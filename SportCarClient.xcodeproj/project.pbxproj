@@ -1,0 +1,783 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4C0E9B8BF9971DCA600BA9B5 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 193AAD04EA67F014D002240C /* Pods.framework */; };
+		59709BA10C676D5E26BB2779 /* Pods_SportCarClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */; };
+		BF1E49EE1C08452700BB9BEC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1E49EC1C08452700BB9BEC /* User.swift */; };
+		BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2959911C1DC9870071385D /* SportCarSelect.swift */; };
+		BF32EEB01C08B22F0098FEC1 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = BF32EEAF1C08B22F0098FEC1 /* Podfile */; };
+		BF49FBAD1C19424D0019EBC2 /* ShinyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF49FBAC1C19424D0019EBC2 /* ShinyButton.swift */; };
+		BF5FF0ED1C15B4860050F5FE /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */; };
+		BF6308981C1965AF0087A4F0 /* Agreement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6308971C1965AF0087A4F0 /* Agreement.swift */; };
+		BF63089D1C1970AB0087A4F0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF63089C1C1970AB0087A4F0 /* Localizable.strings */; };
+		BF63089F1C1972050087A4F0 /* agreement.rtf in Resources */ = {isa = PBXBuildFile; fileRef = BF63089E1C1972050087A4F0 /* agreement.rtf */; };
+		BF6308A31C19A8040087A4F0 /* ResetPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6308A21C19A8040087A4F0 /* ResetPassword.swift */; };
+		BF6308A51C19AF600087A4F0 /* ProfileInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6308A41C19AF600087A4F0 /* ProfileInformation.swift */; };
+		BF6308AC1C19B7D20087A4F0 /* AccountRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6308AB1C19B7D20087A4F0 /* AccountRequester.swift */; };
+		BF67816C1C15AA77001C89AE /* AccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816B1C15AA77001C89AE /* AccountController.swift */; };
+		BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816F1C15AB10001C89AE /* LoginRegister.swift */; };
+		BFAC52271C1C5F9500107F71 /* AuthCodeBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC52261C1C5F9500107F71 /* AuthCodeBtnView.swift */; };
+		BFAC522A1C1C84A700107F71 /* InputableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC52291C1C84A700107F71 /* InputableViewController.swift */; };
+		BFB39CCB1C1EA20200FB6B5D /* sportcar.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFB39CCA1C1EA20200FB6B5D /* sportcar.plist */; };
+		BFB39CCD1C1EA45500FB6B5D /* SportCarBrandSelecter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB39CCC1C1EA45500FB6B5D /* SportCarBrandSelecter.swift */; };
+		BFBEA0841C2152F200F04F9A /* Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBEA0831C2152F200F04F9A /* Wrapper.swift */; };
+		BFBEA0861C215B2200F04F9A /* User.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBEA0851C215B2200F04F9A /* User.generated.swift */; };
+		BFCB96361C1F0551004F77E8 /* BlackBarNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96351C1F0551004F77E8 /* BlackBarNavigationController.swift */; };
+		BFCB96381C1F0DA8004F77E8 /* SportCarBrandSelecterDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96371C1F0DA8004F77E8 /* SportCarBrandSelecterDetail.swift */; };
+		BFCB963A1C1FB0AE004F77E8 /* SportCarRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96391C1FB0AE004F77E8 /* SportCarRequester.swift */; };
+		BFCB963C1C1FFD2D004F77E8 /* SportCarSelectDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */; };
+		BFCB96401C205DF1004F77E8 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB963F1C205DF1004F77E8 /* Home.swift */; };
+		BFCB96421C205EA9004F77E8 /* DisplayBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96411C205EA9004F77E8 /* DisplayBoard.swift */; };
+		BFCB96441C206169004F77E8 /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96431C206169004F77E8 /* SideBar.swift */; };
+		BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96451C2061E0004F77E8 /* LoadingButton.swift */; };
+		BFFA51161C05D9910019E5EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA51151C05D9910019E5EF /* AppDelegate.swift */; };
+		BFFA511E1C05D9920019E5EF /* SportCarClient.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BFFA511C1C05D9920019E5EF /* SportCarClient.xcdatamodeld */; };
+		BFFA51201C05D9920019E5EF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFFA511F1C05D9920019E5EF /* Assets.xcassets */; };
+		BFFA512E1C05D9920019E5EF /* SportCarClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA512D1C05D9920019E5EF /* SportCarClientTests.swift */; };
+		BFFA51391C05D9920019E5EF /* SportCarClientUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA51381C05D9920019E5EF /* SportCarClientUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BFFA512A1C05D9920019E5EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFFA510A1C05D9910019E5EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BFFA51111C05D9910019E5EF;
+			remoteInfo = SportCarClient;
+		};
+		BFFA51351C05D9920019E5EF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFFA510A1C05D9910019E5EF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BFFA51111C05D9910019E5EF;
+			remoteInfo = SportCarClient;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		193AAD04EA67F014D002240C /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B8D1CED12B1FC1DE651D9DA /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SportCarClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF1E49EC1C08452700BB9BEC /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Model/User.swift; sourceTree = "<group>"; };
+		BF2959911C1DC9870071385D /* SportCarSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarSelect.swift; path = Accounts/SportCarSelect.swift; sourceTree = "<group>"; };
+		BF32EEAF1C08B22F0098FEC1 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		BF49FBAC1C19424D0019EBC2 /* ShinyButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShinyButton.swift; path = Accounts/ShinyButton.swift; sourceTree = "<group>"; };
+		BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
+		BF6308971C1965AF0087A4F0 /* Agreement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Agreement.swift; path = Accounts/Agreement.swift; sourceTree = "<group>"; };
+		BF63089C1C1970AB0087A4F0 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		BF63089E1C1972050087A4F0 /* agreement.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; name = agreement.rtf; path = Accounts/agreement.rtf; sourceTree = "<group>"; };
+		BF6308A21C19A8040087A4F0 /* ResetPassword.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResetPassword.swift; path = Accounts/ResetPassword.swift; sourceTree = "<group>"; };
+		BF6308A41C19AF600087A4F0 /* ProfileInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileInformation.swift; path = Accounts/ProfileInformation.swift; sourceTree = "<group>"; };
+		BF6308AB1C19B7D20087A4F0 /* AccountRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountRequester.swift; path = Accounts/AccountRequester.swift; sourceTree = "<group>"; };
+		BF67816B1C15AA77001C89AE /* AccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountController.swift; path = Accounts/AccountController.swift; sourceTree = "<group>"; };
+		BF67816F1C15AB10001C89AE /* LoginRegister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginRegister.swift; path = Accounts/LoginRegister.swift; sourceTree = "<group>"; };
+		BFAC52261C1C5F9500107F71 /* AuthCodeBtnView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthCodeBtnView.swift; path = Accounts/AuthCodeBtnView.swift; sourceTree = "<group>"; };
+		BFAC52291C1C84A700107F71 /* InputableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InputableViewController.swift; path = BaseTemplate/InputableViewController.swift; sourceTree = "<group>"; };
+		BFB39CCA1C1EA20200FB6B5D /* sportcar.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = sportcar.plist; path = BaseTemplate/SportCarBrandSelect/sportcar.plist; sourceTree = "<group>"; };
+		BFB39CCC1C1EA45500FB6B5D /* SportCarBrandSelecter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarBrandSelecter.swift; path = BaseTemplate/SportCarBrandSelect/SportCarBrandSelecter.swift; sourceTree = "<group>"; };
+		BFBEA0831C2152F200F04F9A /* Wrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Wrapper.swift; path = BaseTemplate/Wrapper.swift; sourceTree = "<group>"; };
+		BFBEA0851C215B2200F04F9A /* User.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.generated.swift; path = Model/User.generated.swift; sourceTree = "<group>"; };
+		BFCB96351C1F0551004F77E8 /* BlackBarNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlackBarNavigationController.swift; sourceTree = "<group>"; };
+		BFCB96371C1F0DA8004F77E8 /* SportCarBrandSelecterDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarBrandSelecterDetail.swift; path = BaseTemplate/SportCarBrandSelect/SportCarBrandSelecterDetail.swift; sourceTree = "<group>"; };
+		BFCB96391C1FB0AE004F77E8 /* SportCarRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarRequester.swift; path = Accounts/SportCarRequester.swift; sourceTree = "<group>"; };
+		BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarSelectDetail.swift; path = Accounts/SportCarSelectDetail.swift; sourceTree = "<group>"; };
+		BFCB963F1C205DF1004F77E8 /* Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Home.swift; path = Home/Home.swift; sourceTree = "<group>"; };
+		BFCB96411C205EA9004F77E8 /* DisplayBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DisplayBoard.swift; path = Home/DisplayBoard.swift; sourceTree = "<group>"; };
+		BFCB96431C206169004F77E8 /* SideBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideBar.swift; path = Home/SideBar.swift; sourceTree = "<group>"; };
+		BFCB96451C2061E0004F77E8 /* LoadingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingButton.swift; path = BaseTemplate/LoadingButton.swift; sourceTree = "<group>"; };
+		BFFA51121C05D9910019E5EF /* SportCarClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SportCarClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BFFA51151C05D9910019E5EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		BFFA511D1C05D9920019E5EF /* SportCarClient.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SportCarClient.xcdatamodel; sourceTree = "<group>"; };
+		BFFA511F1C05D9920019E5EF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BFFA51241C05D9920019E5EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BFFA51291C05D9920019E5EF /* SportCarClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SportCarClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BFFA512D1C05D9920019E5EF /* SportCarClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportCarClientTests.swift; sourceTree = "<group>"; };
+		BFFA512F1C05D9920019E5EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BFFA51341C05D9920019E5EF /* SportCarClientUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SportCarClientUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BFFA51381C05D9920019E5EF /* SportCarClientUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportCarClientUITests.swift; sourceTree = "<group>"; };
+		BFFA513A1C05D9920019E5EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DFE647654049B5FDB81F8A93 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BFFA510F1C05D9910019E5EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C0E9B8BF9971DCA600BA9B5 /* Pods.framework in Frameworks */,
+				59709BA10C676D5E26BB2779 /* Pods_SportCarClient.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BFFA51261C05D9920019E5EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BFFA51311C05D9920019E5EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		90C4926835EEBA7FA63E22DF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				193AAD04EA67F014D002240C /* Pods.framework */,
+				9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9A8E06F57F11378672ABA2AD /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3B8D1CED12B1FC1DE651D9DA /* Pods.debug.xcconfig */,
+				DFE647654049B5FDB81F8A93 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BF32EEAA1C088CF60098FEC1 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				BF6308A81C19B3F90087A4F0 /* Network */,
+				BF6308A71C19B3DD0087A4F0 /* CoreDataOperator */,
+				BF6308991C1967A60087A4F0 /* data */,
+				BF49FBAB1C1940110019EBC2 /* ToolViews */,
+				BF6308A61C19B3D10087A4F0 /* Views */,
+			);
+			name = Account;
+			sourceTree = "<group>";
+		};
+		BF49FBAB1C1940110019EBC2 /* ToolViews */ = {
+			isa = PBXGroup;
+			children = (
+				BF49FBAC1C19424D0019EBC2 /* ShinyButton.swift */,
+				BFAC52261C1C5F9500107F71 /* AuthCodeBtnView.swift */,
+			);
+			name = ToolViews;
+			sourceTree = "<group>";
+		};
+		BF6308991C1967A60087A4F0 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				BF63089E1C1972050087A4F0 /* agreement.rtf */,
+			);
+			name = data;
+			sourceTree = "<group>";
+		};
+		BF6308A61C19B3D10087A4F0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BF67816B1C15AA77001C89AE /* AccountController.swift */,
+				BF67816F1C15AB10001C89AE /* LoginRegister.swift */,
+				BF6308971C1965AF0087A4F0 /* Agreement.swift */,
+				BF6308A21C19A8040087A4F0 /* ResetPassword.swift */,
+				BF6308A41C19AF600087A4F0 /* ProfileInformation.swift */,
+				BF2959911C1DC9870071385D /* SportCarSelect.swift */,
+				BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		BF6308A71C19B3DD0087A4F0 /* CoreDataOperator */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = CoreDataOperator;
+			sourceTree = "<group>";
+		};
+		BF6308A81C19B3F90087A4F0 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				BF6308AB1C19B7D20087A4F0 /* AccountRequester.swift */,
+				BFCB96391C1FB0AE004F77E8 /* SportCarRequester.swift */,
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
+		BFAC52281C1C849000107F71 /* BaseTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				BFBEA0821C2152E400F04F9A /* Wrapper */,
+				BFB39CC91C1E9E6800FB6B5D /* SportCarBrandSelect */,
+				BFAC52291C1C84A700107F71 /* InputableViewController.swift */,
+				BFCB96351C1F0551004F77E8 /* BlackBarNavigationController.swift */,
+				BFCB96451C2061E0004F77E8 /* LoadingButton.swift */,
+			);
+			name = BaseTemplate;
+			sourceTree = "<group>";
+		};
+		BFB39CC91C1E9E6800FB6B5D /* SportCarBrandSelect */ = {
+			isa = PBXGroup;
+			children = (
+				BFB39CCA1C1EA20200FB6B5D /* sportcar.plist */,
+				BFB39CCC1C1EA45500FB6B5D /* SportCarBrandSelecter.swift */,
+				BFCB96371C1F0DA8004F77E8 /* SportCarBrandSelecterDetail.swift */,
+			);
+			name = SportCarBrandSelect;
+			sourceTree = "<group>";
+		};
+		BFBEA0821C2152E400F04F9A /* Wrapper */ = {
+			isa = PBXGroup;
+			children = (
+				BFBEA0831C2152F200F04F9A /* Wrapper.swift */,
+			);
+			name = Wrapper;
+			sourceTree = "<group>";
+		};
+		BFCB963D1C2059C1004F77E8 /* God */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = God;
+			sourceTree = "<group>";
+		};
+		BFCB963E1C205DE2004F77E8 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				BFCB963F1C205DF1004F77E8 /* Home.swift */,
+				BFCB96411C205EA9004F77E8 /* DisplayBoard.swift */,
+				BFCB96431C206169004F77E8 /* SideBar.swift */,
+			);
+			name = Home;
+			sourceTree = "<group>";
+		};
+		BFFA51091C05D9910019E5EF = {
+			isa = PBXGroup;
+			children = (
+				BF32EEAF1C08B22F0098FEC1 /* Podfile */,
+				BFFA51141C05D9910019E5EF /* SportCarClient */,
+				BFFA512C1C05D9920019E5EF /* SportCarClientTests */,
+				BFFA51371C05D9920019E5EF /* SportCarClientUITests */,
+				BFFA51131C05D9910019E5EF /* Products */,
+				9A8E06F57F11378672ABA2AD /* Pods */,
+				90C4926835EEBA7FA63E22DF /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		BFFA51131C05D9910019E5EF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BFFA51121C05D9910019E5EF /* SportCarClient.app */,
+				BFFA51291C05D9920019E5EF /* SportCarClientTests.xctest */,
+				BFFA51341C05D9920019E5EF /* SportCarClientUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BFFA51141C05D9910019E5EF /* SportCarClient */ = {
+			isa = PBXGroup;
+			children = (
+				BFCB963E1C205DE2004F77E8 /* Home */,
+				BFCB963D1C2059C1004F77E8 /* God */,
+				BFAC52281C1C849000107F71 /* BaseTemplate */,
+				BF32EEAA1C088CF60098FEC1 /* Account */,
+				BFFA51461C05D9E20019E5EF /* Model */,
+				BFFA51151C05D9910019E5EF /* AppDelegate.swift */,
+				BFFA511F1C05D9920019E5EF /* Assets.xcassets */,
+				BFFA51241C05D9920019E5EF /* Info.plist */,
+				BFFA511C1C05D9920019E5EF /* SportCarClient.xcdatamodeld */,
+				BF63089C1C1970AB0087A4F0 /* Localizable.strings */,
+				BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */,
+			);
+			path = SportCarClient;
+			sourceTree = "<group>";
+		};
+		BFFA512C1C05D9920019E5EF /* SportCarClientTests */ = {
+			isa = PBXGroup;
+			children = (
+				BFFA512D1C05D9920019E5EF /* SportCarClientTests.swift */,
+				BFFA512F1C05D9920019E5EF /* Info.plist */,
+			);
+			path = SportCarClientTests;
+			sourceTree = "<group>";
+		};
+		BFFA51371C05D9920019E5EF /* SportCarClientUITests */ = {
+			isa = PBXGroup;
+			children = (
+				BFFA51381C05D9920019E5EF /* SportCarClientUITests.swift */,
+				BFFA513A1C05D9920019E5EF /* Info.plist */,
+			);
+			path = SportCarClientUITests;
+			sourceTree = "<group>";
+		};
+		BFFA51461C05D9E20019E5EF /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BFBEA0851C215B2200F04F9A /* User.generated.swift */,
+				BF1E49EC1C08452700BB9BEC /* User.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BFFA51111C05D9910019E5EF /* SportCarClient */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BFFA513D1C05D9920019E5EF /* Build configuration list for PBXNativeTarget "SportCarClient" */;
+			buildPhases = (
+				7F0BD1314A8ACACFBE3EC824 /* Check Pods Manifest.lock */,
+				BFFA510E1C05D9910019E5EF /* Sources */,
+				BFFA510F1C05D9910019E5EF /* Frameworks */,
+				BFFA51101C05D9910019E5EF /* Resources */,
+				453C30D4493642E3651BF7A5 /* Embed Pods Frameworks */,
+				3B77CAC4B60C1830F17EA2A2 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SportCarClient;
+			productName = SportCarClient;
+			productReference = BFFA51121C05D9910019E5EF /* SportCarClient.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BFFA51281C05D9920019E5EF /* SportCarClientTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BFFA51401C05D9920019E5EF /* Build configuration list for PBXNativeTarget "SportCarClientTests" */;
+			buildPhases = (
+				BFFA51251C05D9920019E5EF /* Sources */,
+				BFFA51261C05D9920019E5EF /* Frameworks */,
+				BFFA51271C05D9920019E5EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BFFA512B1C05D9920019E5EF /* PBXTargetDependency */,
+			);
+			name = SportCarClientTests;
+			productName = SportCarClientTests;
+			productReference = BFFA51291C05D9920019E5EF /* SportCarClientTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		BFFA51331C05D9920019E5EF /* SportCarClientUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BFFA51431C05D9920019E5EF /* Build configuration list for PBXNativeTarget "SportCarClientUITests" */;
+			buildPhases = (
+				BFFA51301C05D9920019E5EF /* Sources */,
+				BFFA51311C05D9920019E5EF /* Frameworks */,
+				BFFA51321C05D9920019E5EF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BFFA51361C05D9920019E5EF /* PBXTargetDependency */,
+			);
+			name = SportCarClientUITests;
+			productName = SportCarClientUITests;
+			productReference = BFFA51341C05D9920019E5EF /* SportCarClientUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFFA510A1C05D9910019E5EF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = WoodyHuang;
+				TargetAttributes = {
+					BFFA51111C05D9910019E5EF = {
+						CreatedOnToolsVersion = 7.1;
+					};
+					BFFA51281C05D9920019E5EF = {
+						CreatedOnToolsVersion = 7.1;
+						TestTargetID = BFFA51111C05D9910019E5EF;
+					};
+					BFFA51331C05D9920019E5EF = {
+						CreatedOnToolsVersion = 7.1;
+						TestTargetID = BFFA51111C05D9910019E5EF;
+					};
+				};
+			};
+			buildConfigurationList = BFFA510D1C05D9910019E5EF /* Build configuration list for PBXProject "SportCarClient" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BFFA51091C05D9910019E5EF;
+			productRefGroup = BFFA51131C05D9910019E5EF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BFFA51111C05D9910019E5EF /* SportCarClient */,
+				BFFA51281C05D9920019E5EF /* SportCarClientTests */,
+				BFFA51331C05D9920019E5EF /* SportCarClientUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BFFA51101C05D9910019E5EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF32EEB01C08B22F0098FEC1 /* Podfile in Resources */,
+				BFB39CCB1C1EA20200FB6B5D /* sportcar.plist in Resources */,
+				BF63089D1C1970AB0087A4F0 /* Localizable.strings in Resources */,
+				BF63089F1C1972050087A4F0 /* agreement.rtf in Resources */,
+				BFFA51201C05D9920019E5EF /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BFFA51271C05D9920019E5EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BFFA51321C05D9920019E5EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3B77CAC4B60C1830F17EA2A2 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SportCarClient/Pods-SportCarClient-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		453C30D4493642E3651BF7A5 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SportCarClient/Pods-SportCarClient-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7F0BD1314A8ACACFBE3EC824 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BFFA510E1C05D9910019E5EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */,
+				BFAC52271C1C5F9500107F71 /* AuthCodeBtnView.swift in Sources */,
+				BF1E49EE1C08452700BB9BEC /* User.swift in Sources */,
+				BFB39CCD1C1EA45500FB6B5D /* SportCarBrandSelecter.swift in Sources */,
+				BF67816C1C15AA77001C89AE /* AccountController.swift in Sources */,
+				BFBEA0861C215B2200F04F9A /* User.generated.swift in Sources */,
+				BF6308AC1C19B7D20087A4F0 /* AccountRequester.swift in Sources */,
+				BFCB96361C1F0551004F77E8 /* BlackBarNavigationController.swift in Sources */,
+				BF6308A31C19A8040087A4F0 /* ResetPassword.swift in Sources */,
+				BFAC522A1C1C84A700107F71 /* InputableViewController.swift in Sources */,
+				BF6308A51C19AF600087A4F0 /* ProfileInformation.swift in Sources */,
+				BFCB96421C205EA9004F77E8 /* DisplayBoard.swift in Sources */,
+				BFBEA0841C2152F200F04F9A /* Wrapper.swift in Sources */,
+				BFCB96441C206169004F77E8 /* SideBar.swift in Sources */,
+				BFCB96381C1F0DA8004F77E8 /* SportCarBrandSelecterDetail.swift in Sources */,
+				BFCB963A1C1FB0AE004F77E8 /* SportCarRequester.swift in Sources */,
+				BFFA51161C05D9910019E5EF /* AppDelegate.swift in Sources */,
+				BF49FBAD1C19424D0019EBC2 /* ShinyButton.swift in Sources */,
+				BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */,
+				BF5FF0ED1C15B4860050F5FE /* GlobalVariables.swift in Sources */,
+				BFFA511E1C05D9920019E5EF /* SportCarClient.xcdatamodeld in Sources */,
+				BFCB96401C205DF1004F77E8 /* Home.swift in Sources */,
+				BF6308981C1965AF0087A4F0 /* Agreement.swift in Sources */,
+				BFCB963C1C1FFD2D004F77E8 /* SportCarSelectDetail.swift in Sources */,
+				BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BFFA51251C05D9920019E5EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFFA512E1C05D9920019E5EF /* SportCarClientTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BFFA51301C05D9920019E5EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFFA51391C05D9920019E5EF /* SportCarClientUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BFFA512B1C05D9920019E5EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BFFA51111C05D9910019E5EF /* SportCarClient */;
+			targetProxy = BFFA512A1C05D9920019E5EF /* PBXContainerItemProxy */;
+		};
+		BFFA51361C05D9920019E5EF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BFFA51111C05D9910019E5EF /* SportCarClient */;
+			targetProxy = BFFA51351C05D9920019E5EF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		BFFA513B1C05D9920019E5EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		BFFA513C1C05D9920019E5EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BFFA513E1C05D9920019E5EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3B8D1CED12B1FC1DE651D9DA /* Pods.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = SportCarClient/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClient;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+			};
+			name = Debug;
+		};
+		BFFA513F1C05D9920019E5EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DFE647654049B5FDB81F8A93 /* Pods.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = SportCarClient/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClient;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+			};
+			name = Release;
+		};
+		BFFA51411C05D9920019E5EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = SportCarClientTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClientTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SportCarClient.app/SportCarClient";
+			};
+			name = Debug;
+		};
+		BFFA51421C05D9920019E5EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = SportCarClientTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClientTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SportCarClient.app/SportCarClient";
+			};
+			name = Release;
+		};
+		BFFA51441C05D9920019E5EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = SportCarClientUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClientUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = SportCarClient;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		BFFA51451C05D9920019E5EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = SportCarClientUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClientUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = SportCarClient;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BFFA510D1C05D9910019E5EF /* Build configuration list for PBXProject "SportCarClient" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BFFA513B1C05D9920019E5EF /* Debug */,
+				BFFA513C1C05D9920019E5EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BFFA513D1C05D9920019E5EF /* Build configuration list for PBXNativeTarget "SportCarClient" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BFFA513E1C05D9920019E5EF /* Debug */,
+				BFFA513F1C05D9920019E5EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BFFA51401C05D9920019E5EF /* Build configuration list for PBXNativeTarget "SportCarClientTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BFFA51411C05D9920019E5EF /* Debug */,
+				BFFA51421C05D9920019E5EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BFFA51431C05D9920019E5EF /* Build configuration list for PBXNativeTarget "SportCarClientUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BFFA51441C05D9920019E5EF /* Debug */,
+				BFFA51451C05D9920019E5EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		BFFA511C1C05D9920019E5EF /* SportCarClient.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				BFFA511D1C05D9920019E5EF /* SportCarClient.xcdatamodel */,
+			);
+			currentVersion = BFFA511D1C05D9920019E5EF /* SportCarClient.xcdatamodel */;
+			path = SportCarClient.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = BFFA510A1C05D9910019E5EF /* Project object */;
+}
