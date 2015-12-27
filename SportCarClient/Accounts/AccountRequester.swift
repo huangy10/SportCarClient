@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import SwiftyJSON
 
 /// 这个类负责构造访问需要的URL
 class AccountURLMaker {
@@ -44,6 +45,10 @@ class AccountURLMaker {
         return NSURL(string: website + "/account/profile")
     }
     
+    func getProfile(userID: String) -> NSURL? {
+        return NSURL(string: website + "/profile/\(userID)/info")
+    }
+    
 }
 
 /// 这个类负责整个注册登陆部分的网络访问请求
@@ -61,6 +66,7 @@ class AccountRequester {
         
         cfg.HTTPCookieStorage = cooks
         cfg.HTTPCookieAcceptPolicy = NSHTTPCookieAcceptPolicy.Always
+        print("\(cooks.cookies)")
         self.manager = Alamofire.Manager(configuration: cfg)
     }
     
@@ -73,34 +79,46 @@ class AccountRequester {
      */
     func requestAuthCode(phoneNum: String, onSuccess: ()->(Void), onError: ()->(Void)){
         manager.request(.POST, urlMaker.requestForCode()!.absoluteString, parameters: ["phone_num": phoneNum]).responseJSON { (response) -> Void in
-            if response.result.isSuccess && response.result.value?["success"] as! Bool{
-                // 由于onSuccess里面可能对的UI做出更改，这里需要保证这个closure在主线程上执行，下面的onError同
-                dispatch_async(dispatch_get_main_queue(), onSuccess)
-            }else{
+            
+            switch response.result {
+            case .Success(let value):
+                let json = JSON(value)
+                if json["success"].boolValue{
+                    dispatch_async(dispatch_get_main_queue(), onSuccess)
+                }else{
+                    dispatch_async(dispatch_get_main_queue(), onError)
+                }
+                break
+            case .Failure(let error):
+                print("\(error)")
                 dispatch_async(dispatch_get_main_queue(), onError)
+                break
             }
         }
     }
     
-    func postToLogin(phoneNum: String, password: String, onSuccess: (userID: Int?)->(Void), onError: (code: String?)->(Void)) {
+    func postToLogin(phoneNum: String, password: String, onSuccess: (userID: String?)->(Void), onError: (code: String?)->(Void)) {
         manager.request(.POST, urlMaker.login()!.absoluteString, parameters: ["username": phoneNum, "password": password]).responseJSON { (response) -> Void in
-            if response.result.isFailure {
-                // 0000错误代码，一般是由于网络原因或者服务器错误导致的
+            switch response.result {
+            case .Success(let value):
+                let json = JSON(value)
+                if json["success"].boolValue {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        let userID = json["userID"].stringValue
+                        onSuccess(userID: userID)
+                    })
+                }else{
+                    dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
+                        onError(code: json["code"].string)
+                    })
+                }
+                break
+            case .Failure(let error):
+                print("\(error)")
                 dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
                     onError(code: "0000")
                 })
-                return
-            }
-            let result = response.result.value
-            if result?["success"] as! Bool {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    let userID = result?["userID"] as? Int
-                    onSuccess(userID: userID)
-                })
-            }else{
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    onError(code: result?["code"] as? String)
-                })
+                break
             }
         }
     }
@@ -168,6 +186,40 @@ class AccountRequester {
                     })
                     break
                 }
+        }
+    }
+}
+
+// MARK: - Profile Information
+extension AccountRequester {
+    
+    func resultValueHandler(value: Alamofire.Result<AnyObject, NSError>, dataFieldName: String, onSuccess: (JSON?)->(), onError: (code: String?)->()?) {
+        switch value {
+        case .Failure(let error):
+            print("\(error)")
+            dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
+                onError(code: "0000")
+            })
+            break
+        case .Success(let value):
+            let json = JSON(value)
+            if json["success"].boolValue {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    onSuccess(json[dataFieldName])
+                })
+            }else{
+                dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
+                    onError(code: json["code"].string)
+                })
+            }
+            break
+        }
+    }
+    
+    func getProfileDataFor(userID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()?) {
+        let url = urlMaker.getProfile(userID)?.absoluteString
+        manager.request(.GET, url!, parameters: nil).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "user_profile", onSuccess: onSuccess, onError: onError)
         }
     }
 }

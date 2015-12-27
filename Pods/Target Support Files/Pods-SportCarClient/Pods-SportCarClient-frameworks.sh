@@ -86,6 +86,8 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-SportCarClient/Alamofire.framework"
   install_framework "Pods-SportCarClient/AlecrimCoreData.framework"
+  install_framework "Pods-SportCarClient/Cent.framework"
+  install_framework "Pods-SportCarClient/Dollar.framework"
   install_framework "Pods-SportCarClient/Kingfisher.framework"
   install_framework "Pods-SportCarClient/SnapKit.framework"
   install_framework "Pods-SportCarClient/Spring.framework"
@@ -96,6 +98,8 @@ fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-SportCarClient/Alamofire.framework"
   install_framework "Pods-SportCarClient/AlecrimCoreData.framework"
+  install_framework "Pods-SportCarClient/Cent.framework"
+  install_framework "Pods-SportCarClient/Dollar.framework"
   install_framework "Pods-SportCarClient/Kingfisher.framework"
   install_framework "Pods-SportCarClient/SnapKit.framework"
   install_framework "Pods-SportCarClient/Spring.framework"

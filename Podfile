@@ -7,7 +7,10 @@ pod 'Alamofire', '~> 3.0'
 pod 'Kingfisher', '~>1.8'
 pod 'SwiftDate', '~> 2.0'
 pod 'AlecrimCoreData', '~> 4.0'
+pod 'Dollar'
+pod 'Cent'
 pod 'SwiftyTimer'
+pod 'Mapbox-iOS-SDK'
 target 'SportCarClient' do
     pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
 end

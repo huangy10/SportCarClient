@@ -255,7 +255,7 @@ class SportCarSelectDetailController: UIViewController, SportCarBrandSelecterCon
         let requester = SportCarRequester.sharedSCRequester
         requester.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
             let carImgURL = SF(data["image_url"].stringValue)
-            self.carDisplayURL = NSURL(string: carImgURL)
+            self.carDisplayURL = NSURL(string: carImgURL ?? "")
             let downloadIndicator = self.carDisplay?.subviews.first! as! UIActivityIndicatorView
             downloadIndicator.startAnimating()
             self.carDisplay?.kf_setImageWithURL(self.carDisplayURL!, placeholderImage: UIImage(named: "account_car_select_placeholder"), optionsInfo: nil, progressBlock: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in

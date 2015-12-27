@@ -426,9 +426,11 @@ class LoginRegisterController: InputableViewController, UIScrollViewDelegate {
         loginBtn?.enabled = false
         self.requester.postToLogin(username, password: password, onSuccess: { (userID) -> (Void) in
             self.loginBtn?.enabled = true
-            // TODO: 构造本地用户数据并进入个人主页
+
             let user = User.objects.login("\(userID!)")
-            print("\(user)")
+            let ctl = HomeController()
+            ctl.hostUser = user.value
+            self.navigationController?.pushViewController(ctl, animated: true)
             }) { (code) -> (Void) in
                 self.loginBtn?.enabled = true
                 // 显示错误信息

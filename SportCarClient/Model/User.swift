@@ -15,34 +15,48 @@ import AlecrimCoreData // 使用第三方Wrapped的CoreData来简化这边的工
 class User: NSManagedObject {
     /// 仿照了Django的风格将Model的管理器设置为Model的类变量，但是角色并不相同，这里的objects的主要功能是提供
     static let objects = UserManager()
-}
-
-// MARK: - 这个扩展增加了对JSON数据的支持
-extension User{
-    /**
-     比较User中的数据和JSON指定的数据是否相等
-     
-     - parameter json: JSON from SwiftyJSON
-     
-     - returns: 是否相等
-     */
-    func equalTo(json: JSON) -> Bool{
-        if userID == json["userID"].stringValue &&
-        avatarUrl == json["avatar"].string &&
-        district == json["district"].string &&
-        gender == json["gender"].string &&
-        nickName == json["nick_name"].string &&
-        phoneNum == json["phone"].string &&
-        starSign == json["star_sign"].string &&
-        job == json["job"].string &&
-        signature == json["signature"].string &&
-        age == json["age"].int ?? 0
-        {
+    
+    /// 该用户拥有的跑车
+    var ownedCars: [SportCar] = []
+    
+    // 下面是缓存的查询数据
+    var avatarCar: SportCar?
+    
+    var hasAvatarCar: Bool {
+        if avatarCar != nil {
             return true
         }
         return false
     }
+}
+
+extension User{
     
+    /**
+     当创建用户时，自动为其创建Profile对象
+     */
+    override func awakeFromInsert() {
+        if self.profile != nil {
+            return
+        }
+        if let context = self.managedObjectContext as? DataContext {
+            // 只在DataContext下擦执行这个创建操作
+            profile = context.profiles.createEntity()
+            profile?.user = self
+        }
+    }
+}
+
+// MARK: - 这个扩展增加了对JSON数据的支持
+extension User{
+    
+    func equal<T: Equatable>(fieldValue: T?, jsonValue: T?) -> Bool{
+        if jsonValue == nil {
+            return true
+        } else{
+            return fieldValue == jsonValue
+        }
+    }
     /**
      比较User中的数据和JSON指定的数据是否相等
      
@@ -51,14 +65,7 @@ extension User{
      
      - returns: 是否相等
      */
-    func equalTo(json: JSON, ignoreNil: Bool) -> Bool{
-        func equal<T: Equatable>(fieldValue: T?, jsonValue: T?) -> Bool{
-            if jsonValue == nil && ignoreNil {
-                return true
-            } else{
-                return fieldValue == jsonValue
-            }
-        }
+    func isEqualTo(json: JSON, ignoreNil: Bool=false) -> Bool{
         if equal(avatarUrl, jsonValue: json["userID"].string) &&
         equal(district, jsonValue: json["district"].string) &&
         equal(gender, jsonValue: json["gender"].string) &&
@@ -67,10 +74,21 @@ extension User{
         equal(starSign, jsonValue: json["star_sign"].string) &&
         equal(job, jsonValue: json["job"].string) &&
         equal(signature, jsonValue: json["signature"].string) &&
-        equal(age, jsonValue: json["age"].int){
+        equal(age, jsonValue: json["age"].int32){
             return true
         }
         return false
+    }
+    
+    /**
+     比较两个user是否是指代的同一个用户，只比对userID
+     
+     - parameter user: 待比较的用户
+     
+     - returns: 是否相等
+     */
+    func isEqualToSimple(user: User) -> Bool{
+        return self.userID == user.userID
     }
     
     /**
@@ -81,8 +99,9 @@ extension User{
      
      - returns: 赋值是否成功
      */
-    func loadValueFromJSON(json: JSON, forceUpdateNil: Bool=false) -> Bool{
-        guard json["userID"].string == self.userID else{
+    func loadValueFromJSON(json: JSON, forceUpdateNil: Bool=true) -> Bool{
+
+        if json["userID"] != nil && json["userID"].stringValue == self.userID{
             return false
         }
         if forceUpdateNil {
@@ -94,237 +113,53 @@ extension User{
             starSign = json["star_sign"].string
             job = json["job"].string
             signature = json["signature"].string
-            age = json["age"].int ?? 0
+            age = json["age"].int32 ?? 0
+            profile?.loadValueFromJSON(json)
             return true
         }
         // 在内部定义了一个setter以减少后面的代码重复
-        func setter(inout property: String?, jsonFieldName: String) {
+        
+        let setter = { (inout property: String?, jsonFieldName: String) in
             if let value = json[jsonFieldName].string {
                 property = value
             }
         }
-        setter(&avatarUrl, jsonFieldName: "avatar")
-        setter(&district, jsonFieldName: "district")
-        setter(&gender, jsonFieldName: "gender")
-        setter(&nickName, jsonFieldName: "nickName")
-        setter(&phoneNum, jsonFieldName: "nickName")
-        setter(&starSign, jsonFieldName: "star_sign")
-        setter(&job, jsonFieldName: "job")
-        setter(&signature, jsonFieldName: "signature")
-        if let age = json["age"].int {
+        setter(&avatarUrl, "avatar")
+        setter(&district, "district")
+        setter(&gender, "gender")
+        setter(&nickName, "nickName")
+        setter(&phoneNum, "nickName")
+        setter(&starSign, "star_sign")
+        setter(&job, "job")
+        setter(&signature, "signature")
+        if let age = json["age"].int32 {
             self.age = age
         }
         return true
     }
+    
 }
 
-/// 这个类用来管理全部的类变量，做数据持久化工作
-class UserManager {
+
+
+
+
+// MARK: - 这个扩展主要市打包了一些常用属性的获取，注意这里所有的函数只执行了获取操作
+extension User {
     /* 
-     进一步说明设计思路：
-     App的Model层需要解决以下两个关键的问题：
-     1、数据的一致性。例如，当一个用户的数据更新时，App所有相关的用户数据需要被同步更新
-     2、数据的持久性。即在app离线时要能够提供缓存的用户数据
+     写给将来的维护者：
+     这个部分的功能，是为了简化一些常用的操作，和上面的用于支持全局数据一致性的函数的功能不同，这里的函数只载入目前已经存在于内存中和CoreData中的数据
     */
-    /// 主线程上的context
-    var context: DataContext
-    /// 本Manager维持的Context
-    var privateContext: DataContext
-    /// 存储当前全局所有用户信息的字典，键值是userID
-    var users = [String: User]()
-    /// 上次访问的时间，这个时间是相对于整个Manager而言，并非单条数据的
-    var lastAccess: NSDate?
-    /// 上次修改的时间，同上针对Manager层面而言
-    var lastModify: NSDate?
-    /// 成员的最大寿命，秒
-    var maxLife: Int?
-    /// 访问次数：当访问次数超过达到100时，会将更改同步到CoreData数据库
-    var accessTimes: Int = 0 {
-        didSet{
-            //
-        }
-    }
-    /// 当前登陆的用户
-    var hostUser: User?
     
-    init(maxLife: Int?=60) {
-        self.maxLife = maxLife
-        lastAccess = NSDate()
-        lastModify = NSDate()
-        // 创建一个主线程的Context
-        context = DataContext()
-        // 创建一个Background线程的context以供数据的批量操作
-        privateContext = DataContext(parentDataContext: context)
-    }
     
-    func onUserUpdate() {
-        
+    /**
+    获取该用户所有的认证车辆
+    
+    - returns: 打包了的结果
+    */
+    func getAllAuthenticatedCars() -> ManagerResult<[SportCar], ManagerError> {
+        return ManagerResult.Success(self.ownedCars)
     }
 }
 
 
-// MARK: - 用户数据的提取和存储
-extension UserManager {
-    /* 这个扩展主要处理当前用户的数据的同步问题
-    */
-    
-    func returnError<Value>(err: ManagerError) -> ManagerResult<Value, ManagerError>{
-        return ManagerResult.Failure(err)
-    }
-    /**
-    利用从服务器返回的数据创建一个User对象，单个查询和写入直接在主线程上进行。如果创建的用户对象和已有的用户数据发生重叠，则将Manager中的对应数据覆盖
-    
-    - parameter json: JSON数据
-    
-    - returns: ManageResult
-    */
-    func create(json: JSON) -> ManagerResult<User, ManagerError>{
-        guard let userID = json["userID"].string else{
-            return returnError(.KeyError)
-        }
-        // 检查用户是否在现在的内存池中
-        if let user = users[userID] where user.equalTo(json){
-            return ManagerResult.Success(user)
-        }
-        let user = context.users.firstOrCreated {$0.userID == userID }
-        user.userID = userID
-        user.loadValueFromJSON(json, forceUpdateNil: true)
-        // 注意要更新users
-        self.users[user.userID!] = user
-        accessTimes += 1
-        do {
-            try context.save()
-        }catch let err{
-            // 无法保存时打印错误
-            print("\(err)")
-            return returnError(.CantSave)
-        }
-        return ManagerResult.Success(user)
-    }
-    
-    /**
-     一次性存入大量数据，在background线程中进行。即便存储失败也会返回生成的数据
-     
-     - parameter jsons: JSON字典
-     
-     - returns: Wrapped User Array
-     */
-    func create(jsons: [JSON]) -> ManagerResult<[User], ManagerError>{
-        var idList = [String]()
-        for json in jsons {
-            // 首先循环检查所有的JSON字典是否有必须的userID字段，且没有重复
-            guard let userID = json["userID"].string else{
-                return returnError(.KeyError)
-            }
-            if idList.contains(userID){
-                return returnError(.Integrity)
-            }
-            idList.append(json["userID"].stringValue)
-        }
-        var newUsers = [User]()
-        for json in jsons {
-            let userID = json["userID"].stringValue
-            if let user = users[userID] where user.equalTo(json){
-                // 检查用户是否在现在的内存池中
-                newUsers.append(user)
-                accessTimes += 1
-            }
-            let user = context.users.firstOrCreated{$0.userID == userID}
-            user.userID = userID
-            user.loadValueFromJSON(json, forceUpdateNil: true)
-            accessTimes += 1
-            newUsers.append(user)
-            users[userID] = user
-        }
-        do {
-            try context.save()
-        }catch {
-            return returnError(.CantSave)
-        }
-        return ManagerResult.Success(newUsers)
-    }
-    
-    /**
-     重新载入指定id的用户，当这个id并不存在于core data数据库中时，返回NotFound错误
-     
-     - parameter userID: 指定的用户id
-     
-     - returns: 打包的返回结果
-     */
-    func reload(userID: String) -> ManagerResult<User, ManagerError>{
-        if let user = users[userID] {
-            return ManagerResult.Success(user)
-        }
-        if let user = context.users.first({ $0.userID == userID }) {
-            return ManagerResult.Success(user)
-        }
-        return returnError(.NotFound)
-    }
-    
-    func reload(usersID: [String]) -> ManagerResult<[User], ManagerError> {
-        var remainUsers = [String]()
-        var newUsers = [User]()
-        // 首先载入所有已经在内存中的用户的数据
-        for userID in usersID {
-            if let user = users[userID] {
-                newUsers.append(user)
-            }else {
-                remainUsers.append(userID)
-            }
-        }
-        // 剩余的未在内存中的，从CoreData中查询出来
-        let anotherUsers = context.users.filter { $0.userID.isIn(remainUsers) }
-        for user in anotherUsers {
-            self.users[user.userID!] = user
-            newUsers.append(user)
-        }
-        return ManagerResult.Success(newUsers)
-    }
-}
-
-// MARK: - 这个部分主要实现对Host用户的管理
-extension UserManager {
-    
-    /**
-     登录host用户，其实就是设置host值
-     
-     - parameter userID: host用户的id
-     
-     - returns: Result
-     */
-    func login(userID: String) -> ManagerResult<User, ManagerError> {
-        // 检查是否制定的id已经是当前的host，若是直接返回即可
-        if userID == hostUser?.userID {
-            return ManagerResult.Success(hostUser!)
-        }
-        // 检查是否已经在内存池中
-        if let user = users[userID] {
-            hostUser = user
-            return ManagerResult.Success(user)
-        }
-        // 若无则从CoreData中获取
-        let user = context.users.firstOrCreated { $0.userID == userID }
-        hostUser = user
-        // 注意要host用户也要加入users
-        users[userID] = user
-        return ManagerResult.Success(user)
-    }
-    
-    /**
-     恢复上次登陆的状态
-     
-     - returns: 返回hostUser
-     */
-    func resumeLoginStatus() -> User? {
-        if let userID = NSUserDefaults.standardUserDefaults().stringForKey("host_user_id") {
-            let result = login(userID)
-            switch result {
-            case .Success(let user):
-                return user
-            case .Failure(_):
-                return nil
-            }
-        }
-        return nil
-    }
-}

@@ -174,7 +174,7 @@ class SportCarSelectController: InputableViewController, SportCarBrandSelecterCo
             detail.carId = data["car_id"].stringValue
             detail.contents = contents
             detail.carType = carType
-            detail.carDisplayURL = NSURL(string: carImgURL)
+            detail.carDisplayURL = NSURL(string: carImgURL ?? "")
             
             self.navigationController?.pushViewController(detail, animated: true)
             self.brandSelectBtn?.enabled = true

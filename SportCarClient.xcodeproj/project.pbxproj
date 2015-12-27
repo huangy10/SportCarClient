@@ -9,10 +9,30 @@
 /* Begin PBXBuildFile section */
 		4C0E9B8BF9971DCA600BA9B5 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 193AAD04EA67F014D002240C /* Pods.framework */; };
 		59709BA10C676D5E26BB2779 /* Pods_SportCarClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */; };
-		BF1E49EE1C08452700BB9BEC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1E49EC1C08452700BB9BEC /* User.swift */; };
 		BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2959911C1DC9870071385D /* SportCarSelect.swift */; };
+		BF2BE2141C2938B000DD0CF9 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2BE20E1C2938B000DD0CF9 /* Profile.swift */; };
+		BF2BE2161C2938B000DD0CF9 /* Club.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2BE2101C2938B000DD0CF9 /* Club.swift */; };
+		BF2BE2181C2938B000DD0CF9 /* ClubJoining.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2BE2121C2938B000DD0CF9 /* ClubJoining.swift */; };
+		BF2BE21C1C29390200DD0CF9 /* Club.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2BE2191C29390200DD0CF9 /* Club.generated.swift */; };
+		BF2BE21D1C29390200DD0CF9 /* ClubJoining.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2BE21A1C29390200DD0CF9 /* ClubJoining.generated.swift */; };
+		BF2BE21E1C29390200DD0CF9 /* Profile.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2BE21B1C29390200DD0CF9 /* Profile.generated.swift */; };
+		BF2BE2241C293C6D00DD0CF9 /* PersonInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2BE2231C293C6D00DD0CF9 /* PersonInfo.swift */; };
 		BF32EEB01C08B22F0098FEC1 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = BF32EEAF1C08B22F0098FEC1 /* Podfile */; };
+		BF3BD5EA1C28E89000499674 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BF3BD5E91C28E89000499674 /* Settings.bundle */; };
 		BF49FBAD1C19424D0019EBC2 /* ShinyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF49FBAC1C19424D0019EBC2 /* ShinyButton.swift */; };
+		BF5491D01C22FD1A0090D151 /* SportCar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5491CA1C22FD1A0090D151 /* SportCar.swift */; };
+		BF5491D21C22FD1A0090D151 /* SportCarOwnerShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5491CC1C22FD1A0090D151 /* SportCarOwnerShip.swift */; };
+		BF5491D41C22FD1A0090D151 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5491CE1C22FD1A0090D151 /* User.swift */; };
+		BF5491D81C22FD660090D151 /* SportCarOwnerShip.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5491D51C22FD660090D151 /* SportCarOwnerShip.generated.swift */; };
+		BF5491D91C22FD660090D151 /* SportCar.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5491D61C22FD660090D151 /* SportCar.generated.swift */; };
+		BF5491DA1C22FD660090D151 /* User.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5491D71C22FD660090D151 /* User.generated.swift */; };
+		BF5491E01C23071C0090D151 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5491DF1C23071C0090D151 /* Person.swift */; };
+		BF54DD681C2EB4FE00F635C0 /* NewsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF54DD671C2EB4FE00F635C0 /* NewsController.swift */; };
+		BF54DD6E1C2EB95F00F635C0 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF54DD6A1C2EB95F00F635C0 /* News.swift */; };
+		BF54DD701C2EB95F00F635C0 /* NewsComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF54DD6C1C2EB95F00F635C0 /* NewsComment.swift */; };
+		BF54DD741C2EB9A800F635C0 /* News.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF54DD721C2EB9A800F635C0 /* News.generated.swift */; };
+		BF54DD751C2EB9A800F635C0 /* NewsComment.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF54DD731C2EB9A800F635C0 /* NewsComment.generated.swift */; };
+		BF54DD771C2EBDE800F635C0 /* NewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF54DD761C2EBDE800F635C0 /* NewsCell.swift */; };
 		BF5FF0ED1C15B4860050F5FE /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */; };
 		BF6308981C1965AF0087A4F0 /* Agreement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6308971C1965AF0087A4F0 /* Agreement.swift */; };
 		BF63089D1C1970AB0087A4F0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF63089C1C1970AB0087A4F0 /* Localizable.strings */; };
@@ -22,18 +42,22 @@
 		BF6308AC1C19B7D20087A4F0 /* AccountRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6308AB1C19B7D20087A4F0 /* AccountRequester.swift */; };
 		BF67816C1C15AA77001C89AE /* AccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816B1C15AA77001C89AE /* AccountController.swift */; };
 		BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816F1C15AB10001C89AE /* LoginRegister.swift */; };
+		BF9404971C2818C3001ABB1E /* AppLauchner.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9404961C2818C3001ABB1E /* AppLauchner.swift */; };
 		BFAC52271C1C5F9500107F71 /* AuthCodeBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC52261C1C5F9500107F71 /* AuthCodeBtnView.swift */; };
 		BFAC522A1C1C84A700107F71 /* InputableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC52291C1C84A700107F71 /* InputableViewController.swift */; };
 		BFB39CCB1C1EA20200FB6B5D /* sportcar.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFB39CCA1C1EA20200FB6B5D /* sportcar.plist */; };
 		BFB39CCD1C1EA45500FB6B5D /* SportCarBrandSelecter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB39CCC1C1EA45500FB6B5D /* SportCarBrandSelecter.swift */; };
 		BFBEA0841C2152F200F04F9A /* Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBEA0831C2152F200F04F9A /* Wrapper.swift */; };
-		BFBEA0861C215B2200F04F9A /* User.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBEA0851C215B2200F04F9A /* User.generated.swift */; };
+		BFC712EB1C2C3B4F00A71F4C /* UserUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712EA1C2C3B4F00A71F4C /* UserUtilities.swift */; };
+		BFC712F11C2C431900A71F4C /* StatusComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712ED1C2C431900A71F4C /* StatusComment.swift */; };
+		BFC712F31C2C431900A71F4C /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712EF1C2C431900A71F4C /* Status.swift */; };
+		BFC712FB1C2C439900A71F4C /* Status.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712F91C2C439900A71F4C /* Status.generated.swift */; };
+		BFC712FC1C2C439900A71F4C /* StatusComment.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712FA1C2C439900A71F4C /* StatusComment.generated.swift */; };
 		BFCB96361C1F0551004F77E8 /* BlackBarNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96351C1F0551004F77E8 /* BlackBarNavigationController.swift */; };
 		BFCB96381C1F0DA8004F77E8 /* SportCarBrandSelecterDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96371C1F0DA8004F77E8 /* SportCarBrandSelecterDetail.swift */; };
 		BFCB963A1C1FB0AE004F77E8 /* SportCarRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96391C1FB0AE004F77E8 /* SportCarRequester.swift */; };
 		BFCB963C1C1FFD2D004F77E8 /* SportCarSelectDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */; };
 		BFCB96401C205DF1004F77E8 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB963F1C205DF1004F77E8 /* Home.swift */; };
-		BFCB96421C205EA9004F77E8 /* DisplayBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96411C205EA9004F77E8 /* DisplayBoard.swift */; };
 		BFCB96441C206169004F77E8 /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96431C206169004F77E8 /* SideBar.swift */; };
 		BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96451C2061E0004F77E8 /* LoadingButton.swift */; };
 		BFFA51161C05D9910019E5EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA51151C05D9910019E5EF /* AppDelegate.swift */; };
@@ -64,10 +88,30 @@
 		193AAD04EA67F014D002240C /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B8D1CED12B1FC1DE651D9DA /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SportCarClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BF1E49EC1C08452700BB9BEC /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Model/User.swift; sourceTree = "<group>"; };
 		BF2959911C1DC9870071385D /* SportCarSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarSelect.swift; path = Accounts/SportCarSelect.swift; sourceTree = "<group>"; };
+		BF2BE20E1C2938B000DD0CF9 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Profile.swift; path = Model/Profile.swift; sourceTree = "<group>"; };
+		BF2BE2101C2938B000DD0CF9 /* Club.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Club.swift; path = Model/Club.swift; sourceTree = "<group>"; };
+		BF2BE2121C2938B000DD0CF9 /* ClubJoining.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubJoining.swift; path = Model/ClubJoining.swift; sourceTree = "<group>"; };
+		BF2BE2191C29390200DD0CF9 /* Club.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Club.generated.swift; path = Model/Club.generated.swift; sourceTree = "<group>"; };
+		BF2BE21A1C29390200DD0CF9 /* ClubJoining.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubJoining.generated.swift; path = Model/ClubJoining.generated.swift; sourceTree = "<group>"; };
+		BF2BE21B1C29390200DD0CF9 /* Profile.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Profile.generated.swift; path = Model/Profile.generated.swift; sourceTree = "<group>"; };
+		BF2BE2231C293C6D00DD0CF9 /* PersonInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonInfo.swift; path = Person/PersonInfo.swift; sourceTree = "<group>"; };
 		BF32EEAF1C08B22F0098FEC1 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		BF3BD5E91C28E89000499674 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		BF49FBAC1C19424D0019EBC2 /* ShinyButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShinyButton.swift; path = Accounts/ShinyButton.swift; sourceTree = "<group>"; };
+		BF5491CA1C22FD1A0090D151 /* SportCar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCar.swift; path = Model/SportCar.swift; sourceTree = "<group>"; };
+		BF5491CC1C22FD1A0090D151 /* SportCarOwnerShip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarOwnerShip.swift; path = Model/SportCarOwnerShip.swift; sourceTree = "<group>"; };
+		BF5491CE1C22FD1A0090D151 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Model/User.swift; sourceTree = "<group>"; };
+		BF5491D51C22FD660090D151 /* SportCarOwnerShip.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarOwnerShip.generated.swift; path = Model/SportCarOwnerShip.generated.swift; sourceTree = "<group>"; };
+		BF5491D61C22FD660090D151 /* SportCar.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCar.generated.swift; path = Model/SportCar.generated.swift; sourceTree = "<group>"; };
+		BF5491D71C22FD660090D151 /* User.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.generated.swift; path = Model/User.generated.swift; sourceTree = "<group>"; };
+		BF5491DF1C23071C0090D151 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Person.swift; path = Person/Person.swift; sourceTree = "<group>"; };
+		BF54DD671C2EB4FE00F635C0 /* NewsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsController.swift; path = News/NewsController.swift; sourceTree = "<group>"; };
+		BF54DD6A1C2EB95F00F635C0 /* News.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = News.swift; path = Model/News.swift; sourceTree = "<group>"; };
+		BF54DD6C1C2EB95F00F635C0 /* NewsComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsComment.swift; path = Model/NewsComment.swift; sourceTree = "<group>"; };
+		BF54DD721C2EB9A800F635C0 /* News.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = News.generated.swift; path = Model/News.generated.swift; sourceTree = "<group>"; };
+		BF54DD731C2EB9A800F635C0 /* NewsComment.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsComment.generated.swift; path = Model/NewsComment.generated.swift; sourceTree = "<group>"; };
+		BF54DD761C2EBDE800F635C0 /* NewsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsCell.swift; path = News/NewsCell.swift; sourceTree = "<group>"; };
 		BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
 		BF6308971C1965AF0087A4F0 /* Agreement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Agreement.swift; path = Accounts/Agreement.swift; sourceTree = "<group>"; };
 		BF63089C1C1970AB0087A4F0 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -77,18 +121,22 @@
 		BF6308AB1C19B7D20087A4F0 /* AccountRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountRequester.swift; path = Accounts/AccountRequester.swift; sourceTree = "<group>"; };
 		BF67816B1C15AA77001C89AE /* AccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountController.swift; path = Accounts/AccountController.swift; sourceTree = "<group>"; };
 		BF67816F1C15AB10001C89AE /* LoginRegister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginRegister.swift; path = Accounts/LoginRegister.swift; sourceTree = "<group>"; };
+		BF9404961C2818C3001ABB1E /* AppLauchner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppLauchner.swift; path = Home/AppLauchner.swift; sourceTree = "<group>"; };
 		BFAC52261C1C5F9500107F71 /* AuthCodeBtnView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthCodeBtnView.swift; path = Accounts/AuthCodeBtnView.swift; sourceTree = "<group>"; };
 		BFAC52291C1C84A700107F71 /* InputableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InputableViewController.swift; path = BaseTemplate/InputableViewController.swift; sourceTree = "<group>"; };
 		BFB39CCA1C1EA20200FB6B5D /* sportcar.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = sportcar.plist; path = BaseTemplate/SportCarBrandSelect/sportcar.plist; sourceTree = "<group>"; };
 		BFB39CCC1C1EA45500FB6B5D /* SportCarBrandSelecter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarBrandSelecter.swift; path = BaseTemplate/SportCarBrandSelect/SportCarBrandSelecter.swift; sourceTree = "<group>"; };
 		BFBEA0831C2152F200F04F9A /* Wrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Wrapper.swift; path = BaseTemplate/Wrapper.swift; sourceTree = "<group>"; };
-		BFBEA0851C215B2200F04F9A /* User.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.generated.swift; path = Model/User.generated.swift; sourceTree = "<group>"; };
+		BFC712EA1C2C3B4F00A71F4C /* UserUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserUtilities.swift; path = Model/UserUtilities.swift; sourceTree = "<group>"; };
+		BFC712ED1C2C431900A71F4C /* StatusComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusComment.swift; path = Model/StatusComment.swift; sourceTree = "<group>"; };
+		BFC712EF1C2C431900A71F4C /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.swift; path = Model/Status.swift; sourceTree = "<group>"; };
+		BFC712F91C2C439900A71F4C /* Status.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.generated.swift; path = Model/Status.generated.swift; sourceTree = "<group>"; };
+		BFC712FA1C2C439900A71F4C /* StatusComment.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusComment.generated.swift; path = Model/StatusComment.generated.swift; sourceTree = "<group>"; };
 		BFCB96351C1F0551004F77E8 /* BlackBarNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlackBarNavigationController.swift; sourceTree = "<group>"; };
 		BFCB96371C1F0DA8004F77E8 /* SportCarBrandSelecterDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarBrandSelecterDetail.swift; path = BaseTemplate/SportCarBrandSelect/SportCarBrandSelecterDetail.swift; sourceTree = "<group>"; };
 		BFCB96391C1FB0AE004F77E8 /* SportCarRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarRequester.swift; path = Accounts/SportCarRequester.swift; sourceTree = "<group>"; };
 		BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarSelectDetail.swift; path = Accounts/SportCarSelectDetail.swift; sourceTree = "<group>"; };
 		BFCB963F1C205DF1004F77E8 /* Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Home.swift; path = Home/Home.swift; sourceTree = "<group>"; };
-		BFCB96411C205EA9004F77E8 /* DisplayBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DisplayBoard.swift; path = Home/DisplayBoard.swift; sourceTree = "<group>"; };
 		BFCB96431C206169004F77E8 /* SideBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideBar.swift; path = Home/SideBar.swift; sourceTree = "<group>"; };
 		BFCB96451C2061E0004F77E8 /* LoadingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingButton.swift; path = BaseTemplate/LoadingButton.swift; sourceTree = "<group>"; };
 		BFFA51121C05D9910019E5EF /* SportCarClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SportCarClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -150,11 +198,59 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		BF2BE20C1C2937B100DD0CF9 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
+		BF2BE21F1C29395B00DD0CF9 /* Club */ = {
+			isa = PBXGroup;
+			children = (
+				BF2BE2191C29390200DD0CF9 /* Club.generated.swift */,
+				BF2BE2101C2938B000DD0CF9 /* Club.swift */,
+			);
+			name = Club;
+			sourceTree = "<group>";
+		};
+		BF2BE2201C29396100DD0CF9 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				BF2BE21B1C29390200DD0CF9 /* Profile.generated.swift */,
+				BF2BE20E1C2938B000DD0CF9 /* Profile.swift */,
+			);
+			name = Profile;
+			sourceTree = "<group>";
+		};
+		BF2BE2211C29396900DD0CF9 /* ClubJoining */ = {
+			isa = PBXGroup;
+			children = (
+				BF2BE21A1C29390200DD0CF9 /* ClubJoining.generated.swift */,
+				BF2BE2121C2938B000DD0CF9 /* ClubJoining.swift */,
+			);
+			name = ClubJoining;
+			sourceTree = "<group>";
+		};
+		BF2BE2221C293C5700DD0CF9 /* subviews */ = {
+			isa = PBXGroup;
+			children = (
+				BF2BE2231C293C6D00DD0CF9 /* PersonInfo.swift */,
+			);
+			name = subviews;
+			sourceTree = "<group>";
+		};
+		BF2BE2261C293ED500DD0CF9 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Location;
+			sourceTree = "<group>";
+		};
 		BF32EEAA1C088CF60098FEC1 /* Account */ = {
 			isa = PBXGroup;
 			children = (
 				BF6308A81C19B3F90087A4F0 /* Network */,
-				BF6308A71C19B3DD0087A4F0 /* CoreDataOperator */,
 				BF6308991C1967A60087A4F0 /* data */,
 				BF49FBAB1C1940110019EBC2 /* ToolViews */,
 				BF6308A61C19B3D10087A4F0 /* Views */,
@@ -169,6 +265,64 @@
 				BFAC52261C1C5F9500107F71 /* AuthCodeBtnView.swift */,
 			);
 			name = ToolViews;
+			sourceTree = "<group>";
+		};
+		BF5491DB1C22FE7F0090D151 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				BF5491D71C22FD660090D151 /* User.generated.swift */,
+				BF5491CE1C22FD1A0090D151 /* User.swift */,
+				BFC712EA1C2C3B4F00A71F4C /* UserUtilities.swift */,
+			);
+			name = User;
+			sourceTree = "<group>";
+		};
+		BF5491DC1C22FE870090D151 /* SportCar */ = {
+			isa = PBXGroup;
+			children = (
+				BF5491D61C22FD660090D151 /* SportCar.generated.swift */,
+				BF5491CA1C22FD1A0090D151 /* SportCar.swift */,
+			);
+			name = SportCar;
+			sourceTree = "<group>";
+		};
+		BF5491DD1C22FE900090D151 /* SportCarOwnership */ = {
+			isa = PBXGroup;
+			children = (
+				BF5491D51C22FD660090D151 /* SportCarOwnerShip.generated.swift */,
+				BF5491CC1C22FD1A0090D151 /* SportCarOwnerShip.swift */,
+			);
+			name = SportCarOwnership;
+			sourceTree = "<group>";
+		};
+		BF5491DE1C23070A0090D151 /* Person */ = {
+			isa = PBXGroup;
+			children = (
+				BF2BE2221C293C5700DD0CF9 /* subviews */,
+				BF2BE20C1C2937B100DD0CF9 /* Data */,
+				BF5491DF1C23071C0090D151 /* Person.swift */,
+			);
+			name = Person;
+			sourceTree = "<group>";
+		};
+		BF54DD661C2D879000F635C0 /* News */ = {
+			isa = PBXGroup;
+			children = (
+				BF54DD671C2EB4FE00F635C0 /* NewsController.swift */,
+				BF54DD761C2EBDE800F635C0 /* NewsCell.swift */,
+			);
+			name = News;
+			sourceTree = "<group>";
+		};
+		BF54DD711C2EB97E00F635C0 /* News */ = {
+			isa = PBXGroup;
+			children = (
+				BF54DD721C2EB9A800F635C0 /* News.generated.swift */,
+				BF54DD731C2EB9A800F635C0 /* NewsComment.generated.swift */,
+				BF54DD6A1C2EB95F00F635C0 /* News.swift */,
+				BF54DD6C1C2EB95F00F635C0 /* NewsComment.swift */,
+			);
+			name = News;
 			sourceTree = "<group>";
 		};
 		BF6308991C1967A60087A4F0 /* data */ = {
@@ -191,13 +345,6 @@
 				BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */,
 			);
 			name = Views;
-			sourceTree = "<group>";
-		};
-		BF6308A71C19B3DD0087A4F0 /* CoreDataOperator */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = CoreDataOperator;
 			sourceTree = "<group>";
 		};
 		BF6308A81C19B3F90087A4F0 /* Network */ = {
@@ -239,19 +386,23 @@
 			name = Wrapper;
 			sourceTree = "<group>";
 		};
-		BFCB963D1C2059C1004F77E8 /* God */ = {
+		BFC712F41C2C432400A71F4C /* Status */ = {
 			isa = PBXGroup;
 			children = (
+				BFC712F91C2C439900A71F4C /* Status.generated.swift */,
+				BFC712FA1C2C439900A71F4C /* StatusComment.generated.swift */,
+				BFC712ED1C2C431900A71F4C /* StatusComment.swift */,
+				BFC712EF1C2C431900A71F4C /* Status.swift */,
 			);
-			name = God;
+			name = Status;
 			sourceTree = "<group>";
 		};
 		BFCB963E1C205DE2004F77E8 /* Home */ = {
 			isa = PBXGroup;
 			children = (
 				BFCB963F1C205DF1004F77E8 /* Home.swift */,
-				BFCB96411C205EA9004F77E8 /* DisplayBoard.swift */,
 				BFCB96431C206169004F77E8 /* SideBar.swift */,
+				BF9404961C2818C3001ABB1E /* AppLauchner.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -282,8 +433,10 @@
 		BFFA51141C05D9910019E5EF /* SportCarClient */ = {
 			isa = PBXGroup;
 			children = (
+				BF54DD661C2D879000F635C0 /* News */,
+				BF2BE2261C293ED500DD0CF9 /* Location */,
+				BF5491DE1C23070A0090D151 /* Person */,
 				BFCB963E1C205DE2004F77E8 /* Home */,
-				BFCB963D1C2059C1004F77E8 /* God */,
 				BFAC52281C1C849000107F71 /* BaseTemplate */,
 				BF32EEAA1C088CF60098FEC1 /* Account */,
 				BFFA51461C05D9E20019E5EF /* Model */,
@@ -291,6 +444,7 @@
 				BFFA511F1C05D9920019E5EF /* Assets.xcassets */,
 				BFFA51241C05D9920019E5EF /* Info.plist */,
 				BFFA511C1C05D9920019E5EF /* SportCarClient.xcdatamodeld */,
+				BF3BD5E91C28E89000499674 /* Settings.bundle */,
 				BF63089C1C1970AB0087A4F0 /* Localizable.strings */,
 				BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */,
 			);
@@ -318,8 +472,14 @@
 		BFFA51461C05D9E20019E5EF /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				BFBEA0851C215B2200F04F9A /* User.generated.swift */,
-				BF1E49EC1C08452700BB9BEC /* User.swift */,
+				BF54DD711C2EB97E00F635C0 /* News */,
+				BFC712F41C2C432400A71F4C /* Status */,
+				BF2BE21F1C29395B00DD0CF9 /* Club */,
+				BF2BE2211C29396900DD0CF9 /* ClubJoining */,
+				BF2BE2201C29396100DD0CF9 /* Profile */,
+				BF5491DD1C22FE900090D151 /* SportCarOwnership */,
+				BF5491DC1C22FE870090D151 /* SportCar */,
+				BF5491DB1C22FE7F0090D151 /* User */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -395,6 +555,11 @@
 				TargetAttributes = {
 					BFFA51111C05D9910019E5EF = {
 						CreatedOnToolsVersion = 7.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					BFFA51281C05D9920019E5EF = {
 						CreatedOnToolsVersion = 7.1;
@@ -435,6 +600,7 @@
 				BFB39CCB1C1EA20200FB6B5D /* sportcar.plist in Resources */,
 				BF63089D1C1970AB0087A4F0 /* Localizable.strings in Resources */,
 				BF63089F1C1972050087A4F0 /* agreement.rtf in Resources */,
+				BF3BD5EA1C28E89000499674 /* Settings.bundle in Resources */,
 				BFFA51201C05D9920019E5EF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -508,31 +674,54 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF2BE2181C2938B000DD0CF9 /* ClubJoining.swift in Sources */,
+				BF5491E01C23071C0090D151 /* Person.swift in Sources */,
+				BF9404971C2818C3001ABB1E /* AppLauchner.swift in Sources */,
+				BF54DD6E1C2EB95F00F635C0 /* News.swift in Sources */,
 				BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */,
+				BF5491D91C22FD660090D151 /* SportCar.generated.swift in Sources */,
 				BFAC52271C1C5F9500107F71 /* AuthCodeBtnView.swift in Sources */,
-				BF1E49EE1C08452700BB9BEC /* User.swift in Sources */,
+				BF2BE21C1C29390200DD0CF9 /* Club.generated.swift in Sources */,
 				BFB39CCD1C1EA45500FB6B5D /* SportCarBrandSelecter.swift in Sources */,
+				BF5491D21C22FD1A0090D151 /* SportCarOwnerShip.swift in Sources */,
 				BF67816C1C15AA77001C89AE /* AccountController.swift in Sources */,
-				BFBEA0861C215B2200F04F9A /* User.generated.swift in Sources */,
 				BF6308AC1C19B7D20087A4F0 /* AccountRequester.swift in Sources */,
+				BF2BE2241C293C6D00DD0CF9 /* PersonInfo.swift in Sources */,
+				BF2BE21D1C29390200DD0CF9 /* ClubJoining.generated.swift in Sources */,
+				BF54DD751C2EB9A800F635C0 /* NewsComment.generated.swift in Sources */,
 				BFCB96361C1F0551004F77E8 /* BlackBarNavigationController.swift in Sources */,
 				BF6308A31C19A8040087A4F0 /* ResetPassword.swift in Sources */,
+				BF5491D41C22FD1A0090D151 /* User.swift in Sources */,
 				BFAC522A1C1C84A700107F71 /* InputableViewController.swift in Sources */,
+				BF5491DA1C22FD660090D151 /* User.generated.swift in Sources */,
 				BF6308A51C19AF600087A4F0 /* ProfileInformation.swift in Sources */,
-				BFCB96421C205EA9004F77E8 /* DisplayBoard.swift in Sources */,
 				BFBEA0841C2152F200F04F9A /* Wrapper.swift in Sources */,
+				BF54DD771C2EBDE800F635C0 /* NewsCell.swift in Sources */,
+				BFC712F11C2C431900A71F4C /* StatusComment.swift in Sources */,
+				BF2BE21E1C29390200DD0CF9 /* Profile.generated.swift in Sources */,
+				BFC712F31C2C431900A71F4C /* Status.swift in Sources */,
+				BF54DD741C2EB9A800F635C0 /* News.generated.swift in Sources */,
+				BF5491D81C22FD660090D151 /* SportCarOwnerShip.generated.swift in Sources */,
 				BFCB96441C206169004F77E8 /* SideBar.swift in Sources */,
 				BFCB96381C1F0DA8004F77E8 /* SportCarBrandSelecterDetail.swift in Sources */,
+				BF54DD681C2EB4FE00F635C0 /* NewsController.swift in Sources */,
+				BF54DD701C2EB95F00F635C0 /* NewsComment.swift in Sources */,
+				BFC712FC1C2C439900A71F4C /* StatusComment.generated.swift in Sources */,
 				BFCB963A1C1FB0AE004F77E8 /* SportCarRequester.swift in Sources */,
 				BFFA51161C05D9910019E5EF /* AppDelegate.swift in Sources */,
+				BF5491D01C22FD1A0090D151 /* SportCar.swift in Sources */,
 				BF49FBAD1C19424D0019EBC2 /* ShinyButton.swift in Sources */,
 				BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */,
+				BF2BE2141C2938B000DD0CF9 /* Profile.swift in Sources */,
 				BF5FF0ED1C15B4860050F5FE /* GlobalVariables.swift in Sources */,
 				BFFA511E1C05D9920019E5EF /* SportCarClient.xcdatamodeld in Sources */,
 				BFCB96401C205DF1004F77E8 /* Home.swift in Sources */,
 				BF6308981C1965AF0087A4F0 /* Agreement.swift in Sources */,
+				BF2BE2161C2938B000DD0CF9 /* Club.swift in Sources */,
 				BFCB963C1C1FFD2D004F77E8 /* SportCarSelectDetail.swift in Sources */,
 				BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */,
+				BFC712EB1C2C3B4F00A71F4C /* UserUtilities.swift in Sources */,
+				BFC712FB1C2C439900A71F4C /* Status.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

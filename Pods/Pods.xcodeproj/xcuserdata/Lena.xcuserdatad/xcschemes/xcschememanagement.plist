@@ -14,7 +14,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Cent.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Dollar.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Kingfisher.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Mapbox-iOS-SDK-Mapbox.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -57,22 +72,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>021249D43ADAE2D552206638C6301800</key>
+		<key>21981BD422205F07E3594868193146EE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>26AF84B047C0A275890A1E32ABD23F2B</key>
+		<key>23D64788C716063E82E4760BC79D05AE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>31167EACE034E67B6D69F1A8D6FA6B9D</key>
+		<key>23DD5FB2E57E185A86F9C0883DC37447</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>351036F1692F1E976EEC7F342EE19D9A</key>
+		<key>2DB59219DEF5D393F19F0753F2D9C161</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -82,22 +97,37 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>4E307F847AC3BEDF2FA9B74017BB9908</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>64E9BEEFB76C467AB2B72874D174FC98</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B5EC77BBFA4DB8AC4AA01B0DD060C99D</key>
+		<key>798112EF0D0E6C443AA0F4EA185A09C5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C6D7E3F7FAC0B35966819B5FE5A5B7F6</key>
+		<key>94D6E6CA7CA4D9563136AA27D37BEA66</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D01F8CBEDDC858D9AAED041351157AA7</key>
+		<key>9D05950A740EAAE35BC23C7284C65D2B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9E4B9CCC957E6A1ED0406E64CCB44A8A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BBDC238B1368D3D2350B19A8D60533C6</key>
 		<dict>
 			<key>primary</key>
 			<true/>

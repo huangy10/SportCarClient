@@ -16,7 +16,8 @@ import AlecrimCoreData
 
 extension User {
 
-    @NSManaged var age: Int // cannot mark as optional because Objective-C compatibility issues
+    @NSManaged var age: Int32 // cannot mark as optional because Objective-C compatibility issues
+    @NSManaged var avatarCarID: String?
     @NSManaged var avatarUrl: String?
     @NSManaged var birthDate: NSDate?
     @NSManaged var district: String?
@@ -28,14 +29,38 @@ extension User {
     @NSManaged var starSign: String?
     @NSManaged var userID: String?
 
+    @NSManaged var profile: Profile?
+
+    @NSManaged var carsLiked: Set<SportCar>
+    @NSManaged var club: Set<Club>
+    @NSManaged var clubCreated: Set<Club>
     @NSManaged var fans: Set<User>
     @NSManaged var follows: Set<User>
+    @NSManaged var newsComment: Set<NewsComment>
+    @NSManaged var ownership: Set<SportCarOwnerShip>
+    @NSManaged var status: Set<Status>
+    @NSManaged var statusComment: Set<StatusComment>
 
 }
 
 // MARK: - User KVC compliant to-many accessors and helpers
 
 extension User {
+
+    @NSManaged private func addCarsLikedObject(object: SportCar)
+    @NSManaged private func removeCarsLikedObject(object: SportCar)
+    @NSManaged func addCarsLiked(carsLiked: Set<SportCar>)
+    @NSManaged func removeCarsLiked(carsLiked: Set<SportCar>)
+
+    @NSManaged private func addClubObject(object: Club)
+    @NSManaged private func removeClubObject(object: Club)
+    @NSManaged func addClub(club: Set<Club>)
+    @NSManaged func removeClub(club: Set<Club>)
+
+    @NSManaged private func addClubCreatedObject(object: Club)
+    @NSManaged private func removeClubCreatedObject(object: Club)
+    @NSManaged func addClubCreated(clubCreated: Set<Club>)
+    @NSManaged func removeClubCreated(clubCreated: Set<Club>)
 
     @NSManaged private func addFansObject(object: User)
     @NSManaged private func removeFansObject(object: User)
@@ -47,11 +72,52 @@ extension User {
     @NSManaged func addFollows(follows: Set<User>)
     @NSManaged func removeFollows(follows: Set<User>)
 
+    @NSManaged private func addNewsCommentObject(object: NewsComment)
+    @NSManaged private func removeNewsCommentObject(object: NewsComment)
+    @NSManaged func addNewsComment(newsComment: Set<NewsComment>)
+    @NSManaged func removeNewsComment(newsComment: Set<NewsComment>)
+
+    @NSManaged private func addOwnershipObject(object: SportCarOwnerShip)
+    @NSManaged private func removeOwnershipObject(object: SportCarOwnerShip)
+    @NSManaged func addOwnership(ownership: Set<SportCarOwnerShip>)
+    @NSManaged func removeOwnership(ownership: Set<SportCarOwnerShip>)
+
+    @NSManaged private func addStatusObject(object: Status)
+    @NSManaged private func removeStatusObject(object: Status)
+    @NSManaged func addStatus(status: Set<Status>)
+    @NSManaged func removeStatus(status: Set<Status>)
+
+    @NSManaged private func addStatusCommentObject(object: StatusComment)
+    @NSManaged private func removeStatusCommentObject(object: StatusComment)
+    @NSManaged func addStatusComment(statusComment: Set<StatusComment>)
+    @NSManaged func removeStatusComment(statusComment: Set<StatusComment>)
+
+    @nonobjc func addCarsLiked(carsLiked: SportCar) { self.addCarsLikedObject(carsLiked) }
+    @nonobjc func removeCarsLiked(carsLiked: SportCar) { self.removeCarsLikedObject(carsLiked) }
+
+    @nonobjc func addClub(club: Club) { self.addClubObject(club) }
+    @nonobjc func removeClub(club: Club) { self.removeClubObject(club) }
+
+    @nonobjc func addClubCreated(clubCreated: Club) { self.addClubCreatedObject(clubCreated) }
+    @nonobjc func removeClubCreated(clubCreated: Club) { self.removeClubCreatedObject(clubCreated) }
+
     func addFan(fan: User) { self.addFansObject(fan) }
     func removeFan(fan: User) { self.removeFansObject(fan) }
 
     func addFollow(follow: User) { self.addFollowsObject(follow) }
     func removeFollow(follow: User) { self.removeFollowsObject(follow) }
+
+    @nonobjc func addNewsComment(newsComment: NewsComment) { self.addNewsCommentObject(newsComment) }
+    @nonobjc func removeNewsComment(newsComment: NewsComment) { self.removeNewsCommentObject(newsComment) }
+
+    @nonobjc func addOwnership(ownership: SportCarOwnerShip) { self.addOwnershipObject(ownership) }
+    @nonobjc func removeOwnership(ownership: SportCarOwnerShip) { self.removeOwnershipObject(ownership) }
+
+    func addStatu(statu: Status) { self.addStatusObject(statu) }
+    func removeStatu(statu: Status) { self.removeStatusObject(statu) }
+
+    @nonobjc func addStatusComment(statusComment: StatusComment) { self.addStatusCommentObject(statusComment) }
+    @nonobjc func removeStatusComment(statusComment: StatusComment) { self.removeStatusCommentObject(statusComment) }
 
 }
 
@@ -59,7 +125,8 @@ extension User {
 
 extension User {
 
-    static let age = AlecrimCoreData.NullableAttribute<Int>("age")
+    static let age = AlecrimCoreData.NullableAttribute<Int32>("age")
+    static let avatarCarID = AlecrimCoreData.NullableAttribute<String>("avatarCarID")
     static let avatarUrl = AlecrimCoreData.NullableAttribute<String>("avatarUrl")
     static let birthDate = AlecrimCoreData.NullableAttribute<NSDate>("birthDate")
     static let district = AlecrimCoreData.NullableAttribute<String>("district")
@@ -71,8 +138,17 @@ extension User {
     static let starSign = AlecrimCoreData.NullableAttribute<String>("starSign")
     static let userID = AlecrimCoreData.NullableAttribute<String>("userID")
 
+    static let profile = AlecrimCoreData.NullableAttribute<Profile>("profile")
+
+    static let carsLiked = AlecrimCoreData.Attribute<Set<SportCar>>("carsLiked")
+    static let club = AlecrimCoreData.Attribute<Set<Club>>("club")
+    static let clubCreated = AlecrimCoreData.Attribute<Set<Club>>("clubCreated")
     static let fans = AlecrimCoreData.Attribute<Set<User>>("fans")
     static let follows = AlecrimCoreData.Attribute<Set<User>>("follows")
+    static let newsComment = AlecrimCoreData.Attribute<Set<NewsComment>>("newsComment")
+    static let ownership = AlecrimCoreData.Attribute<Set<SportCarOwnerShip>>("ownership")
+    static let status = AlecrimCoreData.Attribute<Set<Status>>("status")
+    static let statusComment = AlecrimCoreData.Attribute<Set<StatusComment>>("statusComment")
 
 }
 
@@ -80,7 +156,8 @@ extension User {
 
 extension AlecrimCoreData.AttributeType where Self.ValueType: User {
 
-    var age: AlecrimCoreData.NullableAttribute<Int> { return AlecrimCoreData.NullableAttribute<Int>("age", self) }
+    var age: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("age", self) }
+    var avatarCarID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("avatarCarID", self) }
     var avatarUrl: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("avatarUrl", self) }
     var birthDate: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("birthDate", self) }
     var district: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("district", self) }
@@ -92,8 +169,17 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: User {
     var starSign: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("starSign", self) }
     var userID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("userID", self) }
 
+    var profile: AlecrimCoreData.NullableAttribute<Profile> { return AlecrimCoreData.NullableAttribute<Profile>("profile", self) }
+
+    var carsLiked: AlecrimCoreData.Attribute<Set<SportCar>> { return AlecrimCoreData.Attribute<Set<SportCar>>("carsLiked", self) }
+    var club: AlecrimCoreData.Attribute<Set<Club>> { return AlecrimCoreData.Attribute<Set<Club>>("club", self) }
+    var clubCreated: AlecrimCoreData.Attribute<Set<Club>> { return AlecrimCoreData.Attribute<Set<Club>>("clubCreated", self) }
     var fans: AlecrimCoreData.Attribute<Set<User>> { return AlecrimCoreData.Attribute<Set<User>>("fans", self) }
     var follows: AlecrimCoreData.Attribute<Set<User>> { return AlecrimCoreData.Attribute<Set<User>>("follows", self) }
+    var newsComment: AlecrimCoreData.Attribute<Set<NewsComment>> { return AlecrimCoreData.Attribute<Set<NewsComment>>("newsComment", self) }
+    var ownership: AlecrimCoreData.Attribute<Set<SportCarOwnerShip>> { return AlecrimCoreData.Attribute<Set<SportCarOwnerShip>>("ownership", self) }
+    var status: AlecrimCoreData.Attribute<Set<Status>> { return AlecrimCoreData.Attribute<Set<Status>>("status", self) }
+    var statusComment: AlecrimCoreData.Attribute<Set<StatusComment>> { return AlecrimCoreData.Attribute<Set<StatusComment>>("statusComment", self) }
 
 }
 

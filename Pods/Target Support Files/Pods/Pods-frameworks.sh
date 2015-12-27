@@ -86,6 +86,8 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods/Alamofire.framework"
   install_framework "Pods/AlecrimCoreData.framework"
+  install_framework "Pods/Cent.framework"
+  install_framework "Pods/Dollar.framework"
   install_framework "Pods/Kingfisher.framework"
   install_framework "Pods/SnapKit.framework"
   install_framework "Pods/Spring.framework"
@@ -95,6 +97,8 @@ fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/Alamofire.framework"
   install_framework "Pods/AlecrimCoreData.framework"
+  install_framework "Pods/Cent.framework"
+  install_framework "Pods/Dollar.framework"
   install_framework "Pods/Kingfisher.framework"
   install_framework "Pods/SnapKit.framework"
   install_framework "Pods/Spring.framework"
