@@ -401,13 +401,4 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         avatarBtn?.setBackgroundImage(image, forState: .Normal)
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
-    // MARK: 一些工具
-    func displayAlertController(title: String?, message: String?) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        let defaultAction = UIAlertAction(title: "确定", style: .Default, handler: { (action) -> Void in
-        })
-        alert.addAction(defaultAction)
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
 }

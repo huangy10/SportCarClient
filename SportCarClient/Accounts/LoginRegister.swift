@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 
-class LoginRegisterController: InputableViewController, UIScrollViewDelegate {
+class LoginRegisterController: InputableViewController {
 //    init(){
 //        super.init(nibName: nil, bundle: nil)
 //    }
@@ -577,14 +577,6 @@ class LoginRegisterController: InputableViewController, UIScrollViewDelegate {
                 self.titleRegisterBtn?.setTitleColor(UIColor.whiteColor(), forState: .Normal)
                 }, completion: nil)
         }
-    }
-    
-    func displayAlertController(title: String?, message: String?) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        let defaultAction = UIAlertAction(title: "确定", style: .Default, handler: { (action) -> Void in
-        })
-        alert.addAction(defaultAction)
-        self.presentViewController(alert, animated: true, completion: nil)
     }
 }
 

@@ -17,10 +17,12 @@ import AlecrimCoreData
 extension News {
 
     @NSManaged var commentNum: Int32 // cannot mark as optional because Objective-C compatibility issues
+    @NSManaged var contentURL: String?
     @NSManaged var cover: String?
     @NSManaged var createdAt: NSDate?
     @NSManaged var likeNum: Int32 // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var newsID: String?
+    @NSManaged var recentLikerName: String?
     @NSManaged var shareNum: Int32 // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var title: String?
 
@@ -47,10 +49,12 @@ extension News {
 extension News {
 
     static let commentNum = AlecrimCoreData.NullableAttribute<Int32>("commentNum")
+    static let contentURL = AlecrimCoreData.NullableAttribute<String>("contentURL")
     static let cover = AlecrimCoreData.NullableAttribute<String>("cover")
     static let createdAt = AlecrimCoreData.NullableAttribute<NSDate>("createdAt")
     static let likeNum = AlecrimCoreData.NullableAttribute<Int32>("likeNum")
     static let newsID = AlecrimCoreData.NullableAttribute<String>("newsID")
+    static let recentLikerName = AlecrimCoreData.NullableAttribute<String>("recentLikerName")
     static let shareNum = AlecrimCoreData.NullableAttribute<Int32>("shareNum")
     static let title = AlecrimCoreData.NullableAttribute<String>("title")
 
@@ -63,10 +67,12 @@ extension News {
 extension AlecrimCoreData.AttributeType where Self.ValueType: News {
 
     var commentNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("commentNum", self) }
+    var contentURL: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("contentURL", self) }
     var cover: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("cover", self) }
     var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
     var likeNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("likeNum", self) }
     var newsID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("newsID", self) }
+    var recentLikerName: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("recentLikerName", self) }
     var shareNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("shareNum", self) }
     var title: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("title", self) }
 

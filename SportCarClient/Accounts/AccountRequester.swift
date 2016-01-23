@@ -49,6 +49,13 @@ class AccountURLMaker {
         return NSURL(string: website + "/profile/\(userID)/info")
     }
     
+    func getFansList(userID: String) -> String{
+        return website + "/profile/\(userID)/fans"
+    }
+    
+    func getFollowList(userID: String) -> String {
+        return website + "/profile/\(userID)/follows"
+    }
 }
 
 /// 这个类负责整个注册登陆部分的网络访问请求
@@ -66,7 +73,6 @@ class AccountRequester {
         
         cfg.HTTPCookieStorage = cooks
         cfg.HTTPCookieAcceptPolicy = NSHTTPCookieAcceptPolicy.Always
-        print("\(cooks.cookies)")
         self.manager = Alamofire.Manager(configuration: cfg)
     }
     
@@ -125,23 +131,46 @@ class AccountRequester {
     
     func postToRegister(phoneNum: String, passwd: String, authCode: String, onSuccess: (userID: Int?)->(Void), onError: (code: String?)->(Void)) {
         manager.request(.POST, urlMaker.register()!.absoluteString, parameters: ["username": phoneNum, "password1": passwd, "password2": passwd, "auth_code": authCode]).responseJSON { (response) -> Void in
-            guard response.result.isSuccess else{
+            
+            switch response.result {
+            case .Success(let value):
+                let json = JSON(value)
+                if json["success"].boolValue {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        let userID = json["userID"].int
+                        onSuccess(userID: userID)
+                    })
+                }else{
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        onError(code: json["code"].string)
+                    })
+                }
+                break
+            case .Failure(let error):
+                print(error)
                 dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
                     onError(code: "0000")
                 })
-                return
+                break
             }
-            let result = response.result.value
-            if result?["success"] as! Bool {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    let userID = result?["userID"] as? Int
-                    onSuccess(userID: userID)
-                })
-            }else {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    onError(code: result?["code"] as? String)
-                })
-            }
+//            
+//            guard response.result.isSuccess else{
+//                dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
+//                    onError(code: "0000")
+//                })
+//                return
+//            }
+//            let result = response.result.value
+//            if result?["success"] as! Bool {
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    let userID = result?["userID"] as? Int
+//                    onSuccess(userID: userID)
+//                })
+//            }else {
+//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                    onError(code: result?["code"] as? String)
+//                })
+//            }
         }
     }
     
@@ -161,21 +190,39 @@ class AccountRequester {
                 switch result{
                 case .Success(let upload, _, _):
                     upload.responseJSON(completionHandler: { (response) -> Void in
-                        print("\(response.result.value)")
-                        guard response.result.isSuccess else {
+                        switch response.result {
+                        case .Success(let value):
+                            let json = JSON(value)
+                            if json["success"].boolValue {
+                                dispatch_async(dispatch_get_main_queue(), onSuccess)
+                            }else{
+                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                                    onError(code: json["code"].string)
+                                })
+                            }
+                            break
+                        case .Failure(let error):
+                            print("\(error)")
                             dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
                                 onError(code: "0000")
                             })
-                            return
+
+                            break
                         }
-                        let result = response.result.value
-                        if result?["success"] as! Bool {
-                            dispatch_async(dispatch_get_main_queue(), onSuccess)
-                        }else{
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                onError(code: result?["code"] as? String)
-                            })
-                        }
+//                        guard response.result.isSuccess else {
+//                            dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
+//                                onError(code: "0000")
+//                            })
+//                            return
+//                        }
+//                        let result = response.result.value
+//                        if result?["success"] as! Bool {
+//                            dispatch_async(dispatch_get_main_queue(), onSuccess)
+//                        }else{
+//                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                                onError(code: result?["code"] as? String)
+//                            })
+//                        }
 
                     })
                     break
@@ -220,6 +267,44 @@ extension AccountRequester {
         let url = urlMaker.getProfile(userID)?.absoluteString
         manager.request(.GET, url!, parameters: nil).responseJSON { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "user_profile", onSuccess: onSuccess, onError: onError)
+        }
+    }
+    
+    /**
+     获取给定id的用户的粉丝列表
+     
+     - parameter userID:        给定的用户id
+     - parameter dateThreshold: 时间分割阈值
+     - parameter op_type:       操作类型，只可以取值为more或者latest
+     - parameter onSuccess:     成功以后调用的closure
+     - parameter onError:       失败以后调用的closure
+     */
+    func getFansList(userID: String, dateThreshold: NSDate, op_type: String, limit: Int = 20, filterStr: String? = nil, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let urlStr = urlMaker.getFansList(userID)
+        manager.request(.GET
+            , urlStr, parameters: ["date_threshold": STRDate(dateThreshold), "op_type": op_type, "limit": limit, "filter": filterStr ?? ""])
+            .responseJSON { (response) -> Void in
+                self.resultValueHandler(response.result, dataFieldName: "fans", onSuccess: onSuccess, onError: onError)
+        }
+    }
+    
+    /**
+     获取给定id的用户的关注列表
+     
+     - parameter userID:        给定用户的id
+     - parameter dateThreshold: 时间分割阈值
+     - parameter op_type:       操作类型，只可以取值为more或者latest
+     - parameter limit:         每次获取的最大用户数量
+     - parameter filterStr:     搜索参数
+     - parameter onSuccess:     成功以后调用的closure
+     - parameter onError:       失败以后调用的closure
+     */
+    func getFollowList(userID: String, dateThreshold: NSDate, op_type: String, limit: Int = 20, filterStr: String? = nil, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let urlStr = urlMaker.getFollowList(userID)
+        manager.request(.GET
+            , urlStr, parameters: ["date_threshold": STRDate(dateThreshold), "op_type": op_type, "limit": limit, "filter": filterStr ?? ""])
+            .responseJSON { (response) -> Void in
+                self.resultValueHandler(response.result, dataFieldName: "follow", onSuccess: onSuccess, onError: onError)
         }
     }
 }

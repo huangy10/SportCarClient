@@ -21,13 +21,25 @@ class SportCarURLMaker: AccountURLMaker {
     func followSportCar(carID: String) -> String {
         return website + "/cars/\(carID)/follow"
     }
+    
+    func getAuthedCarList(userID: String) -> String {
+        return website + "/profile/\(userID)/authed_cars"
+    }
 }
 
 
 class SportCarRequester: AccountRequester {
     
     static let sharedSCRequester = SportCarRequester()
-
+    
+    /**
+     根据生产商和汽车的名字检索跑车对象并返回详细信息
+     
+     - parameter manufacturer: 生产商名称
+     - parameter carName:      车型名称
+     - parameter onSuccess:    成功以后调用这个
+     - parameter onError:      失败以后调用这个
+     */
     func querySportCarWith(manufacturer: String, carName: String, onSuccess: (data: JSON)->(), onError: (code: String?)->()){
         let urlStr = SportCarURLMaker.sharedMaker.querySportCar()
         self.manager.request(.GET, urlStr, parameters: ["manufacturer": manufacturer, "car_name": carName]).responseJSON { (response) -> Void in
@@ -51,6 +63,14 @@ class SportCarRequester: AccountRequester {
         }
     }
     
+    /**
+     关注某一辆汽车，但是并不认证
+     
+     - parameter signature: 跑车签名
+     - parameter carId:     跑车id
+     - parameter onSuccess: 成功以后调用这个
+     - parameter onError:   失败以后调用这个
+     */
     func postToFollow(signature:String?, carId: String, onSuccess: ()->(), onError: (code: String?)->()) {
         let urlStr = SportCarURLMaker.sharedMaker.followSportCar(carId)
        
@@ -73,6 +93,21 @@ class SportCarRequester: AccountRequester {
                 })
                 break
             }
+        }
+    }
+    
+    /**
+     获取某个用户经过认证的所有跑车的信息
+     
+     - parameter userID:    用户uid
+     - parameter onSuccess: 成功以后调用这个
+     - parameter onError:   失败以后调用这个
+     */
+    func getAuthedCarsList(userID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let urlStr = SportCarURLMaker.sharedMaker.getAuthedCarList(userID)
+        
+        self.manager.request(.GET, urlStr).responseJSON { (let response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "cars", onSuccess: onSuccess, onError: onError)
         }
     }
 }

@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D9c" minimumToolsVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15E27e" minimumToolsVersion="Automatic">
+    <entity name="ChatRecord" representedClassName=".ChatRecord" syncable="YES">
+        <attribute name="audio" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="chat_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="hidden" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recordID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="relatedID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sent" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="targetID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="textContent" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="sender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="chatRecords" inverseEntity="User" syncable="YES"/>
+    </entity>
     <entity name="Club" representedClassName=".Club" syncable="YES">
         <attribute name="clubDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="clubID" optional="YES" attributeType="String" syncable="YES"/>
@@ -21,20 +35,27 @@
     </entity>
     <entity name="News" representedClassName=".News" syncable="YES">
         <attribute name="commentNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="contentURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cover" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="likeNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="newsID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recentLikerName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="shareNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NewsComment" inverseName="news" inverseEntity="NewsComment" syncable="YES"/>
+        <relationship name="likedBy" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="likeNews" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="NewsComment" representedClassName=".NewsComment" syncable="YES">
+        <attribute name="alreaySent" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="atString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="commentID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="commentTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NewsComment" inverseName="replys" inverseEntity="NewsComment" syncable="YES"/>
         <relationship name="news" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="News" inverseName="comments" inverseEntity="News" syncable="YES"/>
+        <relationship name="replys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NewsComment" inverseName="commentTo" inverseEntity="NewsComment" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="newsComment" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Profile" representedClassName=".Profile" syncable="YES">
@@ -84,13 +105,17 @@
         <attribute name="statusID" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="car" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SportCar" inverseName="related_status" inverseEntity="SportCar" syncable="YES"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="StatusComment" inverseName="status" inverseEntity="StatusComment" syncable="YES"/>
-        <relationship name="user" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="status" inverseEntity="User" syncable="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="status" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="StatusComment" representedClassName=".StatusComment" syncable="YES">
+        <attribute name="alreadySent" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="atString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="commentID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="commentTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StatusComment" inverseName="replys" inverseEntity="StatusComment" syncable="YES"/>
+        <relationship name="replys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="StatusComment" inverseName="commentTo" inverseEntity="StatusComment" syncable="YES"/>
         <relationship name="status" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Status" inverseName="comments" inverseEntity="Status" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="statusComment" inverseEntity="User" syncable="YES"/>
     </entity>
@@ -108,10 +133,12 @@
         <attribute name="starSign" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userID" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="carsLiked" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SportCar" inverseName="followers" inverseEntity="SportCar" syncable="YES"/>
+        <relationship name="chatRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ChatRecord" inverseName="sender" inverseEntity="ChatRecord" syncable="YES"/>
         <relationship name="club" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Club" inverseName="members" inverseEntity="Club" syncable="YES"/>
         <relationship name="clubCreated" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Club" inverseName="host" inverseEntity="Club" syncable="YES"/>
         <relationship name="fans" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="follows" inverseEntity="User" syncable="YES"/>
         <relationship name="follows" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="fans" inverseEntity="User" syncable="YES"/>
+        <relationship name="likeNews" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="News" inverseName="likedBy" inverseEntity="News" syncable="YES"/>
         <relationship name="newsComment" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NewsComment" inverseName="user" inverseEntity="NewsComment" syncable="YES"/>
         <relationship name="ownership" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SportCarOwnerShip" inverseName="user" inverseEntity="SportCarOwnerShip" syncable="YES"/>
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Profile" inverseName="user" inverseEntity="Profile" syncable="YES"/>
@@ -121,13 +148,14 @@
     <elements>
         <element name="Club" positionX="-506" positionY="372" width="128" height="150"/>
         <element name="ClubJoining" positionX="-758" positionY="342" width="128" height="165"/>
+        <element name="News" positionX="-774" positionY="-117" width="128" height="210"/>
+        <element name="NewsComment" positionX="-765" positionY="-108" width="128" height="195"/>
         <element name="Profile" positionX="-981" positionY="63" width="128" height="210"/>
         <element name="SportCar" positionX="-459" positionY="-270" width="128" height="255"/>
         <element name="SportCarOwnerShip" positionX="-630" positionY="-270" width="128" height="105"/>
         <element name="Status" positionX="-461" positionY="36" width="128" height="225"/>
-        <element name="StatusComment" positionX="-711" positionY="117" width="128" height="135"/>
-        <element name="User" positionX="-785" positionY="-126" width="128" height="375"/>
-        <element name="News" positionX="-774" positionY="-117" width="128" height="30"/>
-        <element name="NewsComment" positionX="-765" positionY="-108" width="128" height="30"/>
+        <element name="StatusComment" positionX="-711" positionY="117" width="128" height="195"/>
+        <element name="User" positionX="-785" positionY="-126" width="128" height="405"/>
+        <element name="ChatRecord" positionX="-783" positionY="-126" width="128" height="225"/>
     </elements>
 </model>

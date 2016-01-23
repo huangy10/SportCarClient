@@ -26,17 +26,41 @@ extension Status {
      - parameter json: json数据
      */
     func loadDataFromJSON(json: JSON) {
-        content = json["content"].string
-        createdAt = DateSTR(json["created_at"].string)
-        image = json["image"].string
-        likeNum = json["like_num"].int32 ?? 0
-        commentNum = json["comment_num"].int32 ?? 0
-        let location = json["location"]
-        location_des = location["description"].string
-        location_x = location["lon"].double ?? 0
-        location_y = location["lat"].double ?? 0
+        if json["statusID"].stringValue != self.statusID! {
+            assertionFailure("Integrity Error")
+        }
+        self.content = json["content"].string
+        self.createdAt = DateSTR(json["created_at"].stringValue)
+        self.image = json["images"].string
+        self.likeNum = json["like_num"].int32 ?? 0
+        self.commentNum = json["comment_num"].int32 ?? 0
+        let locationJSON = json["location"]
+        self.location_x = locationJSON["lon"].double ?? 0
+        self.location_y = locationJSON["lat"].double ?? 0
+        self.location_des = locationJSON["description"].string
         
-        statusID = location["statusID"].string
+        let carJSON = json["car"] as JSON
+        if let car = SportCar.objects.create(carJSON).value {
+            self.car = Status.objects.context.objectWithID(car.objectID) as? SportCar
+        }
+        
+        let userJSON = json["user"]
+        if let user = User.objects.create(userJSON).value {
+            self.user = user
+        }else{
+            assertionFailure("Integrity Error")
+        }
+//        content = json["content"].string
+//        createdAt = DateSTR(json["created_at"].string)
+//        image = json["image"].string
+//        likeNum = json["like_num"].int32 ?? 0
+//        commentNum = json["comment_num"].int32 ?? 0
+//        let location = json["location"]
+//        location_des = location["description"].string
+//        location_x = location["lon"].double ?? 0
+//        location_y = location["lat"].double ?? 0
+//        
+//        statusID = location["statusID"].string
     }
 }
 
@@ -44,7 +68,7 @@ class StatusManager {
     /// 内存池中维持的状态集
     var status: [String: Status] = [:]
     
-    let context = DataContext()
+    let context = User.objects.context
     
 }
 
@@ -52,6 +76,24 @@ class StatusManager {
 
 
 extension StatusManager {
+    
+    /**
+     这个函数处理由Status首页返回的JSON编码数据
+     
+     - parameter json: JSON数据
+     
+     - returns: 返回生成的状态，以及这个状态是否是构造的
+     */
+    func getOrCreate(json: JSON) -> (Status?, Bool){
+        let statusID = json["statusID"].stringValue
+        if let s = status[statusID] {
+            s.loadDataFromJSON(json)
+            return (s, false)
+        }
+        let s = context.statuses.firstOrCreated({ $0.statusID == statusID })
+        s.loadDataFromJSON(json)
+        return (s, true)
+    }
     /**
      获取或者创建一个新的Status实例
      

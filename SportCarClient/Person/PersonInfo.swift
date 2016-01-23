@@ -75,7 +75,7 @@ class PersonInfoView: UIView {
         
         self.backgroundColor = UIColor.whiteColor()
         if self.showMap {
-            mapView = MGLMapView(frame: self.bounds, styleURL: mapStyleURL)
+            mapView = MGLMapView(frame: self.bounds, styleURL: kMapStyleURL)
             // TODO: 配置地图位置
             self.addSubview(mapView!)
         }else{

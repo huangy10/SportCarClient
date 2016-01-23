@@ -8,6 +8,8 @@
 
 import Foundation
 import CoreData
+import AlecrimCoreData
+import SwiftyJSON
 
 
 class SportCarOwnerShip: NSManagedObject {

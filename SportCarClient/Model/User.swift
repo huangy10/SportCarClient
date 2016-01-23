@@ -28,6 +28,9 @@ class User: NSManagedObject {
         }
         return false
     }
+    
+    /// 最近发布的一条Status描述
+    var recentStatusDes: String?
 }
 
 extension User{
@@ -100,8 +103,8 @@ extension User{
      - returns: 赋值是否成功
      */
     func loadValueFromJSON(json: JSON, forceUpdateNil: Bool=true) -> Bool{
-
-        if json["userID"] != nil && json["userID"].stringValue == self.userID{
+        
+        if json["userID"] == nil || json["userID"].stringValue != self.userID{
             return false
         }
         if forceUpdateNil {
@@ -138,6 +141,13 @@ extension User{
         return true
     }
     
+    /// 用户的数据是否的完整，主要检查id，头像，昵称三个信息
+    var isIntegrited: Bool {
+        get{
+            return userID != nil && nickName != nil && avatarUrl != nil
+        }
+    }
+
 }
 
 
@@ -162,4 +172,23 @@ extension User {
     }
 }
 
+// MARK: - 和News的关系
+extension User {
+    /**
+     查看是否给定的news被该用户Like了，注意这里不会创建网络请求，只是查询已经在内存中的数据
+     
+     - parameter news: 指定的news
+     
+     - returns: BOOL
+     */
+    @nonobjc func isNewsLiked(news: News) -> Bool {
+        return isNewsLiked(news.newsID!)
+    }
+    
+    @nonobjc func isNewsLiked(newsID: String) -> Bool {
+        return likeNews.contains({ (n: News) -> Bool in
+            return newsID == n.newsID
+        })
+    }
+}
 

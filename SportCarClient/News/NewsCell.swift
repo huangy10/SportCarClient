@@ -59,14 +59,15 @@ class NewsCell: UITableViewCell {
         shareNumLbl?.text = "0"
         superview.addSubview(shareNumLbl!)
         shareNumLbl?.snp_makeConstraints(closure: { (make) -> Void in
-            make.bottom.equalTo(superview).offset(10)
+            make.bottom.equalTo(superview).offset(-10)
             make.right.equalTo(superview).offset(-15)
-            make.size.equalTo(CGSize(width: 30, height: 15))
+            make.height.equalTo(15)
+            make.width.lessThanOrEqualTo(30)
         })
         shareIcon = UIImageView(image: UIImage(named: "news_share"))
         superview.addSubview(shareIcon!)
         shareIcon?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(shareNumLbl!.snp_left)
+            make.right.equalTo(shareNumLbl!.snp_left).offset(-3)
             make.bottom.equalTo(shareNumLbl!)
             make.size.equalTo(15)
         })
@@ -84,7 +85,7 @@ class NewsCell: UITableViewCell {
         commentIcon = UIImageView(image: UIImage(named: "news_comment"))
         superview.addSubview(commentIcon!)
         commentIcon?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(commentNumLbl!.snp_left)
+            make.right.equalTo(commentNumLbl!.snp_left).offset(-3)
             make.bottom.equalTo(commentNumLbl!)
             make.size.equalTo(15)
         })
@@ -102,7 +103,7 @@ class NewsCell: UITableViewCell {
         superview.addSubview(likeIcon!)
         likeIcon?.snp_makeConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(commentIcon!)
-            make.right.equalTo(likeNumLbl!.snp_left)
+            make.right.equalTo(likeNumLbl!.snp_left).offset(-3)
             make.size.equalTo(15)
         })
         // 创建标题
@@ -134,5 +135,6 @@ class NewsCell: UITableViewCell {
         commentNumLbl?.text = "\(data.commentNum)"
         likeNumLbl?.text = "\(data.likeNum)"
         shareNumLbl?.text = "\(data.shareNum)"
+        shareNumLbl?.sizeToFit()
     }
 }

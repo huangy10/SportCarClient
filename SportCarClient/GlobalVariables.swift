@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SwiftDate
 
 
 // Colors
@@ -17,14 +18,17 @@ let kPlaceholderTextColor = UIColor(white: 0.72, alpha: 1)
 
 // Fonts
 let kBarTextFont = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
-let kBarTitleFont = UIFont.systemFontOfSize(17, weight: UIFontWeightSemibold)
+let kBarTitleFont = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
 let kTextInputFont = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
 
 // Network
 let kHostName = "localhost"
 let kPortName = "8000"
 let kProtocalName = "http"
-let mapStyleURL = NSURL(string: "mapbox://styles/woodyhuang1992/ciigr1ml4009q9xkjihwlpgbh")
+let kMapStyleURL = NSURL(string: "mapbox://styles/woodyhuang1992/ciigr1ml4009q9xkjihwlpgbh")
+
+//
+let kMaxPhotoSelect: Int = 9    // 最大可以选择的照片的数量
 
 
 // Macro
@@ -69,6 +73,43 @@ func DateSTR(str: String?) -> NSDate? {
         return nil
     }
     let formatter = NSDateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd a HH:mm:ss a"
+    formatter.timeZone = NSTimeZone(abbreviation: "UTC")
+    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
     return formatter.dateFromString(str!)
+}
+
+/**
+ 从NSDate创建字符串
+ 
+ - parameter date: -
+ 
+ - returns: -
+ */
+func STRDate(date: NSDate) -> String {
+    let formatter = NSDateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    formatter.timeZone = NSTimeZone(abbreviation: "UTC")
+    return formatter.stringFromDate(date)
+}
+
+func dateDisplay(date: NSDate) -> String {
+    // 到现在的时间
+    let timeDelta = -(date.timeIntervalSinceNow)
+    var result: String = ""
+    let timeRegion = Region(calType: CalendarType.Gregorian)
+    if timeDelta < 300 {
+        // 五分钟显示『刚刚』
+        result = LS("刚刚")
+    }else if timeDelta < 3600{
+        // 一小时内显示分钟
+        result = "\(Int(timeDelta / 60))" + LS("分钟前")
+    }else if timeDelta < 86400 {
+        // 一天内显示小时
+        result = date.toString(DateFormat.Custom("HH:mm"), inRegion: timeRegion)!
+    }else if timeDelta < 172800 {
+        result = LS("昨天") + date.toString(DateFormat.Custom("HH:mm"), inRegion: timeRegion)!
+    }else {
+        result = date.toString(DateFormat.Custom("MM\(LS("月"))dd\(LS("日")) HH:mm"), inRegion: timeRegion)!
+    }
+    return result
 }

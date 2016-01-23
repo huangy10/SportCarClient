@@ -82,26 +82,45 @@ extension UserManager {
      - returns: ManageResult
      */
     func create(json: JSON) -> ManagerResult<User, ManagerError>{
-        guard let userID = json["userID"].string else{
-            return returnError(.KeyError)
-        }
-        // 检查用户是否在现在的内存池中
-        if let user = users[userID] where user.isEqualTo(json){
+        let userID = json["userID"].stringValue
+        if let user = users[userID] {
+            user.loadValueFromJSON(json)
+            do{
+                try context.save()
+            }catch let err {
+                print(err)
+                return returnError(.CantSave)
+            }
             return ManagerResult.Success(user)
         }
-        let user = context.users.firstOrCreated {$0.userID == userID }
-        user.loadValueFromJSON(json, forceUpdateNil: true)
-        // 注意要更新users
-        self.users[user.userID!] = user
-        accessTimes += 1
-        do {
+        let user = context.users.firstOrCreated { $0.userID == userID }
+        user.loadValueFromJSON(json)
+        users["userID"] = user
+        do{
             try context.save()
-        }catch let err{
-            // 无法保存时打印错误
-            print("\(err)")
+        }catch let err {
+            print(err)
             return returnError(.CantSave)
         }
         return ManagerResult.Success(user)
+//        let userID = json["userID"].stringValue
+//        // 检查用户是否在现在的内存池中
+//        if let user = users[userID] where user.isEqualTo(json){
+//            return ManagerResult.Success(user)
+//        }
+//        let user = context.users.firstOrCreated {$0.userID == userID }
+//        user.loadValueFromJSON(json, forceUpdateNil: true)
+//        // 注意要更新users
+//        self.users[user.userID!] = user
+//        accessTimes += 1
+//        do {
+//            try context.save()
+//        }catch let err{
+//            // 无法保存时打印错误
+//            print("\(err)")
+//            return returnError(.CantSave)
+//        }
+//        return ManagerResult.Success(user)
     }
     
     /**

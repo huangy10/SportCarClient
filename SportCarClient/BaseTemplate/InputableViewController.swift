@@ -9,9 +9,9 @@
 import UIKit
 
 
-class InputableViewController: UIViewController, UITextFieldDelegate {
+class InputableViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     var tapper: UITapGestureRecognizer?
-    var inputFields: [UITextField?] = []
+    var inputFields: [UIView?] = []
     
     override func loadView() {
         super.loadView()
@@ -33,6 +33,11 @@ class InputableViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        self.tapper?.enabled = true
+        return true
+    }
+    
+    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
         self.tapper?.enabled = true
         return true
     }

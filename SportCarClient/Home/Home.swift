@@ -40,6 +40,7 @@ class HomeController: UIViewController, HomeDelegate {
     let board: UIView
     //
     var person: PersonController?
+    var news: NewsController?
     
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -162,17 +163,35 @@ extension HomeController {
 
 // MARK: - Sidebar的代理
 extension HomeController {
+    
     func backToHome(onComplete: (()->())?) {
         showSideBar(true)
     }
     
     func switchController(from: Int, to: Int) {
-        if to == 2 {
-            person = PersonController(delegate: self, animated: false, showMap: true)
+        switch to {
+        case 0:
+            if person == nil {
+                person = PersonController(delegate: self, animated: false, showMap: true)
+            }
             person?.user = hostUser
             self.board.addSubview(person!.view!)
+        case 1:
+            news = NewsController(style: .Plain)
+            self.navigationController?.pushViewController(news!, animated: true)
+            break
+        case 2:
+//            if status == nil {
+//                status = StatusHomeController()
+//            }
+//            self.navigationController?.pushViewController(status!, animated: true)
+            let test = StatusHomeController()
+            self.navigationController?.pushViewController(test, animated: true)
+            break
+        default:
+            break
         }
-        hideSideBar()
+        // hideSideBar()
     }
 
 }
