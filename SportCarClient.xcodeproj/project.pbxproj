@@ -69,6 +69,9 @@
 		BFBC52711C52946300EE7D34 /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC52701C52946300EE7D34 /* ChatController.swift */; };
 		BFBC52751C53877100EE7D34 /* ChatRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC52731C53877100EE7D34 /* ChatRecord.swift */; };
 		BFBC52771C5388BE00EE7D34 /* ChatRecord.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC52761C5388BE00EE7D34 /* ChatRecord.generated.swift */; };
+		BFBC52791C53902500EE7D34 /* ChatOpPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC52781C53902500EE7D34 /* ChatOpPanel.swift */; };
+		BFBC527B1C5390E100EE7D34 /* ChatBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC527A1C5390E100EE7D34 /* ChatBubble.swift */; };
+		BFBC527D1C53CE8D00EE7D34 /* ChatAudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC527C1C53CE8D00EE7D34 /* ChatAudioController.swift */; };
 		BFBEA0841C2152F200F04F9A /* Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBEA0831C2152F200F04F9A /* Wrapper.swift */; };
 		BFC712EB1C2C3B4F00A71F4C /* UserUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712EA1C2C3B4F00A71F4C /* UserUtilities.swift */; };
 		BFC712F11C2C431900A71F4C /* StatusComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712ED1C2C431900A71F4C /* StatusComment.swift */; };
@@ -175,6 +178,9 @@
 		BFBC52701C52946300EE7D34 /* ChatController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatController.swift; path = Message/Chat/ChatController.swift; sourceTree = "<group>"; };
 		BFBC52731C53877100EE7D34 /* ChatRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatRecord.swift; path = Model/ChatRecord.swift; sourceTree = "<group>"; };
 		BFBC52761C5388BE00EE7D34 /* ChatRecord.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatRecord.generated.swift; path = Model/ChatRecord.generated.swift; sourceTree = "<group>"; };
+		BFBC52781C53902500EE7D34 /* ChatOpPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatOpPanel.swift; path = Message/Chat/ChatOpPanel.swift; sourceTree = "<group>"; };
+		BFBC527A1C5390E100EE7D34 /* ChatBubble.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatBubble.swift; path = Message/Chat/ChatBubble.swift; sourceTree = "<group>"; };
+		BFBC527C1C53CE8D00EE7D34 /* ChatAudioController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatAudioController.swift; path = Message/Chat/ChatAudioController.swift; sourceTree = "<group>"; };
 		BFBEA0831C2152F200F04F9A /* Wrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Wrapper.swift; path = BaseTemplate/Wrapper.swift; sourceTree = "<group>"; };
 		BFC712EA1C2C3B4F00A71F4C /* UserUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserUtilities.swift; path = Model/UserUtilities.swift; sourceTree = "<group>"; };
 		BFC712ED1C2C431900A71F4C /* StatusComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusComment.swift; path = Model/StatusComment.swift; sourceTree = "<group>"; };
@@ -531,6 +537,9 @@
 			isa = PBXGroup;
 			children = (
 				BFBC52701C52946300EE7D34 /* ChatController.swift */,
+				BFBC52781C53902500EE7D34 /* ChatOpPanel.swift */,
+				BFBC527A1C5390E100EE7D34 /* ChatBubble.swift */,
+				BFBC527C1C53CE8D00EE7D34 /* ChatAudioController.swift */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -878,6 +887,7 @@
 				BFCA90111C50A0C000B05E74 /* StatusFollow.swift in Sources */,
 				BF1D93581C52783000FD9997 /* StatusDetailCommentCell.swift in Sources */,
 				BF2BE2181C2938B000DD0CF9 /* ClubJoining.swift in Sources */,
+				BFBC52791C53902500EE7D34 /* ChatOpPanel.swift in Sources */,
 				BF5491E01C23071C0090D151 /* Person.swift in Sources */,
 				BF9404971C2818C3001ABB1E /* AppLauchner.swift in Sources */,
 				BF268FC81C32C76A005D1B68 /* NewsDetail.swift in Sources */,
@@ -920,8 +930,10 @@
 				BF8D0DC31C424E710070B921 /* ViewControllerExtensions.swift in Sources */,
 				BFBC526E1C52944200EE7D34 /* NotificationController.swift in Sources */,
 				BFAA0CAE1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift in Sources */,
+				BFBC527D1C53CE8D00EE7D34 /* ChatAudioController.swift in Sources */,
 				BFCB96381C1F0DA8004F77E8 /* SportCarBrandSelecterDetail.swift in Sources */,
 				BFAA0CAC1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift in Sources */,
+				BFBC527B1C5390E100EE7D34 /* ChatBubble.swift in Sources */,
 				BF1EC23F1C49414F0016F425 /* UserSelect.swift in Sources */,
 				BFCA900F1C50A09100B05E74 /* StatusBasic.swift in Sources */,
 				BF54DD681C2EB4FE00F635C0 /* NewsController.swift in Sources */,

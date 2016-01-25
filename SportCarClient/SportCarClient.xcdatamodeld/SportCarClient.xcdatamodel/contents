@@ -4,6 +4,7 @@
         <attribute name="audio" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="chat_type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="draft" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="hidden" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="messageType" optional="YES" attributeType="String" syncable="YES"/>
@@ -12,6 +13,8 @@
         <attribute name="sent" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="targetID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="textContent" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="related_clubs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Club" inverseName="mostRecentChat" inverseEntity="Club" syncable="YES"/>
+        <relationship name="related_users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="mostRecentChat" inverseEntity="User" syncable="YES"/>
         <relationship name="sender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="chatRecords" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Club" representedClassName=".Club" syncable="YES">
@@ -22,6 +25,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="host" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="clubCreated" inverseEntity="User" syncable="YES"/>
         <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="club" inverseEntity="User" syncable="YES"/>
+        <relationship name="mostRecentChat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ChatRecord" inverseName="related_clubs" inverseEntity="ChatRecord" syncable="YES"/>
     </entity>
     <entity name="ClubJoining" representedClassName=".ClubJoining" syncable="YES">
         <attribute name="alwaysOnTop" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -139,6 +143,7 @@
         <relationship name="fans" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="follows" inverseEntity="User" syncable="YES"/>
         <relationship name="follows" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="fans" inverseEntity="User" syncable="YES"/>
         <relationship name="likeNews" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="News" inverseName="likedBy" inverseEntity="News" syncable="YES"/>
+        <relationship name="mostRecentChat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ChatRecord" inverseName="related_users" inverseEntity="ChatRecord" syncable="YES"/>
         <relationship name="newsComment" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NewsComment" inverseName="user" inverseEntity="NewsComment" syncable="YES"/>
         <relationship name="ownership" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SportCarOwnerShip" inverseName="user" inverseEntity="SportCarOwnerShip" syncable="YES"/>
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Profile" inverseName="user" inverseEntity="Profile" syncable="YES"/>
@@ -146,7 +151,7 @@
         <relationship name="statusComment" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="StatusComment" inverseName="user" inverseEntity="StatusComment" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Club" positionX="-506" positionY="372" width="128" height="150"/>
+        <element name="Club" positionX="-506" positionY="372" width="128" height="165"/>
         <element name="ClubJoining" positionX="-758" positionY="342" width="128" height="165"/>
         <element name="News" positionX="-774" positionY="-117" width="128" height="210"/>
         <element name="NewsComment" positionX="-765" positionY="-108" width="128" height="195"/>
@@ -155,7 +160,7 @@
         <element name="SportCarOwnerShip" positionX="-630" positionY="-270" width="128" height="105"/>
         <element name="Status" positionX="-461" positionY="36" width="128" height="225"/>
         <element name="StatusComment" positionX="-711" positionY="117" width="128" height="195"/>
-        <element name="User" positionX="-785" positionY="-126" width="128" height="405"/>
-        <element name="ChatRecord" positionX="-783" positionY="-126" width="128" height="225"/>
+        <element name="User" positionX="-785" positionY="-126" width="128" height="420"/>
+        <element name="ChatRecord" positionX="-783" positionY="-126" width="128" height="270"/>
     </elements>
 </model>

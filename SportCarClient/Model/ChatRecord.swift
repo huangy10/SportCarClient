@@ -63,6 +63,7 @@ class ChatRecoardManager {
         newChat.image = image
         newChat.audio = audio
         unSentRecord.remove(newChat)
+        self.saveAll()
     }
     
     /**

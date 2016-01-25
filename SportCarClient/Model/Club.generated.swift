@@ -23,6 +23,7 @@ extension Club {
     @NSManaged var name: String?
 
     @NSManaged var host: User?
+    @NSManaged var mostRecentChat: ChatRecord?
 
     @NSManaged var members: Set<User>
 
@@ -53,6 +54,7 @@ extension Club {
     static let name = AlecrimCoreData.NullableAttribute<String>("name")
 
     static let host = AlecrimCoreData.NullableAttribute<User>("host")
+    static let mostRecentChat = AlecrimCoreData.NullableAttribute<ChatRecord>("mostRecentChat")
 
     static let members = AlecrimCoreData.Attribute<Set<User>>("members")
 
@@ -69,6 +71,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: Club {
     var name: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("name", self) }
 
     var host: AlecrimCoreData.NullableAttribute<User> { return AlecrimCoreData.NullableAttribute<User>("host", self) }
+    var mostRecentChat: AlecrimCoreData.NullableAttribute<ChatRecord> { return AlecrimCoreData.NullableAttribute<ChatRecord>("mostRecentChat", self) }
 
     var members: AlecrimCoreData.Attribute<Set<User>> { return AlecrimCoreData.Attribute<Set<User>>("members", self) }
 

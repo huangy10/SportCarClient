@@ -19,6 +19,7 @@ extension ChatRecord {
     @NSManaged var audio: String?
     @NSManaged var chat_type: String?
     @NSManaged var createdAt: NSDate?
+    @NSManaged var draft: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var hidden: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var image: String?
     @NSManaged var messageType: String?
@@ -30,6 +31,31 @@ extension ChatRecord {
 
     @NSManaged var sender: User?
 
+    @NSManaged var related_clubs: Set<Club>
+    @NSManaged var related_users: Set<User>
+
+}
+
+// MARK: - ChatRecord KVC compliant to-many accessors and helpers
+
+extension ChatRecord {
+
+    @NSManaged private func addRelated_clubsObject(object: Club)
+    @NSManaged private func removeRelated_clubsObject(object: Club)
+    @NSManaged func addRelated_clubs(related_clubs: Set<Club>)
+    @NSManaged func removeRelated_clubs(related_clubs: Set<Club>)
+
+    @NSManaged private func addRelated_usersObject(object: User)
+    @NSManaged private func removeRelated_usersObject(object: User)
+    @NSManaged func addRelated_users(related_users: Set<User>)
+    @NSManaged func removeRelated_users(related_users: Set<User>)
+
+    func addRelated_club(related_club: Club) { self.addRelated_clubsObject(related_club) }
+    func removeRelated_club(related_club: Club) { self.removeRelated_clubsObject(related_club) }
+
+    func addRelated_user(related_user: User) { self.addRelated_usersObject(related_user) }
+    func removeRelated_user(related_user: User) { self.removeRelated_usersObject(related_user) }
+
 }
 
 // MARK: - ChatRecord query attributes
@@ -39,6 +65,7 @@ extension ChatRecord {
     static let audio = AlecrimCoreData.NullableAttribute<String>("audio")
     static let chat_type = AlecrimCoreData.NullableAttribute<String>("chat_type")
     static let createdAt = AlecrimCoreData.NullableAttribute<NSDate>("createdAt")
+    static let draft = AlecrimCoreData.NullableAttribute<Bool>("draft")
     static let hidden = AlecrimCoreData.NullableAttribute<Bool>("hidden")
     static let image = AlecrimCoreData.NullableAttribute<String>("image")
     static let messageType = AlecrimCoreData.NullableAttribute<String>("messageType")
@@ -50,6 +77,9 @@ extension ChatRecord {
 
     static let sender = AlecrimCoreData.NullableAttribute<User>("sender")
 
+    static let related_clubs = AlecrimCoreData.Attribute<Set<Club>>("related_clubs")
+    static let related_users = AlecrimCoreData.Attribute<Set<User>>("related_users")
+
 }
 
 // MARK: - AttributeType extensions
@@ -59,6 +89,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: ChatRecord {
     var audio: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("audio", self) }
     var chat_type: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("chat_type", self) }
     var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
+    var draft: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("draft", self) }
     var hidden: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("hidden", self) }
     var image: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("image", self) }
     var messageType: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("messageType", self) }
@@ -69,6 +100,9 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: ChatRecord {
     var textContent: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("textContent", self) }
 
     var sender: AlecrimCoreData.NullableAttribute<User> { return AlecrimCoreData.NullableAttribute<User>("sender", self) }
+
+    var related_clubs: AlecrimCoreData.Attribute<Set<Club>> { return AlecrimCoreData.Attribute<Set<Club>>("related_clubs", self) }
+    var related_users: AlecrimCoreData.Attribute<Set<User>> { return AlecrimCoreData.Attribute<Set<User>>("related_users", self) }
 
 }
 

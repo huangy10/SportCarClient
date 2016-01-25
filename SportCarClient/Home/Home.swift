@@ -185,6 +185,10 @@ extension HomeController {
 //                status = StatusHomeController()
 //            }
 //            self.navigationController?.pushViewController(status!, animated: true)
+            let audioURL = NSURL(fileURLWithPath: "/Users/Lena/Downloads/sample.mp3", isDirectory: false)
+            let _ = AudioWaveDrawEngine(audioFileURL: audioURL, preferredSampleNum: 50, onFinished: { (engine) -> () in
+                print("done")
+            })
             let test = StatusHomeController()
             self.navigationController?.pushViewController(test, animated: true)
             break

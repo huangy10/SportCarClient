@@ -17,5 +17,8 @@ enum ChatRoomType {
 class ChatRoomController: InputableViewController{
     
     var roomType: ChatRoomType = .Private
+    var targetUser: User?
+    var targetClub: Club?
     
+    var talkBoard: UITableView?
 }
