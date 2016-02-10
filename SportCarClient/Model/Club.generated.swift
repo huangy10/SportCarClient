@@ -25,6 +25,8 @@ extension Club {
     @NSManaged var host: User?
     @NSManaged var mostRecentChat: ChatRecord?
 
+    @NSManaged var activity: Set<Activity>
+    @NSManaged var chats: Set<ChatRecord>
     @NSManaged var members: Set<User>
 
 }
@@ -33,10 +35,26 @@ extension Club {
 
 extension Club {
 
+    @NSManaged private func addActivityObject(object: Activity)
+    @NSManaged private func removeActivityObject(object: Activity)
+    @NSManaged func addActivity(activity: Set<Activity>)
+    @NSManaged func removeActivity(activity: Set<Activity>)
+
+    @NSManaged private func addChatsObject(object: ChatRecord)
+    @NSManaged private func removeChatsObject(object: ChatRecord)
+    @NSManaged func addChats(chats: Set<ChatRecord>)
+    @NSManaged func removeChats(chats: Set<ChatRecord>)
+
     @NSManaged private func addMembersObject(object: User)
     @NSManaged private func removeMembersObject(object: User)
     @NSManaged func addMembers(members: Set<User>)
     @NSManaged func removeMembers(members: Set<User>)
+
+    func addActivity(activity: Activity) { self.addActivityObject(activity) }
+    func removeActivity(activity: Activity) { self.removeActivityObject(activity) }
+
+    func addChat(chat: ChatRecord) { self.addChatsObject(chat) }
+    func removeChat(chat: ChatRecord) { self.removeChatsObject(chat) }
 
     func addMember(member: User) { self.addMembersObject(member) }
     func removeMember(member: User) { self.removeMembersObject(member) }
@@ -56,6 +74,8 @@ extension Club {
     static let host = AlecrimCoreData.NullableAttribute<User>("host")
     static let mostRecentChat = AlecrimCoreData.NullableAttribute<ChatRecord>("mostRecentChat")
 
+    static let activity = AlecrimCoreData.Attribute<Set<Activity>>("activity")
+    static let chats = AlecrimCoreData.Attribute<Set<ChatRecord>>("chats")
     static let members = AlecrimCoreData.Attribute<Set<User>>("members")
 
 }
@@ -73,6 +93,8 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: Club {
     var host: AlecrimCoreData.NullableAttribute<User> { return AlecrimCoreData.NullableAttribute<User>("host", self) }
     var mostRecentChat: AlecrimCoreData.NullableAttribute<ChatRecord> { return AlecrimCoreData.NullableAttribute<ChatRecord>("mostRecentChat", self) }
 
+    var activity: AlecrimCoreData.Attribute<Set<Activity>> { return AlecrimCoreData.Attribute<Set<Activity>>("activity", self) }
+    var chats: AlecrimCoreData.Attribute<Set<ChatRecord>> { return AlecrimCoreData.Attribute<Set<ChatRecord>>("chats", self) }
     var members: AlecrimCoreData.Attribute<Set<User>> { return AlecrimCoreData.Attribute<Set<User>>("members", self) }
 
 }

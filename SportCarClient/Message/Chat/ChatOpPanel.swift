@@ -8,6 +8,8 @@
 
 import UIKit
 
+let kMaxChatWordCount = 140
+
 
 enum ChatOpPanelInputMode {
     case Text
@@ -32,16 +34,25 @@ class ChatOpPanelController: UIViewController {
     var inputMode = ChatOpPanelInputMode.Text
     
     var delegate: ChatOpPanelDelegate?
+
     
     /// 输入方式切换按钮
     var inputToggleBtn: UIButton?
     /// 文字输入框
     var contentInput: UITextView?
     var voiceInputBtn: UIButton?
+    var recording: Bool = false
+    var recorder: ChatAudioRecorder?
+    
     var emojiBtn: UIButton?
     var accessoryBtn: UIButton?
     
     var expandBoardHeight: CGFloat = 250
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        createSubviews()
+    }
     
     internal func createSubviews() {
         let superview = self.view
@@ -89,7 +100,7 @@ class ChatOpPanelController: UIViewController {
         contentInputContainer.backgroundColor = UIColor.whiteColor()
         superview.addSubview(contentInputContainer)
         contentInputContainer.snp_makeConstraints { (make) -> Void in
-            make.height.equalTo(contentHeight)
+            make.bottom.equalTo(superview).offset(-edgeInset)
             make.right.equalTo(emojiBtn!.snp_left).offset(-10)
             make.left.equalTo(inputToggleBtn!.snp_right).offset(10)
             make.top.equalTo(superview).offset(edgeInset)
@@ -98,8 +109,8 @@ class ChatOpPanelController: UIViewController {
         let contentInputIcon = UIImageView(image: UIImage(named: "news_comment_icon"))
         contentInputContainer.addSubview(contentInputIcon)
         contentInputIcon.snp_makeConstraints { (make) -> Void in
-            make.centerY.equalTo(contentInputContainer)
             make.left.equalTo(contentInputContainer).offset(contentHeight / 2)
+            make.bottom.equalTo(contentInputContainer).offset(-edgeInset)
             make.size.equalTo(20)
         }
         //
@@ -111,7 +122,7 @@ class ChatOpPanelController: UIViewController {
             make.right.equalTo(contentInputContainer).offset(-contentHeight / 2)
             make.height.equalTo(contentInputContainer)
             make.left.equalTo(contentInputIcon.snp_right).offset(10)
-            make.centerY.equalTo(contentInputIcon)
+            make.centerY.equalTo(contentInputContainer)
         })
         //
         voiceInputBtn = UIButton()
@@ -125,11 +136,38 @@ class ChatOpPanelController: UIViewController {
             make.edges.equalTo(contentInputContainer)
         })
         voiceInputBtn?.hidden = true
+        voiceInputBtn?.addTarget(self, action: "startRecording", forControlEvents: .TouchDown)
+        voiceInputBtn?.addTarget(self, action: "cancelRecording", forControlEvents: .TouchDragExit)
+        voiceInputBtn?.addTarget(self, action: "finishRecording", forControlEvents: .TouchUpInside)
     }
 }
 
 
 extension ChatOpPanelController {
+    
+    func startRecording() {
+        recording = true
+        voiceInputBtn?.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        if recorder == nil {
+            recorder = ChatAudioRecorder(delegate: (delegate as! ChatRoomController))
+        }
+        recorder?.startRecording(nil)
+    }
+    
+    func cancelRecording() {
+        recording = false
+        voiceInputBtn?.backgroundColor = UIColor.whiteColor()
+        recorder?.finishRecording(false)
+    }
+    
+    func finishRecording() {
+        if !recording {
+            return
+        }
+        recording = false
+        voiceInputBtn?.backgroundColor = UIColor.whiteColor()
+        recorder?.finishRecording(true)
+    }
     
     /**
      获取这个view需要的高度

@@ -24,6 +24,7 @@ let kTextInputFont = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
 // Network
 let kHostName = "localhost"
 let kPortName = "8000"
+let kChatPortName = "8888"
 let kProtocalName = "http"
 let kMapStyleURL = NSURL(string: "mapbox://styles/woodyhuang1992/ciigr1ml4009q9xkjihwlpgbh")
 

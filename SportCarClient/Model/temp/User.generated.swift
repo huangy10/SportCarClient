@@ -25,6 +25,7 @@ extension User {
     @NSManaged var job: String?
     @NSManaged var nickName: String?
     @NSManaged var phoneNum: String?
+    @NSManaged var remarkName: String?
     @NSManaged var signature: String?
     @NSManaged var starSign: String?
     @NSManaged var userID: String?
@@ -32,6 +33,7 @@ extension User {
     @NSManaged var mostRecentChat: ChatRecord?
     @NSManaged var profile: Profile?
 
+    @NSManaged var activity: Set<Activity>
     @NSManaged var carsLiked: Set<SportCar>
     @NSManaged var chatRecords: Set<ChatRecord>
     @NSManaged var club: Set<Club>
@@ -49,6 +51,11 @@ extension User {
 // MARK: - User KVC compliant to-many accessors and helpers
 
 extension User {
+
+    @NSManaged private func addActivityObject(object: Activity)
+    @NSManaged private func removeActivityObject(object: Activity)
+    @NSManaged func addActivity(activity: Set<Activity>)
+    @NSManaged func removeActivity(activity: Set<Activity>)
 
     @NSManaged private func addCarsLikedObject(object: SportCar)
     @NSManaged private func removeCarsLikedObject(object: SportCar)
@@ -105,6 +112,9 @@ extension User {
     @NSManaged func addStatusComment(statusComment: Set<StatusComment>)
     @NSManaged func removeStatusComment(statusComment: Set<StatusComment>)
 
+    func addActivity(activity: Activity) { self.addActivityObject(activity) }
+    func removeActivity(activity: Activity) { self.removeActivityObject(activity) }
+
     func addCarsLiked(carsLiked: SportCar) { self.addCarsLikedObject(carsLiked) }
     func removeCarsLiked(carsLiked: SportCar) { self.removeCarsLikedObject(carsLiked) }
 
@@ -153,6 +163,7 @@ extension User {
     static let job = AlecrimCoreData.NullableAttribute<String>("job")
     static let nickName = AlecrimCoreData.NullableAttribute<String>("nickName")
     static let phoneNum = AlecrimCoreData.NullableAttribute<String>("phoneNum")
+    static let remarkName = AlecrimCoreData.NullableAttribute<String>("remarkName")
     static let signature = AlecrimCoreData.NullableAttribute<String>("signature")
     static let starSign = AlecrimCoreData.NullableAttribute<String>("starSign")
     static let userID = AlecrimCoreData.NullableAttribute<String>("userID")
@@ -160,6 +171,7 @@ extension User {
     static let mostRecentChat = AlecrimCoreData.NullableAttribute<ChatRecord>("mostRecentChat")
     static let profile = AlecrimCoreData.NullableAttribute<Profile>("profile")
 
+    static let activity = AlecrimCoreData.Attribute<Set<Activity>>("activity")
     static let carsLiked = AlecrimCoreData.Attribute<Set<SportCar>>("carsLiked")
     static let chatRecords = AlecrimCoreData.Attribute<Set<ChatRecord>>("chatRecords")
     static let club = AlecrimCoreData.Attribute<Set<Club>>("club")
@@ -187,6 +199,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: User {
     var job: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("job", self) }
     var nickName: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("nickName", self) }
     var phoneNum: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("phoneNum", self) }
+    var remarkName: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("remarkName", self) }
     var signature: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("signature", self) }
     var starSign: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("starSign", self) }
     var userID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("userID", self) }
@@ -194,6 +207,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: User {
     var mostRecentChat: AlecrimCoreData.NullableAttribute<ChatRecord> { return AlecrimCoreData.NullableAttribute<ChatRecord>("mostRecentChat", self) }
     var profile: AlecrimCoreData.NullableAttribute<Profile> { return AlecrimCoreData.NullableAttribute<Profile>("profile", self) }
 
+    var activity: AlecrimCoreData.Attribute<Set<Activity>> { return AlecrimCoreData.Attribute<Set<Activity>>("activity", self) }
     var carsLiked: AlecrimCoreData.Attribute<Set<SportCar>> { return AlecrimCoreData.Attribute<Set<SportCar>>("carsLiked", self) }
     var chatRecords: AlecrimCoreData.Attribute<Set<ChatRecord>> { return AlecrimCoreData.Attribute<Set<ChatRecord>>("chatRecords", self) }
     var club: AlecrimCoreData.Attribute<Set<Club>> { return AlecrimCoreData.Attribute<Set<Club>>("club", self) }

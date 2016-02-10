@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import Spring
+import AlecrimCoreData
 /**
  *  HomeController来实现
  */
@@ -39,7 +40,7 @@ class HomeController: UIViewController, HomeDelegate {
     var sideBarCtl: SideBarController
     let board: UIView
     //
-    var person: PersonController?
+    var person: PersonBasicController?
     var news: NewsController?
     
     convenience init() {
@@ -172,10 +173,11 @@ extension HomeController {
         switch to {
         case 0:
             if person == nil {
-                person = PersonController(delegate: self, animated: false, showMap: true)
+                person = PersonBasicController(user: User.objects.hostUser!)
             }
-            person?.user = hostUser
-            self.board.addSubview(person!.view!)
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            self.navigationController?.pushViewController(person!, animated: true)
+//            self.board.addSubview(person!.view!)
         case 1:
             news = NewsController(style: .Plain)
             self.navigationController?.pushViewController(news!, animated: true)
@@ -185,12 +187,15 @@ extension HomeController {
 //                status = StatusHomeController()
 //            }
 //            self.navigationController?.pushViewController(status!, animated: true)
-            let audioURL = NSURL(fileURLWithPath: "/Users/Lena/Downloads/sample.mp3", isDirectory: false)
-            let _ = AudioWaveDrawEngine(audioFileURL: audioURL, preferredSampleNum: 50, onFinished: { (engine) -> () in
-                print("done")
-            })
             let test = StatusHomeController()
             self.navigationController?.pushViewController(test, animated: true)
+            break
+        case 5:
+            ChatRecordDataSource.sharedDataSource.start()
+//            let messages = MessageController()
+            let messages = PrivateChatSettingController(targetUser: User.objects.hostUser!)
+            self.navigationController?.setNavigationBarHidden(false, animated: false)
+            self.navigationController?.pushViewController(messages, animated: true)
             break
         default:
             break

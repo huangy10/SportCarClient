@@ -74,6 +74,20 @@ extension UserManager {
     func returnError<Value>(err: ManagerError) -> ManagerResult<Value, ManagerError>{
         return ManagerResult.Failure(err)
     }
+    
+    /**
+     获取或者同从coredata中载入用户
+     
+     - parameter userID: 给定的用户id
+     */
+    func getOrReload(userID: String) -> User? {
+        if let user = users[userID] {
+            return user
+        }else {
+            let user = context.users.first { $0.userID == userID }
+            return user
+        }
+    }
     /**
      利用从服务器返回的数据创建一个User对象，单个查询和写入直接在主线程上进行。如果创建的用户对象和已有的用户数据发生重叠，则将Manager中的对应数据覆盖
      

@@ -329,7 +329,7 @@ extension StatusReleaseController {
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = locations.last()!
+        let location = locations.last!
         let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         mapView?.setCenterCoordinate(center, zoomLevel: 12, animated: true)
         if userLocAnn == nil {

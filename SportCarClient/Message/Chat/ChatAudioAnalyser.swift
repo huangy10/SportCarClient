@@ -13,6 +13,8 @@ import AudioToolbox
 
 class AudioWaveDrawEngine: NSObject {
     
+    var loading: Bool = true
+    
     var preferredSampleNum: UInt32
     var maxMagnitude: Float = 1
     var normalizeCoeff: Float = 0
@@ -40,12 +42,16 @@ class AudioWaveDrawEngine: NSObject {
      
      - returns: -
      */
-    init(audioFileURL: NSURL, preferredSampleNum: UInt32, onFinished: (engine: AudioWaveDrawEngine)->()) {
+    init(audioFileURL: NSURL, preferredSampleNum: UInt32, onFinished: (engine: AudioWaveDrawEngine)->(), async: Bool = true) {
         self.audioFileURL = audioFileURL
         self.onFinished = onFinished
         self.preferredSampleNum = preferredSampleNum
         super.init()
-        self.performSelectorInBackground("startSampling", withObject: nil)
+        if async{
+            self.performSelectorInBackground("startSampling", withObject: nil)
+        }else{
+            startSampling()
+        }
     }
     
     func startSampling() {
@@ -113,11 +119,12 @@ class AudioWaveDrawEngine: NSObject {
             assertionFailure()
         }
         //
-        let NUMBER_PER_READ = preferredSampleNum * binSize
+        let NUMBER_PER_READ = binSize
         var audio: [[Float]] = []
         for _ in 0..<extAFNumChannels {
             audio.append([Float](count: Int(NUMBER_PER_READ), repeatedValue: 0))
         }
+        sampledata = [Float](count: Int(preferredSampleNum), repeatedValue: 0)
         
         var packetsRead: Int = 0
         while !extAFReachedEOF {
@@ -132,6 +139,7 @@ class AudioWaveDrawEngine: NSObject {
         normalizeSampleData(maxMagnitude)
         ExtAudioFileDispose(extAFRef)
         
+        loading = false
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
             self.onFinished(engine: self)
         }
@@ -152,7 +160,7 @@ class AudioWaveDrawEngine: NSObject {
         var data: [Float] = [Float](count: kSegmentSize * sizeof(Float), repeatedValue: 0)
         // 创建容纳取出数据的缓冲buffer
         var bufList: AudioBufferList = AudioBufferList(mNumberBuffers: 1, mBuffers: AudioBuffer(
-            mNumberChannels: UInt32(extAFNumChannels), mDataByteSize: numFrames * UInt32(sizeof(Float)), mData: &data
+            mNumberChannels: UInt32(extAFNumChannels), mDataByteSize: numFrames * UInt32(extAFNumChannels * sizeof(Float)), mData: &data
             ))
         var loadedPackets: UInt32 = numFrames
         err = ExtAudioFileRead(extAFRef, &loadedPackets, &bufList)
@@ -206,8 +214,9 @@ class AudioWaveDrawEngine: NSObject {
                     }
                 }
             }
-            if loadedSamples < sampledata.capacity {
+            if loadedSamples < Int(preferredSampleNum){
                 sampledata[loadedSamples] = maxVal
+                loadedSamples += 1
             }else {
                 break
             }
@@ -218,8 +227,41 @@ class AudioWaveDrawEngine: NSObject {
      将采样数据归一化，并将幅度设置为制定的值
      */
     func normalizeSampleData(magnitude: Float) {
-        var coeff = 1 / normalizeCoeff
+        var coeff = 1 / normalizeCoeff * magnitude
         vDSP_vsmul(&sampledata, 1, &coeff, &sampledata, 1, UInt(preferredSampleNum))
+    }
+    
+    class func getAudioLengthInSec(audioURL: NSURL) -> Double {
+        var err: OSStatus
+        let audioURLRef: CFURLRef = audioURL
+        var extAFRef: ExtAudioFileRef = nil
+        err = ExtAudioFileOpenURL(audioURLRef, &extAFRef)
+        if err != noErr{
+            return -1
+        }
+        var infoSize: UInt32 = 0
+        err = ExtAudioFileGetPropertyInfo(extAFRef, kExtAudioFileProperty_FileDataFormat, &infoSize, nil)
+        if err != noErr{
+            return -1
+        }
+        var fileFormat: AudioStreamBasicDescription = AudioStreamBasicDescription()
+        memset(&fileFormat, 0, sizeof(AudioStreamBasicDescription))
+        err = ExtAudioFileGetProperty(extAFRef, kExtAudioFileProperty_FileDataFormat, &infoSize, &fileFormat)
+        if err != noErr {
+            return -1
+        }
+        let sampleRate = fileFormat.mSampleRate
+        var frameNum: UInt32 = 0
+        var writable: DarwinBoolean = false
+        err = ExtAudioFileGetPropertyInfo(extAFRef, kExtAudioFileProperty_FileLengthFrames, &infoSize, &writable)
+        if err != noErr{
+            return -1
+        }
+        err = ExtAudioFileGetProperty(extAFRef, kExtAudioFileProperty_FileLengthFrames, &infoSize, &frameNum)
+        if err != noErr {
+            return -1
+        }
+        return Double(frameNum) / Double(sampleRate)
     }
     
 }
