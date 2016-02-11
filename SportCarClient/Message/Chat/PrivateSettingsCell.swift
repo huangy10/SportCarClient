@@ -91,7 +91,33 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
     
     var staticLbl: UILabel!
     var infoLbl: UILabel!
+    var icon: UIImageView!
     var boolSelect: UISwitch!
+    var markIcon: UIImageView!
+    
+    var editable: Bool = true {
+        didSet  {
+            if editable {
+                infoLbl.textColor = UIColor.blackColor()
+            }else {
+                infoLbl.textColor = UIColor(white: 0.72, alpha: 1)
+            }
+        }
+    }
+    
+    var useAsMark: Bool = false {
+        didSet {
+            if useAsMark {
+                infoLbl.hidden = true
+                icon.hidden = true
+                boolSelect.hidden = true
+            }else {
+                infoLbl.hidden = false
+                icon.hidden = false
+                boolSelect.hidden = false
+            }
+        }
+    }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -114,7 +140,7 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
             make.left.equalTo(superview).offset(15)
         }
         //
-        let icon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
+        icon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         superview.addSubview(icon)
         icon.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(staticLbl)
@@ -153,5 +179,14 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
             make.height.equalTo(0.5)
             make.left.equalTo(superview).offset(15)
         }
+        //
+        markIcon = UIImageView(image: UIImage(named: "hook"))
+        superview.addSubview(markIcon)
+        markIcon.snp_makeConstraints { (make) -> Void in
+            make.right.equalTo(superview).offset(-15)
+            make.top.equalTo(staticLbl)
+            make.size.equalTo(CGSizeMake(17, 12))
+        }
+        markIcon.hidden = true
     }
 }

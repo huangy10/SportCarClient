@@ -31,6 +31,10 @@ internal class StatusURLMaker: AccountURLMaker {
     func postComment(statusID: String) -> String {
         return website + "/status/\(statusID)/post_comments"
     }
+    
+    func getStatusListSimplified(userID: String) -> String{
+        return website + "/profile/\(userID)/status"
+    }
 }
 
 
@@ -191,5 +195,25 @@ class StatusRequester: AccountRequester {
                         break
                     }
             }
+    }
+    
+    /**
+     根据发布者获取动态列表
+     
+     - parameter userID:        给定用户的id
+     - parameter dateThreshold: 时间阈值
+     - parameter limit:         最大获取数量
+     - parameter onSuccess:     成功以后调用的closure
+     - parameter onError:       失败以后调用的closure
+     */
+    func getStatusListSimplified(userID: String, carID: String?, dateThreshold: NSDate, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let strURL = StatusURLMaker.sharedMaker.getStatusListSimplified(userID)
+        var params: [String: AnyObject] = ["date_threshold": STRDate(dateThreshold), "limit": limit, "op_type": "more"]
+        if carID != nil {
+            params["filter_car"] = carID
+        }
+        manager.request(.GET, strURL, parameters: params).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
+        }
     }
 }

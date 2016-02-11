@@ -10,6 +10,8 @@ import Foundation
 import SwiftyJSON
 import AlecrimCoreData
 
+// TODO: 整理和同一Model中所有模块的接口的形式
+
 /**
  重载了等于判断的操作符
  
@@ -117,24 +119,26 @@ extension UserManager {
             return returnError(.CantSave)
         }
         return ManagerResult.Success(user)
-//        let userID = json["userID"].stringValue
-//        // 检查用户是否在现在的内存池中
-//        if let user = users[userID] where user.isEqualTo(json){
-//            return ManagerResult.Success(user)
-//        }
-//        let user = context.users.firstOrCreated {$0.userID == userID }
-//        user.loadValueFromJSON(json, forceUpdateNil: true)
-//        // 注意要更新users
-//        self.users[user.userID!] = user
-//        accessTimes += 1
-//        do {
-//            try context.save()
-//        }catch let err{
-//            // 无法保存时打印错误
-//            print("\(err)")
-//            return returnError(.CantSave)
-//        }
-//        return ManagerResult.Success(user)
+    }
+    
+    /**
+     利用从服务器返回的数据来创建一个User对象，涉及的数据较为全面,基本结构和上面的create(json: JSON)是类似的
+     
+     - parameter detailjson: 详细的json数据
+     
+     - returns: 生成的用户
+     */
+    func create(detailjson: JSON) -> User? {
+        let userID = detailjson["userID"].stringValue
+        if let user = users[userID] {
+            user.loadValueFromJSONWithProfile(detailjson)
+            return user
+        }
+        let user = context.users.firstOrCreated{ $0.userID == userID }
+        user.loadValueFromJSONWithProfile(detailjson)
+        // 将用户数据放进内存池中
+        users[userID] = user
+        return user
     }
     
     /**

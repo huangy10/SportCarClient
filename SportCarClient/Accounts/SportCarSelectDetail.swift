@@ -262,7 +262,7 @@ class SportCarSelectDetailController: UIViewController, SportCarBrandSelecterCon
                 downloadIndicator.stopAnimating()
             })
             
-            self.carId = data["car_id"].string
+            self.carId = data["carID"].stringValue
             self.contents = [carType, self.contents![1], data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
             self.carSelectBtn?.enabled = true
             self.carSelectBtn?.setTitle(carType, forState: .Normal)

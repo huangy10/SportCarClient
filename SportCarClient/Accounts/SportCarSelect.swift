@@ -171,7 +171,7 @@ class SportCarSelectController: InputableViewController, SportCarBrandSelecterCo
             let detail = SportCarSelectDetailController()
             print("\(data)")
             detail.headers = headers
-            detail.carId = data["car_id"].stringValue
+            detail.carId = data["carID"].stringValue
             detail.contents = contents
             detail.carType = carType
             detail.carDisplayURL = NSURL(string: carImgURL ?? "")

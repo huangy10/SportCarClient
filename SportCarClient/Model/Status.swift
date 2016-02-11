@@ -69,7 +69,6 @@ class StatusManager {
     var status: [String: Status] = [:]
     
     let context = User.objects.context
-    
 }
 
 

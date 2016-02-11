@@ -83,7 +83,7 @@ extension ChatListController {
             // 当选中的是一个人是，直接打开对话框
             let room = ChatRoomController()
             room.chatList = self
-            room.targetUser = users.first()
+            room.targetUser = users.first
             messageController.navigationController?.pushViewController(room, animated: true)
         }
     }

@@ -24,12 +24,35 @@ class SportCar: NSManagedObject {
 }
 
 extension SportCar {
-    func loadFromJSON(json: JSON) {
-        carID = json["carID"].stringValue
-        // 注：后期这里调整了，可以上传最多9张图片。由于Sqlite并不支持数组类型，这里将众多图片的url存成一个字符串的，字符串之间以分号隔开
-        image = json["image"].string
-        name = json["name"].string
-        logo = json["logo"].string
+    func loadFromJSON(json: JSON, forceUpdateNil: Bool = false) {
+        if forceUpdateNil {
+//            carID = json["carID"].stringValue
+            // 注：后期这里调整了，可以上传最多9张图片。由于Sqlite并不支持数组类型，这里将众多图片的url存成一个字符串的，字符串之间以分号隔开
+            image = json["image"].string
+            name = json["name"].string
+            logo = json["logo"].string
+            price = json["price"].string
+            engine = json["engine"].string
+            transimission = json["trans"].string
+            body = json["body"].string
+            max_speed = json["speed"].string
+            zeroTo60 = json["acce"].string
+            return
+        }
+        let setter = {(inout property: String?, fieldName: String) in
+            if let value = json[fieldName].string {
+                property = value
+            }
+        }
+        setter(&image, "image")
+        setter(&name, "name")
+        setter(&logo, "logo")
+        setter(&price, "price")
+        setter(&engine, "engine")
+        setter(&transimission, "trans")
+        setter(&body, "body")
+        setter(&max_speed, "speed")
+        setter(&zeroTo60, "acce")
     }
     
     func loadFromData(data: [String: AnyObject?]) {

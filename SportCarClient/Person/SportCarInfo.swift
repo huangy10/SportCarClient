@@ -11,16 +11,18 @@ import SnapKit
 import Kingfisher
 
 
-protocol SportCarInfoCelLDelegate {
+protocol SportCarInfoCellDelegate {
     func carNeedEdit()
 }
 
 
-class SportCarInfoCell: UICollectionViewCell, UIPageViewControllerDataSource {
-    var car: SportCar!
+class SportCarInfoCell: UICollectionViewCell{
+    static let reuseIdentifier = "sport_car_info_cell"
     
-    var carImages: [String] = []
-    var carImagesDisplay: UIPageViewController!
+    var delegate: SportCarInfoCellDelegate?
+    var own: SportCarOwnerShip!
+    
+    var carCover: UIImageView!
     var carNameLbl: UILabel!
     var carAuthIcon: UIImageView!
     var carEditBtn: UIButton!
@@ -33,27 +35,35 @@ class SportCarInfoCell: UICollectionViewCell, UIPageViewControllerDataSource {
     var carSpeed: UILabel!
     var carAcce: UILabel!
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        createSubviews()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func createSubviews() {
         let superview = self.contentView
         //
-        carImagesDisplay = UIPageViewController(transitionStyle: .PageCurl, navigationOrientation: .Horizontal, options: nil)
-        carImagesDisplay.dataSource = self
-        let carImagesDisplayView = carImagesDisplay.view
-        superview.addSubview(carImagesDisplayView)
-        carImagesDisplayView.snp_makeConstraints { (make) -> Void in
+        carCover = UIImageView()
+        superview.addSubview(carCover)
+        carCover.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.top.equalTo(superview)
-            make.height.equalTo(carImagesDisplayView.snp_width)
+            make.height.equalTo(carCover.snp_width).multipliedBy(0.588)
         }
         //
         carNameLbl = UILabel()
         carNameLbl.font = UIFont.systemFontOfSize(19, weight: UIFontWeightSemibold)
         carNameLbl.textColor = UIColor.blackColor()
+        carNameLbl.numberOfLines = 0
         superview.addSubview(carNameLbl)
         carNameLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(20)
-            make.top.equalTo(carImagesDisplayView).offset(15)
+            make.top.equalTo(carCover.snp_bottom).offset(15)
             make.width.equalTo(superview).multipliedBy(0.55)
         }
         //
@@ -68,11 +78,12 @@ class SportCarInfoCell: UICollectionViewCell, UIPageViewControllerDataSource {
         carEditBtn = UIButton()
         carEditBtn.setTitle(LS("编辑"), forState: .Normal)
         carEditBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
+        carEditBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         carEditBtn.addTarget(self, action: "carEditBtnPressed", forControlEvents: .TouchUpInside)
         superview.addSubview(carEditBtn)
         carEditBtn.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
-            make.centerY.equalTo(carEditBtn)
+            make.centerY.equalTo(carAuthIcon)
             make.size.equalTo(CGSizeMake(56, 32))
         }
         //
@@ -89,9 +100,10 @@ class SportCarInfoCell: UICollectionViewCell, UIPageViewControllerDataSource {
         carSignatureLbl = UILabel()
         carSignatureLbl.textColor = UIColor(white: 0.72, alpha: 1)
         carSignatureLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        carSignatureLbl.numberOfLines = 0
         superview.addSubview(carSignatureLbl)
         carSignatureLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(superview)
+            make.left.equalTo(superview).offset(20)
             make.top.equalTo(sepLine).offset(12)
             make.width.equalTo(carNameLbl)
         }
@@ -219,6 +231,27 @@ class SportCarInfoCell: UICollectionViewCell, UIPageViewControllerDataSource {
     
     func loadDataAndUpdateUI() {
         // 设置数据
+        if let car = own.car {
+            // 设置跑车名
+            carNameLbl.text = car.name
+            // 设置封面图
+            carCover.kf_setImageWithURL(SFURL(car.image!)!)
+            // 设置认证标签
+            if own.identified {
+                carAuthIcon.image = UIImage(named: "auth_status_authed")
+            }else {
+                carAuthIcon.image = UIImage(named: "auth_status_unauthed")
+            }
+            // 跑车签名
+            carSignatureLbl.text = own.signature
+            // 跑车性能指标设置
+            carPrice.text = car.price
+            carEngine.text = car.engine
+            carTrans.text = car.transimission
+            carBody.text = car.body
+            carSpeed.text = car.max_speed
+            carAcce.text = car.zeroTo60
+        }
     }
     
     func getCarParamStaticLabel() -> UILabel {
@@ -236,6 +269,18 @@ class SportCarInfoCell: UICollectionViewCell, UIPageViewControllerDataSource {
     }
     
     func carEditBtnPressed() {
-        
+        delegate?.carNeedEdit()
+    }
+    
+    class func getPreferredSizeForSignature(signature: String, carName: String) -> CGSize {
+        let screenWidth = UIScreen.mainScreen().bounds.width
+        let coverHeight = screenWidth * 0.588
+        let designTotalHeight: CGFloat = 634
+        let staticHeight = designTotalHeight - 216 - 52 - 52
+        let signatureLblWidth = screenWidth * 0.55
+        let signatureLblHeight = signature.boundingRectWithSize(CGSizeMake(signatureLblWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)], context: nil).height
+        let carNameHeight = carName.boundingRectWithSize(CGSizeMake(signatureLblWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(19, weight: UIFontWeightSemibold)], context: nil).height
+        return CGSizeMake(screenWidth, signatureLblHeight + staticHeight + coverHeight + carNameHeight)
     }
 }
+

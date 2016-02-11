@@ -430,7 +430,7 @@ extension NewsDetailController {
         }
         let requester = NewsRequester.newsRequester
         var dateThreshold = NSDate()
-        if let lastComment = comments.last() {
+        if let lastComment = comments.last {
             dateThreshold  = lastComment.createdAt ?? dateThreshold
         }
         requestingCommentData = true

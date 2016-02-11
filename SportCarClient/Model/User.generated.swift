@@ -112,20 +112,20 @@ extension User {
     @NSManaged func addStatusComment(statusComment: Set<StatusComment>)
     @NSManaged func removeStatusComment(statusComment: Set<StatusComment>)
 
-    func addActivity(activity: Activity) { self.addActivityObject(activity) }
-    func removeActivity(activity: Activity) { self.removeActivityObject(activity) }
+    @nonobjc func addActivity(activity: Activity) { self.addActivityObject(activity) }
+    @nonobjc func removeActivity(activity: Activity) { self.removeActivityObject(activity) }
 
-    func addCarsLiked(carsLiked: SportCar) { self.addCarsLikedObject(carsLiked) }
-    func removeCarsLiked(carsLiked: SportCar) { self.removeCarsLikedObject(carsLiked) }
+    @nonobjc func addCarsLiked(carsLiked: SportCar) { self.addCarsLikedObject(carsLiked) }
+    @nonobjc func removeCarsLiked(carsLiked: SportCar) { self.removeCarsLikedObject(carsLiked) }
 
-    func addChatRecord(chatRecord: ChatRecord) { self.addChatRecordsObject(chatRecord) }
-    func removeChatRecord(chatRecord: ChatRecord) { self.removeChatRecordsObject(chatRecord) }
+    @nonobjc func addChatRecord(chatRecord: ChatRecord) { self.addChatRecordsObject(chatRecord) }
+    @nonobjc func removeChatRecord(chatRecord: ChatRecord) { self.removeChatRecordsObject(chatRecord) }
 
-    func addClub(club: Club) { self.addClubObject(club) }
-    func removeClub(club: Club) { self.removeClubObject(club) }
+    @nonobjc func addClub(club: Club) { self.addClubObject(club) }
+    @nonobjc func removeClub(club: Club) { self.removeClubObject(club) }
 
-    func addClubCreated(clubCreated: Club) { self.addClubCreatedObject(clubCreated) }
-    func removeClubCreated(clubCreated: Club) { self.removeClubCreatedObject(clubCreated) }
+    @nonobjc func addClubCreated(clubCreated: Club) { self.addClubCreatedObject(clubCreated) }
+    @nonobjc func removeClubCreated(clubCreated: Club) { self.removeClubCreatedObject(clubCreated) }
 
     func addFan(fan: User) { self.addFansObject(fan) }
     func removeFan(fan: User) { self.removeFansObject(fan) }
@@ -133,20 +133,20 @@ extension User {
     func addFollow(follow: User) { self.addFollowsObject(follow) }
     func removeFollow(follow: User) { self.removeFollowsObject(follow) }
 
-    func addLikeNews(likeNews: News) { self.addLikeNewsObject(likeNews) }
-    func removeLikeNews(likeNews: News) { self.removeLikeNewsObject(likeNews) }
+    @nonobjc func addLikeNews(likeNews: News) { self.addLikeNewsObject(likeNews) }
+    @nonobjc func removeLikeNews(likeNews: News) { self.removeLikeNewsObject(likeNews) }
 
-    func addNewsComment(newsComment: NewsComment) { self.addNewsCommentObject(newsComment) }
-    func removeNewsComment(newsComment: NewsComment) { self.removeNewsCommentObject(newsComment) }
+    @nonobjc func addNewsComment(newsComment: NewsComment) { self.addNewsCommentObject(newsComment) }
+    @nonobjc func removeNewsComment(newsComment: NewsComment) { self.removeNewsCommentObject(newsComment) }
 
-    func addOwnership(ownership: SportCarOwnerShip) { self.addOwnershipObject(ownership) }
-    func removeOwnership(ownership: SportCarOwnerShip) { self.removeOwnershipObject(ownership) }
+    @nonobjc func addOwnership(ownership: SportCarOwnerShip) { self.addOwnershipObject(ownership) }
+    @nonobjc func removeOwnership(ownership: SportCarOwnerShip) { self.removeOwnershipObject(ownership) }
 
     func addStatu(statu: Status) { self.addStatusObject(statu) }
     func removeStatu(statu: Status) { self.removeStatusObject(statu) }
 
-    func addStatusComment(statusComment: StatusComment) { self.addStatusCommentObject(statusComment) }
-    func removeStatusComment(statusComment: StatusComment) { self.removeStatusCommentObject(statusComment) }
+    @nonobjc func addStatusComment(statusComment: StatusComment) { self.addStatusCommentObject(statusComment) }
+    @nonobjc func removeStatusComment(statusComment: StatusComment) { self.removeStatusCommentObject(statusComment) }
 
 }
 

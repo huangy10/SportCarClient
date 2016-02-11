@@ -102,7 +102,7 @@ extension User{
      
      - returns: 赋值是否成功
      */
-    func loadValueFromJSON(json: JSON, forceUpdateNil: Bool=true) -> Bool{
+    func loadValueFromJSON(json: JSON, forceUpdateNil: Bool=false) -> Bool{
         
         if json["userID"] == nil || json["userID"].stringValue != self.userID{
             return false
@@ -117,7 +117,7 @@ extension User{
             job = json["job"].string
             signature = json["signature"].string
             age = json["age"].int32 ?? 0
-            profile?.loadValueFromJSON(json)
+            profile?.loadValueFromJSON(json, forceUpdateNil: true)
             return true
         }
         // 在内部定义了一个setter以减少后面的代码重复
@@ -130,7 +130,7 @@ extension User{
         setter(&avatarUrl, "avatar")
         setter(&district, "district")
         setter(&gender, "gender")
-        setter(&nickName, "nickName")
+        setter(&nickName, "nick_name")
         setter(&phoneNum, "nickName")
         setter(&starSign, "star_sign")
         setter(&job, "job")
@@ -138,6 +138,7 @@ extension User{
         if let age = json["age"].int32 {
             self.age = age
         }
+        profile?.loadValueFromJSON(json)
         return true
     }
     
@@ -146,6 +147,38 @@ extension User{
         get{
             return userID != nil && nickName != nil && avatarUrl != nil
         }
+    }
+    
+    /**
+     超级详细的数据读取，其数据格式参照从服务器获取的profile info数据
+     
+     - parameter json: json数据
+     */
+    func loadValueFromJSONWithProfile(json: JSON) {
+        nickName = json["nick_name"].string
+        age = json["age"].int32Value
+        avatarUrl = json["avatar"].string
+        gender = json["gender"].string
+        starSign = json["gender"].string
+        district = json["district"].string
+        job = json["job"].string
+        signature = json["signature"].string
+        let avatarCarJSON = json["avatar_car"]
+        avatarCar = SportCarOwnerShip.objects.createOrLoadHostUserOwnedCar(avatarCarJSON)!.car
+        let profile = self.profile
+        profile?.avatarCarID = avatarCar?.carID
+        profile?.avatarCarImage = avatarCar?.image
+        profile?.avatarCarLogo = avatarCar?.logo
+        profile?.avatarCarName = avatarCar?.name
+        profile?.statusNum = json["status_num"].int32Value
+        profile?.fansNum = json["fans_num"].int32Value
+        profile?.followNum = json["follow_num"].int32Value
+        let avatarClubJSON = json["avatarClub"]
+        // Club和User是属于同一个context的
+        let avatarClub = Club.objects.getOrCreate(avatarClubJSON)
+        profile?.avatarClubID = avatarClub?.clubID
+        profile?.avatarClubLogo = avatarClub?.logo_url
+        profile?.avatarClubName = avatarClub?.name
     }
 
 }

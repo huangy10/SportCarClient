@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import CoreLocation
 import Mapbox
+import Cent
 
 
 class StatusReleaseController: InputableViewController, StatusReleasePhotoSelectDelegate, CLLocationManagerDelegate, MGLMapViewDelegate, FFSelectDelegate {

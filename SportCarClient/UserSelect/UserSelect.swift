@@ -183,6 +183,8 @@ extension UserSelectController {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(UserSelectCell.reuseIdentifier, forIndexPath: indexPath) as! UserSelectCell
         let user = users[indexPath.row]
+        print(user)
+        print(user.nickName)
         cell.avatarImg?.kf_setImageWithURL(SFURL(user.avatarUrl!)!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes

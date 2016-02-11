@@ -17,6 +17,8 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     var statusImages: [String] = []
     var comments: [StatusComment] = []
     
+    var loadAnimated: Bool = true
+    
     var board: UIScrollView?
     
     /// 上方显示
@@ -76,6 +78,11 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         self.initialHight = initHeight
     }
     
+    convenience init(status: Status) {
+        self.init(nibName: nil, bundle: nil)
+        self.status = status
+    }
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
@@ -99,26 +106,36 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
 //            make.height.equalTo(self.view.frame.height)
 //            make.top.equalTo(self.view)
         })
-
-        tmpBackgroundImg = UIImageView()
-        tmpBackgroundImg?.image = initBackground
-        board?.addSubview(tmpBackgroundImg!)
-        tmpBackgroundImg?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(self.view)
-            make.left.equalTo(self.view)
-            make.top.equalTo(board!)
-            make.height.equalTo(self.view)
-        })
+        if loadAnimated {
+            tmpBackgroundImg = UIImageView()
+            tmpBackgroundImg?.image = initBackground
+            board?.addSubview(tmpBackgroundImg!)
+            tmpBackgroundImg?.snp_makeConstraints(closure: { (make) -> Void in
+                make.right.equalTo(self.view)
+                make.left.equalTo(self.view)
+                make.top.equalTo(board!)
+                make.height.equalTo(self.view)
+            })
+        }
         
         statusContainer = UIView()
         statusContainer?.backgroundColor = UIColor.whiteColor()
         board?.addSubview(statusContainer!)
-        statusContainer?.snp_makeConstraints(closure: { (make) -> Void in
-            make.height.equalTo(initialHight)
-            make.right.equalTo(self.view).offset(-10)
-            make.left.equalTo(self.view).offset(10)
-            make.top.equalTo(board!).offset(initialPos)
-        })
+        if loadAnimated {
+            statusContainer?.snp_makeConstraints(closure: { (make) -> Void in
+                make.height.equalTo(initialHight)
+                make.right.equalTo(self.view).offset(-10)
+                make.left.equalTo(self.view).offset(10)
+                make.top.equalTo(board!).offset(initialPos)
+            })
+        }else {
+            statusContainer?.snp_remakeConstraints(closure: { (make) -> Void in
+                make.left.equalTo(self.view)
+                make.right.equalTo(self.view)
+                make.top.equalTo(board!)
+                make.height.equalTo(board!)
+            })
+        }
         createStatusBoard()
         createOtherSubivews()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardAppears:", name: UIKeyboardWillShowNotification, object: nil)
@@ -127,26 +144,29 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        self.view.updateConstraints()
-        self.view.layoutIfNeeded()
-        statusContainer?.snp_remakeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(self.view)
-            make.right.equalTo(self.view)
-            make.top.equalTo(board!)
-            make.height.equalTo(board!)
-        })
-        UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseOut, animations: { () -> Void in
+        if loadAnimated {
+            self.view.updateConstraints()
             self.view.layoutIfNeeded()
-            }) { (_) -> Void in
-                self.tmpBackgroundImg?.hidden = true
-                self.animateOtherSubViews()
-                self.autoSetBoardContentSize(true)
-                self.loadMoreCommentData()
+            statusContainer?.snp_remakeConstraints(closure: { (make) -> Void in
+                make.left.equalTo(self.view)
+                make.right.equalTo(self.view)
+                make.top.equalTo(board!)
+                make.height.equalTo(board!)
+            })
+            UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseOut, animations: { () -> Void in
+                self.view.layoutIfNeeded()
+                }) { (_) -> Void in
+                    self.tmpBackgroundImg?.hidden = true
+                    self.animateOtherSubViews()
+                    self.autoSetBoardContentSize(true)
+                    self.loadMoreCommentData()
+            }
         }
     }
     
     func navSetting() {
-        navigationItem.title = LS("资讯详情")
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationItem.title = LS("动态详情")
         //
         let backBtn = UIButton()
         backBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
@@ -178,11 +198,20 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.72, alpha: 1)
         board?.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(superview).offset(-15)
-            make.left.equalTo(superview).offset(15)
-            make.top.equalTo(board!).offset(initialHight)
-            make.height.equalTo(0.5)
+        if loadAnimated {
+            sepLine.snp_makeConstraints { (make) -> Void in
+                make.right.equalTo(superview).offset(-15)
+                make.left.equalTo(superview).offset(15)
+                make.top.equalTo(board!).offset(initialHight)
+                make.height.equalTo(0.5)
+            }
+        }else {
+            sepLine.snp_makeConstraints(closure: { (make) -> Void in
+                make.right.equalTo(superview).offset(-15)
+                make.left.equalTo(superview).offset(15)
+                make.top.equalTo(statusContainer!.snp_bottom)
+                make.height.equalTo(0.5)
+            })
         }
         //
         let commentStaticLbl = UILabel()
@@ -215,12 +244,21 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         
         commentPanel = CommentBarView()
         self.view?.addSubview(commentPanel!)
-        commentPanel?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(superview)
-            make.left.equalTo(superview)
-            make.height.equalTo(commentPanel!.barheight)
-            make.bottom.equalTo(superview).offset(commentPanel!.barheight)      // 先将这个panel放置在底部，后续动画调出
-        })
+        if loadAnimated {
+            commentPanel?.snp_makeConstraints(closure: { (make) -> Void in
+                make.right.equalTo(superview)
+                make.left.equalTo(superview)
+                make.height.equalTo(commentPanel!.barheight)
+                make.bottom.equalTo(superview).offset(commentPanel!.barheight)      // 先将这个panel放置在底部，后续动画调出
+            })
+        }else {
+            commentPanel?.snp_makeConstraints(closure: { (make) -> Void in
+                make.right.equalTo(superview)
+                make.left.equalTo(superview)
+                make.height.equalTo(commentPanel!.barheight)
+                make.bottom.equalTo(superview).offset(0)
+            })
+        }
         self.inputFields.append(commentPanel?.contentInput)
         commentPanel?.contentInput?.delegate = self
     }
@@ -330,7 +368,7 @@ extension StatusDetailController {
         avatarCarLogoIcon?.contentMode = .ScaleAspectFit
         superview.addSubview(avatarCarLogoIcon!)
         avatarCarLogoIcon?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(avatarCarNameLbl!.snp_left)
+            make.right.equalTo(avatarCarNameLbl!.snp_left).offset(-4)
             make.centerY.equalTo(avatarCarNameLbl!)
             make.size.equalTo(21)
         })
@@ -338,6 +376,7 @@ extension StatusDetailController {
         中间内容区域
         */
         mainCover = UIImageView()
+        mainCover?.contentMode = .ScaleAspectFill
         superview.addSubview(mainCover!)
         mainCover?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview)

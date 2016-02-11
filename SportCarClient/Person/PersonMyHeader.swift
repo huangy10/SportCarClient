@@ -27,6 +27,9 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
     var followNumLbl: UILabel!
     var map: MGLMapView!    // 地图
     
+    var navRightBtn: UIButton!      // 单独创建的类似导航栏的按钮，但是并不在导航栏中
+    var navLeftBtn: UIButton!       // 同上
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         createSubviews()
@@ -43,8 +46,12 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         map.allowsScrolling = false
         map.delegate = self
         superview.addSubview(map)
+        map.snp_makeConstraints { (make) -> Void in
+            make.edges.equalTo(superview)
+        }
         //
         backMask = BackMaskView()
+        backMask.backgroundColor = UIColor.clearColor()
         backMask.centerHegiht = 175
         superview.addSubview(backMask)
         backMask.snp_makeConstraints { (make) -> Void in
@@ -69,8 +76,8 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         avatarCarBtn.backgroundColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(avatarCarBtn)
         avatarCarBtn.snp_makeConstraints { (make) -> Void in
-            make.bottom.equalTo(avatarCarBtn)
-            make.right.equalTo(avatarCarBtn)
+            make.bottom.equalTo(avatarBtn)
+            make.right.equalTo(avatarBtn)
             make.size.equalTo(33)
         }
         //
@@ -133,13 +140,14 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         superview.addSubview(fansNumLbl)
         fansNumLbl.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(avatarBtn)
-            make.top.equalTo(avatarBtn).offset(35)
+            make.top.equalTo(avatarBtn.snp_bottom).offset(35)
         }
         //
         let staticFansNumLbl = UILabel()
         staticFansNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
         staticFansNumLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
         staticFansNumLbl.textAlignment = .Center
+        staticFansNumLbl.text = LS("粉丝")
         superview.addSubview(staticFansNumLbl)
         staticFansNumLbl.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(fansNumLbl.snp_bottom).offset(2)
@@ -152,7 +160,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         statusNumLbl.textAlignment = .Center
         superview.addSubview(statusNumLbl)
         statusNumLbl.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(fansNumLbl.snp_left).offset(50)
+            make.right.equalTo(fansNumLbl.snp_left).offset(-50)
             make.centerY.equalTo(fansNumLbl)
         }
         //
@@ -160,6 +168,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         staticStatusNumLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
         staticStatusNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
         staticStatusNumLbl.textAlignment = .Center
+        staticStatusNumLbl.text = LS("动态")
         superview.addSubview(staticStatusNumLbl)
         staticStatusNumLbl.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(statusNumLbl)
@@ -180,11 +189,37 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         staticFollowNumLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
         staticFollowNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
         staticFollowNumLbl.textAlignment = .Center
+        staticFollowNumLbl.text = LS("关注")
         superview.addSubview(staticFollowNumLbl)
         staticFollowNumLbl.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(followNumLbl)
             make.top.equalTo(followNumLbl.snp_bottom).offset(2)
         }
+        // 
+        navLeftBtn = UIButton()
+        navLeftBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
+        navLeftBtn.imageEdgeInsets = UIEdgeInsetsMake(16, 15, 16, 15)
+        superview.addSubview(navLeftBtn)
+        navLeftBtn.snp_makeConstraints { (make) -> Void in
+            make.left.equalTo(superview)
+            make.centerY.equalTo(superview.snp_top).offset(40)
+            make.size.equalTo(44)
+        }
+        //
+        navRightBtn = UIButton()
+        superview.addSubview(navRightBtn)
+        navRightBtn.snp_makeConstraints { (make) -> Void in
+            make.right.equalTo(superview)
+            make.centerY.equalTo(superview.snp_top).offset(40)
+            make.size.equalTo(44)
+        }
+        let icon = UIImageView(image: UIImage(named: "person_setting"))
+        navRightBtn.addSubview(icon)
+        icon.snp_makeConstraints { (make) -> Void in
+            make.center.equalTo(navRightBtn)
+            make.size.equalTo(20)
+        }
+        
     }
     
     func loadDataAndUpdateUI() {
@@ -202,7 +237,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         nameLbl.text = user.nickName
         //
         let genderText = user.gender ?? "m"
-        let gender = ["m": "♂", "f": "♀"][genderText]
+        let gender = ["男": "♂", "女": "♀"][genderText]
         if genderText == "m" {
             genderAgeLbl.backgroundColor = UIColor(red: 0.227, green: 0.439, blue: 0.686, alpha: 1)
         }else {
@@ -210,6 +245,11 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         }
         let age = user.age
         genderAgeLbl.text = "\(gender!) \(age)"
+        // 
+        let profile = user.profile
+        fansNumLbl.text = "\(profile!.fansNum)"
+        followNumLbl.text = "\(profile!.followNum)"
+        statusNumLbl.text = "\(profile!.statusNum)"
     }
 }
 
@@ -229,8 +269,8 @@ class BackMaskView: UIView {
         CGContextAddLineToPoint(ctx, width, height)
         let rightHeight = centerHegiht + width * ratio / 2
         let leftHeight = centerHegiht - width * ratio / 2
-        CGContextAddLineToPoint(ctx, width, rightHeight)
-        CGContextAddLineToPoint(ctx, 0, leftHeight)
+        CGContextAddLineToPoint(ctx, width, height - rightHeight)
+        CGContextAddLineToPoint(ctx, 0, height - leftHeight)
         CGContextClosePath(ctx)
         CGContextFillPath(ctx)
         CGContextRestoreGState(ctx)

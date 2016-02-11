@@ -18,7 +18,7 @@ protocol SportCarViewListDelegate {
      
      - parameter car: 选中的车辆
      */
-    func didSelectSportCar(car: SportCar?)
+    func didSelectSportCar(car: SportCarOwnerShip?)
     
     /**
      按下了最后的添加按钮
@@ -29,9 +29,9 @@ protocol SportCarViewListDelegate {
 
 class SportsCarViewListController: UICollectionViewController {
     
-    var cars: [SportCar] = []
+    var owns: [SportCarOwnerShip] = []
     
-    var selectedCar: SportCar?
+    var selectedCar: SportCarOwnerShip?
     
     var delegate: SportCarViewListDelegate?
     
@@ -40,7 +40,12 @@ class SportsCarViewListController: UICollectionViewController {
         layout.itemSize = CGSizeMake(120, 62)
         layout.sectionInset = UIEdgeInsetsMake(0, 9, 0, 9)
         layout.minimumInteritemSpacing = 9
+        layout.scrollDirection = .Horizontal
         self.init(collectionViewLayout: layout)
+        collectionView?.showsHorizontalScrollIndicator = false
+        collectionView?.backgroundColor = UIColor(white: 0.945, alpha: 1)
+        collectionView?.registerClass(SportCarViewListTextCell.self, forCellWithReuseIdentifier: SportCarViewListTextCell.reuseIdentifier)
+        collectionView?.registerClass(SportCarViewListAddBtnCell.self, forCellWithReuseIdentifier: SportCarViewListAddBtnCell.reuseIdentifier)
     }
     
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -48,11 +53,11 @@ class SportsCarViewListController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cars.count + 2
+        return owns.count + 2
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        if indexPath.row < cars.count + 1 {
+        if indexPath.row < owns.count + 1 {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(SportCarViewListTextCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarViewListTextCell
             if indexPath.row == 0{
                 cell.titleLbl.text = LS("动态")
@@ -62,9 +67,9 @@ class SportsCarViewListController: UICollectionViewController {
                     cell.setCellSelected(false)
                 }
             }else {
-                let car = cars[indexPath.row - 1]
+                let car = owns[indexPath.row - 1].car!
                 cell.titleLbl.text = car.name
-                if car.carID == selectedCar?.carID {
+                if car.carID == selectedCar?.car?.carID {
                     cell.setCellSelected(true)
                 }else {
                     cell.setCellSelected(false)
@@ -81,8 +86,8 @@ class SportsCarViewListController: UICollectionViewController {
         if indexPath.row == 0 {
             selectedCar = nil
             delegate?.didSelectSportCar(selectedCar)
-        } else if indexPath.row < cars.count + 1 {
-            selectedCar = cars[indexPath.row - 1]
+        } else if indexPath.row < owns.count + 1 {
+            selectedCar = owns[indexPath.row - 1]
             delegate?.didSelectSportCar(selectedCar)
         } else {
             delegate?.needAddSportCar()

@@ -109,7 +109,6 @@ class ChatRecordDataSource {
                     downloader.downloadImageWithURL(targetURL, progressBlock: nil, completionHandler: { (image, error, imageURL, originalData) -> () in
                         newRecord.contentImage = image
                         dispatch_semaphore_signal(semaphore)
-                        print("imageDownload!")
                     })
                 }else{
                     dispatch_semaphore_signal(semaphore)
@@ -168,10 +167,10 @@ class ChatRecordList {
     }
     
     func first() -> ChatRecord?{
-        return _data.first()
+        return _data.first
     }
     
     func last() -> ChatRecord? {
-        return _data.last()
+        return _data.last
     }
 }

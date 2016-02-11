@@ -50,8 +50,8 @@ extension Club {
     @NSManaged func addMembers(members: Set<User>)
     @NSManaged func removeMembers(members: Set<User>)
 
-    func addActivity(activity: Activity) { self.addActivityObject(activity) }
-    func removeActivity(activity: Activity) { self.removeActivityObject(activity) }
+    @nonobjc func addActivity(activity: Activity) { self.addActivityObject(activity) }
+    @nonobjc func removeActivity(activity: Activity) { self.removeActivityObject(activity) }
 
     func addChat(chat: ChatRecord) { self.addChatsObject(chat) }
     func removeChat(chat: ChatRecord) { self.removeChatsObject(chat) }

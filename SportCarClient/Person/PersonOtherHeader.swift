@@ -32,6 +32,7 @@ class PersonHeaderOther: PersonHeaderMine {
         //
         chatBtn = UIButton()
         chatBtn.setImage(UIImage(named: "person_send_message"), forState: .Normal)
+        superview.addSubview(chatBtn)
         chatBtn.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(followBtn)
             make.left.equalTo(followBtn.snp_right).offset(15)
@@ -40,6 +41,7 @@ class PersonHeaderOther: PersonHeaderMine {
         //
         locBtn = UIButton()
         locBtn.setImage(UIImage(named: "person_guide_to"), forState: .Normal)
+        superview.addSubview(locBtn)
         locBtn.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(followBtn)
             make.left.equalTo(chatBtn.snp_right).offset(15)
@@ -52,5 +54,8 @@ class PersonHeaderOther: PersonHeaderMine {
         }
         // 更改maskView的高度
         backMask.centerHegiht = 225
+        avatarBtn.snp_updateConstraints { (make) -> Void in
+            make.bottom.equalTo(self).offset(-156)
+        }
     }
 }

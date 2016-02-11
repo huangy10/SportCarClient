@@ -86,12 +86,20 @@
 		BFBC52791C53902500EE7D34 /* ChatOpPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC52781C53902500EE7D34 /* ChatOpPanel.swift */; };
 		BFBC527D1C53CE8D00EE7D34 /* ChatAudioAnalyser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC527C1C53CE8D00EE7D34 /* ChatAudioAnalyser.swift */; };
 		BFBEA0841C2152F200F04F9A /* Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBEA0831C2152F200F04F9A /* Wrapper.swift */; };
+		BFC0324B1C6CCC7D00ECA69A /* PersonMineSettingsInvitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0324A1C6CCC7D00ECA69A /* PersonMineSettingsInvitation.swift */; };
 		BFC36B991C698D5900DC6FE2 /* PersonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36B981C698D5900DC6FE2 /* PersonController.swift */; };
 		BFC36B9C1C698DD200DC6FE2 /* PersonMyHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36B9B1C698DD200DC6FE2 /* PersonMyHeader.swift */; };
 		BFC36B9E1C699B7500DC6FE2 /* PersonOtherHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36B9D1C699B7500DC6FE2 /* PersonOtherHeader.swift */; };
 		BFC36BA01C69A6A900DC6FE2 /* PersonDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36B9F1C69A6A900DC6FE2 /* PersonDataSource.swift */; };
 		BFC36BA31C69A90400DC6FE2 /* SportscarViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BA21C69A90400DC6FE2 /* SportscarViewList.swift */; };
 		BFC36BA51C6AE5F500DC6FE2 /* SportCarInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BA41C6AE5F500DC6FE2 /* SportCarInfo.swift */; };
+		BFC36BA71C6B0F7400DC6FE2 /* PersonStatusHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BA61C6B0F7400DC6FE2 /* PersonStatusHeader.swift */; };
+		BFC36BAA1C6B27B000DC6FE2 /* PersonRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BA91C6B27B000DC6FE2 /* PersonRequest.swift */; };
+		BFC36BAC1C6C496A00DC6FE2 /* OtherPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BAB1C6C496A00DC6FE2 /* OtherPerson.swift */; };
+		BFC36BAF1C6C5E1D00DC6FE2 /* PersonMineSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BAE1C6C5E1D00DC6FE2 /* PersonMineSettings.swift */; };
+		BFC36BB21C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */; };
+		BFC36BB41C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */; };
+		BFC36BB61C6C854800DC6FE2 /* BlackListViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB51C6C854800DC6FE2 /* BlackListViewer.swift */; };
 		BFC712EB1C2C3B4F00A71F4C /* UserUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712EA1C2C3B4F00A71F4C /* UserUtilities.swift */; };
 		BFC712F11C2C431900A71F4C /* StatusComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712ED1C2C431900A71F4C /* StatusComment.swift */; };
 		BFC712F31C2C431900A71F4C /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712EF1C2C431900A71F4C /* Status.swift */; };
@@ -218,12 +226,20 @@
 		BFBC52781C53902500EE7D34 /* ChatOpPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatOpPanel.swift; path = Message/Chat/ChatOpPanel.swift; sourceTree = "<group>"; };
 		BFBC527C1C53CE8D00EE7D34 /* ChatAudioAnalyser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatAudioAnalyser.swift; path = Message/Chat/ChatAudioAnalyser.swift; sourceTree = "<group>"; };
 		BFBEA0831C2152F200F04F9A /* Wrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Wrapper.swift; path = BaseTemplate/Wrapper.swift; sourceTree = "<group>"; };
+		BFC0324A1C6CCC7D00ECA69A /* PersonMineSettingsInvitation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsInvitation.swift; path = Person/PersonMineSettingsInvitation.swift; sourceTree = "<group>"; };
 		BFC36B981C698D5900DC6FE2 /* PersonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonController.swift; path = Person/PersonController.swift; sourceTree = "<group>"; };
 		BFC36B9B1C698DD200DC6FE2 /* PersonMyHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMyHeader.swift; path = Person/PersonMyHeader.swift; sourceTree = "<group>"; };
 		BFC36B9D1C699B7500DC6FE2 /* PersonOtherHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonOtherHeader.swift; path = Person/PersonOtherHeader.swift; sourceTree = "<group>"; };
 		BFC36B9F1C69A6A900DC6FE2 /* PersonDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonDataSource.swift; path = Person/PersonDataSource.swift; sourceTree = "<group>"; };
 		BFC36BA21C69A90400DC6FE2 /* SportscarViewList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportscarViewList.swift; path = Person/SportscarViewList.swift; sourceTree = "<group>"; };
 		BFC36BA41C6AE5F500DC6FE2 /* SportCarInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarInfo.swift; path = Person/SportCarInfo.swift; sourceTree = "<group>"; };
+		BFC36BA61C6B0F7400DC6FE2 /* PersonStatusHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonStatusHeader.swift; path = Person/PersonStatusHeader.swift; sourceTree = "<group>"; };
+		BFC36BA91C6B27B000DC6FE2 /* PersonRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonRequest.swift; path = Person/PersonRequest.swift; sourceTree = "<group>"; };
+		BFC36BAB1C6C496A00DC6FE2 /* OtherPerson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OtherPerson.swift; path = Person/OtherPerson.swift; sourceTree = "<group>"; };
+		BFC36BAE1C6C5E1D00DC6FE2 /* PersonMineSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettings.swift; path = Person/PersonMineSettings.swift; sourceTree = "<group>"; };
+		BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsNewMessageNotification.swift; path = Person/PersonMineSettingsNewMessageNotification.swift; sourceTree = "<group>"; };
+		BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsLocationVisiblity.swift; path = Person/PersonMineSettingsLocationVisiblity.swift; sourceTree = "<group>"; };
+		BFC36BB51C6C854800DC6FE2 /* BlackListViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlackListViewer.swift; path = Person/BlackListViewer.swift; sourceTree = "<group>"; };
 		BFC712EA1C2C3B4F00A71F4C /* UserUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserUtilities.swift; path = Model/UserUtilities.swift; sourceTree = "<group>"; };
 		BFC712ED1C2C431900A71F4C /* StatusComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusComment.swift; path = Model/StatusComment.swift; sourceTree = "<group>"; };
 		BFC712EF1C2C431900A71F4C /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.swift; path = Model/Status.swift; sourceTree = "<group>"; };
@@ -492,10 +508,13 @@
 		BF5491DE1C23070A0090D151 /* Person */ = {
 			isa = PBXGroup;
 			children = (
+				BFC36BAD1C6C5DFA00DC6FE2 /* Mine */,
+				BFC36BA81C6B279D00DC6FE2 /* Network */,
 				BFC36BA11C69A8F200DC6FE2 /* Component */,
 				BFC36B9A1C698DC000DC6FE2 /* headers */,
 				BFC36B981C698D5900DC6FE2 /* PersonController.swift */,
 				BFC36B9F1C69A6A900DC6FE2 /* PersonDataSource.swift */,
+				BFC36BAB1C6C496A00DC6FE2 /* OtherPerson.swift */,
 			);
 			name = Person;
 			sourceTree = "<group>";
@@ -669,8 +688,37 @@
 			children = (
 				BFC36BA21C69A90400DC6FE2 /* SportscarViewList.swift */,
 				BFC36BA41C6AE5F500DC6FE2 /* SportCarInfo.swift */,
+				BFC36BA61C6B0F7400DC6FE2 /* PersonStatusHeader.swift */,
 			);
 			name = Component;
+			sourceTree = "<group>";
+		};
+		BFC36BA81C6B279D00DC6FE2 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				BFC36BA91C6B27B000DC6FE2 /* PersonRequest.swift */,
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
+		BFC36BAD1C6C5DFA00DC6FE2 /* Mine */ = {
+			isa = PBXGroup;
+			children = (
+				BFC36BB01C6C6FA900DC6FE2 /* Settings */,
+			);
+			name = Mine;
+			sourceTree = "<group>";
+		};
+		BFC36BB01C6C6FA900DC6FE2 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				BFC36BAE1C6C5E1D00DC6FE2 /* PersonMineSettings.swift */,
+				BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */,
+				BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */,
+				BFC36BB51C6C854800DC6FE2 /* BlackListViewer.swift */,
+				BFC0324A1C6CCC7D00ECA69A /* PersonMineSettingsInvitation.swift */,
+			);
+			name = Settings;
 			sourceTree = "<group>";
 		};
 		BFC712F41C2C432400A71F4C /* Status */ = {
@@ -1068,6 +1116,7 @@
 				BF54DD751C2EB9A800F635C0 /* NewsComment.generated.swift in Sources */,
 				BFCB96361C1F0551004F77E8 /* BlackBarNavigationController.swift in Sources */,
 				BFAA0CA91C46009F00AB5C3C /* StatusRequester.swift in Sources */,
+				BFC36BAF1C6C5E1D00DC6FE2 /* PersonMineSettings.swift in Sources */,
 				BF6308A31C19A8040087A4F0 /* ResetPassword.swift in Sources */,
 				BF139E6E1C4E6E8E0022F4FC /* FFSelect.swift in Sources */,
 				BF2336921C5732D800F0AE41 /* ChatCell.swift in Sources */,
@@ -1080,6 +1129,8 @@
 				BFBEA0841C2152F200F04F9A /* Wrapper.swift in Sources */,
 				BF54DD771C2EBDE800F635C0 /* NewsCell.swift in Sources */,
 				BFC712F11C2C431900A71F4C /* StatusComment.swift in Sources */,
+				BFC36BA71C6B0F7400DC6FE2 /* PersonStatusHeader.swift in Sources */,
+				BFC36BB41C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift in Sources */,
 				BFBC52711C52946300EE7D34 /* ChatController.swift in Sources */,
 				BF2BE21E1C29390200DD0CF9 /* Profile.generated.swift in Sources */,
 				BFA1FEFD1C36DD8500F127FA /* NewsDetailCommentCell.swift in Sources */,
@@ -1100,14 +1151,18 @@
 				BF5107131C60CBA6008DC14F /* ChatListCell.swift in Sources */,
 				BFCB96381C1F0DA8004F77E8 /* SportCarBrandSelecterDetail.swift in Sources */,
 				BFAA0CAC1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift in Sources */,
+				BFC36BAA1C6B27B000DC6FE2 /* PersonRequest.swift in Sources */,
 				BF1EC23F1C49414F0016F425 /* UserSelect.swift in Sources */,
 				BFCA900F1C50A09100B05E74 /* StatusBasic.swift in Sources */,
 				BF54DD681C2EB4FE00F635C0 /* NewsController.swift in Sources */,
 				BF54DD701C2EB95F00F635C0 /* NewsComment.swift in Sources */,
 				BFC712FC1C2C439900A71F4C /* StatusComment.generated.swift in Sources */,
 				BF2F7E951C644A8A00E3A3A2 /* Notification.generated.swift in Sources */,
+				BFC36BB21C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift in Sources */,
 				BFCB963A1C1FB0AE004F77E8 /* SportCarRequester.swift in Sources */,
 				BFBC52751C53877100EE7D34 /* ChatRecord.swift in Sources */,
+				BFC36BAC1C6C496A00DC6FE2 /* OtherPerson.swift in Sources */,
+				BFC0324B1C6CCC7D00ECA69A /* PersonMineSettingsInvitation.swift in Sources */,
 				BFC36BA31C69A90400DC6FE2 /* SportscarViewList.swift in Sources */,
 				BFFA51161C05D9910019E5EF /* AppDelegate.swift in Sources */,
 				BF2F7E971C644C7600E3A3A2 /* NotificationCell.swift in Sources */,
@@ -1122,6 +1177,7 @@
 				BF27E6CD1C38457F0074771D /* MakeCommentPanel.swift in Sources */,
 				BFBC52771C5388BE00EE7D34 /* ChatRecord.generated.swift in Sources */,
 				BF5FF0ED1C15B4860050F5FE /* GlobalVariables.swift in Sources */,
+				BFC36BB61C6C854800DC6FE2 /* BlackListViewer.swift in Sources */,
 				BF58990C1C4CFF26005496EA /* informUser.swift in Sources */,
 				BFFA511E1C05D9920019E5EF /* SportCarClient.xcdatamodeld in Sources */,
 				BFCB96401C205DF1004F77E8 /* Home.swift in Sources */,

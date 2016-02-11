@@ -175,7 +175,7 @@ extension HomeController {
             if person == nil {
                 person = PersonBasicController(user: User.objects.hostUser!)
             }
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
+//            self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.navigationController?.pushViewController(person!, animated: true)
 //            self.board.addSubview(person!.view!)
         case 1:

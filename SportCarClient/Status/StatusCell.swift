@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
-
+import Dollar
 
 /// 状态页面的cell
 class StatusCell: UITableViewCell, UICollectionViewDataSource{
