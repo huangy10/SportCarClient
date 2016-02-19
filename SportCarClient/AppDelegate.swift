@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        let home = AppManager()
+        let home = AppManager.sharedAppManager
         let wrapper = BlackBarNavigationController(rootViewController: home)
         window?.rootViewController = wrapper
         window?.makeKeyAndVisible()

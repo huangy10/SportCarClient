@@ -27,6 +27,11 @@ class MessageController: UIViewController {
         createSubviews()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
     func createSubviews() {
         let superview = self.view
         superview.backgroundColor = UIColor.whiteColor()
@@ -128,7 +133,7 @@ class MessageController: UIViewController {
     }
     
     func navLeftBtnPressed() {
-        
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     func titleBtnPressed(sender: UIButton) {

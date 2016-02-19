@@ -116,7 +116,8 @@ extension NewsController {
     }
     
     func backToHomePressed() {
-        self.homeDelegate?.backToHome(nil)
+        self.navigationController?.popViewControllerAnimated(true)
+//        self.homeDelegate?.backToHome(nil)
     }
 }
 

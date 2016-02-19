@@ -5,6 +5,8 @@
 //  Created by 黄延 on 16/2/13.
 //  Copyright © 2016年 WoodyHuang. All rights reserved.
 //
+//  活动的模块的入口
+//
 
 import UIKit
 
@@ -140,7 +142,6 @@ class ActivityHomeController: UIViewController {
         board.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
-//        board.frame = superview.bounds
         //
         mine = ActivityHomeMineListController()
         let mineView = mine.view
@@ -151,19 +152,17 @@ class ActivityHomeController: UIViewController {
             make.left.equalTo(board).offset(width)
         }
         mine.home = self
-//        mineView.frame = CGRectMake(width, 0, width, height)
         //
         nearBy = ActivityNearByController()
         let nearByView = nearBy.view
         board.addSubview(nearByView)
-//        nearByView.frame = CGRectMake(0, 0, width, height)
         nearByView.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(superview)
             make.top.equalTo(superview)
             make.left.equalTo(board)
         }
         nearBy.home = self
-        //
+        
         applied = ActivityAppliedController()
         let appliedView = applied.view
         board.addSubview(appliedView)

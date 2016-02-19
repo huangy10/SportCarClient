@@ -36,14 +36,15 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+//        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //
         navSettings()
-        createSubviews()
         //
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardAppears:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardDisappears:", name: UIKeyboardWillHideNotification, object: nil)
@@ -81,7 +82,6 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         }
         tableView.registerClass(MapCell.self, forCellReuseIdentifier: MapCell.reuseIdentifier)
         tableView.registerClass(ActivityCommentCell.self, forCellReuseIdentifier: ActivityCommentCell.reuseIdentifier)
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "test")
         //
         actInfoBoard = ActivityDetailBoardView()
         actInfoBoard.frame = self.view.bounds
@@ -118,10 +118,46 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
     
     func navLeftBtnPressed() {
         self.navigationController?.popViewControllerAnimated(true)
+
     }
     
+    /**
+     报名或者是关闭
+     */
     func navRightBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        let requester = ActivityRequester()
+        if isMineAct {
+            let endAt = act.endAt!
+            if endAt.compare(NSDate()) == NSComparisonResult.OrderedAscending {
+                self.displayAlertController(LS("活动已结束，无法关闭报名"), message: nil)
+                return
+            }
+            // 关闭报名
+            requester.closeActivty(act.activityID!, onSuccess: { (json) -> () in
+                // 成功以后修改活动的状态
+                self.act.endAt = NSDate()
+                // 更新UI
+                self.actInfoBoard.loadDataAndUpdateUI()
+                }, onError: { (code) -> () in
+                    print(code)
+            })
+        }else{
+            // 报名
+            let endAt = act.endAt!
+            if endAt.compare(NSDate()) == NSComparisonResult.OrderedAscending {
+                self.displayAlertController(LS("活动已结束，无法报名"), message: nil)
+                return
+            }
+            requester.postToApplyActivty(act.activityID!, onSuccess: { (json) -> () in
+                // 当前用户加入
+                self.act.hostApply()
+                self.actInfoBoard.loadDataAndUpdateUI()
+                }, onError: { (code) -> () in
+                    print(code)
+            })
+            
+        }
+//        self.navigationController?.popViewControllerAnimated(true)
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -143,14 +179,11 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
             cell.loadDataAndUpdateUI()
             return cell
         }else{
-            var cell = tableView.dequeueReusableCellWithIdentifier(MapCell.reuseIdentifier) as? MapCell
-            if cell == nil {
-                cell = MapCell(style: .Default, reuseIdentifier: MapCell.reuseIdentifier)
-            }
+            let cell = tableView.dequeueReusableCellWithIdentifier(MapCell.reuseIdentifier, forIndexPath: indexPath) as! MapCell
             let center = CLLocationCoordinate2D(latitude: act.location_y, longitude: act.location_x)
-            cell?.setMapCenter(center)
-            cell?.locLbl.text = LS("导航至 ") + (act.location_des ?? LS("未知地点"))
-            return cell!
+            cell.setMapCenter(center)
+            cell.locLbl.text = LS("导航至 ") + (act.location_des ?? LS("未知地点"))
+            return cell
         }
     }
     

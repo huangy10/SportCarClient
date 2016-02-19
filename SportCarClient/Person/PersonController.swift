@@ -71,6 +71,11 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
     /**
      重写这个方法来替换header所用的类型,header必须是PersonheaderMine的基类
      

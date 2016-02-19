@@ -323,7 +323,7 @@ class ActivityDetailBoardView: UIView {
         users.insert(host!, atIndex: 0)
         memberDisplay.users = users
         memberDisplay.collectionView?.reloadData()
-        let memberDisplayHeight = UIScreen.mainScreen().bounds.width / 4 * CGFloat((users.count + (memberDisplay.showDeleteBtn ? 2 : 1)) / 4 + 1)
+        let memberDisplayHeight = UIScreen.mainScreen().bounds.width / 4 * CGFloat((users.count + (memberDisplay.showDeleteBtn ? 2 : 1) + 1) / 4)
         memberDisplay.view.snp_updateConstraints { (make) -> Void in
             make.height.equalTo(memberDisplayHeight)
         }

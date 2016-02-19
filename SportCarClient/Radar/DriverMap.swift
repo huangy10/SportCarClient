@@ -10,13 +10,23 @@ import UIKit
 import Mapbox
 
 
-class DriverMapController: UIViewController, MGLMapViewDelegate {
+class DriverMapController: UIViewController, RadarMapDelegate {
     
-    var map: MGLMapView!
+    var map: RadarMap!
     var filterBtn: UIButton!
     
     func createSubviews() {
         
     }
     
+}
+
+extension DriverMapController {
+    
+    /**
+     更新附着在
+     */
+    func radarDidUpdateAppearance() {
+        
+    }
 }

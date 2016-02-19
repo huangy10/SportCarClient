@@ -66,7 +66,7 @@ class ActivityReleaseMapCell: UITableViewCell, MGLMapViewDelegate {
         let wrapper = UIScrollView()
         locInputContainer.addSubview(wrapper)
         wrapper.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(locIcon).offset(17)
+            make.left.equalTo(locIcon.snp_right).offset(17)
             make.height.equalTo(locIcon)
             make.centerY.equalTo(locInputContainer)
             make.right.equalTo(locInputContainer).offset(-15)

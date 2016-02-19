@@ -242,7 +242,7 @@ extension AccountRequester {
     
     func resultValueHandler(value: Alamofire.Result<AnyObject, NSError>, dataFieldName: String, onSuccess: (JSON?)->(), onError: (code: String?)->()?) {
         switch value {
-        case .Failure(_):
+        case .Failure(let err):
             dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
                 onError(code: "0000")
             })

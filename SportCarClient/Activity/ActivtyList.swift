@@ -11,7 +11,7 @@ import UIKit
 
 class ActivityHomeMineListController: UITableViewController {
     
-    var home: ActivityHomeController!
+    weak var home: ActivityHomeController!
     
     var data: [Activity] = []
     var loading: Bool = false
@@ -61,6 +61,7 @@ class ActivityHomeMineListController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(ActivityHomeCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityHomeCell
         let act = data[indexPath.row]
         cell.act = act
+        cell.selectionStyle = .None
         cell.loadDataAndUpdateUI()
         let y = cell.frame.origin.y - tableView.contentOffset.y
         if y <= 0 {

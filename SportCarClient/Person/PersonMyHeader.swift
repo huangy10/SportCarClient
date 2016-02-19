@@ -54,6 +54,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         backMask = BackMaskView()
         backMask.backgroundColor = UIColor.clearColor()
         backMask.centerHegiht = 175
+        backMask.ratio = 0.2
         superview.addSubview(backMask)
         backMask.snp_makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview)
@@ -61,6 +62,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
             make.right.equalTo(superview)
             make.height.equalTo(300)
         }
+        backMask.setNeedsDisplay()
         //
         avatarBtn = UIButton()
         avatarBtn.backgroundColor = UIColor(white: 0.72, alpha: 1)

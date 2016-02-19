@@ -16,6 +16,9 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     var boardHeight: CGFloat = 0
     var tableView: UITableView!
     
+    var datePicker: CustomDatePicker!
+    var datePickerMode: String = "startAt"  // startAt or endAt
+    
     var attendNum: Int = 10
     var startAt: String = LS("请选择活动开始时间")
     var endAt: String = LS("请选择活动截止时间")
@@ -88,6 +91,8 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         tableView.registerClass(ActivityReleaseCell.self, forCellReuseIdentifier: ActivityReleaseCell.reuseIdentifier)
         tableView.registerClass(MapCell.self, forCellReuseIdentifier: MapCell.reuseIdentifier)
         tableView.registerClass(ActivityReleaseMapCell.self, forCellReuseIdentifier: ActivityReleaseMapCell.reuseIdentifier)
+        //
+        
     }
     
     func test() {
@@ -125,11 +130,14 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         if indexPath.row < 4 {
             let cell = (tableView.dequeueReusableCellWithIdentifier(ActivityReleaseCell.reuseIdentifier) as! ActivityReleaseCell) ?? ActivityReleaseCell(style: .Default, reuseIdentifier: ActivityReleaseCell.reuseIdentifier)
             cell.staticLbl.text = [LS("人数要求"), LS("开始时间"), LS("截止时间"), LS("参加成员")][indexPath.row]
+            cell.editable = false
+            cell.infoInput.keyboardType = .Default
             switch indexPath.row {
             case 0:
                 // 活动参加人数
                 cell.infoInput.text = "\(attendNum)"
                 cell.infoInput.delegate = self
+                cell.infoInput.keyboardType = .NumberPad
                 var add = true
                 for view in inputFields {
                     if view == cell.infoInput {
@@ -141,23 +149,20 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                     inputFields.append(cell.infoInput)
                 }
                 cell.arrowDirection = "left"
-                cell.editable = true
                 break
             case 1:
                 // 开始时间
                 cell.infoInput.text = startAt
-                cell.editable = true
                 cell.arrowDirection = "down"
+                cell.infoInput.keyboardType = .Default
                 break
             case 2:
                 // 结束时间
                 cell.infoInput.text = endAt
-                cell.editable = true
                 cell.arrowDirection = "down"
                 break
             case 3:
                 cell.infoInput.text = clubLimit
-                cell.editable = false
                 cell.arrowDirection = "down"
             default:
                 break
@@ -175,6 +180,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             }
             if add {
                 inputFields.append(cell.locInput)
+                cell.locInput.delegate = self
             }
             if userLocation != nil {
                 let center = CLLocationCoordinate2D(latitude: userLocation!.coordinate.latitude, longitude: userLocation!.coordinate.longitude)
@@ -194,7 +200,24 @@ extension ActivityReleaseController {
             tableView.setContentOffset(CGPointMake(0, -boardHeight), animated: true)
         }else {
             // 此时必然是cell中的textField
-            tableView.setContentOffset(CGPointMake(0, 0), animated: true)
+            // 沿着view树向上找到cell
+            var view: UIView? = textField
+            var index: NSIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+            while true {
+                if let cell = view as? UITableViewCell {
+                    index = self.tableView.indexPathForCell(cell)!
+                    break
+                }
+                view = view?.superview
+                if view == nil{
+                    return
+                }
+            }
+            if index.section == 0 && index.row == 0 {
+                tableView.setContentOffset(CGPointMake(0, 0), animated: true)
+            }else if index.section == 0 && index.row == 4 {
+                tableView.setContentOffset(CGPointMake(0, 100), animated: true)
+            }
         }
     }
     

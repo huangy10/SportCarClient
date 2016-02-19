@@ -49,7 +49,7 @@ class ChatListCell: UITableViewCell {
         superview.backgroundColor = UIColor.whiteColor()
         //
         avatarBtn = UIButton()
-        avatarBtn.layer.cornerRadius = 45
+        avatarBtn.layer.cornerRadius = 45 / 2
         avatarBtn.clipsToBounds = true
         superview.addSubview(avatarBtn)
         avatarBtn.snp_makeConstraints { (make) -> Void in

@@ -41,6 +41,14 @@ class ActivityURLMaker: AccountURLMaker {
     func createActivity() -> String {
         return website + "/activity/create"
     }
+    
+    func applyActivity(actID: String) -> String {
+        return website + "/activity/\(actID)/apply"
+    }
+    
+    func closeActivity(actID: String) -> String{
+        return website + "/activity/\(actID)/close"
+    }
 }
 
 
@@ -247,6 +255,34 @@ class ActivityRequester: AccountRequester {
                     
                     break
                 }
+        }
+    }
+    
+    /**
+     报名，或者取消报名活动
+     
+     - parameter actID:     活动id
+     - parameter onSuccess: 成功以后调用的closure
+     - parameter onError:   失败以后调用的closure
+     */
+    func postToApplyActivty(actID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let urlStr = ActivityURLMaker.sharedURLMaker.applyActivity(actID)
+        manager.request(.POST, urlStr).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "join", onSuccess: onSuccess, onError: onError)
+        }
+    }
+
+    /**
+     关闭活动报名
+     
+     - parameter actID:     活动id
+     - parameter onSuccess: 成功以后调用的closure
+     - parameter onError:   失败以后调用的closure
+     */
+    func closeActivty(actID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let urlStr = ActivityURLMaker.sharedURLMaker.closeActivity(actID)
+        manager.request(.POST, urlStr).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
         }
     }
 }

@@ -58,6 +58,7 @@
 		BF54DD7A1C303D5100F635C0 /* NewsRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF54DD791C303D5100F635C0 /* NewsRequester.swift */; };
 		BF58990C1C4CFF26005496EA /* informUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF58990B1C4CFF26005496EA /* informUser.swift */; };
 		BF58990E1C4D14A3005496EA /* SportCarSelectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF58990D1C4D14A3005496EA /* SportCarSelectList.swift */; };
+		BF5C96321C76E770002C2806 /* RadarMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C96311C76E770002C2806 /* RadarMap.swift */; };
 		BF5FF0ED1C15B4860050F5FE /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */; };
 		BF6308981C1965AF0087A4F0 /* Agreement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6308971C1965AF0087A4F0 /* Agreement.swift */; };
 		BF63089D1C1970AB0087A4F0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF63089C1C1970AB0087A4F0 /* Localizable.strings */; };
@@ -76,6 +77,8 @@
 		BF9404971C2818C3001ABB1E /* AppLauchner.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9404961C2818C3001ABB1E /* AppLauchner.swift */; };
 		BF9847341C76311D006DDE3C /* ActivityReleaseMapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9847331C76311D006DDE3C /* ActivityReleaseMapCell.swift */; };
 		BFA1FEFD1C36DD8500F127FA /* NewsDetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA1FEFC1C36DD8500F127FA /* NewsDetailCommentCell.swift */; };
+		BFA29E411C770D120008A408 /* RadarBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA29E401C770D120008A408 /* RadarBubble.swift */; };
+		BFA29E441C7768930008A408 /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA29E431C7768930008A408 /* CustomDatePicker.swift */; };
 		BFA2C7691C40F97D00202EF0 /* frameworkextensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2C7681C40F97D00202EF0 /* frameworkextensions.swift */; };
 		BFA2C76B1C412B1500202EF0 /* CommentPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2C76A1C412B1500202EF0 /* CommentPanel.swift */; };
 		BFAA0CA91C46009F00AB5C3C /* StatusRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0CA81C46009F00AB5C3C /* StatusRequester.swift */; };
@@ -231,6 +234,7 @@
 		BF54DD791C303D5100F635C0 /* NewsRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsRequester.swift; path = News/NewsRequester.swift; sourceTree = "<group>"; };
 		BF58990B1C4CFF26005496EA /* informUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = informUser.swift; path = Status/Release/informUser.swift; sourceTree = "<group>"; };
 		BF58990D1C4D14A3005496EA /* SportCarSelectList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarSelectList.swift; path = Status/Release/SportCarSelectList.swift; sourceTree = "<group>"; };
+		BF5C96311C76E770002C2806 /* RadarMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RadarMap.swift; path = Radar/RadarMap.swift; sourceTree = "<group>"; };
 		BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
 		BF6308971C1965AF0087A4F0 /* Agreement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Agreement.swift; path = Accounts/Agreement.swift; sourceTree = "<group>"; };
 		BF63089C1C1970AB0087A4F0 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -249,6 +253,8 @@
 		BF9404961C2818C3001ABB1E /* AppLauchner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppLauchner.swift; path = Home/AppLauchner.swift; sourceTree = "<group>"; };
 		BF9847331C76311D006DDE3C /* ActivityReleaseMapCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityReleaseMapCell.swift; path = Activity/ActivityReleaseMapCell.swift; sourceTree = "<group>"; };
 		BFA1FEFC1C36DD8500F127FA /* NewsDetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsDetailCommentCell.swift; path = News/NewsDetailCommentCell.swift; sourceTree = "<group>"; };
+		BFA29E401C770D120008A408 /* RadarBubble.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RadarBubble.swift; path = Activity/RadarBubble.swift; sourceTree = "<group>"; };
+		BFA29E431C7768930008A408 /* CustomDatePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomDatePicker.swift; path = Activity/CustomDatePicker.swift; sourceTree = "<group>"; };
 		BFA2C7681C40F97D00202EF0 /* frameworkextensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = frameworkextensions.swift; path = BaseTemplate/frameworkextensions.swift; sourceTree = "<group>"; };
 		BFA2C76A1C412B1500202EF0 /* CommentPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentPanel.swift; path = News/CommentPanel.swift; sourceTree = "<group>"; };
 		BFAA0CA81C46009F00AB5C3C /* StatusRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusRequester.swift; path = Status/Network/StatusRequester.swift; sourceTree = "<group>"; };
@@ -626,6 +632,14 @@
 			name = PhotoSelect;
 			sourceTree = "<group>";
 		};
+		BF5C96301C76E756002C2806 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				BF5C96311C76E770002C2806 /* RadarMap.swift */,
+			);
+			name = Map;
+			sourceTree = "<group>";
+		};
 		BF6308991C1967A60087A4F0 /* data */ = {
 			isa = PBXGroup;
 			children = (
@@ -669,6 +683,7 @@
 		BF8D42F41C745E21009AD4BA /* Driver */ = {
 			isa = PBXGroup;
 			children = (
+				BF5C96301C76E756002C2806 /* Map */,
 				BF8D42F71C745F4F009AD4BA /* Bubble */,
 				BF8D42F51C745E2F009AD4BA /* DriverMap.swift */,
 			);
@@ -678,6 +693,7 @@
 		BF8D42F71C745F4F009AD4BA /* Bubble */ = {
 			isa = PBXGroup;
 			children = (
+				BFA29E401C770D120008A408 /* RadarBubble.swift */,
 			);
 			name = Bubble;
 			sourceTree = "<group>";
@@ -697,6 +713,14 @@
 				BF9847331C76311D006DDE3C /* ActivityReleaseMapCell.swift */,
 			);
 			name = Cell;
+			sourceTree = "<group>";
+		};
+		BFA29E421C7768820008A408 /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				BFA29E431C7768930008A408 /* CustomDatePicker.swift */,
+			);
+			name = Tool;
 			sourceTree = "<group>";
 		};
 		BFA2C7671C40F96400202EF0 /* Tools */ = {
@@ -897,6 +921,7 @@
 		BFC0328F1C74519400ECA69A /* Release */ = {
 			isa = PBXGroup;
 			children = (
+				BFA29E421C7768820008A408 /* Tool */,
 				BF8D42FB1C7481CE009AD4BA /* Cell */,
 				BF8D42F81C745FAB009AD4BA /* InfoBoard */,
 				BFC032901C7451AD00ECA69A /* ActivityRelease.swift */,
@@ -1414,6 +1439,7 @@
 				BF54DD701C2EB95F00F635C0 /* NewsComment.swift in Sources */,
 				BFC712FC1C2C439900A71F4C /* StatusComment.generated.swift in Sources */,
 				BF2F7E951C644A8A00E3A3A2 /* Notification.generated.swift in Sources */,
+				BFA29E411C770D120008A408 /* RadarBubble.swift in Sources */,
 				BFC36BB21C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift in Sources */,
 				BFCB963A1C1FB0AE004F77E8 /* SportCarRequester.swift in Sources */,
 				BFC032721C6F508B00ECA69A /* ActivtyList.swift in Sources */,
@@ -1442,6 +1468,7 @@
 				BFC36BB61C6C854800DC6FE2 /* BlackListViewer.swift in Sources */,
 				BF58990C1C4CFF26005496EA /* informUser.swift in Sources */,
 				BFFA511E1C05D9920019E5EF /* SportCarClient.xcdatamodeld in Sources */,
+				BF5C96321C76E770002C2806 /* RadarMap.swift in Sources */,
 				BFCB96401C205DF1004F77E8 /* Home.swift in Sources */,
 				BFC032791C700DFA00ECA69A /* ActivityNearBy.swift in Sources */,
 				BFCA90141C50D6CB00B05E74 /* StatusDetail.swift in Sources */,
@@ -1449,6 +1476,7 @@
 				BF6308981C1965AF0087A4F0 /* Agreement.swift in Sources */,
 				BFC032911C7451AD00ECA69A /* ActivityRelease.swift in Sources */,
 				BFCA900C1C4FC74B00B05E74 /* StatusCell.swift in Sources */,
+				BFA29E441C7768930008A408 /* CustomDatePicker.swift in Sources */,
 				BFC0328C1C735C3400ECA69A /* ActivityComment.swift in Sources */,
 				BF2BE2161C2938B000DD0CF9 /* Club.swift in Sources */,
 				BF8D42FF1C748CB8009AD4BA /* ActivityApplied.swift in Sources */,

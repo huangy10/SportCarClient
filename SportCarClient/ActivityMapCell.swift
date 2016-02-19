@@ -29,6 +29,10 @@ class MapCell: UITableViewCell, MGLMapViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("map deinit")
+    }
+    
     func createSubviews() {
         map = MGLMapView(frame: CGRectZero, styleURL: kMapStyleURL)
         self.contentView.addSubview(map)

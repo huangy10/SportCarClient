@@ -59,9 +59,15 @@ class ChatRecordDataSource {
     // 网络请求工具
     var requester: ChatRequester = ChatRequester.requester
     
+    var started: Bool = false
+    
     func start() {
         /* 初始创建时启动监听
         */
+        if started {
+            return
+        }
+        started = true
         self.requester.startListenning({ (let json) -> () in
             for data in json.arrayValue {
                 let semaphore = dispatch_semaphore_create(0)

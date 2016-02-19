@@ -42,6 +42,9 @@ class HomeController: UIViewController, HomeDelegate {
     //
     var person: PersonBasicController?
     var news: NewsController?
+    var status: StatusHomeController?
+    var message: MessageController?
+    var act: ActivityHomeController?
     
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -75,6 +78,11 @@ class HomeController: UIViewController, HomeDelegate {
             }) { (code) -> ()? in
                 print("\(code)")
         }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     func createSubviews() {
@@ -187,19 +195,26 @@ extension HomeController {
 //                status = StatusHomeController()
 //            }
 //            self.navigationController?.pushViewController(status!, animated: true)
-            let test = StatusHomeController()
-            self.navigationController?.pushViewController(test, animated: true)
+            if status == nil {
+                status = StatusHomeController()
+            }
+            self.navigationController?.pushViewController(status!, animated: true)
             break
         case 4:
-            let act = ActivityHomeController()
-            self.navigationController?.pushViewController(act, animated: true)
+//            if act == nil {
+//                act = ActivityHomeController()
+//            }
+            let text = ActivityHomeController()
+            self.navigationController?.pushViewController(text, animated: true)
             break
         case 5:
             ChatRecordDataSource.sharedDataSource.start()
 //            let messages = MessageController()
-            let messages = PrivateChatSettingController(targetUser: User.objects.hostUser!)
-            self.navigationController?.setNavigationBarHidden(false, animated: false)
-            self.navigationController?.pushViewController(messages, animated: true)
+            if message == nil {
+//            let messages = PrivateChatSettingController(targetUser: User.objects.hostUser!)
+                message = MessageController()
+            }
+            self.navigationController?.pushViewController(message!, animated: true)
             break
         default:
             break

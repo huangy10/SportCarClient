@@ -60,6 +60,29 @@ class Activity: NSManagedObject {
             }
         }
     }
+    
+    /**
+     当前用户加入这个活动
+     */
+    func hostApply() {
+        let host = User.objects.hostUser!
+        if self.user?.userID == host.userID {
+            // 如果活动本身是当前用户创建的，则不做报名操作
+            return
+        }
+        var index = 0
+        for a in self.applicant {
+            if a.user.userID == host.userID {
+                // 当前用户已经报名了这个活动
+                applicant.removeAtIndex(index)
+                return
+            }
+            index += 1
+        }
+        // 循环完毕到这里意味着当前用户没有报名这个活动
+        let join = ActivityJoin(user: host)
+        applicant.append(join)
+    }
 }
 
 class ActivityManager {
@@ -73,10 +96,18 @@ class ActivityManager {
         let actID = json["actID"].stringValue
         let act = context.activities.firstOrCreated({ $0.activityID == actID })
         act.loadValueFromJSON(json)
+        save()
         return act
     }
     
-
+    func save() -> Bool{
+        do {
+            try context.save()
+            return true
+        } catch _{
+            return false
+        }
+    }
 }
 
 /// 这个类不放在coredata中了
@@ -89,6 +120,13 @@ class ActivityJoin {
     
     init(json: JSON) {
         loadValueFromJSON(json)
+    }
+    
+    convenience init(user: User) {
+        self.init(json: JSON([:]))
+        self.user = user
+        approved = true
+        applyAt = NSDate()
     }
     
     func loadValueFromJSON(json: JSON) {

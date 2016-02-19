@@ -11,6 +11,9 @@ import UIKit
 /// 这个类的作用是以全局的角度来调度主要功能模块
 class AppManager: UIViewController {
     
+    /// 全局的instance对象
+    static let sharedAppManager = AppManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         launch()
@@ -29,5 +32,14 @@ class AppManager: UIViewController {
         }
         let ctl = AccountController()
         self.navigationController?.pushViewController(ctl, animated: true)
+    }
+    
+    /**
+     推出当前所有的展示内容回到登陆页面
+     */
+    func logout() {
+        self.navigationController?.popToRootViewControllerAnimated(true)
+        let ctrl = AccountController()
+        self.navigationController?.pushViewController(ctrl, animated: true)
     }
 }

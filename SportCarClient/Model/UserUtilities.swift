@@ -139,6 +139,10 @@ extension UserManager {
      */
     func create(detailjson: JSON) -> User? {
         let userID = detailjson["userID"].stringValue
+        if userID == "" {
+            // 没有找到有效的userID
+            return nil
+        }
         if let user = users[userID] {
             user.loadValueFromJSONWithProfile(detailjson)
             return user

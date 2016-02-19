@@ -89,6 +89,6 @@ extension ChatListController {
     }
     
     func userSelectCancelled() {
-        
+        messageController.dismissViewControllerAnimated(true, completion: nil)
     }
 }

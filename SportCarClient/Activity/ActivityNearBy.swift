@@ -19,13 +19,18 @@ class ActivityNearByController: UIViewController, MGLMapViewDelegate, UICollecti
     var map: MGLMapView!
     var actMarker: MGLPointAnnotation?
     var userLocMarker: UserMapLocationManager!
-    var userLocationUpdator: CADisplayLink!
+    var userLocationUpdator: CADisplayLink?
     var locationManager: CLLocationManager!
     var userLocation: CLLocation?
     
     var actsBoard: UICollectionView!
     var pageCount: UIPageControl!
     var _prePage: Int = 0
+    
+    deinit {
+        userLocationUpdator?.paused = true
+        userLocationUpdator?.invalidate()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +44,20 @@ class ActivityNearByController: UIViewController, MGLMapViewDelegate, UICollecti
         locationManager?.requestAlwaysAuthorization()
         locationManager.requestLocation()
         locationManager?.startUpdatingLocation()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if userLocationUpdator != nil {
+            userLocationUpdator?.paused = false
+        }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if userLocationUpdator != nil {
+            userLocationUpdator?.paused = true
+        }
     }
     
     func createSubviews() {
@@ -212,7 +231,10 @@ extension ActivityNearByController {
             let center = CLLocationCoordinate2D(latitude: userLocation!.coordinate.latitude, longitude: userLocation!.coordinate.longitude)
             map.setCenterCoordinate(center, zoomLevel: 12, animated: true)
             
-            userLocationUpdator = CADisplayLink()
+            userLocationUpdator = CADisplayLink(target: self, selector: "userLocationOnScreenUpdate")
+            userLocationUpdator?.frameInterval = 1
+            userLocationUpdator?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
+            userLocationUpdator?.paused = false
             
             let userMarkLocationOnScreen = map.convertCoordinate(center, toPointToView: map)
             userLocMarker = UserMapLocationManager(size: CGSizeMake(200, 200))
