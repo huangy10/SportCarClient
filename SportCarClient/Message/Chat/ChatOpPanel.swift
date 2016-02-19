@@ -97,6 +97,7 @@ class ChatOpPanelController: UIViewController {
         //
         let contentInputContainer = UIView()
         contentInputContainer.layer.cornerRadius = contentHeight / 2
+        contentInputContainer.clipsToBounds = true
         contentInputContainer.backgroundColor = UIColor.whiteColor()
         superview.addSubview(contentInputContainer)
         contentInputContainer.snp_makeConstraints { (make) -> Void in

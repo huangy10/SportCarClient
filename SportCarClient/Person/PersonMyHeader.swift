@@ -16,6 +16,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
     var user: User!
     // 
     var avatarBtn: UIButton!
+    var detailBtn: UIButton!
     var avatarCarBtn: UIButton!
     var nameLbl: UILabel!
     var genderAgeLbl: UILabel!
@@ -64,6 +65,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         avatarBtn = UIButton()
         avatarBtn.backgroundColor = UIColor(white: 0.72, alpha: 1)
         avatarBtn.layer.cornerRadius = 62.5
+        avatarBtn.clipsToBounds = true
         superview.addSubview(avatarBtn)
         avatarBtn.snp_makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview).offset(-100)
@@ -131,6 +133,15 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         avatarCarNameLbl.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(genderAgeLbl.snp_bottom).offset(12)
             make.left.equalTo(genderAgeLbl)
+        }
+        //
+        detailBtn = UIButton()
+        superview.addSubview(detailBtn)
+        detailBtn.snp_makeConstraints { (make) -> Void in
+            make.left.equalTo(nameLbl)
+            make.top.equalTo(nameLbl)
+            make.bottom.equalTo(avatarBtn)
+            make.right.equalTo(arrowIcon)
         }
         //
         fansNumLbl = UILabel()
@@ -255,8 +266,8 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
 
 
 class BackMaskView: UIView {
-    var ratio: CGFloat = 0.4
-    var centerHegiht : CGFloat = 0
+    var ratio: CGFloat = 0.1
+    var centerHegiht : CGFloat = 100
     
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)

@@ -37,7 +37,7 @@ class CommentBarView: UIView {
         self.init(frame: CGRect.zero)
     }
     
-    private func createSubivews() {
+    func createSubivews() {
         self.backgroundColor = UIColor(white: 0.92, alpha: 1)
         //
         let contentHeight = barheight * 0.76

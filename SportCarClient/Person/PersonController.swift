@@ -101,6 +101,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
 //        }
         // TODO: 这里手动添加了status bar的高度值
         header.frame = CGRectMake(0, -totalHeaderHeight, screenWidth, totalHeaderHeight - authCarListHeight)
+        header.detailBtn.addTarget(self, action: "detailBtnPressed", forControlEvents: .TouchUpInside)
         //
         carsViewList = SportsCarViewListController()
         carsViewList.delegate = self
@@ -262,8 +263,18 @@ extension PersonBasicController {
     /**
      按下跑车编辑按钮
      */
-    func carNeedEdit() {
-        
+    func carNeedEdit(own: SportCarOwnerShip) {
+        let detail = SportCarInfoDetailController()
+        detail.own = own
+        self.navigationController?.pushViewController(detail, animated: true)
+    }
+    
+    /**
+     头像旁边的详情按钮按下
+     */
+    func detailBtnPressed() {
+        let detail = PersonMineInfoController()
+        self.navigationController?.pushViewController(detail, animated: true)
     }
 }
 

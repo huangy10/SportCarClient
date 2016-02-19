@@ -105,6 +105,7 @@ class ChatCell: UITableViewCell {
         //
         avatarBtn = UIButton()
         avatarBtn?.layer.cornerRadius = 17.5
+        avatarBtn?.clipsToBounds = true
         avatarBtn?.backgroundColor = UIColor(white: 0.92, alpha: 1)
         superview.addSubview(avatarBtn!)
         avatarBtn?.addTarget(self, action: "avatarBtnPressed", forControlEvents: .TouchUpInside)
@@ -114,6 +115,7 @@ class ChatCell: UITableViewCell {
         //
         bubbleView = UIView()
         bubbleView?.layer.cornerRadius = 20
+        bubbleView?.clipsToBounds = true
         superview.addSubview(bubbleView!)
         bubbleView?.backgroundColor = UIColor(white: 0.945, alpha: 1)
         //

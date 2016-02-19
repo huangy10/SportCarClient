@@ -68,7 +68,9 @@ class PrivateChatSettingsAvatarCell: UITableViewCell {
     func createSubviews() {
         //
         avatarBtn = UIButton()
+        avatarBtn.clipsToBounds = true
         avatarBtn.layer.cornerRadius = 37
+        avatarBtn.clipsToBounds = true
         self.contentView.addSubview(avatarBtn)
         avatarBtn.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(self.contentView)

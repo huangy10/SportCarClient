@@ -12,9 +12,14 @@ import UIKit
 class InputableViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     var tapper: UITapGestureRecognizer?
     var inputFields: [UIView?] = []
+//    
+//    override func loadView() {
+//        super.loadView()
+//        createSubviews()
+//    }
     
-    override func loadView() {
-        super.loadView()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         createSubviews()
     }
     

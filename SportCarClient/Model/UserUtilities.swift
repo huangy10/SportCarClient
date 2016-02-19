@@ -66,6 +66,15 @@ class UserManager {
     func onUserUpdate() {
         
     }
+    
+    func saveAll() -> Bool{
+        do {
+            try context.save()
+            return true
+        } catch _ {
+            return false
+        }
+    }
 }
 
 

@@ -108,8 +108,12 @@ class InformOtherUserCell: UICollectionViewCell {
         let superview = self.contentView
         //
         imageView = UIImageView()
-        imageView?.layer.cornerRadius = 35
+        imageView?.layer.cornerRadius = 17.5
+        imageView?.clipsToBounds = true
         imageView?.backgroundColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(imageView!)
+        imageView?.snp_makeConstraints(closure: { (make) -> Void in
+            make.edges.equalTo(superview)
+        })
     }
 }

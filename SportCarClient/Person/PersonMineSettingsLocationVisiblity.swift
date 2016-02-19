@@ -12,6 +12,11 @@ import UIKit
 let kPersonMineSettingsLocationVisiblityStaticLabelString = [LS("仅列表可见"), LS("所有人"), LS("仅女性"), LS("仅男性"), LS("不可见"), LS("仅我关注的人"), LS("互相关注")]
 
 class PersonMineSettingsLocationVisiblityController: UITableViewController {
+    
+    var selectedType: String?
+    var showOnMap: Bool = true
+    var dirty: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //
@@ -21,6 +26,10 @@ class PersonMineSettingsLocationVisiblityController: UITableViewController {
         tableView.registerClass(PersonMineSettingsLocationVisiblityCell.self, forCellReuseIdentifier: PersonMineSettingsLocationVisiblityCell.reuseIdentifier)
         tableView.separatorStyle = .None
         tableView.rowHeight = 50
+        //
+        let dataSource = PersonMineSettingsDataSource.sharedDataSource
+        showOnMap = dataSource.showOnMap
+        selectedType = dataSource.locationVisible
     }
     
     func navSettings() {
@@ -44,6 +53,12 @@ class PersonMineSettingsLocationVisiblityController: UITableViewController {
     
     func navRightBtnPressed() {
         self.navigationController?.popViewControllerAnimated(true)
+        if dirty {
+            let dataSource = PersonMineSettingsDataSource.sharedDataSource
+            dataSource.locationVisible = self.selectedType
+            dataSource.showOnMap = self.showOnMap
+            dataSource.sync()
+        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -57,18 +72,41 @@ class PersonMineSettingsLocationVisiblityController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row < kPersonMineSettingsLocationVisiblityStaticLabelString.count {
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
+            cell.selectionStyle = .None
             cell.staticLbl.text = kPersonMineSettingsLocationVisiblityStaticLabelString[indexPath.row]
             if indexPath.row == 0 {
                 cell.useAsMark = false
                 cell.boolSelect.hidden = false
+                cell.boolSelect.on = showOnMap
+                cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
             }else{
                 cell.useAsMark = true
+                if cell.staticLbl.text == kPersonMineSettingsLocationVisibleMapping[selectedType!] {
+                    cell.markIcon.hidden = false
+                }else {
+                    cell.markIcon.hidden = true
+                }
             }
             return cell
         }else {
             let cell = tableView.dequeueReusableCellWithIdentifier(PersonMineSettingsLocationVisiblityCell.reuseIdentifier, forIndexPath: indexPath) as! PersonMineSettingsLocationVisiblityCell
+            cell.selectionStyle = .None
             return cell
         }
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row == 0 {
+            return
+        }
+        dirty = true
+        selectedType = kPersonMineSettingsLocationVisibilityList[indexPath.row - 1]
+        tableView.reloadData()
+    }
+    
+    func switchBtnPressed(sender: UISwitch) {
+        showOnMap = sender.on
+        dirty = true
     }
 }
 

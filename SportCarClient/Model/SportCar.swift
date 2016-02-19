@@ -166,8 +166,8 @@ extension SportCarManager {
         newOwnership.car = car
         newOwnership.signature = initail["signature"].string
         newOwnership.identified = true
-        user.ownedCars.append(car)
-        do {
+        user.ownedCars.append(newOwnership)
+        do { 
             try context.save()
         }catch let err {
             print(err)

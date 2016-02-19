@@ -11,6 +11,13 @@ import UIKit
 
 class PersonMineSettingsNewsMessageNotificationController: UITableViewController {
     
+    var settings: [Bool] = [true, true, true]
+    var dirty: Bool = false
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //
@@ -19,6 +26,14 @@ class PersonMineSettingsNewsMessageNotificationController: UITableViewController
         tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
         tableView.separatorStyle = .None
         tableView.rowHeight = 50
+        //
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dataSourceDidFinishUpdating:", name: PMUpdateFinishedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dataSourceUpateError:", name: PMUpdateErrorNotification, object: nil)
+        //
+        let dataSource = PersonMineSettingsDataSource.sharedDataSource
+        settings[0] = dataSource.newMessageNotificationAccept
+        settings[1] = dataSource.newMessageNotificationSound
+        settings[2] = dataSource.newMessageNotificationShake
     }
     
     func navSettings() {
@@ -42,6 +57,14 @@ class PersonMineSettingsNewsMessageNotificationController: UITableViewController
     
     func navRightBtnPressed() {
         self.navigationController?.popViewControllerAnimated(true)
+        //
+        if dirty {
+            let dataSource = PersonMineSettingsDataSource.sharedDataSource
+            dataSource.newMessageNotificationAccept = settings[0]
+            dataSource.newMessageNotificationSound = settings[1]
+            dataSource.newMessageNotificationShake = settings[2]
+            dataSource.sync()
+        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -56,6 +79,21 @@ class PersonMineSettingsNewsMessageNotificationController: UITableViewController
         let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
         cell.boolSelect.hidden = false
         cell.staticLbl.text = [LS("接受通知"), LS("声音"), LS("振动")][indexPath.row]
+        cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
+        cell.boolSelect.tag = indexPath.row
+        cell.boolSelect.on = settings[indexPath.row]
         return cell
+    }
+    
+    func switchBtnPressed(sender: UISwitch) {
+        dirty = true
+        settings[sender.tag] = sender.on
+    }
+    
+    func dataSourceDidFinishUpdating(notif: Notification) {
+        tableView.reloadData()
+    }
+    
+    func dataSourceUpateError(notif: Notification) {
     }
 }

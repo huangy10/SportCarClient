@@ -318,6 +318,7 @@ extension StatusDetailController {
         avatarBtn = UIButton()
         headerContainer?.addSubview(avatarBtn!)
         avatarBtn?.layer.cornerRadius = 35 / 2.0
+        avatarBtn?.clipsToBounds = true
         avatarBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(headerContainer!).offset(15)
             make.centerY.equalTo(headerContainer!)

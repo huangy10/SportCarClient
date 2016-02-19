@@ -60,6 +60,7 @@ class DetailCommentCell: UITableViewCell {
         avatarBtn = UIButton()
         avatarBtn?.addTarget(self, action: "avatarPressed", forControlEvents: .TouchUpInside)
         avatarBtn?.layer.cornerRadius = 17.5
+        avatarBtn?.clipsToBounds = true
         avatarBtn?.backgroundColor = UIColor.grayColor()
         superview.addSubview(avatarBtn!)
         avatarBtn?.snp_makeConstraints(closure: { (make) -> Void in

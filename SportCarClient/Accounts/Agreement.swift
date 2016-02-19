@@ -39,7 +39,7 @@ class AgreementController: UIViewController {
         let fileURL = NSBundle.mainBundle().URLForResource(filename, withExtension: "rtf")
         do{
             let text = try NSAttributedString(URL: fileURL!, options: [NSDocumentTypeDocumentAttribute: NSRTFTextDocumentType], documentAttributes: nil)
-            print(text)
+
             return text
         }
         catch{

@@ -302,6 +302,7 @@ class UserSelectCell: UITableViewCell {
         avatarImg?.backgroundColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(avatarImg!)
         avatarImg?.layer.cornerRadius = 35 / 2
+        avatarImg?.clipsToBounds = true
         avatarImg?.snp_makeConstraints(closure: { (make) -> Void in
             make.centerY.equalTo(superview)
             make.left.equalTo(selectBtn!.snp_right).offset(10)
@@ -338,7 +339,7 @@ class UserSelectCell: UITableViewCell {
         //
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.72, alpha: 1)
-        superview.addSubview(sepLine)
+        superview .addSubview(sepLine)
         sepLine.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(0.5)
             make.left.equalTo(superview)
@@ -369,6 +370,7 @@ class UserSelectedcell: UICollectionViewCell {
         
         imageView = UIImageView()
         imageView?.layer.cornerRadius = 17.5
+        imageView?.clipsToBounds = true
         self.contentView.addSubview(imageView!)
         imageView?.snp_makeConstraints(closure: { (make) -> Void in
             make.edges.equalTo(self.contentView)

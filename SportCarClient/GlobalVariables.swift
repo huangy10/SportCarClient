@@ -114,3 +114,19 @@ func dateDisplay(date: NSDate) -> String {
     }
     return result
 }
+
+func dateDisplayExact(date: NSDate?) -> String? {
+    if date == nil {
+        return nil
+    }
+    let timeRegion = Region(calType: CalendarType.Gregorian)
+    return date!.toString(DateFormat.Custom("MM\(LS("月"))dd\(LS("日")) HH:mm"), inRegion: timeRegion)!
+}
+
+func dateDisplayHHMM(date: NSDate?) -> String! {
+    if date == nil {
+        return nil
+    }
+    let timeRegion = Region(calType: CalendarType.Gregorian)
+    return date!.toString(DateFormat.Custom("HH:mm"), inRegion: timeRegion)!
+}

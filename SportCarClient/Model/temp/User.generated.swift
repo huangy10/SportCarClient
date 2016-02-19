@@ -33,6 +33,7 @@ extension User {
     @NSManaged var mostRecentChat: ChatRecord?
     @NSManaged var profile: Profile?
 
+    @NSManaged var actComments: Set<ActivityComment>
     @NSManaged var activity: Set<Activity>
     @NSManaged var carsLiked: Set<SportCar>
     @NSManaged var chatRecords: Set<ChatRecord>
@@ -51,6 +52,11 @@ extension User {
 // MARK: - User KVC compliant to-many accessors and helpers
 
 extension User {
+
+    @NSManaged private func addActCommentsObject(object: ActivityComment)
+    @NSManaged private func removeActCommentsObject(object: ActivityComment)
+    @NSManaged func addActComments(actComments: Set<ActivityComment>)
+    @NSManaged func removeActComments(actComments: Set<ActivityComment>)
 
     @NSManaged private func addActivityObject(object: Activity)
     @NSManaged private func removeActivityObject(object: Activity)
@@ -112,6 +118,9 @@ extension User {
     @NSManaged func addStatusComment(statusComment: Set<StatusComment>)
     @NSManaged func removeStatusComment(statusComment: Set<StatusComment>)
 
+    func addActComment(actComment: ActivityComment) { self.addActCommentsObject(actComment) }
+    func removeActComment(actComment: ActivityComment) { self.removeActCommentsObject(actComment) }
+
     func addActivity(activity: Activity) { self.addActivityObject(activity) }
     func removeActivity(activity: Activity) { self.removeActivityObject(activity) }
 
@@ -171,6 +180,7 @@ extension User {
     static let mostRecentChat = AlecrimCoreData.NullableAttribute<ChatRecord>("mostRecentChat")
     static let profile = AlecrimCoreData.NullableAttribute<Profile>("profile")
 
+    static let actComments = AlecrimCoreData.Attribute<Set<ActivityComment>>("actComments")
     static let activity = AlecrimCoreData.Attribute<Set<Activity>>("activity")
     static let carsLiked = AlecrimCoreData.Attribute<Set<SportCar>>("carsLiked")
     static let chatRecords = AlecrimCoreData.Attribute<Set<ChatRecord>>("chatRecords")
@@ -207,6 +217,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: User {
     var mostRecentChat: AlecrimCoreData.NullableAttribute<ChatRecord> { return AlecrimCoreData.NullableAttribute<ChatRecord>("mostRecentChat", self) }
     var profile: AlecrimCoreData.NullableAttribute<Profile> { return AlecrimCoreData.NullableAttribute<Profile>("profile", self) }
 
+    var actComments: AlecrimCoreData.Attribute<Set<ActivityComment>> { return AlecrimCoreData.Attribute<Set<ActivityComment>>("actComments", self) }
     var activity: AlecrimCoreData.Attribute<Set<Activity>> { return AlecrimCoreData.Attribute<Set<Activity>>("activity", self) }
     var carsLiked: AlecrimCoreData.Attribute<Set<SportCar>> { return AlecrimCoreData.Attribute<Set<SportCar>>("carsLiked", self) }
     var chatRecords: AlecrimCoreData.Attribute<Set<ChatRecord>> { return AlecrimCoreData.Attribute<Set<ChatRecord>>("chatRecords", self) }

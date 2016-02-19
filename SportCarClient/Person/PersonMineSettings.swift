@@ -15,11 +15,21 @@ let kMineSettingsStaticLabelString = [LS("新消息通知"), LS("黑名单"), LS
 
 class PersonMineSettings: UITableViewController, BlackListViewDelegate {
     /// 定位可见性
-    var locationVisible: String!
+    var locationVisible: String! {
+        return kPersonMineSettingsLocationVisibleMapping[PersonMineSettingsDataSource.sharedDataSource.locationVisible!]
+    }
     /// 邀请加入群组
-    var acceptInvitation: String!
+    var acceptInvitation: String! {
+        return kPersonMineSettingsAcceptInvitationMapping[PersonMineSettingsDataSource.sharedDataSource.acceptInvitation!]
+    }
     /// 缓存大小
-    var cacheSizeRepre: String!
+    var cacheSizeRepre: String! {
+        return PersonMineSettingsDataSource.sharedDataSource.cacheSizeDes ?? LS("正在获取缓存大小")
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +39,16 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
         tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
         
         tableView.separatorStyle = .None
-        // TODO: 网络请求获取设置
+        //
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dataSourceDidFinishUpdating:", name: PMUpdateFinishedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dataSourceUpateError:", name: PMUpdateErrorNotification, object: nil)
+        let dataSource = PersonMineSettingsDataSource.sharedDataSource
+        dataSource.update()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
     
     func navSettings() {
@@ -116,6 +135,14 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
         case 3:
             let detail = PersonMineSettingsInvitationController()
             self.navigationController?.pushViewController(detail, animated: true)
+        case 7:
+            let detail = AgreementController()
+            self.navigationController?.pushViewController(detail, animated: true)
+            break
+        case 8:
+            let detail = PersonMineSettingsAuthController()
+            self.navigationController?.pushViewController(detail, animated: true)
+            break
         default:
             break
         }
@@ -123,6 +150,14 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
     
     func didSelectUser(users: [User]) {
         
+    }
+    
+    func dataSourceDidFinishUpdating(notif: Notification) {
+        tableView.reloadData()
+    }
+    
+    func dataSourceUpateError(notif: Notification) {
+         
     }
 }
 

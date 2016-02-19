@@ -16,19 +16,32 @@ import AlecrimCoreData
 
 extension NSManagedObject {
 
-    @NSManaged var audio: String?
-    @NSManaged var chat_type: String?
+    @NSManaged var atString: String?
+    @NSManaged var commentID: String?
+    @NSManaged var content: String?
     @NSManaged var createdAt: NSDate?
-    @NSManaged var deleted: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var image: String?
-    @NSManaged var messageType: String?
-    @NSManaged var recordID: String?
-    @NSManaged var relatedID: String?
     @NSManaged var sent: Bool // cannot mark as optional because Objective-C compatibility issues
-    @NSManaged var targetID: String?
-    @NSManaged var textContent: String?
 
-    @NSManaged var sender: User?
+    @NSManaged var activity: Activity?
+    @NSManaged var responseTo: NSManagedObject?
+    @NSManaged var user: User?
+
+    @NSManaged var replies: Set<NSManagedObject>
+
+}
+
+// MARK: - NSManagedObject KVC compliant to-many accessors and helpers
+
+extension NSManagedObject {
+
+    @NSManaged private func addRepliesObject(object: NSManagedObject)
+    @NSManaged private func removeRepliesObject(object: NSManagedObject)
+    @NSManaged func addReplies(replies: Set<NSManagedObject>)
+    @NSManaged func removeReplies(replies: Set<NSManagedObject>)
+
+    func addReply(reply: NSManagedObject) { self.addRepliesObject(reply) }
+    func removeReply(reply: NSManagedObject) { self.removeRepliesObject(reply) }
 
 }
 
@@ -36,19 +49,18 @@ extension NSManagedObject {
 
 extension NSManagedObject {
 
-    static let audio = AlecrimCoreData.NullableAttribute<String>("audio")
-    static let chat_type = AlecrimCoreData.NullableAttribute<String>("chat_type")
+    static let atString = AlecrimCoreData.NullableAttribute<String>("atString")
+    static let commentID = AlecrimCoreData.NullableAttribute<String>("commentID")
+    static let content = AlecrimCoreData.NullableAttribute<String>("content")
     static let createdAt = AlecrimCoreData.NullableAttribute<NSDate>("createdAt")
-    static let deleted = AlecrimCoreData.NullableAttribute<Bool>("deleted")
     static let image = AlecrimCoreData.NullableAttribute<String>("image")
-    static let messageType = AlecrimCoreData.NullableAttribute<String>("messageType")
-    static let recordID = AlecrimCoreData.NullableAttribute<String>("recordID")
-    static let relatedID = AlecrimCoreData.NullableAttribute<String>("relatedID")
     static let sent = AlecrimCoreData.NullableAttribute<Bool>("sent")
-    static let targetID = AlecrimCoreData.NullableAttribute<String>("targetID")
-    static let textContent = AlecrimCoreData.NullableAttribute<String>("textContent")
 
-    static let sender = AlecrimCoreData.NullableAttribute<User>("sender")
+    static let activity = AlecrimCoreData.NullableAttribute<Activity>("activity")
+    static let responseTo = AlecrimCoreData.NullableAttribute<NSManagedObject>("responseTo")
+    static let user = AlecrimCoreData.NullableAttribute<User>("user")
+
+    static let replies = AlecrimCoreData.Attribute<Set<NSManagedObject>>("replies")
 
 }
 
@@ -56,19 +68,18 @@ extension NSManagedObject {
 
 extension AlecrimCoreData.AttributeType where Self.ValueType: NSManagedObject {
 
-    var audio: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("audio", self) }
-    var chat_type: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("chat_type", self) }
+    var atString: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("atString", self) }
+    var commentID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("commentID", self) }
+    var content: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("content", self) }
     var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
-    var deleted: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("deleted", self) }
     var image: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("image", self) }
-    var messageType: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("messageType", self) }
-    var recordID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("recordID", self) }
-    var relatedID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("relatedID", self) }
     var sent: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("sent", self) }
-    var targetID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("targetID", self) }
-    var textContent: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("textContent", self) }
 
-    var sender: AlecrimCoreData.NullableAttribute<User> { return AlecrimCoreData.NullableAttribute<User>("sender", self) }
+    var activity: AlecrimCoreData.NullableAttribute<Activity> { return AlecrimCoreData.NullableAttribute<Activity>("activity", self) }
+    var responseTo: AlecrimCoreData.NullableAttribute<NSManagedObject> { return AlecrimCoreData.NullableAttribute<NSManagedObject>("responseTo", self) }
+    var user: AlecrimCoreData.NullableAttribute<User> { return AlecrimCoreData.NullableAttribute<User>("user", self) }
+
+    var replies: AlecrimCoreData.Attribute<Set<NSManagedObject>> { return AlecrimCoreData.Attribute<Set<NSManagedObject>>("replies", self) }
 
 }
 
@@ -76,7 +87,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: NSManagedObject {
 
 extension DataContext {
 
-    var chatRecords: AlecrimCoreData.Table<NSManagedObject> { return AlecrimCoreData.Table<NSManagedObject>(dataContext: self) }
+    var activityComments: AlecrimCoreData.Table<NSManagedObject> { return AlecrimCoreData.Table<NSManagedObject>(dataContext: self) }
 
 }
 

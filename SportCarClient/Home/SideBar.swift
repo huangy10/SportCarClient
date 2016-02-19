@@ -52,6 +52,8 @@ class SideBarController: UIViewController {
         })
         // 头像
         avatarBtn = LoadingButton(size: CGSize(width: 125, height: 125))
+        avatarBtn?.layer.cornerRadius = 62.5
+        avatarBtn?.clipsToBounds = true
         avatarBtn?.loadImageFromURLSTR(SF(host.avatarUrl ?? ""), placeholderImage: UIImage(named: "account_profile_avatar_btn"))
         avatarBtn?.tag = 0
         superview.addSubview(avatarBtn!)

@@ -8,9 +8,12 @@
 
 import UIKit
 
-let kPersonMineSettingsInvitationStaticLabelString = [LS("所有人"), LS("互相关注"), LS("我关注的"), LS("关注我的"), LS("需要通过验证"), LS("不允许")]
+let kPersonMineSettingsInvitationStaticLabelString = [LS("所有人"), LS("互相关注"), LS("我关注的"), LS("关注我的"), LS("需通过验证"), LS("不允许")]
 
 class PersonMineSettingsInvitationController: UITableViewController {
+    
+    var selectedType: String!
+    var dirty: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +23,9 @@ class PersonMineSettingsInvitationController: UITableViewController {
         tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
         tableView.separatorStyle = .None
         tableView.rowHeight = 50
+        //
+        let dataSource = PersonMineSettingsDataSource.sharedDataSource
+        selectedType = dataSource.acceptInvitation
     }
     
     func navSettings() {
@@ -43,6 +49,11 @@ class PersonMineSettingsInvitationController: UITableViewController {
     
     func navRightBtnPressed() {
         self.navigationController?.popViewControllerAnimated(true)
+        if dirty {
+            let dataSource = PersonMineSettingsDataSource.sharedDataSource
+            dataSource.acceptInvitation = selectedType
+            dataSource.sync()
+        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -57,6 +68,17 @@ class PersonMineSettingsInvitationController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
         cell.useAsMark = true
         cell.staticLbl.text = kPersonMineSettingsInvitationStaticLabelString[indexPath.row]
+        if cell.staticLbl.text == kPersonMineSettingsAcceptInvitationMapping[selectedType] {
+            cell.markIcon.hidden = false
+        }else {
+            cell.markIcon.hidden = true
+        }
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        selectedType = kPersonMineSettingsAcceptInvitationList[indexPath.row]
+        dirty = true
+        tableView.reloadData()
     }
 }

@@ -190,6 +190,10 @@ extension HomeController {
             let test = StatusHomeController()
             self.navigationController?.pushViewController(test, animated: true)
             break
+        case 4:
+            let act = ActivityHomeController()
+            self.navigationController?.pushViewController(act, animated: true)
+            break
         case 5:
             ChatRecordDataSource.sharedDataSource.start()
 //            let messages = MessageController()

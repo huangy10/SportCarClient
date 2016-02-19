@@ -12,7 +12,7 @@ import Kingfisher
 
 
 protocol SportCarInfoCellDelegate {
-    func carNeedEdit()
+    func carNeedEdit(own: SportCarOwnerShip)
 }
 
 
@@ -269,7 +269,7 @@ class SportCarInfoCell: UICollectionViewCell{
     }
     
     func carEditBtnPressed() {
-        delegate?.carNeedEdit()
+        delegate?.carNeedEdit(own)
     }
     
     class func getPreferredSizeForSignature(signature: String, carName: String) -> CGSize {

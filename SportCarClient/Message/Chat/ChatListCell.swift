@@ -50,6 +50,7 @@ class ChatListCell: UITableViewCell {
         //
         avatarBtn = UIButton()
         avatarBtn.layer.cornerRadius = 45
+        avatarBtn.clipsToBounds = true
         superview.addSubview(avatarBtn)
         avatarBtn.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(superview)

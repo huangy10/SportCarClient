@@ -17,7 +17,7 @@ class User: NSManagedObject {
     static let objects = UserManager()
     
     /// 该用户拥有的跑车
-    var ownedCars: [SportCar] = []
+    var ownedCars: [SportCarOwnerShip] = []
     
     // 下面是缓存的查询数据
     var avatarCar: SportCar?
@@ -159,7 +159,7 @@ extension User{
         age = json["age"].int32Value
         avatarUrl = json["avatar"].string
         gender = json["gender"].string
-        starSign = json["gender"].string
+        starSign = json["star_sign"].string
         district = json["district"].string
         job = json["job"].string
         signature = json["signature"].string
@@ -180,7 +180,17 @@ extension User{
         profile?.avatarClubLogo = avatarClub?.logo_url
         profile?.avatarClubName = avatarClub?.name
     }
-
+    
+    func setAvatarCarTpoProfile(car: SportCar) {
+        let profile = self.profile
+        self.avatarCar = SportCar.objects.context.objectWithID(car.objectID) as? SportCar
+        profile?.avatarCarImage = car.image
+        profile?.avatarCarID = car.carID
+        profile?.avatarCarLogo = car.logo
+        profile?.avatarCarName = car.name
+        User.objects.saveAll()
+    }
+    
 }
 
 
@@ -195,14 +205,14 @@ extension User {
     */
     
     
-    /**
-    获取该用户所有的认证车辆
-    
-    - returns: 打包了的结果
-    */
-    func getAllAuthenticatedCars() -> ManagerResult<[SportCar], ManagerError> {
-        return ManagerResult.Success(self.ownedCars)
-    }
+//    /**
+//    获取该用户所有的认证车辆
+//    
+//    - returns: 打包了的结果
+//    */
+//    func getAllAuthenticatedCars() -> ManagerResult<[SportCar], ManagerError> {
+//        return ManagerResult.Success(self.ownedCars)
+//    }
 }
 
 // MARK: - 和News的关系

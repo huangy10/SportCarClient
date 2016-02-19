@@ -24,6 +24,8 @@ class NewsDetailCommentCell: DetailCommentCell {
         let hostUser = User.objects.hostUser
         if user.isEqualToSimple(hostUser!) {
             replyBtn?.hidden = true
+        }else{
+            replyBtn?.hidden = false
         }
         // 设置头像
         avatarBtn?.kf_setImageWithURL(SFURL(user.avatarUrl!)!, forState: .Normal)
