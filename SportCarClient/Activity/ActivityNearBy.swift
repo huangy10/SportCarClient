@@ -27,6 +27,19 @@ class ActivityNearByController: UIViewController, MGLMapViewDelegate, UICollecti
     var pageCount: UIPageControl!
     var _prePage: Int = 0
     
+    var pause: Bool = false{
+        didSet {
+            if pause {
+                userLocationUpdator?.paused = true
+                locationManager.stopUpdatingLocation()
+                userLocation = nil
+            }else{
+                userLocationUpdator?.paused = false
+                locationManager.startUpdatingLocation()
+            }
+        }
+    }
+    
     deinit {
         userLocationUpdator?.paused = true
         userLocationUpdator?.invalidate()
@@ -121,6 +134,13 @@ class ActivityNearByController: UIViewController, MGLMapViewDelegate, UICollecti
         trans = CGAffineTransformTranslate(trans, 0, cell.frame.height * (1 - scaleRatio) / 2)
         cell.container.transform = trans
         return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let act = acts[indexPath.row]
+        let detail = ActivityDetailController(act: act)
+        
+        home.navigationController?.pushViewController(detail, animated: true)
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -230,24 +250,46 @@ extension ActivityNearByController {
             })
             let center = CLLocationCoordinate2D(latitude: userLocation!.coordinate.latitude, longitude: userLocation!.coordinate.longitude)
             map.setCenterCoordinate(center, zoomLevel: 12, animated: true)
-            
-            userLocationUpdator = CADisplayLink(target: self, selector: "userLocationOnScreenUpdate")
-            userLocationUpdator?.frameInterval = 1
-            userLocationUpdator?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
-            userLocationUpdator?.paused = false
-            
+            if userLocationUpdator == nil {
+                userLocationUpdator = CADisplayLink(target: self, selector: "userLocationOnScreenUpdate")
+                userLocationUpdator?.frameInterval = 1
+                userLocationUpdator?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
+                userLocationUpdator?.paused = false
+            }
+            if userLocMarker == nil {
             let userMarkLocationOnScreen = map.convertCoordinate(center, toPointToView: map)
-            userLocMarker = UserMapLocationManager(size: CGSizeMake(200, 200))
-            map.addSubview(userLocMarker)
-            userLocMarker.center = userMarkLocationOnScreen
+                userLocMarker = UserMapLocationManager(size: CGSizeMake(200, 200))
+                map.addSubview(userLocMarker)
+                userLocMarker.center = userMarkLocationOnScreen
+            }
+        }
+    }
+//    
+//    func getNearByActs() {
+//        let requester = ActivityRequester.requester
+//        requester.getNearByActivities(userLocation!, queryDistance: 10, skip: 0, limit: 10, onSuccess: { (json) -> () in
+//            self.acts.removeAll()
+//            for data in json!.arrayValue {
+//                let act = Activity.objects.getOrCreate(data)
+//                self.acts.append(act)
+//            }
+//            self.actsBoard.reloadData()
+//            self.pageCount.currentPage = 0
+//            if self.acts.count > 0 {
+//                self.activityFocusedChanged()
+//            }
+//            }, onError: { (code) -> () in
+//                print(code)
+//        })
+//    }
+    
+    func userLocationOnScreenUpdate() {
+        if userLocation == nil {
+            return
         }
         let center = CLLocationCoordinate2D(latitude: userLocation!.coordinate.latitude, longitude: userLocation!.coordinate.longitude)
         let userMarkLocationOnScreen = map.convertCoordinate(center, toPointToView: map)
         userLocMarker.center = userMarkLocationOnScreen
-    }
-    
-    func userLocationOnScreenUpdate() {
-        
     }
     
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {

@@ -315,4 +315,13 @@ extension UserManager {
         }
         return false
     }
+    
+    func save() -> Bool{
+        do {
+            try context.save()
+            return true
+        }catch _ {
+            return false
+        }
+    }
 }

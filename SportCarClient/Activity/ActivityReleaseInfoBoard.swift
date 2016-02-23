@@ -40,7 +40,7 @@ class ActivityReleaseInfoBoard: UIView {
         posterBtn = UIButton()
         superview.addSubview(posterBtn)
         posterBtn.setTitle(LS("上传一个活动海报"), forState: .Normal)
-        posterBtn.setImage(UIImage(named: "activity_release_default_cover"), forState: .Normal)
+        posterBtn.setBackgroundImage(UIImage(named: "activity_release_default_cover"), forState: .Normal)
         posterBtn.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
         posterBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), forState: .Normal)
         posterBtn.snp_makeConstraints { (make) -> Void in
@@ -71,7 +71,7 @@ class ActivityReleaseInfoBoard: UIView {
         wrapper.contentSize = CGSizeMake(UIScreen.mainScreen().bounds.width * 0.8, 17)
         //
         actNameInput = UITextField()
-        actNameInput.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        actNameInput.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         actNameInput.textColor = UIColor(white: 0.72, alpha: 1)
         actNameInput.placeholder = LS("为活动取一个名字")
         actNameInput.textAlignment = .Center
@@ -89,7 +89,7 @@ class ActivityReleaseInfoBoard: UIView {
         }
         //
         actDesInput = UITextView()
-        actDesInput.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        actDesInput.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         actDesInput.textColor = UIColor(white: 0.72, alpha: 1)
         actDesInput.text = LS("活动描述...")
         superview.addSubview(actDesInput)

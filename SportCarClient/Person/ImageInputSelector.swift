@@ -183,7 +183,18 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         self.dismissViewControllerAnimated(true, completion: nil)
-        delegate?.imageInputSelectorDidSelectImage(image)
+        let superview = self.view
+        container.snp_remakeConstraints { (make) -> Void in
+            make.right.equalTo(superview)
+            make.top.equalTo(superview.snp_bottom)
+            make.left.equalTo(superview)
+            make.height.equalTo(superview)
+        }
+        UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            self.view.layoutIfNeeded()
+            }, completion: { (finished) in
+                self.delegate?.imageInputSelectorDidSelectImage(image)
+        })
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {

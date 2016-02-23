@@ -38,6 +38,10 @@ class NewsController: UITableViewController {
         self.loadMoreNewsBelow()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
 }
 
 
@@ -68,6 +72,7 @@ extension NewsController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(NewsCell.reusableIdentifier, forIndexPath: indexPath) as! NewsCell
         cell.news = news[indexPath.row]
+        cell.selectionStyle = .None
         // 自动载入更多news
         if indexPath.row == news.count-1 {
             self.loadMoreNewsBelow()
@@ -116,8 +121,8 @@ extension NewsController {
     }
     
     func backToHomePressed() {
-        self.navigationController?.popViewControllerAnimated(true)
-//        self.homeDelegate?.backToHome(nil)
+//        self.navigationController?.popViewControllerAnimated(true)
+        self.homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false))
     }
 }
 

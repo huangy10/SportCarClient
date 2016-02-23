@@ -16,6 +16,7 @@ class ActivityReleaseCell: UITableViewCell {
     var staticLbl: UILabel!
     var infoInput: UITextField!
     var arrowIcon: UIImageView!
+    var staticInfoLabel: UILabel!
     
     var arrowDirection: String = "left"{
         didSet {
@@ -32,7 +33,13 @@ class ActivityReleaseCell: UITableViewCell {
     
     var editable: Bool = true{
         didSet {
-            infoInput.enabled = editable
+            if editable {
+                infoInput.hidden = false
+                staticInfoLabel.hidden = true
+            }else {
+                infoInput.hidden = true
+                staticInfoLabel.hidden = false
+            }
         }
     }
     
@@ -88,6 +95,13 @@ class ActivityReleaseCell: UITableViewCell {
 //            make.centerY.equalTo(superview)
 //            make.left.equalTo(staticLbl.snp_right)
 //            make.height.equalTo(staticLbl)
+        }
+        staticInfoLabel = UILabel()
+        staticInfoLabel.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        staticInfoLabel.textColor = UIColor(white: 0.72, alpha: 1)
+        superview.addSubview(staticInfoLabel)
+        staticInfoLabel.snp_makeConstraints { (make) -> Void in
+            make.edges.equalTo(wrapper)
         }
         //
         let sepLine = UIView()

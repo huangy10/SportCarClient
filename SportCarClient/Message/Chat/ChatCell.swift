@@ -252,13 +252,13 @@ class ChatCell: UITableViewCell {
 
         if isMine {
             bubbleView?.snp_remakeConstraints(closure: { (make) -> Void in
-                make.right.equalTo(triangle!.snp_left)
+                make.right.equalTo(triangle!.snp_left).offset(1)
                 make.top.equalTo(superview).offset(timeMarkHeight)
                 make.size.equalTo(CGSizeMake(bubbleContentSize.width + bubbleContentInset.left + bubbleContentInset.right, bubbleContentSize.height + bubbleContentInset.top + bubbleContentInset.bottom))
             })
         }else{
             bubbleView?.snp_remakeConstraints(closure: { (make) -> Void in
-                make.left.equalTo(triangle!.snp_right)
+                make.left.equalTo(triangle!.snp_right).offset(-1)
                 make.top.equalTo(superview).offset(timeMarkHeight)
                 make.size.equalTo(CGSizeMake(bubbleContentSize.width + bubbleContentInset.left + bubbleContentInset.right, bubbleContentSize.height + bubbleContentInset.top + bubbleContentInset.bottom))
             })

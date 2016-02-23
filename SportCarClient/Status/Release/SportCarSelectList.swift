@@ -24,6 +24,7 @@ class SportCarSelectListController: UICollectionViewController{
         let flowlayout = UICollectionViewFlowLayout()
         flowlayout.itemSize = CGSizeMake(140, 60)
         flowlayout.minimumInteritemSpacing = 0.01
+        flowlayout.scrollDirection = .Horizontal
         self.init(collectionViewLayout: flowlayout)
     }
     

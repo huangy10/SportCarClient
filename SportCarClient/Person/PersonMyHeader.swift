@@ -77,7 +77,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         //
         avatarCarBtn = UIButton()
         avatarCarBtn.layer.cornerRadius = 16.5
-        avatarCarBtn.backgroundColor = UIColor(white: 0.72, alpha: 1)
+//        avatarCarBtn.backgroundColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(avatarCarBtn)
         avatarCarBtn.snp_makeConstraints { (make) -> Void in
             make.bottom.equalTo(avatarBtn)
@@ -239,9 +239,10 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         // 头像
         avatarBtn.kf_setImageWithURL(SFURL(user.avatarUrl!)!, forState: .Normal)
         // 认证跑车
-        if let avatarCar = user.avatarCar {
-            avatarCarBtn.kf_setImageWithURL(SFURL(avatarCar.logo!)!, forState: .Normal)
-            avatarCarNameLbl.text = avatarCar.name
+        if let carID = user.profile?.avatarCarID where carID != "" {
+            print(user.profile)
+            avatarCarBtn.kf_setImageWithURL(SFURL(user.profile!.avatarCarLogo!)!, forState: .Normal)
+            avatarCarNameLbl.text = user.profile?.avatarCarName
         }else {
             avatarCarBtn.setImage(nil, forState: .Normal)
             avatarCarNameLbl.text = ""

@@ -24,12 +24,15 @@ class LoginRegisterController: InputableViewController {
     
     var board : UIScrollView?
     
+    var bgImgView: UIImageView!
+    
     var loginPhoneInput: TextFieldWithLeadingIconView?
     var loginPasswordInput: TextFieldWithLeadingIconView?
     var registerPhoneInput: TextFieldWithLeadingIconView?
     var registerPasswordInput: TextFieldWithLeadingIconView?
     var registerAuthCode: TextFieldWithLeadingIconView?
     var titleLbl: UILabel?
+    var titleLogo: UIImageView!
     var titleBtnIcon: UIImageView?
     var titleLoginBtn: UIButton?
     var titleRegisterBtn: UIButton?
@@ -39,6 +42,21 @@ class LoginRegisterController: InputableViewController {
     // 一些需要干预状态的按钮
     var authCodeBtn: AuthCodeBtnView?
     var loginBtn: UIButton?
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.view.updateConstraints()
+        self.view.layoutIfNeeded()
+        bgImgView.snp_remakeConstraints { (make) -> Void in
+            make.right.equalTo(self.view)
+            make.top.equalTo(self.view)
+            make.bottom.equalTo(self.view)
+            make.width.equalTo(bgImgView.snp_height).multipliedBy(0.807)
+        }
+        UIView.animateWithDuration(10, delay: 0, options: .CurveEaseIn, animations: { () -> Void in
+            self.view.layoutIfNeeded()
+            }, completion: nil)
+    }
  
     override func createSubviews() {
         super.createSubviews()
@@ -49,16 +67,18 @@ class LoginRegisterController: InputableViewController {
         let superview = self.view!
         superview.backgroundColor = UIColor.blackColor()
         //
-        let bgImgView = UIImageView(image: UIImage(named: "account_bg_image"))
-        bgImgView.layer.opacity = 0.5
+        bgImgView = UIImageView(image: UIImage(named: "account_bg_image"))
         superview.addSubview(bgImgView)
         bgImgView.snp_makeConstraints { (make) -> Void in
-            make.edges.equalTo(superview)
+            make.left.equalTo(superview)
+            make.top.equalTo(superview)
+            make.bottom.equalTo(superview)
+            make.width.equalTo(bgImgView.snp_height).multipliedBy(0.807)
         }
         //
         titleLbl = UILabel()
         titleLbl?.clipsToBounds = true
-        titleLbl?.text = "跑车范"
+//        titleLbl?.text = "跑车范"
         titleLbl?.font = UIFont.systemFontOfSize(30, weight: UIFontWeightBold)
         titleLbl?.textColor = UIColor.whiteColor()
         titleLbl?.textAlignment = NSTextAlignment.Center
@@ -70,12 +90,20 @@ class LoginRegisterController: InputableViewController {
             make.top.equalTo(superview)
         }
         //
+        titleLogo = UIImageView(image: UIImage(named: "account_title_logo"))
+        titleLbl?.addSubview(titleLogo)
+        titleLogo.snp_makeConstraints { (make) -> Void in
+            make.center.equalTo(titleLbl!)
+            make.height.equalTo(23)
+            make.width.equalTo(81)
+        }
+        //
         board = UIScrollView()
         board?.backgroundColor = UIColor.clearColor()
         board?.pagingEnabled = true
         superview.addSubview(board!)
         board?.snp_makeConstraints(closure: { (make) -> Void in
-            make.top.equalTo(titleLbl!.snp_bottom)
+            make.top.equalTo(titleLogo.snp_bottom).offset(43)
             make.bottom.equalTo(superview)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -375,7 +403,7 @@ class LoginRegisterController: InputableViewController {
     
     func leftBarBtn() -> UIBarButtonItem! {
         let backBtn = UIButton()
-        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
+//        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         backBtn.addTarget(self, action: "backBtnPressed:", forControlEvents: .TouchUpInside)
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
         
@@ -409,7 +437,7 @@ class LoginRegisterController: InputableViewController {
     // MARK: 按钮响应
     
     func backBtnPressed(sender: UIButton) {
-        print("haha")
+//        print("haha")
     }
     
     func loginPressed() {
@@ -427,10 +455,12 @@ class LoginRegisterController: InputableViewController {
         self.requester.postToLogin(username, password: password, onSuccess: { (userID) -> (Void) in
             self.loginBtn?.enabled = true
 
-            let user = User.objects.login("\(userID!)")
-            let ctl = HomeController()
-            ctl.hostUser = user.value
-            self.navigationController?.pushViewController(ctl, animated: true)
+            User.objects.login("\(userID!)")
+            let app = AppManager.sharedAppManager
+            app.guideToContent()
+//            let ctl = HomeController()
+//            ctl.hostUser = user.value
+//            self.navigationController?.pushViewController(ctl, animated: true)
             }) { (code) -> (Void) in
                 self.loginBtn?.enabled = true
                 // 显示错误信息
@@ -474,6 +504,7 @@ class LoginRegisterController: InputableViewController {
         }
     
         self.requester.postToRegister(phone, passwd: passwd, authCode: authCode, onSuccess: { (userID) -> (Void) in
+            User.objects.login(userID!)
             self.registerConfirm()
             }) { (code) -> (Void) in
                 switch code! {

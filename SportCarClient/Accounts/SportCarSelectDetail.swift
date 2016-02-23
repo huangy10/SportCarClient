@@ -125,6 +125,8 @@ class SportCarSelectDetailController: UIViewController, SportCarBrandSelecterCon
         let requester = SportCarRequester.sharedSCRequester
         requester.postToFollow(contents![1], carId: carId!, onSuccess: { () -> () in
             print("Done！")
+            let app = AppManager.sharedAppManager
+            app.guideToContent()
             }) { (code) -> () in
                 self.displayAlertController(LS("错误"), message: LS("服务器发生了内部错误"))
         }

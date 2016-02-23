@@ -145,6 +145,8 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
             make.top.equalTo(headerContainer!.snp_bottom)
             make.height.equalTo(mainCover!.snp_width)
         })
+        mainCover?.contentMode = .ScaleAspectFill
+        mainCover?.clipsToBounds = true
         //
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .Horizontal
@@ -260,6 +262,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         let user: User = status!.user!
         avatarBtn?.kf_setImageWithURL(SFURL(user.avatarUrl!)!, forState: .Normal)
         nameLbl?.text = user.nickName
+        releaseDateLbl?.text = dateDisplay(status!.createdAt!)
         let profile = user.profile!
         if profile.avatarClubLogo != nil {
             avatarClubBtn?.hidden = false
@@ -331,6 +334,8 @@ class StatusCellImageDisplayCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         imageView = UIImageView()
+        imageView?.contentMode = .ScaleAspectFill
+        imageView?.clipsToBounds = true
         self.contentView.addSubview(imageView!)
         imageView?.snp_makeConstraints(closure: { (make) -> Void in
             make.edges.equalTo(self.contentView)

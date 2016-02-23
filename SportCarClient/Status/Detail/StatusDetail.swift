@@ -319,6 +319,7 @@ extension StatusDetailController {
         headerContainer?.addSubview(avatarBtn!)
         avatarBtn?.layer.cornerRadius = 35 / 2.0
         avatarBtn?.clipsToBounds = true
+        avatarBtn?.addTarget(self, action: "statusHostAvatarPressed", forControlEvents: .TouchUpInside)
         avatarBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(headerContainer!).offset(15)
             make.centerY.equalTo(headerContainer!)
@@ -474,6 +475,11 @@ extension StatusDetailController {
         loadDataAndUpdateUI()
     }
     
+    func statusHostAvatarPressed() {
+        let detail = PersonOtherController(user: status!.user!)
+        self.navigationController?.pushViewController(detail, animated: true)
+    }
+    
     func loadDataAndUpdateUI() {
         if status == nil {
             return
@@ -484,6 +490,7 @@ extension StatusDetailController {
         let user: User = status!.user!
         avatarBtn?.kf_setImageWithURL(SFURL(user.avatarUrl!)!, forState: .Normal)
         nameLbl?.text = user.nickName
+        releaseDateLbl?.text = dateDisplay(status!.createdAt!)
         let profile = user.profile!
         if profile.avatarClubLogo != nil {
             avatarClubBtn?.hidden = false
@@ -611,7 +618,6 @@ extension StatusDetailController {
     }
     
     func avatarPressed(cell: DetailCommentCell) {
-        
     }
     
     /**

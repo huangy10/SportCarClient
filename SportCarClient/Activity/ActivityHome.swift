@@ -12,6 +12,9 @@ import UIKit
 
 
 class ActivityHomeController: UIViewController {
+    
+    var homeDelegate: HomeDelegate?
+    
     var nearBy: ActivityNearByController!
     var mine: ActivityHomeMineListController!
     var applied: ActivityAppliedController!
@@ -23,11 +26,15 @@ class ActivityHomeController: UIViewController {
     var titleBtnIcon: UIImageView!
     var curTag: Int = 1
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navSettings()
+        createSubviews()
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        navSettings()
-        //
-        createSubviews()
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     func navSettings() {
@@ -103,6 +110,12 @@ class ActivityHomeController: UIViewController {
         if sender.tag == curTag {
             return
         }
+        if sender.tag == 0 {
+            nearBy.pause = false
+        }else{
+            nearBy.pause = true
+        }
+        
         let btns = [titleNearByBtn, titleMineBtn, titleAppliedBtn]
         let targetBtn = btns[sender.tag]
         let sourceBtn = btns[curTag]
@@ -119,11 +132,13 @@ class ActivityHomeController: UIViewController {
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+//        self.navigationController?.popViewControllerAnimated(true)
+        homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false))
     }
     
     func navRightBtnPressed() {
         let release = ActivityReleaseController()
+        release.actHomeController = self
         self.navigationController?.pushViewController(release, animated: true)
     }
     

@@ -51,7 +51,6 @@ class Activity: NSManagedObject {
         }
         let userJSON = json["user"]
         self.user = User.objects.create(userJSON).value
-        
         let applicants = json["apply_list"].arrayValue
         if applicants.count > 0 {
             applicant.removeAll()

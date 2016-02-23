@@ -117,6 +117,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         nickNameInput?.placeholder = NSLocalizedString("请输入您的昵称", comment: "")
         nickNameInput?.font = kTextInputFont
         nickNameInput?.textAlignment = NSTextAlignment.Center
+        nickNameInput?.textColor = UIColor.blackColor()
         nickNameInput?.delegate = self
         superview.addSubview(nickNameInput!)
         nickNameInput?.snp_makeConstraints(closure: { (make) -> Void in
@@ -304,6 +305,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
     }
     
     func genderPressed() {
+        self.nickNameInput?.resignFirstResponder()
         pickerTitle?.text = "您的性别"
         birthDatePickerView?.hidden = true
         genderPickerView?.hidden = false
@@ -320,6 +322,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
     }
     
     func birthDatePressed() {
+        self.nickNameInput?.resignFirstResponder()
         pickerTitle?.text = "您的生日"
         birthDatePickerView?.hidden = false
         genderPickerView?.hidden = true
@@ -342,6 +345,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
             formatter.dateFormat = "yyyy-MM-dd"
             
             birthDateInput?.setTitle(formatter.stringFromDate(selectedDate!), forState: .Normal)
+            birthDateInput?.setTitleColor(UIColor.blackColor(), forState: .Normal)
         }
         if !genderPickerView!.hidden{
             let selectedGender = genderPickerView?.selectedRowInComponent(0)
@@ -350,6 +354,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
             }else{
                 genderInput?.setTitle("女", forState: .Normal)
             }
+            genderInput?.setTitleColor(UIColor.blackColor(), forState: .Normal)
         }
         
         let superview = self.view

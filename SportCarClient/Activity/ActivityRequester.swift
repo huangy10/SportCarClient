@@ -199,21 +199,20 @@ class ActivityRequester: AccountRequester {
      - parameter onSuccess:  成功以后调用的closure
      - parameter onError:    失败以后调用的closure
      */
-    func createNewActivity(name: String, des: String, informUser: [String]?,  var maxAttend: Int, startAt: NSDate, endAt: NSDate, clubLimit: String?, poster: UIImage, lat: Double, lon: Double, loc_des: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+    func createNewActivity(name: String, des: String, informUser: [String]?,  maxAttend: Int, startAt: NSDate, endAt: NSDate, clubLimit: String?, poster: UIImage, lat: Double, lon: Double, loc_des: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
         let urlStr = ActivityURLMaker.sharedURLMaker.createActivity()
         manager.upload(.POST, urlStr, multipartFormData: { (form) -> Void in
             // 必备信息
             form.appendBodyPart(data: name.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "name")
             form.appendBodyPart(data: des.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "description")
-            form.appendBodyPart(data: NSData(bytes: &maxAttend, length: sizeof(Int)), name: "max_attend")
+            form.appendBodyPart(data: "\(maxAttend)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "max_attend")
             form.appendBodyPart(data: STRDate(startAt).dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "start_at")
             form.appendBodyPart(data: STRDate(endAt).dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "end_at")
-            form.appendBodyPart(data: UIImagePNGRepresentation(poster)!, name: "poster")
+            form.appendBodyPart(data: UIImagePNGRepresentation(poster)!, name: "poster", fileName: "poster.png", mimeType: "image/png")
             // 位置数据
             let location = ["lat": lat, "lon": lon, "description": loc_des]
-            let locationJSONString = JSON(location).stringValue
-            form.appendBodyPart(data: locationJSONString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "location")
-            // Optional 
+            form.appendBodyPart(data: try! JSON(location).rawData(), name: "location")
+            // Optional
             if informUser != nil {
                 let jsonList: String = JSON(informUser!).stringValue
                 form.appendBodyPart(data: jsonList.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "inform_of")

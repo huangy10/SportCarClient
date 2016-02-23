@@ -254,7 +254,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     }
     
     func backBtnPressed() {
-        navigationController?.popViewControllerAnimated(false)
+        navigationController?.popViewControllerAnimated(true)
     }
     
     func shareBtnPressed() {

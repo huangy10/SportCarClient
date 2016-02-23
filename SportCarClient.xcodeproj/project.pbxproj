@@ -19,6 +19,7 @@
 		BF2336901C5669A000F0AE41 /* ChatRecordDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF23368F1C5669A000F0AE41 /* ChatRecordDataSource.swift */; };
 		BF2336921C5732D800F0AE41 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2336911C5732D800F0AE41 /* ChatCell.swift */; };
 		BF2336941C57353C00F0AE41 /* ChatWave.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2336931C57353C00F0AE41 /* ChatWave.swift */; };
+		BF24291E1C7C524D005D4C6E /* DriverMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF24291D1C7C524D005D4C6E /* DriverMap.swift */; };
 		BF268FC81C32C76A005D1B68 /* NewsDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF268FC71C32C76A005D1B68 /* NewsDetail.swift */; };
 		BF26FD3D1C686E5A0077D1F0 /* GroupSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF26FD3C1C686E5A0077D1F0 /* GroupSettings.swift */; };
 		BF26FD411C6878C40077D1F0 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF26FD3F1C6878C40077D1F0 /* Activity.swift */; };
@@ -58,7 +59,6 @@
 		BF54DD7A1C303D5100F635C0 /* NewsRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF54DD791C303D5100F635C0 /* NewsRequester.swift */; };
 		BF58990C1C4CFF26005496EA /* informUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF58990B1C4CFF26005496EA /* informUser.swift */; };
 		BF58990E1C4D14A3005496EA /* SportCarSelectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF58990D1C4D14A3005496EA /* SportCarSelectList.swift */; };
-		BF5C96321C76E770002C2806 /* RadarMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C96311C76E770002C2806 /* RadarMap.swift */; };
 		BF5FF0ED1C15B4860050F5FE /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */; };
 		BF6308981C1965AF0087A4F0 /* Agreement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6308971C1965AF0087A4F0 /* Agreement.swift */; };
 		BF63089D1C1970AB0087A4F0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF63089C1C1970AB0087A4F0 /* Localizable.strings */; };
@@ -69,15 +69,12 @@
 		BF67816C1C15AA77001C89AE /* AccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816B1C15AA77001C89AE /* AccountController.swift */; };
 		BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816F1C15AB10001C89AE /* LoginRegister.swift */; };
 		BF8D0DC31C424E710070B921 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D0DC21C424E710070B921 /* ViewControllerExtensions.swift */; };
-		BF8D42F31C745E1D009AD4BA /* RadarHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D42F21C745E1D009AD4BA /* RadarHome.swift */; };
-		BF8D42F61C745E2F009AD4BA /* DriverMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D42F51C745E2F009AD4BA /* DriverMap.swift */; };
 		BF8D42FA1C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D42F91C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift */; };
 		BF8D42FD1C7481F5009AD4BA /* ActivityReleaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D42FC1C7481F5009AD4BA /* ActivityReleaseCell.swift */; };
 		BF8D42FF1C748CB8009AD4BA /* ActivityApplied.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D42FE1C748CB8009AD4BA /* ActivityApplied.swift */; };
 		BF9404971C2818C3001ABB1E /* AppLauchner.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9404961C2818C3001ABB1E /* AppLauchner.swift */; };
 		BF9847341C76311D006DDE3C /* ActivityReleaseMapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9847331C76311D006DDE3C /* ActivityReleaseMapCell.swift */; };
 		BFA1FEFD1C36DD8500F127FA /* NewsDetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA1FEFC1C36DD8500F127FA /* NewsDetailCommentCell.swift */; };
-		BFA29E411C770D120008A408 /* RadarBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA29E401C770D120008A408 /* RadarBubble.swift */; };
 		BFA29E441C7768930008A408 /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA29E431C7768930008A408 /* CustomDatePicker.swift */; };
 		BFA2C7691C40F97D00202EF0 /* frameworkextensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2C7681C40F97D00202EF0 /* frameworkextensions.swift */; };
 		BFA2C76B1C412B1500202EF0 /* CommentPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2C76A1C412B1500202EF0 /* CommentPanel.swift */; };
@@ -195,6 +192,7 @@
 		BF23368F1C5669A000F0AE41 /* ChatRecordDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatRecordDataSource.swift; path = Message/Chat/Network/ChatRecordDataSource.swift; sourceTree = "<group>"; };
 		BF2336911C5732D800F0AE41 /* ChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatCell.swift; path = Message/Chat/ChatCell.swift; sourceTree = "<group>"; };
 		BF2336931C57353C00F0AE41 /* ChatWave.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatWave.swift; path = Message/Chat/ChatWave.swift; sourceTree = "<group>"; };
+		BF24291D1C7C524D005D4C6E /* DriverMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DriverMap.swift; path = Radar/DriverMap.swift; sourceTree = "<group>"; };
 		BF268FC71C32C76A005D1B68 /* NewsDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsDetail.swift; path = News/NewsDetail.swift; sourceTree = "<group>"; };
 		BF26FD3C1C686E5A0077D1F0 /* GroupSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GroupSettings.swift; path = Message/Chat/GroupSettings.swift; sourceTree = "<group>"; };
 		BF26FD3F1C6878C40077D1F0 /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Activity.swift; path = Model/Activity.swift; sourceTree = "<group>"; };
@@ -234,7 +232,6 @@
 		BF54DD791C303D5100F635C0 /* NewsRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsRequester.swift; path = News/NewsRequester.swift; sourceTree = "<group>"; };
 		BF58990B1C4CFF26005496EA /* informUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = informUser.swift; path = Status/Release/informUser.swift; sourceTree = "<group>"; };
 		BF58990D1C4D14A3005496EA /* SportCarSelectList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarSelectList.swift; path = Status/Release/SportCarSelectList.swift; sourceTree = "<group>"; };
-		BF5C96311C76E770002C2806 /* RadarMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RadarMap.swift; path = Radar/RadarMap.swift; sourceTree = "<group>"; };
 		BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
 		BF6308971C1965AF0087A4F0 /* Agreement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Agreement.swift; path = Accounts/Agreement.swift; sourceTree = "<group>"; };
 		BF63089C1C1970AB0087A4F0 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -245,15 +242,12 @@
 		BF67816B1C15AA77001C89AE /* AccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountController.swift; path = Accounts/AccountController.swift; sourceTree = "<group>"; };
 		BF67816F1C15AB10001C89AE /* LoginRegister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginRegister.swift; path = Accounts/LoginRegister.swift; sourceTree = "<group>"; };
 		BF8D0DC21C424E710070B921 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewControllerExtensions.swift; path = BaseTemplate/ViewControllerExtensions.swift; sourceTree = "<group>"; };
-		BF8D42F21C745E1D009AD4BA /* RadarHome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RadarHome.swift; path = Radar/RadarHome.swift; sourceTree = "<group>"; };
-		BF8D42F51C745E2F009AD4BA /* DriverMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DriverMap.swift; path = Radar/DriverMap.swift; sourceTree = "<group>"; };
 		BF8D42F91C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityReleaseInfoBoard.swift; path = Activity/ActivityReleaseInfoBoard.swift; sourceTree = "<group>"; };
 		BF8D42FC1C7481F5009AD4BA /* ActivityReleaseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityReleaseCell.swift; path = Activity/ActivityReleaseCell.swift; sourceTree = "<group>"; };
 		BF8D42FE1C748CB8009AD4BA /* ActivityApplied.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityApplied.swift; path = Activity/ActivityApplied.swift; sourceTree = "<group>"; };
 		BF9404961C2818C3001ABB1E /* AppLauchner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppLauchner.swift; path = Home/AppLauchner.swift; sourceTree = "<group>"; };
 		BF9847331C76311D006DDE3C /* ActivityReleaseMapCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityReleaseMapCell.swift; path = Activity/ActivityReleaseMapCell.swift; sourceTree = "<group>"; };
 		BFA1FEFC1C36DD8500F127FA /* NewsDetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsDetailCommentCell.swift; path = News/NewsDetailCommentCell.swift; sourceTree = "<group>"; };
-		BFA29E401C770D120008A408 /* RadarBubble.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RadarBubble.swift; path = Activity/RadarBubble.swift; sourceTree = "<group>"; };
 		BFA29E431C7768930008A408 /* CustomDatePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomDatePicker.swift; path = Activity/CustomDatePicker.swift; sourceTree = "<group>"; };
 		BFA2C7681C40F97D00202EF0 /* frameworkextensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = frameworkextensions.swift; path = BaseTemplate/frameworkextensions.swift; sourceTree = "<group>"; };
 		BFA2C76A1C412B1500202EF0 /* CommentPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentPanel.swift; path = News/CommentPanel.swift; sourceTree = "<group>"; };
@@ -424,6 +418,14 @@
 				BF23368F1C5669A000F0AE41 /* ChatRecordDataSource.swift */,
 			);
 			name = Network;
+			sourceTree = "<group>";
+		};
+		BF24291C1C7C51CE005D4C6E /* Driver */ = {
+			isa = PBXGroup;
+			children = (
+				BF24291D1C7C524D005D4C6E /* DriverMap.swift */,
+			);
+			name = Driver;
 			sourceTree = "<group>";
 		};
 		BF268FC61C32C757005D1B68 /* Detail */ = {
@@ -632,14 +634,6 @@
 			name = PhotoSelect;
 			sourceTree = "<group>";
 		};
-		BF5C96301C76E756002C2806 /* Map */ = {
-			isa = PBXGroup;
-			children = (
-				BF5C96311C76E770002C2806 /* RadarMap.swift */,
-			);
-			name = Map;
-			sourceTree = "<group>";
-		};
 		BF6308991C1967A60087A4F0 /* data */ = {
 			isa = PBXGroup;
 			children = (
@@ -674,28 +668,9 @@
 		BF8D42F11C745DA3009AD4BA /* Radar */ = {
 			isa = PBXGroup;
 			children = (
-				BF8D42F41C745E21009AD4BA /* Driver */,
-				BF8D42F21C745E1D009AD4BA /* RadarHome.swift */,
+				BF24291C1C7C51CE005D4C6E /* Driver */,
 			);
 			name = Radar;
-			sourceTree = "<group>";
-		};
-		BF8D42F41C745E21009AD4BA /* Driver */ = {
-			isa = PBXGroup;
-			children = (
-				BF5C96301C76E756002C2806 /* Map */,
-				BF8D42F71C745F4F009AD4BA /* Bubble */,
-				BF8D42F51C745E2F009AD4BA /* DriverMap.swift */,
-			);
-			name = Driver;
-			sourceTree = "<group>";
-		};
-		BF8D42F71C745F4F009AD4BA /* Bubble */ = {
-			isa = PBXGroup;
-			children = (
-				BFA29E401C770D120008A408 /* RadarBubble.swift */,
-			);
-			name = Bubble;
 			sourceTree = "<group>";
 		};
 		BF8D42F81C745FAB009AD4BA /* InfoBoard */ = {
@@ -1222,6 +1197,7 @@
 				TargetAttributes = {
 					BFFA51111C05D9910019E5EF = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = F6Q2CCPKZ9;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1403,8 +1379,8 @@
 				BF54DD771C2EBDE800F635C0 /* NewsCell.swift in Sources */,
 				BFC712F11C2C431900A71F4C /* StatusComment.swift in Sources */,
 				BFC36BA71C6B0F7400DC6FE2 /* PersonStatusHeader.swift in Sources */,
+				BF24291E1C7C524D005D4C6E /* DriverMap.swift in Sources */,
 				BFC36BB41C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift in Sources */,
-				BF8D42F31C745E1D009AD4BA /* RadarHome.swift in Sources */,
 				BFBC52711C52946300EE7D34 /* ChatController.swift in Sources */,
 				BF2BE21E1C29390200DD0CF9 /* Profile.generated.swift in Sources */,
 				BFA1FEFD1C36DD8500F127FA /* NewsDetailCommentCell.swift in Sources */,
@@ -1419,7 +1395,6 @@
 				BFBC526E1C52944200EE7D34 /* MessageController.swift in Sources */,
 				BF2F7E8E1C62F39A00E3A3A2 /* NotificationCtrl.swift in Sources */,
 				BF23368E1C56529B00F0AE41 /* ChatRequester.swift in Sources */,
-				BF8D42F61C745E2F009AD4BA /* DriverMap.swift in Sources */,
 				BF8D42FD1C7481F5009AD4BA /* ActivityReleaseCell.swift in Sources */,
 				BFC032751C6F556C00ECA69A /* ActivityRequester.swift in Sources */,
 				BFC36B9E1C699B7500DC6FE2 /* PersonOtherHeader.swift in Sources */,
@@ -1439,7 +1414,6 @@
 				BF54DD701C2EB95F00F635C0 /* NewsComment.swift in Sources */,
 				BFC712FC1C2C439900A71F4C /* StatusComment.generated.swift in Sources */,
 				BF2F7E951C644A8A00E3A3A2 /* Notification.generated.swift in Sources */,
-				BFA29E411C770D120008A408 /* RadarBubble.swift in Sources */,
 				BFC36BB21C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift in Sources */,
 				BFCB963A1C1FB0AE004F77E8 /* SportCarRequester.swift in Sources */,
 				BFC032721C6F508B00ECA69A /* ActivtyList.swift in Sources */,
@@ -1468,7 +1442,6 @@
 				BFC36BB61C6C854800DC6FE2 /* BlackListViewer.swift in Sources */,
 				BF58990C1C4CFF26005496EA /* informUser.swift in Sources */,
 				BFFA511E1C05D9920019E5EF /* SportCarClient.xcdatamodeld in Sources */,
-				BF5C96321C76E770002C2806 /* RadarMap.swift in Sources */,
 				BFCB96401C205DF1004F77E8 /* Home.swift in Sources */,
 				BFC032791C700DFA00ECA69A /* ActivityNearBy.swift in Sources */,
 				BFCA90141C50D6CB00B05E74 /* StatusDetail.swift in Sources */,
@@ -1608,6 +1581,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = SportCarClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClient;
@@ -1622,6 +1596,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = SportCarClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClient;

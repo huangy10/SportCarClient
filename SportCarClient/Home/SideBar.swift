@@ -77,12 +77,12 @@ class SideBarController: UIViewController {
             make.width.equalTo(superview).multipliedBy(0.8)
             make.height.equalTo(33)
         })
-        if let avatarCar = host.avatarCar {
+        if let carID = host.profile?.avatarCarID where carID != "" {
             carNameLbl = UILabel()
             carNameLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
             carNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
             carNameLbl?.textAlignment = .Center
-            carNameLbl?.text = avatarCar.name
+            carNameLbl?.text = host.profile?.avatarCarName
             superview.addSubview(carNameLbl!)
             carNameLbl?.sizeToFit()
             carNameLbl?.translatesAutoresizingMaskIntoConstraints = true
@@ -92,7 +92,7 @@ class SideBarController: UIViewController {
             })
             
             carIcon = UIImageView()
-            carIcon?.kf_setImageWithURL(NSURL(string: avatarCar.image!)!)
+            carIcon?.kf_setImageWithURL(SFURL(host.profile!.avatarCarLogo!)!)
             superview.addSubview(carIcon!)
             carIcon?.snp_makeConstraints(closure: { (make) -> Void in
                 make.right.equalTo(carNameLbl!.snp_left)

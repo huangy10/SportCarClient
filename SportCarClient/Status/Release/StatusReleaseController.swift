@@ -17,6 +17,8 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
     /*
     ================================================================================================ 子控件
     */
+    ///
+    weak var home: StatusHomeController?
     /// 面板
     var board: UIScrollView?
     /// 添加图片的操作面板
@@ -121,7 +123,7 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
         statusContentInput?.text = LS("有什么想说的呢...")
         statusContentInput?.delegate = self
         inputFields.append(statusContentInput)
-        statusContentInput?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        statusContentInput?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         statusContentInput?.textColor = UIColor(white: 0.72, alpha: 1)
         board?.addSubview(statusContentInput!)
         statusContentInput?.snp_makeConstraints(closure: { (make) -> Void in
@@ -231,6 +233,8 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
     }
     
     func autoSetBoardContentSize() {
+        self.view.updateConstraints()
+        self.view.layoutIfNeeded()
         var contentRect = CGRectZero
         for view in board!.subviews {
             contentRect = CGRectUnion(contentRect, view.frame)
@@ -264,10 +268,12 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
         let car_id = sportCarList?.selectedCar?.carID
         let lat: Double? = userLocAnn?.coordinate.latitude
         let lon: Double? = userLocAnn?.coordinate.longitude
-        let loc_description = locationDesInput?.text
+        let loc_description = locationDesInput?.text == "" ? "未知未知" : locationDesInput!.text
         let requester = StatusRequester.SRRequester
         requester.postNewStatus(content, images: selectedImages, car_id: car_id, lat: lat, lon: lon, loc_description: loc_description, onSuccess: { (let data) -> () in
             print(data)
+            self.home?.dismissViewControllerAnimated(true, completion: nil)
+            self.home?.followStatusCtrl.loadLatestData()
             }) { (code) -> () in
                 print(code)
                 self.displayAlertController(nil, message: LS("发送失败"))
@@ -275,7 +281,7 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
     }
     
     func navLeftBtnPressed() {
-        
+        home?.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 
@@ -285,17 +291,18 @@ extension StatusReleaseController {
     
     func photoSelected(images: [UIImage]) {
         self.dismissViewControllerAnimated(true, completion: {
-            self.autoSetImageSelectPanelSize()
+            
         })
         addImagePanelDataSource?.images.appendContentsOf(images)
         imageCountLbl?.text = "\(addImagePanelDataSource!.images.count)/\(addImagePanelDataSource!.maxImageNum)"
         addImagePanel?.reloadData()
-        
+        self.autoSetImageSelectPanelSize()
     }
     
     func autoSetImageSelectPanelSize() {
+//        print(addImagePanel?.collectionViewLayout.collectionViewContentSize())
         addImagePanel?.snp_updateConstraints(closure: { (make) -> Void in
-            make.height.equalTo(addImagePanel!.contentSize.height)
+            make.height.equalTo(addImagePanel!.collectionViewLayout.collectionViewContentSize())
         })
         autoSetBoardContentSize()
     }
@@ -399,6 +406,7 @@ extension StatusReleaseController {
 
         if firstEditting {
             statusContentInput?.text = ""
+            statusContentInput?.textColor = UIColor.blackColor()
             firstEditting = false
         }
     }
@@ -406,11 +414,16 @@ extension StatusReleaseController {
     func changeLayoutWhenKeyboardAppears(notif: NSNotification) {
         let userInfo = notif.userInfo!
         let keyboardFrame = userInfo[UIKeyboardFrameBeginUserInfoKey]!.CGRectValue
-        if locationDesInput!.editing {
+        if !locationDesInput!.editing {
+            if statusContentInput!.frame.origin.y < keyboardFrame.height {
+                return
+            }
+        }
+
             board?.snp_updateConstraints(closure: { (make) -> Void in
                 make.bottom.equalTo(self.view).offset(-(keyboardFrame.height))
             })
-        }
+//        }
         self.view.layoutIfNeeded()
     }
     
@@ -501,6 +514,8 @@ class StatusReleaseAddImageCell: UICollectionViewCell {
         let superview = self.contentView
         //
         imageView = UIImageView()
+        imageView?.contentMode = .ScaleAspectFill
+        imageView?.clipsToBounds = true
         superview.addSubview(imageView!)
         imageView?.snp_makeConstraints(closure: { (make) -> Void in
             make.edges.equalTo(superview).inset(7.5)

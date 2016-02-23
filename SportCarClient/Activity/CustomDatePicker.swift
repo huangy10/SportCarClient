@@ -25,7 +25,7 @@ class CustomDatePicker: UIView {
     var picker: UIDatePicker!
     var pickerTitleLbl: UILabel!
     
-    static let headerHegiht = 234
+    static let requiredHegiht = 234
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,6 +38,7 @@ class CustomDatePicker: UIView {
     
     func createSubview() {
         let superview = self
+        self.backgroundColor = UIColor.whiteColor()
         //
         header = UIView()
         header.backgroundColor = UIColor(white: 0.92, alpha: 1)
@@ -86,6 +87,12 @@ class CustomDatePicker: UIView {
     }
     
     func doneBtnPressed() {
-        
+        delegate?.dateDidPicked(picker.date)
+    }
+    
+    func reset() {
+        let now = NSDate()
+        picker.minimumDate = now
+        picker.setDate(now, animated: false)
     }
 }

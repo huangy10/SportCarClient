@@ -13,7 +13,7 @@ class StatusFollowController: StatusBasicController {
     
     override func loadMoreData() {
         // 获取关注对象的状态（自己的状态也会返回）
-        let dateThreshold = (status.last?.createdAt ?? NSDate()).dateByAddingTimeInterval(-1)
+        let dateThreshold = (status.last?.createdAt ?? NSDate())
         let requester = StatusRequester.SRRequester
         requester.getMoreStatusList(dateThreshold, onSuccess: { (let data) -> () in
             if self.jsonDataHandler(data!) > 0{

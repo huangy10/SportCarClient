@@ -308,7 +308,7 @@ class ActivityDetailBoardView: UIView {
             avatarCarNameLbl.text = host?.profile?.avatarCarName
         }
         // 活动发布时间
-        releaseDateLbl.text = STRDate(act.createdAt!)
+        releaseDateLbl.text = dateDisplay(act.createdAt!)
         // 地址
         locationLbl.text = act.location_des
         // 评论数量

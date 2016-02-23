@@ -32,6 +32,10 @@ class PersonURLMaker: AccountURLMaker {
     func profileModify() -> String{
         return website + "/profile/modify"
     }
+    
+    func profileOperation(userID: String) -> String {
+        return website + "/profile/\(userID)/operation"
+    }
 }
 
 
@@ -158,6 +162,13 @@ class PersonRequester: AccountRequester{
                     onError(code: "0000")
                     break
                 }
+        }
+    }
+    
+    func follow(userID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let urlStr = PersonURLMaker.sharedMaker.profileOperation(userID)
+        manager.request(.POST, urlStr, parameters: ["op_type": "follow"]).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "follow", onSuccess: onSuccess, onError: onError)
         }
     }
 }

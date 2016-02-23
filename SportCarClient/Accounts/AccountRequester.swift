@@ -129,7 +129,7 @@ class AccountRequester {
         }
     }
     
-    func postToRegister(phoneNum: String, passwd: String, authCode: String, onSuccess: (userID: Int?)->(Void), onError: (code: String?)->(Void)) {
+    func postToRegister(phoneNum: String, passwd: String, authCode: String, onSuccess: (userID: String?)->(Void), onError: (code: String?)->(Void)) {
         manager.request(.POST, urlMaker.register()!.absoluteString, parameters: ["username": phoneNum, "password1": passwd, "password2": passwd, "auth_code": authCode]).responseJSON { (response) -> Void in
             
             switch response.result {
@@ -137,7 +137,7 @@ class AccountRequester {
                 let json = JSON(value)
                 if json["success"].boolValue {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        let userID = json["userID"].int
+                        let userID = json["userID"].stringValue
                         onSuccess(userID: userID)
                     })
                 }else{
@@ -182,7 +182,8 @@ class AccountRequester {
             return
         }
         manager.upload(.POST, urlStr, multipartFormData: { (multipartFormData) -> Void in
-            multipartFormData.appendBodyPart(data: UIImagePNGRepresentation(avatar)!, name: "avatar")
+//            multipartFormData.appendBodyPart(data: UIImagePNGRepresentation(avatar)!, name: "avatar")
+            multipartFormData.appendBodyPart(data: UIImagePNGRepresentation(avatar)!, name: "avatar", fileName: "avatar.png", mimeType: "image/png")
             multipartFormData.appendBodyPart(data: nickName.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "nick_name")
             multipartFormData.appendBodyPart(data: genderLetter.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "gender")
             multipartFormData.appendBodyPart(data: birthDate.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "birth_date")
@@ -242,7 +243,7 @@ extension AccountRequester {
     
     func resultValueHandler(value: Alamofire.Result<AnyObject, NSError>, dataFieldName: String, onSuccess: (JSON?)->(), onError: (code: String?)->()?) {
         switch value {
-        case .Failure(let err):
+        case .Failure(_):
             dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
                 onError(code: "0000")
             })

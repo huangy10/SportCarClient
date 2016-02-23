@@ -10,7 +10,9 @@ import UIKit
 import Mapbox
 
 
-class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, FFSelectDelegate, MGLMapViewDelegate, CLLocationManagerDelegate {
+class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, FFSelectDelegate, MGLMapViewDelegate, CLLocationManagerDelegate, CustomDatePickerDelegate, ImageInputSelectorDelegate {
+    
+    weak var actHomeController: ActivityHomeController?
     
     var board: ActivityReleaseInfoBoard!
     var boardHeight: CGFloat = 0
@@ -21,12 +23,16 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     
     var attendNum: Int = 10
     var startAt: String = LS("请选择活动开始时间")
+    var startAtDate: NSDate?
     var endAt: String = LS("请选择活动截止时间")
+    var endAtDate: NSDate?
     var clubLimit: String = LS("全部")
     var clubLimitID: String? = nil
+    var poster: UIImage?
     
     var locationManager: CLLocationManager!
     var userLocation: CLLocation?
+    var locDescriptin: String?
     
     override func viewDidLoad() {
         navSettings()
@@ -59,7 +65,57 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     }
     
     func navRightBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+//        self.navigationController?.popViewControllerAnimated(true)
+        self.inputFields.each { (view) -> () in
+            view?.resignFirstResponder()
+        }
+        // 检查数据完整性
+        guard let actName = board.actNameInput.text where actName != "" else{
+            self.displayAlertController(LS("请填写活动名称"), message: nil)
+            return
+        }
+        
+        guard let actDes = board.actDesInput.text where board.actDesEditStart else {
+            self.displayAlertController(LS("请填写活动描述"), message: nil)
+            return
+        }
+        
+        guard let posterImage = self.poster else{
+            self.displayAlertController(LS("请选择活动海报"), message: nil)
+            return
+        }
+        
+        if userLocation == nil{
+            self.displayAlertController(LS("无法获取当前位置"), message: nil)
+            return
+        }
+        
+        if startAtDate == nil {
+            self.displayAlertController(LS("请选择活动开始时间"), message: nil)
+        }
+        
+        if endAtDate == nil {
+            self.displayAlertController(LS("请选择活动结束时间"), message: nil)
+        }
+        
+        var informUser: [String]? = nil
+        if board.informOfUsers.count > 0 {
+            informUser = board.informOfUsers.map({ (user) -> String in
+                return user.userID!
+            })
+        }
+        
+        // 上传数据
+        let requester = ActivityRequester.requester
+        requester.createNewActivity(actName, des: actDes, informUser: informUser, maxAttend: attendNum, startAt: startAtDate!, endAt: endAtDate!, clubLimit: clubLimitID, poster: posterImage, lat: userLocation!.coordinate.latitude, lon: userLocation!.coordinate.longitude, loc_des: locDescriptin ?? "", onSuccess: { (json) -> () in
+            print(json)
+            self.navigationController?.popViewControllerAnimated(true)
+            let mine = self.actHomeController?.mine
+            mine?.refreshControl?.beginRefreshing()
+            mine?.getLatestActData()
+            }) { (code) -> () in
+                print(code)
+        }
     }
     
     override func createSubviews() {
@@ -85,17 +141,22 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         board.actDesInput.delegate = self
         self.inputFields.append(board.actNameInput)
         self.inputFields.append(board.actDesInput)
+        board.posterBtn.addTarget(self, action: "posterSelectBtnPressed", forControlEvents: .TouchUpInside)
         //
         tableView.separatorStyle = .None
         tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.registerClass(ActivityReleaseCell.self, forCellReuseIdentifier: ActivityReleaseCell.reuseIdentifier)
-        tableView.registerClass(MapCell.self, forCellReuseIdentifier: MapCell.reuseIdentifier)
         tableView.registerClass(ActivityReleaseMapCell.self, forCellReuseIdentifier: ActivityReleaseMapCell.reuseIdentifier)
         //
-        
-    }
-    
-    func test() {
+        datePicker = CustomDatePicker()
+        datePicker.delegate = self
+        self.view.addSubview(datePicker)
+        datePicker.snp_makeConstraints { (make) -> Void in
+            make.right.equalTo(self.view)
+            make.left.equalTo(self.view)
+            make.height.equalTo(CustomDatePicker.requiredHegiht)
+            make.bottom.equalTo(self.view).offset(CustomDatePicker.requiredHegiht)
+        }
         
     }
     
@@ -138,6 +199,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 cell.infoInput.text = "\(attendNum)"
                 cell.infoInput.delegate = self
                 cell.infoInput.keyboardType = .NumberPad
+                cell.editable = true
                 var add = true
                 for view in inputFields {
                     if view == cell.infoInput {
@@ -152,24 +214,24 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 break
             case 1:
                 // 开始时间
-                cell.infoInput.text = startAt
+                cell.staticInfoLabel.text = startAt
                 cell.arrowDirection = "down"
-                cell.infoInput.keyboardType = .Default
                 break
             case 2:
                 // 结束时间
-                cell.infoInput.text = endAt
+                cell.staticInfoLabel.text = endAt
                 cell.arrowDirection = "down"
                 break
             case 3:
-                cell.infoInput.text = clubLimit
+                cell.staticInfoLabel.text = clubLimit
                 cell.arrowDirection = "down"
             default:
                 break
             }
             return cell
         }else{
-            let cell = (tableView.dequeueReusableCellWithIdentifier(ActivityReleaseMapCell.reuseIdentifier) as? ActivityReleaseMapCell) ?? ActivityReleaseMapCell(style: .Default, reuseIdentifier: MapCell.reuseIdentifier)
+//            let cell = (tableView.dequeueReusableCellWithIdentifier(ActivityReleaseMapCell.reuseIdentifier) as? ActivityReleaseMapCell) ?? ActivityReleaseMapCell(style: .Default, reuseIdentifier: MapCell.reuseIdentifier)
+            let cell = tableView.dequeueReusableCellWithIdentifier(ActivityReleaseMapCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityReleaseMapCell
             // 添加进inputField
             var add = true
             for view in inputFields {
@@ -189,6 +251,22 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             return cell
         }
     }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        switch indexPath.row {
+        case 1:
+            datePickerMode = "startAt"
+            showDatePicker()
+            break
+        case 2:
+            datePickerMode = "endAt"
+            showDatePicker()
+            break
+        default:
+            datePickerMode = ""
+            break
+        }
+    }
 }
 
 extension ActivityReleaseController {
@@ -197,6 +275,7 @@ extension ActivityReleaseController {
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField == board.actNameInput {
             // 
+            board.actNameInput.textColor = UIColor.blackColor()
             tableView.setContentOffset(CGPointMake(0, -boardHeight), animated: true)
         }else {
             // 此时必然是cell中的textField
@@ -221,11 +300,37 @@ extension ActivityReleaseController {
         }
     }
     
+    func textFieldDidEndEditing(textField: UITextField) {
+        if textField == board.actNameInput {
+            return
+        }
+        var view: UIView? = textField
+        var index: NSIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+        while true {
+            if let cell = view as? UITableViewCell {
+                index = self.tableView.indexPathForRowAtPoint(cell.center)!
+//                index = self.tableView.indexPathForCell(cell)!
+                break
+            }
+            view = view?.superview
+            if view == nil{
+                return
+            }
+        }
+        if index.section == 0 && index.row == 0 {
+            attendNum = Int(textField.text ?? "0")!
+        }else if index.section == 0 && index.row == 4 {
+            locDescriptin = textField.text
+        }
+    }
+
     // 初次开始编辑时清除placeholder
     func textViewDidBeginEditing(textView: UITextView) {
         if board.actDesEditStart {
             return
         }
+        board.actDesInput.textColor = UIColor.blackColor()
+        board.actDesEditStart = true
         textView.text = ""
     }
     
@@ -274,6 +379,7 @@ extension ActivityReleaseController {
     
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print(error)
+        locationManager.requestLocation()
     }
 }
 
@@ -288,5 +394,83 @@ extension ActivityReleaseController {
         board.informOfList.users = users
         board.informOfList.collectionView?.reloadData()
         board.informOfListCountLbl.text = "\(users.count)/9"
+    }
+}
+
+extension ActivityReleaseController {
+    
+    func posterSelectBtnPressed() {
+        let detail = ImageInputSelectorController()
+        detail.delegate = self
+        detail.bgImage = self.getScreenShotBlurred(false)
+        self.presentViewController(detail, animated: false, completion: nil)
+    }
+    
+    func imageInputSelectorDidCancel() {
+        self.dismissViewControllerAnimated(false, completion: nil)
+    }
+    
+    func imageInputSelectorDidSelectImage(image: UIImage) {
+        self.dismissViewControllerAnimated(false, completion: nil)
+        poster = image
+        let btn = board.posterBtn
+        btn.setTitle("", forState: .Normal)
+        btn.setBackgroundImage(image, forState: .Normal)
+    }
+}
+
+extension ActivityReleaseController {
+    
+    override func dismissKeyboard() {
+        super.dismissKeyboard()
+        if datePickerMode == "startAt" || datePickerMode == "endAt" {
+            hideDatePicker()
+        }
+    }
+    
+    func showDatePicker() {
+        self.tapper?.enabled = true
+        datePicker.reset()
+        datePicker.snp_updateConstraints { (make) -> Void in
+            make.bottom.equalTo(self.view).offset(0)
+        }
+        UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            self.view.layoutIfNeeded()
+            }, completion: nil)
+    }
+    
+    func hideDatePicker() {
+        datePicker.snp_updateConstraints { (make) -> Void in
+            make.bottom.equalTo(self.view).offset(CustomDatePicker.requiredHegiht)
+        }
+        UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            self.view.layoutIfNeeded()
+            }, completion: nil)
+    }
+    
+    func dateDidPicked(date: NSDate) {
+        
+        if datePickerMode == "startAt" {
+            if endAtDate != nil && endAtDate!.compare(date) == NSComparisonResult.OrderedAscending {
+                self.displayAlertController(LS("结束时间不能早于开始时间"), message: nil)
+                return
+            }
+            startAt = STRDate(date)
+            startAtDate = date
+            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: .Automatic)
+        }else if datePickerMode == "endAt" {
+            if startAtDate != nil && startAtDate!.compare(date) == NSComparisonResult.OrderedDescending {
+                self.displayAlertController(LS("开始时间不能晚于结束时间"), message: nil)
+                return
+            }
+            endAt = STRDate(date)
+            endAtDate = date
+            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 2, inSection: 0)], withRowAnimation: .Automatic)
+        }
+        hideDatePicker()
+    }
+    
+    func datePickCancel() {
+        hideDatePicker()
     }
 }

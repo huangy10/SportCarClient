@@ -27,11 +27,24 @@ class AppManager: UIViewController {
             // 当获取到了非nil的hostUser时，直接进入Home界面
             let ctl = HomeController()
             ctl.hostUser = hostUser
-            self.navigationController?.pushViewController(ctl, animated: true)
+            self.navigationController?.pushViewController(ctl, animated: false)
             return
         }
         let ctl = AccountController()
-        self.navigationController?.pushViewController(ctl, animated: true)
+        let wrapper = BlackBarNavigationController(rootViewController: ctl)
+        self.presentViewController(wrapper, animated: false, completion: nil)
+//        self.navigationController?.pushViewController(ctl, animated: true)
+    }
+    
+    func guideToContent() {
+        if let hostUser = User.objects.hostUser {
+            let ctl = HomeController()
+            ctl.hostUser = hostUser
+            self.navigationController?.pushViewController(ctl, animated: false)
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }else {
+            assertionFailure()
+        }
     }
     
     /**

@@ -14,6 +14,7 @@ import Kingfisher
 
 class PersonHeaderOther: PersonHeaderMine {
     var followBtn: UIButton!
+    var followBtnTmpImage: UIImageView!
     var chatBtn: UIButton!
     var locBtn: UIButton!
     
@@ -29,6 +30,13 @@ class PersonHeaderOther: PersonHeaderMine {
             make.top.equalTo(avatarBtn.snp_bottom).offset(24)
             make.size.equalTo(CGSizeMake(130, 45))
         }
+        followBtnTmpImage = UIImageView()
+        followBtnTmpImage.backgroundColor = UIColor.whiteColor()
+        followBtn.addSubview(followBtnTmpImage)
+        followBtnTmpImage.snp_makeConstraints { (make) -> Void in
+            make.edges.equalTo(followBtn)
+        }
+        followBtnTmpImage.hidden = true
         //
         chatBtn = UIButton()
         chatBtn.setImage(UIImage(named: "person_send_message"), forState: .Normal)
@@ -56,6 +64,20 @@ class PersonHeaderOther: PersonHeaderMine {
         backMask.centerHegiht = 225
         avatarBtn.snp_updateConstraints { (make) -> Void in
             make.bottom.equalTo(self).offset(-156)
+        }
+        // 
+        navLeftBtn.hidden = true
+        navRightBtn.hidden = true
+    }
+    
+    override func loadDataAndUpdateUI() {
+        super.loadDataAndUpdateUI()
+        if user.followed {
+            followBtnTmpImage.image = UIImage(named: "person_followed")
+            followBtn.setImage(UIImage(named: "person_followed"), forState: .Normal)
+        }else{
+            followBtnTmpImage.image = UIImage(named: "person_add_follow")
+            followBtn.setImage(UIImage(named: "person_add_follow"), forState: .Normal)
         }
     }
 }

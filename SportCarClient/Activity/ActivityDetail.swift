@@ -11,9 +11,12 @@ import SwiftyJSON
 import Mapbox
 
 class ActivityDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource{
+    weak var parentTableView: UITableView?
+    
     var act: Activity!
     var comments: [ActivityComment] = []
     var isMineAct: Bool{
+        print(act.user)
         return act.user?.userID == User.objects.hostUser?.userID
     }
     
@@ -85,6 +88,8 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         //
         actInfoBoard = ActivityDetailBoardView()
         actInfoBoard.frame = self.view.bounds
+        actInfoBoard.hostAvatar.addTarget(self, action: "hostAvatarPressed", forControlEvents: .TouchUpInside)
+        //
         tableView.addSubview(actInfoBoard)
         tableView.separatorStyle = .None
         //
@@ -136,6 +141,8 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
             requester.closeActivty(act.activityID!, onSuccess: { (json) -> () in
                 // 成功以后修改活动的状态
                 self.act.endAt = NSDate()
+                Activity.objects.save()
+                self.parentTableView?.reloadData()
                 // 更新UI
                 self.actInfoBoard.loadDataAndUpdateUI()
                 }, onError: { (code) -> () in
@@ -299,6 +306,13 @@ extension ActivityDetailController {
             make.bottom.equalTo(self.view).offset(0)
         })
         self.view.layoutIfNeeded()
+    }
+}
+
+extension ActivityDetailController {
+    func hostAvatarPressed() {
+        let detail = PersonOtherController(user: act.user!)
+        self.navigationController?.pushViewController(detail, animated: true)
     }
 }
 

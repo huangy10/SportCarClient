@@ -10,6 +10,7 @@ import UIKit
 import SwiftyJSON
 
 class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate {
+    var homeDelegate: HomeDelegate?
     // 显示的用户的信息
     var data: PersonDataSource!
     
@@ -74,6 +75,9 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        // 
+        
+        header.loadDataAndUpdateUI()
     }
     
     /**
@@ -107,6 +111,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         // TODO: 这里手动添加了status bar的高度值
         header.frame = CGRectMake(0, -totalHeaderHeight, screenWidth, totalHeaderHeight - authCarListHeight)
         header.detailBtn.addTarget(self, action: "detailBtnPressed", forControlEvents: .TouchUpInside)
+        header.user = data.user
         //
         carsViewList = SportsCarViewListController()
         carsViewList.delegate = self
@@ -151,7 +156,8 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+//        self.navigationController?.popViewControllerAnimated(true)
+        homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false))
     }
     
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {

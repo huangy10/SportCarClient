@@ -12,6 +12,8 @@ import SnapKit
 
 class MessageController: UIViewController {
     
+    var homeDelegate: HomeDelegate?
+    
     var board: UIScrollView!
     
     var titleNotifBtn: UIButton!
@@ -133,7 +135,8 @@ class MessageController: UIViewController {
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+//        self.navigationController?.popViewControllerAnimated(true)
+        homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false))
     }
     
     func titleBtnPressed(sender: UIButton) {

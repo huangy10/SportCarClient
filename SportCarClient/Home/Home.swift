@@ -20,7 +20,7 @@ protocol HomeDelegate {
      
      - parameter onComplete: 完成后将会执行这一个closure
      */
-    func backToHome(onComplete: (()->())?)
+    func backToHome(onComplete: (()->())?, screenShot: UIImage)
     
     /**
      切换各个功能模块
@@ -38,13 +38,14 @@ class HomeController: UIViewController, HomeDelegate {
     
     /// 边栏按钮集群的问题
     var sideBarCtl: SideBarController
-    let board: UIView
+    let board: UIButton!
     //
     var person: PersonBasicController?
     var news: NewsController?
     var status: StatusHomeController?
     var message: MessageController?
     var act: ActivityHomeController?
+    //
     
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -52,7 +53,7 @@ class HomeController: UIViewController, HomeDelegate {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         sideBarCtl = SideBarController()
-        board = UIView()
+        board = UIButton()
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
 
@@ -64,15 +65,19 @@ class HomeController: UIViewController, HomeDelegate {
         super.viewDidLoad()
         self.createSubviews()
         
+        status = StatusHomeController()
+        status?.homeDelegate = self
+        self.navigationController?.pushViewController(status!, animated: false)
+        
         let requester = AccountRequester.sharedRequester
         requester.getProfileDataFor(self.hostUser!.userID!, onSuccess: { (data) -> () in
             // 获取到了数据之后更新
             guard data != nil else{
-                print("Duang!")
                 return
             }
             // 将获取到的数据设置给hostUser
             self.hostUser?.loadValueFromJSON(data!, forceUpdateNil: true)
+            User.objects.saveAll()
             // 令侧边栏更新数据
             self.reloadData()
             }) { (code) -> ()? in
@@ -83,6 +88,8 @@ class HomeController: UIViewController, HomeDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        // 更新页面数据
+        self.sideBarCtl.reloadUserData()
     }
     
     func createSubviews() {
@@ -94,20 +101,16 @@ class HomeController: UIViewController, HomeDelegate {
         sideBarCtl.delegate = self
         // 
         board.backgroundColor = UIColor.whiteColor()
+        board.addTarget(self, action: "boardPressed", forControlEvents: .TouchUpInside)
         superview.addSubview(board)
+        board.tag = 2
         self.board.layer.anchorPoint = CGPoint(x: 0, y: 0.5)
         board.frame = superview.bounds
         self.showSideBar(false)
-        
-        let testBtn = UIButton()
-        board.addSubview(testBtn)
-        testBtn.frame = board.bounds
-        testBtn.addTarget(self, action: "testBtn", forControlEvents: .TouchUpInside)
-        //
     }
     
-    func testBtn() {
-        self.backToHome(nil)
+    func boardPressed() {
+        self.switchController(0, to: board.tag)
     }
 }
 
@@ -130,31 +133,25 @@ extension HomeController {
      */
     func showSideBar(animated:Bool) {
         let screenWidth = self.view.frame.width
+        var move = CATransform3DTranslate(CATransform3DIdentity, 0.876 * screenWidth, 0, 0)
+        move.m34 = 1.0 / -500
+        var scale = CATransform3DScale(move, 0.8, 0.8, 1)
+        scale.m34 = 1.0 / -500
+        var trans = CATransform3DRotate(scale, -3.14/9.0, 0, 1, 0)
+        trans.m34 = 1.0 / -500.0
         if !animated {
-            var move = CATransform3DTranslate(CATransform3DIdentity, 0.876 * screenWidth, 0, 0)
-            move.m34 = 1.0 / -500
-            var scale = CATransform3DScale(move, 0.8, 0.8, 1)
-            scale.m34 = 1.0 / -500
-            var trans = CATransform3DRotate(scale, -3.14/9.0, 0, 1, 0)
-            trans.m34 = 1.0 / -500.0
             self.board.layer.transform = trans
             return
         }
         SpringAnimation.spring(0.5) { () -> Void in
             // 绕Y轴旋转-20度
-            var move = CATransform3DTranslate(CATransform3DIdentity, 0.876 * screenWidth, 0, 0)
-            move.m34 = 1.0 / -500
-            var scale = CATransform3DScale(move, 0.8, 0.8, 1)
-            scale.m34 = 1.0 / -500
-            var trans = CATransform3DRotate(scale, -3.14/9.0, 0, 1, 0)
-            trans.m34 = 1.0 / -500.0
             self.board.layer.transform = trans
         }
     }
     
     /**
     */
-    func hideSideBar() {
+    func hideSideBar(animated: Bool = false) {
         SpringAnimation.springWithCompletion(0.5, animations: { () -> Void in
             let screenWidth = self.view.frame.width
             var move = CATransform3DTranslate(CATransform3DIdentity, 0 * screenWidth, 0, 0)
@@ -173,21 +170,29 @@ extension HomeController {
 // MARK: - Sidebar的代理
 extension HomeController {
     
-    func backToHome(onComplete: (()->())?) {
+    func backToHome(onComplete: (()->())?, screenShot: UIImage) {
+        board.layer.transform = CATransform3DIdentity
+        board.setImage(screenShot, forState: .Normal)
+        self.navigationController?.popViewControllerAnimated(false)
         showSideBar(true)
     }
     
     func switchController(from: Int, to: Int) {
+        board.tag = to
         switch to {
         case 0:
             if person == nil {
                 person = PersonBasicController(user: User.objects.hostUser!)
+                person?.homeDelegate = self
             }
 //            self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.navigationController?.pushViewController(person!, animated: true)
 //            self.board.addSubview(person!.view!)
         case 1:
-            news = NewsController(style: .Plain)
+            if news == nil {
+                news = NewsController(style: .Plain)
+                news?.homeDelegate = self
+            }
             self.navigationController?.pushViewController(news!, animated: true)
             break
         case 2:
@@ -197,15 +202,17 @@ extension HomeController {
 //            self.navigationController?.pushViewController(status!, animated: true)
             if status == nil {
                 status = StatusHomeController()
+                status?.homeDelegate = self
             }
             self.navigationController?.pushViewController(status!, animated: true)
             break
         case 4:
-//            if act == nil {
-//                act = ActivityHomeController()
-//            }
-            let text = ActivityHomeController()
-            self.navigationController?.pushViewController(text, animated: true)
+            if act == nil {
+                act = ActivityHomeController()
+                act?.homeDelegate = self
+            }
+            
+            self.navigationController?.pushViewController(act!, animated: true)
             break
         case 5:
             ChatRecordDataSource.sharedDataSource.start()
@@ -213,6 +220,7 @@ extension HomeController {
             if message == nil {
 //            let messages = PrivateChatSettingController(targetUser: User.objects.hostUser!)
                 message = MessageController()
+                message?.homeDelegate = self
             }
             self.navigationController?.pushViewController(message!, animated: true)
             break

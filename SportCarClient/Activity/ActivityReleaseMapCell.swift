@@ -46,7 +46,6 @@ class ActivityReleaseMapCell: UITableViewCell, MGLMapViewDelegate {
         locInputContainer.layer.shadowColor = UIColor.blackColor().CGColor
         locInputContainer.layer.shadowOpacity = 0.5
         locInputContainer.layer.shadowOffset = CGSizeMake(1, 1.5)
-        locInputContainer.backgroundColor = UIColor.blueColor()
         superview.addSubview(locInputContainer)
         locInputContainer.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
@@ -73,7 +72,6 @@ class ActivityReleaseMapCell: UITableViewCell, MGLMapViewDelegate {
         }
         //
         locInput = UITextField()
-        locInput.backgroundColor = UIColor.redColor()
         locInput.textColor = UIColor.blackColor()
         locInput.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         wrapper.addSubview(locInput)

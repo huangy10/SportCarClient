@@ -149,7 +149,7 @@ class InlineUserSelectCell: UICollectionViewCell {
                 return
             }
             avatarImg.kf_setImageWithURL(SFURL(user!.avatarUrl!)!)
-            if let avatarCarURLStr = user?.avatarCar?.logo {
+            if let avatarCarURLStr = user?.profile?.avatarCarLogo {
                 avatarCarLogo.hidden = false
                 avatarCarLogo.kf_setImageWithURL(SFURL(avatarCarURLStr)!)
             }else{

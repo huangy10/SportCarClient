@@ -25,24 +25,33 @@ class ResetPasswordController: LoginRegisterController {
             make.edges.equalTo(superview)
         }
         //
-        titleLbl = UILabel()
-        titleLbl?.clipsToBounds = true
-        titleLbl?.text = "跑车范"
-        titleLbl?.font = UIFont.systemFontOfSize(30, weight: UIFontWeightBold)
-        titleLbl?.textColor = UIColor.whiteColor()
-        titleLbl?.textAlignment = NSTextAlignment.Center
-        superview.addSubview(titleLbl!)
-        titleLbl!.snp_makeConstraints { (make) -> Void in
-            make.width.equalTo(superview)
-            make.height.equalTo(125)
+//        titleLbl = UILabel()
+//        titleLbl?.clipsToBounds = true
+//        titleLbl?.text = "跑车范"
+//        titleLbl?.font = UIFont.systemFontOfSize(30, weight: UIFontWeightBold)
+//        titleLbl?.textColor = UIColor.whiteColor()
+//        titleLbl?.textAlignment = NSTextAlignment.Center
+//        superview.addSubview(titleLbl!)
+//        titleLbl!.snp_makeConstraints { (make) -> Void in
+//            make.width.equalTo(superview)
+//            make.height.equalTo(125)
+//            make.centerX.equalTo(superview)
+//            make.top.equalTo(superview)
+//        }
+        titleLogo = UIImageView(image: UIImage(named: "account_title_logo"))
+        superview.addSubview(titleLogo)
+        titleLogo.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
-            make.top.equalTo(superview)
+            make.top.equalTo(superview).offset(40)
+            make.height.equalTo(46)
+            make.width.equalTo(162)
         }
+
         // 复用了注册页面的结构
         let panel = self.registerView()
         superview.addSubview(panel)
         panel.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(titleLbl!.snp_bottom)
+            make.top.equalTo(titleLogo!.snp_bottom).offset(43)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.bottom.equalTo(superview)

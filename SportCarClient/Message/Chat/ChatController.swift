@@ -138,6 +138,8 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         let navRightBtnIconURLStr = navRightBtnImageURLStr
         navRightBtn.kf_setImageWithURL(SFURL(navRightBtnIconURLStr!)!, forState: .Normal)
         navRightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+        navRightBtn.layer.cornerRadius = 17.5
+        navRightBtn.clipsToBounds = true
         navRightBtn.frame = CGRectMake(0, 0, 35, 35)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navRightBtn)
     }
@@ -211,7 +213,7 @@ extension ChatRoomController {
             targetID = targetUser!.userID!
             break
         }
-        targetID = "28"
+//        targetID = "28"
         let newChat = ChatRecord.objects.postNewChatRecord(chatType, messageType: messageType, targetID: targetID, textContent: text, image: image, audio: audio, relatedID: nil)
         let dataSource = ChatRecordDataSource.sharedDataSource
         let identifier = getIdentifierForRoomController(self)

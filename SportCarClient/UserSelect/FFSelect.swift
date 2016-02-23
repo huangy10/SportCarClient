@@ -184,7 +184,6 @@ class FFSelectController: UserSelectController {
         delegate?.userSelectCancelled()
     }
     
-    
     /**
      根据当前选定的模式从服务器获取更多的数据
      */

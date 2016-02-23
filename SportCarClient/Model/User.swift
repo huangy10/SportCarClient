@@ -20,17 +20,19 @@ class User: NSManagedObject {
     var ownedCars: [SportCarOwnerShip] = []
     
     // 下面是缓存的查询数据
-    var avatarCar: SportCar?
+//    var avatarCar: SportCar?
     
-    var hasAvatarCar: Bool {
-        if avatarCar != nil {
-            return true
-        }
-        return false
-    }
+//    var hasAvatarCar: Bool {
+//        if avatarCar != nil {
+//            return true
+//        }
+//        return false
+//    }
     
     /// 最近发布的一条Status描述
     var recentStatusDes: String?
+    
+    var followed: Bool = false
 }
 
 extension User{
@@ -118,6 +120,9 @@ extension User{
             signature = json["signature"].string
             age = json["age"].int32 ?? 0
             profile?.loadValueFromJSON(json, forceUpdateNil: true)
+            if let f = json["followed"].bool {
+                self.followed = f
+            }
             return true
         }
         // 在内部定义了一个setter以减少后面的代码重复
@@ -137,6 +142,9 @@ extension User{
         setter(&signature, "signature")
         if let age = json["age"].int32 {
             self.age = age
+        }
+        if let f = json["followed"].bool {
+            self.followed = f
         }
         profile?.loadValueFromJSON(json)
         return true
@@ -164,7 +172,7 @@ extension User{
         job = json["job"].string
         signature = json["signature"].string
         let avatarCarJSON = json["avatar_car"]
-        avatarCar = SportCarOwnerShip.objects.createOrLoadHostUserOwnedCar(avatarCarJSON)!.car
+        let avatarCar = SportCarOwnerShip.objects.createOrLoadHostUserOwnedCar(avatarCarJSON)!.car
         let profile = self.profile
         profile?.avatarCarID = avatarCar?.carID
         profile?.avatarCarImage = avatarCar?.image
@@ -179,11 +187,15 @@ extension User{
         profile?.avatarClubID = avatarClub?.clubID
         profile?.avatarClubLogo = avatarClub?.logo_url
         profile?.avatarClubName = avatarClub?.name
+        //
+        if let f = json["followed"].bool {
+            self.followed = f
+        }
     }
     
     func setAvatarCarTpoProfile(car: SportCar) {
         let profile = self.profile
-        self.avatarCar = SportCar.objects.context.objectWithID(car.objectID) as? SportCar
+//        let avatarCar = SportCar.objects.context.objectWithID(car.objectID) as? SportCar
         profile?.avatarCarImage = car.image
         profile?.avatarCarID = car.carID
         profile?.avatarCarLogo = car.logo

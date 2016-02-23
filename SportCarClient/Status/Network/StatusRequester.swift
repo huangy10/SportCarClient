@@ -90,7 +90,8 @@ class StatusRequester: AccountRequester {
             data.appendBodyPart(data: content.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "content")
             var i = 1
             for image in images {
-                data.appendBodyPart(data: UIImagePNGRepresentation(image)!, name: "image\(i)")
+                data.appendBodyPart(data: UIImagePNGRepresentation(image)!, name: "image\(i)", fileName: "image\(i)/png", mimeType: "image/png")
+//                data.appendBodyPart(data: UIImagePNGRepresentation(image)!, name: "image\(i)")
                 i += 1
             }
             if car_id != nil {

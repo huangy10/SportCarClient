@@ -15,6 +15,7 @@ class ActivityHomeMineListController: UITableViewController {
     
     var data: [Activity] = []
     var loading: Bool = false
+//    var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,9 +25,41 @@ class ActivityHomeMineListController: UITableViewController {
         tableView.rowHeight = 250
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 10, 0)
         tableView.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
+        //
+        refreshControl = UIRefreshControl()
+        refreshControl!.addTarget(self, action: "getLatestActData", forControlEvents: .ValueChanged)
+        tableView.addSubview(refreshControl!)
         getMoreActData()
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
 
+    }
+    
+    func getLatestActData() {
+        if loading {
+            return
+        }
+        loading = true
+        let requester = ActivityRequester.requester
+        let dateThreshold = data.first()?.createdAt ?? NSDate()
+        requester.getMineActivityList(dateThreshold, op_type: "latest", limit: 10, onSuccess: { (json) -> () in
+            var i = 0
+            for data in json!.arrayValue {
+                let act = Activity.objects.getOrCreate(data)
+                self.data.insert(act, atIndex: i)
+                i += 1
+            }
+            self.loading = false
+            self.tableView.reloadData()
+            self.refreshControl?.endRefreshing()
+            }) { (code) -> () in
+                print(code)
+                self.loading = false
+                self.refreshControl?.endRefreshing()
+        }
+    }
     
     func getMoreActData() {
         if loading {
@@ -60,6 +93,7 @@ class ActivityHomeMineListController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(ActivityHomeCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityHomeCell
         let act = data[indexPath.row]
+        print(act.user?.userID)
         cell.act = act
         cell.selectionStyle = .None
         cell.loadDataAndUpdateUI()
@@ -73,11 +107,13 @@ class ActivityHomeMineListController: UITableViewController {
             let inset = 10 - insetRatio * insetRatio * 8
             cell.setContentInset(inset)
         }
+        print(act.user?.userID)
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let detail = ActivityDetailController(act: data[indexPath.row])
+        detail.parentTableView = self.tableView
         home.navigationController?.pushViewController(detail, animated: true)
     }
     
