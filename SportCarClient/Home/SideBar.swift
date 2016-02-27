@@ -159,7 +159,6 @@ extension SideBarController {
             // 如果没有当前登录用户，直接退出
             return
         }
-        print("\(SF(user.avatarUrl!))")
         avatarBtn?.loadImageFromURLSTR(SF(user.avatarUrl ?? ""), placeholderImage: avatarBtn?.imageView?.image)
         nameLbl?.text = user.nickName ?? LS("离线用户")
     }

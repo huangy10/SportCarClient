@@ -33,6 +33,9 @@ let kMapStyleURL = NSURL(string: "mapbox://styles/woodyhuang1992/ciigr1ml4009q9x
 let kMaxPhotoSelect: Int = 9    // 最大可以选择的照片的数量
 
 
+//
+let kEarchPerimeter: Double = 40075   // 地球周长（KM）
+
 // Macro
 func LS(str: String, comment: String="") -> String{
     return NSLocalizedString(str, comment: "")

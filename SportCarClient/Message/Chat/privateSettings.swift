@@ -12,7 +12,7 @@ import SwiftyJSON
 
 let kPrivateChatSettingSectionTitles = ["", LS("信息"), LS("隐私"), LS("聊天")]
 
-class PrivateChatSettingController: UITableViewController, FFSelectDelegate {
+class PrivateChatSettingController: UITableViewController, FFSelectDelegate, PersonMineSinglePropertyModifierDelegate, GroupChatSetupDelegate {
     /*
      列表长度有限，则直接采用UIScrollView
     */
@@ -20,6 +20,10 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate {
     var targetUser: User!
     var seeHisStatus: Bool = true
     var allowSeeStatus: Bool = true
+    // 是否发生了修改
+    var dirty = false
+    // 调出用户选择界面的目的: group_chat/recommend
+    var userSelectPurpose = ""
     
     var board: UIScrollView!
     var startGroupChatBtn: UIButton?
@@ -40,6 +44,8 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navSettings()
+        
         tableView.separatorStyle = .None
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "start_group_chat_cell")
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "start_chat_cell")
@@ -74,6 +80,10 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate {
     }
     
     func navRightBtnPressed() {
+
+    }
+    
+    func navLeftBtnPressed() {
         self.navigationController?.popViewControllerAnimated(true)
         let requester = ChatRequester.requester
         requester.postUpdateUserRelationSettings(targetUser.userID!, remark_name: targetUser.remarkName!, allowSeeStatus: allowSeeStatus, seeHisStatus: seeHisStatus, onSuccess: { (_) -> () in
@@ -81,10 +91,6 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate {
             }) { (code) -> () in
                 
         }
-    }
-    
-    func navLeftBtnPressed() {
-        
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -135,19 +141,22 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
+            cell.selectionStyle = .None
             cell.avatarBtn.kf_setImageWithURL(SFURL(targetUser.avatarUrl!)!, forState: .Normal)
             return cell
         case 1:
             if indexPath.row < 2 {
                 let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
+                cell.selectionStyle = .None
                 cell.staticLbl.text = [LS("备注"), LS("把他推荐给朋友")][indexPath.row]
                 cell.boolSelect.hidden = true
                 if indexPath.row == 0 {
-                    cell.infoLbl.text = targetUser.remarkName
+                    cell.infoLbl.text = targetUser.remarkName ?? targetUser.nickName
                 }
                 return cell
             }else {
                 let cell = tableView.dequeueReusableCellWithIdentifier("start_group_chat_cell", forIndexPath: indexPath)
+                cell.selectionStyle = .None
                 if startGroupChatBtn == nil {
                     startGroupChatBtn = UIButton()
                     startGroupChatBtn?.setImage(UIImage(named: "chat_settings_add_person"), forState: .Normal)
@@ -171,6 +180,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate {
             }
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
+            cell.selectionStyle = .None
             cell.staticLbl.text = [LS("不让他看我的动态"), LS("不看他的动态")][indexPath.row]
             cell.detailTextLabel?.text = ""
             cell.boolSelect.hidden = false
@@ -186,12 +196,14 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate {
         default:
             if indexPath.row < 3 {
                 let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
+                cell.selectionStyle = .None
                 cell.staticLbl.text = [LS("查找聊天内容"), LS("情况聊天内容"), LS("举报")][indexPath.row]
                 cell.detailTextLabel?.text = ""
                 cell.boolSelect.hidden = true
                 return cell
             }else {
                 let cell = tableView.dequeueReusableCellWithIdentifier("start_chat_cell", forIndexPath: indexPath)
+                cell.selectionStyle = .None
                 if startChat == nil {
                     startChat = UIButton()
                     startChat?.setImage(UIImage(named: "chat_setting_start_chat"), forState: .Normal)
@@ -231,14 +243,20 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate {
     }
     
     func startGroupChatPressed() {
-        
+        userSelectPurpose = "group_chat"
+        let selector = FFSelectController()
+        let nav = BlackBarNavigationController(rootViewController: selector)
+        selector.delegate = self
+        self.presentViewController(nav, animated: true, completion: nil)
     }
     
     func seeHisStatusSwitchPressed(sender: UISwitch) {
+        dirty = true
         seeHisStatus = !sender.on
     }
     
     func allowSeeStatusSwitchPressed(sender: UISwitch) {
+        dirty = true
         allowSeeStatus = !sender.on
     }
 }
@@ -248,7 +266,44 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate {
 extension PrivateChatSettingController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        switch indexPath.section {
+        case 0:
+            // 点击头像进入个人详情
+            let detail = PersonOtherController(user: self.targetUser)
+            self.navigationController?.pushViewController(detail, animated: true)
+            break
+        case 1:
+            // 点击修改备注
+            let detail = PersonMineSinglePropertyModifierController()
+            detail.focusedIndexPath = indexPath
+            detail.delegate = self
+            detail.propertyName = LS("修改备注")
+            detail.initValue = targetUser.remarkName ?? targetUser.nickName
+            self.navigationController?.pushViewController(detail, animated: true)
+            break
+        default:
+            break
+        }
+    }
+    
+    func didModify(newValue: String?, indexPath: NSIndexPath) {
+        dirty = true
         
+        switch indexPath.section {
+        case 1:
+            if indexPath.row == 0 {
+                targetUser.remarkName = newValue
+            }
+            break
+        default:
+            break
+        }
+        
+        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+    }
+    
+    func modificationCancelled() {
+        // Do nothing for now
     }
     
     /**
@@ -265,9 +320,27 @@ extension PrivateChatSettingController {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func userSelected(users: [User]) {
+    func userSelected(var users: [User]) {
         self.dismissViewControllerAnimated(true, completion: nil)
-        // 向每一个用户发送一条推荐消息
+        if userSelectPurpose == "group_chat" {
+            if users.findIndex({ $0.userID == self.targetUser.userID}) == nil {
+                users.insert(self.targetUser, atIndex: 0)
+            }
+            if users.count <= 1 {
+                assertionFailure()
+            }
+            let detail = GroupChatSetupController()
+            detail.users = users
+            detail.delegate = self
+            self.navigationController?.pushViewController(detail, animated: true)
+        }
+    }
+    
+    func groupChatSetupControllerDidSuccessCreatingClub(newClub: Club) {
+        self.navigationController?.popViewControllerAnimated(true)
+        let chatRoom = ChatRoomController()
+        chatRoom.targetClub = newClub
+        self.navigationController?.pushViewController(chatRoom, animated: true)
     }
     
     /**
@@ -276,14 +349,7 @@ extension PrivateChatSettingController {
     func clearChatContent() {
         
     }
-    
-    /**
-     修改备注名称
-     */
-    func changeRemarkName() {
-        
-    }
-    
+
     /**
      搜索聊天内容
      */

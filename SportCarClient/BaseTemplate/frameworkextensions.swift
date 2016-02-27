@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 extension String {
@@ -29,4 +30,10 @@ extension NSDate {
         
         return (comps1.day == comps2.day) && (comps1.month == comps2.month) && (comps1.year == comps2.year)
     }
+}
+
+func CGPointDistance(p1: CGPoint, p2: CGPoint) -> CGFloat {
+    let dx = p1.x - p2.x
+    let dy = p1.y - p2.y
+    return sqrt(dx * dx + dy * dy)
 }

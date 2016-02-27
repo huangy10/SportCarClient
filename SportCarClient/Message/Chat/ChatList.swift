@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class ChatListController: UITableViewController, FFSelectDelegate {
+class ChatListController: UITableViewController, FFSelectDelegate, GroupChatSetupDelegate {
     // 指向通用数据库
     let dataSource = ChatRecordDataSource.sharedDataSource
     var messageController: MessageController!
@@ -20,6 +20,11 @@ class ChatListController: UITableViewController, FFSelectDelegate {
         tableView.registerClass(ChatListCell.self, forCellReuseIdentifier: ChatListCell.reuseIdentifier)
         tableView.rowHeight = 75
         tableView.separatorStyle = .None
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        needUpdate()
     }
     
     /**
@@ -76,7 +81,7 @@ class ChatListController: UITableViewController, FFSelectDelegate {
 
 extension ChatListController {
     func userSelected(users: [User]) {
-        messageController.dismissViewControllerAnimated(true, completion: nil)
+        messageController.dismissViewControllerAnimated(false, completion: nil)
         
         if users.count == 0 {
         }else if users.count == 1 {
@@ -85,10 +90,24 @@ extension ChatListController {
             room.chatList = self
             room.targetUser = users.first
             messageController.navigationController?.pushViewController(room, animated: true)
+            
+        }else{
+            let detail = GroupChatSetupController()
+            detail.users = users
+            detail.delegate = self
+            messageController.navigationController?.pushViewController(detail, animated: true)
         }
     }
     
     func userSelectCancelled() {
         messageController.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func groupChatSetupControllerDidSuccessCreatingClub(newClub: Club) {
+        self.navigationController?.popViewControllerAnimated(true)
+        let chatRoom = ChatRoomController()
+        chatRoom.chatList = self
+        chatRoom.targetClub = newClub
+        messageController.navigationController?.pushViewController(chatRoom, animated: true)
     }
 }

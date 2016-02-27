@@ -24,8 +24,16 @@ class ChatURLMaker {
         return chatWebsite + "/chat/update"
     }
     
+    func chatList() -> String {
+        return website + "/chat/list"
+    }
+    
     func chatSettings(targetUserID: String) -> String {
         return website + "/profile/\(targetUserID)/settings"
+    }
+    
+    func groupChatCreate() -> String {
+        return website + "/club/create"
     }
 }
 
@@ -57,7 +65,7 @@ class ChatRequester: AccountRequester {
                     dispatch_async(self.privateQueue, { () -> Void in
                         onError(code: data["code"].string)
                     })
-                    delayTime = dispatch_time(DISPATCH_TIME_NOW, 3)
+                    delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC) * 3)
                 }
                 break
             case .Failure(let err):
@@ -65,7 +73,7 @@ class ChatRequester: AccountRequester {
                 dispatch_async(self.privateQueue, { () -> Void in
                     onError(code: "0000")
                 })
-                delayTime = dispatch_time(DISPATCH_TIME_NOW, 3)
+                delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC) * 3)
                 break
             }
             // 继续请求
@@ -168,6 +176,67 @@ class ChatRequester: AccountRequester {
         manager.request(.POST, strURL, parameters: ["remark_name": remark_name, "allow_see_status": allowSeeStatus, "see_his_status": seeHisStatus]).responseJSON { (response) -> Void in
             // No data binded
             self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
+        }
+    }
+    
+    /**
+     创建俱乐部
+     
+     - parameter clubName:    俱乐部名称
+     - parameter clubLogo:    俱乐部的标识
+     - parameter members:     俱乐部成员（id列表）
+     - parameter description: 俱乐部描述
+     - parameter onSuccess:   成功以后的调用的closure
+     - parameter onError:     失败以后调用的closure
+     */
+    func createNewClub(clubName: String, clubLogo: UIImage, members: [String], description: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let url = ChatURLMaker.sharedMaker.groupChatCreate()
+        manager.upload(.POST, url, multipartFormData: { (form) -> Void in
+            form.appendBodyPart(data: clubName.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "name")
+            form.appendBodyPart(data: UIImagePNGRepresentation(clubLogo)!, name: "logo", fileName: "logo.png", mimeType: "image/png")
+            form.appendBodyPart(data: try! JSON(members).rawData(), name: "members")
+            form.appendBodyPart(data: description.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "description")
+            }) { (result) -> Void in
+                switch result {
+                case .Success(let request, _, _):
+                    request.responseJSON(completionHandler: { (response) -> Void in
+                        self.resultValueHandler(response.result, dataFieldName: "club", onSuccess: onSuccess, onError: onError)
+                    })
+                    break
+                case .Failure(let error):
+                    print(error)
+                    onError(code: "0000")
+                    break
+                }
+        }
+    }
+    
+    /**
+     获取聊天列表的数据
+    */
+    func getChatList(onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let url = ChatURLMaker.sharedMaker.chatList()
+        manager.request(.GET, url).responseJSON { (response) -> Void in
+            switch response.result {
+            case .Success(let value):
+                let data = JSON(value)
+                if data["success"].boolValue {
+                    dispatch_async(self.privateQueue, { () -> Void in
+                        onSuccess(data["data"])
+                    })
+                }else{
+                    dispatch_async(self.privateQueue, { () -> Void in
+                        onError(code: data["code"].string)
+                    })
+                }
+                break
+            case .Failure(let err) :
+                print(err)
+                dispatch_async(self.privateQueue, { () -> Void in
+                    onError(code: "0000")
+                })
+                break
+            }
         }
     }
 }

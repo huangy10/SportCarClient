@@ -45,6 +45,7 @@ class HomeController: UIViewController, HomeDelegate {
     var status: StatusHomeController?
     var message: MessageController?
     var act: ActivityHomeController?
+    var radar: RadarHomeController?
     //
     
     convenience init() {
@@ -205,6 +206,13 @@ extension HomeController {
                 status?.homeDelegate = self
             }
             self.navigationController?.pushViewController(status!, animated: true)
+            break
+        case 3:
+            if radar == nil {
+                radar = RadarHomeController()
+                radar?.homeDelegate = self
+            }
+            self.navigationController?.pushViewController(radar!, animated: true)
             break
         case 4:
             if act == nil {

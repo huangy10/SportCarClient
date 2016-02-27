@@ -38,7 +38,7 @@ class PersonOtherController: PersonBasicController {
         shareBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareBtn)
         //
-
+        
     }
     
     override func navRightBtnPressed() {
@@ -91,6 +91,11 @@ class PersonOtherController: PersonBasicController {
     }
     
     func chatBtnPressed() {
+        if let room = self.navigationController?.viewControllers.fetch(-3) as? ChatRoomController where room.targetUser == self.data.user{
+            self.navigationController?.popViewControllerAnimated(true)
+            return
+        }
+
         ChatRecordDataSource.sharedDataSource.start()
         let room = ChatRoomController()
         ChatRecordDataSource.sharedDataSource.curRoom = room

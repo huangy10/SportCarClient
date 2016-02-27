@@ -50,6 +50,7 @@ class ChatRecord: NSManagedObject {
             targetUser = User.objects.getOrReload(targetID!)
         } else if chat_type == "group" && targetID != nil {
             targetClub = Club.objects.getOrLoad(targetID!)
+            club = targetClub
         }
     }
     

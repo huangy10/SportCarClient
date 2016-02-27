@@ -21,8 +21,16 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     var chatList: ChatListController?
     
     var roomType: ChatRoomType = .Private
-    var targetUser: User?
-    var targetClub: Club?
+    var targetUser: User? {
+        didSet {
+            roomType = .Private
+        }
+    }
+    var targetClub: Club? {
+        didSet {
+            roomType = .Club
+        }
+    }
     
     var chatRecords: ChatRecordList? {
         let identifier = getIdentifierForRoomController(self)
@@ -151,12 +159,26 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     }
     
     func navRightBtnPressed() {
-        
+        // 调出个人信息
+        switch roomType {
+        case .Private:
+            let detail = PrivateChatSettingController(targetUser: self.targetUser!)
+            self.navigationController?.pushViewController(detail, animated: true)
+            break
+        case .Club:
+            break
+        }
     }
     
     func needsUpdate() {
-        // just reload the data
+        var needScrollToBottom = false
+        if talkBoard!.contentOffset.y + talkBoard!.frame.height >= talkBoard!.contentSize.height - 1 && talkBoard!.contentSize.height > talkBoard!.frame.height {
+            needScrollToBottom = true
+        }
         self.talkBoard?.reloadData()
+        if needScrollToBottom {
+            talkBoard!.setContentOffset(CGPointMake(0, talkBoard!.contentSize.height - talkBoard!.frame.height), animated: true)
+        }
     }
 }
 

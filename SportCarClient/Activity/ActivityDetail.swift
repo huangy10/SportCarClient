@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import Mapbox
+import Cent
 
 class ActivityDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource{
     weak var parentTableView: UITableView?

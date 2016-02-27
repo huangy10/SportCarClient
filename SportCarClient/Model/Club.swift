@@ -24,7 +24,7 @@ class Club: NSManagedObject {
      */
     func loadValueFromJSON(json: JSON) {
         name = json["club_name"].string
-        logo_url = json["club_url"].string
+        logo_url = json["club_logo"].string
         clubDescription = json["description"].string
     }
     
