@@ -39,6 +39,18 @@ class ChatURLMaker {
     func clubList() -> String {
         return website + "/club/list"
     }
+    
+    func unreadInformation() -> String {
+        return website + "/chat/unread"
+    }
+    
+    func chatHistory() -> String {
+        return website + "/chat/history"
+    }
+    
+    func chatUnreadSync() -> String {
+        return website + "/chat/unread/sync"
+    }
 }
 
 
@@ -230,7 +242,7 @@ class ChatRequester: AccountRequester {
                     })
                 }else{
                     dispatch_async(self.privateQueue, { () -> Void in
-                        onError(code: data["code"].string)
+                        onError(code: data["code"].string) 
                     })
                 }
                 break
@@ -244,10 +256,38 @@ class ChatRequester: AccountRequester {
         }
     }
     
+    /**
+     获取当前用户的俱乐部列表
+     */
     func getClubList(onSuccess: (JSON?)->(), onError: (code: String?)->()) {
         let url = ChatURLMaker.sharedMaker.clubList()
         manager.request(.GET, url).responseJSON { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "clubs", onSuccess: onSuccess, onError: onError)
+        }
+    }
+    
+    /**
+     获取未读消息信息
+     */
+    func getUnreadInformation(onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let url = ChatURLMaker.sharedMaker.unreadInformation()
+        manager.request(.GET, url).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
+        }
+    }
+    
+    /**
+     获取聊天历史
+     
+     - parameter targetID:      目标id
+     - parameter chatType:      聊天类型
+     - parameter dateThreshold: 时间阈值，获取这个时间节点之前的消息
+     - parameter limit:         最大获取的数量
+     */
+    func getChatHistory(targetID: String, chatType: String, dateThreshold: NSDate, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let url = ChatURLMaker.sharedMaker.chatHistory()
+        manager.request(.GET, url, parameters: ["date_threshold": STRDate(dateThreshold), "op_type": "more", "limit": limit, "target_id": targetID, "chat_type": chatType]).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "chats", onSuccess: onSuccess, onError: onError)
         }
     }
 }

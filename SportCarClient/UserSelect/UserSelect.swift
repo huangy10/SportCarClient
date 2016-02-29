@@ -134,10 +134,10 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
             UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
                 self.view.layoutIfNeeded()
                 }, completion: { (_) -> Void in
-                    self.selectedUserList?.hidden = true
+//                    self.selectedUserList?.hidden = true
             })
         }else{
-            selectedUserList?.hidden = false
+//            selectedUserList?.hidden = false
             selectedUserList?.snp_updateConstraints(closure: { (make) -> Void in
                 make.height.equalTo(65)
             })
@@ -204,12 +204,15 @@ extension UserSelectController {
             if sender.selected {
                 self.selectedUsers.remove(targetUser)
                 if self.selectedUsers.count == 0 {
+                    self.selectedUserList?.reloadData()
                     self.setSelectedUserListHiddenAnimated(true)
                 }
             }else{
                 self.selectedUsers.append(targetUser)
                 if self.selectedUsers.count == 1{
                     self.setSelectedUserListHiddenAnimated(false)
+                    self.userSelectionDidChange()
+                    return
                 }
             }
             self.selectedUserList?.reloadData()

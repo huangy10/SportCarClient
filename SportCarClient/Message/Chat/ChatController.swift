@@ -32,23 +32,25 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         }
     }
     
-    var chatRecords: ChatRecordList? {
-        let identifier = getIdentifierForRoomController(self)
-        if let records = ChatRecordDataSource.sharedDataSource.chatRecords[identifier] {
-            return records
-        }
-        let newRecordList = ChatRecordList()
-        ChatRecordDataSource.sharedDataSource.chatRecords[identifier] = newRecordList
-        switch roomType {
-        case .Private:
-            newRecordList._item = ChatRecordListItem.UserItem(self.targetUser!)
-            break
-        case .Club:
-            newRecordList._item = ChatRecordListItem.ClubItem(self.targetClub!)
-            break
-        }
-        return newRecordList
-    }
+    var distinct_identifier: String!
+    
+    var chatRecords: ChatRecordList?
+//        let identifier = getIdentifierForChatRoom(self)
+//        if let records = ChatRecordDataSource.sharedDataSource.chatRecords[identifier] {
+//            return records
+//        }
+//        let newRecordList = ChatRecordList()
+//        ChatRecordDataSource.sharedDataSource.chatRecords[identifier] = newRecordList
+//        switch roomType {
+//        case .Private:
+//            newRecordList._item = ChatRecordListItem.UserItem(self.targetUser!)
+//            break
+//        case .Club:
+//            newRecordList._item = ChatRecordListItem.ClubItem(self.targetClub!)
+//            break
+//        }
+//        return newRecordList
+//    }
     
     var navTitle: String? {
         if targetUser != nil {
@@ -69,6 +71,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     }
     
     var talkBoard: UITableView?
+    var refresh: UIRefreshControl!
     // 下方的输入面板
     var chatOpPanelController: ChatOpPanelController?
     
@@ -86,10 +89,29 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     override func viewDidLoad() {
         navSettings()
         super.viewDidLoad()
-//        ChatRecordDataSource.sharedDataSource.chatRecords[getIdentifierForRoomController(self)] = []
-        
+        // bind datasource
+        self.distinct_identifier = getIdentifierForChatRoom(self)
+        if let records = ChatRecordDataSource.sharedDataSource.chatRecords[distinct_identifier] {
+            chatRecords = records
+        }else {
+            chatRecords = ChatRecordList()
+            ChatRecordDataSource.sharedDataSource.chatRecords[distinct_identifier] = chatRecords!
+            switch roomType {
+            case .Private:
+                chatRecords?._item = ChatRecordListItem.UserItem(targetUser!)
+                break
+            case .Club:
+                chatRecords?._item = ChatRecordListItem.ClubItem(targetClub!)
+                break
+            }
+        }
+        // request history
+        if chatRecords?.count < 5 {
+            loadChatHistory(5 - chatRecords!.count)
+        }
+        chatRecords?.unread = 0
+        //
         ChatCell.registerCellForTableView(talkBoard!)
-        
         // 添加键盘出现时时间的监听
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardAppears:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardDisappears:", name: UIKeyboardWillHideNotification, object: nil)
@@ -130,7 +152,9 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
 //            make.height.equalTo(UIScreen.mainScreen().bounds.height - self.navigationController!.navigationBar.frame.height - 20 - 45)
             make.top.equalTo(superview)
         })
-        
+        refresh = UIRefreshControl()
+        refresh.addTarget(self, action: "loadChatHistory", forControlEvents: .ValueChanged)
+        talkBoard?.addSubview(refresh)
     }
     
     func navSettings() {
@@ -182,6 +206,49 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     }
 }
 
+// MARK: - 数据
+extension ChatRoomController {
+    
+    func loadChatHistory() {
+        loadChatHistory(10)
+    }
+    
+    func loadChatHistory(limit: Int) {
+        let requester = ChatRequester.requester
+        var chatType: String
+        var targetID: String
+        switch chatRecords!._item! {
+        case .UserItem(let user) :
+            chatType = "private"
+            targetID = user.userID!
+        case .ClubItem(let club) :
+            chatType = "group"
+            targetID = club.clubID!
+        }
+        let dateThreshold = chatRecords?.first()?.createdAt ?? NSDate()
+        requester.getChatHistory(targetID, chatType: chatType, dateThreshold: dateThreshold, limit: limit, onSuccess: { (json) -> () in
+            self.refresh.endRefreshing()
+            dispatch_async(requester.privateQueue, { () -> Void in
+                let datasource = ChatRecordDataSource.sharedDataSource
+                datasource.parseHistoryFromServer(json!)
+                
+            })
+            }) { (code) -> () in
+                print(code)
+        }
+    }
+    
+    /**
+     检查
+     
+     - returns: 载入的数量
+     */
+    func checkLocalChatStorage() -> Int{
+        // TODO: implement it
+        return 0
+    }
+}
+
 
 // MARK: - tableView代理
 extension ChatRoomController {
@@ -224,22 +291,43 @@ extension ChatRoomController {
 extension ChatRoomController {
     
     func confirmSendChatMessage(text: String? = nil, image: UIImage? = nil, audio: NSURL? = nil, messageType: String="text") {
-        var chatType = ""
-        var targetID = ""
-        switch roomType {
-        case .Club:
-            chatType = "group"
-            targetID = targetClub!.clubID!
+        
+        let newChat = ChatRecord.objects.postNewChatRecord(messageType, textContent: text, image: image, audio: audio, relatedID: nil)
+        switch chatRecords!._item! {
+        case .UserItem(let user):
+            newChat.targetID = user.userID
+            newChat.targetUser = user
+            newChat.chat_type = "private"
             break
-        case .Private:
-            chatType = "private"
-            targetID = targetUser!.userID!
+        case .ClubItem(let club):
+            newChat.targetID = club.clubID
+            newChat.targetClub = club
+            newChat.chat_type = "group"
             break
         }
-//        targetID = "28"
-        let newChat = ChatRecord.objects.postNewChatRecord(chatType, messageType: messageType, targetID: targetID, textContent: text, image: image, audio: audio, relatedID: nil)
+//        var chatType = ""
+//        var targetID = ""
+//        switch roomType {
+//        case .Club:
+//            chatType = "group"
+//            targetID = targetClub!.clubID!
+//            break
+//        case .Private:
+//            chatType = "private"
+//            targetID = targetUser!.userID!
+//            break
+//        }
+//
+//        let newChat = ChatRecord.objects.postNewChatRecord(chatType, messageType: messageType, targetID: targetID, textContent: text, image: image, audio: audio, relatedID: nil)
+//        switch chatRecords!._item! {
+//        case .UserItem(let value):
+//
+//            break
+//        case .ClubItem(let value):
+//            break
+//        }
         let dataSource = ChatRecordDataSource.sharedDataSource
-        let identifier = getIdentifierForRoomController(self)
+        let identifier = getIdentiferForChatRecord(newChat)
         dataSource.chatRecords[identifier]?.append(newChat)
         //
         if messageType == "audio" {
@@ -254,7 +342,7 @@ extension ChatRoomController {
         let targetPath = NSIndexPath(forRow: self.chatRecords!.count - 1, inSection: 0)
         talkBoard?.scrollToRowAtIndexPath(targetPath, atScrollPosition: .Top, animated: false)
         self.chatOpPanelController?.contentInput?.text = ""
-        ChatRequester.requester.postNewChatRecord(chatType, messageType: messageType, targetID: targetID, image: image, audio: audio, textContent: text, onSuccess: { (json) -> () in
+        ChatRequester.requester.postNewChatRecord(newChat.chat_type!, messageType: messageType, targetID: newChat.targetID!, image: image, audio: audio, textContent: text, onSuccess: { (json) -> () in
             let newID = json!["chatID"].stringValue
             ChatRecord.objects.confirmSent(newChat, chatRecordID: newID, image: json!["image"].string, audio: json!["audio"].string)
             }) { (code) -> () in

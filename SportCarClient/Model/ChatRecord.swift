@@ -42,6 +42,9 @@ class ChatRecord: NSManagedObject {
         self.textContent = json["text_content"].string
         let userJSON = json["sender"]
         self.sender = User.objects.create(userJSON).value
+        if sender?.userID == User.objects.hostUser?.userID {
+            self.read = true
+        }
         self.image = json["image"].string
         self.targetID = json["target_id"].stringValue
         self.audio = json["audio"].string
@@ -49,6 +52,9 @@ class ChatRecord: NSManagedObject {
         self.read = json["read"].bool ?? false
         if chat_type == "private" && targetID != nil{
             targetUser = User.objects.getOrReload(targetID!)
+            if targetUser == nil {
+                targetUser = User.objects.create(json["target_user"]).value
+            }
         } else if chat_type == "group" && targetID != nil {
             targetClub = Club.objects.getOrLoad(targetID!)
             if targetClub == nil {
@@ -85,15 +91,24 @@ class ChatRecoardManager {
         return context.chatRecords.firstOrCreated( {$0.recordID == chatRecordID} )
     }
     
-    func postNewChatRecord(chatType: String, messageType: String, targetID: String,
-        textContent: String? = nil, image: UIImage?=nil, audio: NSURL? = nil, relatedID: String?=nil) -> ChatRecord{
+    /**
+     创建一个聊天条目以供发送到服务器。这里只设置了聊天的内容，其他相关配置在外部完成
+     
+     - parameter messageType: 消息类型text/audio/image
+     - parameter targetID:    目标id
+     - parameter textContent: 文本内容
+     - parameter image:       发送的图片
+     - parameter audio:       发送的音频
+     - parameter relatedID:   关联id
+     
+     - returns: 返回一个创建成果的聊天条目
+     */
+    func postNewChatRecord(messageType: String, textContent: String? = nil, image: UIImage?=nil, audio: NSURL? = nil, relatedID: String?=nil) -> ChatRecord{
         let hostUser = User.objects.hostUser
         let newChat = context.chatRecords.createEntity()
         newChat.createdAt = NSDate()
-        newChat.chat_type = chatType
         newChat.textContent = textContent
         newChat.sender = hostUser
-        newChat.targetID = targetID
         newChat.messageType = messageType
         newChat.sent = true
         newChat.contentImage = image
@@ -124,5 +139,28 @@ class ChatRecoardManager {
             print(error)
             return false
         }
+    }
+}
+
+// MARK: - Local utility
+extension ChatRecoardManager {
+    
+    /**
+     这个地方的逻辑是这样的：当从服务器获取到chat list时，将list给出的more recent chat record的id（注意此时不要将其存入数据库）传入此处检查是否这个最新的chatRecord已经存在了，如果存在了就以此为基点向前索取
+     如果网络获取chatlist失败，则传入一个空的id
+     */
+    func loadLocalRecord(latest: String?, limit: Int) -> [ChatRecord]{
+        if latest != nil {
+            let latestRecord = context.chatRecords.first({ $0.recordID == latest })
+            if latestRecord == nil {
+                // 没有找到本地副本，返回空
+                return []
+            }
+            let records: [ChatRecord] = context.chatRecords.filter({$0.createdAt >= latestRecord!.createdAt!})
+                .orderByDescending({$0.createdAt})
+                .take(limit).toArray()
+            return records
+        }
+        return []
     }
 }

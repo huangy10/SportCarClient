@@ -49,16 +49,7 @@ class ChatListController: UITableViewController, FFSelectDelegate, GroupChatSetu
         let cell = tableView.dequeueReusableCellWithIdentifier(ChatListCell.reuseIdentifier, forIndexPath: indexPath) as! ChatListCell
         let chatData = ChatRecordDataSource.sharedDataSource.chatRecords.valueForIndex(indexPath.row)
         cell.listItem = chatData?._item
-        var unread = 0
-        let count = chatData!.count
-        for var i: Int = (count-1); i >= 0; i-- {
-            if !chatData![i].read {
-                unread += 1
-            }else {
-                break
-            }
-        }
-        cell.setUnreadNumber(unread)
+        cell.setUnreadNumber(chatData!.unread)
         if let recentChat = chatData?.last(){
             cell.recentTalkLbl.text = recentChat.getDescription()
             cell.recentTalkTimeLbl.text = dateDisplay(recentChat.createdAt!)
