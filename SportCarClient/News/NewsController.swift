@@ -32,6 +32,7 @@ class NewsController: UITableViewController {
         navigationBarSettings()
         // 注册news的cell
         tableView.registerClass(NewsCell.self, forCellReuseIdentifier: NewsCell.reusableIdentifier)
+        tableView.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         tableView.separatorStyle = .None
         refreshControl?.enabled = true
         // 开始准备获取数据
@@ -41,6 +42,7 @@ class NewsController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.tableView.reloadData()
     }
 }
 
@@ -66,7 +68,7 @@ extension NewsController {
      */
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let screenWidth = self.tableView.frame.width
-        return screenWidth * 0.5773
+        return screenWidth * 0.573
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -84,7 +86,11 @@ extension NewsController {
         // 选中cell后弹出的详情页面
         let detailCtrl = NewsDetailController()
         detailCtrl.news = news[indexPath.row]
-        self.navigationController?.pushViewController(detailCtrl, animated: true)
+        let cell = tableView.cellForRowAtIndexPath(indexPath)!
+        let initPos = cell.frame.origin.y - tableView.contentOffset.y
+        detailCtrl.initPos = initPos
+        detailCtrl.initBgImg = self.getScreenShotBlurred(false)
+        self.navigationController?.pushViewController(detailCtrl, animated: false)
         
     }
 }
@@ -111,17 +117,14 @@ extension NewsController {
     
     func leftBarBtn() -> UIBarButtonItem? {
         let homeBtn = UIButton()
-//        homeBtn.setBackgroundImage(UIImage(named: "home_back"), forState: .Normal)
         homeBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
         homeBtn.addTarget(self, action: "backToHomePressed", forControlEvents: .TouchUpInside)
         homeBtn.frame = CGRect(x: 0, y: 0, width: 15, height: 13.5)
-//        homeBtn.imageEdgeInsets = UIEdgeInsets(top: 14.5, left: 0, bottom: 14.5, right: 14.5)
         let leftBtnItem = UIBarButtonItem(customView: homeBtn)
         return leftBtnItem
     }
     
     func backToHomePressed() {
-//        self.navigationController?.popViewControllerAnimated(true)
         self.homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false))
     }
 }

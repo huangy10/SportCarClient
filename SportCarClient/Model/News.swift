@@ -22,6 +22,10 @@ import Dollar
 class News: NSManagedObject {
     
     static let objects = NewsManager()
+    
+    // TODO: save this to core data
+    /// 是否被当前用户赞了
+    var liked = false
 
 }
 
@@ -41,6 +45,7 @@ extension News {
         title = json["title"].string
         contentURL = json["content"].string
         recentLikerName = json["recent_like_user_id"].stringValue
+        liked = json["liked"].boolValue
     }
     
     func getLikeDescription() -> NSAttributedString{

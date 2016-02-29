@@ -35,6 +35,10 @@ class ChatURLMaker {
     func groupChatCreate() -> String {
         return website + "/club/create"
     }
+    
+    func clubList() -> String {
+        return website + "/club/list"
+    }
 }
 
 
@@ -237,6 +241,13 @@ class ChatRequester: AccountRequester {
                 })
                 break
             }
+        }
+    }
+    
+    func getClubList(onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let url = ChatURLMaker.sharedMaker.clubList()
+        manager.request(.GET, url).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "clubs", onSuccess: onSuccess, onError: onError)
         }
     }
 }

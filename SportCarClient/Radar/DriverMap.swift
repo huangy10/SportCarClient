@@ -11,7 +11,7 @@ import Mapbox
 import Spring
 
 
-class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate {
+class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate, RadarFilterDelegate {
     
     /// 待使用的markers
     var markerPool: [UserOnMapView] = []
@@ -25,6 +25,10 @@ class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocation
     var userList: UITableView!
     var showUserListBtn: UIButton!
     var showUserListBtnIcon: UIImageView!
+    
+    var mapFilter: RadarFilterController!
+    var mapNav: BlackBarNavigationController!
+    var mapFilterView: UIView!
     
     var locationManager: CLLocationManager!
     ///
@@ -58,8 +62,7 @@ class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocation
         usrLocMarker.center = self.view.center
         //
         userList = UITableView(frame: CGRectZero, style: .Plain)
-        userList.separatorColor = UIColor(white: 0.72, alpha: 1)
-        userList.separatorInset = UIEdgeInsetsZero
+        userList.separatorStyle = .None
         userList.rowHeight = 90
         userList.delegate = self
         userList.dataSource = self
@@ -67,7 +70,7 @@ class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocation
         userList.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(self.view)
             make.left.equalTo(self.view)
-            make.height.equalTo(self.view.frame.height - 190)
+            make.height.equalTo(self.view.frame.height - 100)
             make.top.equalTo(self.view.snp_bottom)
         }
         userList.registerClass(DriverMapUserCell.self, forCellReuseIdentifier: "cell")
@@ -99,6 +102,26 @@ class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocation
         btnLbl.textColor = UIColor.whiteColor()
         btnLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         btnLbl.frame = CGRectMake(47.5, 0, 60, 50)
+        //
+        mapFilter = RadarFilterController()
+        mapFilter.delegate = self
+        mapNav = BlackBarNavigationController(rootViewController: mapFilter)
+        mapFilterView = mapNav.view
+        self.view.addSubview(mapFilterView)
+        mapFilterView.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo(self.view).offset(3)
+            make.left.equalTo(self.view).offset(15)
+            make.size.equalTo(CGSizeMake(124, 41))
+        }
+        //
+        let mapFilterToggleBtn = UIButton()
+        self.view.addSubview(mapFilterToggleBtn)
+        mapFilterToggleBtn.addTarget(self, action: "toggleMapFilter", forControlEvents: .TouchUpInside)
+        mapFilterToggleBtn.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo(self.view).offset(3)
+            make.left.equalTo(self.view).offset(15)
+            make.size.equalTo(CGSizeMake(124, 41))
+        }
         //
         updator = CADisplayLink(target: self, selector: "userLocationUpdate")
         updator.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
@@ -291,8 +314,8 @@ extension RadarDriverMapController {
             userList.snp_remakeConstraints { (make) -> Void in
                 make.right.equalTo(self.view)
                 make.left.equalTo(self.view)
-                make.height.equalTo(self.view.frame.height - 190)
-                make.bottom.equalTo(self.view.snp_bottom)
+                make.height.equalTo(self.view.frame.height - 100)
+                make.bottom.equalTo(self.view.snp_bottom).offset(90)
             }
             SpringAnimation.spring(0.6, animations: { () -> Void in
                 self.view.layoutIfNeeded()
@@ -304,7 +327,7 @@ extension RadarDriverMapController {
             userList.snp_remakeConstraints { (make) -> Void in
                 make.right.equalTo(self.view)
                 make.left.equalTo(self.view)
-                make.height.equalTo(self.view.frame.height - 190)
+                make.height.equalTo(self.view.frame.height - 100)
                 make.top.equalTo(self.view.snp_bottom)
             }
             SpringAnimation.spring(0.6, animations: { () -> Void in
@@ -314,5 +337,37 @@ extension RadarDriverMapController {
             showUserListBtn.tag = 0
         }
         
+    }
+}
+
+extension RadarDriverMapController {
+    func toggleMapFilter() {
+        
+        if mapNav.viewControllers.count > 1 {
+            mapNav.popToRootViewControllerAnimated(true)
+            return
+        }
+        
+        if mapFilter.expanded {
+            mapFilterView.snp_remakeConstraints(closure: { (make) -> Void in
+                make.top.equalTo(self.view).offset(3)
+                make.left.equalTo(self.view).offset(15)
+                make.size.equalTo(CGSizeMake(124, 41))
+            })
+        }else {
+            mapFilterView.snp_remakeConstraints(closure: { (make) -> Void in
+                make.top.equalTo(self.view).offset(3)
+                make.left.equalTo(self.view).offset(15)
+                make.size.equalTo(CGSizeMake(124, 42 * 6))
+            })
+        }
+        mapFilter.expanded = !mapFilter.expanded
+        UIView.animateWithDuration(0.3) { () -> Void in
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func radarFilterDidChange() {
+        toggleMapFilter()
     }
 }

@@ -55,11 +55,13 @@ class ClubManager {
         let clubID = json["id"].stringValue
         if let club = self.clubs[clubID] {
             club.loadValueFromJSON(json)
+            saveAll()
             return club
         }
         let club = context.clubs.firstOrCreated { $0.clubID == clubID }
         club.loadValueFromJSON(json)
         self.clubs[clubID] = club
+        saveAll()
         return club
     }
     

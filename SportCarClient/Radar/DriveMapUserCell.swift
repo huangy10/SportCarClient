@@ -90,6 +90,16 @@ class DriverMapUserCell: UITableViewCell {
             make.right.equalTo(superview).offset(-25)
             make.size.equalTo(CGSizeMake(9, 15))
         }
+        //
+        let sepLine = UIView()
+        sepLine.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        superview.addSubview(sepLine)
+        sepLine.snp_makeConstraints { (make) -> Void in
+            make.left.equalTo(superview)
+            make.right.equalTo(superview)
+            make.bottom.equalTo(superview)
+            make.height.equalTo(0.5)
+        }
     }
     
     func loadDataAndUpdateUI() {

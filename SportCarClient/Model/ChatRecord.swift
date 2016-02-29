@@ -46,10 +46,14 @@ class ChatRecord: NSManagedObject {
         self.targetID = json["target_id"].stringValue
         self.audio = json["audio"].string
         self.messageType = json["message_type"].string
+        self.read = json["read"].bool ?? false
         if chat_type == "private" && targetID != nil{
             targetUser = User.objects.getOrReload(targetID!)
         } else if chat_type == "group" && targetID != nil {
             targetClub = Club.objects.getOrLoad(targetID!)
+            if targetClub == nil {
+                targetClub = Club.objects.getOrCreate(json["target_club"])
+            }
             club = targetClub
         }
     }

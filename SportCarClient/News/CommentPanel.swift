@@ -19,6 +19,7 @@ class CommentBarView: UIView {
     var contentInput: UITextView?
     var shareBtn: UIButton?
     var likeBtn: UIButton?
+    var likeBtnIcon: UIImageView!
     
     var barheight: CGFloat
     
@@ -68,7 +69,7 @@ class CommentBarView: UIView {
             make.right.equalTo(shareBtn!.snp_left).offset(-9)
         })
         //
-        let likeBtnIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
+        likeBtnIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
         likeBtn?.addSubview(likeBtnIcon)
         likeBtnIcon.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(17)
@@ -107,4 +108,15 @@ class CommentBarView: UIView {
         })
     }
     
+    func setLikedAnimated(liked: Bool) {
+        if liked {
+            likeBtnIcon.transform = CGAffineTransformIdentity
+            likeBtnIcon.image = UIImage(named: "news_like_liked")
+            UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 140, options: .CurveEaseInOut, animations: { () -> Void in
+                self.likeBtnIcon.transform = CGAffineTransformMakeScale(1.1, 1.1)
+                }, completion: nil)
+        }else {
+            likeBtnIcon.image = UIImage(named: "news_like_unliked")
+        }
+    }
 }

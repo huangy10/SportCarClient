@@ -18,7 +18,7 @@ class ResetPasswordController: LoginRegisterController {
         let superview = self.view!
         superview.backgroundColor = UIColor.blackColor()
         //
-        let bgImgView = UIImageView(image: UIImage(named: "account_bg_image"))
+        bgImgView = UIImageView(image: UIImage(named: "account_bg_image"))
         bgImgView.layer.opacity = 0.5
         superview.addSubview(bgImgView)
         bgImgView.snp_makeConstraints { (make) -> Void in
@@ -43,8 +43,8 @@ class ResetPasswordController: LoginRegisterController {
         titleLogo.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(40)
-            make.height.equalTo(46)
-            make.width.equalTo(162)
+            make.height.equalTo(23)
+            make.width.equalTo(81)
         }
 
         // 复用了注册页面的结构
@@ -154,9 +154,9 @@ class ResetPasswordController: LoginRegisterController {
         
         let registerBtn = UIButton()
         registerBtn.setBackgroundImage(UIImage(named: "account_resetpwd_confirm_btn"), forState: .Normal)
-        registerBtn.layer.shadowColor = UIColor(red: 0.23, green: 0.07, blue: 0.07, alpha: 1).CGColor
-        registerBtn.layer.shadowOffset = CGSize(width: 4, height: 2)
-        registerBtn.layer.shadowRadius = 6
+        registerBtn.layer.shadowColor = UIColor(red: 0.95, green: 0.21, blue: 0.21, alpha: 1).CGColor
+        registerBtn.layer.shadowOffset = CGSize(width: 0, height: 3)
+        registerBtn.layer.shadowRadius = 7
         registerBtn.layer.shadowOpacity = 1
         container.addSubview(registerBtn)
         registerBtn.snp_makeConstraints { (make) -> Void in
@@ -170,10 +170,17 @@ class ResetPasswordController: LoginRegisterController {
     
     // MARK: 重写按钮的功能
     override func backBtnPressed(sender: UIButton) {
-        self.navigationController?.popViewControllerAnimated(true)
+        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+//        self.navigationController?.popViewControllerAnimated(true)
     }
     //
     override func registerPressed() {
         
+    }
+//    
+    override func leftBarBtn() -> UIBarButtonItem! {
+        let btn = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: "backBtnPressed:")
+        btn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        return btn
     }
 }

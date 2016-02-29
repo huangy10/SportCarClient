@@ -91,6 +91,9 @@
 		BFAA0CAE1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0CAD1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift */; };
 		BFAC52271C1C5F9500107F71 /* AuthCodeBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC52261C1C5F9500107F71 /* AuthCodeBtnView.swift */; };
 		BFAC522A1C1C84A700107F71 /* InputableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC52291C1C84A700107F71 /* InputableViewController.swift */; };
+		BFADDF6A1C82A35100893435 /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFADDF691C82A35100893435 /* ShareController.swift */; };
+		BFADDF6D1C82D39D00893435 /* RadarFilterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFADDF6C1C82D39D00893435 /* RadarFilterController.swift */; };
+		BFADDF6F1C82E3F200893435 /* RadarClubFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFADDF6E1C82E3F200893435 /* RadarClubFilter.swift */; };
 		BFB39CCB1C1EA20200FB6B5D /* sportcar.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFB39CCA1C1EA20200FB6B5D /* sportcar.plist */; };
 		BFB39CCD1C1EA45500FB6B5D /* SportCarBrandSelecter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB39CCC1C1EA45500FB6B5D /* SportCarBrandSelecter.swift */; };
 		BFBC526E1C52944200EE7D34 /* MessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC526D1C52944200EE7D34 /* MessageController.swift */; };
@@ -273,6 +276,9 @@
 		BFAA0CAD1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusReleasePhotoAlbumListController.swift; path = Status/StatusReleasePhotoAlbumListController.swift; sourceTree = "<group>"; };
 		BFAC52261C1C5F9500107F71 /* AuthCodeBtnView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthCodeBtnView.swift; path = Accounts/AuthCodeBtnView.swift; sourceTree = "<group>"; };
 		BFAC52291C1C84A700107F71 /* InputableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InputableViewController.swift; path = BaseTemplate/InputableViewController.swift; sourceTree = "<group>"; };
+		BFADDF691C82A35100893435 /* ShareController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShareController.swift; path = News/ShareController.swift; sourceTree = "<group>"; };
+		BFADDF6C1C82D39D00893435 /* RadarFilterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RadarFilterController.swift; path = Radar/RadarFilterController.swift; sourceTree = "<group>"; };
+		BFADDF6E1C82E3F200893435 /* RadarClubFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RadarClubFilter.swift; path = Radar/RadarClubFilter.swift; sourceTree = "<group>"; };
 		BFB39CCA1C1EA20200FB6B5D /* sportcar.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = sportcar.plist; path = BaseTemplate/SportCarBrandSelect/sportcar.plist; sourceTree = "<group>"; };
 		BFB39CCC1C1EA45500FB6B5D /* SportCarBrandSelecter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarBrandSelecter.swift; path = BaseTemplate/SportCarBrandSelect/SportCarBrandSelecter.swift; sourceTree = "<group>"; };
 		BFBC526D1C52944200EE7D34 /* MessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageController.swift; path = Message/Notification/MessageController.swift; sourceTree = "<group>"; };
@@ -441,6 +447,7 @@
 		BF24291C1C7C51CE005D4C6E /* Driver */ = {
 			isa = PBXGroup;
 			children = (
+				BFADDF6B1C82D36D00893435 /* Tools */,
 				BF9B54A91C7F5BED0006D673 /* Cell */,
 				BF24291D1C7C524D005D4C6E /* DriverMap.swift */,
 				BF2429261C7D62D6005D4C6E /* UserOnMap.swift */,
@@ -626,6 +633,7 @@
 		BF54DD661C2D879000F635C0 /* News */ = {
 			isa = PBXGroup;
 			children = (
+				BFADDF681C82A34300893435 /* Tool */,
 				BF268FC61C32C757005D1B68 /* Detail */,
 				BF54DD781C303D4000F635C0 /* Networks */,
 				BF54DD671C2EB4FE00F635C0 /* NewsController.swift */,
@@ -788,6 +796,23 @@
 				BFCB96451C2061E0004F77E8 /* LoadingButton.swift */,
 			);
 			name = BaseTemplate;
+			sourceTree = "<group>";
+		};
+		BFADDF681C82A34300893435 /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				BFADDF691C82A35100893435 /* ShareController.swift */,
+			);
+			name = Tool;
+			sourceTree = "<group>";
+		};
+		BFADDF6B1C82D36D00893435 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				BFADDF6C1C82D39D00893435 /* RadarFilterController.swift */,
+				BFADDF6E1C82E3F200893435 /* RadarClubFilter.swift */,
+			);
+			name = Tools;
 			sourceTree = "<group>";
 		};
 		BFB39CC91C1E9E6800FB6B5D /* SportCarBrandSelect */ = {
@@ -1407,6 +1432,7 @@
 				BFC032821C72F69300ECA69A /* ActivityDetailBoard.swift in Sources */,
 				BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */,
 				BFEFB5E31C5E4C8600841BF4 /* chatAccessoryBoard.swift in Sources */,
+				BFADDF6F1C82E3F200893435 /* RadarClubFilter.swift in Sources */,
 				BF5491D91C22FD660090D151 /* SportCar.generated.swift in Sources */,
 				BFAC52271C1C5F9500107F71 /* AuthCodeBtnView.swift in Sources */,
 				BFC032801C72EEEB00ECA69A /* ActivityDetail.swift in Sources */,
@@ -1427,6 +1453,7 @@
 				BF6308AC1C19B7D20087A4F0 /* AccountRequester.swift in Sources */,
 				BFCA900A1C4FC64300B05E74 /* StatusHome.swift in Sources */,
 				BF2BE21D1C29390200DD0CF9 /* ClubJoining.generated.swift in Sources */,
+				BFADDF6D1C82D39D00893435 /* RadarFilterController.swift in Sources */,
 				BF9B54B21C8011A50006D673 /* ClubViewer.swift in Sources */,
 				BF54DD751C2EB9A800F635C0 /* NewsComment.generated.swift in Sources */,
 				BFCB96361C1F0551004F77E8 /* BlackBarNavigationController.swift in Sources */,
@@ -1514,6 +1541,7 @@
 				BF27E6CD1C38457F0074771D /* MakeCommentPanel.swift in Sources */,
 				BFBC52771C5388BE00EE7D34 /* ChatRecord.generated.swift in Sources */,
 				BF5FF0ED1C15B4860050F5FE /* GlobalVariables.swift in Sources */,
+				BFADDF6A1C82A35100893435 /* ShareController.swift in Sources */,
 				BFC032691C6F358400ECA69A /* SportCarAuth.swift in Sources */,
 				BFC36BB61C6C854800DC6FE2 /* BlackListViewer.swift in Sources */,
 				BF58990C1C4CFF26005496EA /* informUser.swift in Sources */,

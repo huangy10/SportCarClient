@@ -31,6 +31,7 @@ class ChatListCell: UITableViewCell {
         }
     }
     var avatarBtn: UIButton!
+    var unreadLbl: UILabel!
     var nickNameLbl: UILabel!
     var recentTalkLbl: UILabel!
     var recentTalkTimeLbl: UILabel!
@@ -56,6 +57,21 @@ class ChatListCell: UITableViewCell {
             make.centerY.equalTo(superview)
             make.left.equalTo(superview).offset(15)
             make.size.equalTo(45)
+        }
+        //
+        unreadLbl = UILabel()
+        unreadLbl.font = UIFont.systemFontOfSize(9, weight: UIFontWeightUltraLight)
+        unreadLbl.textColor = UIColor.whiteColor()
+        unreadLbl.backgroundColor = kHighlightedRedTextColor
+        unreadLbl.layer.cornerRadius = 9
+        unreadLbl.clipsToBounds = true
+        unreadLbl.textAlignment = .Center
+        unreadLbl.hidden = true
+        superview.addSubview(unreadLbl)
+        unreadLbl.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo(avatarBtn)
+            make.centerX.equalTo(avatarBtn.snp_right)
+            make.size.equalTo(18)
         }
         //
         nickNameLbl = UILabel()
@@ -94,6 +110,15 @@ class ChatListCell: UITableViewCell {
             make.right.equalTo(superview)
             make.height.equalTo(0.5)
             make.bottom.equalTo(superview)
+        }
+    }
+    
+    func setUnreadNumber(num: Int) {
+        if num > 0 {
+            unreadLbl.text = "\(num)"
+            unreadLbl.hidden = false
+        }else {
+            unreadLbl.hidden = true
         }
     }
 }

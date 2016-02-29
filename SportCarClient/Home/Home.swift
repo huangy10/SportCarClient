@@ -70,6 +70,8 @@ class HomeController: UIViewController, HomeDelegate {
         status?.homeDelegate = self
         self.navigationController?.pushViewController(status!, animated: false)
         
+        ChatRecordDataSource.sharedDataSource.start()
+        
         let requester = AccountRequester.sharedRequester
         requester.getProfileDataFor(self.hostUser!.userID!, onSuccess: { (data) -> () in
             // 获取到了数据之后更新
@@ -133,6 +135,7 @@ extension HomeController {
      显示边栏
      */
     func showSideBar(animated:Bool) {
+        sideBarCtl.reloadUserData()
         let screenWidth = self.view.frame.width
         var move = CATransform3DTranslate(CATransform3DIdentity, 0.876 * screenWidth, 0, 0)
         move.m34 = 1.0 / -500

@@ -70,7 +70,7 @@ class LoginRegisterController: InputableViewController {
         bgImgView = UIImageView(image: UIImage(named: "account_bg_image"))
         superview.addSubview(bgImgView)
         bgImgView.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(superview)
+            make.left.equalTo(superview).offset(-50)
             make.top.equalTo(superview)
             make.bottom.equalTo(superview)
             make.width.equalTo(bgImgView.snp_height).multipliedBy(0.807)
@@ -204,9 +204,9 @@ class LoginRegisterController: InputableViewController {
         //
         let login = UIButton()
         login.setBackgroundImage(UIImage(named: "account_login_btn"), forState: .Normal)
-        login.layer.shadowColor = UIColor(red: 0.23, green: 0.07, blue: 0.07, alpha: 1).CGColor
-        login.layer.shadowOffset = CGSize(width: 4, height: 2)
-        login.layer.shadowRadius = 6
+        login.layer.shadowColor = UIColor(red: 0.95, green: 0.21, blue: 0.21, alpha: 1).CGColor
+        login.layer.shadowOffset = CGSize(width: 0, height: 3)
+        login.layer.shadowRadius = 7
         login.layer.shadowOpacity = 1
         container.addSubview(login)
         login.snp_makeConstraints { (make) -> Void in
@@ -338,9 +338,9 @@ class LoginRegisterController: InputableViewController {
         
         let registerBtn = UIButton()
         registerBtn.setBackgroundImage(UIImage(named: "account_register_btn"), forState: .Normal)
-        registerBtn.layer.shadowColor = UIColor(red: 0.23, green: 0.07, blue: 0.07, alpha: 1).CGColor
-        registerBtn.layer.shadowOffset = CGSize(width: 4, height: 2)
-        registerBtn.layer.shadowRadius = 6
+        registerBtn.layer.shadowColor = UIColor(red: 0.95, green: 0.21, blue: 0.21, alpha: 1).CGColor
+        registerBtn.layer.shadowOffset = CGSize(width: 0, height: 3)
+        registerBtn.layer.shadowRadius = 7
         registerBtn.layer.shadowOpacity = 1
         container.addSubview(registerBtn)
         registerBtn.snp_makeConstraints { (make) -> Void in
@@ -525,7 +525,10 @@ class LoginRegisterController: InputableViewController {
     
     func forgetBtnPressed() {
         let ctrl = ResetPasswordController()
-        self.navigationController?.pushViewController(ctrl, animated: true)
+        let nav = BlackBarNavigationController(rootViewController: ctrl)
+        self.presentViewController(nav, animated: true, completion: nil)
+        //
+//        self.navigationController?.pushViewController(ctrl, animated: true)
     }
     
     func checkAgreement() {

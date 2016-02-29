@@ -14,6 +14,7 @@ class NewsCell: UITableViewCell {
     static let reusableIdentifier = "news_cell"
     /// 封面图片
     var coverImg: UIImageView?
+    var coverMask: UIImageView?
     var titleLbl: UILabel?
     var commentNumLbl: UILabel?
     var shareNumLbl: UILabel?
@@ -52,6 +53,15 @@ class NewsCell: UITableViewCell {
         coverImg?.snp_makeConstraints(closure: { (make) -> Void in
             make.edges.equalTo(superview)
         })
+        coverMask = UIImageView(image: UIImage(named: "news_cover_mask"))
+        coverImg?.addSubview(coverMask!)
+        coverMask?.snp_makeConstraints(closure: { (make) -> Void in
+            make.left.equalTo(coverImg!)
+            make.right.equalTo(coverImg!)
+            make.bottom.equalTo(coverImg!)
+            make.height.equalTo(107)
+        })
+
         // 首先创建右下角的三个按钮
         shareNumLbl = UILabel()
         shareNumLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
@@ -64,6 +74,7 @@ class NewsCell: UITableViewCell {
             make.height.equalTo(15)
             make.width.lessThanOrEqualTo(30)
         })
+        shareNumLbl?.backgroundColor = UIColor.redColor()
         shareIcon = UIImageView(image: UIImage(named: "news_share"))
         superview.addSubview(shareIcon!)
         shareIcon?.snp_makeConstraints(closure: { (make) -> Void in
@@ -132,9 +143,14 @@ class NewsCell: UITableViewCell {
             coverImg?.kf_setImageWithURL(coverImageURL)
         }
         titleLbl?.text = data.title
-        commentNumLbl?.text = "\(data.commentNum)"
-        likeNumLbl?.text = "\(data.likeNum)"
-        shareNumLbl?.text = "\(data.shareNum)"
-        shareNumLbl?.sizeToFit()
+        commentNumLbl?.text = "\(data.commentNum)".strip()
+        likeNumLbl?.text = "\(data.likeNum)".strip()
+        shareNumLbl?.text = "\(data.shareNum)".strip()
+        
+        if data.liked {
+            likeIcon?.image = UIImage(named: "news_like_liked")
+        }else {
+            likeIcon?.image = UIImage(named: "news_like_unliked")
+        }
     }
 }

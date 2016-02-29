@@ -195,6 +195,7 @@ extension ChatRoomController {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let record = chatRecords![indexPath.row]
+        record.read = true
         let messageType = record.messageType!
         let cell = tableView.dequeueReusableCellWithIdentifier(messageType, forIndexPath: indexPath) as! ChatCell
         let displayTimeMark: Bool = {

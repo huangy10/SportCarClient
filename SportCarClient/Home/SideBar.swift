@@ -24,6 +24,9 @@ class SideBarController: UIViewController {
     /// 红色的确定被选中按钮的marker
     var btnMarker: UIImageView?
     
+    var unreadMessagesLbl: UILabel!
+    var unreadMessagesIcon: UIImageView!
+    
     var delegate: HomeDelegate?
     
     override func viewDidLoad() {
@@ -132,6 +135,21 @@ class SideBarController: UIViewController {
             preView = btn
         }
         
+        // 创建未读消息数量
+        unreadMessagesLbl = UILabel()
+        unreadMessagesLbl.textColor = UIColor.whiteColor()
+        unreadMessagesLbl.backgroundColor = kHighlightedRedTextColor
+        unreadMessagesLbl.font = UIFont.systemFontOfSize(9, weight: UIFontWeightUltraLight)
+        unreadMessagesLbl.layer.cornerRadius = 9
+        unreadMessagesLbl.clipsToBounds = true
+        unreadMessagesLbl.textAlignment = .Center
+        superview.addSubview(unreadMessagesLbl)
+        unreadMessagesLbl.snp_makeConstraints { (make) -> Void in
+            make.centerY.equalTo(btnArray[4])
+            make.left.equalTo(superview).offset(125)
+            make.size.equalTo(18)
+        }
+        
         let statusBtn = btnArray[1]
         let marker = UIImage(named: "home_slct_marker")
         btnMarker = UIImageView(image: marker)
@@ -161,6 +179,14 @@ extension SideBarController {
         }
         avatarBtn?.loadImageFromURLSTR(SF(user.avatarUrl ?? ""), placeholderImage: avatarBtn?.imageView?.image)
         nameLbl?.text = user.nickName ?? LS("离线用户")
+        
+        let messageDatasource = ChatRecordDataSource.sharedDataSource
+        if messageDatasource.totalUnreadNum > 0 {
+            unreadMessagesLbl.hidden = false
+            unreadMessagesLbl.text = "\(messageDatasource.totalUnreadNum)"
+        }else {
+            unreadMessagesLbl.hidden = true
+        }
     }
 }
 

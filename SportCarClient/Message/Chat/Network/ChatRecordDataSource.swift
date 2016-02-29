@@ -57,7 +57,24 @@ class ChatRecordDataSource {
     var curRoom: ChatRoomController?
     var listCtrl: ChatListController?
     // 总的未读消息的数量
-    var totalUnreadNum: Int = 0
+    var totalUnreadNum: Int {
+        get {
+            var unread = 0
+            let keys = chatRecords.keys
+            for key in keys {
+                let list = chatRecords[key]!
+                let count = list.count
+                for var i: Int = count-1; i >= 0; i-- {
+                    if !list[i].read {
+                        unread += 1
+                    }else {
+                        break
+                    }
+                }
+            }
+            return unread
+        }
+    }
     // 所有的内存中的聊天条目
     var chatRecords = MyOrderedDict<String, ChatRecordList>()
     // 网络请求工具
@@ -75,8 +92,8 @@ class ChatRecordDataSource {
                 let newRecord = ChatRecord.objects.getOrCreateEmpty(data["chatID"].stringValue)
                 newRecord.loadValueFromJSON(data)
                 // 创建对应的消息
-//                print(data)
-//                print(newRecord)
+                print(data)
+                print(newRecord)
                 let identifier = getIdentiferForChatRecord(newRecord)
                 //
                 if let records = self.chatRecords[identifier] {

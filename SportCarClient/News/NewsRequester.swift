@@ -48,6 +48,10 @@ class NewsURLMaker: AccountURLMaker {
     func postComment(newsID: String) -> String {
         return website + "/news/\(newsID)/post_comments"
     }
+    
+    func newsOperation(newsID: String) -> String {
+        return website + "/news/\(newsID)/operation"
+    }
 }
 
 
@@ -171,6 +175,13 @@ class NewsRequester: AccountRequester {
 
                     break
                 }
+        }
+    }
+    
+    func likeNews(newsID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let url = NewsURLMaker.sharedMaker.newsOperation(newsID)
+        manager.request(.POST, url, parameters: ["op_type": "like"]).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "like_info", onSuccess: onSuccess, onError: onError)
         }
     }
 }
