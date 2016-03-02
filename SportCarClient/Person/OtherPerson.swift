@@ -64,6 +64,9 @@ class PersonOtherController: PersonBasicController {
             panel.followBtn.setImage(UIImage(named: "person_followed"), forState: .Normal)
             panel.followBtnTmpImage.image = UIImage(named: "person_followed")
         }
+        panel.fanslistBtn.addTarget(self, action: "fanslistPressed", forControlEvents: .TouchUpInside)
+        panel.followlistBtn.addTarget(self, action: "followlistPressed", forControlEvents: .TouchUpInside)
+        panel.detailBtn.addTarget(self, action: "detailBtnPressed", forControlEvents: .TouchUpInside)
         return panel
     }
     
@@ -105,5 +108,25 @@ class PersonOtherController: PersonBasicController {
     
     func locateBtnPressed() {
         
+    }
+    
+    func fanslistPressed() {
+        let fans = FansSelectController()
+        fans.targetUser = data.user
+        let wrapper = BlackBarNavigationController(rootViewController: fans)
+        self.presentViewController(wrapper, animated: true, completion: nil)
+    }
+    
+    func followlistPressed() {
+        let follow = FollowSelectController()
+        follow.targetUser = data.user
+        let wrapper = BlackBarNavigationController(rootViewController: follow)
+        self.presentViewController(wrapper, animated: true, completion: nil)
+    }
+    
+    override func detailBtnPressed() {
+        let detail = PersonOtherInfoController()
+        detail.user = data.user
+        self.navigationController?.pushViewController(detail, animated: true)
     }
 }

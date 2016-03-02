@@ -18,7 +18,6 @@ class AuthBasicController: InputableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
-        createSubviews()
     }
     
     func navSettings() {

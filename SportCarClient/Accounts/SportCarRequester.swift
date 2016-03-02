@@ -25,6 +25,10 @@ class SportCarURLMaker: AccountURLMaker {
     func getAuthedCarList(userID: String) -> String {
         return website + "/profile/\(userID)/authed_cars"
     }
+    
+    func authenticateSportscar() -> String{
+        return website + "/cars/auth"
+    }
 }
 
 
@@ -108,6 +112,38 @@ class SportCarRequester: AccountRequester {
         
         self.manager.request(.GET, urlStr).responseJSON { (let response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "cars", onSuccess: onSuccess, onError: onError)
+        }
+    }
+    
+    /**
+     申请认证车辆
+     
+     - parameter carID:        待认证车辆的id
+     - parameter driveLicense: 驾照照片
+     - parameter photo:        人车合照
+     - parameter idCard:       身份证
+     - parameter licenseNum:   车牌照
+     */
+    func authenticateSportscar(carID: String, driveLicense: UIImage, photo: UIImage, idCard: UIImage, licenseNum: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let url = SportCarURLMaker.sharedMaker.authenticateSportscar()
+        manager.upload(.POST, url, multipartFormData: { (form) -> Void in
+            form.appendBodyPart(data: carID.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "car_id")
+            form.appendBodyPart(data: UIImagePNGRepresentation(driveLicense)!, name: "drive_license", fileName: "drive_license.png", mimeType: "image/png")
+            form.appendBodyPart(data: UIImagePNGRepresentation(photo)!, name: "photo", fileName: "photo.png", mimeType: "image/png")
+            form.appendBodyPart(data: UIImagePNGRepresentation(idCard)!, name: "idCard", fileName: "id_card", mimeType: "image/png")
+            form.appendBodyPart(data: licenseNum.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "license")
+            }) { (result) -> Void in
+                switch result {
+                case .Success(let upload, _, _):
+                    upload.responseJSON(completionHandler: { (response) -> Void in
+                        self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
+                    })
+                    break
+                case .Failure(let error):
+                    print(error)
+                    onError(code: "0000")
+                    break
+                }
         }
     }
 }

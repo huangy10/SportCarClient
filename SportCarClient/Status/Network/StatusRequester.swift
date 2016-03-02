@@ -35,6 +35,10 @@ internal class StatusURLMaker: AccountURLMaker {
     func getStatusListSimplified(userID: String) -> String{
         return website + "/profile/\(userID)/status"
     }
+    
+    func statusOperation(statusID: String) -> String {
+        return website + "/status/\(statusID)/operation"
+    }
 }
 
 
@@ -43,6 +47,7 @@ class StatusRequester: AccountRequester {
     static let SRRequester: StatusRequester = StatusRequester()
     
     let fetchLimit = 20
+    let privateQueue = dispatch_queue_create("status", DISPATCH_QUEUE_SERIAL)
     
     /**
      获取最新的status
@@ -192,7 +197,6 @@ class StatusRequester: AccountRequester {
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             onError(code: "0000")
                         })
-                        
                         break
                     }
             }
@@ -215,6 +219,19 @@ class StatusRequester: AccountRequester {
         }
         manager.request(.GET, strURL, parameters: params).responseJSON { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
+        }
+    }
+    
+    /**
+     删除制定的id的状态，这个请求会在privatQueue上发送
+     
+     - parameter statusID:  目标id
+     */
+    func deleteStatus(statusID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+        let url = StatusURLMaker.sharedMaker.statusOperation(statusID)
+        return manager.request(.POST, url, parameters: ["op_type": "delete"])
+            .response(queue: self.privateQueue, responseSerializer: Request.JSONResponseSerializer(options: .AllowFragments)) { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
         }
     }
 }

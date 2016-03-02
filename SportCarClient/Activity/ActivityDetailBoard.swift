@@ -278,6 +278,7 @@ class ActivityDetailBoardView: UIView {
             make.width.equalTo(75)
             make.center.equalTo(sepLine2)
         }
+        superview.bringSubviewToFront(doneIcon)
     }
     
     func loadDataAndUpdateUI() -> CGFloat{

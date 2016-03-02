@@ -18,6 +18,9 @@ class PersonHeaderOther: PersonHeaderMine {
     var chatBtn: UIButton!
     var locBtn: UIButton!
     
+    var fanslistBtn: UIButton!
+    var followlistBtn: UIButton!
+    
     override func createSubviews() {
         super.createSubviews()
         let superview = self
@@ -65,7 +68,23 @@ class PersonHeaderOther: PersonHeaderMine {
         avatarBtn.snp_updateConstraints { (make) -> Void in
             make.bottom.equalTo(self).offset(-156)
         }
-        // 
+        // 在粉丝和关注上方加一个透明按钮以实现点击进入粉丝列表
+        fanslistBtn = UIButton()
+        superview.addSubview(fanslistBtn)
+        fanslistBtn.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(fansNumLbl)
+            make.top.equalTo(fansNumLbl)
+            make.size.equalTo(44)
+        }
+        //
+        followlistBtn = UIButton()
+        superview.addSubview(followlistBtn)
+        followlistBtn.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(followNumLbl)
+            make.top.equalTo(followNumLbl)
+            make.size.equalTo(44)
+        }
+        //
         navLeftBtn.hidden = true
         navRightBtn.hidden = true
     }

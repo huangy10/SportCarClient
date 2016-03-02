@@ -19,6 +19,7 @@ extension Club {
     @NSManaged var clubDescription: String?
     @NSManaged var clubID: String?
     @NSManaged var created_at: NSDate?
+    @NSManaged var identified: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var logo_url: String?
     @NSManaged var name: String?
 
@@ -68,6 +69,7 @@ extension Club {
     static let clubDescription = AlecrimCoreData.NullableAttribute<String>("clubDescription")
     static let clubID = AlecrimCoreData.NullableAttribute<String>("clubID")
     static let created_at = AlecrimCoreData.NullableAttribute<NSDate>("created_at")
+    static let identified = AlecrimCoreData.NullableAttribute<Bool>("identified")
     static let logo_url = AlecrimCoreData.NullableAttribute<String>("logo_url")
     static let name = AlecrimCoreData.NullableAttribute<String>("name")
 
@@ -87,6 +89,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: Club {
     var clubDescription: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("clubDescription", self) }
     var clubID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("clubID", self) }
     var created_at: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("created_at", self) }
+    var identified: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("identified", self) }
     var logo_url: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("logo_url", self) }
     var name: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("name", self) }
 

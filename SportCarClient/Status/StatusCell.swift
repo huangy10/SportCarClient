@@ -14,6 +14,8 @@ import Dollar
 /// 状态页面的cell
 class StatusCell: UITableViewCell, UICollectionViewDataSource{
     
+    var parent: UIViewController?
+    
     static let reuseIdentifier = "statuc_cell"
     
     var status: Status?
@@ -85,6 +87,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
             make.centerY.equalTo(headerContainer!)
             make.size.equalTo(35)
         })
+        avatarBtn?.addTarget(self, action: "avatarBtnPressed", forControlEvents: .TouchUpInside)
         //
         nameLbl = UILabel()
         nameLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightBlack)
@@ -166,7 +169,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         //
         contentLbl = UILabel()
         contentLbl?.textColor = UIColor.blackColor()
-        contentLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        contentLbl?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)
         contentLbl?.numberOfLines = 0
         superview.addSubview(contentLbl!)
         contentLbl?.snp_makeConstraints(closure: { (make) -> Void in
@@ -245,7 +248,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
     class func heightForStatus(data: Status) -> CGFloat{
         let content = data.content! as NSString
         let screenWidth = UIScreen.mainScreen().bounds.width
-        let textRect = content.boundingRectWithSize(CGSizeMake(screenWidth - 50, 1000), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)], context: nil)
+        let textRect = content.boundingRectWithSize(CGSizeMake(screenWidth - 50, 1000), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)], context: nil)
         // 1080 + 40 - 200 - 114
         let imageInfo = data.image!
         let otherImageHeight: CGFloat = imageInfo.split(";").count > 1 ? 100 : 0
@@ -285,6 +288,9 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         let imageInfo = status!.image!
         statusImages = imageInfo.split(";")
         mainCover?.kf_setImageWithURL(SFURL(statusImages[0])!)
+        mainCover?.kf_setImageWithURL(SFURL(statusImages[0])!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+            self.mainCover?.setupForImageViewer(SFURL(self.statusImages[0])!, backgroundColor: UIColor.blackColor())
+        })
         if statusImages.count <= 1 {
             otherImgList?.reloadData()
             otherImgList?.snp_updateConstraints(closure: { (make) -> Void in
@@ -321,7 +327,13 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StatusCellImageDisplayCell.reuseIdentifier, forIndexPath: indexPath) as! StatusCellImageDisplayCell
         cell.imageView?.kf_setImageWithURL(SFURL(statusImages[indexPath.row + 1])!)
+        cell.imageView?.setupForImageViewer(SFURL(statusImages[indexPath.row + 1])!, backgroundColor: UIColor.blackColor())
         return cell
+    }
+    
+    func avatarBtnPressed() {
+        let detail = PersonOtherController(user: status!.user!)
+        parent?.navigationController?.pushViewController(detail, animated: true)
     }
 }
 

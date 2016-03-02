@@ -47,6 +47,7 @@ class SportCarInfoDetailController: UITableViewController {
     }
     
     func navRightBtnPressed() {
+        // TODO: 删除该跑车
         self.navigationController?.popViewControllerAnimated(true)
     }
     
@@ -76,6 +77,7 @@ class SportCarInfoDetailController: UITableViewController {
             let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! SportCarInfoDetailHeader
             header.carImage.kf_setImageWithURL(SFURL(own.car!.image!)!)
             header.carNameLbl.text = own.car?.name
+            header.authBtn.addTarget(self, action: "carAuthBtnPressed", forControlEvents: .TouchUpInside)
             if own.identified {
                 header.carAuthStatusIcon.image = UIImage(named: "auth_status_authed")
             }else{
@@ -92,6 +94,7 @@ class SportCarInfoDetailController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
         cell.boolSelect.hidden = true
+        cell.selectionStyle = .None
         if indexPath.section == 0{
             cell.staticLbl.text = kSportsCarInfoDetailStaticLabelString1[indexPath.row]
             switch indexPath.row {
@@ -135,6 +138,15 @@ class SportCarInfoDetailController: UITableViewController {
         }
         return cell
     }
+    
+    func carAuthBtnPressed() {
+        if !own.identified {
+            // TODO: 显示toast您的爱车已经认证
+        }else {
+            let detail = SportscarAuthController()
+            self.navigationController?.pushViewController(detail, animated: true)
+        }
+    }
 }
 
 class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
@@ -143,6 +155,8 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
     var carNameLbl: UILabel!
     var carAuthStatusIcon: UIImageView!
     var statementLbl: UILabel!
+    
+    var authBtn: UIButton!
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -199,6 +213,15 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(superview)
             make.size.equalTo(CGSizeMake(9, 15))
+        }
+        //
+        authBtn = UIButton()
+        superview.addSubview(authBtn)
+        authBtn.snp_makeConstraints { (make) -> Void in
+            make.left.equalTo(carImage.snp_right)
+            make.right.equalTo(superview)
+            make.top.equalTo(superview)
+            make.bottom.equalTo(superview)
         }
     }
     

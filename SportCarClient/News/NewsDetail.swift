@@ -76,6 +76,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         super.viewDidLoad()
         navSetting()
         createSubviews()
+        createNewsContentViews()
         initializeCommentBar()
         loadDataAndUpdateUI()
         loadNewsCoverAnimated()
@@ -111,7 +112,10 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
                     self.newsTitle.transform = CGAffineTransformMakeScale(1.23, 1.23)
                     self.newsTitleFake.transform = CGAffineTransformMakeScale(1.23, 1.23)
                     self.view.layoutIfNeeded()
-                    }, completion: nil)
+                    self.showNewsContentViews()
+                    }, completion: { _ in
+                        
+                })
         })
         bg.snp_remakeConstraints { (make) -> Void in
             make.edges.equalTo(self.view)
@@ -136,6 +140,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         self.view.layoutIfNeeded()
         commentPanel.snp_updateConstraints { (make) -> Void in
             make.bottom.equalTo(self.view).offset(45)
+            self.hideNewsContentViews()
         }
         UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
             self.view.layoutIfNeeded()
@@ -176,6 +181,123 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
                         self.navigationController?.popViewControllerAnimated(false)
                 })
         }
+    }
+    
+    /**
+     进场动画后期开始创建载入资讯的内容，此处将其均设置为hidden
+     */
+    func createNewsContentViews() {
+        let superview = self.view
+        let sepLine = UIView()
+        sepLine.backgroundColor = UIColor(white: 0.945, alpha: 1)
+        board?.addSubview(sepLine)
+        sepLine.snp_makeConstraints { (make) -> Void in
+            make.left.equalTo(newsTitle!)
+            make.height.equalTo(1)
+            make.width.equalTo(board!).multipliedBy(0.64)
+            make.top.equalTo(newsTitle!.snp_bottom).offset(15)
+        }
+        sepLine.layer.opacity = 0
+        newsDetailPanelView = UIWebView()
+        newsDetailPanelView?.userInteractionEnabled = false
+        newsDetailPanelView?.delegate = self
+        newsDetailPanelView?.paginationMode = .Unpaginated
+        board?.addSubview(newsDetailPanelView!)
+        newsDetailPanelView?.snp_makeConstraints(closure: { (make) -> Void in
+            make.top.equalTo(sepLine.snp_bottom).offset(15)
+            make.right.equalTo(superview).offset(-20)
+            make.left.equalTo(superview).offset(20)
+            make.height.equalTo(200)
+        })
+        newsDetailPanelView?.scrollView.scrollEnabled = false
+        newsDetailPanelView.layer.opacity = 0
+        //
+        newsDetailLoading = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        newsDetailPanelView?.addSubview(newsDetailLoading!)
+        newsDetailLoading?.snp_makeConstraints(closure: { (make) -> Void in
+            make.edges.equalTo(newsDetailPanelView!)
+        })
+        newsDetailLoading?.hidesWhenStopped = true
+        newsDetailLoading?.startAnimating()
+        newsDetailLoading.layer.opacity = 0
+        //
+        likeInfoIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
+        board?.addSubview(likeInfoIcon!)
+        likeInfoIcon?.snp_makeConstraints(closure: { (make) -> Void in
+            make.size.equalTo(15)
+            make.left.equalTo(newsDetailPanelView!)
+            make.top.equalTo(newsDetailPanelView!.snp_bottom).offset(35)
+        })
+        likeInfoIcon.hidden = true
+        //
+        likeDescriptionLbl = UILabel()
+        board?.addSubview(likeDescriptionLbl!)
+        likeDescriptionLbl?.snp_makeConstraints(closure: { (make) -> Void in
+            make.left.equalTo(likeInfoIcon!.snp_right).offset(10)
+            make.centerY.equalTo(likeInfoIcon!)
+            make.height.equalTo(17)
+        })
+        likeDescriptionLbl.layer.opacity = 0
+        //
+        let sepLine2 = UIView()
+        sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        board?.addSubview(sepLine2)
+        sepLine2.snp_makeConstraints { (make) -> Void in
+            make.right.equalTo(superview)
+            make.left.equalTo(board!)
+            make.top.equalTo(likeInfoIcon!.snp_bottom).offset(16)
+            make.height.equalTo(1)
+        }
+        sepLine2.layer.opacity = 0
+        
+        let commentStaticLbl = UILabel()
+        commentStaticLbl.backgroundColor = UIColor.whiteColor()
+        commentStaticLbl.text = LS("评论")
+        commentStaticLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        commentStaticLbl.textAlignment = .Center
+        commentStaticLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        board?.addSubview(commentStaticLbl)
+        commentStaticLbl.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(board!)
+            make.centerY.equalTo(sepLine2)
+            make.size.equalTo(CGSize(width: 75, height: 17))
+        }
+        commentStaticLbl.layer.opacity = 0
+        //
+        commentTableView = UITableView(frame: CGRect.zero, style: .Plain)
+        commentTableView?.delegate = self
+        commentTableView?.dataSource = self
+        commentTableView?.separatorStyle = .None
+        commentTableView?.registerClass(NewsDetailCommentCell.self, forCellReuseIdentifier: NewsDetailCommentCell.reuseIdentifier)
+        board?.addSubview(commentTableView!)
+        commentTableView?.snp_makeConstraints(closure: { (make) -> Void in
+            make.top.equalTo(sepLine2.snp_bottom).offset(27)
+            make.right.equalTo(superview)
+            make.left.equalTo(superview)
+            make.height.equalTo(100)
+        })
+        commentTableView?.scrollEnabled = false
+        commentTableView.layer.opacity = 0
+        //
+        commentTableLoading = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        commentTableView?.addSubview(commentTableLoading!)
+        commentTableLoading?.hidesWhenStopped = true
+        commentTableLoading?.startAnimating()
+        commentTableLoading?.snp_makeConstraints(closure: { (make) -> Void in
+            make.center.equalTo(commentTableView!)
+            make.size.equalTo(44)
+        })
+        commentTableLoading.layer.opacity = 0
+    }
+    
+    func showNewsContentViews(){
+        newsDetailPanelView.layer.opacity = 1
+        commentTableView.layer.opacity = 1
+    }
+    
+    func hideNewsContentViews() {
+        newsDetailPanelView.layer.opacity = 0
+        commentTableView.layer.opacity = 0
     }
     
     internal override func createSubviews() {
@@ -691,10 +813,10 @@ extension NewsDetailController {
         newsCover?.kf_setImageWithURL(imageURL)
         newsTitleFake.text = news?.title
         newsTitle.text = news?.title
-//        let url = NSURL(string: news!.contentURL!)!
-//        let request = NSURLRequest(URL: url)
-//        newsDetailPanelView?.loadRequest(request)
-//        loadMoreCommentData()
+        let url = NSURL(string: news!.contentURL!)!
+        let request = NSURLRequest(URL: url)
+        newsDetailPanelView?.loadRequest(request)
+        loadMoreCommentData()
         if news!.liked {
             likeIcon.image = UIImage(named: "news_like_liked")
             commentPanel.likeBtnIcon.image = UIImage(named: "news_like_liked")

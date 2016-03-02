@@ -35,22 +35,6 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     var distinct_identifier: String!
     
     var chatRecords: ChatRecordList?
-//        let identifier = getIdentifierForChatRoom(self)
-//        if let records = ChatRecordDataSource.sharedDataSource.chatRecords[identifier] {
-//            return records
-//        }
-//        let newRecordList = ChatRecordList()
-//        ChatRecordDataSource.sharedDataSource.chatRecords[identifier] = newRecordList
-//        switch roomType {
-//        case .Private:
-//            newRecordList._item = ChatRecordListItem.UserItem(self.targetUser!)
-//            break
-//        case .Club:
-//            newRecordList._item = ChatRecordListItem.ClubItem(self.targetClub!)
-//            break
-//        }
-//        return newRecordList
-//    }
     
     var navTitle: String? {
         if targetUser != nil {
@@ -190,6 +174,8 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
             self.navigationController?.pushViewController(detail, animated: true)
             break
         case .Club:
+            let detail = GroupChatSettingController(targetClub: self.targetClub!)
+            self.navigationController?.pushViewController(detail, animated: true)
             break
         }
     }
@@ -305,27 +291,6 @@ extension ChatRoomController {
             newChat.chat_type = "group"
             break
         }
-//        var chatType = ""
-//        var targetID = ""
-//        switch roomType {
-//        case .Club:
-//            chatType = "group"
-//            targetID = targetClub!.clubID!
-//            break
-//        case .Private:
-//            chatType = "private"
-//            targetID = targetUser!.userID!
-//            break
-//        }
-//
-//        let newChat = ChatRecord.objects.postNewChatRecord(chatType, messageType: messageType, targetID: targetID, textContent: text, image: image, audio: audio, relatedID: nil)
-//        switch chatRecords!._item! {
-//        case .UserItem(let value):
-//
-//            break
-//        case .ClubItem(let value):
-//            break
-//        }
         let dataSource = ChatRecordDataSource.sharedDataSource
         let identifier = getIdentiferForChatRecord(newChat)
         dataSource.chatRecords[identifier]?.append(newChat)

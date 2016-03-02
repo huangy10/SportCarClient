@@ -213,7 +213,7 @@ extension StatusReleasePhotoSelectController {
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 0
+        return 10
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
@@ -247,6 +247,8 @@ class StatusReleasePhotoSelectCell: UICollectionViewCell {
     internal func createSubivews() {
         imageView = UIImageView()
         contentView.addSubview(imageView!)
+        imageView?.contentMode = .ScaleAspectFill
+        imageView?.clipsToBounds = true
         imageView?.snp_makeConstraints(closure: { (make) -> Void in
             make.edges.equalTo(contentView)
         })

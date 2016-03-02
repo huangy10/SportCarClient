@@ -137,10 +137,7 @@ class PersonMineSettingsDataSource {
                     break
                 }
             }
-            var sizeString = "\(sizedouble)"
-            if sizeString.length > 4 {
-                sizeString = sizeString[0..<4]
-            }
+            let sizeString = String(format: "%.1f", sizedouble)
             cacheSizeDes = sizeString + ["", "KB", "MB", "GB"][shiftLevel]
         }catch _ {
             cacheSizeDes = LS("获取缓存大小失败")

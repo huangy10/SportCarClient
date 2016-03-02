@@ -91,7 +91,7 @@ extension UserManager {
      
      - parameter userID: 给定的用户id
      */
-    func getOrReload(userID: String) -> User? {
+    func getOrLoad(userID: String) -> User? {
         if let user = users[userID] {
             return user
         }else {

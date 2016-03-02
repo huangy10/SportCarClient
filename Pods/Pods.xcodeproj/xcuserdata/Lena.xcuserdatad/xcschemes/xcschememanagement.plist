@@ -24,12 +24,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Kingfisher.xcscheme</key>
+		<key>ImagePicker-ImagePicker.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Mapbox-iOS-SDK-Mapbox.xcscheme</key>
+		<key>ImagePicker.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Kingfisher.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -72,27 +77,37 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>059879557C54A732FE7AC7BB1EF61AEB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>0733652B04064A1841477D3EF38C1DFA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>21981BD422205F07E3594868193146EE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>23D64788C716063E82E4760BC79D05AE</key>
+		<key>32D021F12246C95447B2ABA30D63BB5A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>23DD5FB2E57E185A86F9C0883DC37447</key>
+		<key>3D1C7076CEC45E3F09AADDCDFF443692</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2DB59219DEF5D393F19F0753F2D9C161</key>
+		<key>421170F3DEC968511AE379093B2551FE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>432ECC54282C84882B482CCB4CF227FC</key>
+		<key>454B3E9A6602CC0A6E641A525A8F9075</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -102,32 +117,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>64E9BEEFB76C467AB2B72874D174FC98</key>
+		<key>79C040AFDDCE1BCBF6D8B5EB0B85887F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>798112EF0D0E6C443AA0F4EA185A09C5</key>
+		<key>938515F0F434D7468FCB8A15DA8B6925</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>94D6E6CA7CA4D9563136AA27D37BEA66</key>
+		<key>A917DA9C45D7893094FDCD6B60C44BD3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9D05950A740EAAE35BC23C7284C65D2B</key>
+		<key>D001DE49152FF44ED8E5FD8B382C4DB7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9E4B9CCC957E6A1ED0406E64CCB44A8A</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>BBDC238B1368D3D2350B19A8D60533C6</key>
+		<key>ED0DBB1358E8CE39F1E33CF8C2063335</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -101,7 +101,9 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
             }
             return cell
         }else{
-            let cell = tableView.dequeueReusableCellWithIdentifier(PersonMineSettingsBtnsCell.reuseIdentifier, forIndexPath: indexPath) as! PersonMineSettingsBtnsCell
+            let cell = tableView.dequeueReusableCellWithIdentifier(PersonMineSettingsBtnsCell.reuseIdentifier,
+                forIndexPath: indexPath) as! PersonMineSettingsBtnsCell
+            cell.quitBtn.addTarget(self, action: "quitBtnPressed", forControlEvents: .TouchUpInside)
             return cell
         }
     }
@@ -135,6 +137,10 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
         case 3:
             let detail = PersonMineSettingsInvitationController()
             self.navigationController?.pushViewController(detail, animated: true)
+        case 4:
+            let detail = ClearCacheController(parent: self)
+            self.presentViewController(detail, animated: false, completion: nil)
+            break
         case 7:
             let detail = AgreementController()
             self.navigationController?.pushViewController(detail, animated: true)
@@ -159,12 +165,26 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
     func dataSourceUpateError(notif: Notification) {
          
     }
+    
+    func quitBtnPressed() {
+        let app = AppManager.sharedAppManager
+        app.logout()
+    }
 }
 
 class PersonMineSettingsBtnsCell: UITableViewCell {
     static let reuseIdentifier = "person_mine_settings_btn_cell"
     var quitBtn: UIButton!
     var changePassword: UIButton!
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        createSubviews()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     func createSubviews() {
         let superview = self.contentView
@@ -174,7 +194,7 @@ class PersonMineSettingsBtnsCell: UITableViewCell {
         quitBtn.setImage(UIImage(named: "person_logout"), forState: .Normal)
         superview.addSubview(quitBtn)
         quitBtn.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(quitBtn)
+            make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(35)
             make.size.equalTo(CGSizeMake(150, 50))
         }
@@ -190,6 +210,8 @@ class PersonMineSettingsBtnsCell: UITableViewCell {
             make.bottom.equalTo(superview)
             make.width.equalTo(quitBtn)
         }
+        //
+        changePassword.hidden = true
     }
 }
 

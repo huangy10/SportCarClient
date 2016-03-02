@@ -52,7 +52,7 @@ func getIdentiferForChatRecord(chatRecord: ChatRecord) -> String{
             return "\(targetID)_\(senderID)"
         }
     }else {
-        return chatRecord.club!.clubID!
+        return chatRecord.targetClub!.clubID!
     }
 }
 
@@ -83,7 +83,8 @@ class ChatRecordDataSource {
      */
     func loadChatList() {
         self.requester.getChatList({ (json) -> () in
-            for data in json!.arrayValue {
+            // 处理聊天内容
+            for data in json!["chats"].arrayValue {
                 let semaphore = dispatch_semaphore_create(0)
                 let newRecord = ChatRecord.objects.getOrCreateEmpty(data["chatID"].stringValue)
                 newRecord.loadValueFromJSON(data)
@@ -148,6 +149,20 @@ class ChatRecordDataSource {
                 }
                 self.getUnreadInformation()
             })
+            // 解析聊天设置
+            for data in json!["club_settings"].arrayValue {
+                let clubID = data["club"]["id"].stringValue
+                if let club = Club.objects.getOrLoad(clubID) {
+                    club.clubJoining?.updateFromJson(data)
+                }
+            }
+            // 个人聊天设置
+            for data in json!["private_settings"].arrayValue {
+                let userID = data["target_id"].stringValue
+                if let user = User.objects.getOrLoad(userID) {
+                    user.remarkName = data["remarkName"].string
+                }
+            }
             }) { (code) -> () in
                 print(code)
         }
@@ -318,6 +333,8 @@ class ChatRecordDataSource {
             }
             //                self.chatRecords[identifier]?.appendContentsOf([newRecord])
             if newRecord.messageType == "audio"{
+                print(newRecord)
+                print(data)
                 // 如果是音频数据的话直接开始下载
                 self.requester.download_audio_file_async( newRecord, onComplete: { (record, localURL) -> () in
                     // 下载完成后开始分析波形

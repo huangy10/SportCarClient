@@ -52,6 +52,7 @@ class StatusBasicController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(StatusCell.reuseIdentifier, forIndexPath: indexPath) as! StatusCell
+        cell.parent = homeController
         cell.status = status[indexPath.row]
         cell.selectionStyle = .None
         cell.loadDataAndUpdateUI()

@@ -11,11 +11,11 @@ import CoreData
 import SwiftyJSON
 
 class ClubJoining: NSManagedObject {
-
-// Insert code here to add functionality to your managed object subclass
-    func loadValueFromJSON(json: JSON) {
-        
+    
+    func updateFromJson(json: JSON) {
+        nickName = json["nick_name"].string
+        showNickName = json["show_nick_name"].boolValue
+        noDisturbing = json["no_disturbing"].boolValue
+        alwaysOnTop = json["always_on_top"].boolValue
     }
 }
-
-

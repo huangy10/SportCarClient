@@ -23,7 +23,6 @@ extension ClubJoining {
     @NSManaged var nickName: String?
     @NSManaged var noDisturbing: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var showNickName: Bool // cannot mark as optional because Objective-C compatibility issues
-    @NSManaged var userID: String?
 
 }
 
@@ -38,7 +37,6 @@ extension ClubJoining {
     static let nickName = AlecrimCoreData.NullableAttribute<String>("nickName")
     static let noDisturbing = AlecrimCoreData.NullableAttribute<Bool>("noDisturbing")
     static let showNickName = AlecrimCoreData.NullableAttribute<Bool>("showNickName")
-    static let userID = AlecrimCoreData.NullableAttribute<String>("userID")
 
 }
 
@@ -53,7 +51,6 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: ClubJoining {
     var nickName: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("nickName", self) }
     var noDisturbing: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("noDisturbing", self) }
     var showNickName: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("showNickName", self) }
-    var userID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("userID", self) }
 
 }
 

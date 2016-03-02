@@ -51,8 +51,11 @@ class AppManager: UIViewController {
      推出当前所有的展示内容回到登陆页面
      */
     func logout() {
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        User.objects.logout()
         let ctrl = AccountController()
-        self.navigationController?.pushViewController(ctrl, animated: true)
+        let nav = BlackBarNavigationController(rootViewController: ctrl)
+        self.presentViewController(nav, animated: true, completion: nil)
+        self.navigationController?.popToRootViewControllerAnimated(false)
+        
     }
 }

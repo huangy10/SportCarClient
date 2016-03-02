@@ -16,6 +16,8 @@ class Club: NSManagedObject {
 
 // Insert code here to add functionality to your managed object subclass
     static let objects = ClubManager()
+    // 实质是关于俱乐部的配置，如果为空表示均为默认设置
+    var clubJoining: ClubJoining?
     
     /**
      从json数据载入数据，这里面只载入最简单的几个属性
@@ -26,6 +28,7 @@ class Club: NSManagedObject {
         name = json["club_name"].string
         logo_url = json["club_logo"].string
         clubDescription = json["description"].string
+        identified = json["identified"].boolValue
     }
     
 }
@@ -53,6 +56,9 @@ class ClubManager {
      */
     func getOrCreate(json: JSON) -> Club?{
         let clubID = json["id"].stringValue
+        if clubID == "" {
+            return nil
+        }
         if let club = self.clubs[clubID] {
             club.loadValueFromJSON(json)
             saveAll()
@@ -60,6 +66,7 @@ class ClubManager {
         }
         let club = context.clubs.firstOrCreated { $0.clubID == clubID }
         club.loadValueFromJSON(json)
+        club.clubJoining = context.clubJoinings.first({$0.clubID == clubID})
         self.clubs[clubID] = club
         saveAll()
         return club
@@ -77,6 +84,9 @@ class ClubManager {
             return club
         }
         let club = context.clubs.first { $0.clubID == clubID }
+        if club != nil {
+            club?.clubJoining = context.clubJoinings.first({$0.clubID == clubID})
+        }
         return club
     }
     

@@ -93,6 +93,7 @@ extension ChatListController {
             messageController.navigationController?.pushViewController(room, animated: true)
             
         }else{
+            // 创建群聊
             let detail = GroupChatSetupController()
             detail.users = users
             detail.delegate = self
@@ -105,6 +106,7 @@ extension ChatListController {
     }
     
     func groupChatSetupControllerDidSuccessCreatingClub(newClub: Club) {
+        // 群聊创建成功，打开聊天窗口
         self.navigationController?.popViewControllerAnimated(true)
         let chatRoom = ChatRoomController()
         chatRoom.chatList = self

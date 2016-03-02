@@ -310,7 +310,6 @@ extension StatusReleaseController {
     func photeSelectCancelled() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
 }
 
 

@@ -36,6 +36,10 @@ class ChatURLMaker {
         return website + "/club/create"
     }
     
+    func clubInfo(clubID: String) -> String {
+        return website + "/club/\(clubID)/info"
+    }
+    
     func clubList() -> String {
         return website + "/club/list"
     }
@@ -142,7 +146,8 @@ class ChatRequester: AccountRequester {
             if messageType == "image" {
                 data.appendBodyPart(data: UIImagePNGRepresentation(image!)!, name: "image", fileName: "uploaded_image.png", mimeType: "image/png")
             }else if messageType == "audio" {
-                data.appendBodyPart(fileURL: audio!, name: "audio")
+                data.appendBodyPart(fileURL: audio!, name: "audio", fileName: "audio.m4a", mimeType: "audio/mp4")
+//                data.appendBodyPart(fileURL: audio!, name: "audio")
             }else{
                 data.appendBodyPart(data: textContent!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "text_content")
             }
@@ -174,6 +179,18 @@ class ChatRequester: AccountRequester {
         let strURL = ChatURLMaker.sharedMaker.chatSettings(targetUserID)
         manager.request(.GET, strURL).responseJSON { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "settings", onSuccess: onSuccess, onError: onError)
+        }
+    }
+    
+    /**
+     获取俱乐部信息
+     
+     - parameter clubID:    俱乐部id
+     */
+    func getClubInfo(clubID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let url = ChatURLMaker.sharedMaker.clubInfo(clubID)
+        manager.request(.GET, url).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
         }
     }
     

@@ -1,6 +1,12 @@
 # SwiftyTimer
 
-SwiftyTimer is a set of extensions to make the `NSTimer` API cleaner, nicer to use, and at home with Swift's syntax.
+![Platforms](https://img.shields.io/badge/platforms-ios%20%7C%20osx%20%7C%20watchos%20%7C%20tvos-lightgrey.svg)
+[![CocoaPods](http://img.shields.io/cocoapods/v/SwiftyTimer.svg)](https://cocoapods.org/pods/SwiftyTimer)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](#carthage)
+![Swift version](https://img.shields.io/badge/swift-2.1-orange.svg)
+
+#### Modern Swifty API for `NSTimer`
+###### SwiftyTimer allows you to instantly schedule delays and repeating timers using convenient closure syntax. It's time to get rid of Objective-C cruft.
 
 Read [Swifty APIs: NSTimer](http://radex.io/swift/nstimer/) for more information about this project.
 
@@ -23,11 +29,13 @@ SwiftyTimer uses closures instead of target/selector/userInfo.
 You can specify time intervals with intuitive [Ruby on Rails](http://rubyonrails.org)-like helpers:
 
 ```swift
+100.milliseconds
 1.second
 2.5.seconds
 5.seconds
 10.minutes
 1.hour
+2.days
 ```
 
 You can pass method references instead of closures:
@@ -55,23 +63,35 @@ timer.start(modes: NSDefaultRunLoopMode, NSEventTrackingRunLoopMode)
 
 ## Installation
 
-The simplest way to install this library is to copy `Src/SwiftyTimer.swift` to your project. There's no step two!
-
-#### CocoaPods
-
-You can also install this library using CocoaPods. Just add this line to your Podfile:
+If you're using CocoaPods, just add this line to your Podfile:
 
 ```ruby
 pod 'SwiftyTimer'
 ```
 
-Then import library module like so:
+Install by running this command in your terminal:
+
+```sh
+pod install
+```
+
+Then import the library in all files where you use it:
 
 ```swift
 import SwiftyTimer
 ```
 
-Note that this requires iOS 8 or OS X 10.9+
+#### Carthage
+
+Just add to your Cartfile:
+
+```ruby
+github "radex/SwiftyTimer"
+```
+
+#### Manually
+
+Simply copy `Sources/SwiftyTimer.swift` to your Xcode project.
 
 ## More like this
 

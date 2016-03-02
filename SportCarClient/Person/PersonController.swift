@@ -91,6 +91,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         let header = PersonHeaderMine()
         header.navRightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
         header.navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        header.detailBtn.addTarget(self, action: "detailBtnPressed", forControlEvents: .TouchUpInside)
         return header
     }
     
@@ -110,7 +111,6 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
 //        }
         // TODO: 这里手动添加了status bar的高度值
         header.frame = CGRectMake(0, -totalHeaderHeight, screenWidth, totalHeaderHeight - authCarListHeight)
-        header.detailBtn.addTarget(self, action: "detailBtnPressed", forControlEvents: .TouchUpInside)
         header.user = data.user
         //
         carsViewList = SportsCarViewListController()
@@ -213,6 +213,9 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         if data.selectedCar == nil {
             status = data.statusList[indexPath.row]
         }else {
+            if indexPath.section == 0 {
+                return
+            }
             status = data.statusDict[data.selectedCar!.car!.carID!]![indexPath.row]
         }
         let detail = StatusDetailController(status: status)

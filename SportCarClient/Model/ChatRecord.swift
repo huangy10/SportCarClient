@@ -34,7 +34,17 @@ class ChatRecord: NSManagedObject {
     
     /// 理论上来看，当产生了chatrecord时，对应的club和User都应当已经存在
     var targetUser: User?
-    var targetClub: Club?
+    var targetClub: Club? {
+        didSet {
+            club = targetClub
+        }
+    }
+    
+    var targetJoin: ClubJoining? {
+        didSet {
+            
+        }
+    }
     
     func loadValueFromJSON(json: JSON) {
         self.createdAt = DateSTR(json["created_at"].string)
@@ -51,7 +61,7 @@ class ChatRecord: NSManagedObject {
         self.messageType = json["message_type"].string
         self.read = json["read"].bool ?? false
         if chat_type == "private" && targetID != nil{
-            targetUser = User.objects.getOrReload(targetID!)
+            targetUser = User.objects.getOrLoad(targetID!)
             if targetUser == nil {
                 targetUser = User.objects.create(json["target_user"]).value
             }

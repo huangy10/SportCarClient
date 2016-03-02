@@ -71,8 +71,6 @@ class FFSelectController: UserSelectController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         getMoreUserData()
@@ -160,6 +158,7 @@ class FFSelectController: UserSelectController {
                 self.titleFollowBtn?.setTitleColor(UIColor.whiteColor(), forState: .Normal)
                 }, completion: nil)
             navTitlestate = .Fans
+            self.userTableView?.reloadData()
         }else{
             if navTitlestate == .Follow {
                 return
@@ -173,6 +172,10 @@ class FFSelectController: UserSelectController {
                 self.titleFollowBtn?.setTitleColor(kBarBgColor, forState: .Normal)
                 }, completion: nil)
             navTitlestate = .Follow
+            if follows.count == 0 {
+                getMoreUserData()
+            }
+            self.userTableView?.reloadData()
         }
     }
     
@@ -196,6 +199,7 @@ class FFSelectController: UserSelectController {
             requester.getFansList(targetUser.userID!, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
                 if let fansJSONData = data?.arrayValue {
                     for json in fansJSONData {
+                        print(json)
                         let user = User.objects.create(json).value
                         user?.recentStatusDes = json["recent_status_des"].string
                         self.fans.append(user!)

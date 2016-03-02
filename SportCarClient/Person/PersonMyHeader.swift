@@ -11,7 +11,7 @@ import Mapbox
 import Kingfisher
 import SnapKit
 
-class PersonHeaderMine: UIView, MGLMapViewDelegate {
+class PersonHeaderMine: UIView, MGLMapViewDelegate, CLLocationManagerDelegate {
     // 绑定的相关用户
     var user: User!
     // 
@@ -30,6 +30,9 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
     
     var navRightBtn: UIButton!      // 单独创建的类似导航栏的按钮，但是并不在导航栏中
     var navLeftBtn: UIButton!       // 同上
+    
+    /// 是否自己抓取位置数据
+    var locateYouself = true
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -140,7 +143,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         detailBtn = UIButton()
         superview.addSubview(detailBtn)
         detailBtn.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(nameLbl)
+            make.left.equalTo(avatarBtn)
             make.top.equalTo(nameLbl)
             make.bottom.equalTo(avatarBtn)
             make.right.equalTo(arrowIcon)
@@ -158,7 +161,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         //
         let staticFansNumLbl = UILabel()
         staticFansNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        staticFansNumLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        staticFansNumLbl.font = UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)
         staticFansNumLbl.textAlignment = .Center
         staticFansNumLbl.text = LS("粉丝")
         superview.addSubview(staticFansNumLbl)
@@ -173,12 +176,12 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         statusNumLbl.textAlignment = .Center
         superview.addSubview(statusNumLbl)
         statusNumLbl.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(fansNumLbl.snp_left).offset(-50)
+            make.centerX.equalTo(fansNumLbl).offset(-85)
             make.centerY.equalTo(fansNumLbl)
         }
         //
         let staticStatusNumLbl = UILabel()
-        staticStatusNumLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        staticStatusNumLbl.font = UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)
         staticStatusNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
         staticStatusNumLbl.textAlignment = .Center
         staticStatusNumLbl.text = LS("动态")
@@ -194,12 +197,12 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         followNumLbl.font = UIFont.systemFontOfSize(17, weight: UIFontWeightSemibold)
         superview.addSubview(followNumLbl)
         followNumLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(fansNumLbl.snp_right).offset(50)
+            make.centerX.equalTo(fansNumLbl).offset(85)
             make.centerY.equalTo(fansNumLbl)
         }
         //
         let staticFollowNumLbl = UILabel()
-        staticFollowNumLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        staticFollowNumLbl.font = UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)
         staticFollowNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
         staticFollowNumLbl.textAlignment = .Center
         staticFollowNumLbl.text = LS("关注")
@@ -252,7 +255,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate {
         //
         let genderText = user.gender ?? "m"
         let gender = ["男": "♂", "女": "♀"][genderText]
-        if genderText == "m" {
+        if genderText == "男" {
             genderAgeLbl.backgroundColor = UIColor(red: 0.227, green: 0.439, blue: 0.686, alpha: 1)
         }else {
             genderAgeLbl.backgroundColor = UIColor(red: 0.686, green: 0.227, blue: 0.490, alpha: 1)

@@ -11,18 +11,23 @@ import SnapKit
 
 let kGroupChatSettingSectionTitles = ["", "信息", "通知", "聊天"]
 
-class GroupChatController: UITableViewController {
+class GroupChatSettingController: UITableViewController {
     
-    var targetClub: Club!
+    var targetClub: Club! 
     //
-    var clubJoining: ClubJoining!
+    var clubJoining: ClubJoining? {
+        return targetClub.clubJoining
+    }
+    
     // 活动描述：
     var activityDescription: String?
     
     var inlineUserSelect: InlineUserSelectController?
+    var deleteQuitBtn: UIButton?
     
-    init(targetUser: Club) {
+    init(targetClub: Club) {
         super.init(style: .Plain)
+        self.targetClub = targetClub
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -31,12 +36,52 @@ class GroupChatController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navSettings()
         tableView.separatorStyle = .None
         
         tableView.registerClass(PrivateChatSettingsAvatarCell.self, forCellReuseIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier)
         tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
         tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select")
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "quit")
+        
+        let requester = ChatRequester.requester
+        requester.getClubInfo(targetClub.clubID!, onSuccess: { (json) -> () in
+            self.targetClub.loadValueFromJSON(json!["club"])
+            self.targetClub.clubJoining?.updateFromJson(json!)
+            for data in json!["club"]["members"].arrayValue {
+                // 添加成员
+                if let user = User.objects.create(data).value {
+                    self.targetClub.addMember(user)
+                }
+            }
+            self.tableView.reloadData()
+            }) { (code) -> () in
+                print(code)
+        }
+    }
+    
+    func navSettings() {
+        self.navigationItem.title = targetClub.name
+        let leftBtn = UIButton()
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
+        leftBtn.frame = CGRectMake(0, 0, 9, 15)
+        leftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
+        let rightBtn = UIButton()
+        rightBtn.setImage(UIImage(named: "status_detail_other_operation"), forState: .Normal)
+        rightBtn.imageView?.contentMode = .ScaleAspectFit
+        rightBtn.frame = CGRectMake(0, 0, 21, 21)
+        rightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
+    }
+    
+    func navRightBtnPressed() {
+        
+    }
+    
+    func navLeftBtnPressed() {
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -82,7 +127,7 @@ class GroupChatController: UITableViewController {
                 return 50
             }else {
                 let userNum = targetClub.members.count
-                let height: CGFloat = 110 * CGFloat(userNum / 4)
+                let height: CGFloat = 110 * CGFloat(userNum / 4 + 1)
                 return height
             }
         case 2:
@@ -125,14 +170,14 @@ class GroupChatController: UITableViewController {
                     break
                 case 3:
                     cell.staticLbl.text = LS("我在本群的昵称")
-                    cell.infoLbl.text = clubJoining.nickName
+                    cell.infoLbl.text = clubJoining?.nickName ?? User.objects.hostUser?.nickName
                     cell.boolSelect.hidden = true
                     break
                 default:
                     cell.staticLbl.text = LS("显示本群昵称")
                     cell.boolSelect.hidden = false
                     cell.infoLbl.text = ""
-                    cell.boolSelect.on = clubJoining.showNickName
+                    cell.boolSelect.on = clubJoining?.showNickName ?? true
                     cell.tag = 0
                     cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
                 }
@@ -148,6 +193,9 @@ class GroupChatController: UITableViewController {
                     inlineUserSelect?.view.snp_makeConstraints(closure: { (make) -> Void in
                         make.edges.equalTo(cell.contentView)
                     })
+                }else {
+                    inlineUserSelect?.users = Array(targetClub.members)
+                    inlineUserSelect?.collectionView?.reloadData()
                 }
                 return cell
             }
@@ -159,7 +207,7 @@ class GroupChatController: UITableViewController {
                 cell.infoLbl.text = ""
                 cell.boolSelect.hidden = false
                 cell.boolSelect.tag = 1
-                cell.boolSelect.on = clubJoining.noDisturbing
+                cell.boolSelect.on = clubJoining?.noDisturbing ?? false
                 cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
                 break
             case 1:
@@ -167,7 +215,7 @@ class GroupChatController: UITableViewController {
                 cell.infoLbl.text = ""
                 cell.boolSelect.hidden = false
                 cell.boolSelect.tag = 2
-                cell.boolSelect.on = clubJoining.alwaysOnTop
+                cell.boolSelect.on = clubJoining?.alwaysOnTop ?? false
                 cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
                 break
             default:
@@ -175,28 +223,48 @@ class GroupChatController: UITableViewController {
             }
             return cell
         default:
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-            cell.staticLbl.text = [LS("查找聊天内容"), LS("清空聊天内容"), LS("举报")][indexPath.row]
-            cell.infoLbl.text = ""
-            cell.boolSelect.hidden = false
-            return cell
+            if indexPath.row < 3 {
+                let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
+                cell.staticLbl.text = [LS("查找聊天内容"), LS("清空聊天内容"), LS("举报")][indexPath.row]
+                cell.infoLbl.text = ""
+                cell.boolSelect.hidden = false
+                return cell
+            }else {
+                let cell = tableView.dequeueReusableCellWithIdentifier("quit", forIndexPath: indexPath)
+                if deleteQuitBtn == nil {
+                    deleteQuitBtn = UIButton()
+                    deleteQuitBtn?.setImage(UIImage(named: "delete_and_quit_btn"), forState: .Normal)
+                    deleteQuitBtn?.addTarget(self, action: "deletedAndQuitBtnPressed", forControlEvents: .TouchUpInside)
+                    cell.contentView.addSubview(deleteQuitBtn!)
+                    deleteQuitBtn?.snp_makeConstraints(closure: { (make) -> Void in
+                        make.centerX.equalTo(cell.contentView)
+                        make.top.equalTo(cell.contentView).offset(15)
+                        make.size.equalTo(CGSizeMake(150, 50))
+                    })
+                }
+                return cell
+            }
+            
         }
     }
 }
 
-extension GroupChatController {
+extension GroupChatSettingController {
     func switchBtnPressed(sender: UISwitch) {
         switch sender.tag {
         case 0:
-            clubJoining.showNickName = sender.on
+            clubJoining?.showNickName = sender.on
             break
         case 1:
-            clubJoining.noDisturbing = sender.on
+            clubJoining?.noDisturbing = sender.on
             break
         case 2:
-            clubJoining.alwaysOnTop = sender.on
+            clubJoining?.alwaysOnTop = sender.on
         default:
             break
         }
+    }
+    
+    func deleteAndQuitBtnPressed() {
     }
 }

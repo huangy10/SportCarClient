@@ -14,6 +14,7 @@ protocol ShareControllorDelegate {
     func shareControllerFinished()
 }
 
+// TODO: 将这个类改成PresentTemplateViewController的子类
 
 class ShareController: UIViewController {
     var delegate: ShareControllorDelegate?

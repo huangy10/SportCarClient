@@ -9,6 +9,7 @@
 import UIKit
 import Mapbox
 import Spring
+import Alamofire
 
 
 class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate, RadarFilterDelegate {
@@ -37,6 +38,18 @@ class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocation
     var userLocation: CLLocation?
     
     var locationUpdatingToServer: Bool = false
+    var locationUpdatingRequest: Request?
+    var manualStopUpdating: Bool = false {
+        didSet {
+            if manualStopUpdating {
+                locationManager.stopUpdatingLocation()
+                locationUpdatingRequest?.cancel()
+                locationUpdatingToServer = false
+            }else {
+                locationManager.startUpdatingLocation()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -236,13 +249,13 @@ extension RadarDriverMapController {
      更新用户的位置
      */
     func updateUserLocationToServer() {
-        if locationUpdatingToServer == false {
+        if locationUpdatingToServer == false || manualStopUpdating{
             return
         }
         if userLocation == nil {
             assertionFailure()
         }
-        
+        print("dunag")
         let requester = RadarRequester.requester
         locationUpdatingToServer = true
         
@@ -253,7 +266,7 @@ extension RadarDriverMapController {
         let loc2 = CLLocation(latitude: mapBounds.ne.latitude, longitude: mapBounds.ne.longitude)
         let distance = loc1.distanceFromLocation(loc2)
         
-        requester.getRadarData(scanCenter, filterDistance: distance, onSuccess: { (json) -> () in
+        locationUpdatingRequest = requester.getRadarData(scanCenter, filterDistance: distance, onSuccess: { (json) -> () in
             // 当前正在显示的用户
             var existingUsers = Array(self.userMarkerMapping.keys)
             for data in json!.arrayValue {
@@ -276,16 +289,18 @@ extension RadarDriverMapController {
                     self.userMarkerMapping[userID] = marker
                 }
             }
+            self.performSelector("updateUserLocationToServer", withObject: nil, afterDelay: 1)
             //
             }) { (code) -> () in
-            print(code)
-        }
-        requester.updateCurrentLocation(userLocation!.coordinate, onSuccess: { (json) -> () in
-            self.performSelector("updateUserLocationToServer", withObject: nil, afterDelay: 1)
-            }) { (code) -> () in
                 print(code)
-                self.locationUpdatingToServer = false
+                self.performSelector("updateUserLocationToServer", withObject: nil, afterDelay: 1)
         }
+//        requester.updateCurrentLocation(userLocation!.coordinate, onSuccess: { (json) -> () in
+//            self.performSelector("updateUserLocationToServer", withObject: nil, afterDelay: 1)
+//            }) { (code) -> () in
+//                print(code)
+//                self.locationUpdatingToServer = false
+//        }
     }
 }
 

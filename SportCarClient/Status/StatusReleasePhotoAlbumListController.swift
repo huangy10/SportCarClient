@@ -146,6 +146,8 @@ class StatusReleasePhotoAlbumListCell: UITableViewCell {
         let superview = self.contentView
         //
         imageCover = UIImageView()
+        imageCover?.clipsToBounds = true
+        imageCover?.contentMode = .ScaleAspectFill
         superview.addSubview(imageCover!)
         imageCover?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview)

@@ -12,7 +12,7 @@ import Spring
 import SwiftyJSON
 
 
-class StatusDetailController: InputableViewController, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate {
+class StatusDetailController: InputableViewController, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate {
     var status: Status?
     var statusImages: [String] = []
     var comments: [StatusComment] = []
@@ -188,9 +188,27 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     }
     
     func navRightBtnPressed() {
-        
+        // 根据的状态的发布者来确定弹出的窗口
+        if status?.user?.userID == User.objects.hostUser?.userID {
+            // 是当前用户发布的状态，则弹出删除
+            let delete = StatusDeleteController(parent: self)
+            delete.delegate = self
+            delete.status = status!
+            self.presentViewController(delete, animated: false, completion: nil)
+        }else {
+            // 否则弹出举报
+            let report = ReportBlacklistViewController(parent: self)
+            self.presentViewController(report, animated: false, completion: nil)
+        }
     }
-
+    
+    /**
+     弹出的删除窗口删除了状态以后调用这个回调
+     */
+    func statusDidDeleted() {
+        // pop当前这个窗口
+        self.backBtnPressed()
+    }
     
     func createOtherSubivews() {
         let superview = self.view
@@ -549,6 +567,9 @@ extension StatusDetailController {
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StatusCellImageDisplayCell.reuseIdentifier, forIndexPath: indexPath) as! StatusCellImageDisplayCell
         cell.imageView?.kf_setImageWithURL(SFURL(statusImages[indexPath.row + 1])!)
+        cell.imageView?.kf_setImageWithURL(SFURL(statusImages[indexPath.row + 1])!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+            cell.imageView?.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+        })
         return cell
     }
 }
@@ -596,7 +617,6 @@ extension StatusDetailController {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(DetailCommentCell.reuseIdentifier, forIndexPath: indexPath) as! StatusDetailCommentCell
-        // TODO: 配置cell数据
         cell.comment = comments[indexPath.row]
         cell.replyBtn?.tag = indexPath.row
         cell.delegate = self

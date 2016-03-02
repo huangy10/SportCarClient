@@ -31,6 +31,7 @@ class RadarHomeController: UIViewController{
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        driver.manualStopUpdating = false
     }
     
     func navSettings() {
@@ -97,6 +98,7 @@ class RadarHomeController: UIViewController{
         }else {
             self.navigationController?.popViewControllerAnimated(true)
         }
+        driver.manualStopUpdating = true
     }
     
     func navRightBtnPressed() {

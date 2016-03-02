@@ -50,9 +50,9 @@ class RadarRequester: AccountRequester {
      - parameter onSuccess:      成功以后调用的closure
      - parameter onError:        失败以后调用的closure
      */
-    func getRadarData(loc: CLLocationCoordinate2D, filterDistance: Double, onSuccess: (json: JSON?)->(), onError: (code: String?)->()) {
+    func getRadarData(loc: CLLocationCoordinate2D, filterDistance: Double, onSuccess: (json: JSON?)->(), onError: (code: String?)->()) -> Request{
         let url = RadarURLMaker.sharedMaker.updateRadarData()
-        manager.request(.POST, url, parameters: ["filter": "distance", "filter_param": filterDistance, "loc": ["lat": loc.latitude, "lon": loc.longitude]], encoding: .JSON).responseJSON { (response) -> Void in
+        return manager.request(.POST, url, parameters: ["filter": "distance", "filter_param": filterDistance, "loc": ["lat": loc.latitude, "lon": loc.longitude]], encoding: .JSON).responseJSON { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "result", onSuccess: onSuccess, onError: onError)
         }
     }

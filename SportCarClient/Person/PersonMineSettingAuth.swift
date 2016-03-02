@@ -109,7 +109,7 @@ class PersonMineSettingsAuthController: AuthThreeImagesController {
     
     override func createDescriptionLabel() -> UIView {
         let lbl = UILabel()
-        lbl.numberOfLines = 0
+        lbl.numberOfLines = 0  
         lbl.textColor = UIColor(white: 0.72, alpha: 1)
         lbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
         lbl.text = descriptionText

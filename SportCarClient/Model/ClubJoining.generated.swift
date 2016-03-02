@@ -39,7 +39,6 @@ extension ClubJoining {
     static let noDisturbing = AlecrimCoreData.NullableAttribute<Bool>("noDisturbing")
     static let showNickName = AlecrimCoreData.NullableAttribute<Bool>("showNickName")
     static let userID = AlecrimCoreData.NullableAttribute<String>("userID")
-
 }
 
 // MARK: - AttributeType extensions
