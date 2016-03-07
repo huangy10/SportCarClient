@@ -40,6 +40,7 @@ class InlineUserSelectController: UICollectionViewController {
     var relatedClub: Club?
     // 是否显示删除按钮---注：添加按钮总是显示
     var showDeleteBtn: Bool = false
+    var showAddBtn: Bool = true
     // 最大可以显示的用户的数量，设置为0表示没有限制
     var maxUserNum: Int = 0
     
@@ -55,11 +56,12 @@ class InlineUserSelectController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if showDeleteBtn {
+        if showDeleteBtn && showAddBtn {
             return users.count + 2
-        }else{
+        }else if showAddBtn{
             return users.count + 1
         }
+        return users.count
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {

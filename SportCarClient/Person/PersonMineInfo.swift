@@ -11,9 +11,9 @@ import SnapKit
 import Kingfisher
 
 
-class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyModifierDelegate, ImageInputSelectorDelegate, AvatarCarSelectDelegate {
+class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyModifierDelegate, ImageInputSelectorDelegate, AvatarCarSelectDelegate, AvatarClubSelectDelegate, CityElementSelectDelegate {
     
-    var user: User = User.objects.hostUser!
+    var user: User = User.objects.hostUser()!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,7 +87,7 @@ class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyM
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
-            cell.avatarBtn.kf_setImageWithURL(SFURL(user.avatarUrl!)!, forState: .Normal)
+            cell.avatarImage.kf_setImageWithURL(SFURL(user.avatarUrl!)!)
             return cell
         }else {
             let cell = tableView.dequeueReusableCellWithIdentifier(PersonMineInfoCell.reuseIdentifier, forIndexPath: indexPath) as! PersonMineInfoCell
@@ -178,6 +178,11 @@ class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyM
                 let detail = AvatarCarSelectController()
                 detail.delegate = self
                 self.navigationController?.pushViewController(detail, animated: true)
+            case 2:
+                let detail = AvatarClubSelectController()
+                detail.delegate = self
+                self.navigationController?.pushViewController(detail, animated: true)
+                break
             default:
                 break
             }
@@ -193,13 +198,17 @@ class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyM
                 self.navigationController?.pushViewController(detail, animated: true)
                 break
             case 2:
-                
-                let detail = PersonMineSinglePropertyModifierController()
-                detail.focusedIndexPath = indexPath
+                let detail = CityElementSelectController()
                 detail.delegate = self
-                detail.initValue = user.district
-                detail.propertyName = LS("活跃地区")
+                detail.maxLevel = 2
                 self.navigationController?.pushViewController(detail, animated: true)
+//
+//                let detail = PersonMineSinglePropertyModifierController()
+//                detail.focusedIndexPath = indexPath
+//                detail.delegate = self
+//                detail.initValue = user.district
+//                detail.propertyName = LS("活跃地区")
+//                self.navigationController?.pushViewController(detail, animated: true)
             case 3:
                 let detail = PersonMineSinglePropertyModifierController()
                 detail.focusedIndexPath = indexPath
@@ -218,6 +227,12 @@ class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyM
 }
 
 extension PersonMineInfoController {
+    
+    func cityElementSelectDidSelect(dataSource: CityElementSelectDataSource) {
+        let district = dataSource.selectedCity! + dataSource.selectedDistrict!
+        self.didModify(district, indexPath: NSIndexPath(forItem: 2, inSection: 2))
+    }
+    
     func didModify(newValue: String?, indexPath: NSIndexPath) {
         let requester = PersonRequester.requester
         switch indexPath.section {
@@ -309,6 +324,22 @@ extension PersonMineInfoController {
                 
         }
     }
+    
+    func avatarClubSelectDidCancel() {
+        
+    }
+    
+    func avatarClubSelectDidFinish(selectedClub: Club) {
+        let requester = PersonRequester.requester
+        requester.profileModifiy(["avatar_club": selectedClub.clubID!], onSuccess: { (data) -> () in
+            //
+            let targetUser = self.user
+            targetUser.setAvatarClubToProfile(selectedClub)
+            self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 2, inSection: 1)], withRowAnimation: .Automatic)
+            }) { (code) -> () in
+                
+        }
+    }
 }
 
 class PersonMineInfoCell: PrivateChatSettingsCommonCell {
@@ -318,6 +349,8 @@ class PersonMineInfoCell: PrivateChatSettingsCommonCell {
         super.createSubviews()
         iconImage = UIImageView()
         self.contentView.addSubview(iconImage)
+        iconImage.layer.cornerRadius = 10
+        iconImage.clipsToBounds = true
         iconImage.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(infoLbl.snp_left).offset(-8)
             make.centerY.equalTo(infoLbl)

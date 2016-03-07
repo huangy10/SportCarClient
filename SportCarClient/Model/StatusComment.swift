@@ -86,7 +86,7 @@ class StatusCommentManager {
      - returns: 返回创建成功的NewsComment对象
      */
     func postNewCommentToStatus(status: Status, commentString: String, responseToComment: StatusComment?, atString: String?) -> StatusComment {
-        let hostUser = User.objects.hostUser!
+        let hostUser = User.objects.hostUser()!
         let newComment = context.statusComments.createEntity()
         newComment.createdAt = NSDate()
         newComment.user = hostUser

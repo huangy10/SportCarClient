@@ -146,7 +146,7 @@ extension User{
         if let f = json["followed"].bool {
             self.followed = f
         }
-        profile?.loadValueFromJSON(json)
+        // profile?.loadValueFromJSON(json)
         return true
     }
     
@@ -174,6 +174,7 @@ extension User{
         let avatarCarJSON = json["avatar_car"]
         let avatarCar = SportCarOwnerShip.objects.createOrLoadHostUserOwnedCar(avatarCarJSON)!.car
         let profile = self.profile
+        print(avatarCar?.carID)
         profile?.avatarCarID = avatarCar?.carID
         profile?.avatarCarImage = avatarCar?.image
         profile?.avatarCarLogo = avatarCar?.logo
@@ -181,7 +182,7 @@ extension User{
         profile?.statusNum = json["status_num"].int32Value
         profile?.fansNum = json["fans_num"].int32Value
         profile?.followNum = json["follow_num"].int32Value
-        let avatarClubJSON = json["avatarClub"]
+        let avatarClubJSON = json["avatar_club"]
         // Club和User是属于同一个context的
         let avatarClub = Club.objects.getOrCreate(avatarClubJSON)
         profile?.avatarClubID = avatarClub?.clubID
@@ -203,6 +204,13 @@ extension User{
         User.objects.saveAll()
     }
     
+    func setAvatarClubToProfile(club: Club) {
+        let profile = self.profile
+        profile?.avatarClubID = club.clubID
+        profile?.avatarClubLogo = club.logo_url
+        profile?.avatarClubName = club.name
+        User.objects.saveAll()
+    }
 }
 
 

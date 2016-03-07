@@ -55,15 +55,13 @@ class SportCarOwnerShipManager {
      */
     func createOrLoadHostUserOwnedCar(json: JSON) -> SportCarOwnerShip?{
         let carID = json["carID"].stringValue
-        let user = User.objects.hostUser!
-        if let own = context.sportCarOwnerShips.first ({ $0.car.carID == carID && $0.user.userID == user.userID }) {
+        if let own = context.sportCarOwnerShips.first ({ $0.car.carID == carID && $0.user.userID == User.objects.hostUserID }) {
             own.car?.loadFromJSON(json)
             return own
         }else {
-            let own = context.sportCarOwnerShips.createEntity() 
-            let currentContextUser = context.objectWithID(user.objectID) as! User
-            own.identified = true
-            own.user = currentContextUser
+            let own = context.sportCarOwnerShips.createEntity()
+            User.objects.hostUser()?.addOwnership([own])
+//            own.user = currentContextUser
             let car = SportCar.objects.create(json).value
             own.car = car
             

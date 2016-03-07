@@ -156,8 +156,11 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     }
     
     func navLeftBtnPressed() {
-//        self.navigationController?.popViewControllerAnimated(true)
-        homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false))
+        if homeDelegate != nil {
+            homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false))
+        }else {
+            self.navigationController?.popViewControllerAnimated(true)
+        }
     }
     
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {

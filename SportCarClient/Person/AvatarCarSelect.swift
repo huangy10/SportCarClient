@@ -20,7 +20,7 @@ class AvatarCarSelectController: AvatarItemSelectController {
     var delegate: AvatarCarSelectDelegate?
     
     var cars: [SportCarOwnerShip] = []
-    var user: User = User.objects.hostUser!
+    var user: User = User.objects.hostUser()!
     
     var selectedRow: Int = -1
     

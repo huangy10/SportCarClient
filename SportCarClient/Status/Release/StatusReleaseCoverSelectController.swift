@@ -39,6 +39,7 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
     let imageSize = CGSizeMake(100, 100)
     
     var selectedImageRow: [Int] = []
+    var selectedImageTasks: [Int: PHImageRequestID] = [:]
     
     var rightNavBtn: UIButton?
     
@@ -125,14 +126,16 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
     func navRightBtnPressed() {
         let requestOption = PHImageRequestOptions()
         requestOption.synchronous = true
+        requestOption.networkAccessAllowed = true
+        
         let screenWidth = UIScreen.mainScreen().bounds.width
         let outputImageSize = CGSizeMake(screenWidth, screenWidth)
-        
         
         var outputImage: [UIImage] = []
         for row: Int in selectedImageRow {
             if let asset = fetchResult![row] as? PHAsset {
-                photosManager.requestImageForAsset(asset, targetSize: outputImageSize, contentMode: contentMode, options: requestOption, resultHandler: { (image, _) -> Void in
+                photosManager.requestImageForAsset(asset, targetSize: outputImageSize, contentMode: contentMode, options: requestOption, resultHandler: { (image, info) -> Void in
+                    print(info)
                     outputImage.append(image!)
                 })
             }

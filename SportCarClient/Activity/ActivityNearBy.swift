@@ -236,6 +236,7 @@ extension ActivityNearByController {
         if needRequest {
             let requester = ActivityRequester.requester
             requester.getNearByActivities(userLocation!, queryDistance: 10, skip: 0, limit: 10, onSuccess: { (json) -> () in
+                self.acts.removeAll()
                 for data in json!.arrayValue {
                     let act = Activity.objects.getOrCreate(data)
                     self.acts.append(act)
@@ -258,7 +259,7 @@ extension ActivityNearByController {
             }
             if userLocMarker == nil {
             let userMarkLocationOnScreen = map.convertCoordinate(center, toPointToView: map)
-                userLocMarker = UserMapLocationManager(size: CGSizeMake(200, 200))
+                userLocMarker = UserMapLocationManager(size: CGSizeMake(400, 400))
                 map.addSubview(userLocMarker)
                 userLocMarker.center = userMarkLocationOnScreen
             }

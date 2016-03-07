@@ -79,7 +79,8 @@ class HomeController: UIViewController, HomeDelegate {
                 return
             }
             // 将获取到的数据设置给hostUser
-            self.hostUser?.loadValueFromJSON(data!, forceUpdateNil: true)
+            self.hostUser?.loadValueFromJSONWithProfile(data!)
+//            self.hostUser?.loadValueFromJSON(data!, forceUpdateNil: true)
             User.objects.saveAll()
             // 令侧边栏更新数据
             self.reloadData()
@@ -135,6 +136,7 @@ extension HomeController {
      显示边栏
      */
     func showSideBar(animated:Bool) {
+        
         sideBarCtl.reloadUserData()
         let screenWidth = self.view.frame.width
         var move = CATransform3DTranslate(CATransform3DIdentity, 0.876 * screenWidth, 0, 0)
@@ -151,6 +153,7 @@ extension HomeController {
             // 绕Y轴旋转-20度
             self.board.layer.transform = trans
         }
+        sideBarCtl.animateBG()
     }
     
     /**
@@ -186,7 +189,7 @@ extension HomeController {
         switch to {
         case 0:
             if person == nil {
-                person = PersonBasicController(user: User.objects.hostUser!)
+                person = PersonBasicController(user: User.objects.hostUser()!)
                 person?.homeDelegate = self
             }
 //            self.navigationController?.setNavigationBarHidden(false, animated: true)

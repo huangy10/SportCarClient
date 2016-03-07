@@ -41,8 +41,8 @@ class ActivityCommentManager {
         return comment
     }
     
-    func postToNewCommentToActivity(act:Activity, commentString: String, atString: String?, responseToComment: ActivityComment?) -> ActivityComment{
-        let hostUser = User.objects.hostUser!
+    func postToNewCommentToActivity(act:Activity, commentString: String, atString: String?, responseToComment: ActivityComment?, ctx: DataContext? = nil) -> ActivityComment{
+        let hostUser = User.objects.hostUser(ctx)
         let newComment = context.activityComments.createEntity()
         newComment.createdAt = NSDate()
         newComment.user = hostUser

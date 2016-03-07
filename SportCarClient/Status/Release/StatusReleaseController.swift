@@ -248,10 +248,9 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
     func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = LS("发布动态")
-        let leftBtn = UIButton(frame: CGRectMake(0, 0, 10.5, 18))
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        leftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
+        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: "navLeftBtnPressed")
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        self.navigationItem.leftBarButtonItem = leftBtnItem
         
         let rightBtn = UIButton(frame: CGRectMake(0, 0, 28, 16))
         rightBtn.setTitle(LS("发布"), forState: .Normal)
@@ -270,18 +269,22 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
         let lon: Double? = userLocAnn?.coordinate.longitude
         let loc_description = locationDesInput?.text == "" ? "未知未知" : locationDesInput!.text
         let requester = StatusRequester.SRRequester
+        let toast = self.showStaticToast(LS("发布中..."))
         requester.postNewStatus(content, images: selectedImages, car_id: car_id, lat: lat, lon: lon, loc_description: loc_description, onSuccess: { (let data) -> () in
-            print(data)
-            self.home?.dismissViewControllerAnimated(true, completion: nil)
+            self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
             self.home?.followStatusCtrl.loadLatestData()
+            self.hideToast(toast)
+            self.showToast(LS("发布成功！"))
             }) { (code) -> () in
                 print(code)
+                self.hideToast(toast)
+                self.showToast(LS("发布失败，请检查网络设置"))
                 self.displayAlertController(nil, message: LS("发送失败"))
         }
     }
     
     func navLeftBtnPressed() {
-        home?.dismissViewControllerAnimated(true, completion: nil)
+        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 
@@ -309,6 +312,18 @@ extension StatusReleaseController {
     
     func photeSelectCancelled() {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func wrapperDidPress(images: [UIImage]) {
+        print("wrapper")
+    }
+    
+    func doneButtonDidPress(images: [UIImage]) {
+        print("done")
+    }
+    
+    func cancelButtonDidPress() {
+        print("cancel")
     }
 }
 

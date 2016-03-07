@@ -37,3 +37,4 @@ func CGPointDistance(p1: CGPoint, p2: CGPoint) -> CGFloat {
     let dy = p1.y - p2.y
     return sqrt(dx * dx + dy * dy)
 }
+

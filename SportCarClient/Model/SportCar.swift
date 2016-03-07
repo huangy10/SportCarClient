@@ -68,13 +68,7 @@ class SportCarManager {
     /// 存储当前内存池类的所有跑车数据
     var cars = [String: SportCar]()
     /// 主线程的context
-    let context: DataContext
-    /// Background下运行的context，用来处理大批量操作
-    let privateContext: DataContext
-    init() {
-        context = DataContext()
-        privateContext = DataContext(parentDataContext: context)
-    }
+    let context = User.objects.defaultContext
 }
 
 // MARK: - 这个extension处理跑车的内存池存取

@@ -5,6 +5,7 @@
 import Foundation
 import CoreData
 import SwiftyJSON
+import AlecrimCoreData
 
 class Notification: NSManagedObject {
     
@@ -21,16 +22,39 @@ class Notification: NSManagedObject {
         messageType = json["message_type"].string
         read = json["read"].bool ?? true
         // TODO： 处理targetID
+        let userJSON = json["related_user"]
+        user = User.objects.create(userJSON, ctx: Notification.objects.context).value
+        let statusJSON = json["related_status"]
+        let status = Status.objects.getOrCreate(statusJSON).0!
+        relatedID = status.statusID
+        let statusImage = status.image!
+        image = statusImage.split(";").first()
     }
     
 }
 
 class NotificationManager {
     
-    let context = User.objects.context
+    let context = DataContext()
     
     func getOrCreate(json: JSON) -> Notification?{
-        return nil
+        let notificationID = json["notification_id"].stringValue
+        if notificationID == "" {
+            // blank id is not allowed
+            return nil
+        }
+        let notification = context.notifications.firstOrCreated({$0.notificationID == notificationID})
+        notification.loadFromJSON(json)
+        return notification
+    }
+    
+    func saveAll() -> Bool{
+        do {
+            try context.save()
+            return false
+        } catch {
+            return true
+        }
     }
     
 }

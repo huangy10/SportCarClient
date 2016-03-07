@@ -15,7 +15,7 @@ class ActivityCommentCell: DetailCommentCell {
     override func loadDataAndUpdateUI() {
         let user = comment.user!
         //
-        let hostUser = User.objects.hostUser!
+        let hostUser = User.objects.hostUser()!
         if hostUser.userID == user.userID {
             replyBtn?.hidden = true
         }else{

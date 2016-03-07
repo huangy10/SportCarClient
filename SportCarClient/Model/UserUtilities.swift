@@ -32,44 +32,40 @@ class UserManager {
     1、数据的一致性。例如，当一个用户的数据更新时，App所有相关的用户数据需要被同步更新
     2、数据的持久性。即在app离线时要能够提供缓存的用户数据
     */
-    /// 主线程上的context
-    var context: DataContext
-    /// 本Manager维持的Context
-    var privateContext: DataContext
-    /// 存储当前全局所有用户信息的字典，键值是userID
-    var users = [String: User]()
-    /// 上次访问的时间，这个时间是相对于整个Manager而言，并非单条数据的
-    var lastAccess: NSDate?
-    /// 上次修改的时间，同上针对Manager层面而言
-    var lastModify: NSDate?
-    /// 成员的最大寿命，秒
-    var maxLife: Int?
-    /// 访问次数：当访问次数超过达到100时，会将更改同步到CoreData数据库
-    var accessTimes: Int = 0 {
-        didSet{
-            //
+    /// 主线程上的context，默认
+    var defaultContext: DataContext
+    
+    /// 当前登陆的用户
+//    var hostUser: User?
+    var _hostUser: User? {
+        didSet {
+            hostUserID = _hostUser?.userID
         }
     }
-    /// 当前登陆的用户
-    var hostUser: User?
+    func hostUser(ctx: DataContext? = nil) -> User? {
+        if _hostUser == nil {
+            return nil
+        } else if ctx == nil || ctx == defaultContext {
+            return _hostUser
+        }
+        let context = ctx ?? defaultContext
+        return context.objectWithID(_hostUser!.objectID) as? User
+    }
+    var hostUserID: String?
     
     init(maxLife: Int?=60) {
-        self.maxLife = maxLife
-        lastAccess = NSDate()
-        lastModify = NSDate()
         // 创建一个主线程的Context
-        context = DataContext()
-        // 创建一个Background线程的context以供数据的批量操作
-        privateContext = DataContext(parentDataContext: context)
+        defaultContext = DataContext()
     }
     
     func onUserUpdate() {
         
     }
     
-    func saveAll() -> Bool{
+    func saveAll(context: DataContext? = nil) -> Bool{
+        let ctx = context ?? defaultContext
         do {
-            try context.save()
+            try ctx.save()
             return true
         } catch _ {
             return false
@@ -91,13 +87,10 @@ extension UserManager {
      
      - parameter userID: 给定的用户id
      */
-    func getOrLoad(userID: String) -> User? {
-        if let user = users[userID] {
-            return user
-        }else {
-            let user = context.users.first { $0.userID == userID }
-            return user
-        }
+    func getOrLoad(userID: String, ctx: DataContext? = nil) -> User? {
+        let context = ctx ?? defaultContext
+        let user = context.users.first { $0.userID == userID }
+        return user
     }
     /**
      利用从服务器返回的数据创建一个User对象，单个查询和写入直接在主线程上进行。如果创建的用户对象和已有的用户数据发生重叠，则将Manager中的对应数据覆盖
@@ -106,27 +99,15 @@ extension UserManager {
      
      - returns: ManageResult
      */
-    func create(json: JSON) -> ManagerResult<User, ManagerError>{
+    func create(json: JSON, ctx: DataContext? = nil) -> ManagerResult<User, ManagerError>{
+        let context = ctx ?? defaultContext
         let userID = json["userID"].stringValue
-        if let user = users[userID] {
-            user.loadValueFromJSON(json)
-            do{
-                try context.save()
-            }catch let err {
-                print(err)
-                return returnError(.CantSave)
-            }
-            return ManagerResult.Success(user)
+        if userID == "" {
+            return returnError(.KeyError)
         }
-        let user = context.users.firstOrCreated { $0.userID == userID }
+        let user = context.users.firstOrCreated{$0.userID == userID}
         user.loadValueFromJSON(json)
-        users["userID"] = user
-        do{
-            try context.save()
-        }catch let err {
-            print(err)
-            return returnError(.CantSave)
-        }
+        saveAll(ctx)
         return ManagerResult.Success(user)
     }
     
@@ -137,20 +118,16 @@ extension UserManager {
      
      - returns: 生成的用户
      */
-    func create(detailjson: JSON) -> User? {
+    func create(detailjson: JSON, ctx: DataContext? = nil) -> User? {
+        let context = ctx ?? defaultContext
         let userID = detailjson["userID"].stringValue
         if userID == "" {
             // 没有找到有效的userID
             return nil
         }
-        if let user = users[userID] {
-            user.loadValueFromJSONWithProfile(detailjson)
-            return user
-        }
-        let user = context.users.firstOrCreated{ $0.userID == userID }
+        let user = context.users.firstOrCreated{$0.userID == userID}
         user.loadValueFromJSONWithProfile(detailjson)
-        // 将用户数据放进内存池中
-        users[userID] = user
+        saveAll()
         return user
     }
     
@@ -161,40 +138,40 @@ extension UserManager {
      
      - returns: Wrapped User Array
      */
-    func create(jsons: [JSON]) -> ManagerResult<[User], ManagerError>{
-        var idList = [String]()
-        for json in jsons {
-            // 首先循环检查所有的JSON字典是否有必须的userID字段，且没有重复
-            guard let userID = json["userID"].string else{
-                return returnError(.KeyError)
-            }
-            if idList.contains(userID){
-                return returnError(.Integrity)
-            }
-            idList.append(json["userID"].stringValue)
-        }
-        var newUsers = [User]()
-        for json in jsons {
-            let userID = json["userID"].stringValue
-            if let user = users[userID] where user.isEqualTo(json){
-                // 检查用户是否在现在的内存池中
-                newUsers.append(user)
-                accessTimes += 1
-            }
-            let user = context.users.firstOrCreated{$0.userID == userID}
-            user.userID = userID
-            user.loadValueFromJSON(json, forceUpdateNil: true)
-            accessTimes += 1
-            newUsers.append(user)
-            users[userID] = user
-        }
-        do {
-            try context.save()
-        }catch {
-            return returnError(.CantSave)
-        }
-        return ManagerResult.Success(newUsers)
-    }
+//    func create(jsons: [JSON], ctx: DataContext? = nil) -> ManagerResult<[User], ManagerError>{
+//        var idList = [String]()
+//        for json in jsons {
+//            // 首先循环检查所有的JSON字典是否有必须的userID字段，且没有重复
+//            guard let userID = json["userID"].string else{
+//                return returnError(.KeyError)
+//            }
+//            if idList.contains(userID){
+//                return returnError(.Integrity)
+//            }
+//            idList.append(json["userID"].stringValue)
+//        }
+//        var newUsers = [User]()
+//        for json in jsons {
+//            let userID = json["userID"].stringValue
+//            if let user = users[userID] where user.isEqualTo(json){
+//                // 检查用户是否在现在的内存池中
+//                newUsers.append(user)
+//                accessTimes += 1
+//            }
+//            let user = context.users.firstOrCreated{$0.userID == userID}
+//            user.userID = userID
+//            user.loadValueFromJSON(json, forceUpdateNil: true)
+//            accessTimes += 1
+//            newUsers.append(user)
+//            users[userID] = user
+//        }
+//        do {
+//            try context.save()
+//        }catch {
+//            return returnError(.CantSave)
+//        }
+//        return ManagerResult.Success(newUsers)
+//    }
     
     /**
      重新载入指定id的用户，当这个id并不存在于core data数据库中时，返回NotFound错误
@@ -203,35 +180,33 @@ extension UserManager {
      
      - returns: 打包的返回结果
      */
-    func reload(userID: String) -> ManagerResult<User, ManagerError>{
-        if let user = users[userID] {
-            return ManagerResult.Success(user)
-        }
+    func reload(userID: String, ctx: DataContext? = nil) -> ManagerResult<User, ManagerError>{
+        let context = ctx ?? defaultContext
         if let user = context.users.first({ $0.userID == userID }) {
             return ManagerResult.Success(user)
         }
         return returnError(.NotFound)
     }
-    
-    func reload(usersID: [String]) -> ManagerResult<[User], ManagerError> {
-        var remainUsers = [String]()
-        var newUsers = [User]()
-        // 首先载入所有已经在内存中的用户的数据
-        for userID in usersID {
-            if let user = users[userID] {
-                newUsers.append(user)
-            }else {
-                remainUsers.append(userID)
-            }
-        }
-        // 剩余的未在内存中的，从CoreData中查询出来
-        let anotherUsers = context.users.filter { $0.userID.isIn(remainUsers) }
-        for user in anotherUsers {
-            self.users[user.userID!] = user
-            newUsers.append(user)
-        }
-        return ManagerResult.Success(newUsers)
-    }
+//    
+//    func reload(usersID: [String]) -> ManagerResult<[User], ManagerError> {
+//        var remainUsers = [String]()
+//        var newUsers = [User]()
+//        // 首先载入所有已经在内存中的用户的数据
+//        for userID in usersID {
+//            if let user = users[userID] {
+//                newUsers.append(user)
+//            }else {
+//                remainUsers.append(userID)
+//            }
+//        }
+//        // 剩余的未在内存中的，从CoreData中查询出来
+//        let anotherUsers = context.users.filter { $0.userID.isIn(remainUsers) }
+//        for user in anotherUsers {
+//            self.users[user.userID!] = user
+//            newUsers.append(user)
+//        }
+//        return ManagerResult.Success(newUsers)
+//    }
 }
 
 // MARK: - 这个部分主要实现对Host用户的管理
@@ -244,29 +219,18 @@ extension UserManager {
      
      - returns: Result
      */
-    func login(userID: String) -> ManagerResult<User, ManagerError> {
+    func login(userID: String, ctx: DataContext? = nil) -> ManagerResult<User, ManagerError> {
+        let context = ctx ?? defaultContext
         defer {
             NSUserDefaults.standardUserDefaults().setObject(userID, forKey: "host_user_id")
         }
         // 检查是否制定的id已经是当前的host，若是直接返回即可
-        if userID == hostUser?.userID {
-            return ManagerResult.Success(hostUser!)
+        if userID == hostUser(ctx)?.userID {
+            return ManagerResult.Success(hostUser(ctx)!)
         }
-        // 检查是否已经在内存池中
-        if let user = users[userID] {
-            hostUser = user
-            return ManagerResult.Success(user)
-        }
-        // 若无则从CoreData中获取
         let user = context.users.firstOrCreated { $0.userID == userID }
-        hostUser = user
-        // 注意要host用户也要加入users
-        users[userID] = user
-        do {
-            try context.save()
-        }catch _ {
-            
-        }
+        _hostUser = user
+//        print(user.profile?.avatarCarImage)
         return ManagerResult.Success(user)
     }
     
@@ -292,11 +256,11 @@ extension UserManager {
      注销登陆，这个操作会将hostUser置为nil，并将NSUserDefaults中存储的host_user_id移除
      */
     func logout() -> Void{
-        if hostUser == nil {
+        if _hostUser == nil {
             return
         }
         NSUserDefaults.standardUserDefaults().removeObjectForKey("host_user_id")
-        hostUser = nil
+        _hostUser = nil
     }
     
     /**
@@ -307,21 +271,22 @@ extension UserManager {
      - returns: 是否是host用户
      */
     func isHostUser(user: User?) -> Bool {
-        if user == nil || self.hostUser == nil{
+        if user == nil || self.hostUser() == nil{
             return false
         }
-        if user!.userID == self.hostUser?.userID {
+        if user!.userID == self.hostUser()?.userID {
             return true
         }
         return false
     }
-    
-    func save() -> Bool{
-        do {
-            try context.save()
-            return true
-        }catch _ {
-            return false
-        }
-    }
+//    
+//    func save() -> Bool{
+//        do {
+//            try context.save()
+////            try privateContext.save()
+//            return true
+//        }catch _ {
+//            return false
+//        }
+//    }
 }

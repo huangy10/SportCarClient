@@ -54,7 +54,7 @@ class PrivateChatSettingsHeader: UITableViewHeaderFooterView {
 
 class PrivateChatSettingsAvatarCell: UITableViewCell {
     static let reuseIdentifier = "private_chat_settings_avatar_cell"
-    var avatarBtn: UIButton!
+    var avatarImage: UIImageView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -67,12 +67,12 @@ class PrivateChatSettingsAvatarCell: UITableViewCell {
     
     func createSubviews() {
         //
-        avatarBtn = UIButton()
-        avatarBtn.clipsToBounds = true
-        avatarBtn.layer.cornerRadius = 37
-        avatarBtn.clipsToBounds = true
-        self.contentView.addSubview(avatarBtn)
-        avatarBtn.snp_makeConstraints { (make) -> Void in
+        avatarImage = UIImageView()
+        avatarImage.clipsToBounds = true
+        avatarImage.layer.cornerRadius = 37
+        avatarImage.contentMode = .ScaleAspectFill
+        self.contentView.addSubview(avatarImage)
+        avatarImage.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(self.contentView)
             make.size.equalTo(74)
         }

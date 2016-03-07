@@ -13,7 +13,7 @@ import SwiftyJSON
 
 internal class StatusURLMaker: AccountURLMaker {
     
-    static let sharedMaker = StatusURLMaker(user: User.objects.hostUser)
+    static let sharedMaker = StatusURLMaker(user: User.objects.hostUser())
     
     
     func getStatusFollowList() -> String{
@@ -111,8 +111,8 @@ class StatusRequester: AccountRequester {
             if loc_description != nil {
                 data.appendBodyPart(data: loc_description!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "location_description")
             }
-            let hostUser = User.objects.hostUser!
-            data.appendBodyPart(data: hostUser.userID!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "user_id")
+            let hostUserID = User.objects.hostUserID!
+            data.appendBodyPart(data: hostUserID.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "user_id")
             
             }) { (let encodingResult) -> Void in
                 switch encodingResult{
@@ -233,5 +233,12 @@ class StatusRequester: AccountRequester {
             .response(queue: self.privateQueue, responseSerializer: Request.JSONResponseSerializer(options: .AllowFragments)) { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
         }
+    }
+    
+    func likeStatus(statusID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+        let url = StatusURLMaker.sharedMaker.statusOperation(statusID)
+        return manager.request(.POST, url, parameters: ["op_type": "like"]).responseJSON(completionHandler: { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "like_info", onSuccess: onSuccess, onError: onError)
+        })
     }
 }

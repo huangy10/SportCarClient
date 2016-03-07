@@ -99,6 +99,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate, CLLocationManagerDelegate {
         //
         avatarClubLogo = UIButton()
         avatarClubLogo.layer.cornerRadius = 10
+        avatarClubLogo.clipsToBounds = true
         superview.addSubview(avatarClubLogo)
         avatarClubLogo.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(nameLbl)
@@ -106,13 +107,6 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate, CLLocationManagerDelegate {
             make.size.equalTo(20)
         }
         //
-//        let gender = user.gender!
-//        var lblBGColor: UIColor
-//        if gender == "m" {
-//            lblBGColor = UIColor(red: 0.227, green: 0.439, blue: 0.686, alpha: 1)
-//        }else{
-//            lblBGColor = kHighlightedRedTextColor
-//        }
         genderAgeLbl = UILabel()
         genderAgeLbl.backgroundColor = UIColor(red: 0.227, green: 0.439, blue: 0.686, alpha: 1)
         genderAgeLbl.textColor = UIColor.whiteColor()
@@ -243,12 +237,17 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate, CLLocationManagerDelegate {
         avatarBtn.kf_setImageWithURL(SFURL(user.avatarUrl!)!, forState: .Normal)
         // 认证跑车
         if let carID = user.profile?.avatarCarID where carID != "" {
-            print(user.profile)
             avatarCarBtn.kf_setImageWithURL(SFURL(user.profile!.avatarCarLogo!)!, forState: .Normal)
             avatarCarNameLbl.text = user.profile?.avatarCarName
         }else {
             avatarCarBtn.setImage(nil, forState: .Normal)
             avatarCarNameLbl.text = ""
+        }
+        // 认证俱乐部
+        if let clubID = user.profile?.avatarClubID where clubID != "" {
+            avatarClubLogo.kf_setImageWithURL(SFURL(user.profile!.avatarClubLogo!)!, forState: .Normal)
+        }else {
+            avatarClubLogo.setImage(nil, forState: .Normal)
         }
         // 
         nameLbl.text = user.nickName
@@ -261,7 +260,7 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate, CLLocationManagerDelegate {
             genderAgeLbl.backgroundColor = UIColor(red: 0.686, green: 0.227, blue: 0.490, alpha: 1)
         }
         let age = user.age
-        genderAgeLbl.text = "\(gender!) \(age)"
+        genderAgeLbl.text = "\(gender!) \(age) "
         // 
         let profile = user.profile
         fansNumLbl.text = "\(profile!.fansNum)"

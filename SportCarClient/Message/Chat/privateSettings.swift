@@ -80,7 +80,8 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     }
     
     func navRightBtnPressed() {
-
+        let report = ReportBlacklistViewController(parent: self)
+        self.presentViewController(report, animated: false, completion: nil)
     }
     
     func navLeftBtnPressed() {
@@ -106,7 +107,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         case 2:
             return 2
         case 3:
-            return 4
+            return 3
         default:
             return 0
         }
@@ -142,7 +143,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
             cell.selectionStyle = .None
-            cell.avatarBtn.kf_setImageWithURL(SFURL(targetUser.avatarUrl!)!, forState: .Normal)
+            cell.avatarImage.kf_setImageWithURL(SFURL(targetUser.avatarUrl!)!)
             return cell
         case 1:
             if indexPath.row < 2 {
@@ -194,10 +195,10 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
             }
             return cell
         default:
-            if indexPath.row < 3 {
+            if indexPath.row < 2 {
                 let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
                 cell.selectionStyle = .None
-                cell.staticLbl.text = [LS("查找聊天内容"), LS("情况聊天内容"), LS("举报")][indexPath.row]
+                cell.staticLbl.text = [LS("清空聊天内容"), LS("举报")][indexPath.row]
                 cell.detailTextLabel?.text = ""
                 cell.boolSelect.hidden = true
                 return cell
@@ -232,7 +233,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         case 2:
             return 50
         case 3:
-            if indexPath.row < 3 {
+            if indexPath.row < 2 {
                 return 50
             }else {
                 return 128

@@ -104,6 +104,8 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         ChatRecordDataSource.sharedDataSource.curRoom = self
+        // 重新载入club的信息
+        self.navigationItem.title = navTitle
     }
     
     override func createSubviews() {
@@ -174,6 +176,11 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
             self.navigationController?.pushViewController(detail, animated: true)
             break
         case .Club:
+            if targetClub?.host?.userID == User.objects.hostUserID {
+                let detail = GroupChatSettingHostController(targetClub: targetClub!)
+                self.navigationController?.pushViewController(detail, animated: true)
+                break
+            }
             let detail = GroupChatSettingController(targetClub: self.targetClub!)
             self.navigationController?.pushViewController(detail, animated: true)
             break
@@ -287,7 +294,7 @@ extension ChatRoomController {
             break
         case .ClubItem(let club):
             newChat.targetID = club.clubID
-            newChat.targetClub = club
+            newChat.targetClub = ChatRecord.objects.context.objectWithID(club.objectID) as? Club
             newChat.chat_type = "group"
             break
         }

@@ -96,7 +96,7 @@ class PersonMineSettingsDataSource {
     }
     
     func saveToUserDefault() {
-        let prefix = User.objects.hostUser!.userID!
+        let prefix = User.objects.hostUserID!
         let userDefault = NSUserDefaults.standardUserDefaults()
         userDefault.setObject(locationVisible, forKey: prefix + "_location_visibile")
         userDefault.setObject(acceptInvitation, forKey: prefix + "_accept_invitation")
@@ -106,7 +106,7 @@ class PersonMineSettingsDataSource {
     }
     
     func loadFromUserDefault() {
-        let prefix = User.objects.hostUser!.userID!
+        let prefix = User.objects.hostUserID!
         let userDefault = NSUserDefaults.standardUserDefaults()
         locationVisible = (userDefault.objectForKey(prefix + "_location_visible") as? String) ?? "all"
         acceptInvitation = (userDefault.objectForKey(prefix + "_accept_invitation") as? String) ?? "all"

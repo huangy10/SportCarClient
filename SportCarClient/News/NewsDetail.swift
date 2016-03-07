@@ -688,11 +688,6 @@ extension NewsDetailController{
             
             self.news?.liked = liked
             self.news?.likeNum = json!["like_num"].int32Value
-            if json!.boolValue {
-                self.likeIcon.image = UIImage(named: "news_like_liked")
-            }else {
-                self.likeIcon.image = UIImage(named: "news_like_unliked")
-            }
             self.commentPanel.setLikedAnimated(liked)
             self.likeRequesting = false
             }) { (code) -> () in
@@ -813,6 +808,8 @@ extension NewsDetailController {
         newsCover?.kf_setImageWithURL(imageURL)
         newsTitleFake.text = news?.title
         newsTitle.text = news?.title
+        likeNumLbl.text = "\(news?.likeNum ?? 0)"
+        commentNumLbl.text = "\(news?.commentNum ?? 0)"
         let url = NSURL(string: news!.contentURL!)!
         let request = NSURLRequest(URL: url)
         newsDetailPanelView?.loadRequest(request)

@@ -40,6 +40,7 @@ class ActivityReleaseInfoBoard: UIView {
         posterBtn = UIButton()
         superview.addSubview(posterBtn)
         posterBtn.setTitle(LS("上传一个活动海报"), forState: .Normal)
+        posterBtn.imageView?.contentMode = .ScaleAspectFill
         posterBtn.setBackgroundImage(UIImage(named: "activity_release_default_cover"), forState: .Normal)
         posterBtn.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
         posterBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), forState: .Normal)

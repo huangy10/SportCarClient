@@ -141,6 +141,10 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
             let detail = ClearCacheController(parent: self)
             self.presentViewController(detail, animated: false, completion: nil)
             break
+        case 6:
+            let detail = SuggestionController(parent: self)
+            self.presentViewController(detail, animated: false, completion: nil)
+            break
         case 7:
             let detail = AgreementController()
             self.navigationController?.pushViewController(detail, animated: true)

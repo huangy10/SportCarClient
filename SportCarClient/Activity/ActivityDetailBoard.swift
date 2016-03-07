@@ -285,8 +285,7 @@ class ActivityDetailBoardView: UIView {
         // 活动海报
         actCover.kf_setImageWithURL(SFURL(act.poster!)!)
         // 是否显示编辑按钮
-        let hostUser = User.objects.hostUser!
-        if hostUser.userID == act.user?.userID {
+        if User.objects.hostUserID == act.user?.userID {
             showEditBtn = true
             memberDisplay.showDeleteBtn = true
         }else{

@@ -31,6 +31,7 @@ extension User {
     @NSManaged var userID: String?
 
     @NSManaged var mostRecentChat: ChatRecord?
+    @NSManaged var notifications: Notification?
     @NSManaged var profile: Profile?
 
     @NSManaged var actComments: Set<ActivityComment>
@@ -178,6 +179,7 @@ extension User {
     static let userID = AlecrimCoreData.NullableAttribute<String>("userID")
 
     static let mostRecentChat = AlecrimCoreData.NullableAttribute<ChatRecord>("mostRecentChat")
+    static let notifications = AlecrimCoreData.NullableAttribute<Notification>("notifications")
     static let profile = AlecrimCoreData.NullableAttribute<Profile>("profile")
 
     static let actComments = AlecrimCoreData.Attribute<Set<ActivityComment>>("actComments")
@@ -215,6 +217,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: User {
     var userID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("userID", self) }
 
     var mostRecentChat: AlecrimCoreData.NullableAttribute<ChatRecord> { return AlecrimCoreData.NullableAttribute<ChatRecord>("mostRecentChat", self) }
+    var notifications: AlecrimCoreData.NullableAttribute<Notification> { return AlecrimCoreData.NullableAttribute<Notification>("notifications", self) }
     var profile: AlecrimCoreData.NullableAttribute<Profile> { return AlecrimCoreData.NullableAttribute<Profile>("profile", self) }
 
     var actComments: AlecrimCoreData.Attribute<Set<ActivityComment>> { return AlecrimCoreData.Attribute<Set<ActivityComment>>("actComments", self) }

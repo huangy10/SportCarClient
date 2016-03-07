@@ -64,7 +64,7 @@ class Activity: NSManagedObject {
      当前用户加入这个活动
      */
     func hostApply() {
-        let host = User.objects.hostUser!
+        let host = User.objects.hostUser()!
         if self.user?.userID == host.userID {
             // 如果活动本身是当前用户创建的，则不做报名操作
             return
@@ -89,7 +89,7 @@ class ActivityManager {
     /// 没有发送的活动
     var unSentActs: [Activity] = []
     
-    let context = User.objects.context
+    let context = User.objects.defaultContext
     
     func getOrCreate(json: JSON) -> Activity{
         let actID = json["actID"].stringValue

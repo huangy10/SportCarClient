@@ -104,9 +104,9 @@ class NewsCommentManager {
      
      - returns: 返回创建成功的NewsComment对象
      */
-    func postNewCommentToNews(news: News, commentString: String, responseToComment: NewsComment?, atString: String?) -> NewsComment {
+    func postNewCommentToNews(news: News, commentString: String, responseToComment: NewsComment?, atString: String?, ctx: DataContext? = nil) -> NewsComment {
         // 获取当前context下hostUser对象
-        let hostUser = context.objectWithID(User.objects.hostUser!.objectID) as! User
+        let hostUser = User.objects.hostUser(ctx)
         let newComment = context.newsComments.createEntity()
         newComment.createdAt = NSDate()
         newComment.user = hostUser

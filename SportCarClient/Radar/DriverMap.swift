@@ -13,7 +13,7 @@ import Alamofire
 
 
 class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate, RadarFilterDelegate {
-    
+    var radarHome: RadarHomeController?
     /// 待使用的markers
     var markerPool: [UserOnMapView] = []
     /// 当前可见的marker
@@ -70,8 +70,9 @@ class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocation
             make.edges.equalTo(self.view)
         }
         //
-        usrLocMarker = UserMapLocationManager(size: CGSizeMake(200, 200))
+        usrLocMarker = UserMapLocationManager(size: CGSizeMake(400, 400))
         map.addSubview(usrLocMarker)
+        usrLocMarker.userInteractionEnabled = false
         usrLocMarker.center = self.view.center
         //
         userList = UITableView(frame: CGRectZero, style: .Plain)
@@ -92,9 +93,11 @@ class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocation
         showUserListBtn.tag = 0
         showUserListBtn.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         showUserListBtn.layer.shadowColor = UIColor.blackColor().CGColor
-        showUserListBtn.layer.shadowRadius = 0.4
-        showUserListBtn.layer.shadowOffset = CGSizeMake(1, 1.5)
+        showUserListBtn.layer.shadowRadius = 2
+        showUserListBtn.layer.shadowOpacity = 0.5
+        showUserListBtn.layer.shadowOffset = CGSizeMake(0, 5)
         showUserListBtn.layer.cornerRadius = 4
+        showUserListBtn.clipsToBounds = false
         showUserListBtn.addTarget(self, action: "showUserBtnPressed", forControlEvents: .TouchUpInside)
         self.view.addSubview(showUserListBtn)
         showUserListBtn.snp_makeConstraints { (make) -> Void in
@@ -122,7 +125,7 @@ class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocation
         mapFilterView = mapNav.view
         self.view.addSubview(mapFilterView)
         mapFilterView.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(self.view).offset(3)
+            make.top.equalTo(self.view).offset(10)
             make.left.equalTo(self.view).offset(15)
             make.size.equalTo(CGSizeMake(124, 41))
         }
@@ -131,7 +134,7 @@ class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocation
         self.view.addSubview(mapFilterToggleBtn)
         mapFilterToggleBtn.addTarget(self, action: "toggleMapFilter", forControlEvents: .TouchUpInside)
         mapFilterToggleBtn.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(self.view).offset(3)
+            make.top.equalTo(mapFilterView)
             make.left.equalTo(self.view).offset(15)
             make.size.equalTo(CGSizeMake(124, 41))
         }
@@ -194,6 +197,7 @@ extension RadarDriverMapController {
         if markerPool.count == 0 {
             // 否则创建一个新的
             let newMarker = UserOnMapView(size: CGSizeMake(65, 65))
+            newMarker.addTarget(self, action: "markerPressed:", forControlEvents: .TouchUpInside)
             visibleMarkers.append(newMarker)
             map.addSubview(newMarker)
             map.bringSubviewToFront(usrLocMarker)
@@ -216,6 +220,20 @@ extension RadarDriverMapController {
         visibleMarkers.remove(marker)
         markerPool.append(marker)
         userMarkerMapping[marker.user!.userID!] = nil
+    }
+    
+    func markerPressed(sender: UserOnMapView) {
+        let user = sender.user
+        if user == nil {
+            return
+        }
+        if user?.userID == User.objects.hostUser()?.userID {
+            let detail = PersonBasicController(user: user!)
+            radarHome?.navigationController?.pushViewController(detail, animated: true)
+        }else {
+            let detail = PersonOtherController(user: user!)
+            radarHome?.navigationController?.pushViewController(detail, animated: true)
+        }
     }
 }
 
@@ -365,13 +383,13 @@ extension RadarDriverMapController {
         
         if mapFilter.expanded {
             mapFilterView.snp_remakeConstraints(closure: { (make) -> Void in
-                make.top.equalTo(self.view).offset(3)
+                make.top.equalTo(self.view).offset(10)
                 make.left.equalTo(self.view).offset(15)
                 make.size.equalTo(CGSizeMake(124, 41))
             })
         }else {
             mapFilterView.snp_remakeConstraints(closure: { (make) -> Void in
-                make.top.equalTo(self.view).offset(3)
+                make.top.equalTo(self.view).offset(10)
                 make.left.equalTo(self.view).offset(15)
                 make.size.equalTo(CGSizeMake(124, 42 * 6))
             })

@@ -19,6 +19,8 @@ class NotificationBaseCell: UITableViewCell {
     var informLbL: UILabel!
     var dateLbl: UILabel!
     
+    var readDot: UIView!
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
@@ -33,7 +35,7 @@ class NotificationBaseCell: UITableViewCell {
         superview.backgroundColor = UIColor.whiteColor()
         //
         avatarBtn = UIButton()
-        avatarBtn.layer.cornerRadius = 45
+        avatarBtn.layer.cornerRadius = 22.5
         avatarBtn.clipsToBounds = true
         superview.addSubview(avatarBtn)
         avatarBtn.snp_makeConstraints { (make) -> Void in
@@ -78,22 +80,30 @@ class NotificationCellWithCoverThumbnail: NotificationBaseCell {
         return "notification_cell_with_cover_thumbnail"
     }
     
-    var cover: UIButton!
+    var cover: UIImageView!
     var messageBodyLbl: UILabel!
     
     override func createSubviews() {
         super.createSubviews()
         let superview = self.contentView
         
+        cover = UIImageView()
+        super.addSubview(cover)
+        cover.snp_makeConstraints { (make) -> Void in
+            make.right.equalTo(superview).offset(-15)
+            make.centerY.equalTo(avatarBtn)
+            make.height.equalTo(avatarBtn)
+            make.width.equalTo(avatarBtn)
+        }
+        
         messageBodyLbl = UILabel()
         messageBodyLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
         messageBodyLbl.textColor = UIColor(white: 0.47, alpha: 1)
         superview.addSubview(messageBodyLbl)
         messageBodyLbl.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(superview).offset(-15)
-            make.centerY.equalTo(avatarBtn)
-            make.height.equalTo(avatarBtn)
-            make.width.equalTo(messageBodyLbl.snp_height)
+            make.left.equalTo(avatarBtn)
+            make.right.equalTo(cover)
+            make.top.equalTo(avatarBtn.snp_bottom).offset(15)
         }
     }
 }

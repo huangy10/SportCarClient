@@ -29,7 +29,7 @@ class FFSelectController: UserSelectController {
     
     var delegate: FFSelectDelegate?
     
-    let targetUser: User = User.objects.hostUser!
+    let targetUser: User = User.objects.hostUser()!
     
     var fans: [User] = []
     var follows: [User] = []
@@ -123,13 +123,10 @@ class FFSelectController: UserSelectController {
         })
         self.navigationItem.titleView = container
         
-        //
-        let leftBtn = UIButton()
-        leftBtn.frame = CGRectMake(0, 0, 10.5, 18)
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        leftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
-        let leftBtnItem = UIBarButtonItem(customView: leftBtn)
+        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: "navLeftBtnPressed")
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.leftBarButtonItem = leftBtnItem
+
         
         navRightBtn = UIButton()
         navRightBtn?.setTitleColor(kHighlightedRedTextColor, forState: .Normal)

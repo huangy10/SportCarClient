@@ -101,6 +101,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         //
         avatarClubBtn = UIButton()
         avatarClubBtn?.layer.cornerRadius = 10
+        avatarClubBtn?.clipsToBounds = true
         headerContainer?.addSubview(avatarClubBtn!)
         avatarClubBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.size.equalTo(20)
@@ -313,6 +314,11 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         }
         likeNumLbl?.text = "\(status!.likeNum)"
         commentNumLbL?.text = "\(status!.commentNum)"
+        if status!.liked {
+            likeIcon?.image = UIImage(named: "news_like_liked")
+        } else {
+            likeIcon?.image = UIImage(named: "news_like_unliked")
+        }
         self.contentView.layoutIfNeeded()
     }
     
@@ -332,8 +338,13 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
     }
     
     func avatarBtnPressed() {
-        let detail = PersonOtherController(user: status!.user!)
-        parent?.navigationController?.pushViewController(detail, animated: true)
+        if status?.user?.userID != User.objects.hostUserID {
+            let detail = PersonOtherController(user: status!.user!)
+            parent?.navigationController?.pushViewController(detail, animated: true)
+        } else {
+            let detail = PersonBasicController(user: status!.user!)
+            parent?.navigationController?.pushViewController(detail, animated: true)
+        }
     }
 }
 

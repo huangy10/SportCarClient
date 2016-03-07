@@ -27,7 +27,7 @@ class PersonDataSource {
      
      - parameter json: json数据包，已经剔除了success
      */
-    func handleAuthedCarsJSONResponse(json: JSON, user: User = User.objects.hostUser!) {
+    func handleAuthedCarsJSONResponse(json: JSON, user: User = User.objects.hostUser()!) {
         // 认证汽车的获取不存在分页获取的问题，故每次获取的json数据包含的都是所有的认证汽车，故此处需要将原有的数据删除
         owns.removeAll()
         let data = json.arrayValue

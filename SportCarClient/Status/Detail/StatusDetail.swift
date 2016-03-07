@@ -189,7 +189,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     
     func navRightBtnPressed() {
         // 根据的状态的发布者来确定弹出的窗口
-        if status?.user?.userID == User.objects.hostUser?.userID {
+        if status?.user?.userID == User.objects.hostUserID {
             // 是当前用户发布的状态，则弹出删除
             let delete = StatusDeleteController(parent: self)
             delete.delegate = self
@@ -261,6 +261,8 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         //
         
         commentPanel = CommentBarView()
+        commentPanel?.shareBtnHidden = true
+        commentPanel?.likeBtn?.addTarget(self, action: "likeBtnPressed", forControlEvents: .TouchUpInside)
         self.view?.addSubview(commentPanel!)
         if loadAnimated {
             commentPanel?.snp_makeConstraints(closure: { (make) -> Void in
@@ -356,6 +358,7 @@ extension StatusDetailController {
         //
         avatarClubBtn = UIButton()
         avatarClubBtn?.layer.cornerRadius = 10
+        avatarClubBtn?.clipsToBounds = true
         headerContainer?.addSubview(avatarClubBtn!)
         avatarClubBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.size.equalTo(20)
@@ -386,6 +389,8 @@ extension StatusDetailController {
         //
         avatarCarLogoIcon = UIImageView()
         avatarCarLogoIcon?.contentMode = .ScaleAspectFit
+        avatarCarLogoIcon?.layer.cornerRadius = 10.5
+        avatarCarLogoIcon?.clipsToBounds = true
         superview.addSubview(avatarCarLogoIcon!)
         avatarCarLogoIcon?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(avatarCarNameLbl!.snp_left).offset(-4)
@@ -397,6 +402,7 @@ extension StatusDetailController {
         */
         mainCover = UIImageView()
         mainCover?.contentMode = .ScaleAspectFill
+        mainCover?.clipsToBounds = true
         superview.addSubview(mainCover!)
         mainCover?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview)
@@ -553,6 +559,8 @@ extension StatusDetailController {
         }
         likeNumLbl?.text = "\(status!.likeNum)"
         commentNumLbL?.text = "\(status!.commentNum)"
+        likeIcon?.image = status!.liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
+        commentPanel?.likeBtnIcon.image = status!.liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
         self.view.layoutIfNeeded()
     }
     
@@ -662,6 +670,19 @@ extension StatusDetailController {
 
 // MARK: - 下方评论条相关
 extension StatusDetailController {
+    
+    func likeBtnPressed() {
+        let requester = StatusRequester.SRRequester
+        requester.likeStatus(status!.statusID!, onSuccess: { (json) -> () in
+            self.status?.likeNum = json!["like_num"].int32Value
+            let liked = json!["like_state"].boolValue
+            self.commentPanel?.setLikedAnimated(liked)
+            self.likeNumLbl?.text = "\(self.status!.likeNum)"
+            self.likeIcon?.image = liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
+            }) { (code) -> () in
+                print(code)
+        }
+    }
     
     /**
      评论编辑完成，确认发送

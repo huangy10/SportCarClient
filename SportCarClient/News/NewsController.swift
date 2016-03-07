@@ -34,6 +34,9 @@ class NewsController: UITableViewController {
         tableView.registerClass(NewsCell.self, forCellReuseIdentifier: NewsCell.reusableIdentifier)
         tableView.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         tableView.separatorStyle = .None
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: "handleRefreshing", forControlEvents: .TouchUpInside)
+        tableView.addSubview(refreshControl!)
         refreshControl?.enabled = true
         // 开始准备获取数据
         self.loadMoreNewsBelow()

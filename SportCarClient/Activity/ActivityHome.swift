@@ -137,9 +137,8 @@ class ActivityHomeController: UIViewController {
     }
     
     func navRightBtnPressed() {
-        let release = ActivityReleaseController()
-        release.actHomeController = self
-        self.navigationController?.pushViewController(release, animated: true)
+        let release = ActivityReleasePresentableController()
+        release.presentFrom(self)
     }
     
     func createSubviews() {

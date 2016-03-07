@@ -42,7 +42,8 @@ class PersonOtherController: PersonBasicController {
     }
     
     override func navRightBtnPressed() {
-        
+        let report = ReportBlacklistViewController(parent: self)
+        self.presentViewController(report, animated: false, completion: nil)
     }
     
     override func navLeftBtnPressed() {

@@ -18,11 +18,14 @@ extension Notification {
 
     @NSManaged var createdAt: NSDate?
     @NSManaged var flag: Bool // cannot mark as optional because Objective-C compatibility issues
+    @NSManaged var image: String?
     @NSManaged var messageBody: String?
     @NSManaged var messageType: String?
     @NSManaged var notificationID: String?
     @NSManaged var read: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var relatedID: String?
+
+    @NSManaged var user: User?
 
 }
 
@@ -32,11 +35,14 @@ extension Notification {
 
     static let createdAt = AlecrimCoreData.NullableAttribute<NSDate>("createdAt")
     static let flag = AlecrimCoreData.NullableAttribute<Bool>("flag")
+    static let image = AlecrimCoreData.NullableAttribute<String>("image")
     static let messageBody = AlecrimCoreData.NullableAttribute<String>("messageBody")
     static let messageType = AlecrimCoreData.NullableAttribute<String>("messageType")
     static let notificationID = AlecrimCoreData.NullableAttribute<String>("notificationID")
     static let read = AlecrimCoreData.NullableAttribute<Bool>("read")
     static let relatedID = AlecrimCoreData.NullableAttribute<String>("relatedID")
+
+    static let user = AlecrimCoreData.NullableAttribute<User>("user")
 
 }
 
@@ -46,11 +52,14 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: Notification {
 
     var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
     var flag: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("flag", self) }
+    var image: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("image", self) }
     var messageBody: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("messageBody", self) }
     var messageType: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("messageType", self) }
     var notificationID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("notificationID", self) }
     var read: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("read", self) }
     var relatedID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("relatedID", self) }
+
+    var user: AlecrimCoreData.NullableAttribute<User> { return AlecrimCoreData.NullableAttribute<User>("user", self) }
 
 }
 

@@ -77,7 +77,6 @@ class DetailCommentCell: UITableViewCell {
         nameLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(avatarBtn!.snp_right).offset(11)
             make.top.equalTo(avatarBtn!)
-            make.height.equalTo(20)
         })
         //
         responseStaticLbl = UILabel()
@@ -86,8 +85,7 @@ class DetailCommentCell: UITableViewCell {
         responseStaticLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
         superview.addSubview(responseStaticLbl!)
         responseStaticLbl!.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(nameLbl!.snp_right).inset(2)
-            make.height.equalTo(17)
+            make.left.equalTo(nameLbl!.snp_right).offset(2)
             make.bottom.equalTo(nameLbl!)
         }
         responseStaticLbl?.hidden = true
@@ -97,8 +95,7 @@ class DetailCommentCell: UITableViewCell {
         responseLbl?.textColor = UIColor.blackColor()
         superview.addSubview(responseLbl!)
         responseLbl?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(responseStaticLbl!.snp_right).inset(2)
-            make.height.equalTo(nameLbl!)
+            make.left.equalTo(responseStaticLbl!.snp_right).offset(2)
             make.bottom.equalTo(nameLbl!)
         })
         responseLbl?.hidden = true

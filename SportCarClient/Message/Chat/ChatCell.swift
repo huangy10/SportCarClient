@@ -32,7 +32,7 @@ class ChatCell: UITableViewCell {
         }
     }
     var isMineBubble: Bool {
-        return (chat?.sender == User.objects.hostUser) ?? false
+        return (chat?.sender?.userID == User.objects.hostUserID) ?? false
     }
     var loading: Bool = true {
         didSet {

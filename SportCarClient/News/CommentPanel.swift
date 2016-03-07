@@ -18,6 +18,20 @@ class CommentBarView: UIView {
     var commentIcon: UIImageView?
     var contentInput: UITextView?
     var shareBtn: UIButton?
+    var shareBtnHidden: Bool = false{
+        didSet {
+            if shareBtnHidden {
+                shareBtn?.hidden = true
+                likeBtn?.snp_remakeConstraints(closure: { (make) -> Void in
+                    make.size.equalTo(barheight * 0.76)
+                    make.bottom.equalTo(self).offset(-5)
+                    make.right.equalTo(self).offset(-15)
+                })
+            }else {
+                assertionFailure()
+            }
+        }
+    }
     var likeBtn: UIButton?
     var likeBtnIcon: UIImageView!
     

@@ -11,7 +11,7 @@
 import UIKit
 
 
-class PresentTemplateViewController: UIViewController {
+class PresentTemplateViewController: InputableViewController {
     
     weak var parentController: UIViewController?
     
@@ -37,7 +37,6 @@ class PresentTemplateViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        createSubviews()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -45,7 +44,8 @@ class PresentTemplateViewController: UIViewController {
         showAnimated()
     }
     
-    func createSubviews() {
+    override func createSubviews() {
+        super.createSubviews()
         let superview = self.view
         //
         bg = UIImageView(image: bgImage)

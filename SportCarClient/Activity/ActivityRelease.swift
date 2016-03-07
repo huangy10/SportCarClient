@@ -37,7 +37,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     override func viewDidLoad() {
         navSettings()
         super.viewDidLoad()
-        //
+        
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -49,11 +49,9 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = LS("发布活动")
         //
-        let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
+        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: "navLeftBtnPressed")
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        self.navigationItem.leftBarButtonItem = leftBtnItem
         //
         let rightItem = UIBarButtonItem(title: LS("发布"), style: .Done, target: self, action: "navRightBtnPressed")
         rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
@@ -92,10 +90,12 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         
         if startAtDate == nil {
             self.displayAlertController(LS("请选择活动开始时间"), message: nil)
+            return
         }
         
         if endAtDate == nil {
             self.displayAlertController(LS("请选择活动结束时间"), message: nil)
+            return
         }
         
         var informUser: [String]? = nil
@@ -106,14 +106,18 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         }
         
         // 上传数据
+        let toast = showStaticToast(LS("发布中..."))
         let requester = ActivityRequester.requester
         requester.createNewActivity(actName, des: actDes, informUser: informUser, maxAttend: attendNum, startAt: startAtDate!, endAt: endAtDate!, clubLimit: clubLimitID, poster: posterImage, lat: userLocation!.coordinate.latitude, lon: userLocation!.coordinate.longitude, loc_des: locDescriptin ?? "", onSuccess: { (json) -> () in
-            print(json)
             self.navigationController?.popViewControllerAnimated(true)
             let mine = self.actHomeController?.mine
             mine?.refreshControl?.beginRefreshing()
             mine?.getLatestActData()
+            self.hideToast(toast)
+            self.showToast(LS("发布成功！"))
             }) { (code) -> () in
+                self.hideToast(toast)
+                self.showToast(LS("发布失败，请检查网络设置"))
                 print(code)
         }
     }

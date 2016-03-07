@@ -17,8 +17,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
     var act: Activity!
     var comments: [ActivityComment] = []
     var isMineAct: Bool{
-        print(act.user)
-        return act.user?.userID == User.objects.hostUser?.userID
+        return act.user?.userID == User.objects.hostUserID
     }
     
     var actInfoBoard: ActivityDetailBoardView!

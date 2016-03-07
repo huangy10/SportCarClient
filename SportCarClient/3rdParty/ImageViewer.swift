@@ -18,6 +18,7 @@ class ImageViewer: UIViewController {
     
     var senderView: UIImageView!
     var originalFrameRelativeToScreen: CGRect!
+    var originalCornerRadius: CGFloat = 0;
     var rootViewController: UIViewController!
     var imageView = UIImageView()
     var panGesture: UIPanGestureRecognizer!
@@ -93,7 +94,7 @@ class ImageViewer: UIViewController {
         var originalFrame = senderView.convertRect(windowBounds, toView: nil)
         originalFrame.origin = CGPointMake(originalFrame.origin.x, originalFrame.origin.y)
         originalFrame.size = senderView.frame.size
-        
+        originalCornerRadius = senderView.layer.cornerRadius
         originalFrameRelativeToScreen = originalFrame
         
 //        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: UIStatusBarAnimation.Slide)
@@ -103,6 +104,7 @@ class ImageViewer: UIViewController {
         senderView.alpha = 0.0
         
         imageView.frame = originalFrameRelativeToScreen
+        imageView.layer.cornerRadius = originalCornerRadius
         imageView.userInteractionEnabled = true
         imageView.contentMode = UIViewContentMode.ScaleAspectFill
         
@@ -176,6 +178,7 @@ class ImageViewer: UIViewController {
         UIView.animateWithDuration(0.8, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.6, options: [UIViewAnimationOptions.BeginFromCurrentState, UIViewAnimationOptions.CurveEaseInOut], animations: {() -> Void in
             if let image = self.imageView.image {
                 self.imageView.frame = self.centerFrameFromImage(image)
+                self.imageView.layer.cornerRadius = 0
             } else {
                 fatalError("Image within UIImageView needed.")
             }
@@ -299,6 +302,7 @@ class ImageViewer: UIViewController {
             
             UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.6, options: [UIViewAnimationOptions.BeginFromCurrentState, UIViewAnimationOptions.CurveEaseInOut], animations: {() in
                 self.imageView.frame = self.originalFrameRelativeToScreen
+                self.imageView.layer.cornerRadius = self.originalCornerRadius
                 self.rootViewController.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
                 self.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
                 self.maskView.alpha = 0.0

@@ -140,8 +140,9 @@ class SportCarInfoDetailController: UITableViewController {
     }
     
     func carAuthBtnPressed() {
-        if !own.identified {
+        if own.identified {
             // TODO: 显示toast您的爱车已经认证
+            self.showToast(LS("您的爱车已认证"))
         }else {
             let detail = SportscarAuthController()
             self.navigationController?.pushViewController(detail, animated: true)

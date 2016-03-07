@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import AlecrimCoreData
 
 class ChatURLMaker {
     let chatWebsite = "\(kProtocalName)://\(kHostName):\(kChatPortName)"
@@ -44,6 +45,14 @@ class ChatURLMaker {
         return website + "/club/list"
     }
     
+    func clubDiscover() -> String {
+        return website + "/club/discover"
+    }
+    
+    func clubUpdate(clubID: String) -> String {
+        return website + "/club/\(clubID)/update"
+    }
+    
     func unreadInformation() -> String {
         return website + "/chat/unread"
     }
@@ -55,6 +64,10 @@ class ChatURLMaker {
     func chatUnreadSync() -> String {
         return website + "/chat/unread/sync"
     }
+    
+    func getNotifications() -> String {
+        return website + "/notification/"
+    }
 }
 
 
@@ -62,7 +75,9 @@ class ChatRequester: AccountRequester {
     
     static let requester = ChatRequester()
     
-    let privateQueue = dispatch_queue_create("chat_updater", DISPATCH_QUEUE_SERIAL)
+    let privateQueue = dispatch_queue_create("chat_update", DISPATCH_QUEUE_SERIAL)
+    let context = DataContext()
+
     
     func startListenning(onMessageCome: (JSON)->(), onError: (code: String?)->()) {
         dispatch_async(privateQueue) { () -> Void in
@@ -108,13 +123,23 @@ class ChatRequester: AccountRequester {
     }
     
     func download_audio_file_async(chatRecord: ChatRecord, onComplete:(record: ChatRecord, localURL: NSURL)->(), onError: (record: ChatRecord)->()) {
+        // 首先查看是否已经有local副本存在
+        if let local = chatRecord.audioLocal {
+            if let localPath = NSURL(string: local)?.path {
+                let filename = localPath.split("/").last()!
+                let cacheFilePath = (getCachedAudioDirectory() as AnyObject).stringByAppendingPathComponent(filename)
+                if NSFileManager.defaultManager().fileExistsAtPath(cacheFilePath) {
+                    onComplete(record: chatRecord, localURL: NSURL(string: cacheFilePath)!)
+                    return
+                }
+            }
+        }
         let urlStr = chatRecord.audio
         var target_URL: NSURL = NSURL()
         manager.download(.GET, SFURL(urlStr!)!.absoluteString, destination: { (tmpURL, response) -> NSURL in
-            let fileManager = NSFileManager.defaultManager()
-            let directoryURL = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
-            let pathComponent = response.suggestedFilename
-            target_URL = directoryURL.URLByAppendingPathComponent(pathComponent!)
+            let pathComponent = response.suggestedFilename ?? (NSUUID().UUIDString + ".m4a")
+            let cacheFilePath = (self.getCachedAudioDirectory() as AnyObject).stringByAppendingPathComponent(pathComponent)
+            target_URL = NSURL(fileURLWithPath: cacheFilePath)
             return target_URL
         }).response { (_, _, _, err) -> Void in
             if err == nil {
@@ -123,6 +148,20 @@ class ChatRequester: AccountRequester {
                 onError(record: chatRecord)
             }
         }
+    }
+    
+    func getCachedAudioDirectory() -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
+        let cacheDirectory: AnyObject = paths[0]
+        let targetFolder = cacheDirectory.stringByAppendingPathComponent("record_audio_cache")
+        do {
+            if !NSFileManager.defaultManager().fileExistsAtPath(targetFolder) {
+                try NSFileManager.defaultManager().createDirectoryAtPath(targetFolder, withIntermediateDirectories: false, attributes: nil)
+            }
+        }catch{
+            return cacheDirectory as! String
+        }
+        return targetFolder
     }
     
     /**
@@ -283,6 +322,13 @@ class ChatRequester: AccountRequester {
         }
     }
     
+    func getClubListAuthed(onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let url = ChatURLMaker.sharedMaker.clubList()
+        manager.request(.GET, url, parameters: ["authed": "y"]).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "clubs", onSuccess: onSuccess, onError: onError)
+        }
+    }
+    
     /**
      获取未读消息信息
      */
@@ -301,10 +347,85 @@ class ChatRequester: AccountRequester {
      - parameter dateThreshold: 时间阈值，获取这个时间节点之前的消息
      - parameter limit:         最大获取的数量
      */
-    func getChatHistory(targetID: String, chatType: String, dateThreshold: NSDate, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+    func getChatHistory(targetID: String, chatType: String, dateThreshold: NSDate, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request{
         let url = ChatURLMaker.sharedMaker.chatHistory()
-        manager.request(.GET, url, parameters: ["date_threshold": STRDate(dateThreshold), "op_type": "more", "limit": limit, "target_id": targetID, "chat_type": chatType]).responseJSON { (response) -> Void in
+        return manager.request(.GET, url, parameters: ["date_threshold": STRDate(dateThreshold), "op_type": "more", "limit": limit, "target_id": targetID, "chat_type": chatType]).responseJSON(self.privateQueue, completionHandler: { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "chats", onSuccess: onSuccess, onError: onError)
+        })
+//            .response(queue: self.privateQueue, responseSerializer: Request.JSONResponseSerializer(options: .AllowFragments)) { (response) -> Void in
+//            self.resultValueHandler(response.result, dataFieldName: "chats", onSuccess: onSuccess, onError: onError)
+//        }
+//            .responseJSON { (response) -> Void in
+//            self.resultValueHandler(response.result, dataFieldName: "chats", onSuccess: onSuccess, onError: onError)
+//        }
+    }
+    
+    /**
+     更新群聊设置
+     */
+    
+    func updateClubLogo(club: Club, newLogo: UIImage, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let url = ChatURLMaker.sharedMaker.clubUpdate(club.clubID!)
+        manager.upload(.POST, url, multipartFormData: { (form) -> Void in
+            form.appendBodyPart(data: UIImagePNGRepresentation(newLogo)!, name: "logo", fileName: "new_logo.png", mimeType: "image/png")
+            }) { (result) -> Void in
+                switch result {
+                case .Success(let request, _, _):
+                    request.responseJSON(completionHandler: { (response) -> Void in
+                        self.resultValueHandler(response.result, dataFieldName: "logo", onSuccess: onSuccess, onError: onError)
+                    })
+                case .Failure(let error):
+                    print(error)
+                    onError(code: "0000")
+                }
+        }
+    }
+    
+    func updateClubSettings(
+        club: Club,
+        onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+            let clubJoining = club.clubJoining!
+            let url = ChatURLMaker.sharedMaker.clubUpdate(club.clubID!)
+            let params: [String: AnyObject] = [
+                "only_host_can_invite": club.onlyHostInvites,
+                "show_members_to_public": club.show_members,
+                "nick_name": clubJoining.nickName ?? User.objects.hostUser()!.nickName!,
+                "show_nick_name": clubJoining.showNickName,
+                "no_disturbing": clubJoining.noDisturbing,
+                "always_on_top": clubJoining.alwaysOnTop,
+                "name": club.name!,
+                "description": club.clubDescription!
+            ]
+            manager.request(.POST, url, parameters: params, encoding: .JSON).responseJSON { (response) -> Void in
+                self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
+            }
+    }
+    
+    /**
+     俱乐部发现
+     
+     - parameter queryType: 筛选类型，有效参数为nearby/value/members/average/beauty/recent
+     - parameter skip:      跳过前skip个结果
+     - parameter limit:     最大获取的数量
+     */
+    func discoverClub(queryType: String, skip: Int, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        let url = ChatURLMaker.sharedMaker.clubDiscover()
+        manager.request(.GET, url, parameters: ["query_type": queryType, "skip": skip, "limit": limit]).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
+        }
+    }
+    
+    func getNotifications(threshold: NSDate, limit: Int, opType: String, dateFix: String = "", onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request{
+        let url = ChatURLMaker.sharedMaker.getNotifications()
+        let params: [String : AnyObject] = [
+            "date_threshold": STRDate(threshold),
+            "limit": limit,
+            "op_type": opType,
+            "date_fix": dateFix
+        ]
+        return manager.request(.GET, url, parameters: params)
+            .response(queue: self.privateQueue, responseSerializer: Request.JSONResponseSerializer(options: .AllowFragments)) { (response) -> Void in
+                self.resultValueHandler(response.result, dataFieldName: "notifications", onSuccess: onSuccess, onError: onError)
         }
     }
 }

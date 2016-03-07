@@ -24,29 +24,38 @@ class Club: NSManagedObject {
      
      - parameter json: json数据
      */
-    func loadValueFromJSON(json: JSON) {
+    func loadValueFromJSON(json: JSON, ctx: DataContext? = nil) {
         name = json["club_name"].string
         logo_url = json["club_logo"].string
         clubDescription = json["description"].string
         identified = json["identified"].boolValue
+        city = json["city"].string
+        let hostJson = json["host"]
+        if hostJson["userID"].stringValue != "" {
+            host = User.objects.create(hostJson, ctx: ctx).value
+        }
+        let memberNum = json["members_num"].int32Value
+        if memberNum > 0 {
+            self.memberNum = memberNum
+        }
+        if let showMembers = json["show_members_to_public"].bool {
+            show_members = showMembers
+        }
     }
-    
 }
 
 
 class ClubManager {
     
-    let context = User.objects.context
+    let defaultContext = User.objects.defaultContext
     
-    func saveAll() {
+    func saveAll(context: DataContext) {
         do {
             try context.save()
         } catch let error {
             print(error)
         }
     }
-    
-    var clubs: [String: Club] = [:]
     /**
      获取内存中或者coredata中存储的数据或者创建新的记录
      
@@ -54,21 +63,16 @@ class ClubManager {
      
      - returns: Club
      */
-    func getOrCreate(json: JSON) -> Club?{
+    func getOrCreate(json: JSON, ctx: DataContext? = nil) -> Club?{
+        let context = ctx ?? defaultContext
         let clubID = json["id"].stringValue
         if clubID == "" {
             return nil
         }
-        if let club = self.clubs[clubID] {
-            club.loadValueFromJSON(json)
-            saveAll()
-            return club
-        }
         let club = context.clubs.firstOrCreated { $0.clubID == clubID }
-        club.loadValueFromJSON(json)
-        club.clubJoining = context.clubJoinings.first({$0.clubID == clubID})
-        self.clubs[clubID] = club
-        saveAll()
+        club.loadValueFromJSON(json, ctx: context)
+        club.clubJoining = context.clubJoinings.firstOrCreated({$0.clubID == clubID})
+        // saveAll()
         return club
     }
     
@@ -79,13 +83,11 @@ class ClubManager {
      
      - returns: 返回club对象
      */
-    func getOrLoad(clubID: String) -> Club? {
-        if let club = self.clubs[clubID] {
-            return club
-        }
+    func getOrLoad(clubID: String, ctx: DataContext? = nil) -> Club? {
+        let context = ctx ?? defaultContext
         let club = context.clubs.first { $0.clubID == clubID }
         if club != nil {
-            club?.clubJoining = context.clubJoinings.first({$0.clubID == clubID})
+            club?.clubJoining = context.clubJoinings.firstOrCreated({$0.clubID == clubID})
         }
         return club
     }

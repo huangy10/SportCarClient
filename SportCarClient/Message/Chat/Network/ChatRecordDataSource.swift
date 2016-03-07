@@ -27,7 +27,7 @@ func getIdentifierForIdPair(id1: String, _ id2: String) -> String{
 func getIdentifierForChatRoom(room: ChatRoomController) -> String {
     switch room.roomType {
     case .Private:
-        let senderID = Int(User.objects.hostUser!.userID!)!
+        let senderID = Int(User.objects.hostUser(ChatRecord.objects.context)!.userID!)!
         let targetID = Int(room.targetUser!.userID!)!
         if senderID < targetID {
             return "\(senderID)_\(targetID)"
@@ -96,8 +96,8 @@ class ChatRecordDataSource {
                 }else{
                     let newRecords = ChatRecordList()
                     if newRecord.chat_type == "private" {
-                        var target_user = User.objects.create(data["sender"]).value
-                        let host = User.objects.hostUser
+                        var target_user = User.objects.create(data["sender"], ctx: ChatRecord.objects.context).value
+                        let host = User.objects.hostUser(ChatRecord.objects.context)
                         if target_user?.userID == host?.userID {
                             target_user = newRecord.targetUser
                         }
@@ -115,10 +115,8 @@ class ChatRecordDataSource {
                     self.requester.download_audio_file_async( newRecord, onComplete: { (record, localURL) -> () in
                         // 下载完成后开始分析波形
                         record.audioLocal = localURL.absoluteString
-                        
                         let anaylzer = AudioWaveDrawEngine(audioFileURL: localURL, preferredSampleNum: 30, onFinished: { (engine) -> () in
                             }, async: false)
-                        
                         record.cachedWaveData = anaylzer.sampledata
                         record.audioLengthInSec = anaylzer.lengthInSec
                         record.readyForDisplay = true
@@ -141,19 +139,14 @@ class ChatRecordDataSource {
                 dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
                 self.chatRecords.bringKeyToFront(identifier)
             }
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                if self.curRoom != nil{
-                    self.curRoom?.needsUpdate()
-                }else {
-                    self.listCtrl?.needUpdate()
-                }
-                self.getUnreadInformation()
-            })
             // 解析聊天设置
             for data in json!["club_settings"].arrayValue {
                 let clubID = data["club"]["id"].stringValue
                 if let club = Club.objects.getOrLoad(clubID) {
                     club.clubJoining?.updateFromJson(data)
+                    // 其他设置消息需呀单独手动配置
+                    club.onlyHostInvites = data["club"]["only_host_can_invite"].boolValue
+                    club.show_members = data["club"]["show_members_to_public"].boolValue
                 }
             }
             // 个人聊天设置
@@ -163,6 +156,16 @@ class ChatRecordDataSource {
                     user.remarkName = data["remarkName"].string
                 }
             }
+            //
+            ChatRecord.objects.saveAll()
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if self.curRoom != nil{
+                    self.curRoom?.needsUpdate()
+                }else {
+                    self.listCtrl?.needUpdate()
+                }
+                self.getUnreadInformation()
+            })
             }) { (code) -> () in
                 print(code)
         }
@@ -178,7 +181,7 @@ class ChatRecordDataSource {
                 let chatType = data["chat_type"].stringValue
                 if chatType == "private" {
                     let user = User.objects.create(data["user"]).value
-                    let identifier = getIdentifierForIdPair(user!.userID!, User.objects.hostUser!.userID!)
+                    let identifier = getIdentifierForIdPair(user!.userID!, User.objects.hostUser(ChatRecord.objects.context)!.userID!)
                     if let records = self.chatRecords[identifier] {
                         records.unread = data["unread"].intValue
                         self.totalUnreadNum += records.unread
@@ -226,7 +229,7 @@ class ChatRecordDataSource {
                 //
                 if let records = self.chatRecords[identifier] {
                     records.appendContentsOf([newRecord])
-                    if newRecord.sender?.userID != User.objects.hostUser?.userID {
+                    if newRecord.sender?.userID != User.objects.hostUserID {
                         if self.curRoom == nil || getIdentifierForChatRoom(self.curRoom!) != identifier {
                             records.unread += 1
                             self.totalUnreadNum += 1
@@ -319,8 +322,7 @@ class ChatRecordDataSource {
                 let newRecords = ChatRecordList()
                 if newRecord.chat_type == "private" {
                     var target_user = User.objects.create(data["sender"]).value
-                    let host = User.objects.hostUser
-                    if target_user?.userID == host?.userID {
+                    if target_user?.userID == User.objects.hostUserID {
                         target_user = newRecord.targetUser
                     }
                     newRecords._item = ChatRecordListItem.UserItem(target_user!)
@@ -333,8 +335,6 @@ class ChatRecordDataSource {
             }
             //                self.chatRecords[identifier]?.appendContentsOf([newRecord])
             if newRecord.messageType == "audio"{
-                print(newRecord)
-                print(data)
                 // 如果是音频数据的话直接开始下载
                 self.requester.download_audio_file_async( newRecord, onComplete: { (record, localURL) -> () in
                     // 下载完成后开始分析波形

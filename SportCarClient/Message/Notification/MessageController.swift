@@ -40,6 +40,7 @@ class MessageController: UIViewController {
         //
         board = UIScrollView()
         board.pagingEnabled = true
+        board.scrollEnabled = false
         let screenWidth = UIScreen.mainScreen().bounds.width
         let screenHeight = UIScreen.mainScreen().bounds.height
         board.contentSize = CGSizeMake(screenWidth * 2, screenHeight)
@@ -127,11 +128,7 @@ class MessageController: UIViewController {
     }
     
     func navRightBtnPressed() {
-        if board.contentOffset.x <= 1 {
-            
-        }else{
-            chatList.navRightBtnPressed()
-        }
+        chatList.navRightBtnPressed()
     }
     
     func navLeftBtnPressed() {

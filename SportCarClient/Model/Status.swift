@@ -12,6 +12,10 @@ import SwiftyJSON
 import AlecrimCoreData
 
 class Status: NSManagedObject {
+    
+    /// TODO: save this to core data
+    var liked = false
+    
     /// Status的管理器
     static let objects = StatusManager()
 }
@@ -33,6 +37,7 @@ extension Status {
         self.createdAt = DateSTR(json["created_at"].stringValue)
         self.image = json["images"].string
         self.likeNum = json["like_num"].int32 ?? 0
+        self.liked = json["liked"].boolValue
         self.commentNum = json["comment_num"].int32 ?? 0
         let locationJSON = json["location"]
         self.location_x = locationJSON["lon"].double ?? 0
@@ -68,7 +73,7 @@ class StatusManager {
     /// 内存池中维持的状态集
     var status: [String: Status] = [:]
     
-    let context = User.objects.context
+    let context = User.objects.defaultContext
 }
 
 

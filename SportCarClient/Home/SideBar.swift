@@ -36,12 +36,11 @@ class SideBarController: UIViewController {
     
     func createSubviews() {
         createSubviewsHigherResolution()
-    }
+    } 
     
     func createSubviewsHigherResolution() {
         let superview = self.view
-        superview.backgroundColor = UIColor.redColor()
-        guard let host = User.objects.hostUser else{
+        guard let host = User.objects.hostUser() else{
             assertionFailure()
             return
         }
@@ -49,9 +48,9 @@ class SideBarController: UIViewController {
         bgImg = UIImageView(image: UIImage(named: "home_bg"))
         superview.addSubview(bgImg!)
         bgImg?.snp_makeConstraints(closure: { (make) -> Void in
-            make.center.equalTo(superview)
-            make.width.equalTo(superview)
-            make.height.equalTo(superview).multipliedBy(1.4)
+            make.left.equalTo(superview)
+            make.height.equalTo(superview)
+            make.width.equalTo(bgImg!.snp_height).multipliedBy(0.75)
         })
         // 头像
         avatarBtn = LoadingButton(size: CGSize(width: 125, height: 125))
@@ -81,16 +80,16 @@ class SideBarController: UIViewController {
             make.height.equalTo(33)
         })
         if let carID = host.profile?.avatarCarID where carID != "" {
+
             carNameLbl = UILabel()
             carNameLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
             carNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-            carNameLbl?.textAlignment = .Center
             carNameLbl?.text = host.profile?.avatarCarName
             superview.addSubview(carNameLbl!)
-            carNameLbl?.sizeToFit()
+            let size = carNameLbl?.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max))
             carNameLbl?.translatesAutoresizingMaskIntoConstraints = true
             carNameLbl?.snp_makeConstraints(closure: { (make) -> Void in
-                make.centerX.equalTo(avatarBtn!).offset(22)
+                make.left.equalTo(avatarBtn!.snp_centerX).offset((25 - size!.width) / 2)
                 make.top.equalTo(nameLbl!.snp_bottom).offset(10)
             })
             
@@ -98,7 +97,7 @@ class SideBarController: UIViewController {
             carIcon?.kf_setImageWithURL(SFURL(host.profile!.avatarCarLogo!)!)
             superview.addSubview(carIcon!)
             carIcon?.snp_makeConstraints(closure: { (make) -> Void in
-                make.right.equalTo(carNameLbl!.snp_left)
+                make.right.equalTo(carNameLbl!.snp_left).offset(-5)
                 make.centerY.equalTo(carNameLbl!)
                 make.size.equalTo(CGSize(width: 21, height: 21))
             })
@@ -164,6 +163,26 @@ class SideBarController: UIViewController {
         
         self.selectedBtn = statusBtn
     }
+    
+    func animateBG() {
+        bgImg?.layer.removeAllAnimations()
+        let superview = self.view
+        bgImg?.snp_remakeConstraints(closure: { (make) -> Void in
+            make.left.equalTo(superview)
+            make.height.equalTo(superview)
+            make.width.equalTo(bgImg!.snp_height).multipliedBy(0.75)
+        })
+        superview.updateConstraints()
+        superview.layoutIfNeeded()
+        bgImg?.snp_remakeConstraints(closure: { (make) -> Void in
+            make.right.equalTo(superview)
+            make.height.equalTo(superview)
+            make.width.equalTo(bgImg!.snp_height).multipliedBy(0.75)
+        })
+        UIView.animateWithDuration(10) { () -> Void in
+            superview.layoutIfNeeded()
+        }
+    }
 }
 
 // MARK: - 数据设置
@@ -173,7 +192,7 @@ extension SideBarController {
      */
     func reloadUserData() {
         // 获取当前用户
-        guard let user = User.objects.hostUser else{
+        guard let user = User.objects.hostUser() else{
             // 如果没有当前登录用户，直接退出
             return
         }

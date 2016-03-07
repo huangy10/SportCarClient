@@ -49,7 +49,7 @@ extension News {
     }
     
     func getLikeDescription() -> NSAttributedString{
-        let host = User.objects.hostUser!
+        let host = User.objects.hostUser()!
         let currentLiked = host.isNewsLiked(self)
         
         let gray = UIColor(white: 0.72, alpha: 1)

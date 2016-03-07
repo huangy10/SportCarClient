@@ -37,7 +37,7 @@ class AppManager: UIViewController {
     }
     
     func guideToContent() {
-        if let hostUser = User.objects.hostUser {
+        if let hostUser = User.objects.hostUser() {
             let ctl = HomeController()
             ctl.hostUser = hostUser
             self.navigationController?.pushViewController(ctl, animated: false)

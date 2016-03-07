@@ -80,8 +80,8 @@ class SportCarSelectListController: UICollectionViewController{
      */
     func getSportCarData() {
         let requester = SportCarRequester.sharedSCRequester
-        requester.getAuthedCarsList(User.objects.hostUser!.userID!, onSuccess: { (let data) -> () in
-            let hostUser = User.objects.hostUser!
+        requester.getAuthedCarsList(User.objects.hostUserID!, onSuccess: { (let data) -> () in
+            let hostUser = User.objects.hostUser()!
             for carOwnerShipJSON in data!.arrayValue {
                 let carJSON = carOwnerShipJSON["car"]
                 let car = SportCar.objects.create(carJSON).value

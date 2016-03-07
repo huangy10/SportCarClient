@@ -46,13 +46,13 @@ class ChatRecord: NSManagedObject {
         }
     }
     
-    func loadValueFromJSON(json: JSON) {
+    func loadValueFromJSON(json: JSON, ctx: DataContext? = nil) {
         self.createdAt = DateSTR(json["created_at"].string)
         self.chat_type = json["chat_type"].string
         self.textContent = json["text_content"].string
         let userJSON = json["sender"]
-        self.sender = User.objects.create(userJSON).value
-        if sender?.userID == User.objects.hostUser?.userID {
+        self.sender = User.objects.create(userJSON, ctx: ChatRecord.objects.context).value
+        if sender?.userID == User.objects.hostUser(ctx)?.userID {
             self.read = true
         }
         self.image = json["image"].string
@@ -61,14 +61,14 @@ class ChatRecord: NSManagedObject {
         self.messageType = json["message_type"].string
         self.read = json["read"].bool ?? false
         if chat_type == "private" && targetID != nil{
-            targetUser = User.objects.getOrLoad(targetID!)
+            targetUser = User.objects.getOrLoad(targetID!, ctx: ChatRecord.objects.context)
             if targetUser == nil {
-                targetUser = User.objects.create(json["target_user"]).value
+                targetUser = User.objects.create(json["target_user"], ctx: ChatRecord.objects.context).value
             }
         } else if chat_type == "group" && targetID != nil {
-            targetClub = Club.objects.getOrLoad(targetID!)
+            targetClub = Club.objects.getOrLoad(targetID!, ctx: ChatRecord.objects.context)
             if targetClub == nil {
-                targetClub = Club.objects.getOrCreate(json["target_club"])
+                targetClub = Club.objects.getOrCreate(json["target_club"], ctx: ChatRecord.objects.context)
             }
             club = targetClub
         }
@@ -86,7 +86,7 @@ class ChatRecord: NSManagedObject {
 }
 
 class ChatRecoardManager {
-    let context = User.objects.context
+    let context = DataContext()
     
     var unSentRecord: [ChatRecord] = []
     
@@ -114,7 +114,8 @@ class ChatRecoardManager {
      - returns: 返回一个创建成果的聊天条目
      */
     func postNewChatRecord(messageType: String, textContent: String? = nil, image: UIImage?=nil, audio: NSURL? = nil, relatedID: String?=nil) -> ChatRecord{
-        let hostUser = User.objects.hostUser
+        let hostUser = User.objects.hostUser(context)
+//        hostUser = context.objectWithID(hostUser!.objectID) as? User
         let newChat = context.chatRecords.createEntity()
         newChat.createdAt = NSDate()
         newChat.textContent = textContent
