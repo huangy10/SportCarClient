@@ -72,6 +72,7 @@ class ChatListController: UITableViewController, FFSelectDelegate, GroupChatSetu
             detail.targetClub = club
             break
         }
+        dataSource.totalUnreadNum -= chatData!.unread
         messageController.navigationController?.pushViewController(detail, animated: true)
     }
     

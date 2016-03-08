@@ -114,7 +114,7 @@ class ChatCell: UITableViewCell {
         superview.addSubview(triangle!)
         //
         bubbleView = UIView()
-        bubbleView?.layer.cornerRadius = 20
+        bubbleView?.layer.cornerRadius = 8
         bubbleView?.clipsToBounds = true
         superview.addSubview(bubbleView!)
         bubbleView?.backgroundColor = UIColor(white: 0.945, alpha: 1)
@@ -220,36 +220,29 @@ class ChatCell: UITableViewCell {
             bubbleLbL?.text = chat?.textContent
             let textSize = bubbleLbL!.sizeThatFits(CGSizeMake(maxBubbleWidth - 30, CGFloat.max))
             bubbleContentSize = textSize
-//            bubbleLbL?.snp_remakeConstraints(closure: { (make) -> Void in
-//                make.left.equalTo(container!)
-//                make.top.equalTo(container!)
-//                make.width.equalTo(textSize.width)
-//            })
         }else if reuseIdentifier == "image" {
-            bubbleImg?.image = chat?.contentImage
-            let imageSize = bubbleImg?.image?.size
+            if chat?.image == nil {
+                bubbleImg?.image = chat?.contentImage
+                bubbleImg?.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+            } else {
+                guard let imageURL = SFURL(chat!.image!) else {
+                    assertionFailure()
+                    return
+                }
+                bubbleImg?.kf_setImageWithURL(imageURL, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+                    self.bubbleImg?.setupForImageViewer(imageURL, backgroundColor: UIColor.blackColor())
+                })
+            }
+            let imageSize = chat?.imageSize
             var contentSize = CGSizeMake(88 / imageSize!.height * imageSize!.width, 88)
             if contentSize.width > maxBubbleWidth - 30 {
                 contentSize = CGSizeMake(maxBubbleWidth - 30, (maxBubbleWidth - 30) / imageSize!.width * imageSize!.height)
             }
             bubbleContentSize = contentSize
-//            bubbleImg?.snp_remakeConstraints(closure: { (make) -> Void in
-//                make.top.equalTo(container!)
-//                make.centerX.equalTo(container!)
-//                make.size.equalTo(contentSize)
-//            })
         }else{
             bubbleAudio?.chatRecord = chat
-//            bubbleAudio?.snp_remakeConstraints(closure: { (make) -> Void in
-//                make.center.equalTo(container!)
-//                make.size.equalTo(CGSizeMake(maxBubbleWidth - 30, 30))
-//            })
             bubbleContentSize = CGSizeMake(maxBubbleWidth - 30, 30)
         }
-        // This may cause autolayout alert, just ignore it
-//        bubbleContentView?.layoutIfNeeded()
-//        let bubbleContentSize = bubbleContentView?.frame.size
-
         if isMine {
             bubbleView?.snp_remakeConstraints(closure: { (make) -> Void in
                 make.right.equalTo(triangle!.snp_left).offset(1)
@@ -276,13 +269,20 @@ class ChatCell: UITableViewCell {
         let maxBubbleContentWidth = UIScreen.mainScreen().bounds.width - 100 - 30
         let timeMarkHeight = chat.displayTimeMark ? kChatCellTimeMarkSpaceHeight : 0
         if messageType == "text" {
-            let textSize = chat.textContent!.boundingRectWithSize(CGSizeMake(maxBubbleContentWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)], context: nil).size
-            return textSize.height + 32 + 10 + timeMarkHeight
+            if let textSize = chat.textContent?.boundingRectWithSize(CGSizeMake(maxBubbleContentWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)], context: nil).size {
+                return textSize.height + 32 + 10 + timeMarkHeight
+            }else {
+                assertionFailure()
+                return 0
+            }
         }else if messageType == "image" {
-            let imageSize = chat.contentImage?.size
-            var contentSize = CGSizeMake(88 / imageSize!.height * imageSize!.width, 88)
+            if chat.imageWidth == 0 || chat.imageHeight == 0 {
+                assertionFailure()
+            }
+            let imageSize = chat.imageSize
+            var contentSize = CGSizeMake(88 / imageSize.height * imageSize.width, 88)
             if contentSize.width > maxBubbleContentWidth{
-                contentSize = CGSizeMake(maxBubbleContentWidth , maxBubbleContentWidth / imageSize!.width * imageSize!.height)
+                contentSize = CGSizeMake(maxBubbleContentWidth , maxBubbleContentWidth / imageSize.width * imageSize.height)
             }
             return contentSize.height + 32 + 10 + timeMarkHeight
         }else {

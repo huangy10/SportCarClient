@@ -130,6 +130,11 @@ class AvatarCarSelectController: AvatarItemSelectController {
         }
         cell.onSelect = { (sender: UIButton) in
             let row = sender.tag
+            let targetOwn = self.cars[row]
+            if targetOwn.identified == false {
+                self.showToast(LS("请返回认证跑车"))
+                return
+            }
             if sender.selected {
                 self.selectedRow = -1
             }else{

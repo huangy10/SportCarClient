@@ -145,6 +145,9 @@ class ChatRequester: AccountRequester {
             if err == nil {
                 onComplete(record: chatRecord, localURL: target_URL)
             }else{
+                if err?.code == 516 {
+                    onComplete(record: chatRecord, localURL: target_URL)
+                }
                 onError(record: chatRecord)
             }
         }

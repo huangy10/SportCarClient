@@ -88,7 +88,7 @@ extension StatusManager {
      
      - returns: 返回生成的状态，以及这个状态是否是构造的
      */
-    func getOrCreate(json: JSON) -> (Status?, Bool){
+    func getOrCreate(json: JSON, ctx: DataContext? = nil) -> (Status?, Bool){
         let statusID = json["statusID"].stringValue
         if let s = status[statusID] {
             s.loadDataFromJSON(json)

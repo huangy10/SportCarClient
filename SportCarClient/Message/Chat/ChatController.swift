@@ -40,7 +40,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         if targetUser != nil {
             return targetUser?.nickName
         }else if targetClub != nil{
-            return targetClub?.name
+            return "\(targetClub!.name!)(\(targetClub!.memberNum))"
         }
         return nil
     }
@@ -284,7 +284,6 @@ extension ChatRoomController {
 extension ChatRoomController {
     
     func confirmSendChatMessage(text: String? = nil, image: UIImage? = nil, audio: NSURL? = nil, messageType: String="text") {
-        
         let newChat = ChatRecord.objects.postNewChatRecord(messageType, textContent: text, image: image, audio: audio, relatedID: nil)
         switch chatRecords!._item! {
         case .UserItem(let user):
@@ -317,6 +316,11 @@ extension ChatRoomController {
         ChatRequester.requester.postNewChatRecord(newChat.chat_type!, messageType: messageType, targetID: newChat.targetID!, image: image, audio: audio, textContent: text, onSuccess: { (json) -> () in
             let newID = json!["chatID"].stringValue
             ChatRecord.objects.confirmSent(newChat, chatRecordID: newID, image: json!["image"].string, audio: json!["audio"].string)
+            if messageType == "image" {
+                let imageURL = SFURL(newChat.image!)!
+                let cache = KingfisherManager.sharedManager.cache
+                cache.storeImage(image!, forKey: imageURL.absoluteString)
+            }
             }) { (code) -> () in
                 print(code)
         }
@@ -363,7 +367,7 @@ extension ChatRoomController {
             displayAccessoryBoard = true
             // 显示accessory面板
             self.tapper?.enabled = true
-            accessoryBoard?.snp_makeConstraints(closure: { (make) -> Void in
+            accessoryBoard?.snp_updateConstraints(closure: { (make) -> Void in
                 make.top.equalTo(self.view.snp_bottom).offset(-accessoryBoardHeight)
             })
             opPanelView?.snp_updateConstraints(closure: { (make) -> Void in

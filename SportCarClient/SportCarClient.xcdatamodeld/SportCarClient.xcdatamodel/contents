@@ -204,7 +204,7 @@
         <relationship name="likeNews" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="News" inverseName="likedBy" inverseEntity="News" syncable="YES"/>
         <relationship name="mostRecentChat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ChatRecord" inverseName="related_users" inverseEntity="ChatRecord" syncable="YES"/>
         <relationship name="newsComment" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NewsComment" inverseName="user" inverseEntity="NewsComment" syncable="YES"/>
-        <relationship name="notifications" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Notification" inverseName="user" inverseEntity="Notification" syncable="YES"/>
+        <relationship name="notifications" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Notification" inverseName="user" inverseEntity="Notification" syncable="YES"/>
         <relationship name="ownership" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SportCarOwnerShip" inverseName="user" inverseEntity="SportCarOwnerShip" syncable="YES"/>
         <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Profile" inverseName="user" inverseEntity="Profile" syncable="YES"/>
         <relationship name="status" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Status" inverseName="user" inverseEntity="Status" syncable="YES"/>

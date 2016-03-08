@@ -31,7 +31,6 @@ extension User {
     @NSManaged var userID: String?
 
     @NSManaged var mostRecentChat: ChatRecord?
-    @NSManaged var notifications: Notification?
     @NSManaged var profile: Profile?
 
     @NSManaged var actComments: Set<ActivityComment>
@@ -44,6 +43,7 @@ extension User {
     @NSManaged var follows: Set<User>
     @NSManaged var likeNews: Set<News>
     @NSManaged var newsComment: Set<NewsComment>
+    @NSManaged var notifications: Set<Notification>
     @NSManaged var ownership: Set<SportCarOwnerShip>
     @NSManaged var status: Set<Status>
     @NSManaged var statusComment: Set<StatusComment>
@@ -104,6 +104,11 @@ extension User {
     @NSManaged func addNewsComment(newsComment: Set<NewsComment>)
     @NSManaged func removeNewsComment(newsComment: Set<NewsComment>)
 
+    @NSManaged private func addNotificationsObject(object: Notification)
+    @NSManaged private func removeNotificationsObject(object: Notification)
+    @NSManaged func addNotifications(notifications: Set<Notification>)
+    @NSManaged func removeNotifications(notifications: Set<Notification>)
+
     @NSManaged private func addOwnershipObject(object: SportCarOwnerShip)
     @NSManaged private func removeOwnershipObject(object: SportCarOwnerShip)
     @NSManaged func addOwnership(ownership: Set<SportCarOwnerShip>)
@@ -149,6 +154,9 @@ extension User {
     @nonobjc func addNewsComment(newsComment: NewsComment) { self.addNewsCommentObject(newsComment) }
     @nonobjc func removeNewsComment(newsComment: NewsComment) { self.removeNewsCommentObject(newsComment) }
 
+    func addNotification(notification: Notification) { self.addNotificationsObject(notification) }
+    func removeNotification(notification: Notification) { self.removeNotificationsObject(notification) }
+
     @nonobjc func addOwnership(ownership: SportCarOwnerShip) { self.addOwnershipObject(ownership) }
     @nonobjc func removeOwnership(ownership: SportCarOwnerShip) { self.removeOwnershipObject(ownership) }
 
@@ -179,7 +187,6 @@ extension User {
     static let userID = AlecrimCoreData.NullableAttribute<String>("userID")
 
     static let mostRecentChat = AlecrimCoreData.NullableAttribute<ChatRecord>("mostRecentChat")
-    static let notifications = AlecrimCoreData.NullableAttribute<Notification>("notifications")
     static let profile = AlecrimCoreData.NullableAttribute<Profile>("profile")
 
     static let actComments = AlecrimCoreData.Attribute<Set<ActivityComment>>("actComments")
@@ -192,6 +199,7 @@ extension User {
     static let follows = AlecrimCoreData.Attribute<Set<User>>("follows")
     static let likeNews = AlecrimCoreData.Attribute<Set<News>>("likeNews")
     static let newsComment = AlecrimCoreData.Attribute<Set<NewsComment>>("newsComment")
+    static let notifications = AlecrimCoreData.Attribute<Set<Notification>>("notifications")
     static let ownership = AlecrimCoreData.Attribute<Set<SportCarOwnerShip>>("ownership")
     static let status = AlecrimCoreData.Attribute<Set<Status>>("status")
     static let statusComment = AlecrimCoreData.Attribute<Set<StatusComment>>("statusComment")
@@ -217,7 +225,6 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: User {
     var userID: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("userID", self) }
 
     var mostRecentChat: AlecrimCoreData.NullableAttribute<ChatRecord> { return AlecrimCoreData.NullableAttribute<ChatRecord>("mostRecentChat", self) }
-    var notifications: AlecrimCoreData.NullableAttribute<Notification> { return AlecrimCoreData.NullableAttribute<Notification>("notifications", self) }
     var profile: AlecrimCoreData.NullableAttribute<Profile> { return AlecrimCoreData.NullableAttribute<Profile>("profile", self) }
 
     var actComments: AlecrimCoreData.Attribute<Set<ActivityComment>> { return AlecrimCoreData.Attribute<Set<ActivityComment>>("actComments", self) }
@@ -230,6 +237,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: User {
     var follows: AlecrimCoreData.Attribute<Set<User>> { return AlecrimCoreData.Attribute<Set<User>>("follows", self) }
     var likeNews: AlecrimCoreData.Attribute<Set<News>> { return AlecrimCoreData.Attribute<Set<News>>("likeNews", self) }
     var newsComment: AlecrimCoreData.Attribute<Set<NewsComment>> { return AlecrimCoreData.Attribute<Set<NewsComment>>("newsComment", self) }
+    var notifications: AlecrimCoreData.Attribute<Set<Notification>> { return AlecrimCoreData.Attribute<Set<Notification>>("notifications", self) }
     var ownership: AlecrimCoreData.Attribute<Set<SportCarOwnerShip>> { return AlecrimCoreData.Attribute<Set<SportCarOwnerShip>>("ownership", self) }
     var status: AlecrimCoreData.Attribute<Set<Status>> { return AlecrimCoreData.Attribute<Set<Status>>("status", self) }
     var statusComment: AlecrimCoreData.Attribute<Set<StatusComment>> { return AlecrimCoreData.Attribute<Set<StatusComment>>("statusComment", self) }

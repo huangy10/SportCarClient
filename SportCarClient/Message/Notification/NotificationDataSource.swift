@@ -48,6 +48,7 @@ class NotificationDataSource: NSObject {
             updated = true
         }
         if updated {
+            Notification.objects.saveAll()
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.list?.tableView.reloadData()
             })
@@ -66,7 +67,7 @@ class NotificationDataSource: NSObject {
     }
     
     func getMore() {
-        let threshold = notifications.first()?.createdAt ?? NSDate()
+        let threshold = notifications.last()?.createdAt ?? NSDate()
         requester.getNotifications(threshold, limit: 10, opType: "more", onSuccess: { (json) -> () in
             self.loadNotificationListFromJSON(json!.arrayValue)
             }) { (code) -> () in

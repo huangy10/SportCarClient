@@ -56,7 +56,10 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         // 获取认证车辆的列表
         requester.getAuthedCars(data.user.userID!, onSuccess: { (json) -> () in
             self.data.handleAuthedCarsJSONResponse(json!, user: self.data.user)
+            self.data.selectedCar = self.data.owns.first()
             self.carsViewList.owns = self.data.owns
+            // 默认选择第一辆认证的车辆
+            self.carsViewList.selectedCar = self.data.owns.first()
             self.carsViewList.collectionView?.reloadData()
             }) { (code) -> () in
                 print(code)

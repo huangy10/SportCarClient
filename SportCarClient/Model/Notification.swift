@@ -24,8 +24,11 @@ class Notification: NSManagedObject {
         // TODO： 处理targetID
         let userJSON = json["related_user"]
         user = User.objects.create(userJSON, ctx: Notification.objects.context).value
+        if user == nil {
+            print(json)
+        }
         let statusJSON = json["related_status"]
-        let status = Status.objects.getOrCreate(statusJSON).0!
+        let status = Status.objects.getOrCreate(statusJSON, ctx: Notification.objects.context).0!
         relatedID = status.statusID
         let statusImage = status.image!
         image = statusImage.split(";").first()

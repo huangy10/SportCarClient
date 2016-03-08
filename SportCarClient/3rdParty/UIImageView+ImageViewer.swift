@@ -11,8 +11,29 @@ import UIKit
 
 public extension UIImageView {
     
+    public func setHighQualityImageURL(url: NSURL) {
+        guard let gestures = gestureRecognizers else {
+            assertionFailure("You should call setupForImageViewer before changing the high quality image url")
+            return
+        }
+        for g in gestures {
+            if let gg = g as? ImageViewerTapGestureRecognizer {
+                gg.highQualityImageUrl = url
+            }
+        }
+    }
+    
     public func setupForImageViewer(highQualityImageUrl: NSURL? = nil, backgroundColor: UIColor = UIColor.whiteColor()) {
         userInteractionEnabled = true
+        if gestureRecognizers != nil {
+            for g in gestureRecognizers! {
+                if let gg = g as? ImageViewerTapGestureRecognizer {
+                    gg.highQualityImageUrl = highQualityImageUrl
+                    gg.backgroundColor = backgroundColor
+                    return
+                }
+            }
+        }
         let gestureRecognizer = ImageViewerTapGestureRecognizer(target: self, action: "didTap:", highQualityImageUrl: highQualityImageUrl, backgroundColor: backgroundColor)
         addGestureRecognizer(gestureRecognizer)
     }

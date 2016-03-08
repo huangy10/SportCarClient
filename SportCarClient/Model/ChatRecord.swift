@@ -56,6 +56,8 @@ class ChatRecord: NSManagedObject {
             self.read = true
         }
         self.image = json["image"].string
+        self.imageWidth = json["image_width"].doubleValue
+        self.imageHeight = json["image_height"].doubleValue
         self.targetID = json["target_id"].stringValue
         self.audio = json["audio"].string
         self.messageType = json["message_type"].string
@@ -115,7 +117,6 @@ class ChatRecoardManager {
      */
     func postNewChatRecord(messageType: String, textContent: String? = nil, image: UIImage?=nil, audio: NSURL? = nil, relatedID: String?=nil) -> ChatRecord{
         let hostUser = User.objects.hostUser(context)
-//        hostUser = context.objectWithID(hostUser!.objectID) as? User
         let newChat = context.chatRecords.createEntity()
         newChat.createdAt = NSDate()
         newChat.textContent = textContent
@@ -123,6 +124,8 @@ class ChatRecoardManager {
         newChat.messageType = messageType
         newChat.sent = true
         newChat.contentImage = image
+        newChat.imageWidth = Double(image?.size.width ?? 0)
+        newChat.imageHeight = Double(image?.size.height ?? 0)
         newChat.audioLocal = audio?.absoluteString
         unSentRecord.append(newChat)
         return newChat

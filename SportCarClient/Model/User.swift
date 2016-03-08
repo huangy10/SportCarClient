@@ -106,6 +106,12 @@ extension User{
      */
     func loadValueFromJSON(json: JSON, forceUpdateNil: Bool=false) -> Bool{
         
+        defer {
+            if avatarUrl == nil {
+                print(self)
+            }
+        }
+        
         if json["userID"] == nil || json["userID"].stringValue != self.userID{
             return false
         }

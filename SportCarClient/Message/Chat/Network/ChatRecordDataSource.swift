@@ -126,14 +126,7 @@ class ChatRecordDataSource {
                         }, onError: { (record) -> () in
                             dispatch_semaphore_signal(semaphore)
                     })
-                }else if newRecord.messageType == "image" {
-                    let downloader = KingfisherManager.sharedManager.downloader
-                    let targetURL = SFURL(newRecord.image!)!
-                    downloader.downloadImageWithURL(targetURL, progressBlock: nil, completionHandler: { (image, error, imageURL, originalData) -> () in
-                        newRecord.contentImage = image
-                        dispatch_semaphore_signal(semaphore)
-                    })
-                }else{
+                } else {
                     dispatch_semaphore_signal(semaphore)
                 }
                 dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
@@ -268,14 +261,7 @@ class ChatRecordDataSource {
                         }, onError: { (record) -> () in
                              dispatch_semaphore_signal(semaphore)
                     })
-                }else if newRecord.messageType == "image" {
-                    let downloader = KingfisherManager.sharedManager.downloader
-                    let targetURL = SFURL(newRecord.image!)!
-                    downloader.downloadImageWithURL(targetURL, progressBlock: nil, completionHandler: { (image, error, imageURL, originalData) -> () in
-                        newRecord.contentImage = image
-                        dispatch_semaphore_signal(semaphore)
-                    })
-                }else{
+                } else {
                     dispatch_semaphore_signal(semaphore)
                 }
                 dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
@@ -352,14 +338,7 @@ class ChatRecordDataSource {
                     }, onError: { (record) -> () in
                         dispatch_semaphore_signal(semaphore)
                 })
-            }else if newRecord.messageType == "image" {
-                let downloader = KingfisherManager.sharedManager.downloader
-                let targetURL = SFURL(newRecord.image!)!
-                downloader.downloadImageWithURL(targetURL, progressBlock: nil, completionHandler: { (image, error, imageURL, originalData) -> () in
-                    newRecord.contentImage = image
-                    dispatch_semaphore_signal(semaphore)
-                })
-            }else{
+            } else {
                 dispatch_semaphore_signal(semaphore)
             }
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)

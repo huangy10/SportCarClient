@@ -87,8 +87,9 @@ class SportCarInfoCell: UICollectionViewCell{
             make.size.equalTo(CGSizeMake(56, 32))
         }
         //
+        let sepLineBackgroundColor = UIColor(white: 0.1, alpha: 1)
         let sepLine = UIView()
-        sepLine.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        sepLine.backgroundColor = sepLineBackgroundColor
         superview.addSubview(sepLine)
         sepLine.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(carNameLbl.snp_bottom).offset(12.5)
@@ -149,7 +150,7 @@ class SportCarInfoCell: UICollectionViewCell{
         }
         //
         let sepLine2 = UIView()
-        sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        sepLine2.backgroundColor = sepLineBackgroundColor
         carParamBoard.addSubview(sepLine2)
         sepLine2.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(carParamBoard).offset(84)
@@ -189,7 +190,7 @@ class SportCarInfoCell: UICollectionViewCell{
         }
         //
         let sepLine3 = UIView()
-        sepLine3.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        sepLine3.backgroundColor = sepLineBackgroundColor
         carParamBoard.addSubview(sepLine3)
         sepLine3.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(carParamBoard)
@@ -251,6 +252,8 @@ class SportCarInfoCell: UICollectionViewCell{
             carBody.text = car.body
             carSpeed.text = car.max_speed
             carAcce.text = car.zeroTo60
+            //
+            carEditBtn.hidden = own.user?.userID != User.objects.hostUserID
         }
     }
     
