@@ -28,13 +28,20 @@ class NotificationDataSource: NSObject {
         }
     }
     let requester = ChatRequester.requester
-    
-    var heartBeat: NSTimer!
+    let privateQueue: dispatch_queue_t
     var started: Bool = false
     
     override init() {
+        privateQueue = requester.notificationQueue
         super.init()
-        heartBeat = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "updateNotification", userInfo: nil, repeats: true)
+        loadHistoricalNotifications()
+        dispatch_async(privateQueue) { () -> Void in
+            self.updateNotification()
+        }
+    }
+    
+    func loadHistoricalNotifications() {
+        self.notifications.appendContentsOf(Notification.objects.historicalList(40))
     }
     
     /**
@@ -61,8 +68,18 @@ class NotificationDataSource: NSObject {
         let dateFix = notifications.first()?.notificationID ?? ""
         requester.getNotifications(threshold, limit: 10, opType: opType, dateFix: dateFix, onSuccess: { (json) -> () in
             self.loadNotificationListFromJSON(json!.arrayValue)
+            var delayTime: dispatch_time_t = DISPATCH_TIME_NOW
+            delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC) * 3)
+            dispatch_after(delayTime, self.privateQueue, { () -> Void in
+                self.updateNotification()
+            })
             }) { (code) -> () in
                 print(code)
+                var delayTime: dispatch_time_t = DISPATCH_TIME_NOW
+                delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC) * 3)
+                dispatch_after(delayTime, self.privateQueue, { () -> Void in
+                    self.updateNotification()
+                })
         }
     }
     

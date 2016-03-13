@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Mapbox
+
 import Kingfisher
 
 /// 用户显示在地图上的单元

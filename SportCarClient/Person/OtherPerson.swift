@@ -17,6 +17,7 @@ class PersonOtherController: PersonBasicController {
     }
     
     override func viewDidLoad() {
+        carsViewListShowAddBtn = false
         super.viewDidLoad()
         navSettings()
     }
@@ -67,6 +68,7 @@ class PersonOtherController: PersonBasicController {
         }
         panel.fanslistBtn.addTarget(self, action: "fanslistPressed", forControlEvents: .TouchUpInside)
         panel.followlistBtn.addTarget(self, action: "followlistPressed", forControlEvents: .TouchUpInside)
+        panel.statuslistBtn.addTarget(self, action: "statuslistPressed", forControlEvents: .TouchUpInside)
         panel.detailBtn.addTarget(self, action: "detailBtnPressed", forControlEvents: .TouchUpInside)
         return panel
     }
@@ -109,20 +111,6 @@ class PersonOtherController: PersonBasicController {
     
     func locateBtnPressed() {
         
-    }
-    
-    func fanslistPressed() {
-        let fans = FansSelectController()
-        fans.targetUser = data.user
-        let wrapper = BlackBarNavigationController(rootViewController: fans)
-        self.presentViewController(wrapper, animated: true, completion: nil)
-    }
-    
-    func followlistPressed() {
-        let follow = FollowSelectController()
-        follow.targetUser = data.user
-        let wrapper = BlackBarNavigationController(rootViewController: follow)
-        self.presentViewController(wrapper, animated: true, completion: nil)
     }
     
     override func detailBtnPressed() {

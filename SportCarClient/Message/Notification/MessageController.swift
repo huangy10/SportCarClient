@@ -37,7 +37,7 @@ class MessageController: UIViewController {
     func createSubviews() {
         let superview = self.view
         superview.backgroundColor = UIColor.whiteColor()
-        //
+
         board = UIScrollView()
         board.pagingEnabled = true
         board.scrollEnabled = false
@@ -48,23 +48,26 @@ class MessageController: UIViewController {
         board.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
-        //
+        
         chatList = ChatListController()
         board.addSubview(chatList.view)
         chatList.messageController = self
         chatList.view.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(board).offset(screenWidth)
             make.top.equalTo(superview)
-            make.size.equalTo(CGSizeMake(screenWidth, screenHeight))
+            make.bottom.equalTo(superview)
+            make.width.equalTo(screenWidth)
         }
         ChatRecordDataSource.sharedDataSource.listCtrl = chatList
-        //
+        
         notificationList = NotificationController()
         board.addSubview(notificationList.view)
+        notificationList.messageHome = self
         notificationList.view.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(board)
             make.top.equalTo(superview)
-            make.size.equalTo(CGSizeMake(screenWidth, screenHeight))
+            make.bottom.equalTo(superview)
+            make.width.equalTo(screenWidth)
         }
     }
     

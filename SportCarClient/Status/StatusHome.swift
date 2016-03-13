@@ -24,9 +24,16 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
     // 三个tableView
     var nearByStatusCtrl = StatusBasicController()
     var followStatusCtrl = StatusFollowController()
-    var hotStatausCtrl = StatusBasicController()
+    var hotStatusCtrl = StatusHotController()
     //
-    var board: UIScrollView?
+    var board: UIScrollView!
+    
+    var titleNearbyBtn: UIButton!
+    var titleFollowBtn: UIButton!
+    var titleHotBtn: UIButton!
+    var titleIcon: UIImageView!
+    
+    private var _curTag = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,22 +50,28 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         let superview = self.view
         //
         board = UIScrollView()
-        board?.pagingEnabled = true
+        board.pagingEnabled = true
+        board.scrollEnabled = false
         let screenSize = superview.frame.size
-//        board?.contentSize = CGSizeMake(screenSize.width * 3, screenSize.height)
+        board.contentSize = CGSizeMake(screenSize.width * 3, screenSize.height)
+        board.setContentOffset(CGPointMake(screenSize.width, 0), animated: true)
         superview.addSubview(board!)
-        board?.frame = superview.bounds
+        board.frame = superview.bounds
         // 关注
         followStatusCtrl.homeController = self
         let followView = followStatusCtrl.view
-        superview.addSubview(followView)
-        followView.frame = CGRectMake(0, 0, screenSize.width, screenSize.height)
+        board.addSubview(followView)
+        followView.frame = CGRectMake(screenSize.width, 0, screenSize.width, screenSize.height)
+        //
+        hotStatusCtrl.homeController = self
+        let hotView = hotStatusCtrl.view
+        board.addSubview(hotView)
+        hotView.frame = CGRectMake(screenSize.width * 2, 0, screenSize.width, screenSize.height)
     }
     
     internal func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.navigationItem.title = LS("动态")
-        //
+//        self.navigationItem.title = LS("动态")
         // 导航栏左侧按钮
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
@@ -77,6 +90,52 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         let container = UIView(frame: CGRectMake(0, 0, containerWidth, barHeight))
         container.backgroundColor = UIColor.clearColor()
         
+        titleFollowBtn = UIButton()
+        titleFollowBtn.tag = 1
+        titleFollowBtn.setTitle(LS("关注"), forState: .Normal)
+        titleFollowBtn.setTitleColor(kBarBgColor, forState: .Normal)
+        titleFollowBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        titleFollowBtn.addTarget(self, action: "navTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        container.addSubview(titleFollowBtn)
+        titleFollowBtn.snp_makeConstraints { (make) -> Void in
+            make.height.equalTo(30)
+            make.width.equalTo(80)
+            make.center.equalTo(container)
+        }
+        
+        titleNearbyBtn = UIButton()
+        titleNearbyBtn.tag = 0
+        titleNearbyBtn.setTitle(LS("附近"), forState: .Normal)
+        titleNearbyBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        titleNearbyBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        titleNearbyBtn.addTarget(self, action: "navTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        container.addSubview(titleNearbyBtn)
+        titleNearbyBtn.snp_makeConstraints { (make) -> Void in
+            make.centerY.equalTo(container)
+            make.right.equalTo(titleFollowBtn.snp_left).offset(-9)
+            make.size.equalTo(CGSizeMake(80, 30))
+        }
+        
+        titleHotBtn = UIButton()
+        titleHotBtn.tag = 2
+        titleHotBtn.setTitle(LS("热门"), forState: .Normal)
+        titleHotBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        titleHotBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        titleHotBtn.addTarget(self, action: "navTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        container.addSubview(titleHotBtn)
+        titleHotBtn.snp_makeConstraints { (make) -> Void in
+            make.left.equalTo(titleFollowBtn.snp_right).offset(9)
+            make.centerY.equalTo(container)
+            make.size.equalTo(CGSizeMake(80, 30))
+        }
+        
+        titleIcon = UIImageView(image: UIImage(named: "account_header_button"))
+        container.addSubview(titleIcon)
+        titleIcon.snp_makeConstraints { (make) -> Void in
+            make.edges.equalTo(titleFollowBtn)
+        }
+        container.sendSubviewToBack(titleIcon)
+        self.navigationItem.titleView = container
     }
     
     func navLeftBtnPressed() {
@@ -89,5 +148,28 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         release.home = self
         let wrapper = BlackBarNavigationController(rootViewController: release)
         self.presentViewController(wrapper, animated: true, completion: nil)
+    }
+    
+    func navTitleBtnPressed(sender: UIButton) {
+        if sender.tag == _curTag {
+            // current button is pressed, do nothing
+            return
+        }
+        let btns = [titleNearbyBtn, titleFollowBtn, titleHotBtn]
+//        let controllers = [nearByStatusCtrl, followStatusCtrl, hotStatusCtrl]
+//        controllers[_curTag].viewWillDisappear(true)
+//        controllers[sender.tag].viewWillAppear(true)
+        let targetBtn = btns[sender.tag]
+        let sourceBtn = btns[_curTag]
+        targetBtn.setTitleColor(kBarBgColor, forState: .Normal)
+        sourceBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        titleIcon.snp_remakeConstraints { (make) -> Void in
+            make.edges.equalTo(targetBtn)
+        }
+        UIView.animateWithDuration(0.2) { () -> Void in
+            self.titleIcon.superview?.layoutIfNeeded()
+        }
+        board.setContentOffset(CGPointMake(self.view.frame.width * CGFloat(sender.tag), 0), animated: true)
+        _curTag = sender.tag
     }
 }

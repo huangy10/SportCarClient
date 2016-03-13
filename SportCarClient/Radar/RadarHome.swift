@@ -35,7 +35,19 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        driver.manualStopUpdating = false
+        
+        if navRightBtn.tag == 0 {
+            driver.viewWillAppear(animated)
+        } else {
+            
+        }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        if navRightBtn.tag == 0 {
+            driver.viewWillDisappear(animated)
+        }
     }
     
     func navSettings() {
@@ -106,7 +118,6 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         }else {
             self.navigationController?.popViewControllerAnimated(true)
         }
-        driver.manualStopUpdating = true
     }
     
     func navRightBtnPressed() {

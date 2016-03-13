@@ -169,7 +169,6 @@ class SportCarSelectController: InputableViewController, SportCarBrandSelecterCo
             let headers = [LS("具体型号"), LS("跑车签名"), LS("价格"), LS("发动机"), LS("变速箱"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
             let contents = [carType, self.signatureInput?.text, data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
             let detail = SportCarSelectDetailController()
-            print("\(data)")
             detail.headers = headers
             detail.carId = data["carID"].stringValue
             detail.contents = contents

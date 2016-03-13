@@ -22,6 +22,10 @@ class StatusBasicController: UITableViewController {
     
     var homeController: StatusHomeController?
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     func loadMoreData() {
         assertionFailure("Not Implemented")
     }
@@ -32,6 +36,9 @@ class StatusBasicController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onStatusDelete:", name: kStatusDidDeletedNotification, object: nil)
+        
         tableView.registerClass(StatusCell.self, forCellReuseIdentifier: StatusCell.reuseIdentifier)
         myRefreshControl = UIRefreshControl()
         tableView.addSubview(myRefreshControl!)
@@ -110,10 +117,30 @@ extension StatusBasicController {
     func jsonDataHandler(json: JSON) -> Int{
         let statusJSONData = json.arrayValue
         for statusJSON in statusJSONData {
-            let newStatus = Status.objects.getOrCreate(statusJSON).0
-            self.status.append(newStatus!)
+            let newStatus = Status.objects.getOrCreate(statusJSON)
+            self.status.append(newStatus)
         }
         statusDataSort()
         return statusJSONData.count
+    }
+    
+    func onStatusDelete(notification: NSNotification) {
+        if let statusID = notification.userInfo![kStatusDidDeletedStatusIDKey] as? String{
+            var index = 0
+            var flag = false
+            for s in status {
+                if s.statusID == statusID {
+                    flag = true
+                    break
+                }
+                index += 1
+            }
+            if flag {
+                status.removeAtIndex(index)
+            }
+            
+        } else {
+            assertionFailure()
+        }
     }
 }

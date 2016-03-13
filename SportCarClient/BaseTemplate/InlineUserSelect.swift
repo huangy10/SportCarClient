@@ -11,8 +11,7 @@ import SnapKit
 import Kingfisher
 
 protocol InlineUserSelectDelegate {
-    func addBtnPresssed()
-    func removeBtnPressed()
+    func inlineUserSelectNeedAddMembers()
 }
 
 class InlineUserSelectController: UICollectionViewController {
@@ -34,7 +33,7 @@ class InlineUserSelectController: UICollectionViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    var delegate: InlineUserSelectDelegate?
     // 显示的用户列表
     var users: [User] = []
     var relatedClub: Club?
@@ -93,6 +92,12 @@ class InlineUserSelectController: UICollectionViewController {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(InlineUserSelectBtnCell.reuseIdentifier, forIndexPath: indexPath) as! InlineUserSelectBtnCell
             cell.type = "remove"
             return cell
+        }
+    }
+    
+    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row == users.count {
+            delegate?.inlineUserSelectNeedAddMembers()
         }
     }
 }

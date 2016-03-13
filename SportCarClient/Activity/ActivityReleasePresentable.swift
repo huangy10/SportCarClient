@@ -69,7 +69,7 @@ class ActivityReleasePresentableController: ActivityReleaseController {
         
         // make the request
         let requester = ActivityRequester.requester
-        requester.createNewActivity(actName, des: actDes, informUser: informUser, maxAttend: attendNum, startAt: startAtDate!, endAt: endAtDate!, clubLimit: clubLimitID, poster: posterImage, lat: userLocation!.coordinate.latitude, lon: userLocation!.coordinate.longitude, loc_des: locDescriptin ?? "", onSuccess: { (json) -> () in
+        requester.createNewActivity(actName, des: actDes, informUser: informUser, maxAttend: attendNum, startAt: startAtDate!, endAt: endAtDate!, clubLimit: clubLimitID, poster: posterImage, lat: userLocation!.latitude, lon: userLocation!.longitude, loc_des: locDescriptin ?? "", onSuccess: { (json) -> () in
             // TODO: send a global notification to make corresponding activity list update
             self.presenter?.dismissViewControllerAnimated(true, completion: nil)
             }) { (code) -> () in

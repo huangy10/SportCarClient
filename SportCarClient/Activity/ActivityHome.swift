@@ -111,9 +111,9 @@ class ActivityHomeController: UIViewController {
             return
         }
         if sender.tag == 0 {
-            nearBy.pause = false
+            nearBy.viewWillAppear(true)
         }else{
-            nearBy.pause = true
+            nearBy.viewWillDisappear(true)
         }
         
         let btns = [titleNearByBtn, titleMineBtn, titleAppliedBtn]

@@ -11,7 +11,7 @@ import SnapKit
 
 let kGroupChatSettingSectionTitles = ["", "信息", "通知", "聊天"]
 
-class GroupChatSettingController: UITableViewController, PersonMineSinglePropertyModifierDelegate {
+class GroupChatSettingController: UITableViewController, PersonMineSinglePropertyModifierDelegate, InlineUserSelectDelegate, FFSelectDelegate {
     
     var targetClub: Club!
     // 是否设置发生了更改
@@ -49,13 +49,12 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         
         let requester = ChatRequester.requester
         requester.getClubInfo(targetClub.clubID!, onSuccess: { (json) -> () in
-            self.targetClub.loadValueFromJSON(json!["club"])
+            self.targetClub.loadValueFromJSON(json!["club"], ctx: ChatRecord.objects.context)
             self.targetClub.clubJoining?.updateFromJson(json!)
             for data in json!["club"]["members"].arrayValue {
                 // 添加成员
-                if let user = User.objects.create(data).value where !self.targetClub.members.contains(user){
-                    self.targetClub.addMember(user)
-                }
+                let user = User.objects.getOrCreate(data)
+                self.targetClub.addMember(user)
             }
             self.tableView.reloadData()
             }) { (code) -> () in
@@ -202,13 +201,12 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 cell.selectionStyle = .None
                 if inlineUserSelect == nil {
                     inlineUserSelect = InlineUserSelectController()
-                    inlineUserSelect?.users = targetClub.members.map({ (user) -> User in
-                        return user
-                    })
+                    inlineUserSelect?.delegate = self
                     cell.contentView.addSubview(inlineUserSelect!.view)
                     inlineUserSelect?.view.snp_makeConstraints(closure: { (make) -> Void in
                         make.edges.equalTo(cell.contentView)
                     })
+                    inlineUserSelect?.relatedClub = targetClub
                 }
                 inlineUserSelect?.users = Array(targetClub.members)
                 inlineUserSelect?.showAddBtn = !targetClub.onlyHostInvites
@@ -286,6 +284,41 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     
     func modificationCancelled() {
         // Do nothing
+    }
+    
+    func inlineUserSelectNeedAddMembers() {
+        if targetClub.onlyHostInvites {
+            self.showToast(LS("本群只有群主能够邀请成员"))
+            return
+        }
+        let select = FFSelectController()
+        select.selectedUsers = Array(targetClub.members)
+        select.delegate = self
+        let wrapper = BlackBarNavigationController(rootViewController: select)
+        self.presentViewController(wrapper, animated: true, completion: nil)
+    }
+    
+    func userSelectCancelled() {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func userSelected(users: [User]) {
+        // send request to the server
+        dismissViewControllerAnimated(true, completion: nil)
+        if users.count == 0 { return }
+        let userIDs = users.map({return $0.userID!})
+        let originIDs = Array(targetClub.members).map({return $0.userID!})
+        let targets = userIDs.filter({!originIDs.contains($0)})
+        let requester = ChatRequester.requester
+        requester.updateClubMembers(targetClub.clubID!, members: targets, opType: "add", onSuccess: { (json) -> () in
+            self.targetClub.addMembers(Set(users))
+            self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 5, inSection: 1)], withRowAnimation: .Automatic)
+            }) { (code) -> () in
+                if code == "no permission" {
+                    self.showToast(LS("您没有权限进行此项操作"))
+                }
+                print(code)
+        }
     }
 }
 

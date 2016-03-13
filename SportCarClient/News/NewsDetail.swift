@@ -59,7 +59,6 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     var coverTopConstraintOffset: SnapKit.Constraint?
     
     // 数据相关的状态变量
-    var allCommentsLoaded: Bool = false
     var requestingCommentData: Bool = false
     var disableWebLink: Bool = false
     var responseToRow: Int?         // 回应的评论对象所在的行
@@ -173,7 +172,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
                 self.newsCover.snp_updateConstraints(closure: { (make) -> Void in
                     make.top.equalTo(self.board).offset(self.initPos)
                 })
-                UIView.animateWithDuration(0.5, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+                UIView.animateWithDuration(0.9, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
                     self.view.layoutIfNeeded()
                     self.initBg.layer.opacity = 1
                     self.initBg.transform = CGAffineTransformIdentity
@@ -426,151 +425,6 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         //
         
     }
-    /*
-    internal override func createSubviews() {
-        super.createSubviews()
-        let superview = self.view
-        //
-        board = UIScrollView(frame: superview.bounds)
-        superview.addSubview(board!)
-        board?.delegate = self
-        board?.snp_makeConstraints(closure: { (make) -> Void in
-            make.height.equalTo(superview.bounds.height - 45)
-            make.right.equalTo(superview)
-            make.left.equalTo(superview)
-            make.bottom.equalTo(superview).offset(-45)
-//            make.edges.equalTo(superview).inset(UIEdgeInsets(top: 0, left: 0, bottom: 45, right: 0))
-        })
-        board?.backgroundColor = UIColor.blackColor()
-        //
-        bg = UIView()
-        bg?.backgroundColor = UIColor.whiteColor()
-        board?.addSubview(bg!)
-        //
-        newsCover = UIImageView()
-        board?.addSubview(newsCover!)
-        newsCover?.snp_makeConstraints(closure: { (make) -> Void in
-            coverTopConstraintOffset = make.top.equalTo(board!).offset(0).constraint
-            make.right.equalTo(superview)
-            make.left.equalTo(superview)
-            make.height.equalTo(newsCover!.snp_width).multipliedBy(0.573)
-        })
-        newsCover?.backgroundColor = UIColor.grayColor()
-        //
-        newsTitle = UILabel()
-        newsTitle?.font = UIFont.systemFontOfSize(21, weight: UIFontWeightBlack)
-        newsTitle?.text = LS("资讯标题")
-        newsTitle?.textColor = UIColor.blackColor()
-        board?.addSubview(newsTitle!)
-        newsTitle?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(board!).offset(-20)
-            make.left.equalTo(board!).offset(20)
-            make.top.equalTo(board!).offset(superview.frame.width * 0.573 + 16)
-        })
-        //
-        let sepLine = UIView()
-        sepLine.backgroundColor = UIColor(white: 0.92, alpha: 1)
-        board?.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(newsTitle!)
-            make.height.equalTo(1)
-            make.width.equalTo(board!).multipliedBy(0.64)
-            make.top.equalTo(newsTitle!.snp_bottom).offset(15)
-        }
-        //
-        newsDetailPanelView = UIWebView()
-        newsDetailPanelView?.userInteractionEnabled = false
-        newsDetailPanelView?.delegate = self
-        newsDetailPanelView?.paginationMode = .Unpaginated
-        board?.addSubview(newsDetailPanelView!)
-        newsDetailPanelView?.snp_makeConstraints(closure: { (make) -> Void in
-            make.top.equalTo(sepLine.snp_bottom).offset(15)
-            make.right.equalTo(superview).offset(-20)
-            make.left.equalTo(superview).offset(20)
-            make.height.equalTo(200)
-        })
-        newsDetailPanelView?.backgroundColor = UIColor.redColor()
-        newsDetailPanelView?.scrollView.scrollEnabled = false
-        //
-        newsDetailLoading = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
-        newsDetailPanelView?.addSubview(newsDetailLoading!)
-        newsDetailLoading?.snp_makeConstraints(closure: { (make) -> Void in
-            make.edges.equalTo(newsDetailPanelView!)
-        })
-        newsDetailLoading?.hidesWhenStopped = true
-        newsDetailLoading?.startAnimating()
-        //
-        likeIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
-        board?.addSubview(likeIcon!)
-        likeIcon?.snp_makeConstraints(closure: { (make) -> Void in
-            make.size.equalTo(15)
-            make.left.equalTo(newsDetailPanelView!)
-            make.top.equalTo(newsDetailPanelView!.snp_bottom).offset(35)
-        })
-        //
-        likeDescriptionLbl = UILabel()
-        board?.addSubview(likeDescriptionLbl!)
-        likeDescriptionLbl?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(likeIcon!.snp_right).offset(10)
-            make.centerY.equalTo(likeIcon!)
-            make.height.equalTo(17)
-        })
-        // 
-        let sepLine2 = UIView()
-        sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
-        board?.addSubview(sepLine2)
-        sepLine2.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(superview)
-            make.left.equalTo(board!)
-            make.top.equalTo(likeIcon!.snp_bottom).offset(16)
-            make.height.equalTo(1)
-        }
-        
-        let commentStaticLbl = UILabel()
-        commentStaticLbl.backgroundColor = UIColor.whiteColor()
-        commentStaticLbl.text = LS("评论")
-        commentStaticLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        commentStaticLbl.textAlignment = .Center
-        commentStaticLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        board?.addSubview(commentStaticLbl)
-        commentStaticLbl.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(board!)
-            make.centerY.equalTo(sepLine2)
-            make.size.equalTo(CGSize(width: 75, height: 17))
-        }
-        //
-        commentTableView = UITableView(frame: CGRect.zero, style: .Plain)
-        commentTableView?.delegate = self
-        commentTableView?.dataSource = self
-        commentTableView?.separatorStyle = .None
-        commentTableView?.registerClass(NewsDetailCommentCell.self, forCellReuseIdentifier: NewsDetailCommentCell.reuseIdentifier)
-        board?.addSubview(commentTableView!)
-        commentTableView?.snp_makeConstraints(closure: { (make) -> Void in
-            make.top.equalTo(sepLine2.snp_bottom).offset(27)
-            make.right.equalTo(superview)
-            make.left.equalTo(superview)
-            make.height.equalTo(100)
-        })
-        commentTableView?.scrollEnabled = false
-        //
-        commentTableLoading = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
-        commentTableView?.addSubview(commentTableLoading!)
-        commentTableLoading?.hidesWhenStopped = true
-        commentTableLoading?.startAnimating()
-        commentTableLoading?.snp_makeConstraints(closure: { (make) -> Void in
-            make.edges.equalTo(commentTableView!)
-        })
-        //
-        bg?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(superview)
-            make.left.equalTo(superview)
-            make.top.equalTo(newsTitle!).offset(-17)
-            make.bottom.equalTo(commentTableView!)
-        })
-        //
-        initializeCommentBar()
-    }
-    */
     
     func initializeCommentBar() {
         commentPanel = CommentBarView()
@@ -689,6 +543,7 @@ extension NewsDetailController{
             self.news?.liked = liked
             self.news?.likeNum = json!["like_num"].int32Value
             self.commentPanel.setLikedAnimated(liked)
+            self.likeIcon.image = liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
             self.likeRequesting = false
             }) { (code) -> () in
                 self.likeRequesting = false
@@ -795,7 +650,7 @@ extension NewsDetailController {
         for view in board!.subviews {
             contentRect = CGRectUnion(contentRect, view.frame)
         }
-        board?.contentSize = CGSize(width: self.view.bounds.width, height: contentRect.height)
+        board?.contentSize = CGSize(width: self.view.bounds.width, height: contentRect.height + 45)
         self.view.layoutIfNeeded()
     }
     
@@ -838,14 +693,11 @@ extension NewsDetailController {
         }
         requestingCommentData = true
         requester.getMoreNewsComment(dateThreshold, newsID: news!.newsID!, onSuccess: { (json) -> () in
-            guard let data = json?.array else{
-                assertionFailure()
-                return
+            for data in json!.arrayValue {
+                let newComment = NewsComment.objects.getOrCreate(data, news: self.news!)
+                self.comments.append(newComment)
             }
-            let newComments = NewsComment.objects.createOrUpdate(data, news: self.news!)
-            self.comments.appendContentsOf(newComments)
             //
-            self.allCommentsLoaded  = newComments.count == 0
             self.reorganizComments()
             self.commentTableView?.reloadData()
             self.commentTableLoading?.stopAnimating()
@@ -903,9 +755,6 @@ extension NewsDetailController {
         cell.comment = comments[indexPath.row]
         cell.replyBtn?.tag = indexPath.row
         cell.delegate = self
-        if indexPath.row == comments.count - 1 && !allCommentsLoaded{
-            loadMoreCommentData()
-        }
         return cell
     }
 }
@@ -925,13 +774,14 @@ extension NewsDetailController {
 
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         newsDetailLoading?.startAnimating()
-        switch navigationType{
-        case .Other:
-            return true
-        default:
-            return false
-        }
-        
+        print(navigationType)
+        return true
+//        switch navigationType{
+//        case .Other:
+//            return true
+//        default:
+//            return false
+//        }
     }
     
     func webViewDidFinishLoad(webView: UIWebView) {

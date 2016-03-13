@@ -64,9 +64,9 @@ class BlackListViewController: UserSelectController {
         let requester = PersonRequester.requester
         requester.getBlackList(dateThreshold, limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
-                let user = User.objects.create(data["target"]).value
-                user?.recentStatusDes = data["recent_status_des"].string
-                self.blUsers.append(user!)
+                let user = User.objects.getOrCreate(data["target"])
+                user.recentStatusDes = data["recent_status_des"].string
+                self.blUsers.append(user)
                 self.dateThreshold = DateSTR(data["blacklist_at"].stringValue)!
             }
             self.loading = false

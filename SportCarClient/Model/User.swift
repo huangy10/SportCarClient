@@ -19,16 +19,6 @@ class User: NSManagedObject {
     /// 该用户拥有的跑车
     var ownedCars: [SportCarOwnerShip] = []
     
-    // 下面是缓存的查询数据
-//    var avatarCar: SportCar?
-    
-//    var hasAvatarCar: Bool {
-//        if avatarCar != nil {
-//            return true
-//        }
-//        return false
-//    }
-    
     /// 最近发布的一条Status描述
     var recentStatusDes: String?
     
@@ -55,47 +45,6 @@ extension User{
 // MARK: - 这个扩展增加了对JSON数据的支持
 extension User{
     
-    func equal<T: Equatable>(fieldValue: T?, jsonValue: T?) -> Bool{
-        if jsonValue == nil {
-            return true
-        } else{
-            return fieldValue == jsonValue
-        }
-    }
-    /**
-     比较User中的数据和JSON指定的数据是否相等
-     
-     - parameter json:      json数据
-     - parameter ignoreNil: 是否忽视json中nil的字段
-     
-     - returns: 是否相等
-     */
-    func isEqualTo(json: JSON, ignoreNil: Bool=false) -> Bool{
-        if equal(avatarUrl, jsonValue: json["userID"].string) &&
-        equal(district, jsonValue: json["district"].string) &&
-        equal(gender, jsonValue: json["gender"].string) &&
-        equal(nickName, jsonValue: json["nick_name"].string) &&
-        equal(phoneNum, jsonValue: json["phone_num"].string) &&
-        equal(starSign, jsonValue: json["star_sign"].string) &&
-        equal(job, jsonValue: json["job"].string) &&
-        equal(signature, jsonValue: json["signature"].string) &&
-        equal(age, jsonValue: json["age"].int32){
-            return true
-        }
-        return false
-    }
-    
-    /**
-     比较两个user是否是指代的同一个用户，只比对userID
-     
-     - parameter user: 待比较的用户
-     
-     - returns: 是否相等
-     */
-    func isEqualToSimple(user: User) -> Bool{
-        return self.userID == user.userID
-    }
-    
     /**
      从json数据结构中载入数据，注意必须满足json["userID"] = self.userID赋值才会有效
      
@@ -104,160 +53,119 @@ extension User{
      
      - returns: 赋值是否成功
      */
-    func loadValueFromJSON(json: JSON, forceUpdateNil: Bool=false) -> Bool{
-        
-        defer {
-            if avatarUrl == nil {
-                print(self)
-            }
-        }
-        
-        if json["userID"] == nil || json["userID"].stringValue != self.userID{
-            return false
-        }
-        if forceUpdateNil {
-            avatarUrl = json["avatar"].string
+    func loadFromJSON(json: JSON, ctx: DataContext? = nil, basic: Bool = true) {
+        nickName = json["nick_name"].string
+        avatarUrl = json["avatar"].string
+        if !basic {
             district = json["district"].string
             gender = json["gender"].string
-            nickName = json["nick_name"].string
             phoneNum = json["phone_num"].string
             starSign = json["star_sign"].string
             job = json["job"].string
             signature = json["signature"].string
             age = json["age"].int32 ?? 0
-            profile?.loadValueFromJSON(json, forceUpdateNil: true)
+            profile?.loadValueFromJSON(json)
             if let f = json["followed"].bool {
                 self.followed = f
             }
-            return true
-        }
-        // 在内部定义了一个setter以减少后面的代码重复
-        
-        let setter = { (inout property: String?, jsonFieldName: String) in
-            if let value = json[jsonFieldName].string {
-                property = value
-            }
-        }
-        setter(&avatarUrl, "avatar")
-        setter(&district, "district")
-        setter(&gender, "gender")
-        setter(&nickName, "nick_name")
-        setter(&phoneNum, "nickName")
-        setter(&starSign, "star_sign")
-        setter(&job, "job")
-        setter(&signature, "signature")
-        if let age = json["age"].int32 {
-            self.age = age
-        }
-        if let f = json["followed"].bool {
-            self.followed = f
-        }
-        // profile?.loadValueFromJSON(json)
-        return true
-    }
-    
-    /// 用户的数据是否的完整，主要检查id，头像，昵称三个信息
-    var isIntegrited: Bool {
-        get{
-            return userID != nil && nickName != nil && avatarUrl != nil
         }
     }
     
-    /**
-     超级详细的数据读取，其数据格式参照从服务器获取的profile info数据
-     
-     - parameter json: json数据
-     */
-    func loadValueFromJSONWithProfile(json: JSON) {
-        nickName = json["nick_name"].string
-        age = json["age"].int32Value
-        avatarUrl = json["avatar"].string
-        gender = json["gender"].string
-        starSign = json["star_sign"].string
-        district = json["district"].string
-        job = json["job"].string
-        signature = json["signature"].string
-        let avatarCarJSON = json["avatar_car"]
-        let avatarCar = SportCarOwnerShip.objects.createOrLoadHostUserOwnedCar(avatarCarJSON)!.car
-        let profile = self.profile
-        print(avatarCar?.carID)
-        profile?.avatarCarID = avatarCar?.carID
-        profile?.avatarCarImage = avatarCar?.image
-        profile?.avatarCarLogo = avatarCar?.logo
-        profile?.avatarCarName = avatarCar?.name
-        profile?.statusNum = json["status_num"].int32Value
-        profile?.fansNum = json["fans_num"].int32Value
-        profile?.followNum = json["follow_num"].int32Value
-        let avatarClubJSON = json["avatar_club"]
-        // Club和User是属于同一个context的
-        let avatarClub = Club.objects.getOrCreate(avatarClubJSON)
-        profile?.avatarClubID = avatarClub?.clubID
-        profile?.avatarClubLogo = avatarClub?.logo_url
-        profile?.avatarClubName = avatarClub?.name
-        //
-        if let f = json["followed"].bool {
-            self.followed = f
-        }
+    func setAvatarCar(car: SportCar) {
+        profile?.setAvatarCar(car)
     }
     
-    func setAvatarCarTpoProfile(car: SportCar) {
-        let profile = self.profile
-//        let avatarCar = SportCar.objects.context.objectWithID(car.objectID) as? SportCar
-        profile?.avatarCarImage = car.image
-        profile?.avatarCarID = car.carID
-        profile?.avatarCarLogo = car.logo
-        profile?.avatarCarName = car.name
-        User.objects.saveAll()
-    }
-    
-    func setAvatarClubToProfile(club: Club) {
-        let profile = self.profile
-        profile?.avatarClubID = club.clubID
-        profile?.avatarClubLogo = club.logo_url
-        profile?.avatarClubName = club.name
-        User.objects.saveAll()
+    func setAvatarClub(club: Club) {
+        profile?.setAvatarClub(club)
     }
 }
 
-
-
-
-
-// MARK: - 这个扩展主要市打包了一些常用属性的获取，注意这里所有的函数只执行了获取操作
-extension User {
-    /* 
-     写给将来的维护者：
-     这个部分的功能，是为了简化一些常用的操作，和上面的用于支持全局数据一致性的函数的功能不同，这里的函数只载入目前已经存在于内存中和CoreData中的数据
-    */
+class UserManager: ModelManager {
     
-    
-//    /**
-//    获取该用户所有的认证车辆
-//    
-//    - returns: 打包了的结果
-//    */
-//    func getAllAuthenticatedCars() -> ManagerResult<[SportCar], ManagerError> {
-//        return ManagerResult.Success(self.ownedCars)
-//    }
+    /// 当前登陆的用户
+    private var _hostUser: User? {
+        didSet {
+            hostUserID = _hostUser?.userID
+        }
+    }
+    func hostUser(ctx: DataContext? = nil) -> User? {
+        if _hostUser == nil {
+            return nil
+        } else if ctx == nil || ctx == defaultContext {
+            return _hostUser
+        }
+        let context = ctx ?? defaultContext
+        return context.objectWithID(_hostUser!.objectID) as? User
+    }
+    var hostUserID: String?
 }
 
-// MARK: - 和News的关系
-extension User {
-    /**
-     查看是否给定的news被该用户Like了，注意这里不会创建网络请求，只是查询已经在内存中的数据
-     
-     - parameter news: 指定的news
-     
-     - returns: BOOL
-     */
-    @nonobjc func isNewsLiked(news: News) -> Bool {
-        return isNewsLiked(news.newsID!)
+
+// MARK: - 用户数据的提取和存储
+extension UserManager {
+    
+    func getOrLoad(userID: String, ctx: DataContext? = nil) -> User? {
+        let context = ctx ?? defaultContext
+        let user = context.users.first { $0.userID == userID }
+        return user
+    }
+
+    func getOrCreate(json: JSON, ctx: DataContext? = nil, basic: Bool = true) -> User{
+        let context = ctx ?? defaultContext
+        let userID = json["userID"].stringValue
+        assert(userID != "")
+        let user = context.users.firstOrCreated{$0.userID == userID}
+        user.loadFromJSON(json, ctx: context, basic: basic)
+        return user
     }
     
-    @nonobjc func isNewsLiked(newsID: String) -> Bool {
-        return likeNews.contains({ (n: News) -> Bool in
-            return newsID == n.newsID
-        })
+}
+
+// MARK: - 这个部分主要实现对Host用户的管理
+extension UserManager {
+    
+    /**
+     登录host用户，其实就是设置host值
+     
+     - parameter userID: host用户的id
+     
+     - returns: Result
+     */
+    func login(userID: String, ctx: DataContext? = nil){
+        let context = ctx ?? defaultContext
+        defer {
+            NSUserDefaults.standardUserDefaults().setObject(userID, forKey: "host_user_id")
+        }
+        // 检查是否制定的id已经是当前的host，若是直接返回即可
+        if userID == hostUser(ctx)?.userID {
+            return
+        }
+        let user = context.users.firstOrCreated { $0.userID == userID }
+        _hostUser = user
+    }
+    
+    /**
+     恢复上次登陆的状态
+     
+     - returns: 返回hostUser，若返回的是nil表明没有存储的上一次登陆状态
+     */
+    func resumeLoginStatus() -> User? {
+        if let userID = NSUserDefaults.standardUserDefaults().stringForKey("host_user_id") {
+            login(userID)
+            return hostUser()
+        }
+        return nil
+    }
+    
+    /**
+     注销登陆，这个操作会将hostUser置为nil，并将NSUserDefaults中存储的host_user_id移除
+     */
+    func logout() -> Void{
+        if _hostUser == nil {
+            return
+        }
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("host_user_id")
+        _hostUser = nil
     }
 }
 

@@ -84,9 +84,9 @@ class SportCarSelectListController: UICollectionViewController{
             let hostUser = User.objects.hostUser()!
             for carOwnerShipJSON in data!.arrayValue {
                 let carJSON = carOwnerShipJSON["car"]
-                let car = SportCar.objects.create(carJSON).value
-                SportCar.objects.getOrCreateOwnership(car!, user: hostUser, initail: carOwnerShipJSON)
-                self.cars.append(car!)
+                let car = SportCar.objects.getOrCreate(carJSON)
+                SportCar.objects.getOrCreateOwnership(car, user: hostUser, initail: carOwnerShipJSON)
+                self.cars.append(car)
             }
             self.collectionView?.reloadData()
             }) { (let code) -> () in

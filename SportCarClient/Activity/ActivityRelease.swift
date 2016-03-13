@@ -7,10 +7,9 @@
 //
 
 import UIKit
-import Mapbox
 
 
-class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, FFSelectDelegate, MGLMapViewDelegate, CLLocationManagerDelegate, CustomDatePickerDelegate, ImageInputSelectorDelegate {
+class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, FFSelectDelegate, CustomDatePickerDelegate, ImageInputSelectorDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate, BMKGeoCodeSearchDelegate {
     
     weak var actHomeController: ActivityHomeController?
     
@@ -30,19 +29,39 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     var clubLimitID: String? = nil
     var poster: UIImage?
     
-    var locationManager: CLLocationManager!
-    var userLocation: CLLocation?
+    var locationService: BMKLocationService?
+    var userLocation: CLLocationCoordinate2D?
+    var geoSearch: BMKGeoCodeSearch?
+    var mapCell: ActivityReleaseMapCell!
+    var skipFirstLocFlag = true
     var locDescriptin: String?
+    var locInput: UITextField? {
+        return mapCell.locInput
+    }
+    
+    var mapView: BMKMapView? {
+        return mapCell.map
+    }
     
     override func viewDidLoad() {
         navSettings()
         super.viewDidLoad()
         
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestAlwaysAuthorization()
-        locationManager.requestLocation()
+        locationService = BMKLocationService()
+        geoSearch = BMKGeoCodeSearch()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        locationService?.delegate = self
+        locationService?.startUserLocationService()
+        geoSearch?.delegate = self
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        locationService?.delegate = nil
+        geoSearch?.delegate = nil
     }
     
     func navSettings() {
@@ -63,7 +82,6 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     }
     
     func navRightBtnPressed() {
-//        self.navigationController?.popViewControllerAnimated(true)
         self.inputFields.each { (view) -> () in
             view?.resignFirstResponder()
         }
@@ -108,7 +126,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         // 上传数据
         let toast = showStaticToast(LS("发布中..."))
         let requester = ActivityRequester.requester
-        requester.createNewActivity(actName, des: actDes, informUser: informUser, maxAttend: attendNum, startAt: startAtDate!, endAt: endAtDate!, clubLimit: clubLimitID, poster: posterImage, lat: userLocation!.coordinate.latitude, lon: userLocation!.coordinate.longitude, loc_des: locDescriptin ?? "", onSuccess: { (json) -> () in
+        requester.createNewActivity(actName, des: actDes, informUser: informUser, maxAttend: attendNum, startAt: startAtDate!, endAt: endAtDate!, clubLimit: clubLimitID, poster: posterImage, lat: userLocation!.latitude, lon: userLocation!.longitude, loc_des: locDescriptin ?? "", onSuccess: { (json) -> () in
             self.navigationController?.popViewControllerAnimated(true)
             let mine = self.actHomeController?.mine
             mine?.refreshControl?.beginRefreshing()
@@ -161,7 +179,10 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             make.height.equalTo(CustomDatePicker.requiredHegiht)
             make.bottom.equalTo(self.view).offset(CustomDatePicker.requiredHegiht)
         }
-        
+        //
+        mapCell = ActivityReleaseMapCell(style: .Default, reuseIdentifier: ActivityReleaseMapCell.reuseIdentifier)
+        inputFields.append(mapCell.locInput)
+        mapCell.locInput.delegate = self
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -187,7 +208,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         if indexPath.row < 4 {
             return 50
         }else{
-            return 250
+            return 500
         }
     }
     
@@ -234,25 +255,28 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             }
             return cell
         }else{
-//            let cell = (tableView.dequeueReusableCellWithIdentifier(ActivityReleaseMapCell.reuseIdentifier) as? ActivityReleaseMapCell) ?? ActivityReleaseMapCell(style: .Default, reuseIdentifier: MapCell.reuseIdentifier)
-            let cell = tableView.dequeueReusableCellWithIdentifier(ActivityReleaseMapCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityReleaseMapCell
-            // 添加进inputField
-            var add = true
-            for view in inputFields {
-                if view == cell.locInput {
-                    add = false
-                    break
-                }
-            }
-            if add {
-                inputFields.append(cell.locInput)
-                cell.locInput.delegate = self
-            }
-            if userLocation != nil {
-                let center = CLLocationCoordinate2D(latitude: userLocation!.coordinate.latitude, longitude: userLocation!.coordinate.longitude)
-                cell.setMapCenter(center)
-            }
-            return cell
+//            let cell = tableView.dequeueReusableCellWithIdentifier(ActivityReleaseMapCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityReleaseMapCell
+//            // 添加进inputField
+//            var add = true
+//            for view in inputFields {
+//                if view == cell.locInput {
+//                    add = false
+//                    break
+//                }
+//            }
+//            if add {
+//                inputFields.append(cell.locInput)
+//                cell.locInput.delegate = self
+//
+//                if userLocation != nil {
+//                    cell.map.setCenterCoordinate(userLocation!, animated: true)
+//                    cell.map.delegate = self
+//                }
+//                if locDescriptin != nil {
+//                    locInput?.text = locDescriptin
+//                }
+//            }
+            return mapCell
         }
     }
     
@@ -323,7 +347,7 @@ extension ActivityReleaseController {
         }
         if index.section == 0 && index.row == 0 {
             attendNum = Int(textField.text ?? "0")!
-        }else if index.section == 0 && index.row == 4 {
+        } else if index.section == 0 && index.row == 4 {
             locDescriptin = textField.text
         }
     }
@@ -372,19 +396,48 @@ extension ActivityReleaseController {
 }
 
 extension ActivityReleaseController {
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        print(status)
+    
+    func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
+        locationService?.stopUserLocationService()
+        self.userLocation = userLocation.location.coordinate
+        mapView?.zoomLevel = 12
+        mapView?.setCenterCoordinate(userLocation.location.coordinate, animated: false)
+        mapView?.delegate = self
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        userLocation = locations.last()
-        tableView.reloadData()
+    func mapView(mapView: BMKMapView!, regionDidChangeAnimated animated: Bool) {
+        let visibleRegion = mapView.region
+        if !skipFirstLocFlag || userLocation == nil{
+            userLocation = visibleRegion.center
+        } else {
+            skipFirstLocFlag = false
+        }
+        tableView.scrollEnabled = true
+        getLocationDescription(userLocation!)
     }
     
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        print(error)
-        locationManager.requestLocation()
+    func mapView(mapView: BMKMapView!, regionWillChangeAnimated animated: Bool) {
+        tableView.scrollEnabled = false
     }
+    
+    func getLocationDescription(location: CLLocationCoordinate2D) {
+        let option = BMKReverseGeoCodeOption()
+        option.reverseGeoPoint = location
+        let res = geoSearch!.reverseGeoCode(option)
+        if !res {
+            self.showToast(LS("无法获取制定位置信息"))
+        }
+    }
+    
+    func onGetReverseGeoCodeResult(searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
+        if error == BMK_SEARCH_NO_ERROR {
+            locDescriptin = result.address
+            locInput?.text = result.address
+        } else {
+            self.showToast(LS("无法获取制定位置信息"))
+        }
+    }
+    
 }
 
 extension ActivityReleaseController {
@@ -459,7 +512,7 @@ extension ActivityReleaseController {
                 self.displayAlertController(LS("结束时间不能早于开始时间"), message: nil)
                 return
             }
-            startAt = STRDate(date)
+            startAt = date.stringDisplay()!
             startAtDate = date
             tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: .Automatic)
         }else if datePickerMode == "endAt" {
@@ -467,7 +520,7 @@ extension ActivityReleaseController {
                 self.displayAlertController(LS("开始时间不能晚于结束时间"), message: nil)
                 return
             }
-            endAt = STRDate(date)
+            endAt = date.stringDisplay()!
             endAtDate = date
             tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 2, inSection: 0)], withRowAnimation: .Automatic)
         }

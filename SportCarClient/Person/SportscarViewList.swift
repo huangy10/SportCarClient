@@ -35,6 +35,8 @@ class SportsCarViewListController: UICollectionViewController {
     
     var delegate: SportCarViewListDelegate?
     
+    var showAddBtn: Bool = true
+    
     convenience init() {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSizeMake(120, 62)
@@ -53,7 +55,7 @@ class SportsCarViewListController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return owns.count + 2
+        return owns.count + (showAddBtn ? 2 : 1)
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {

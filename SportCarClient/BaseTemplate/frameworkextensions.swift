@@ -15,6 +15,10 @@ extension String {
         return String(self.characters.prefix(ind)) + string + String(self.characters.suffix(self.characters
             .count - ind))
     }
+    
+    func sizeWithFont(font: UIFont, boundingSize: CGSize) -> CGSize {
+        return self.boundingRectWithSize(boundingSize, options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil).size
+    }
 }
 
 
@@ -37,4 +41,5 @@ func CGPointDistance(p1: CGPoint, p2: CGPoint) -> CGFloat {
     let dy = p1.y - p2.y
     return sqrt(dx * dx + dy * dy)
 }
+
 

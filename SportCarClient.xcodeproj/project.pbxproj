@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4C0E9B8BF9971DCA600BA9B5 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 193AAD04EA67F014D002240C /* Pods.framework */; };
 		59709BA10C676D5E26BB2779 /* Pods_SportCarClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */; };
-		BF139E681C4DE0750022F4FC /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF139E671C4DE0750022F4FC /* MapManager.swift */; };
 		BF139E6E1C4E6E8E0022F4FC /* FFSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF139E6D1C4E6E8E0022F4FC /* FFSelect.swift */; };
 		BF1D93561C52776F00FD9997 /* DetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1D93551C52776F00FD9997 /* DetailCommentCell.swift */; };
 		BF1D93581C52783000FD9997 /* StatusDetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1D93571C52783000FD9997 /* StatusDetailCommentCell.swift */; };
@@ -20,7 +19,6 @@
 		BF2336921C5732D800F0AE41 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2336911C5732D800F0AE41 /* ChatCell.swift */; };
 		BF2336941C57353C00F0AE41 /* ChatWave.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2336931C57353C00F0AE41 /* ChatWave.swift */; };
 		BF24291E1C7C524D005D4C6E /* DriverMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF24291D1C7C524D005D4C6E /* DriverMap.swift */; };
-		BF2429201C7C8CA7005D4C6E /* test.gif in Resources */ = {isa = PBXBuildFile; fileRef = BF24291F1C7C8CA7005D4C6E /* test.gif */; };
 		BF2429221C7C8E15005D4C6E /* UIImage+Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2429211C7C8E15005D4C6E /* UIImage+Gif.swift */; };
 		BF2429271C7D62D6005D4C6E /* UserOnMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2429261C7D62D6005D4C6E /* UserOnMap.swift */; };
 		BF268FC81C32C76A005D1B68 /* NewsDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF268FC71C32C76A005D1B68 /* NewsDetail.swift */; };
@@ -86,6 +84,7 @@
 		BF8FE9A31C86C22400008170 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8FE9A11C86C22400008170 /* ImageViewer.swift */; };
 		BF8FE9A41C86C22400008170 /* UIImageView+ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8FE9A21C86C22400008170 /* UIImageView+ImageViewer.swift */; };
 		BF9404971C2818C3001ABB1E /* AppLauchner.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9404961C2818C3001ABB1E /* AppLauchner.swift */; };
+		BF95EC2D1C8F251A00B77817 /* InlineUserDeletable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF95EC2C1C8F251900B77817 /* InlineUserDeletable.swift */; };
 		BF9663FE1C8889220096D131 /* GroupSettingHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9663FD1C8889220096D131 /* GroupSettingHost.swift */; };
 		BF9664001C89449F0096D131 /* ClubAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9663FF1C89449F0096D131 /* ClubAuth.swift */; };
 		BF9664021C89C0770096D131 /* ActivityReleasePresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9664011C89C0770096D131 /* ActivityReleasePresentable.swift */; };
@@ -101,6 +100,7 @@
 		BFA29E441C7768930008A408 /* CustomDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA29E431C7768930008A408 /* CustomDatePicker.swift */; };
 		BFA2C7691C40F97D00202EF0 /* frameworkextensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2C7681C40F97D00202EF0 /* frameworkextensions.swift */; };
 		BFA2C76B1C412B1500202EF0 /* CommentPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2C76A1C412B1500202EF0 /* CommentPanel.swift */; };
+		BFA64F001C946AB900BA460F /* StatusHot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA64EFF1C946AB900BA460F /* StatusHot.swift */; };
 		BFAA0CA91C46009F00AB5C3C /* StatusRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0CA81C46009F00AB5C3C /* StatusRequester.swift */; };
 		BFAA0CAC1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0CAB1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift */; };
 		BFAA0CAE1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0CAD1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift */; };
@@ -111,13 +111,16 @@
 		BFADDF6F1C82E3F200893435 /* RadarClubFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFADDF6E1C82E3F200893435 /* RadarClubFilter.swift */; };
 		BFB39CCB1C1EA20200FB6B5D /* sportcar.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFB39CCA1C1EA20200FB6B5D /* sportcar.plist */; };
 		BFB39CCD1C1EA45500FB6B5D /* SportCarBrandSelecter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB39CCC1C1EA45500FB6B5D /* SportCarBrandSelecter.swift */; };
+		BFB98A271C92A9FB00459CCE /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFB98A261C92A9FB00459CCE /* ModelManager.swift */; };
 		BFBC526E1C52944200EE7D34 /* MessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC526D1C52944200EE7D34 /* MessageController.swift */; };
 		BFBC52711C52946300EE7D34 /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC52701C52946300EE7D34 /* ChatController.swift */; };
 		BFBC52751C53877100EE7D34 /* ChatRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC52731C53877100EE7D34 /* ChatRecord.swift */; };
 		BFBC52771C5388BE00EE7D34 /* ChatRecord.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC52761C5388BE00EE7D34 /* ChatRecord.generated.swift */; };
 		BFBC52791C53902500EE7D34 /* ChatOpPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC52781C53902500EE7D34 /* ChatOpPanel.swift */; };
 		BFBC527D1C53CE8D00EE7D34 /* ChatAudioAnalyser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBC527C1C53CE8D00EE7D34 /* ChatAudioAnalyser.swift */; };
-		BFBEA0841C2152F200F04F9A /* Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBEA0831C2152F200F04F9A /* Wrapper.swift */; };
+		BFBE19211C9521FF005114A0 /* LocSelectPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBE19201C9521FF005114A0 /* LocSelectPin.swift */; };
+		BFBE19231C952FB3005114A0 /* custom_config_黑夜 in Resources */ = {isa = PBXBuildFile; fileRef = BFBE19221C952FB3005114A0 /* custom_config_黑夜 */; };
+		BFBE19251C953286005114A0 /* UserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBE19241C953286005114A0 /* UserPin.swift */; };
 		BFC0324B1C6CCC7D00ECA69A /* PersonMineSettingsInvitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0324A1C6CCC7D00ECA69A /* PersonMineSettingsInvitation.swift */; };
 		BFC0324E1C6D7A8400ECA69A /* PersonSettingMineDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0324D1C6D7A8400ECA69A /* PersonSettingMineDataSource.swift */; };
 		BFC032511C6DCD6200ECA69A /* AuthBasic.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC032501C6DCD6200ECA69A /* AuthBasic.swift */; };
@@ -158,7 +161,6 @@
 		BFC36BB21C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */; };
 		BFC36BB41C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */; };
 		BFC36BB61C6C854800DC6FE2 /* BlackListViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB51C6C854800DC6FE2 /* BlackListViewer.swift */; };
-		BFC712EB1C2C3B4F00A71F4C /* UserUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712EA1C2C3B4F00A71F4C /* UserUtilities.swift */; };
 		BFC712F11C2C431900A71F4C /* StatusComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712ED1C2C431900A71F4C /* StatusComment.swift */; };
 		BFC712F31C2C431900A71F4C /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712EF1C2C431900A71F4C /* Status.swift */; };
 		BFC712FB1C2C439900A71F4C /* Status.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC712F91C2C439900A71F4C /* Status.generated.swift */; };
@@ -218,7 +220,6 @@
 		193AAD04EA67F014D002240C /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B8D1CED12B1FC1DE651D9DA /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SportCarClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BF139E671C4DE0750022F4FC /* MapManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapManager.swift; path = Map/MapManager.swift; sourceTree = "<group>"; };
 		BF139E6D1C4E6E8E0022F4FC /* FFSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FFSelect.swift; path = UserSelect/FFSelect.swift; sourceTree = "<group>"; };
 		BF1D93551C52776F00FD9997 /* DetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetailCommentCell.swift; path = BaseTemplate/Views/DetailCommentCell.swift; sourceTree = "<group>"; };
 		BF1D93571C52783000FD9997 /* StatusDetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusDetailCommentCell.swift; path = Status/Detail/StatusDetailCommentCell.swift; sourceTree = "<group>"; };
@@ -229,7 +230,6 @@
 		BF2336911C5732D800F0AE41 /* ChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatCell.swift; path = Message/Chat/ChatCell.swift; sourceTree = "<group>"; };
 		BF2336931C57353C00F0AE41 /* ChatWave.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatWave.swift; path = Message/Chat/ChatWave.swift; sourceTree = "<group>"; };
 		BF24291D1C7C524D005D4C6E /* DriverMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DriverMap.swift; path = Radar/DriverMap.swift; sourceTree = "<group>"; };
-		BF24291F1C7C8CA7005D4C6E /* test.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = test.gif; sourceTree = "<group>"; };
 		BF2429211C7C8E15005D4C6E /* UIImage+Gif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+Gif.swift"; path = "3rdParty/UIImage+Gif.swift"; sourceTree = "<group>"; };
 		BF2429261C7D62D6005D4C6E /* UserOnMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserOnMap.swift; path = Radar/UserOnMap.swift; sourceTree = "<group>"; };
 		BF268FC71C32C76A005D1B68 /* NewsDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsDetail.swift; path = News/NewsDetail.swift; sourceTree = "<group>"; };
@@ -295,6 +295,7 @@
 		BF8FE9A11C86C22400008170 /* ImageViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageViewer.swift; path = 3rdParty/ImageViewer.swift; sourceTree = "<group>"; };
 		BF8FE9A21C86C22400008170 /* UIImageView+ImageViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImageView+ImageViewer.swift"; path = "3rdParty/UIImageView+ImageViewer.swift"; sourceTree = "<group>"; };
 		BF9404961C2818C3001ABB1E /* AppLauchner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppLauchner.swift; path = Home/AppLauchner.swift; sourceTree = "<group>"; };
+		BF95EC2C1C8F251900B77817 /* InlineUserDeletable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InlineUserDeletable.swift; path = Message/Chat/InlineUserDeletable.swift; sourceTree = "<group>"; };
 		BF9663FD1C8889220096D131 /* GroupSettingHost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GroupSettingHost.swift; path = Person/GroupSettingHost.swift; sourceTree = "<group>"; };
 		BF9663FF1C89449F0096D131 /* ClubAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubAuth.swift; path = Message/Chat/ClubAuth.swift; sourceTree = "<group>"; };
 		BF9664011C89C0770096D131 /* ActivityReleasePresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityReleasePresentable.swift; path = Activity/ActivityReleasePresentable.swift; sourceTree = "<group>"; };
@@ -310,6 +311,7 @@
 		BFA29E431C7768930008A408 /* CustomDatePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomDatePicker.swift; path = Activity/CustomDatePicker.swift; sourceTree = "<group>"; };
 		BFA2C7681C40F97D00202EF0 /* frameworkextensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = frameworkextensions.swift; path = BaseTemplate/frameworkextensions.swift; sourceTree = "<group>"; };
 		BFA2C76A1C412B1500202EF0 /* CommentPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentPanel.swift; path = News/CommentPanel.swift; sourceTree = "<group>"; };
+		BFA64EFF1C946AB900BA460F /* StatusHot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusHot.swift; path = Status/HomeSubviews/StatusHot.swift; sourceTree = "<group>"; };
 		BFAA0CA81C46009F00AB5C3C /* StatusRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusRequester.swift; path = Status/Network/StatusRequester.swift; sourceTree = "<group>"; };
 		BFAA0CAB1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusReleaseCoverSelectController.swift; path = Status/Release/StatusReleaseCoverSelectController.swift; sourceTree = "<group>"; };
 		BFAA0CAD1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusReleasePhotoAlbumListController.swift; path = Status/StatusReleasePhotoAlbumListController.swift; sourceTree = "<group>"; };
@@ -320,13 +322,17 @@
 		BFADDF6E1C82E3F200893435 /* RadarClubFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RadarClubFilter.swift; path = Radar/RadarClubFilter.swift; sourceTree = "<group>"; };
 		BFB39CCA1C1EA20200FB6B5D /* sportcar.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = sportcar.plist; path = BaseTemplate/SportCarBrandSelect/sportcar.plist; sourceTree = "<group>"; };
 		BFB39CCC1C1EA45500FB6B5D /* SportCarBrandSelecter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarBrandSelecter.swift; path = BaseTemplate/SportCarBrandSelect/SportCarBrandSelecter.swift; sourceTree = "<group>"; };
+		BFB98A261C92A9FB00459CCE /* ModelManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ModelManager.swift; path = Model/ModelManager.swift; sourceTree = "<group>"; };
 		BFBC526D1C52944200EE7D34 /* MessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageController.swift; path = Message/Notification/MessageController.swift; sourceTree = "<group>"; };
 		BFBC52701C52946300EE7D34 /* ChatController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatController.swift; path = Message/Chat/ChatController.swift; sourceTree = "<group>"; };
 		BFBC52731C53877100EE7D34 /* ChatRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatRecord.swift; path = Model/ChatRecord.swift; sourceTree = "<group>"; };
 		BFBC52761C5388BE00EE7D34 /* ChatRecord.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatRecord.generated.swift; path = Model/ChatRecord.generated.swift; sourceTree = "<group>"; };
 		BFBC52781C53902500EE7D34 /* ChatOpPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatOpPanel.swift; path = Message/Chat/ChatOpPanel.swift; sourceTree = "<group>"; };
 		BFBC527C1C53CE8D00EE7D34 /* ChatAudioAnalyser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatAudioAnalyser.swift; path = Message/Chat/ChatAudioAnalyser.swift; sourceTree = "<group>"; };
-		BFBEA0831C2152F200F04F9A /* Wrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Wrapper.swift; path = BaseTemplate/Wrapper.swift; sourceTree = "<group>"; };
+		BFBE191F1C951DD1005114A0 /* BMKSwiftDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "BMKSwiftDemo-Bridging-Header.h"; path = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		BFBE19201C9521FF005114A0 /* LocSelectPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocSelectPin.swift; path = Map/LocSelectPin.swift; sourceTree = "<group>"; };
+		BFBE19221C952FB3005114A0 /* custom_config_黑夜 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "custom_config_黑夜"; path = "data/custom_config_黑夜"; sourceTree = "<group>"; };
+		BFBE19241C953286005114A0 /* UserPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserPin.swift; path = Map/UserPin.swift; sourceTree = "<group>"; };
 		BFC0324A1C6CCC7D00ECA69A /* PersonMineSettingsInvitation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsInvitation.swift; path = Person/PersonMineSettingsInvitation.swift; sourceTree = "<group>"; };
 		BFC0324D1C6D7A8400ECA69A /* PersonSettingMineDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonSettingMineDataSource.swift; path = Person/PersonSettingMineDataSource.swift; sourceTree = "<group>"; };
 		BFC032501C6DCD6200ECA69A /* AuthBasic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthBasic.swift; path = Person/AuthBasic.swift; sourceTree = "<group>"; };
@@ -367,7 +373,6 @@
 		BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsNewMessageNotification.swift; path = Person/PersonMineSettingsNewMessageNotification.swift; sourceTree = "<group>"; };
 		BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsLocationVisiblity.swift; path = Person/PersonMineSettingsLocationVisiblity.swift; sourceTree = "<group>"; };
 		BFC36BB51C6C854800DC6FE2 /* BlackListViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlackListViewer.swift; path = Person/BlackListViewer.swift; sourceTree = "<group>"; };
-		BFC712EA1C2C3B4F00A71F4C /* UserUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserUtilities.swift; path = Model/UserUtilities.swift; sourceTree = "<group>"; };
 		BFC712ED1C2C431900A71F4C /* StatusComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusComment.swift; path = Model/StatusComment.swift; sourceTree = "<group>"; };
 		BFC712EF1C2C431900A71F4C /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.swift; path = Model/Status.swift; sourceTree = "<group>"; };
 		BFC712F91C2C439900A71F4C /* Status.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.generated.swift; path = Model/Status.generated.swift; sourceTree = "<group>"; };
@@ -461,7 +466,9 @@
 		BF139E661C4DE0650022F4FC /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				BF139E671C4DE0750022F4FC /* MapManager.swift */,
+				BFBE19221C952FB3005114A0 /* custom_config_黑夜 */,
+				BFBE19201C9521FF005114A0 /* LocSelectPin.swift */,
+				BFBE19241C953286005114A0 /* UserPin.swift */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -643,7 +650,6 @@
 			children = (
 				BF5491D71C22FD660090D151 /* User.generated.swift */,
 				BF5491CE1C22FD1A0090D151 /* User.swift */,
-				BFC712EA1C2C3B4F00A71F4C /* UserUtilities.swift */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -873,7 +879,6 @@
 				BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */,
 				BF1D93541C52775900FD9997 /* Views */,
 				BFA2C7671C40F96400202EF0 /* Tools */,
-				BFBEA0821C2152E400F04F9A /* Wrapper */,
 				BFB39CC91C1E9E6800FB6B5D /* SportCarBrandSelect */,
 				BFAC52291C1C84A700107F71 /* InputableViewController.swift */,
 				BFCB96351C1F0551004F77E8 /* BlackBarNavigationController.swift */,
@@ -940,14 +945,6 @@
 				BF51070E1C60CB4B008DC14F /* detail */,
 			);
 			name = Chat;
-			sourceTree = "<group>";
-		};
-		BFBEA0821C2152E400F04F9A /* Wrapper */ = {
-			isa = PBXGroup;
-			children = (
-				BFBEA0831C2152F200F04F9A /* Wrapper.swift */,
-			);
-			name = Wrapper;
 			sourceTree = "<group>";
 		};
 		BFC0324C1C6D7A7100ECA69A /* data */ = {
@@ -1144,6 +1141,7 @@
 			children = (
 				BFCA900E1C50A09100B05E74 /* StatusBasic.swift */,
 				BFCA90101C50A0C000B05E74 /* StatusFollow.swift */,
+				BFA64EFF1C946AB900BA460F /* StatusHot.swift */,
 			);
 			name = HomeSubViews;
 			sourceTree = "<group>";
@@ -1226,6 +1224,7 @@
 		BFFA51091C05D9910019E5EF = {
 			isa = PBXGroup;
 			children = (
+				BFBE191F1C951DD1005114A0 /* BMKSwiftDemo-Bridging-Header.h */,
 				BF32EEAF1C08B22F0098FEC1 /* Podfile */,
 				BFFA51141C05D9910019E5EF /* SportCarClient */,
 				BFFA512C1C05D9920019E5EF /* SportCarClientTests */,
@@ -1249,7 +1248,6 @@
 		BFFA51141C05D9910019E5EF /* SportCarClient */ = {
 			isa = PBXGroup;
 			children = (
-				BF24291F1C7C8CA7005D4C6E /* test.gif */,
 				BF8D42F11C745DA3009AD4BA /* Radar */,
 				BFC0326A1C6F39CE00ECA69A /* Activity */,
 				BFC0325D1C6EE90900ECA69A /* 3rdPartyCode */,
@@ -1305,6 +1303,7 @@
 				BF5491DD1C22FE900090D151 /* SportCarOwnership */,
 				BF5491DC1C22FE870090D151 /* SportCar */,
 				BF5491DB1C22FE7F0090D151 /* User */,
+				BFB98A261C92A9FB00459CCE /* ModelManager.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1333,6 +1332,7 @@
 			isa = PBXGroup;
 			children = (
 				BFFBA80F1C65D7B100991642 /* InlineUserSelect.swift */,
+				BF95EC2C1C8F251900B77817 /* InlineUserDeletable.swift */,
 			);
 			name = inlineUserSelect;
 			sourceTree = "<group>";
@@ -1470,8 +1470,8 @@
 				BF32EEB01C08B22F0098FEC1 /* Podfile in Resources */,
 				BFB39CCB1C1EA20200FB6B5D /* sportcar.plist in Resources */,
 				BF63089D1C1970AB0087A4F0 /* Localizable.strings in Resources */,
-				BF2429201C7C8CA7005D4C6E /* test.gif in Resources */,
 				BFDFF2771C8BC36200055C1C /* ChineseSubdivisions.plist in Resources */,
+				BFBE19231C952FB3005114A0 /* custom_config_黑夜 in Resources */,
 				BF63089F1C1972050087A4F0 /* agreement.rtf in Resources */,
 				BF3BD5EA1C28E89000499674 /* Settings.bundle in Resources */,
 				BFFA51201C05D9920019E5EF /* status.xcassets in Resources */,
@@ -1550,6 +1550,7 @@
 				BF5107111C60CB65008DC14F /* ChatList.swift in Sources */,
 				BFC0326F1C6F3A1100ECA69A /* ActivityHomeCell.swift in Sources */,
 				BFC032531C6DD14000ECA69A /* AuthThreeImageInput.swift in Sources */,
+				BFA64F001C946AB900BA460F /* StatusHot.swift in Sources */,
 				BF5E7EE01C85C770004B8305 /* PresentTemplate.swift in Sources */,
 				BFCA90111C50A0C000B05E74 /* StatusFollow.swift in Sources */,
 				BF1D93581C52783000FD9997 /* StatusDetailCommentCell.swift in Sources */,
@@ -1590,6 +1591,7 @@
 				BFC032641C6EF55400ECA69A /* AvatarCarSelect.swift in Sources */,
 				BF5E7EE41C85E568004B8305 /* ClearCache.swift in Sources */,
 				BF5491D21C22FD1A0090D151 /* SportCarOwnerShip.swift in Sources */,
+				BFBE19211C9521FF005114A0 /* LocSelectPin.swift in Sources */,
 				BF26FD3D1C686E5A0077D1F0 /* GroupSettings.swift in Sources */,
 				BF3387E61C47C2AF00B95CAB /* StatusReleaseController.swift in Sources */,
 				BF67816C1C15AA77001C89AE /* AccountController.swift in Sources */,
@@ -1617,7 +1619,6 @@
 				BF1D93561C52776F00FD9997 /* DetailCommentCell.swift in Sources */,
 				BFC0325F1C6EE92600ECA69A /* UIImageEffects.swift in Sources */,
 				BF6308A51C19AF600087A4F0 /* ProfileInformation.swift in Sources */,
-				BFBEA0841C2152F200F04F9A /* Wrapper.swift in Sources */,
 				BF54DD771C2EBDE800F635C0 /* NewsCell.swift in Sources */,
 				BFC712F11C2C431900A71F4C /* StatusComment.swift in Sources */,
 				BF9B54AB1C7F5F740006D673 /* DriveMapUserCell.swift in Sources */,
@@ -1652,6 +1653,7 @@
 				BF2429271C7D62D6005D4C6E /* UserOnMap.swift in Sources */,
 				BFBC527D1C53CE8D00EE7D34 /* ChatAudioAnalyser.swift in Sources */,
 				BF5107131C60CBA6008DC14F /* ChatListCell.swift in Sources */,
+				BFB98A271C92A9FB00459CCE /* ModelManager.swift in Sources */,
 				BF77F3191C85357D00B09D9A /* ReportAndBlacklist.swift in Sources */,
 				BFC032861C73507600ECA69A /* ActivityMapCell.swift in Sources */,
 				BF9664061C89F0B60096D131 /* AvatarClubSelect.swift in Sources */,
@@ -1678,6 +1680,7 @@
 				BFC0324B1C6CCC7D00ECA69A /* PersonMineSettingsInvitation.swift in Sources */,
 				BFC0325A1C6E22EF00ECA69A /* PersonMineSinglePropertyModifier.swift in Sources */,
 				BFC36BA31C69A90400DC6FE2 /* SportscarViewList.swift in Sources */,
+				BF95EC2D1C8F251A00B77817 /* InlineUserDeletable.swift in Sources */,
 				BFFA51161C05D9910019E5EF /* AppDelegate.swift in Sources */,
 				BFC032581C6E006800ECA69A /* PersonMineInfo.swift in Sources */,
 				BF2F7E971C644C7600E3A3A2 /* NotificationCell.swift in Sources */,
@@ -1688,6 +1691,7 @@
 				BFC36B991C698D5900DC6FE2 /* PersonController.swift in Sources */,
 				BF9B54AF1C7FFDB20006D673 /* RadarHomePopover.swift in Sources */,
 				BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */,
+				BFBE19251C953286005114A0 /* UserPin.swift in Sources */,
 				BFA2C76B1C412B1500202EF0 /* CommentPanel.swift in Sources */,
 				BF2BE2141C2938B000DD0CF9 /* Profile.swift in Sources */,
 				BFFBA8131C65E5B900991642 /* PrivateSettingsCell.swift in Sources */,
@@ -1718,9 +1722,7 @@
 				BF8D42FF1C748CB8009AD4BA /* ActivityApplied.swift in Sources */,
 				BFCB963C1C1FFD2D004F77E8 /* SportCarSelectDetail.swift in Sources */,
 				BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */,
-				BFC712EB1C2C3B4F00A71F4C /* UserUtilities.swift in Sources */,
 				BFC032841C734C8300ECA69A /* ActivityCommentPanel.swift in Sources */,
-				BF139E681C4DE0750022F4FC /* MapManager.swift in Sources */,
 				BFC712FB1C2C439900A71F4C /* Status.generated.swift in Sources */,
 				BF8FE9A31C86C22400008170 /* ImageViewer.swift in Sources */,
 			);
@@ -1850,7 +1852,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -1865,7 +1867,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h";
 			};
 			name = Release;
 		};

@@ -7,43 +7,23 @@
 //
 
 import UIKit
-import Mapbox
 
 
-class ActivityNearByController: UIViewController, MGLMapViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, CLLocationManagerDelegate {
+class ActivityNearByController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate {
     
     var home: ActivityHomeController!
     
     var acts: [Activity] = []
     
-    var map: MGLMapView!
-    var actMarker: MGLPointAnnotation?
-    var userLocMarker: UserMapLocationManager!
-    var userLocationUpdator: CADisplayLink?
-    var locationManager: CLLocationManager!
-    var userLocation: CLLocation?
+    var map: BMKMapView!
+    var actAnno: BMKPointAnnotation?
+    var userAnno: BMKPointAnnotation?
+    var userLocation: BMKUserLocation?
+    var locationService: BMKLocationService!
     
     var actsBoard: UICollectionView!
     var pageCount: UIPageControl!
     var _prePage: Int = 0
-    
-    var pause: Bool = false{
-        didSet {
-            if pause {
-                userLocationUpdator?.paused = true
-                locationManager.stopUpdatingLocation()
-                userLocation = nil
-            }else{
-                userLocationUpdator?.paused = false
-                locationManager.startUpdatingLocation()
-            }
-        }
-    }
-    
-    deinit {
-        userLocationUpdator?.paused = true
-        userLocationUpdator?.invalidate()
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,34 +31,28 @@ class ActivityNearByController: UIViewController, MGLMapViewDelegate, UICollecti
         
         actsBoard.registerClass(ActivityNearByCell.self, forCellWithReuseIdentifier: ActivityNearByCell.reuseIdentifier)
         // 启动位置跟踪
-        locationManager = CLLocationManager()
-        locationManager?.delegate = self
-        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager?.requestAlwaysAuthorization()
-        locationManager.requestLocation()
-        locationManager?.startUpdatingLocation()
+        locationService = BMKLocationService()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if userLocationUpdator != nil {
-            userLocationUpdator?.paused = false
-        }
+        map.delegate = self
+        locationService.delegate = self
+        locationService.startUserLocationService()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillAppear(animated)
-        if userLocationUpdator != nil {
-            userLocationUpdator?.paused = true
-        }
+        map.delegate = nil
+        locationService.delegate = nil
+        locationService.stopUserLocationService()
     }
     
     func createSubviews() {
         let superview = self.view
+        superview.backgroundColor = UIColor.blackColor()
         //
-        map = MGLMapView(frame: CGRectZero, styleURL: kMapStyleURL)
-        map.delegate = self
-        map.allowsRotating = false
+        map = BMKMapView()
         superview.addSubview(map)
         map.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
@@ -213,29 +187,25 @@ extension ActivityNearByController {
     func activityFocusedChanged() {
         let focusedActivity = acts[pageCount.currentPage]
         let center = CLLocationCoordinate2D(latitude: focusedActivity.location_y, longitude: focusedActivity.location_x)
-        map.setCenterCoordinate(center, zoomLevel: 12, animated: true)
-        //
-        if actMarker != nil {
-            map.removeAnnotation(actMarker!)
+        map.setCenterCoordinate(center, animated: true)
+        if actAnno != nil {
+            map.removeAnnotation(actAnno!)
         }
-        actMarker = MGLPointAnnotation()
-        actMarker?.title = ""
-        actMarker?.coordinate = center
-        map.addAnnotation(actMarker!)
+        actAnno = BMKPointAnnotation()
+        actAnno?.coordinate = center
+        map.addAnnotation(actAnno)
     }
     
-    // ========================
-    
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        print(status)
-    }
-    
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let needRequest = userLocation == nil
-        userLocation = locations.last()
-        if needRequest {
-            let requester = ActivityRequester.requester
-            requester.getNearByActivities(userLocation!, queryDistance: 10, skip: 0, limit: 10, onSuccess: { (json) -> () in
+    func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
+        if self.userLocation == nil {
+            if userAnno == nil {
+                userAnno = BMKPointAnnotation()
+                map.addAnnotation(userAnno!)
+            }
+            userAnno?.coordinate = userLocation.location.coordinate
+            map.zoomLevel = 12
+            map.setCenterCoordinate(userLocation.location.coordinate, animated: true)
+            ActivityRequester.requester.getNearByActivities(userLocation.location, queryDistance: 10, skip: 0, limit: 10, onSuccess: { (json) -> () in
                 self.acts.removeAll()
                 for data in json!.arrayValue {
                     let act = Activity.objects.getOrCreate(data)
@@ -249,68 +219,70 @@ extension ActivityNearByController {
                 }, onError: { (code) -> () in
                     print(code)
             })
-            let center = CLLocationCoordinate2D(latitude: userLocation!.coordinate.latitude, longitude: userLocation!.coordinate.longitude)
-            map.setCenterCoordinate(center, zoomLevel: 12, animated: true)
-            if userLocationUpdator == nil {
-                userLocationUpdator = CADisplayLink(target: self, selector: "userLocationOnScreenUpdate")
-                userLocationUpdator?.frameInterval = 1
-                userLocationUpdator?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
-                userLocationUpdator?.paused = false
+        }
+        userAnno?.coordinate = userLocation.location.coordinate
+        self.userLocation = userLocation
+    }
+    
+    func mapView(mapView: BMKMapView!, viewForAnnotation annotation: BMKAnnotation!) -> BMKAnnotationView! {
+        if userAnno == annotation as? BMKPointAnnotation {
+            let view = HostUserOnRadarAnnotationView(annotation: annotation, reuseIdentifier: "host")
+            view.startScan()
+            return view
+        } else {
+            var view = mapView.dequeueReusableAnnotationViewWithIdentifier("act") as? UserSelectAnnotationView
+            if view == nil {
+                view = UserSelectAnnotationView(annotation: annotation, reuseIdentifier: "act")
             }
-            if userLocMarker == nil {
-            let userMarkLocationOnScreen = map.convertCoordinate(center, toPointToView: map)
-                userLocMarker = UserMapLocationManager(size: CGSizeMake(400, 400))
-                map.addSubview(userLocMarker)
-                userLocMarker.center = userMarkLocationOnScreen
-            }
+            return view
         }
     }
-//    
-//    func getNearByActs() {
-//        let requester = ActivityRequester.requester
-//        requester.getNearByActivities(userLocation!, queryDistance: 10, skip: 0, limit: 10, onSuccess: { (json) -> () in
-//            self.acts.removeAll()
-//            for data in json!.arrayValue {
-//                let act = Activity.objects.getOrCreate(data)
-//                self.acts.append(act)
+    
+//    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//
+//        let needRequest = userLocation == nil
+//        userLocation = locations.last()
+//        if needRequest {
+//            let requester = ActivityRequester.requester
+//            requester.getNearByActivities(userLocation!, queryDistance: 10, skip: 0, limit: 10, onSuccess: { (json) -> () in
+//                self.acts.removeAll()
+//                for data in json!.arrayValue {
+//                    let act = Activity.objects.getOrCreate(data)
+//                    self.acts.append(act)
+//                }
+//                self.actsBoard.reloadData()
+//                self.pageCount.currentPage = 0
+//                if self.acts.count > 0 {
+//                    self.activityFocusedChanged()
+//                }
+//                }, onError: { (code) -> () in
+//                    print(code)
+//            })
+//            let center = CLLocationCoordinate2D(latitude: userLocation!.coordinate.latitude, longitude: userLocation!.coordinate.longitude)
+//            map.setCenterCoordinate(center, zoomLevel: 12, animated: true)
+//            if userLocationUpdator == nil {
+//                userLocationUpdator = CADisplayLink(target: self, selector: "userLocationOnScreenUpdate")
+//                userLocationUpdator?.frameInterval = 1
+//                userLocationUpdator?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
+//                userLocationUpdator?.paused = false
 //            }
-//            self.actsBoard.reloadData()
-//            self.pageCount.currentPage = 0
-//            if self.acts.count > 0 {
-//                self.activityFocusedChanged()
+//            if userLocMarker == nil {
+//            let userMarkLocationOnScreen = map.convertCoordinate(center, toPointToView: map)
+//                userLocMarker = UserMapLocationManager(size: CGSizeMake(400, 400))
+//                map.addSubview(userLocMarker)
+//                userLocMarker.center = userMarkLocationOnScreen
 //            }
-//            }, onError: { (code) -> () in
-//                print(code)
-//        })
+//        }
 //    }
-    
-    func userLocationOnScreenUpdate() {
-        if userLocation == nil {
-            return
-        }
-        let center = CLLocationCoordinate2D(latitude: userLocation!.coordinate.latitude, longitude: userLocation!.coordinate.longitude)
-        let userMarkLocationOnScreen = map.convertCoordinate(center, toPointToView: map)
-        userLocMarker.center = userMarkLocationOnScreen
-    }
-    
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        print(error)
-    }
-    
-    // ========================
-    
-    func mapView(mapView: MGLMapView, didUpdateUserLocation userLocation: MGLUserLocation?) {
-        
-    }
-    
-    func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
-        var annoationImage = mapView.dequeueReusableAnnotationImageWithIdentifier("act_current_location")
-        
-        if annoationImage == nil {
-            annoationImage = MGLAnnotationImage(image: UIImage(named: "map_default_marker")!, reuseIdentifier: "act_current_location")
-        }
-        
-        return annoationImage
-    }
+//    
+//    func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
+//        var annoationImage = mapView.dequeueReusableAnnotationImageWithIdentifier("act_current_location")
+//        
+//        if annoationImage == nil {
+//            annoationImage = MGLAnnotationImage(image: UIImage(named: "map_default_marker")!, reuseIdentifier: "act_current_location")
+//        }
+//        
+//        return annoationImage
+//    }
 }
 

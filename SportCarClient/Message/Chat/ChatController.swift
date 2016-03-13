@@ -478,7 +478,6 @@ extension ChatRoomController {
                 }, completion: nil)
         }
     }
-    
 }
 
 // MARK: - 图片选择器的代理
@@ -507,7 +506,7 @@ extension ChatRoomController {
         if audioURL != nil {
             confirmSendChatMessage(nil, image: nil, audio: audioURL, messageType: "audio")
         }else {
-            displayAlertController("错误", message: "说话的时间太短")
+            showToast(LS("说话时间太短"))
         }
     }
     

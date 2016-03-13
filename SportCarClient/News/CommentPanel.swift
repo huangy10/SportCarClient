@@ -122,13 +122,15 @@ class CommentBarView: UIView {
         })
     }
     
-    func setLikedAnimated(liked: Bool) {
+    func setLikedAnimated(liked: Bool, flag: Bool = true) {
         if liked {
-            likeBtnIcon.transform = CGAffineTransformIdentity
             likeBtnIcon.image = UIImage(named: "news_like_liked")
-            UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 140, options: .CurveEaseInOut, animations: { () -> Void in
-                self.likeBtnIcon.transform = CGAffineTransformMakeScale(1.1, 1.1)
-                }, completion: nil)
+            if flag {
+                likeBtnIcon.transform = CGAffineTransformIdentity
+                UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 140, options: .CurveEaseInOut, animations: { () -> Void in
+                    self.likeBtnIcon.transform = CGAffineTransformMakeScale(1.1, 1.1)
+                    }, completion: nil)
+            }
         }else {
             likeBtnIcon.image = UIImage(named: "news_like_unliked")
         }

@@ -25,45 +25,33 @@ extension Profile {
      
      - parameter json: JSON
      */
-    func loadValueFromJSON(json: JSON, forceUpdateNil: Bool=false) {
-        if forceUpdateNil {
-            fansNum = json["fans_num"].int32 ?? 0
-            followNum = json["follow_num"].int32 ?? 0
-            statusNum = json["status_num"].int32 ?? 0
-            //
-            let avatarCar = json["avatar_car"]
-            avatarCarID = avatarCar["carID"].string
-            avatarCarImage = avatarCar["image"].string
-            avatarCarName = avatarCar["name"].string
-            avatarCarLogo = avatarCar["logo"].string
-            //
-            let avatarClub = json["avatar_club"]
-            avatarClubID = avatarClub["id"].string
-            avatarClubName = avatarClub["club_name"].string
-            avatarClubLogo = avatarClub["club_logo"].string
-            return
-        }
-        if let fansNum = json["fans_num"].int32 {
-            self.fansNum = fansNum
-        }
-        if let followNum = json["follow_num"].int32 {
-            self.followNum = followNum
-        }
-        if let statusNum = json["status_num"].int32 {
-            self.statusNum = statusNum
-        }
+    func loadValueFromJSON(json: JSON) {
+        fansNum = json["fans_num"].int32 ?? 0
+        followNum = json["follow_num"].int32 ?? 0
+        statusNum = json["status_num"].int32 ?? 0
+
         let avatarCar = json["avatar_car"]
-        if avatarCar["name"].string != nil {
-            avatarCarID = avatarCar["carID"].string
-            avatarCarImage = avatarCar["image"].string
-            avatarCarName = avatarCar["name"].string
-            avatarCarLogo = avatarCar["logo"].string
-        }
+        avatarCarID = avatarCar["carID"].string
+        avatarCarImage = avatarCar["image"].string
+        avatarCarName = avatarCar["name"].string
+        avatarCarLogo = avatarCar["logo"].string
+
         let avatarClub = json["avatar_club"]
-        if avatarClub["club_name"] != nil {
-            avatarClubID = avatarClub["id"].string
-            avatarClubName = avatarClub["club_name"].string
-            avatarClubLogo = avatarClub["club_logo"].string
-        }
+        avatarClubID = avatarClub["id"].string
+        avatarClubName = avatarClub["club_name"].string
+        avatarClubLogo = avatarClub["club_logo"].string
+    }
+    
+    func setAvatarCar(car: SportCar) {
+        avatarCarID = car.carID
+        avatarCarImage = car.image
+        avatarCarName = car.name
+        avatarCarLogo = car.logo
+    }
+    
+    func setAvatarClub(club: Club) {
+        avatarClubID = club.clubID
+        avatarClubName = club.name
+        avatarClubLogo = club.logo_url
     }
 }

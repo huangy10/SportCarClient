@@ -38,7 +38,7 @@ class RadarClubFilterController: UITableViewController {
         requester.getClubList({ (json) -> () in
             for data in json!.arrayValue {
                 let club = Club.objects.getOrCreate(data["club"])
-                self.clubs.append(club!)
+                self.clubs.append(club)
             }
             self.tableView.reloadData()
             }) { (code) -> () in

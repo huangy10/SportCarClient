@@ -44,7 +44,6 @@ class ChatOpPanelController: UIViewController {
     var recording: Bool = false
     var recorder: ChatAudioRecorder?
     
-    var emojiBtn: UIButton?
     var accessoryBtn: UIButton?
     
     var expandBoardHeight: CGFloat = 250
@@ -85,16 +84,6 @@ class ChatOpPanelController: UIViewController {
         })
         accessoryBtn?.addTarget(self, action: "accessoryBtnPressed", forControlEvents: .TouchUpInside)
         //
-        emojiBtn = UIButton()
-        emojiBtn?.setImage(UIImage(named: "chat_add_emoji"), forState: .Normal)
-        superview.addSubview(emojiBtn!)
-        emojiBtn?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(accessoryBtn!.snp_left).offset(-10)
-            make.bottom.equalTo(superview).offset(-edgeInset)
-            make.size.equalTo(contentHeight)
-        })
-        emojiBtn?.addTarget(self, action: "emojiBtnPressed", forControlEvents: .TouchUpInside)
-        //
         let contentInputContainer = UIView()
         contentInputContainer.layer.cornerRadius = contentHeight / 2
         contentInputContainer.clipsToBounds = true
@@ -102,7 +91,7 @@ class ChatOpPanelController: UIViewController {
         superview.addSubview(contentInputContainer)
         contentInputContainer.snp_makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview).offset(-edgeInset)
-            make.right.equalTo(emojiBtn!.snp_left).offset(-10)
+            make.right.equalTo(accessoryBtn!.snp_left).offset(-10)
             make.left.equalTo(inputToggleBtn!.snp_right).offset(10)
             make.top.equalTo(superview).offset(edgeInset)
         }

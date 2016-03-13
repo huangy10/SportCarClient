@@ -7,21 +7,19 @@
 //
 
 import UIKit
-import Mapbox
 import Spring
 import Alamofire
 
 
-class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate, RadarFilterDelegate {
+class RadarDriverMapController: UIViewController, UITableViewDataSource, UITableViewDelegate, RadarFilterDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate {
     var radarHome: RadarHomeController?
-    /// 待使用的markers
-    var markerPool: [UserOnMapView] = []
-    /// 当前可见的marker
-    var visibleMarkers: [UserOnMapView] = []
-    /// 用户数据和marker的绑定关系
-    var userMarkerMapping: [String: UserOnMapView] = [:]
     
-    var map: MGLMapView!
+    var map: BMKMapView!
+    var userAnnotate: BMKPointAnnotation!
+    var locationService: BMKLocationService!
+    var userLocation: BMKUserLocation?
+    var userAnnos: MyOrderedDict<String, UserAnnotation> = MyOrderedDict()
+    var timer: NSTimer?
     
     var userList: UITableView!
     var showUserListBtn: UIButton!
@@ -30,50 +28,42 @@ class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocation
     var mapFilter: RadarFilterController!
     var mapNav: BlackBarNavigationController!
     var mapFilterView: UIView!
-    
-    var locationManager: CLLocationManager!
     ///
-    var updator: CADisplayLink!
-    var usrLocMarker: UserMapLocationManager!
-    var userLocation: CLLocation?
     
-    var locationUpdatingToServer: Bool = false
-    var locationUpdatingRequest: Request?
-    var manualStopUpdating: Bool = false {
-        didSet {
-            if manualStopUpdating {
-                locationManager.stopUpdatingLocation()
-                locationUpdatingRequest?.cancel()
-                locationUpdatingToServer = false
-            }else {
-                locationManager.startUpdatingLocation()
-            }
-        }
-    }
+    weak var locationUpdatingRequest: Request?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         createSubviews()
         
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.requestAlwaysAuthorization()
-        locationManager.startUpdatingLocation()
+        locationService = BMKLocationService()
+        locationService.allowsBackgroundLocationUpdates = true
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        map.viewWillAppear()
+        map.delegate = self
+        locationService.delegate = self
+        timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "getLocationData", userInfo: nil, repeats: true)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        map.viewWillDisappear()
+        map.delegate = nil
+        locationService.delegate = nil
+        timer?.invalidate()
     }
     
     func createSubviews() {
-        map = MGLMapView(frame: CGRectZero, styleURL: kMapStyleURL)
-        map.delegate = self
+        self.view.backgroundColor = UIColor.blackColor()
+        map = BMKMapView()
         self.view.addSubview(map)
         map.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(self.view)
         }
-        //
-        usrLocMarker = UserMapLocationManager(size: CGSizeMake(400, 400))
-        map.addSubview(usrLocMarker)
-        usrLocMarker.userInteractionEnabled = false
-        usrLocMarker.center = self.view.center
         //
         userList = UITableView(frame: CGRectZero, style: .Plain)
         userList.separatorStyle = .None
@@ -138,22 +128,6 @@ class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocation
             make.left.equalTo(self.view).offset(15)
             make.size.equalTo(CGSizeMake(124, 41))
         }
-        //
-        updator = CADisplayLink(target: self, selector: "userLocationUpdate")
-        updator.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
-        updator.frameInterval = 0
-        updator.paused = false
-    }
-    
-    func userLocationUpdate() {
-        if userLocation == nil {
-            return
-        }
-        
-        let p = map.convertCoordinate(userLocation!.coordinate, toPointToView: map)
-        usrLocMarker.center = p
-        
-        updateMapContent()
     }
 }
 
@@ -161,164 +135,94 @@ class RadarDriverMapController: UIViewController, MGLMapViewDelegate, CLLocation
 // MARK: - Delegate functions about map
 extension RadarDriverMapController {
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let userLoc = locations.last() {
-            let center = CLLocationCoordinate2D(latitude: userLoc.coordinate.latitude, longitude: userLoc.coordinate.longitude)
-            if userLocation == nil {
-                map.setCenterCoordinate(center, zoomLevel: 12, animated: true)
+    func getLocationData() {
+        locationService.startUserLocationService()
+    }
+    
+    func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
+        locationService.stopUserLocationService()
+        if self.userLocation == nil {
+            let annotate = UserAnnotation()
+            annotate.user = User.objects.hostUser()
+            annotate.coordinate = userLocation.location.coordinate
+            map.addAnnotation(annotate)
+            print(annotate.coordinate)
+            map.zoomLevel = 12
+            map.setCenterCoordinate(annotate.coordinate, animated: true)
+            userAnnotate = annotate
+        }
+        self.userLocation = userLocation
+        userAnnotate.coordinate = userLocation.location.coordinate
+        print(userLocation.location.coordinate)
+        updateUserLocationToServer()
+    }
+    
+    func mapView(mapView: BMKMapView!, viewForAnnotation annotation: BMKAnnotation!) -> BMKAnnotationView! {
+        if let userAnno = annotation as? UserAnnotation {
+            let user = userAnno.user
+            if user.userID == User.objects.hostUserID {
+                let cell = HostUserOnRadarAnnotationView(annotation: annotation, reuseIdentifier: "host")
+                cell.startScan()
+                return cell
+            } else {
+                var cell = mapView.dequeueReusableAnnotationViewWithIdentifier("user") as? UserAnnotationView
+                if cell == nil {
+                    cell = UserAnnotationView(annotation: userAnno, reuseIdentifier: "use")
+                } else {
+                    cell?.annotation = userAnno
+                }
+                cell?.user = userAnno.user
+                return cell
             }
-            userLocation = userLoc
-            if !locationUpdatingToServer {
-                locationUpdatingToServer = true
-                self.updateUserLocationToServer()
-            }
         }
+        return nil
     }
     
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        print(error)
-        locationManager.requestLocation()
-    }
-    
-    func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
-        var image = mapView.dequeueReusableAnnotationImageWithIdentifier("user")
-        if image == nil {
-            image = MGLAnnotationImage(image: UIImage(named: "map_default_marker")!, reuseIdentifier: "user")
-        }
-        
-        return image
-    }
-}
-
-// MARK: - Marker的重复利用
-extension RadarDriverMapController {
-    
-    func dequeueMarker() -> UserOnMapView {
-        if markerPool.count == 0 {
-            // 否则创建一个新的
-            let newMarker = UserOnMapView(size: CGSizeMake(65, 65))
-            newMarker.addTarget(self, action: "markerPressed:", forControlEvents: .TouchUpInside)
-            visibleMarkers.append(newMarker)
-            map.addSubview(newMarker)
-            map.bringSubviewToFront(usrLocMarker)
-            return newMarker
-        }else {
-            let marker = markerPool.first()!
-            markerPool.removeAtIndex(0)
-            visibleMarkers.append(marker)
-            map.addSubview(marker)
-            map.bringSubviewToFront(usrLocMarker)
-            return marker
-        }
-    }
-    
-    func recycleMarker(marker: UserOnMapView) {
-        if !visibleMarkers.contains(marker) {
-            return
-        }
-        marker.removeFromSuperview()
-        visibleMarkers.remove(marker)
-        markerPool.append(marker)
-        userMarkerMapping[marker.user!.userID!] = nil
-    }
-    
-    func markerPressed(sender: UserOnMapView) {
-        let user = sender.user
-        if user == nil {
-            return
-        }
-        if user?.userID == User.objects.hostUser()?.userID {
-            let detail = PersonBasicController(user: user!)
-            radarHome?.navigationController?.pushViewController(detail, animated: true)
-        }else {
-            let detail = PersonOtherController(user: user!)
-            radarHome?.navigationController?.pushViewController(detail, animated: true)
-        }
-    }
 }
 
 // MARK: - 网络&数据
 extension RadarDriverMapController {
     
     /**
-     更新地图显示内容
-     */
-    func updateMapContent() {
-        var markerToBeRecycled: [UserOnMapView] = []
-        for marker in self.visibleMarkers {
-            // 更新位置
-            let center = map.convertCoordinate(marker.coordinate!, toPointToView: map)
-            marker.center = center
-            
-            let containerRect = CGRectMake(-map.bounds.width, -map.bounds.height, map.bounds.width * 3, map.bounds.height * 3)
-            if !CGRectContainsRect(containerRect, marker.frame) {
-                // 如果已经离开了当前画面，回收之
-                
-                markerToBeRecycled.append(marker)
-            }
-        }
-        // 实际回收工作
-        markerToBeRecycled.each { (marker) -> () in
-            self.recycleMarker(marker)
-        }
-    }
-    
-    /**
      更新用户的位置
      */
     func updateUserLocationToServer() {
-        if locationUpdatingToServer == false || manualStopUpdating{
+        
+        guard locationUpdatingRequest == nil else {
             return
         }
-        if userLocation == nil {
-            assertionFailure()
-        }
-        print("dunag")
+        
         let requester = RadarRequester.requester
-        locationUpdatingToServer = true
+        let mapBounds = map.region
+        let scanCenter = mapBounds.center
         
-        let mapBounds = map.visibleCoordinateBounds
-        let scanCenter = CLLocationCoordinate2D(latitude: (mapBounds.ne.latitude + mapBounds.sw.latitude) / 2, longitude: (mapBounds.ne.longitude + mapBounds.sw.longitude) / 2 )
-        
-        let loc1 = CLLocation(latitude: mapBounds.sw.latitude, longitude: mapBounds.sw.longitude)
-        let loc2 = CLLocation(latitude: mapBounds.ne.latitude, longitude: mapBounds.ne.longitude)
+        let loc1 = CLLocation(latitude: mapBounds.center.latitude, longitude: mapBounds.center.longitude)
+        let loc2 = CLLocation(latitude: mapBounds.center.latitude + mapBounds.span.latitudeDelta, longitude: mapBounds.center.longitude + mapBounds.span.longitudeDelta)
         let distance = loc1.distanceFromLocation(loc2)
         
         locationUpdatingRequest = requester.getRadarData(scanCenter, filterDistance: distance, onSuccess: { (json) -> () in
             // 当前正在显示的用户
-            var existingUsers = Array(self.userMarkerMapping.keys)
             for data in json!.arrayValue {
                 // 创建用户对象
-                let user: User = User.objects.create(data).value!
+                let user = User.objects.getOrCreate(data)
                 let userID = user.userID!
-                
-                if let marker = self.userMarkerMapping[userID] {
-                    // 用户已经在，则直接修改其数据
-                    existingUsers.remove(userID)
-                    marker.user = user
+                if let anno = self.userAnnos[userID] {
                     let loc = data["loc"]
-                    marker.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
-                }else{
-                    // 用户不存在，添加之
-                    let marker = self.dequeueMarker()
-                    marker.user = user
+                    anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
+                } else {
+                    let anno = UserAnnotation()
+                    anno.user = user
                     let loc = data["loc"]
-                    marker.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
-                    self.userMarkerMapping[userID] = marker
+                    anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
+                    self.userAnnos[userID] = anno
+                    self.map.addAnnotation(anno)
                 }
             }
-            self.performSelector("updateUserLocationToServer", withObject: nil, afterDelay: 1)
-            //
+            self.locationUpdatingRequest = nil
             }) { (code) -> () in
                 print(code)
-                self.performSelector("updateUserLocationToServer", withObject: nil, afterDelay: 1)
+                self.locationUpdatingRequest = nil
         }
-//        requester.updateCurrentLocation(userLocation!.coordinate, onSuccess: { (json) -> () in
-//            self.performSelector("updateUserLocationToServer", withObject: nil, afterDelay: 1)
-//            }) { (code) -> () in
-//                print(code)
-//                self.locationUpdatingToServer = false
-//        }
     }
 }
 
@@ -329,15 +233,15 @@ extension RadarDriverMapController {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return visibleMarkers.count
+        return userAnnos.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! DriverMapUserCell
-        let marker = visibleMarkers[indexPath.row]
-        cell.user = marker.user
-        cell.hostLoc = self.userLocation!
-        cell.userLoc = CLLocation(latitude: marker.coordinate!.latitude, longitude: marker.coordinate!.longitude)
+        let anno = userAnnos.valueForIndex(indexPath.row)
+        cell.user = anno?.user
+        cell.hostLoc = CLLocation(latitude: userAnnotate.coordinate.latitude, longitude: userAnnotate.coordinate.longitude)
+        cell.userLoc = CLLocation(latitude: anno!.coordinate.latitude, longitude: anno!.coordinate.longitude)
         cell.loadDataAndUpdateUI()
         return cell
     }

@@ -196,10 +196,9 @@ class FFSelectController: UserSelectController {
             requester.getFansList(targetUser.userID!, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
                 if let fansJSONData = data?.arrayValue {
                     for json in fansJSONData {
-                        print(json)
-                        let user = User.objects.create(json).value
-                        user?.recentStatusDes = json["recent_status_des"].string
-                        self.fans.append(user!)
+                        let user = User.objects.getOrCreate(json)
+                        user.recentStatusDes = json["recent_status_des"].string
+                        self.fans.append(user)
                         self.fansDateThreshold = DateSTR(json["created_at"].stringValue)
                     }
                     if fansJSONData.count > 0 {
@@ -215,9 +214,9 @@ class FFSelectController: UserSelectController {
             requester.getFollowList(targetUser.userID!, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
                 if let followJSONData = data?.arrayValue {
                     for json in followJSONData {
-                        let user = User.objects.create(json).value
-                        user?.recentStatusDes = json["recent_status_des"].string
-                        self.follows.append(user!)
+                        let user = User.objects.getOrCreate(json)
+                        user.recentStatusDes = json["recent_status_des"].string
+                        self.follows.append(user)
                         self.followDateThreshold = DateSTR(json["created_at"].stringValue)
                     }
                     if followJSONData.count > 0 {

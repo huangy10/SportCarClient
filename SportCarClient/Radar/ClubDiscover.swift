@@ -32,7 +32,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         requester.discoverClub("recent", skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
                 let club = Club.objects.getOrCreate(data)
-                self.clubs.append(club!)
+                self.clubs.append(club)
             }
             self.bubbles.clubs = self.clubs
             self.bubbles.reloadBubble()
@@ -226,7 +226,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         requester.discoverClub(opType, skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
                 let club = Club.objects.getOrCreate(data)
-                self.clubs.append(club!)
+                self.clubs.append(club)
             }
             self.bubbles.clubs = self.clubs
             self.bubbles.reloadBubble()

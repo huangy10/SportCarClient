@@ -12,13 +12,14 @@ import UIKit
 import Kingfisher
 
 
-class GroupChatSettingHostController: GroupChatSettingController, ImageInputSelectorDelegate{
+class GroupChatSettingHostController: GroupChatSettingController, ImageInputSelectorDelegate {
     
     var newLogo: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.registerClass(GroupChatSettingHostClubAuthCell.self, forCellReuseIdentifier: "auth_status")
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select_deletable")
     }
     
     override func navSettings() {
@@ -109,7 +110,19 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
                 cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
                 return cell
             case 8:
-                let cell = super.tableView(tableView, cellForRowAtIndexPath: NSIndexPath(forRow: 5, inSection: indexPath.section))
+                // user inlineUserSelectDeletable
+                let cell = tableView.dequeueReusableCellWithIdentifier("inline_user_select_deletable", forIndexPath: indexPath)
+                if inlineUserSelect == nil {
+                    let select = InlineUserSelectDeletable()
+                    cell.contentView.addSubview(select.view)
+                    select.view.snp_makeConstraints(closure: { (make) -> Void in
+                        make.edges.equalTo(cell.contentView)
+                    })
+                    select.relatedClub = targetClub
+                    select.delegate = self
+                    inlineUserSelect = select
+                }
+                inlineUserSelect?.users = Array(targetClub.members)
                 inlineUserSelect?.showAddBtn = true
                 inlineUserSelect?.showDeleteBtn = true
                 return cell
@@ -214,6 +227,14 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
     
     override func modificationCancelled() {
         // Do nothing
+    }
+    
+    func inlineUserSelectShouldDeleteUser(user: User) {
+        
+    }
+    
+    override func inlineUserSelectNeedAddMembers() {
+        
     }
 }
 

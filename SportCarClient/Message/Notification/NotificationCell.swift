@@ -39,7 +39,7 @@ class NotificationBaseCell: UITableViewCell {
         avatarBtn.clipsToBounds = true
         superview.addSubview(avatarBtn)
         avatarBtn.snp_makeConstraints { (make) -> Void in
-            make.centerY.equalTo(superview)
+            make.top.equalTo(superview).offset(15)
             make.left.equalTo(superview).offset(15)
             make.size.equalTo(45)
         }
@@ -82,6 +82,7 @@ class NotificationCellWithCoverThumbnail: NotificationBaseCell {
     
     var cover: UIImageView!
     var messageBodyLbl: UILabel!
+    static let messageBodyLblMaxWidth = UIScreen.mainScreen().bounds.width - 30
     
     override func createSubviews() {
         super.createSubviews()
@@ -122,6 +123,21 @@ class NotificationCellAboutActivity: NotificationBaseCell{
     var onAgreeBtnPressed: ((sender: NotificationCellAboutActivity)->())?
     var denyBtn: UIButton!
     var onDenyBtnPressed: ((sender: NotificationCellAboutActivity)->())?
+    var doneLbl : UILabel!
+    
+    var showBtns: Bool = true {
+        didSet {
+            agreenBtn.hidden = !showBtns
+            denyBtn.hidden = !showBtns
+        }
+    }
+    
+    var closeOperation: Bool = true {
+        didSet {
+            showBtns = !closeOperation
+            doneLbl.hidden = !closeOperation
+        }
+    }
     
     override func createSubviews() {
         super.createSubviews()
@@ -151,7 +167,7 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         agreenBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         superview.addSubview(agreenBtn)
         agreenBtn.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(superview.snp_right).offset(45)
+            make.centerX.equalTo(superview.snp_right).offset(-45)
             make.top.equalTo(dateLbl.snp_bottom).offset(13)
             make.size.equalTo(CGSizeMake(44, 20))
         }
@@ -163,15 +179,26 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         denyBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         superview.addSubview(denyBtn)
         denyBtn.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(agreenBtn.snp_center).offset(-50)
+            make.centerX.equalTo(agreenBtn.snp_centerX).offset(-50)
             make.centerY.equalTo(agreenBtn)
             make.size.equalTo(agreenBtn)
         }
         denyBtn.addTarget(self, action: "denyBtnPressed", forControlEvents: .TouchUpInside)
+        //
+        doneLbl = UILabel()
+        doneLbl.font = UIFont.systemFontOfSize(14)
+        doneLbl.textColor = UIColor.blackColor()
+        superview.addSubview(doneLbl)
+        doneLbl.snp_makeConstraints { (make) -> Void in
+            make.left.equalTo(denyBtn)
+            make.right.equalTo(agreenBtn)
+            make.height.equalTo(agreenBtn)
+            make.centerY.equalTo(agreenBtn)
+        }
     }
     
     
-    func agreeBtnPresssed() {
+    func agreeBtnPressed() {
         if onAgreeBtnPressed == nil {
             assertionFailure()
         }

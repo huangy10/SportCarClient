@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate {
+class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, SportCarBrandSelecterControllerDelegate {
     var homeDelegate: HomeDelegate?
     // 显示的用户的信息
     var data: PersonDataSource!
@@ -17,6 +17,8 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     var header: PersonHeaderMine!
     var totalHeaderHeight: CGFloat = 0
     var carsViewList: SportsCarViewListController!
+    
+    var carsViewListShowAddBtn: Bool = true
     
     init(user: User) {
         let flowLayout = UICollectionViewFlowLayout()
@@ -39,6 +41,8 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onStatusDelete:", name: kStatusDidDeletedNotification, object: nil)
+        
         createSubviews()
         
         // 发出网络请求
@@ -47,7 +51,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         // 这个请求是保证当前用户的数据是最新的，而hostuser中的数据可以暂时先直接拿来展示
         requester.getProfileDataFor(data.user.userID!, onSuccess: { (json) -> () in
             let hostUser = self.data.user
-            hostUser.loadValueFromJSONWithProfile(json!)
+            hostUser.loadFromJSON(json!, ctx: nil, basic: false)
             self.header.user = hostUser
             self.header.loadDataAndUpdateUI()
             }) { (code) -> ()? in
@@ -95,6 +99,10 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         header.navRightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
         header.navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
         header.detailBtn.addTarget(self, action: "detailBtnPressed", forControlEvents: .TouchUpInside)
+        
+        header.fanslistBtn.addTarget(self, action: "fanslistPressed", forControlEvents: .TouchUpInside)
+        header.followlistBtn.addTarget(self, action: "followlistPressed", forControlEvents: .TouchUpInside)
+        header.statuslistBtn.addTarget(self, action: "statuslistPressed", forControlEvents: .TouchUpInside)
         return header
     }
     
@@ -106,17 +114,12 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         let authCarListHeight: CGFloat = 62
         header = getPersonInfoPanel()
         collectionView?.addSubview(header)
-//        header.snp_makeConstraints { (make) -> Void in
-//            make.top.equalTo(collectionView!)
-//            make.left.equalTo(superview)
-//            make.right.equalTo(superview)
-//            make.height.equalTo(header.snp_width).multipliedBy(0.968)
-//        }
         // TODO: 这里手动添加了status bar的高度值
         header.frame = CGRectMake(0, -totalHeaderHeight, screenWidth, totalHeaderHeight - authCarListHeight)
         header.user = data.user
         //
         carsViewList = SportsCarViewListController()
+        carsViewList.showAddBtn = carsViewListShowAddBtn
         carsViewList.delegate = self
         let carsView = carsViewList.view
         collectionView?.addSubview(carsView)
@@ -275,9 +278,13 @@ extension PersonBasicController {
         // 当car是nil时，代表显示所有的动态，直接
         collectionView?.reloadData()
     }
-    
+
     func needAddSportCar() {
-        
+        // show sportcar brand select controller
+        let detail = SportCarBrandSelecterController()
+        detail.delegate = self
+        let nav = BlackBarNavigationController(rootViewController: detail)
+        self.presentViewController(nav, animated: true, completion: nil)
     }
     
     /**
@@ -296,6 +303,33 @@ extension PersonBasicController {
         let detail = PersonMineInfoController()
         self.navigationController?.pushViewController(detail, animated: true)
     }
+    
+    func brandSelected(manufacturer: String?, carType: String?) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        if manufacturer == nil || carType == nil {
+            return
+        }
+
+        let toast = showStaticToast(LS("获取跑车数据中..."))
+        let requester = SportCarRequester.sharedSCRequester
+        requester.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
+            self.hideToast(toast)
+            let carImgURL = SF(data["image_url"].stringValue)
+            let headers = [LS("具体型号"), LS("跑车签名"), LS("价格"), LS("发动机"), LS("变速箱"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
+            let contents = [carType, nil, data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
+            let detail = SportCarSelectDetailController()
+            detail.headers = headers
+            detail.carId = data["carID"].stringValue
+            detail.contents = contents
+            detail.carType = carType
+            detail.carDisplayURL = NSURL(string: carImgURL ?? "")
+            self.navigationController?.pushViewController(detail, animated: true)
+            }) { (code) -> () in
+                // 弹窗说明错误
+                self.hideToast(toast)
+                self.showToast(LS("获取跑车数据失败"))
+        }
+    }
 }
 
 // MARK: - Utilities
@@ -310,8 +344,8 @@ extension PersonBasicController {
     func jsonDataHandler(json: JSON, inout container: [Status]) {
         let data = json.arrayValue
         for statusJSON in data {
-            let newStatus = Status.objects.getOrCreate(statusJSON).0
-            container.append(newStatus!)
+            let newStatus = Status.objects.getOrCreate(statusJSON)
+            container.append(newStatus)
         }
         container.sortInPlace { (s1, s2) -> Bool in
             switch s1.createdAt!.compare(s2.createdAt!) {
@@ -352,6 +386,28 @@ extension PersonBasicController {
                     print(code)
             })
         }
+    }
+    
+    func onStatusDelete(notification: NSNotification) {
+        // TODO: implement this
+    }
+    
+    func fanslistPressed() {
+        let fans = FansSelectController()
+        fans.targetUser = data.user
+        self.navigationController?.pushViewController(fans, animated: true)
+    }
+    
+    func followlistPressed() {
+        let follow = FollowSelectController()
+        follow.targetUser = data.user
+        self.navigationController?.pushViewController(follow, animated: true)
+    }
+    
+    func statuslistPressed() {
+        carsViewList.selectedCar = nil
+        carsViewList.collectionView?.reloadData()
+        didSelectSportCar(nil)
     }
 }
 

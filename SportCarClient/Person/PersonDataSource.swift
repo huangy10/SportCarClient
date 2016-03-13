@@ -57,8 +57,8 @@ class PersonDataSource {
         }
         
         for statusJSON in data {
-            let status = Status.objects.getOrCreate(statusJSON).0
-            targetStatusList.append(status!)
+            let status = Status.objects.getOrCreate(statusJSON)
+            targetStatusList.append(status)
         }
     }
 }

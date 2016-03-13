@@ -56,22 +56,22 @@ class StatusRequester: AccountRequester {
      - parameter onSuccess:     成功后调用这个closure
      - parameter onError:       失败以后调用这个
      */
-    func getLatestStatusList(dateThreshold: NSDate, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+    func getLatestStatusList(dateThreshold: NSDate, queryType: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
         let opType = "latest"
         let dtStr = STRDate(dateThreshold)
         let requestURLStr = StatusURLMaker.sharedMaker.getStatusFollowList()
         manager.request(.GET, requestURLStr,
-            parameters: ["date_threshold": dtStr, "limit": fetchLimit, "op_type": opType]).responseJSON { (response) -> Void in
+            parameters: ["date_threshold": dtStr, "limit": fetchLimit, "op_type": opType, "query_type": queryType]).responseJSON { (response) -> Void in
                 self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
         }
     }
     
-    func getMoreStatusList(dateThreshold: NSDate, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+    func getMoreStatusList(dateThreshold: NSDate, queryType: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
         let opType = "more"
         let dtStr = STRDate(dateThreshold)
         let requestURLStr = StatusURLMaker.sharedMaker.getStatusFollowList()
         manager.request(.GET, requestURLStr,
-            parameters: ["date_threshold": dtStr, "limit": fetchLimit, "op_type": opType]).responseJSON { (response) -> Void in
+            parameters: ["date_threshold": dtStr, "limit": fetchLimit, "op_type": opType, "query_type": queryType]).responseJSON { (response) -> Void in
                 self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
         }
     }
@@ -88,7 +88,7 @@ class StatusRequester: AccountRequester {
      - parameter onSuccess:       成功以后调用这个closure
      - parameter onError:         失败以后调用这个closure
      */
-    func postNewStatus(content: String, images: [UIImage], car_id: String?, lat: Double?, lon: Double?, loc_description: String?,
+    func postNewStatus(content: String, images: [UIImage], car_id: String?, lat: Double?, lon: Double?, loc_description: String?, informOf: [String]?,
         onSuccess: (JSON?)->(), onError: (code: String?)->()) {
         let urlStr = StatusURLMaker.sharedMaker.postNewStatus()
         manager.upload(.POST, urlStr, multipartFormData: { (data) -> Void in
@@ -110,6 +110,10 @@ class StatusRequester: AccountRequester {
             }
             if loc_description != nil {
                 data.appendBodyPart(data: loc_description!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "location_description")
+            }
+            if informOf != nil && informOf!.count > 0{
+                let informJSON = JSON(informOf!)
+                data.appendBodyPart(data: try! informJSON.rawData(), name: "inform_of")
             }
             let hostUserID = User.objects.hostUserID!
             data.appendBodyPart(data: hostUserID.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "user_id")

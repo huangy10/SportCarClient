@@ -41,9 +41,8 @@ class ClubBriefInfoController: UITableViewController {
             }
             for data in clubJson["members"].arrayValue {
                 // 添加成员
-                if let user = User.objects.create(data).value where !self.targetClub.members.contains(user){
-                    self.targetClub.addMember(user)
-                }
+                let user = User.objects.getOrCreate(data)
+                self.targetClub.addMember(user)
             }
             self.tableView.reloadData()
             }) { (code) -> () in

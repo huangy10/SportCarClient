@@ -44,7 +44,7 @@ class FansSelectController: UserSelectController {
     
     override func navLeftBtnPressed() {
         // dismiss self
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -66,9 +66,9 @@ class FansSelectController: UserSelectController {
         requester.getFansList(targetUser!.userID!, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
             if let fansJSONData = data?.arrayValue {
                 for json in fansJSONData {
-                    let user = User.objects.create(json).value
-                    user?.recentStatusDes = json["recent_status_des"].string
-                    self.fans.append(user!)
+                    let user = User.objects.getOrCreate(json)
+                    user.recentStatusDes = json["recent_status_des"].string
+                    self.fans.append(user)
                     self.fansDateThreshold = DateSTR(json["created_at"].stringValue)
                 }
                 if fansJSONData.count > 0 {
@@ -93,7 +93,9 @@ class UserSelectCellUnselectable: UserSelectCell {
     override func createSubviews() {
         super.createSubviews()
         selectBtn?.hidden = true
-        avatarImg?.snp_updateConstraints(closure: { (make) -> Void in
+        avatarImg?.snp_remakeConstraints(closure: { (make) -> Void in
+            make.centerY.equalTo(self.contentView)
+            make.size.equalTo(35)
             make.left.equalTo(self.contentView).offset(15)
         })
     }

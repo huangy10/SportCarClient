@@ -8,10 +8,10 @@
 
 import UIKit
 import SwiftyJSON
-import Mapbox
 import Cent
+import MapKit
 
-class ActivityDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource{
+class ActivityDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource, InlineUserSelectDelegate, FFSelectDelegate{
     weak var parentTableView: UITableView?
     
     var act: Activity!
@@ -28,6 +28,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
     var responseToRow: Int = -1
     var atUser: [String] = []
     var responseToPrefixStr = ""
+    var toast: UIView?
     
     init(act: Activity) {
         super.init(nibName: nil, bundle: nil)
@@ -41,7 +42,6 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
-//        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -57,6 +57,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         requester.getActivityDetail(act.activityID!, onSuccess: { (json) -> () in
             self.act.loadValueFromJSON(json!)
             self.actInfoBoard.act = self.act
+            self.commentPanel.setLikedAnimated(self.act.liked, flag: false)
             self.boardHeight = self.actInfoBoard.loadDataAndUpdateUI()
             self.actInfoBoard.frame = CGRectMake(0, -self.boardHeight, self.tableView.frame.width, self.boardHeight)
             self.tableView.contentInset = UIEdgeInsetsMake(self.boardHeight, 0, self.commentPanel.barheight, 0)
@@ -89,6 +90,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         actInfoBoard = ActivityDetailBoardView()
         actInfoBoard.frame = self.view.bounds
         actInfoBoard.hostAvatar.addTarget(self, action: "hostAvatarPressed", forControlEvents: .TouchUpInside)
+        actInfoBoard.memberDisplay.delegate = self
         //
         tableView.addSubview(actInfoBoard)
         tableView.separatorStyle = .None
@@ -97,6 +99,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         self.inputFields.append(commentPanel.contentInput)
         commentPanel.contentInput?.delegate = self
         self.view.addSubview(commentPanel)
+        commentPanel.likeBtn?.addTarget(self, action: "likeBtnPressed", forControlEvents: .TouchUpInside)
         commentPanel.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -116,7 +119,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: isMineAct ? LS("关闭") : LS("报名"), style: .Done, target: self, action: "navRightBtnPressed")
+        let rightItem = UIBarButtonItem(title: isMineAct ? LS("关闭活动") : LS("报名"), style: .Done, target: self, action: "navRightBtnPressed")
         rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }
@@ -141,7 +144,6 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
             requester.closeActivty(act.activityID!, onSuccess: { (json) -> () in
                 // 成功以后修改活动的状态
                 self.act.endAt = NSDate()
-                Activity.objects.save()
                 self.parentTableView?.reloadData()
                 // 更新UI
                 self.actInfoBoard.loadDataAndUpdateUI()
@@ -189,6 +191,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
             let cell = tableView.dequeueReusableCellWithIdentifier(MapCell.reuseIdentifier, forIndexPath: indexPath) as! MapCell
             let center = CLLocationCoordinate2D(latitude: act.location_y, longitude: act.location_x)
             cell.setMapCenter(center)
+            cell.locBtn.addTarget(self, action: "needNavigation", forControlEvents: .TouchUpInside)
             cell.locLbl.text = LS("导航至 ") + (act.location_des ?? LS("未知地点"))
             return cell
         }
@@ -199,6 +202,45 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
             return ActivityCommentCell.heightForComment(comments[indexPath.row].content!)
         }else{
             return 250
+        }
+    }
+    
+    func inlineUserSelectShouldDeleteUser(user: User) {
+        let requester = ActivityRequester.requester
+        requester.activityOperation(act.activityID!, targetUserID: user.userID!, opType: "apply_deny", onSuccess: { (json) -> () in
+            self.act.applicant.remove(user)
+            self.boardHeight = self.actInfoBoard.loadDataAndUpdateUI()
+            self.actInfoBoard.frame = CGRectMake(0, -self.boardHeight, self.tableView.frame.width, self.boardHeight)
+            self.tableView.contentInset = UIEdgeInsetsMake(self.boardHeight, 0, self.commentPanel.barheight, 0)
+            self.actInfoBoard.backMaskView.setNeedsDisplay()
+            }) { (code) -> () in
+                print(code)
+        }
+    }
+    
+    func inlineUserSelectNeedAddMembers() {
+        let select = FFSelectController()
+        select.delegate = self
+        select.selectedUsers.appendContentsOf(act.applicant)
+        let wrapper = BlackBarNavigationController(rootViewController: select)
+        self.presentViewController(wrapper, animated: true, completion: nil)
+    }
+    
+    func userSelectCancelled() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func userSelected(users: [User]) {
+        // send invitation to those guys
+        self.dismissViewControllerAnimated(true, completion: nil)
+        let requester = ActivityRequester.requester
+        let userIDs = users.map { return $0.userID! }
+        let userIDData = try! JSON(userIDs).rawData()
+        let userJSONString = String(data: userIDData, encoding: NSUTF8StringEncoding)
+        requester.activityOperation(act.activityID!, targetUserID: userJSONString!, opType: "invite", onSuccess: { (json) -> () in
+            self.showToast(LS("邀请已发送"))
+            }) { (code) -> () in
+                self.showToast(LS("邀请发送失败，请坚持您的网络状况"))
         }
     }
 }
@@ -241,8 +283,12 @@ extension ActivityDetailController {
         }
         let requester = ActivityRequester.requester
         requester.sendActivityComment(act.activityID!, content: content, image: image, responseTo: responseToComment?.commentID, informOf: atUser, onSuccess: { (json) -> () in
-            let newCommentID = json!.stringValue
+            let newCommentID = json!["id"].stringValue
             ActivityComment.objects.confirmSent(newComment, commentID: newCommentID)
+            // update the comment number
+            let commentNum = json!["comment_num"].int32Value
+            self.act.commentNum = commentNum
+            self.actInfoBoard.commentNumLbl.text = "\(commentNum)"
             }) { (code) -> () in
                 print(code)
         }
@@ -313,6 +359,49 @@ extension ActivityDetailController {
     func hostAvatarPressed() {
         let detail = PersonOtherController(user: act.user!)
         self.navigationController?.pushViewController(detail, animated: true)
+    }
+    
+    func likeBtnPressed() {
+        ActivityRequester.requester.activityOperation(act.activityID!, targetUserID: "", opType: "like", onSuccess: { (json) -> () in
+            let liked = json!["liked"].boolValue
+            let likeNum = json!["like_num"].int32Value
+            self.actInfoBoard.setLikeIconState(liked)
+            self.actInfoBoard.likeNumLbl.text = "\(likeNum)"
+            self.commentPanel.setLikedAnimated(liked)
+            }) { (code) -> () in
+                print(code)
+        }
+    }
+    
+    func needNavigation() {
+        toast = self.showConfirmToast(LS("跳转到地图导航?"), target: self, confirmSelector: "openMapToNavigate", cancelSelector: "hideToast")
+    }
+    
+    func hideToast() {
+        if toast != nil {
+            self.hideToast(toast!)
+        }
+    }
+    
+    func openMapToNavigate() {
+        self.hideToast(toast!)
+        let param = BMKNaviPara()
+        let end = BMKPlanNode()
+        let center = CLLocationCoordinate2D(latitude: act.location_y, longitude: act.location_x)
+        end.pt = center
+        let targetName = act.location_des
+        end.name = targetName
+        param.endPoint = end
+        param.appScheme = "baidumapsdk://mapsdk.baidu.com"
+        let res = BMKNavigation.openBaiduMapNavigation(param)
+        if res.rawValue != 0 {
+            // 如果没有安装百度地图，则打开自带地图
+            let target = MKMapItem(placemark: MKPlacemark(coordinate: center, addressDictionary: nil))
+            target.name = targetName
+            let options: [String: AnyObject] = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
+                MKLaunchOptionsMapTypeKey: NSNumber(unsignedInteger: MKMapType.Standard.rawValue)]
+            MKMapItem.openMapsWithItems([target], launchOptions: options)
+        }
     }
 }
 

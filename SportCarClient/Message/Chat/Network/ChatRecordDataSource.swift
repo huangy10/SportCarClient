@@ -87,7 +87,7 @@ class ChatRecordDataSource {
             for data in json!["chats"].arrayValue {
                 let semaphore = dispatch_semaphore_create(0)
                 let newRecord = ChatRecord.objects.getOrCreateEmpty(data["chatID"].stringValue)
-                newRecord.loadValueFromJSON(data)
+                newRecord.loadValueFromJSON(data, ctx: ChatRecord.objects.context)
                 // 创建对应的消息
                 let identifier = getIdentiferForChatRecord(newRecord)
                 //
@@ -96,15 +96,15 @@ class ChatRecordDataSource {
                 }else{
                     let newRecords = ChatRecordList()
                     if newRecord.chat_type == "private" {
-                        var target_user = User.objects.create(data["sender"], ctx: ChatRecord.objects.context).value
+                        var target_user = User.objects.getOrCreate(data["sender"], ctx: ChatRecord.objects.context)
                         let host = User.objects.hostUser(ChatRecord.objects.context)
-                        if target_user?.userID == host?.userID {
-                            target_user = newRecord.targetUser
+                        if target_user.userID == host?.userID {
+                            target_user = newRecord.targetUser!
                         }
-                        newRecords._item = ChatRecordListItem.UserItem(target_user!)
+                        newRecords._item = ChatRecordListItem.UserItem(target_user)
                     }else {
-                        let target_club = Club.objects.getOrCreate(data["target_club"])
-                        newRecords._item = ChatRecordListItem.ClubItem(target_club!)
+                        let target_club = Club.objects.getOrCreate(data["target_club"], ctx: ChatRecord.objects.context)
+                        newRecords._item = ChatRecordListItem.ClubItem(target_club)
                     }
                     newRecords.appendContentsOf([newRecord])
                     self.chatRecords[identifier] = newRecords
@@ -135,7 +135,8 @@ class ChatRecordDataSource {
             // 解析聊天设置
             for data in json!["club_settings"].arrayValue {
                 let clubID = data["club"]["id"].stringValue
-                if let club = Club.objects.getOrLoad(clubID) {
+                if let club = Club.objects.getOrLoad(clubID, ctx: ChatRecord.objects.context) {
+                    club.memberNum = data["club"]["members_num"].int32Value
                     club.clubJoining?.updateFromJson(data)
                     // 其他设置消息需呀单独手动配置
                     club.onlyHostInvites = data["club"]["only_host_can_invite"].boolValue
@@ -145,7 +146,7 @@ class ChatRecordDataSource {
             // 个人聊天设置
             for data in json!["private_settings"].arrayValue {
                 let userID = data["target_id"].stringValue
-                if let user = User.objects.getOrLoad(userID) {
+                if let user = User.objects.getOrLoad(userID, ctx: ChatRecord.objects.context) {
                     user.remarkName = data["remarkName"].string
                 }
             }
@@ -173,19 +174,19 @@ class ChatRecordDataSource {
             for data in json!.arrayValue {
                 let chatType = data["chat_type"].stringValue
                 if chatType == "private" {
-                    let user = User.objects.create(data["user"]).value
-                    let identifier = getIdentifierForIdPair(user!.userID!, User.objects.hostUser(ChatRecord.objects.context)!.userID!)
+                    let user = User.objects.getOrCreate(data["user"])
+                    let identifier = getIdentifierForIdPair(user.userID!, User.objects.hostUser(ChatRecord.objects.context)!.userID!)
                     if let records = self.chatRecords[identifier] {
                         records.unread = data["unread"].intValue
                         self.totalUnreadNum += records.unread
                     }else{
                         let newRecords = ChatRecordList()
-                        newRecords._item = ChatRecordListItem.UserItem(user!)
+                        newRecords._item = ChatRecordListItem.UserItem(user)
                         newRecords.unread = data["unread"].intValue
                         self.totalUnreadNum += newRecords.unread
                     }
                 }else {
-                    let club = Club.objects.getOrCreate(data["club"])!
+                    let club = Club.objects.getOrCreate(data["club"])
                     let identifier = club.clubID!
                     if let records = self.chatRecords[identifier] {
                         records.unread = data["unread"].intValue
@@ -231,18 +232,17 @@ class ChatRecordDataSource {
                 }else{
                     let newRecords = ChatRecordList()
                     if newRecord.chat_type == "private" {
-                        let target_user = User.objects.create(data["sender"]).value
-                        newRecords._item = ChatRecordListItem.UserItem(target_user!)
+                        let target_user = User.objects.getOrCreate(data["sender"], ctx: ChatRecord.objects.context)
+                        newRecords._item = ChatRecordListItem.UserItem(target_user)
                     }else {
-                        let target_club = Club.objects.getOrCreate(data["target_club"])
-                        newRecords._item = ChatRecordListItem.ClubItem(target_club!)
+                        let target_club = Club.objects.getOrCreate(data["target_club"], ctx: ChatRecord.objects.context)
+                        newRecords._item = ChatRecordListItem.ClubItem(target_club)
                     }
                     newRecords.appendContentsOf([newRecord])
                     self.chatRecords[identifier] = newRecords
                     newRecords.unread = 1
                     self.totalUnreadNum += 1
                 }
-//                self.chatRecords[identifier]?.appendContentsOf([newRecord])
                 if newRecord.messageType == "audio"{
                     // 如果是音频数据的话直接开始下载
                     self.requester.download_audio_file_async( newRecord, onComplete: { (record, localURL) -> () in
@@ -298,7 +298,7 @@ class ChatRecordDataSource {
         for data in json.arrayValue {
             let semaphore = dispatch_semaphore_create(0)
             let newRecord = ChatRecord.objects.getOrCreateEmpty(data["chatID"].stringValue)
-            newRecord.loadValueFromJSON(data)
+            newRecord.loadValueFromJSON(data, ctx: ChatRecord.objects.context)
             //
             let identifier = getIdentiferForChatRecord(newRecord)
             //
@@ -307,14 +307,14 @@ class ChatRecordDataSource {
             }else{
                 let newRecords = ChatRecordList()
                 if newRecord.chat_type == "private" {
-                    var target_user = User.objects.create(data["sender"]).value
-                    if target_user?.userID == User.objects.hostUserID {
-                        target_user = newRecord.targetUser
+                    var target_user = User.objects.getOrCreate(data["sender"])
+                    if target_user.userID == User.objects.hostUserID {
+                        target_user = newRecord.targetUser!
                     }
-                    newRecords._item = ChatRecordListItem.UserItem(target_user!)
+                    newRecords._item = ChatRecordListItem.UserItem(target_user)
                 }else {
                     let target_club = Club.objects.getOrCreate(data["target_club"])
-                    newRecords._item = ChatRecordListItem.ClubItem(target_club!)
+                    newRecords._item = ChatRecordListItem.ClubItem(target_club)
                 }
                 newRecords.addAtFirst(newRecord)
                 self.chatRecords[identifier] = newRecords

@@ -9,11 +9,11 @@
 import UIKit
 import SnapKit
 import CoreLocation
-import Mapbox
 import Cent
+import Dollar
 
 
-class StatusReleaseController: InputableViewController, StatusReleasePhotoSelectDelegate, CLLocationManagerDelegate, MGLMapViewDelegate, FFSelectDelegate {
+class StatusReleaseController: InputableViewController, StatusReleasePhotoSelectDelegate, FFSelectDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate {
     /*
     ================================================================================================ 子控件
     */
@@ -38,11 +38,12 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
     /// 跑车选择列表
     var sportCarList: SportCarSelectListController?
     /// 地图控件
-    var mapView: MGLMapView?
+    var mapView: BMKMapView!
     var locationDesInput: UITextField?
-    
-    var locationManager: CLLocationManager?
-    var userLocAnn: MGLPointAnnotation?
+    var locationService: BMKLocationService?
+    var userLocation: BMKUserLocation?
+    var locSearch: BMKGeoCodeSearch?
+    var annotation: BMKPointAnnotation!
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -58,14 +59,28 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        locationManager = CLLocationManager()
-        locationManager?.delegate = self
-        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager?.requestAlwaysAuthorization()
-        locationManager?.startUpdatingLocation()
-        
+        locationService = BMKLocationService()
+        locationService?.allowsBackgroundLocationUpdates = true
+        locationService?.startUserLocationService()
+        locSearch = BMKGeoCodeSearch()
+
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardAppears:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardDisappears:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        locationService?.delegate = self
+        mapView.viewWillAppear()
+        mapView.delegate = self
+        locSearch?.delegate = self
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        mapView.viewWillDisappear()
+        mapView.delegate = nil
+        locSearch?.delegate = nil
     }
     
     override func createSubviews() {
@@ -184,11 +199,7 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
             make.height.equalTo(60)
         }
         //
-        mapView = MGLMapView(frame: CGRectZero, styleURL: kMapStyleURL)
-        mapView?.allowsScrolling = false
-        mapView?.allowsZooming = false
-        mapView?.allowsRotating = false
-        mapView?.delegate = self
+        mapView = BMKMapView()
         board?.addSubview(mapView!)
         mapView?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(superview)
@@ -239,7 +250,8 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
         for view in board!.subviews {
             contentRect = CGRectUnion(contentRect, view.frame)
         }
-        board?.contentSize = CGSizeMake(self.view.frame.width, contentRect.height - 60)
+        print(mapView.frame)
+        board?.contentSize = CGSizeMake(self.view.frame.width, contentRect.height)
         UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
             self.view.layoutIfNeeded()
             }, completion: nil)
@@ -265,12 +277,15 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
         let content = statusContentInput?.text ?? ""
         let selectedImages = addImagePanelDataSource!.images
         let car_id = sportCarList?.selectedCar?.carID
-        let lat: Double? = userLocAnn?.coordinate.latitude
-        let lon: Double? = userLocAnn?.coordinate.longitude
+        let lat: Double? = userLocation?.location.coordinate.latitude
+        let lon: Double? = userLocation?.location.coordinate.longitude
         let loc_description = locationDesInput?.text == "" ? "未知未知" : locationDesInput!.text
         let requester = StatusRequester.SRRequester
         let toast = self.showStaticToast(LS("发布中..."))
-        requester.postNewStatus(content, images: selectedImages, car_id: car_id, lat: lat, lon: lon, loc_description: loc_description, onSuccess: { (let data) -> () in
+        let informUserIds = informOfUsers.map { (user) -> String in
+            return user.userID!
+        }
+        requester.postNewStatus(content, images: selectedImages, car_id: car_id, lat: lat, lon: lon, loc_description: loc_description, informOf: informUserIds, onSuccess: { (let data) -> () in
             self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
             self.home?.followStatusCtrl.loadLatestData()
             self.hideToast(toast)
@@ -303,7 +318,6 @@ extension StatusReleaseController {
     }
     
     func autoSetImageSelectPanelSize() {
-//        print(addImagePanel?.collectionViewLayout.collectionViewContentSize())
         addImagePanel?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(addImagePanel!.collectionViewLayout.collectionViewContentSize())
         })
@@ -338,6 +352,12 @@ extension StatusReleaseController {
     
     func userSelected(users: [User]) {
         informOfUsers.appendContentsOf(users)
+        informOfUsers = $.uniq(informOfUsers, by: { (user: User) -> String in
+            return user.userID!
+        })
+        informOfList?.users = informOfUsers
+        informOfList?.collectionView?.reloadData()
+        informOfListCountLbl?.text = "\(informOfUsers.count)/9"
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
@@ -346,36 +366,38 @@ extension StatusReleaseController {
 // MARK: - About map
 extension StatusReleaseController {
     
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        print(status)
-    }
-    
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = locations.last!
-        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        mapView?.setCenterCoordinate(center, zoomLevel: 12, animated: true)
-        if userLocAnn == nil {
-            userLocAnn = MGLPointAnnotation()
-            userLocAnn?.title = "hahahhaha"
-            userLocAnn?.coordinate = center
-            mapView?.addAnnotation(userLocAnn!)
+    func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
+        self.userLocation = userLocation
+        // 只需要获取当前的数据
+        locationService?.stopUserLocationService()
+
+        self.userLocation = userLocation
+        annotation = BMKPointAnnotation()
+        annotation.coordinate = userLocation.location.coordinate
+        mapView.addAnnotation(annotation)
+        mapView.setCenterCoordinate(userLocation.location.coordinate, animated: true)
+        mapView.zoomLevel = 12
+        // reverse geo code search after getting the position
+        let option = BMKReverseGeoCodeOption()
+        option.reverseGeoPoint = userLocation.location.coordinate
+        let res = locSearch!.reverseGeoCode(option)
+        if !res {
+            self.showToast(LS("无法获取当前位置信息"))
         }
-        locationManager?.stopUpdatingLocation()
     }
     
-    func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
-//        return nil
-        var annotationImage = mapView.dequeueReusableAnnotationImageWithIdentifier("user_current_location")
-        
-        if annotationImage == nil {
-            annotationImage = MGLAnnotationImage(image: UIImage(named: "map_default_marker")!, reuseIdentifier: "user_current_location")
+    func mapView(mapView: BMKMapView!, viewForAnnotation annotation: BMKAnnotation!) -> BMKAnnotationView! {
+        let view = UserSelectAnnotationView(annotation: annotation, reuseIdentifier: "user_location")
+        view.annotation = annotation
+        return view
+    }
+    
+    func onGetReverseGeoCodeResult(searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
+        if error == BMK_SEARCH_NO_ERROR {
+            locationDesInput!.text = result.address
+        } else {
+            self.showToast(LS("无法获取当前位置信息"))
         }
-        
-        return annotationImage
-    }
-    
-    func mapView(mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
-        return true
     }
     
 }

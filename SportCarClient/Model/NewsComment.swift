@@ -30,30 +30,24 @@ class NewsComment: NSManagedObject {
      - parameter json: json数据
      - parameter news: 被评论的news
      */
-    func loadDataFronJSON(json: JSON, commentedNews: News) {
+    func loadFronJSON(json: JSON, commentedNews: News, ctx: DataContext? = nil) {
         content = json["content"].string
         image = json["image"].string
         createdAt = DateSTR(json["created_at"].string)
         if let commentToID = json["response_to__id"].string {
-            commentTo = NewsComment.objects.getOrCreate(commentToID)
+            commentTo = ctx?.newsComments.first({$0.commentID == commentToID})
         }else{
             commentTo = nil
         }
         news = commentedNews
         let userJSON = json["user"]
-        // 跨了context，需要处理一下
-        let addUser = User.objects.create(userJSON).value
-        user = self.managedObjectContext?.objectWithID(addUser!.objectID) as? User
+        user = User.objects.getOrCreate(userJSON, ctx: ctx)
     }
 }
 
 
-class NewsCommentManager {
-    /// 本Manager使用的context，和news的manager使用同一个context
-    var context : DataContext = News.objects.context
-    
-    /// 评论池
-    var comments: [String: NewsComment] = [:]
+class NewsCommentManager: ModelManager {
+
     /// 尚未发布到的服务器的评论，故这里面的评论还并不具有服务器分配的id，故以数组形式储存。当发送成功以后对应的评论会被移出该list。正常网络情况下，评论对象只会在创建后和完成发送之间的很短时间内在这里驻留。当网络情况不佳时，所有未能提交给服务器的评论内容都会缓存在这里，当网络可以使用时再发送
     var unSentComments: [NewsComment] = []
     
@@ -66,32 +60,13 @@ class NewsCommentManager {
      
      - returns: Comment对象
      */
-    func getOrCreate(commentID: String) -> NewsComment {
-        if let comment = comments[commentID] {
-            return comment
-        }
+    func getOrCreate(json: JSON, news: News, ctx: DataContext? = nil) -> NewsComment {
+        let context = ctx ?? defaultContext
+        let commentID = json["commentID"].stringValue
+        assert(commentID != "")
         let newComment = context.newsComments.firstOrCreated( {$0.commentID == commentID} )
-        comments[commentID] = newComment
+        newComment.loadFronJSON(json, commentedNews: news, ctx: ctx)
         return newComment
-    }
-    
-    /**
-     对一组json组的数据处理，返回读取的comment对象数组
-     
-     - parameter jsons: json数组
-     - parameter news:  对应的news
-     
-     - returns: comment对象数组
-     */
-    func createOrUpdate(jsons: [JSON], news: News) -> [NewsComment] {
-        var result = [NewsComment]()
-        for json in jsons {
-            let commentID = json["commentID"].stringValue
-            let newComment = NewsComment.objects.getOrCreate(commentID)
-            newComment.loadDataFronJSON(json, commentedNews: news)
-            result.append(newComment)
-        }
-        return result
     }
     
     /**
@@ -107,7 +82,7 @@ class NewsCommentManager {
     func postNewCommentToNews(news: News, commentString: String, responseToComment: NewsComment?, atString: String?, ctx: DataContext? = nil) -> NewsComment {
         // 获取当前context下hostUser对象
         let hostUser = User.objects.hostUser(ctx)
-        let newComment = context.newsComments.createEntity()
+        let newComment = defaultContext.newsComments.createEntity()
         newComment.createdAt = NSDate()
         newComment.user = hostUser
         newComment.content = commentString
@@ -131,6 +106,5 @@ class NewsCommentManager {
         comment.alreaySent = true
         comment.commentID = commentID
         unSentComments.remove(comment)
-        comments[commentID] = comment
     }
 }

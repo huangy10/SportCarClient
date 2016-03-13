@@ -251,7 +251,8 @@ extension AccountRequester {
             if json["success"].boolValue {
                 onSuccess(json[dataFieldName])
             }else{
-                onError(code: json["code"].string)
+                let code = json["code"].string ?? json["message"].string
+                onError(code: code)
             }
             break
         }

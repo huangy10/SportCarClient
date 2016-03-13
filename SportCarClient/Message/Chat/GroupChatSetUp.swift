@@ -118,9 +118,8 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
             let newClub = Club.objects.getOrCreate(json!)
             //
             let kingfisherCache = KingfisherManager.sharedManager.cache
-            kingfisherCache.storeImage(self.logoImage!, forKey: SFURL(newClub!.logo_url!)!.absoluteString)
-
-            self.delegate?.groupChatSetupControllerDidSuccessCreatingClub(newClub!)
+            kingfisherCache.storeImage(self.logoImage!, forKey: SFURL(newClub.logo_url!)!.absoluteString)
+            self.delegate?.groupChatSetupControllerDidSuccessCreatingClub(newClub)
             }) { (code) -> () in
                 self.displayAlertController(LS("创建群聊失败"), message: nil)
                 print(code)

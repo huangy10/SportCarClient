@@ -7,16 +7,15 @@
 //
 
 import UIKit
-import Mapbox
 
 
-class ActivityReleaseMapCell: UITableViewCell, MGLMapViewDelegate {
+class ActivityReleaseMapCell: UITableViewCell {
     
     static let reuseIdentifier = "activity_release_map_cell"
     
-    var map: MGLMapView!
+    var map:BMKMapView!
     var locInput: UITextField!
-    var mapAnno: MGLPointAnnotation?
+    var mapAnno: BMKPointAnnotation!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -27,15 +26,17 @@ class ActivityReleaseMapCell: UITableViewCell, MGLMapViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        map.viewWillDisappear()
+    }
+    
     func createSubviews() {
         let superview = self.contentView
         superview.backgroundColor = UIColor.whiteColor()
         //
-        map = MGLMapView(frame: CGRectZero, styleURL: kMapStyleURL)
+        map = BMKMapView()
         superview.addSubview(map)
-        map.scrollEnabled = false
-        map.rotateEnabled = false
-        map.delegate = self
+        map.viewWillAppear()
         map.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(self)
         }
@@ -70,6 +71,13 @@ class ActivityReleaseMapCell: UITableViewCell, MGLMapViewDelegate {
             make.centerY.equalTo(locInputContainer)
             make.right.equalTo(locInputContainer).offset(-15)
         }
+        // 
+        let marker = UIImageView(image: UIImage(named: "map_default_marker"))
+        superview.addSubview(marker)
+        marker.snp_makeConstraints { (make) -> Void in
+            make.center.equalTo(map)
+            make.size.equalTo(CGSizeMake(38, 74))
+        }
         //
         locInput = UITextField()
         locInput.textColor = UIColor.blackColor()
@@ -77,24 +85,4 @@ class ActivityReleaseMapCell: UITableViewCell, MGLMapViewDelegate {
         wrapper.addSubview(locInput)
         locInput.autoresizingMask = [.FlexibleHeight , .FlexibleWidth]
     }
-    
-    func setMapCenter(center: CLLocationCoordinate2D) {
-        map.setCenterCoordinate(center, zoomLevel: 12, animated: true)
-        if mapAnno == nil {
-            mapAnno = MGLPointAnnotation()
-            mapAnno?.coordinate = center
-            map.addAnnotation(mapAnno!)
-        }
-    }
-    
-    func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
-        var annotationImage = mapView.dequeueReusableAnnotationImageWithIdentifier("user_current_location")
-        
-        if annotationImage == nil {
-            annotationImage = MGLAnnotationImage(image: UIImage(named: "map_default_marker")!, reuseIdentifier: "user_current_location")
-        }
-        
-        return annotationImage
-    }
-    
 }

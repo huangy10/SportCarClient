@@ -22,7 +22,7 @@ class NewsDetailCommentCell: DetailCommentCell {
         }
         let user = data.user!
         let hostUser = User.objects.hostUser()
-        if user.isEqualToSimple(hostUser!) {
+        if user.userID == hostUser?.userID {
             replyBtn?.hidden = true
         }else{
             replyBtn?.hidden = false

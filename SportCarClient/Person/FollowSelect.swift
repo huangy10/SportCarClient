@@ -45,7 +45,7 @@ class FollowSelectController: UserSelectController {
     
     override func navLeftBtnPressed() {
         // dismiss self
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -68,10 +68,9 @@ class FollowSelectController: UserSelectController {
             print(data)
             if let fansJSONData = data?.arrayValue {
                 for json in fansJSONData {
-                    let user = User.objects.create(json).value
-                    user?.recentStatusDes = json["recent_status_des"].string
-                    print(user?.avatarUrl)
-                    self.follows.append(user!)
+                    let user = User.objects.getOrCreate(json)
+                    user.recentStatusDes = json["recent_status_des"].string
+                    self.follows.append(user)
                     self.followsDateThreshold = DateSTR(json["created_at"].stringValue)
                 }
                 if fansJSONData.count > 0 {

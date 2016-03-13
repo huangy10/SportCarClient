@@ -7,18 +7,15 @@
 //
 
 import UIKit
-import Mapbox
 
-
-class MapCell: UITableViewCell, MGLMapViewDelegate {
+class MapCell: UITableViewCell {
     
     static let reuseIdentifier = "user_usable_map_cell"
     
-    var map: MGLMapView!
+    var map: BMKMapView!
     var locBtn: UIButton!
     var locLbl: UILabel!
-    
-    var mapAnno: MGLPointAnnotation?
+    var loc: CLLocationCoordinate2D?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -34,11 +31,8 @@ class MapCell: UITableViewCell, MGLMapViewDelegate {
     }
     
     func createSubviews() {
-        map = MGLMapView(frame: CGRectZero, styleURL: kMapStyleURL)
+        map = BMKMapView()
         self.contentView.addSubview(map)
-        map.scrollEnabled = false
-        map.rotateEnabled = false
-        map.delegate = self
         map.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(self.contentView)
         }
@@ -76,24 +70,19 @@ class MapCell: UITableViewCell, MGLMapViewDelegate {
             make.centerY.equalTo(locDesContainer)
             make.right.equalTo(locDesContainer).offset(-15)
         }
+        //
+        let marker = UIImageView(image: UIImage(named: "map_default_marker"))
+        self.contentView.addSubview(marker)
+        marker.snp_makeConstraints { (make) -> Void in
+            make.center.equalTo(map)
+            make.size.equalTo(CGSizeMake(38, 74))
+        }
     }
     
     func setMapCenter(center: CLLocationCoordinate2D) {
-        map.setCenterCoordinate(center, zoomLevel: 12, animated: true)
-        if mapAnno == nil {
-            mapAnno = MGLPointAnnotation()
-            mapAnno?.coordinate = center
-            map.addAnnotation(mapAnno!)
-        }
+        loc = center
+        map.zoomLevel = 12
+        map.setCenterCoordinate(center, animated: true)
     }
     
-    func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
-        var annotationImage = mapView.dequeueReusableAnnotationImageWithIdentifier("user_current_location")
-        
-        if annotationImage == nil {
-            annotationImage = MGLAnnotationImage(image: UIImage(named: "map_default_marker")!, reuseIdentifier: "user_current_location")
-        }
-        
-        return annotationImage
-    }
 }

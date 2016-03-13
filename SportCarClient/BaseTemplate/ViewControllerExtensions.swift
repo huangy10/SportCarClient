@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Spring
 
 extension UIViewController {
     
@@ -136,4 +137,92 @@ extension UIViewController {
                 toast.removeFromSuperview()
         }
     }
+    
+    /**
+     Display a toast to ask for permisson
+     
+     - parameter message:   Message content to be displayed
+     */
+    func showConfirmToast(message: String, target: AnyObject, confirmSelector: Selector, cancelSelector: Selector) -> UIView {
+        let container = UIView()
+        let containerWidth = UIScreen.mainScreen().bounds.width * 0.5
+        container.backgroundColor = UIColor(red: 0.067, green: 0.051, blue: 0.051, alpha: 1)
+        
+        let staticLbl = UILabel()
+        staticLbl.font = UIFont.systemFontOfSize(14)
+        staticLbl.textColor = UIColor.whiteColor()
+        staticLbl.text = message
+        staticLbl.numberOfLines = 0
+        container.addSubview(staticLbl)
+        staticLbl.snp_makeConstraints { (make) -> Void in
+            make.left.equalTo(container).offset(20)
+            make.right.equalTo(container).offset(-20)
+            make.top.equalTo(container).offset(15)
+        }
+        let lblHeight = staticLbl.sizeThatFits(CGSizeMake(containerWidth - 40, CGFloat.max)).height
+        
+        let confirmBtn = UIButton()
+        confirmBtn.addTarget(target, action: confirmSelector, forControlEvents: .TouchUpInside)
+        confirmBtn.setTitle(LS("确定"), forState: .Normal)
+        confirmBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
+        confirmBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        container.addSubview(confirmBtn)
+        confirmBtn.snp_makeConstraints { (make) -> Void in
+            make.size.equalTo(CGSizeMake(74, 43))
+            make.bottom.equalTo(container)
+            make.right.equalTo(container).offset(-10)
+        }
+        //
+        let cancelBtn = UIButton()
+        cancelBtn.addTarget(self, action: cancelSelector, forControlEvents: .TouchUpInside)
+        cancelBtn.setTitle(LS("取消"), forState: .Normal)
+        cancelBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), forState: .Normal)
+        cancelBtn.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        container.addSubview(cancelBtn)
+        cancelBtn.snp_makeConstraints { (make) -> Void in
+            make.centerY.equalTo(confirmBtn)
+            make.size.equalTo(CGSizeMake(74, 43))
+            make.right.equalTo(confirmBtn.snp_left)
+        }
+        
+        let superview = self.view
+        superview.addSubview(container)
+        container.snp_makeConstraints { (make) -> Void in
+            make.width.equalTo(containerWidth)
+            make.height.equalTo(lblHeight + 44)
+            make.top.equalTo(superview.snp_bottom)
+            make.centerX.equalTo(superview)
+        }
+        
+        superview.updateConstraints()
+        superview.layoutIfNeeded()
+        
+        container.snp_remakeConstraints { (make) -> Void in
+            make.width.equalTo(containerWidth)
+            make.height.equalTo(lblHeight + 64)
+            make.top.equalTo(superview).offset(150)
+            make.centerX.equalTo(superview)
+        }
+        
+        SpringAnimation.spring(0.5) { () -> Void in
+            self.view.layoutIfNeeded()
+        }
+        
+        return container
+    }
+    
+    func hideConfirmToast(toast: UIView) {
+        self.view.layoutIfNeeded()
+        let superview = self.view
+        toast.snp_updateConstraints { (make) -> Void in
+            make.top.equalTo(superview).offset(-UIScreen.mainScreen().bounds.height - 30)
+        }
+        
+        SpringAnimation.springWithCompletion(0.5, animations: { () -> Void in
+            self.view.layoutIfNeeded()
+            }) { (_) -> Void in
+                toast.removeFromSuperview()
+        }
+    }
+    
 }

@@ -32,7 +32,7 @@ class Club: NSManagedObject {
         city = json["city"].string
         let hostJson = json["host"]
         if hostJson["userID"].stringValue != "" {
-            host = User.objects.create(hostJson, ctx: ctx).value
+            host = User.objects.getOrCreate(hostJson, ctx: ctx)
         }
         let memberNum = json["members_num"].int32Value
         if memberNum > 0 {
@@ -41,21 +41,15 @@ class Club: NSManagedObject {
         if let showMembers = json["show_members_to_public"].bool {
             show_members = showMembers
         }
+        if let onlyHostInvites = json["only_host_can_invite"].bool {
+            self.onlyHostInvites = onlyHostInvites
+        }
     }
 }
 
 
-class ClubManager {
-    
-    let defaultContext = User.objects.defaultContext
-    
-    func saveAll(context: DataContext) {
-        do {
-            try context.save()
-        } catch let error {
-            print(error)
-        }
-    }
+class ClubManager: ModelManager {
+
     /**
      获取内存中或者coredata中存储的数据或者创建新的记录
      
@@ -63,12 +57,10 @@ class ClubManager {
      
      - returns: Club
      */
-    func getOrCreate(json: JSON, ctx: DataContext? = nil) -> Club?{
+    func getOrCreate(json: JSON, ctx: DataContext? = nil) -> Club{
         let context = ctx ?? defaultContext
         let clubID = json["id"].stringValue
-        if clubID == "" {
-            return nil
-        }
+        assert(clubID != "")
         let club = context.clubs.firstOrCreated { $0.clubID == clubID }
         club.loadValueFromJSON(json, ctx: context)
         club.clubJoining = context.clubJoinings.firstOrCreated({$0.clubID == clubID})

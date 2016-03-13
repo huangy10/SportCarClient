@@ -318,7 +318,7 @@ extension PersonMineInfoController {
             // 
             let targetUser = self.user
             let car = selectedCar.car
-            targetUser.setAvatarCarTpoProfile(car!)
+            targetUser.setAvatarCar(car!)
             self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 1)], withRowAnimation: .Automatic)
             }) { (code) -> () in
                 
@@ -334,7 +334,7 @@ extension PersonMineInfoController {
         requester.profileModifiy(["avatar_club": selectedClub.clubID!], onSuccess: { (data) -> () in
             //
             let targetUser = self.user
-            targetUser.setAvatarClubToProfile(selectedClub)
+            targetUser.setAvatarClub(selectedClub)
             self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 2, inSection: 1)], withRowAnimation: .Automatic)
             }) { (code) -> () in
                 

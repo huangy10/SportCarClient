@@ -18,6 +18,10 @@ class Status: NSManagedObject {
     
     /// Status的管理器
     static let objects = StatusManager()
+    
+    var coverImage: String? {
+        return image?.split(";").first()
+    }
 }
 
 
@@ -29,10 +33,11 @@ extension Status {
      
      - parameter json: json数据
      */
-    func loadDataFromJSON(json: JSON) {
+    func loadDataFromJSON(json: JSON, ctx: DataContext? = nil) {
         if json["statusID"].stringValue != self.statusID! {
             assertionFailure("Integrity Error")
         }
+        let context = ctx ?? Status.objects.defaultContext
         self.content = json["content"].string
         self.createdAt = DateSTR(json["created_at"].stringValue)
         self.image = json["images"].string
@@ -44,36 +49,18 @@ extension Status {
         self.location_y = locationJSON["lat"].double ?? 0
         self.location_des = locationJSON["description"].string
         
-        let carJSON = json["car"] as JSON
-        if let car = SportCar.objects.create(carJSON).value {
-            self.car = Status.objects.context.objectWithID(car.objectID) as? SportCar
+        let carJSON = json["car"]
+        if !carJSON.isEmpty {
+            car = SportCar.objects.getOrCreate(carJSON, ctx: context)
         }
-        
         let userJSON = json["user"]
-        if let user = User.objects.create(userJSON).value {
-            self.user = user
-        }else{
-            assertionFailure("Integrity Error")
-        }
-//        content = json["content"].string
-//        createdAt = DateSTR(json["created_at"].string)
-//        image = json["image"].string
-//        likeNum = json["like_num"].int32 ?? 0
-//        commentNum = json["comment_num"].int32 ?? 0
-//        let location = json["location"]
-//        location_des = location["description"].string
-//        location_x = location["lon"].double ?? 0
-//        location_y = location["lat"].double ?? 0
-//        
-//        statusID = location["statusID"].string
+        user = User.objects.getOrCreate(userJSON, ctx: context)
     }
 }
 
 class StatusManager {
-    /// 内存池中维持的状态集
-    var status: [String: Status] = [:]
     
-    let context = User.objects.defaultContext
+    let defaultContext = User.objects.defaultContext
 }
 
 
@@ -88,15 +75,13 @@ extension StatusManager {
      
      - returns: 返回生成的状态，以及这个状态是否是构造的
      */
-    func getOrCreate(json: JSON, ctx: DataContext? = nil) -> (Status?, Bool){
+    func getOrCreate(json: JSON, ctx: DataContext? = nil) -> Status{
+        let context = ctx ?? defaultContext
         let statusID = json["statusID"].stringValue
-        if let s = status[statusID] {
-            s.loadDataFromJSON(json)
-            return (s, false)
-        }
+        assert(statusID != "")
         let s = context.statuses.firstOrCreated({ $0.statusID == statusID })
-        s.loadDataFromJSON(json)
-        return (s, true)
+        s.loadDataFromJSON(json, ctx: context)
+        return s
     }
     /**
      获取或者创建一个新的Status实例
@@ -105,71 +90,22 @@ extension StatusManager {
      
      - returns: 返回一个二元组，第一个元素是获取或者生成的Status实例，第二个元素表征这个实例是否是生成的
      */
-    func getOrCreateEmpty(statusID: String, initial: JSON? = nil) -> (Status?, Bool){
-        if let s = status[statusID] {
-            if initial != nil {
-                s.loadDataFromJSON(initial!)
-            }
-            return (s, false)
-        }
+    func getOrCreateEmpty(statusID: String, initial: JSON? = nil, ctx: DataContext? = nil) -> (Status?, Bool){
+        let context = ctx ?? defaultContext
+        
         if let s = context.statuses.first({$0.statusID == statusID}) {
             if initial != nil {
-                s.loadDataFromJSON(initial!)
+                s.loadDataFromJSON(initial!, ctx: context)
             }
             return (s, false)
         }else{
             let s = context.statuses.createEntity()
             s.statusID = statusID
             if initial != nil {
-                s.loadDataFromJSON(initial!)
+                s.loadDataFromJSON(initial!, ctx: context)
             }
             return (s, false)
         }
     }
-    
-    /**
-     将当前context里面的内容全部保存
-     
-     - returns: 是否保存成功
-     */
-    func save() -> Bool {
-        do {
-            try context.save()
-        }catch let err {
-            print(err)
-            return false
-        }
-        return true
-    }
 }
-
-
-
-// MARK: - 这个扩展用来从内存中获取数据
-extension StatusManager {
-    
-    /**
-     根据也用户和跑车来检索状态
-     
-     - parameter user: 检索的用户
-     - parameter car:  检索的车辆
-     
-     - returns: 返回查询结果
-     */
-    func statusList(forUser user: User?, aboutCar car: SportCar?) -> [Status]{
-        return []
-    }
-    
-    /**
-     根据用户检索状态
-     
-     - parameter user: 检索的用户
-     
-     - returns: 返回检索到的结果
-     */
-    func statusList(forUser user: User) -> [Status] {
-        return []
-    }
-}
-
 

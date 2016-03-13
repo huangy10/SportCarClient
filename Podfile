@@ -10,9 +10,8 @@ pod 'AlecrimCoreData', '~> 4.0'
 pod 'Dollar'
 pod 'Cent'
 pod 'SwiftyTimer'
-pod 'Mapbox-iOS-SDK'
 target 'SportCarClient' do
     pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
 end
 pod 'Spring', :git => 'https://github.com/MengTo/Spring.git', :branch => 'swift2'
-pod 'ImagePicker'
+pod 'BaiduMapKit'

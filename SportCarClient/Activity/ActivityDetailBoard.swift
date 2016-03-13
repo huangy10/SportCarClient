@@ -36,8 +36,9 @@ class ActivityDetailBoardView: UIView {
     var attendNumLbl: UILabel!  // 已报名
     var actTimeLbl: UILabel!
     var likeNumLbl: UILabel!
+    var likeIcon: UIImageView!
     var commentNumLbl: UILabel!
-    var memberDisplay: InlineUserSelectController!
+    var memberDisplay: InlineUserSelectDeletable!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -53,6 +54,8 @@ class ActivityDetailBoardView: UIView {
         superview.backgroundColor = UIColor.whiteColor()
         //
         actCover = UIImageView()
+        actCover.contentMode = .ScaleAspectFill
+        actCover.clipsToBounds = true
         superview.addSubview(actCover)
         actCover.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
@@ -69,10 +72,6 @@ class ActivityDetailBoardView: UIView {
         superview.addSubview(backMaskView)
         backMaskView.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(actCover)
-//            make.right.equalTo(superview)
-//            make.left.equalTo(superview)
-//            make.bottom.equalTo(actCover)
-//            make.height.equalTo(56)
         }
         editBtn = UIButton()
         editBtn.hidden = !showEditBtn
@@ -89,6 +88,7 @@ class ActivityDetailBoardView: UIView {
         actNameLbl = UILabel()
         actNameLbl.font = UIFont.systemFontOfSize(21, weight: UIFontWeightSemibold)
         actNameLbl.textColor = UIColor.blackColor()
+        actNameLbl.numberOfLines = 0
         superview.addSubview(actNameLbl)
         actNameLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(20)
@@ -103,7 +103,6 @@ class ActivityDetailBoardView: UIView {
         desLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(actNameLbl)
             make.top.equalTo(actNameLbl.snp_bottom).offset(10)
-//            make.right.lessThanOrEqualTo(superview).offset(-20)
         }
         //
         doneIcon = UIImageView(image: UIImage(named: "activity_done"))
@@ -240,7 +239,7 @@ class ActivityDetailBoardView: UIView {
             make.centerY.equalTo(commentIcon)
         }
         //
-        let likeIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
+        likeIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
         superview.addSubview(likeIcon)
         likeIcon.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(likeNumLbl.snp_left).offset(-4)
@@ -248,7 +247,7 @@ class ActivityDetailBoardView: UIView {
             make.size.equalTo(15)
         }
         //
-        memberDisplay = InlineUserSelectController()
+        memberDisplay = InlineUserSelectDeletable()
         superview.addSubview(memberDisplay.view)
         memberDisplay.view.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
@@ -315,15 +314,12 @@ class ActivityDetailBoardView: UIView {
         commentNumLbl.text = "\(act.commentNum)"
         // 点赞数量
         likeNumLbl.text = "\(act.likeNum)"
+        setLikeIconState(act.liked)
         // 
-        let joins = act.applicant
-        var users = joins.map { (a) -> User in
-            return a.user
-        }
-        users.insert(host!, atIndex: 0)
+        let users = act.applicant
         memberDisplay.users = users
         memberDisplay.collectionView?.reloadData()
-        let memberDisplayHeight = UIScreen.mainScreen().bounds.width / 4 * CGFloat((users.count + (memberDisplay.showDeleteBtn ? 2 : 1) + 1) / 4)
+        let memberDisplayHeight = UIScreen.mainScreen().bounds.width / 4 * CGFloat((users.count + (memberDisplay.showDeleteBtn ? 2 : 1) - 1) / 4 + 1)
         memberDisplay.view.snp_updateConstraints { (make) -> Void in
             make.height.equalTo(memberDisplayHeight)
         }
@@ -341,11 +337,11 @@ class ActivityDetailBoardView: UIView {
         return contentRect.height + 20
     }
     
-    func editBtnPressed() {
-        
+    func setLikeIconState(flag: Bool) {
+        likeIcon.image = flag ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
     }
     
-    func hostAvatarPressed() {
+    func editBtnPressed() {
         
     }
 }

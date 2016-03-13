@@ -51,7 +51,7 @@ class ChatRecord: NSManagedObject {
         self.chat_type = json["chat_type"].string
         self.textContent = json["text_content"].string
         let userJSON = json["sender"]
-        self.sender = User.objects.create(userJSON, ctx: ChatRecord.objects.context).value
+        sender = User.objects.getOrCreate(userJSON, ctx: ctx)
         if sender?.userID == User.objects.hostUser(ctx)?.userID {
             self.read = true
         }
@@ -63,10 +63,7 @@ class ChatRecord: NSManagedObject {
         self.messageType = json["message_type"].string
         self.read = json["read"].bool ?? false
         if chat_type == "private" && targetID != nil{
-            targetUser = User.objects.getOrLoad(targetID!, ctx: ChatRecord.objects.context)
-            if targetUser == nil {
-                targetUser = User.objects.create(json["target_user"], ctx: ChatRecord.objects.context).value
-            }
+            targetUser = User.objects.getOrCreate(json["target_user"], ctx: ctx)
         } else if chat_type == "group" && targetID != nil {
             targetClub = Club.objects.getOrLoad(targetID!, ctx: ChatRecord.objects.context)
             if targetClub == nil {
@@ -88,7 +85,7 @@ class ChatRecord: NSManagedObject {
 }
 
 class ChatRecoardManager {
-    let context = DataContext()
+    let context = DataContext(parentDataContext: User.objects.defaultContext)
     
     var unSentRecord: [ChatRecord] = []
     

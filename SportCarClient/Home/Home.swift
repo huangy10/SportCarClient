@@ -79,8 +79,7 @@ class HomeController: UIViewController, HomeDelegate {
                 return
             }
             // 将获取到的数据设置给hostUser
-            self.hostUser?.loadValueFromJSONWithProfile(data!)
-//            self.hostUser?.loadValueFromJSON(data!, forceUpdateNil: true)
+            self.hostUser?.loadFromJSON(data!, ctx: nil, basic: false)
             User.objects.saveAll()
             // 令侧边栏更新数据
             self.reloadData()
@@ -243,5 +242,11 @@ extension HomeController {
         }
         // hideSideBar()
     }
-
+    
+    override func didReceiveMemoryWarning() {
+        print("bafjwhfopiwehfoi")
+        if board.tag != 3 {
+            radar = nil
+        }
+    }
 }

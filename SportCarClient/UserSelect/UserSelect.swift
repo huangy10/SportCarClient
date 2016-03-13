@@ -188,9 +188,9 @@ extension UserSelectController {
         cell.recentStatusLbL?.text = user.recentStatusDes
         
         cell.selectBtn?.tag = indexPath.row
-        if selectedUsers.contains(user) {
+        if selectedUsers.filter({$0.userID == user.userID}).count > 0 {
             cell.selectBtn?.selected = true
-        }else{
+        } else {
             cell.selectBtn?.selected = false
         }
         cell.onSelect = { (let sender) in
@@ -292,12 +292,14 @@ class UserSelectCell: UITableViewCell {
         selectBtn?.setImage(UIImage(named: "status_photo_unselected_small"), forState: .Normal)
         selectBtn?.setImage(UIImage(named: "status_photo_selected_small"), forState: .Selected)
         selectBtn?.addTarget(self, action: "selectBtnPressed", forControlEvents: .TouchUpInside)
+        selectBtn?.contentEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5)
         selectBtn?.selected = false
         superview.addSubview(selectBtn!)
         selectBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.centerY.equalTo(superview)
             make.left.equalTo(superview).offset(15)
-            make.size.equalTo(22.5)
+//            make.size.equalTo(22.5)
+            make.size.equalTo(32.5)
         })
         //
         avatarImg = UIImageView()
@@ -307,7 +309,7 @@ class UserSelectCell: UITableViewCell {
         avatarImg?.clipsToBounds = true
         avatarImg?.snp_makeConstraints(closure: { (make) -> Void in
             make.centerY.equalTo(superview)
-            make.left.equalTo(selectBtn!.snp_right).offset(10)
+            make.left.equalTo(selectBtn!.snp_right).offset(5)
             make.size.equalTo(35)
         })
         //

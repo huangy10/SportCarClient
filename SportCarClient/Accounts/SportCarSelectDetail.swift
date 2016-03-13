@@ -89,6 +89,7 @@ class SportCarSelectDetailController: UIViewController, SportCarBrandSelecterCon
     
     // MARK: Navigation设置
     func navigationBarSettings() {
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = NSLocalizedString("补充信息", comment: "")
         self.navigationItem.leftBarButtonItem = navBarLeftBtn()
         self.navigationItem.rightBarButtonItem = navBarRigthBtn()

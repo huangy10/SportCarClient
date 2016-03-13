@@ -24,6 +24,8 @@ class StatusDeleteController: PresentTemplateViewController {
     var deleteBtn: UIButton!
     var status: Status!
     
+    weak var toast: UIView?
+    
     override func createContent() {
         deleteBtn = UIButton()
         deleteBtn.setTitle(LS("删除"), forState: .Normal)
@@ -39,6 +41,11 @@ class StatusDeleteController: PresentTemplateViewController {
     }
     
     func deleteBtnPressed() {
+        toast = showConfirmToast(LS("确认删除这条状态吗？"), target: self, confirmSelector: "deleteConfirmed", cancelSelector: "deleteCancelled")
+    }
+    
+    func deleteConfirmed() {
+        hideConfirmToast(toast!)
         let requester = StatusRequester.SRRequester
         let waitSignal = dispatch_semaphore_create(0)
         requester.deleteStatus(status.statusID!, onSuccess: { (json) -> () in
@@ -51,5 +58,9 @@ class StatusDeleteController: PresentTemplateViewController {
         dispatch_semaphore_wait(waitSignal, DISPATCH_TIME_FOREVER)
         delegate?.statusDidDeleted()
         hideAnimated()
+    }
+    
+    func deleteCancelled() {
+        hideConfirmToast(toast!)
     }
 }

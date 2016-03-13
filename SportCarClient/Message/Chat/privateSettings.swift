@@ -29,6 +29,8 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     var startGroupChatBtn: UIButton?
     var startChat: UIButton?
     
+    var toast: UIView?
+    
     init(targetUser: User) {
         super.init(style: .Plain)
         self.targetUser = targetUser
@@ -60,7 +62,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
             self.seeHisStatus = data!["see_his_status"].boolValue
             self.tableView.reloadData()
             }) { (code) -> () in
-                //
+                print(code)
         }
     }
     
@@ -71,12 +73,12 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         leftBtn.frame = CGRectMake(0, 0, 9, 15)
         leftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
-        let rightBtn = UIButton()
-        rightBtn.setImage(UIImage(named: "status_detail_other_operation"), forState: .Normal)
-        rightBtn.imageView?.contentMode = .ScaleAspectFit
-        rightBtn.frame = CGRectMake(0, 0, 21, 21)
-        rightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
+//        let rightBtn = UIButton()
+//        rightBtn.setImage(UIImage(named: "status_detail_other_operation"), forState: .Normal)
+//        rightBtn.imageView?.contentMode = .ScaleAspectFit
+//        rightBtn.frame = CGRectMake(0, 0, 21, 21)
+//        rightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
     }
     
     func navRightBtnPressed() {
@@ -103,7 +105,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         case 0:
             return 1
         case 1:
-            return 3
+            return 2
         case 2:
             return 2
         case 3:
@@ -120,12 +122,6 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
             return 50
         }
     }
-//    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        if section == 0{
-//            return nil
-//        }
-//        return kPrivateChatSettingSectionTitles[section]
-//    }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
@@ -146,10 +142,10 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
             cell.avatarImage.kf_setImageWithURL(SFURL(targetUser.avatarUrl!)!)
             return cell
         case 1:
-            if indexPath.row < 2 {
+            if indexPath.row < 1 {
                 let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
                 cell.selectionStyle = .None
-                cell.staticLbl.text = [LS("备注"), LS("把他推荐给朋友")][indexPath.row]
+                cell.staticLbl.text = LS("备注")
                 cell.boolSelect.hidden = true
                 if indexPath.row == 0 {
                     cell.infoLbl.text = targetUser.remarkName ?? targetUser.nickName
@@ -160,6 +156,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                 cell.selectionStyle = .None
                 if startGroupChatBtn == nil {
                     startGroupChatBtn = UIButton()
+                    startGroupChatBtn?.addTarget(self, action: "startGroupChatPressed", forControlEvents: .TouchUpInside)
                     startGroupChatBtn?.setImage(UIImage(named: "chat_settings_add_person"), forState: .Normal)
                     cell.contentView.addSubview(startGroupChatBtn!)
                     startGroupChatBtn?.snp_makeConstraints(closure: { (make) -> Void in
@@ -225,7 +222,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         case 0:
             return 114
         case 1:
-            if indexPath.row < 2 {
+            if indexPath.row < 1 {
                 return 50
             }else {
                 return 105
@@ -245,7 +242,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     
     func startGroupChatPressed() {
         userSelectPurpose = "group_chat"
-        let selector = FFSelectController()
+        let selector = FFSelectController(maxSelectNum: 100, preSelectedUsers: [targetUser])
         let nav = BlackBarNavigationController(rootViewController: selector)
         selector.delegate = self
         self.presentViewController(nav, animated: true, completion: nil)
@@ -267,6 +264,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
 extension PrivateChatSettingController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
         switch indexPath.section {
         case 0:
             // 点击头像进入个人详情
@@ -281,6 +279,13 @@ extension PrivateChatSettingController {
             detail.propertyName = LS("修改备注")
             detail.initValue = targetUser.remarkName ?? targetUser.nickName
             self.navigationController?.pushViewController(detail, animated: true)
+        case 3:
+            if indexPath.row == 0 {
+                toast = showConfirmToast(LS("确定要清除聊天信息吗？"), target: self, confirmSelector: "clearChatContent", cancelSelector: "hideToast")
+            } else if indexPath.row == 1 {
+                let report = ReportBlacklistViewController(parent: self)
+                self.presentViewController(report, animated: false, completion: nil)
+            }
             break
         default:
             break
@@ -356,5 +361,11 @@ extension PrivateChatSettingController {
      */
     func searchChatContent() {
         
+    }
+    
+    func hideToast() {
+        if toast != nil {
+            hideToast(toast!)
+        }
     }
 }

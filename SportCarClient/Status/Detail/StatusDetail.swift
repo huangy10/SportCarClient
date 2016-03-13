@@ -13,6 +13,10 @@ import SwiftyJSON
 
 
 class StatusDetailController: InputableViewController, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate {
+    
+    var list: UITableView?
+    var indexPath: NSIndexPath?
+    
     var status: Status?
     var statusImages: [String] = []
     var comments: [StatusComment] = []
@@ -185,6 +189,9 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     
     func backBtnPressed() {
         self.navigationController?.popViewControllerAnimated(true)
+        if list != nil || indexPath != nil {
+            list?.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
+        }
     }
     
     func navRightBtnPressed() {
@@ -592,9 +599,11 @@ extension StatusDetailController {
         requestingCommentData = true
         let requester = StatusRequester.SRRequester
         let dateThreshold = comments.last()?.createdAt ?? NSDate()
-        requester.getMoreStatusComment(dateThreshold, statusID: status!.statusID!, onSuccess: { (let data) -> () in
-            let newComments = StatusComment.objects.getOrCreateBatch(data!.arrayValue, status: self.status!)
-            self.comments.appendContentsOf(newComments)
+        requester.getMoreStatusComment(dateThreshold, statusID: status!.statusID!, onSuccess: { (json) -> () in
+            for data in json!.arrayValue {
+                let newComment = StatusComment.objects.getOrCreate(data, status: self.status!)
+                self.comments.append(newComment)
+            }
             self.reorgnizeComments()
             self.commentList?.reloadData()
             self.autoSetBoardContentSize(true)
@@ -676,6 +685,7 @@ extension StatusDetailController {
         requester.likeStatus(status!.statusID!, onSuccess: { (json) -> () in
             self.status?.likeNum = json!["like_num"].int32Value
             let liked = json!["like_state"].boolValue
+            self.status?.liked = liked
             self.commentPanel?.setLikedAnimated(liked)
             self.likeNumLbl?.text = "\(self.status!.likeNum)"
             self.likeIcon?.image = liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")

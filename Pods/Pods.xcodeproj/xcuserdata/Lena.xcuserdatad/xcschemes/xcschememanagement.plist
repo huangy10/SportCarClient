@@ -24,16 +24,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>ImagePicker-ImagePicker.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>ImagePicker.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Kingfisher.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -77,12 +67,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>059879557C54A732FE7AC7BB1EF61AEB</key>
+		<key>1E8A0AF69B710D4CD910894CE53A16A9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0733652B04064A1841477D3EF38C1DFA</key>
+		<key>1EF9C7AA200537B8F763C4B179BB3C4D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -92,22 +82,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>32D021F12246C95447B2ABA30D63BB5A</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>3D1C7076CEC45E3F09AADDCDFF443692</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>421170F3DEC968511AE379093B2551FE</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>454B3E9A6602CC0A6E641A525A8F9075</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -117,27 +92,32 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>69A5DE078A5636F5981A378D76D0E3C8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>79C040AFDDCE1BCBF6D8B5EB0B85887F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>938515F0F434D7468FCB8A15DA8B6925</key>
+		<key>7ABBC59C445DD745B522ABF74045EEAB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A917DA9C45D7893094FDCD6B60C44BD3</key>
+		<key>81153D63AC02DAE999C117BDF350316E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D001DE49152FF44ED8E5FD8B382C4DB7</key>
+		<key>91E790DC3F61117B7342520BF67A5678</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>ED0DBB1358E8CE39F1E33CF8C2063335</key>
+		<key>A48CFC556CC512017E4FDD460F6CF088</key>
 		<dict>
 			<key>primary</key>
 			<true/>

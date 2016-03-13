@@ -26,12 +26,14 @@ func activityTimeDes(act: Activity) -> String{
 
 class Activity: NSManagedObject {
     
-    var applicant = [ActivityJoin]()
+    var applicant = [User]()
+    
+    var liked: Bool = false
 
 // Insert code here to add functionality to your managed object subclass
     static let objects = ActivityManager()
     
-    func loadValueFromJSON(json: JSON) {
+    func loadValueFromJSON(json: JSON, ctx: DataContext? = nil) {
         actDescription = json["description"].string
         createdAt = DateSTR(json["created_at"].string)
         startAt = DateSTR(json["start_at"].string)
@@ -43,6 +45,9 @@ class Activity: NSManagedObject {
         maxAttend = json["max_attend"].int32Value
         name = json["name"].string
         poster = json["poster"].string
+        if let liked = json["liked"].bool {
+            self.liked = liked
+        }
         if let likeNum = json["like_num"].int32 {
             self.likeNum = likeNum
         }
@@ -50,12 +55,12 @@ class Activity: NSManagedObject {
             self.commentNum = commentNum
         }
         let userJSON = json["user"]
-        self.user = User.objects.create(userJSON).value
+        user = User.objects.getOrCreate(userJSON, ctx: ctx)
         let applicants = json["apply_list"].arrayValue
         if applicants.count > 0 {
             applicant.removeAll()
             for x in applicants {
-                applicant.append(ActivityJoin(json: x))
+                applicant.append(User.objects.getOrCreate(x["user"]))
             }
         }
     }
@@ -71,7 +76,7 @@ class Activity: NSManagedObject {
         }
         var index = 0
         for a in self.applicant {
-            if a.user.userID == host.userID {
+            if a.userID == host.userID {
                 // 当前用户已经报名了这个活动
                 applicant.removeAtIndex(index)
                 return
@@ -79,59 +84,20 @@ class Activity: NSManagedObject {
             index += 1
         }
         // 循环完毕到这里意味着当前用户没有报名这个活动
-        let join = ActivityJoin(user: host)
-        applicant.append(join)
+        applicant.append(host)
     }
 }
 
-class ActivityManager {
+class ActivityManager: ModelManager {
     
     /// 没有发送的活动
     var unSentActs: [Activity] = []
     
-    let context = User.objects.defaultContext
-    
-    func getOrCreate(json: JSON) -> Activity{
+    func getOrCreate(json: JSON, ctx: DataContext? = nil) -> Activity{
+        let context = ctx ?? defaultContext
         let actID = json["actID"].stringValue
         let act = context.activities.firstOrCreated({ $0.activityID == actID })
-        act.loadValueFromJSON(json)
-        save()
+        act.loadValueFromJSON(json, ctx: context)
         return act
-    }
-    
-    func save() -> Bool{
-        do {
-            try context.save()
-            return true
-        } catch _{
-            return false
-        }
-    }
-}
-
-/// 这个类不放在coredata中了
-class ActivityJoin {
-    var user: User!
-    var approved: Bool = true
-    var applyAt: NSDate!
-    
-    let context = Activity.objects.context
-    
-    init(json: JSON) {
-        loadValueFromJSON(json)
-    }
-    
-    convenience init(user: User) {
-        self.init(json: JSON([:]))
-        self.user = user
-        approved = true
-        applyAt = NSDate()
-    }
-    
-    func loadValueFromJSON(json: JSON) {
-        approved = json["approved"].boolValue
-        applyAt = DateSTR(json["like_at"].string)!
-        let userJSON = json["user"]
-        user = User.objects.create(userJSON)
     }
 }

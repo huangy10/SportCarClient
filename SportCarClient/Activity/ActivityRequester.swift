@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 import CoreLocation
+import Alamofire
 
 
 class ActivityURLMaker: AccountURLMaker {
@@ -48,6 +49,10 @@ class ActivityURLMaker: AccountURLMaker {
     
     func closeActivity(actID: String) -> String{
         return website + "/activity/\(actID)/close"
+    }
+    
+    func activityOperation(actID: String) -> String {
+        return website + "/activity/\(actID)/operation"
     }
 }
 
@@ -139,7 +144,7 @@ class ActivityRequester: AccountRequester {
                             let json = JSON(value)
                             if json["success"].boolValue == true {
                                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    onSuccess(json["id"])
+                                    onSuccess(json["data"])
                                 })
                             }else{
                                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -283,5 +288,12 @@ class ActivityRequester: AccountRequester {
         manager.request(.POST, urlStr).responseJSON { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
         }
+    }
+    
+    func activityOperation(actID: String, targetUserID: String, opType: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request{
+        let url = ActivityURLMaker.sharedURLMaker.activityOperation(actID)
+        return manager.request(.POST, url, parameters: ["op_type": opType, "target_user": targetUserID]).responseJSON(completionHandler: { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
+        })
     }
 }

@@ -36,8 +36,8 @@ class AvatarClubSelectController: AvatarItemSelectController {
             var i = 0
             for data in json!.arrayValue {
                 let club = Club.objects.getOrCreate(data["club"])
-                self.clubs.append(club!)
-                if club?.clubID == self.user.profile?.avatarClubID {
+                self.clubs.append(club)
+                if club.clubID == self.user.profile?.avatarClubID {
                     self.selectedRow = i
                 }
                 i += 1

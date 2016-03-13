@@ -53,6 +53,10 @@ class ChatURLMaker {
         return website + "/club/\(clubID)/update"
     }
     
+    func clubMembers(clubID: String) -> String {
+        return website + "/club/\(clubID)/members"
+    }
+    
     func unreadInformation() -> String {
         return website + "/chat/unread"
     }
@@ -76,6 +80,7 @@ class ChatRequester: AccountRequester {
     static let requester = ChatRequester()
     
     let privateQueue = dispatch_queue_create("chat_update", DISPATCH_QUEUE_SERIAL)
+    let notificationQueue = dispatch_queue_create("notification_update", DISPATCH_QUEUE_SERIAL)
     let context = DataContext()
 
     
@@ -427,8 +432,21 @@ class ChatRequester: AccountRequester {
             "date_fix": dateFix
         ]
         return manager.request(.GET, url, parameters: params)
-            .response(queue: self.privateQueue, responseSerializer: Request.JSONResponseSerializer(options: .AllowFragments)) { (response) -> Void in
+            .response(queue: self.notificationQueue, responseSerializer: Request.JSONResponseSerializer(options: .AllowFragments)) { (response) -> Void in
                 self.resultValueHandler(response.result, dataFieldName: "notifications", onSuccess: onSuccess, onError: onError)
         }
+    }
+    
+    /**
+     变更俱乐部的成员
+     
+     - parameter members:   删除或者新增的成员的列表
+     - parameter opType:    add/delete
+     */
+    func updateClubMembers(clubID: String, members: [String], opType: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+        let url = ChatURLMaker.sharedMaker.clubMembers(clubID)
+        return manager.request(.POST, url, parameters: ["op_type": opType, "target_users": members], encoding: .JSON).responseJSON(completionHandler: { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
+        })
     }
 }

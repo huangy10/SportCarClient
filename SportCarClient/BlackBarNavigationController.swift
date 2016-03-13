@@ -17,6 +17,9 @@ class BlackBarNavigationController: UINavigationController {
         self.navigationBar.translucent = false
         self.navigationBar.barStyle = UIBarStyle.Black
         self.navigationBar.titleTextAttributes = [NSFontAttributeName: kBarTitleFont]
+        self.navigationBar.setBackgroundImage(UIImage(), forBarPosition: .Any, barMetrics: .Default)
+        self.navigationBar.shadowImage = UIImage()
+        self.navigationBar.backgroundColor = kBarBgColor
     }
     
     override init(rootViewController: UIViewController) {

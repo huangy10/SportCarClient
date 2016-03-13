@@ -14,30 +14,24 @@ import SwiftyJSON
 
 class StatusComment: NSManagedObject {
 
-// Insert code here to add functionality to your managed object subclass
     static let objects = StatusCommentManager()
     
-    func loadDataFromJSON(json: JSON, status: Status) {
+    func loadFromJSON(json: JSON, status: Status, ctx: DataContext? = nil) {
         if json["commentID"].stringValue != self.commentID {
             assertionFailure("Integrity Error")
         }
         content = json["content"].string
         createdAt = DateSTR(json["created_at"].stringValue)
         image = json["image"].string
-        user = User.objects.create(json["user"]).value
+        user = User.objects.getOrCreate(json["user"], ctx: ctx)
         self.status = status
-        
         // TODO: responseTo还没有处理
     }
 
 }
 
 
-class StatusCommentManager {
-    
-    let context = Status.objects.context
-    
-    var comments: [String: StatusComment] = [:]
+class StatusCommentManager: ModelManager {
     
     var unSentComments: [StatusComment] = []
     
@@ -49,30 +43,12 @@ class StatusCommentManager {
      
      - returns: 评论对象以及该对象是否是从内存中直接获取的
      */
-    func getOrCreate(json: JSON, status: Status) -> (StatusComment, Bool){
+    func getOrCreate(json: JSON, status: Status, ctx: DataContext? = nil) -> StatusComment{
+        let context = ctx ?? defaultContext
         let commentID = json["commentID"].stringValue
-        if let comment = comments[commentID] {
-            return (comment, false)
-        }
         let comment = context.statusComments.firstOrCreated({ $0.commentID == commentID})
-        comment.loadDataFromJSON(json, status: status)
-        return (comment, true)
-    }
-    
-    /**
-     批量创建状态评论
-     
-     - parameter jsons:  json数组
-     - parameter status: 对应的状态
-     
-     - returns: 评论数组
-     */
-    func getOrCreateBatch(jsons: [JSON], status: Status) -> [StatusComment] {
-        var result: [StatusComment] = []
-        for json in jsons {
-            result.append(getOrCreate(json, status: status).0)
-        }
-        return result
+        comment.loadFromJSON(json, status: status, ctx: context)
+        return comment
     }
     
     /**
@@ -87,7 +63,7 @@ class StatusCommentManager {
      */
     func postNewCommentToStatus(status: Status, commentString: String, responseToComment: StatusComment?, atString: String?) -> StatusComment {
         let hostUser = User.objects.hostUser()!
-        let newComment = context.statusComments.createEntity()
+        let newComment = defaultContext.statusComments.createEntity()
         newComment.createdAt = NSDate()
         newComment.user = hostUser
         newComment.content = commentString
@@ -111,13 +87,6 @@ class StatusCommentManager {
         comment.alreadySent = true
         comment.commentID = commentID
         unSentComments.remove(comment)
-        comments[commentID] = comment
-        
-        do{
-            try context.save()
-        }catch _ {
-            
-        }
     }
     
 }

@@ -76,7 +76,7 @@ class SportCarInfoCell: UICollectionViewCell{
         }
         //
         carEditBtn = UIButton()
-        carEditBtn.setTitle(LS("编辑"), forState: .Normal)
+        carEditBtn.setTitle(LS("认证"), forState: .Normal)
         carEditBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
         carEditBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         carEditBtn.addTarget(self, action: "carEditBtnPressed", forControlEvents: .TouchUpInside)

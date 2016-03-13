@@ -7,11 +7,10 @@
 //
 
 import UIKit
-import Mapbox
 import Kingfisher
 import SnapKit
 
-class PersonHeaderMine: UIView, MGLMapViewDelegate, CLLocationManagerDelegate {
+class PersonHeaderMine: UIView {
     // 绑定的相关用户
     var user: User!
     // 
@@ -26,10 +25,14 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate, CLLocationManagerDelegate {
     var statusNumLbl: UILabel!
     var fansNumLbl: UILabel!
     var followNumLbl: UILabel!
-    var map: MGLMapView!    // 地图
+    var map: BMKMapView!
     
     var navRightBtn: UIButton!      // 单独创建的类似导航栏的按钮，但是并不在导航栏中
     var navLeftBtn: UIButton!       // 同上
+    
+    var fanslistBtn: UIButton!
+    var followlistBtn: UIButton!
+    var statuslistBtn: UIButton!
     
     /// 是否自己抓取位置数据
     var locateYouself = true
@@ -45,10 +48,8 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate, CLLocationManagerDelegate {
     
     func createSubviews() {
         let superview = self
-        map = MGLMapView(frame: CGRectZero, styleURL: kMapStyleURL)
-        map.allowsRotating = false
-        map.allowsScrolling = false
-        map.delegate = self
+        map = BMKMapView()
+        map.backgroundColor = UIColor.blackColor()
         superview.addSubview(map)
         map.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
@@ -229,7 +230,30 @@ class PersonHeaderMine: UIView, MGLMapViewDelegate, CLLocationManagerDelegate {
             make.center.equalTo(navRightBtn)
             make.size.equalTo(20)
         }
-        
+        // 在粉丝和关注上方加一个透明按钮以实现点击进入粉丝列表
+        fanslistBtn = UIButton()
+        superview.addSubview(fanslistBtn)
+        fanslistBtn.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(fansNumLbl)
+            make.top.equalTo(fansNumLbl)
+            make.size.equalTo(44)
+        }
+        //
+        followlistBtn = UIButton()
+        superview.addSubview(followlistBtn)
+        followlistBtn.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(followNumLbl)
+            make.top.equalTo(followNumLbl)
+            make.size.equalTo(44)
+        }
+        //
+        statuslistBtn = UIButton()
+        superview.addSubview(statuslistBtn)
+        statuslistBtn.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(statusNumLbl)
+            make.top.equalTo(statusNumLbl)
+            make.size.equalTo(44)
+        }
     }
     
     func loadDataAndUpdateUI() {

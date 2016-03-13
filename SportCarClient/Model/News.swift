@@ -49,18 +49,15 @@ extension News {
     }
     
     func getLikeDescription() -> NSAttributedString{
-        let host = User.objects.hostUser()!
-        let currentLiked = host.isNewsLiked(self)
-        
         let gray = UIColor(white: 0.72, alpha: 1)
         let red = kHighlightedRedTextColor
         let font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
         var result: NSAttributedString
         if 0 == likeNum {
             result = NSAttributedString(string: LS("抢先来赞"), attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: gray])
-        }else if recentLikerName == nil && !currentLiked{
+        }else if recentLikerName == nil && !liked{
             result = NSAttributedString(string: "\(likeNum)" + LS("人赞了"), attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: gray])
-        }else if !currentLiked {
+        }else if !liked {
             let str = NSMutableAttributedString(string: "\(recentLikerName)\(LS("和其他"))\(likeNum-1)\(LS("人赞了"))", attributes: [NSFontAttributeName: font])
             str.addAttribute(NSForegroundColorAttributeName, value: red, range: NSMakeRange(0, recentLikerName!.length))
             str.addAttribute(NSForegroundColorAttributeName, value: gray, range: NSMakeRange(recentLikerName!.length, str.length - recentLikerName!.length))
@@ -79,29 +76,7 @@ extension News {
 
 
 /// News的管理器
-class NewsManager {
-    /// 本Mananger使用的context
-    let context = DataContext()
-    //
-    let privateContxt: DataContext
-    /// 内存池内的news
-    var news: [String: News] = [:]
-    
-    init() {
-        privateContxt = DataContext(parentDataContext: context)
-    }
-    
-    deinit {
-        do {
-            try context.save()
-        } catch _ {
-            assertionFailure()
-        }
-    }
-}
-
-// MARK: - JSON
-extension NewsManager {
+class NewsManager: ModelManager {
     
     /**
      创建的或者更新已有的news数据
@@ -110,43 +85,16 @@ extension NewsManager {
      
      - return: 返回创建成功的news
      */
-    func createOrUpdate(jsons: [JSON]) -> [News]{
+    func createOrUpdate(jsons: [JSON], ctx: DataContext? = nil) -> [News]{
+        let context = ctx ?? defaultContext
         var result = [News]()
         for json in jsons {
-            let newsID = "\(json["id"].stringValue)"
-            if let n = news[newsID] {
-                // 如果这一数据已经在内存中了，则更新之
-                n.loadValueFromJSON(json)
-                result.append(n)
-                continue
-            }
-            // 如果没在内存池中，则尝试从coreData中读取，coreData中也没有则创建的之
+            let newsID = json["id"].stringValue
+            assert(newsID != "")
             let n = context.news.firstOrCreated({$0.newsID == newsID})
             n.loadValueFromJSON(json)
-            // 更新内存池
-            news[newsID] = n
             result.append(n)
         }
         return result
-    }
-}
-
-// MARK: - 过期数据清理
-extension NewsManager {
-    
-    /**
-     这个函数清理coreData中的内容，将不再内存池中的数据清除
-     */
-    func clearCoreData() {
-
-        let newsIDs = Array(news.keys)
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
-            let predicate = NSPredicate(format: "newsID NOT IN %@", newsIDs)
-            do{
-                try self.privateContxt.news.filterUsingPredicate(predicate).delete()
-            }catch _ {
-                assertionFailure()
-            }
-        })
     }
 }

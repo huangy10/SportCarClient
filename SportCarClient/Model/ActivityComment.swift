@@ -21,14 +21,14 @@ class ActivityComment: NSManagedObject {
         content = json["content"].string
         createdAt = DateSTR(json["created_at"].string)
         image = json["image"].string
-        user = User.objects.create(json["user"]).value
+        user = User.objects.getOrCreate(json["user"])
         self.activity = act
     }
 
 }
 
 class ActivityCommentManager {
-    let context = Activity.objects.context
+    let context = Activity.objects.defaultContext
     
     /// 未发送成功的评论
     var unSentComments: [ActivityComment] = []
