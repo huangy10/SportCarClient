@@ -41,6 +41,8 @@ class ActivityHomeCell: UITableViewCell {
         let superview = container
         //
         actCover = UIImageView()
+        actCover.clipsToBounds = true
+        actCover.contentMode = .ScaleAspectFill
         superview.addSubview(actCover)
         actCover.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)

@@ -55,7 +55,8 @@ class MyOrderedDict<Key: Hashable, Value> {
      */
     func bringIndexToFront(index: Int, frontPos: Int = 0) {
         let count = self.count
-        if index >= count || frontPos >= count || index <= frontPos {
+        if index >= count || frontPos >= count || index < frontPos {
+            assertionFailure()
             return
         }
         let a = _keys[index]

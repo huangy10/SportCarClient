@@ -375,8 +375,8 @@ extension StatusReleaseController {
         annotation = BMKPointAnnotation()
         annotation.coordinate = userLocation.location.coordinate
         mapView.addAnnotation(annotation)
-        mapView.setCenterCoordinate(userLocation.location.coordinate, animated: true)
-        mapView.zoomLevel = 12
+        let region = BMKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 3000, 5000)
+        mapView.setRegion(region, animated: true)
         // reverse geo code search after getting the position
         let option = BMKReverseGeoCodeOption()
         option.reverseGeoPoint = userLocation.location.coordinate

@@ -159,7 +159,9 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
             cell.avatarImage.kf_setImageWithURL(SFURL(targetClub.logo_url!)!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
-                cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+                if error == nil {
+                    cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+                }
             })
             return cell
         case 1:

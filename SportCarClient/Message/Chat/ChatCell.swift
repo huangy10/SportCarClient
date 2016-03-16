@@ -230,7 +230,9 @@ class ChatCell: UITableViewCell {
                     return
                 }
                 bubbleImg?.kf_setImageWithURL(imageURL, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+                    if error == nil {
                     self.bubbleImg?.setupForImageViewer(imageURL, backgroundColor: UIColor.blackColor())
+                    }
                 })
             }
             let imageSize = chat?.imageSize

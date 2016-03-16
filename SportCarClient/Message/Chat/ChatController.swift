@@ -96,6 +96,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         chatRecords?.unread = 0
         //
         ChatCell.registerCellForTableView(talkBoard!)
+        talkBoard?.registerClass(UITableViewCell.self, forCellReuseIdentifier: "invisible_cell")
         // 添加键盘出现时时间的监听
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardAppears:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardDisappears:", name: UIKeyboardWillHideNotification, object: nil)
@@ -135,7 +136,6 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.bottom.equalTo(chatOpPanelController!.view.snp_top)
-//            make.height.equalTo(UIScreen.mainScreen().bounds.height - self.navigationController!.navigationBar.frame.height - 20 - 45)
             make.top.equalTo(superview)
         })
         refresh = UIRefreshControl()
@@ -224,21 +224,10 @@ extension ChatRoomController {
             dispatch_async(requester.privateQueue, { () -> Void in
                 let datasource = ChatRecordDataSource.sharedDataSource
                 datasource.parseHistoryFromServer(json!)
-                
             })
             }) { (code) -> () in
                 print(code)
         }
-    }
-    
-    /**
-     检查
-     
-     - returns: 载入的数量
-     */
-    func checkLocalChatStorage() -> Int{
-        // TODO: implement it
-        return 0
     }
 }
 
@@ -257,6 +246,9 @@ extension ChatRoomController {
         let record = chatRecords![indexPath.row]
         record.read = true
         let messageType = record.messageType!
+        if messageType == "placeholder" {
+            return tableView.dequeueReusableCellWithIdentifier("invisible_cell", forIndexPath: indexPath)
+        }
         let cell = tableView.dequeueReusableCellWithIdentifier(messageType, forIndexPath: indexPath) as! ChatCell
         let displayTimeMark: Bool = {
             if indexPath.row == 0 {
@@ -277,6 +269,9 @@ extension ChatRoomController {
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let record = chatRecords![indexPath.row]
+        if record.messageType == "placeholder" {
+            return 0
+        }
         return ChatCell.getContentHeightForChatRecord(record)
     }
 }

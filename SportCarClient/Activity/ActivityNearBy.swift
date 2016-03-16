@@ -37,6 +37,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         map.delegate = self
+        userLocation = nil
         locationService.delegate = self
         locationService.startUserLocationService()
     }
@@ -203,9 +204,10 @@ extension ActivityNearByController {
                 map.addAnnotation(userAnno!)
             }
             userAnno?.coordinate = userLocation.location.coordinate
-            map.zoomLevel = 12
+            let region = BMKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 3000, 5000)
+            map.setRegion(region, animated: true)
             map.setCenterCoordinate(userLocation.location.coordinate, animated: true)
-            ActivityRequester.requester.getNearByActivities(userLocation.location, queryDistance: 10, skip: 0, limit: 10, onSuccess: { (json) -> () in
+            ActivityRequester.requester.getNearByActivities(userLocation.location, queryDistance: 1000, skip: 0, limit: 10, onSuccess: { (json) -> () in
                 self.acts.removeAll()
                 for data in json!.arrayValue {
                     let act = Activity.objects.getOrCreate(data)

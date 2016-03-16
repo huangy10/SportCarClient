@@ -98,6 +98,7 @@ class ActivityReleaseCell: UITableViewCell {
         }
         staticInfoLabel = UILabel()
         staticInfoLabel.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        staticInfoLabel.userInteractionEnabled = false
         staticInfoLabel.textColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(staticInfoLabel)
         staticInfoLabel.snp_makeConstraints { (make) -> Void in

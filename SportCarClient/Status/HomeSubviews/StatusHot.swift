@@ -135,6 +135,8 @@ class StatusHotCell: UICollectionViewCell {
         let superview = self.contentView
         cover = UIImageView()
         superview.addSubview(cover)
+        cover.contentMode = .ScaleAspectFill
+        cover.clipsToBounds = true
         cover.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }

@@ -43,6 +43,8 @@ class ActivityNearByCell: UICollectionViewCell {
          superview = container
         //
         cover = UIImageView()
+        cover.contentMode = .ScaleAspectFill
+        cover.clipsToBounds = true
         superview.addSubview(cover)
         cover.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview)

@@ -288,9 +288,10 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         */
         let imageInfo = status!.image!
         statusImages = imageInfo.split(";")
-        mainCover?.kf_setImageWithURL(SFURL(statusImages[0])!)
         mainCover?.kf_setImageWithURL(SFURL(statusImages[0])!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
-            self.mainCover?.setupForImageViewer(SFURL(self.statusImages[0])!, backgroundColor: UIColor.blackColor())
+            if error == nil {
+                self.mainCover?.setupForImageViewer(SFURL(self.statusImages[0])!, backgroundColor: UIColor.blackColor())
+            }
         })
         if statusImages.count <= 1 {
             otherImgList?.reloadData()
@@ -332,8 +333,11 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StatusCellImageDisplayCell.reuseIdentifier, forIndexPath: indexPath) as! StatusCellImageDisplayCell
-        cell.imageView?.kf_setImageWithURL(SFURL(statusImages[indexPath.row + 1])!)
-        cell.imageView?.setupForImageViewer(SFURL(statusImages[indexPath.row + 1])!, backgroundColor: UIColor.blackColor())
+        cell.imageView?.kf_setImageWithURL(SFURL(statusImages[indexPath.row + 1])!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+            if error == nil {
+                cell.imageView?.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+            }
+        })
         return cell
     }
     

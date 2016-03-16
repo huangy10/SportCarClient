@@ -76,10 +76,12 @@ class ChatRecord: NSManagedObject {
     func getDescription() -> String {
         if messageType == "text" {
             return textContent!
-        }else if messageType == "image" {
+        } else if messageType == "image" {
             return LS("[图片]")
-        }else {
+        } else if messageType == "audio" {
             return LS("[语音]")
+        } else {
+            return ""
         }
     }
 }

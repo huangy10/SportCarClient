@@ -146,9 +146,9 @@ extension RadarDriverMapController {
             annotate.user = User.objects.hostUser()
             annotate.coordinate = userLocation.location.coordinate
             map.addAnnotation(annotate)
-            print(annotate.coordinate)
-            map.zoomLevel = 12
-            map.setCenterCoordinate(annotate.coordinate, animated: true)
+//            map.setCenterCoordinate(annotate.coordinate, animated: true)
+            let region = BMKCoordinateRegionMakeWithDistance(annotate.coordinate, 3000, 5000)
+            map.setRegion(region, animated: true)
             userAnnotate = annotate
         }
         self.userLocation = userLocation
@@ -166,11 +166,13 @@ extension RadarDriverMapController {
                 return cell
             } else {
                 var cell = mapView.dequeueReusableAnnotationViewWithIdentifier("user") as? UserAnnotationView
+                
                 if cell == nil {
                     cell = UserAnnotationView(annotation: userAnno, reuseIdentifier: "use")
                 } else {
                     cell?.annotation = userAnno
                 }
+                cell?.parent = self.radarHome
                 cell?.user = userAnno.user
                 return cell
             }

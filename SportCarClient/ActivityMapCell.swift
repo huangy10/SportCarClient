@@ -81,8 +81,10 @@ class MapCell: UITableViewCell {
     
     func setMapCenter(center: CLLocationCoordinate2D) {
         loc = center
-        map.zoomLevel = 12
-        map.setCenterCoordinate(center, animated: true)
+//        map.zoomLevel = 12
+//        map.setCenterCoordinate(center, animated: true)
+        let region = BMKCoordinateRegionMakeWithDistance(center, 3000, 5000)
+        map.setRegion(region, animated: true)
     }
     
 }

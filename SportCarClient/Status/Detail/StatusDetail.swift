@@ -583,7 +583,9 @@ extension StatusDetailController {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StatusCellImageDisplayCell.reuseIdentifier, forIndexPath: indexPath) as! StatusCellImageDisplayCell
         cell.imageView?.kf_setImageWithURL(SFURL(statusImages[indexPath.row + 1])!)
         cell.imageView?.kf_setImageWithURL(SFURL(statusImages[indexPath.row + 1])!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
-            cell.imageView?.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+            if error == nil {
+                cell.imageView?.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+            }
         })
         return cell
     }

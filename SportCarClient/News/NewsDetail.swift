@@ -198,7 +198,6 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         }
         sepLine.layer.opacity = 0
         newsDetailPanelView = UIWebView()
-        newsDetailPanelView?.userInteractionEnabled = false
         newsDetailPanelView?.delegate = self
         newsDetailPanelView?.paginationMode = .Unpaginated
         board?.addSubview(newsDetailPanelView!)
@@ -214,7 +213,8 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         newsDetailLoading = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
         newsDetailPanelView?.addSubview(newsDetailLoading!)
         newsDetailLoading?.snp_makeConstraints(closure: { (make) -> Void in
-            make.edges.equalTo(newsDetailPanelView!)
+            make.center.equalTo(newsDetailPanelView)
+            make.size.equalTo(44)
         })
         newsDetailLoading?.hidesWhenStopped = true
         newsDetailLoading?.startAnimating()
@@ -764,6 +764,9 @@ extension NewsDetailController {
     /**
      开始载入news.content制定的URL中的网页内容
      */
+    func tapTest() {
+        print("tapped")
+    }
     func startLoadWebContent() {
         guard let url = NSURL(string: news!.contentURL!) else{
             return
@@ -774,19 +777,18 @@ extension NewsDetailController {
 
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         newsDetailLoading?.startAnimating()
-        print(navigationType)
         return true
-//        switch navigationType{
-//        case .Other:
-//            return true
-//        default:
-//            return false
-//        }
     }
     
     func webViewDidFinishLoad(webView: UIWebView) {
         newsDetailLoading?.stopAnimating()
         reArrageWebViewFrames()
+    }
+    
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
+        if error == nil {
+            showToast(LS("无法获取资讯详情"))
+        }
     }
 }
 

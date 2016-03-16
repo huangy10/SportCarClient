@@ -35,6 +35,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     var mapCell: ActivityReleaseMapCell!
     var skipFirstLocFlag = true
     var locDescriptin: String?
+    var setCenterFlag: Bool = false
     var locInput: UITextField? {
         return mapCell.locInput
     }
@@ -255,27 +256,12 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             }
             return cell
         }else{
-//            let cell = tableView.dequeueReusableCellWithIdentifier(ActivityReleaseMapCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityReleaseMapCell
-//            // 添加进inputField
-//            var add = true
-//            for view in inputFields {
-//                if view == cell.locInput {
-//                    add = false
-//                    break
-//                }
-//            }
-//            if add {
-//                inputFields.append(cell.locInput)
-//                cell.locInput.delegate = self
-//
-//                if userLocation != nil {
-//                    cell.map.setCenterCoordinate(userLocation!, animated: true)
-//                    cell.map.delegate = self
-//                }
-//                if locDescriptin != nil {
-//                    locInput?.text = locDescriptin
-//                }
-//            }
+            if !setCenterFlag && self.userLocation != nil {
+                let region = BMKCoordinateRegionMakeWithDistance(self.userLocation!, 3000, 5000)
+                setCenterFlag = true
+                mapView?.setRegion(region, animated: true)
+            }
+            
             return mapCell
         }
     }
@@ -400,8 +386,8 @@ extension ActivityReleaseController {
     func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
         locationService?.stopUserLocationService()
         self.userLocation = userLocation.location.coordinate
-        mapView?.zoomLevel = 12
-        mapView?.setCenterCoordinate(userLocation.location.coordinate, animated: false)
+        let region = BMKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 3000, 5000)
+        mapView?.setRegion(region, animated: true)
         mapView?.delegate = self
     }
     
@@ -472,7 +458,8 @@ extension ActivityReleaseController {
         poster = image
         let btn = board.posterBtn
         btn.setTitle("", forState: .Normal)
-        btn.setBackgroundImage(image, forState: .Normal)
+        btn.setImage(image, forState: .Normal)
+        board.posterLbl.hidden = true
     }
 }
 

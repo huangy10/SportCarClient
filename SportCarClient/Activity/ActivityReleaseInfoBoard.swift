@@ -13,6 +13,7 @@ class ActivityReleaseInfoBoard: UIView {
     var releaser: ActivityReleaseController!
     
     var posterBtn: UIButton!
+    var posterLbl: UILabel!
     var actNameInput: UITextField!
     var actDesInput: UITextView!
     var actDesInputWordCount: UILabel!
@@ -39,16 +40,23 @@ class ActivityReleaseInfoBoard: UIView {
         //
         posterBtn = UIButton()
         superview.addSubview(posterBtn)
-        posterBtn.setTitle(LS("上传一个活动海报"), forState: .Normal)
+        posterBtn.setImage(UIImage(named: "activity_release_default_cover"), forState: .Normal)
         posterBtn.imageView?.contentMode = .ScaleAspectFill
-        posterBtn.setBackgroundImage(UIImage(named: "activity_release_default_cover"), forState: .Normal)
-        posterBtn.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        posterBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), forState: .Normal)
+        posterBtn.clipsToBounds = true
         posterBtn.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.top.equalTo(superview)
             make.left.equalTo(superview)
             make.height.equalTo(posterBtn.snp_width).multipliedBy(0.573)
+        }
+        
+        posterLbl = UILabel()
+        posterLbl.textAlignment = .Center
+        posterLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        posterLbl.text = LS("上传一个活动海报")
+        posterBtn.addSubview(posterLbl)
+        posterLbl.snp_makeConstraints { (make) -> Void in
+            make.center.equalTo(posterBtn)
         }
         //
         let staticTitleLbl = UILabel()

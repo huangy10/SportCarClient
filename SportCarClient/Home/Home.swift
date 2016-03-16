@@ -244,7 +244,6 @@ extension HomeController {
     }
     
     override func didReceiveMemoryWarning() {
-        print("bafjwhfopiwehfoi")
         if board.tag != 3 {
             radar = nil
         }

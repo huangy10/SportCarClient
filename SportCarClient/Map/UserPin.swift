@@ -29,17 +29,19 @@ class UserAnnotationView: BMKAnnotationView {
     
     override init!(annotation: BMKAnnotation!, reuseIdentifier: String!) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+
         self.bounds = CGRectMake(0, 0, 65, 65)
         avatar = UIButton()
         avatar.layer.cornerRadius = 32.5
         avatar.clipsToBounds = true
         self.addSubview(avatar)
-        avatar.frame = self.bounds
+        avatar.addTarget(self, action: "avatarPressed", forControlEvents: .TouchUpInside)
+        avatar.frame = CGRectMake(0, 0, 65, 65)
         
         avatarCar = UIImageView()
         avatarCar.layer.cornerRadius = 12.5
         self.addSubview(avatarCar)
-        avatar.frame = CGRectMake(40, 40, 25, 25)
+        avatarCar.frame = CGRectMake(40, 40, 25, 25)
     }
     
     func avatarPressed() {
