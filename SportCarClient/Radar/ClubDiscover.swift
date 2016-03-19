@@ -12,7 +12,7 @@ import SnapKit
 
 class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableViewDelegate, ClubBubbleViewDelegate, RadarFilterDelegate {
     
-    var radarHome: RadarHomeController?
+    weak var radarHome: RadarHomeController?
     
     var bubbles: ClubBubbleView!
     var clubs: [Club] = []

@@ -67,7 +67,6 @@ class AudioWaveDrawEngine: NSObject {
         var infoSize: UInt32 = 0
         err = ExtAudioFileGetPropertyInfo(extAFRef, kExtAudioFileProperty_FileDataFormat, &infoSize, nil)
         if err != noErr {
-            print(infoSize)
             assertionFailure("Can not Extract File Info")
         }
         var fileFormat: AudioStreamBasicDescription = AudioStreamBasicDescription()

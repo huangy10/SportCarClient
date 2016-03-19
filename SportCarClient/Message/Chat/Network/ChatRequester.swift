@@ -192,10 +192,10 @@ class ChatRequester: AccountRequester {
             data.appendBodyPart(data: targetID.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "target_id")
             if messageType == "image" {
                 data.appendBodyPart(data: UIImagePNGRepresentation(image!)!, name: "image", fileName: "uploaded_image.png", mimeType: "image/png")
-            }else if messageType == "audio" {
+            } else if messageType == "audio" {
                 data.appendBodyPart(fileURL: audio!, name: "audio", fileName: "audio.m4a", mimeType: "audio/mp4")
 //                data.appendBodyPart(fileURL: audio!, name: "audio")
-            }else{
+            } else if messageType == "text" {
                 data.appendBodyPart(data: textContent!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "text_content")
             }
             }) { (result) -> Void in

@@ -9,9 +9,11 @@
 import UIKit
 
 
-class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, FFSelectDelegate, CustomDatePickerDelegate, ImageInputSelectorDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate, BMKGeoCodeSearchDelegate {
+class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, FFSelectDelegate, CustomDatePickerDelegate, ImageInputSelectorDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate, BMKGeoCodeSearchDelegate, ProgressProtocol {
     
     weak var actHomeController: ActivityHomeController?
+    
+    var pp_progressView: UIProgressView?
     
     var board: ActivityReleaseInfoBoard!
     var boardHeight: CGFloat = 0
@@ -126,6 +128,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         
         // 上传数据
         let toast = showStaticToast(LS("发布中..."))
+        pp_showProgressView()
         let requester = ActivityRequester.requester
         requester.createNewActivity(actName, des: actDes, informUser: informUser, maxAttend: attendNum, startAt: startAtDate!, endAt: endAtDate!, clubLimit: clubLimitID, poster: posterImage, lat: userLocation!.latitude, lon: userLocation!.longitude, loc_des: locDescriptin ?? "", onSuccess: { (json) -> () in
             self.navigationController?.popViewControllerAnimated(true)
@@ -134,9 +137,15 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             mine?.getLatestActData()
             self.hideToast(toast)
             self.showToast(LS("发布成功！"))
+            self.pp_hideProgressView()
+            }, onProgress: { (progress) -> () in
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.pp_updateProgress(progress)
+                })
             }) { (code) -> () in
                 self.hideToast(toast)
                 self.showToast(LS("发布失败，请检查网络设置"))
+                self.pp_hideProgressView()
                 print(code)
         }
     }

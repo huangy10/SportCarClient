@@ -27,14 +27,14 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-        self.view.backgroundColor = UIColor.clearColor()
+//        self.view.backgroundColor = UIColor.clearColor()
         tableView.separatorStyle = .None
         tableView.layer.cornerRadius = 4
         tableView.registerClass(RadarFilterHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.registerClass(RadarFilterCell.self, forCellReuseIdentifier: "cell")
         tableView.rowHeight = 42
         tableView.scrollEnabled = false
-        tableView.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
+        tableView.backgroundColor = kBarBgColor
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -146,7 +146,7 @@ class RadarFilterHeader: UITableViewHeaderFooterView {
     
     func createSubviews() {
         let superview = self.contentView
-        superview.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
+        superview.backgroundColor = kBarBgColor
         //
         titleLbl = UILabel()
         titleLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)

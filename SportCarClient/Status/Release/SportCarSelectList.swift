@@ -174,7 +174,7 @@ class SportCarSelectListAddCell: UICollectionViewCell {
         addBtn?.addTarget(self, action: "addPressed", forControlEvents: .TouchUpInside)
         superview.addSubview(addBtn!)
         addBtn?.snp_makeConstraints(closure: { (make) -> Void in
-            make.center.equalTo(superview)
+            make.center.equalTo(superview).offset(CGPointMake(-20, 0))
             make.size.equalTo(18)
         })
     }

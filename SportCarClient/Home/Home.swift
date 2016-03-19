@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import Spring
 import AlecrimCoreData
+import Kingfisher
 /**
  *  HomeController来实现
  */
@@ -66,9 +67,9 @@ class HomeController: UIViewController, HomeDelegate {
         super.viewDidLoad()
         self.createSubviews()
         
-        status = StatusHomeController()
-        status?.homeDelegate = self
-        self.navigationController?.pushViewController(status!, animated: false)
+        radar = RadarHomeController()
+        radar?.homeDelegate = self
+        self.navigationController?.pushViewController(radar!, animated: false)
         
         ChatRecordDataSource.sharedDataSource.start()
         
@@ -106,7 +107,7 @@ class HomeController: UIViewController, HomeDelegate {
         board.backgroundColor = UIColor.whiteColor()
         board.addTarget(self, action: "boardPressed", forControlEvents: .TouchUpInside)
         superview.addSubview(board)
-        board.tag = 2
+        board.tag = 1
         self.board.layer.anchorPoint = CGPoint(x: 0, y: 0.5)
         board.frame = superview.bounds
         self.showSideBar(false)
@@ -180,6 +181,7 @@ extension HomeController {
         board.layer.transform = CATransform3DIdentity
         board.setImage(screenShot, forState: .Normal)
         self.navigationController?.popViewControllerAnimated(false)
+        self.radar = nil
         showSideBar(true)
     }
     
@@ -191,35 +193,15 @@ extension HomeController {
                 person = PersonBasicController(user: User.objects.hostUser()!)
                 person?.homeDelegate = self
             }
-//            self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.navigationController?.pushViewController(person!, animated: true)
-//            self.board.addSubview(person!.view!)
         case 1:
-            if news == nil {
-                news = NewsController(style: .Plain)
-                news?.homeDelegate = self
-            }
-            self.navigationController?.pushViewController(news!, animated: true)
-            break
-        case 2:
-//            if status == nil {
-//                status = StatusHomeController()
-//            }
-//            self.navigationController?.pushViewController(status!, animated: true)
-            if status == nil {
-                status = StatusHomeController()
-                status?.homeDelegate = self
-            }
-            self.navigationController?.pushViewController(status!, animated: true)
-            break
-        case 3:
             if radar == nil {
                 radar = RadarHomeController()
                 radar?.homeDelegate = self
             }
             self.navigationController?.pushViewController(radar!, animated: true)
             break
-        case 4:
+        case 2:
             if act == nil {
                 act = ActivityHomeController()
                 act?.homeDelegate = self
@@ -227,11 +209,23 @@ extension HomeController {
             
             self.navigationController?.pushViewController(act!, animated: true)
             break
+        case 3:
+            if news == nil {
+                news = NewsController(style: .Plain)
+                news?.homeDelegate = self
+            }
+            self.navigationController?.pushViewController(news!, animated: true)
+            break
+        case 4:
+            if status == nil {
+                status = StatusHomeController()
+                status?.homeDelegate = self
+            }
+            self.navigationController?.pushViewController(status!, animated: true)
+            break
         case 5:
             ChatRecordDataSource.sharedDataSource.start()
-//            let messages = MessageController()
             if message == nil {
-//            let messages = PrivateChatSettingController(targetUser: User.objects.hostUser!)
                 message = MessageController()
                 message?.homeDelegate = self
             }
@@ -240,12 +234,16 @@ extension HomeController {
         default:
             break
         }
-        // hideSideBar()
     }
     
     override func didReceiveMemoryWarning() {
         if board.tag != 3 {
             radar = nil
         }
+        let cache = KingfisherManager.sharedManager.cache
+        
+        // Set max disk cache to 50 mb. Default is no limit.
+        cache.clearMemoryCache()
+        print("clear cache")
     }
 }

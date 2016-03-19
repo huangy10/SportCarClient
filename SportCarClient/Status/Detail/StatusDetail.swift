@@ -142,6 +142,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         }
         createStatusBoard()
         createOtherSubivews()
+        loadDataAndUpdateUI()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardAppears:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardDisappears:", name: UIKeyboardWillHideNotification, object: nil)
     }
@@ -502,8 +503,6 @@ extension StatusDetailController {
             make.top.equalTo(likeNumLbl!)
             make.size.equalTo(15)
         })
-        
-        loadDataAndUpdateUI()
     }
     
     func statusHostAvatarPressed() {
@@ -718,6 +717,8 @@ extension StatusDetailController {
             }
             let newCommentID = data!.stringValue
             StatusComment.objects.confirmSent(newComment, commentID: newCommentID)
+            self.status?.commentNum += 1
+            self.loadDataAndUpdateUI()
             }) { (code) -> () in
                 print(code)
         }

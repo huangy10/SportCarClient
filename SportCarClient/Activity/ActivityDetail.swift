@@ -193,6 +193,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
             cell.setMapCenter(center)
             cell.locBtn.addTarget(self, action: "needNavigation", forControlEvents: .TouchUpInside)
             cell.locLbl.text = LS("导航至 ") + (act.location_des ?? LS("未知地点"))
+            cell.locDesIcon.image = UIImage(named: "person_guide_to")
             return cell
         }
     }

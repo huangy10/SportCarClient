@@ -80,6 +80,7 @@ class Activity: NSManagedObject {
                 // 当前用户已经报名了这个活动
                 applicant.removeAtIndex(index)
                 return
+                
             }
             index += 1
         }

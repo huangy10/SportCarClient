@@ -132,7 +132,6 @@ class ActivityDetailBoardView: UIView {
             make.top.equalTo(sepLine).offset(27.5)
             make.size.equalTo(35)
         }
-        hostAvatar.addTarget(self, action: "hostAvatarPressed", forControlEvents: .TouchUpInside)
         //
         hostNameLbL = UILabel()
         hostNameLbL.textColor = UIColor.blackColor()

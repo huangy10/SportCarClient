@@ -15,6 +15,7 @@ class MapCell: UITableViewCell {
     var map: BMKMapView!
     var locBtn: UIButton!
     var locLbl: UILabel!
+    var locDesIcon: UIImageView!
     var loc: CLLocationCoordinate2D?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -52,7 +53,7 @@ class MapCell: UITableViewCell {
         }
         locBtn = locDesContainer
         //
-        let locDesIcon = UIImageView(image: UIImage(named: "news_comment_icon"))
+        locDesIcon = UIImageView(image: UIImage(named: "news_comment_icon"))
         locDesContainer.addSubview(locDesIcon)
         locDesIcon.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(20)

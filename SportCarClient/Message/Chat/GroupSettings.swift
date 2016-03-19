@@ -27,6 +27,8 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     var inlineUserSelect: InlineUserSelectController?
     var deleteQuitBtn: UIButton?
     
+    var toast: UIView?
+    
     init(targetClub: Club) {
         super.init(style: .Plain)
         self.targetClub = targetClub
@@ -273,6 +275,8 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             detail.focusedIndexPath = indexPath
             detail.delegate = self
             self.navigationController?.pushViewController(detail, animated: true)
+        } else if indexPath.section == 3 && indexPath.row == 1 {
+            showConfirmToast(LS("确定清除聊天记录?"), target: self, confirmSelector: "clearChatContent", cancelSelector: "hideToast")
         }
     }
     
@@ -322,6 +326,18 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 print(code)
         }
     }
+    
+    func clearChatContent() {
+        let identifier = targetClub.clubID
+        ChatRecordDataSource.sharedDataSource.clearChatContentForIdentifier(identifier!)
+        hideToast()
+    }
+    
+    func hideToast() {
+        if toast != nil {
+            hideToast(toast!)
+        }
+    }
 }
 
 extension GroupChatSettingController {
@@ -343,5 +359,6 @@ extension GroupChatSettingController {
     }
     
     func deleteAndQuitBtnPressed() {
+        
     }
 }

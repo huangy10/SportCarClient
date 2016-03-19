@@ -22,6 +22,10 @@ class RadarURLMaker: AccountURLMaker {
     func updateRadarData() -> String {
         return website + "/radar/nearby"
     }
+    
+    func trackUser(userID: String) -> String {
+        return website + "/radar/\(userID)/track"
+    }
 }
 
 class RadarRequester: AccountRequester {
@@ -54,6 +58,13 @@ class RadarRequester: AccountRequester {
         let url = RadarURLMaker.sharedMaker.updateRadarData()
         return manager.request(.POST, url, parameters: ["filter": "distance", "filter_param": filterDistance, "loc": ["lat": loc.latitude, "lon": loc.longitude]], encoding: .JSON).responseJSON { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "result", onSuccess: onSuccess, onError: onError)
+        }
+    }
+    
+    func trackUser(userID: String, onSuccess: (json: JSON?)->(), onError: (code: String?)->()) -> Request {
+        let url = RadarURLMaker.sharedMaker.trackUser(userID)
+        return manager.request(.GET, url).responseJSON { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "location", onSuccess: onSuccess, onError: onError)
         }
     }
 }

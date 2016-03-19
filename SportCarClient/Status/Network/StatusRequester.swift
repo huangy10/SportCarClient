@@ -89,14 +89,13 @@ class StatusRequester: AccountRequester {
      - parameter onError:         失败以后调用这个closure
      */
     func postNewStatus(content: String, images: [UIImage], car_id: String?, lat: Double?, lon: Double?, loc_description: String?, informOf: [String]?,
-        onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+        onSuccess: (JSON?)->(), onError: (code: String?)->(), onProgress: (progress: Float)->()) {
         let urlStr = StatusURLMaker.sharedMaker.postNewStatus()
         manager.upload(.POST, urlStr, multipartFormData: { (data) -> Void in
             data.appendBodyPart(data: content.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "content")
             var i = 1
             for image in images {
                 data.appendBodyPart(data: UIImagePNGRepresentation(image)!, name: "image\(i)", fileName: "image\(i)/png", mimeType: "image/png")
-//                data.appendBodyPart(data: UIImagePNGRepresentation(image)!, name: "image\(i)")
                 i += 1
             }
             if car_id != nil {
@@ -121,6 +120,10 @@ class StatusRequester: AccountRequester {
             }) { (let encodingResult) -> Void in
                 switch encodingResult{
                 case .Success(request: let upload, _, _):
+                    upload.progress({ (bytesWritten, totalByteWritten, totalByteExpectedToWrite) -> Void in
+                        let progress = Float(totalByteWritten) / Float(totalByteExpectedToWrite)
+                        onProgress(progress: progress)
+                    })
                     upload.responseJSON(completionHandler: { (response) -> Void in
                         self.resultValueHandler(response.result, dataFieldName: "statusID", onSuccess: onSuccess, onError: onError)
                     })

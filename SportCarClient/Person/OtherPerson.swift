@@ -7,10 +7,19 @@
 //
 
 import UIKit
+import MapKit
 import SwiftyJSON
+import Alamofire
 
 
-class PersonOtherController: PersonBasicController {
+class PersonOtherController: PersonBasicController, RequestProtocol {
+    
+    // backOffLocation
+    var backOffLocation: Location?
+    var userLoc: Location?
+    
+    var toast: UIView?
+    var rp_currentRequest: Request?
     
     override func viewWillAppear(animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
@@ -20,6 +29,12 @@ class PersonOtherController: PersonBasicController {
         carsViewListShowAddBtn = false
         super.viewDidLoad()
         navSettings()
+        trackTargetUserLocation()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        // Override this to disable self.locating
+        rp_cancelRequest()
     }
     
     func navSettings() {
@@ -39,7 +54,6 @@ class PersonOtherController: PersonBasicController {
         shareBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareBtn)
         //
-        
     }
     
     override func navRightBtnPressed() {
@@ -110,12 +124,65 @@ class PersonOtherController: PersonBasicController {
     }
     
     func locateBtnPressed() {
-        
+        guard userLoc != nil else {
+            showToast(LS("无法确认目标用户的位置"))
+            return
+        }
+        needNavigation()
+    }
+    func needNavigation() {
+        toast = self.showConfirmToast(LS("跳转到地图导航?"), target: self, confirmSelector: "openMapToNavigate", cancelSelector: "hideToast")
+    }
+    
+    func hideToast() {
+        if toast != nil {
+            self.hideToast(toast!)
+        }
+    }
+    
+    func openMapToNavigate() {
+        self.hideToast(toast!)
+        let param = BMKNaviPara()
+        let end = BMKPlanNode()
+        let center = userLoc!.location
+        end.pt = center
+        let targetName = userLoc!.description
+        end.name = targetName
+        param.endPoint = end
+        param.appScheme = "baidumapsdk://mapsdk.baidu.com"
+        let res = BMKNavigation.openBaiduMapNavigation(param)
+        if res.rawValue != 0 {
+            // 如果没有安装百度地图，则打开自带地图
+            let target = MKMapItem(placemark: MKPlacemark(coordinate: center, addressDictionary: nil))
+            target.name = targetName
+            let options: [String: AnyObject] = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
+                MKLaunchOptionsMapTypeKey: NSNumber(unsignedInteger: MKMapType.Standard.rawValue)]
+            MKMapItem.openMapsWithItems([target], launchOptions: options)
+        }
     }
     
     override func detailBtnPressed() {
         let detail = PersonOtherInfoController()
         detail.user = data.user
         self.navigationController?.pushViewController(detail, animated: true)
+    }
+    
+    func trackTargetUserLocation() {
+        userAnno = BMKPointAnnotation()
+        if backOffLocation != nil {
+            userAnno.coordinate = backOffLocation!.location
+            let region = BMKCoordinateRegionMakeWithDistance(backOffLocation!.location, 3000, 5000)
+            header.map.setRegion(region, animated: true)
+            userLoc = backOffLocation
+        } else {
+            rp_currentRequest = RadarRequester.requester.trackUser(data.user.userID!, onSuccess: { (json) -> () in
+                self.userLoc = Location(latitude: json!["lat"].doubleValue, longitude: json!["lon"].doubleValue, description: json!["description"].stringValue)
+                self.userAnno.coordinate = self.userLoc!.location
+                let region = BMKCoordinateRegionMakeWithDistance(self.userLoc!.location, 3000, 5000)
+                self.header.map.setRegion(region, animated: true)
+                }) { (code) -> () in
+                    print(code)
+            }
+        }
     }
 }

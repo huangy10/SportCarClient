@@ -86,7 +86,9 @@ class ChatRecordDataSource {
         data: JSON,
         downloadAudio: Bool = true,
         context: DataContext = ChatRecord.objects.context,
-        autoBringToFront: Bool = true
+        autoBringToFront: Bool = true,
+        reversed: Bool = false,
+        unreadCheck: Bool = false
         ) -> ChatRecord {
             let newRecordID = data["chatID"].stringValue
             let messageType = data["message_type"].stringValue
@@ -96,7 +98,17 @@ class ChatRecordDataSource {
             let identifier = getIdentiferForChatRecord(newRecord)
             // put the new record to the corresponding queue, if the queue does not exist, then create one
             if let records = chatRecords[identifier] {
-                records.append(newRecord)
+                if reversed {
+                    records.addAtFirst(newRecord)
+                } else{
+                    records.append(newRecord)
+                }
+                if unreadCheck {
+                    if self.curRoom == nil || getIdentifierForChatRoom(self.curRoom!) != identifier {
+                        self.totalUnreadNum += 1
+                        records.unread += 1
+                    }
+                }
             } else {
                 let newRecords = ChatRecordList()
                 if newRecord.chat_type == "private" {
@@ -116,7 +128,14 @@ class ChatRecordDataSource {
                 }
                 newRecords.append(newRecord)
                 chatRecords[identifier] = newRecords
+                if unreadCheck {
+                    if self.curRoom == nil || getIdentifierForChatRoom(self.curRoom!) != identifier {
+                        self.totalUnreadNum += 1
+                        newRecords.unread += 1
+                    }
+                }
             }
+            
             // Download file associated with the chat record
             if messageType == "audio" && downloadAudio {
                 let semaphore = dispatch_semaphore_create(0)
@@ -151,7 +170,7 @@ class ChatRecordDataSource {
         self.requester.getChatList({ (json) -> () in
             // 处理聊天内容
             for data in json!["chats"].arrayValue {
-                self.parseChatRecordData(data, autoBringToFront: false)
+                self.parseChatRecordData(data, autoBringToFront: true)
 //                let semaphore = dispatch_semaphore_create(0)
 //                let newRecord = ChatRecord.objects.getOrCreateEmpty(data["chatID"].stringValue)
 //                newRecord.loadValueFromJSON(data, ctx: ChatRecord.objects.context)
@@ -364,7 +383,7 @@ class ChatRecordDataSource {
      */
     func parseHistoryFromServer(json: JSON) {
         for data in json.arrayValue {
-            self.parseChatRecordData(data, autoBringToFront: false)
+            self.parseChatRecordData(data, autoBringToFront: false, reversed: true)
 //            let semaphore = dispatch_semaphore_create(0)
 //            let newRecord = ChatRecord.objects.getOrCreateEmpty(data["chatID"].stringValue)
 //            newRecord.loadValueFromJSON(data, ctx: ChatRecord.objects.context)
@@ -421,6 +440,12 @@ class ChatRecordDataSource {
             }
         })
     }
+    
+    func clearChatContentForIdentifier(identifier: String) {
+        if let records = chatRecords[identifier] {
+            records.clear()
+        }
+    }
 }
 
 class ChatRecordList {
@@ -460,5 +485,11 @@ class ChatRecordList {
     
     func addAtFirst(chat: ChatRecord) {
         _data.insert(chat, atIndex: 0)
+    }
+    
+    func clear() {
+        _data = _data.filter { (record) -> Bool in
+            return record.messageType == "placeholder"
+        }
     }
 }

@@ -204,7 +204,7 @@ class ActivityRequester: AccountRequester {
      - parameter onSuccess:  成功以后调用的closure
      - parameter onError:    失败以后调用的closure
      */
-    func createNewActivity(name: String, des: String, informUser: [String]?,  maxAttend: Int, startAt: NSDate, endAt: NSDate, clubLimit: String?, poster: UIImage, lat: Double, lon: Double, loc_des: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+    func createNewActivity(name: String, des: String, informUser: [String]?,  maxAttend: Int, startAt: NSDate, endAt: NSDate, clubLimit: String?, poster: UIImage, lat: Double, lon: Double, loc_des: String, onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()) {
         let urlStr = ActivityURLMaker.sharedURLMaker.createActivity()
         manager.upload(.POST, urlStr, multipartFormData: { (form) -> Void in
             // 必备信息
@@ -228,6 +228,10 @@ class ActivityRequester: AccountRequester {
             }) { (result) -> Void in
                 switch result {
                 case .Success(let upload, _, _):
+                    upload.progress({ (_, totalWritten, total) -> Void in
+                        let progress = Float(totalWritten) / Float(total)
+                        onProgress(progress: progress)
+                    })
                     upload.responseJSON(completionHandler: { (response) -> Void in
                         switch response.result {
                         case .Success(let value):

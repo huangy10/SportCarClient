@@ -12,7 +12,7 @@ import Alamofire
 
 
 class RadarDriverMapController: UIViewController, UITableViewDataSource, UITableViewDelegate, RadarFilterDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate {
-    var radarHome: RadarHomeController?
+    weak var radarHome: RadarHomeController?
     
     var map: BMKMapView!
     var userAnnotate: BMKPointAnnotation!
@@ -38,6 +38,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         createSubviews()
         
         locationService = BMKLocationService()
+        locationService.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationService.allowsBackgroundLocationUpdates = true
     }
     
@@ -84,8 +85,8 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         showUserListBtn.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         showUserListBtn.layer.shadowColor = UIColor.blackColor().CGColor
         showUserListBtn.layer.shadowRadius = 2
-        showUserListBtn.layer.shadowOpacity = 0.5
-        showUserListBtn.layer.shadowOffset = CGSizeMake(0, 5)
+        showUserListBtn.layer.shadowOpacity = 0.4
+        showUserListBtn.layer.shadowOffset = CGSizeMake(0, 3)
         showUserListBtn.layer.cornerRadius = 4
         showUserListBtn.clipsToBounds = false
         showUserListBtn.addTarget(self, action: "showUserBtnPressed", forControlEvents: .TouchUpInside)
@@ -113,6 +114,11 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         mapFilter.delegate = self
         mapNav = BlackBarNavigationController(rootViewController: mapFilter)
         mapFilterView = mapNav.view
+        mapFilterView.layer.shadowColor = UIColor.blackColor().CGColor
+        mapFilterView.layer.shadowRadius = 2
+        mapFilterView.layer.shadowOpacity = 0.4
+        mapFilterView.layer.shadowOffset = CGSizeMake(0, 3)
+        mapFilterView.layer.cornerRadius = 4
         self.view.addSubview(mapFilterView)
         mapFilterView.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(self.view).offset(10)

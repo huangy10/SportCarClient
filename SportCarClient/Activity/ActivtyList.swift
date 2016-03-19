@@ -46,7 +46,12 @@ class ActivityHomeMineListController: UITableViewController {
         let dateThreshold = data.first()?.createdAt ?? NSDate()
         requester.getMineActivityList(dateThreshold, op_type: "latest", limit: 10, onSuccess: { (json) -> () in
             var i = 0
+            let curIdList = self.data.map({return $0.activityID!})
             for data in json!.arrayValue {
+                let id = data["actID"].stringValue
+                if curIdList.contains(id) {
+                    continue
+                }
                 let act = Activity.objects.getOrCreate(data)
                 self.data.insert(act, atIndex: i)
                 i += 1
@@ -93,7 +98,6 @@ class ActivityHomeMineListController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(ActivityHomeCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityHomeCell
         let act = data[indexPath.row]
-        print(act.user?.userID)
         cell.act = act
         cell.selectionStyle = .None
         cell.loadDataAndUpdateUI()
@@ -107,7 +111,6 @@ class ActivityHomeMineListController: UITableViewController {
             let inset = 10 - insetRatio * insetRatio * 8
             cell.setContentInset(inset)
         }
-        print(act.user?.userID)
         return cell
     }
     

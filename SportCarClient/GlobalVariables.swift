@@ -79,7 +79,7 @@ func DateSTR(str: String?) -> NSDate? {
     }
     let formatter = NSDateFormatter()
     formatter.timeZone = NSTimeZone(abbreviation: "UTC")
-    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSSSS Z"
     return formatter.dateFromString(str!)
 }
 
@@ -92,7 +92,7 @@ func DateSTR(str: String?) -> NSDate? {
  */
 func STRDate(date: NSDate) -> String {
     let formatter = NSDateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSSSS Z"
     formatter.timeZone = NSTimeZone(abbreviation: "UTC")
     return formatter.stringFromDate(date)
 }

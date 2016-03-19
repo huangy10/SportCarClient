@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Kingfisher
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate {
@@ -32,6 +33,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate {
     func customizeMap() {
         let path = NSBundle.mainBundle().pathForResource("custom_config_黑夜", ofType: "")
         BMKMapView.customMapStyle(path)
+    }
+    
+    func imageCacheSettings() {
+        let cache = KingfisherManager.sharedManager.cache
+        // Set max disk cache to 50 mb. Default is no limit.
+        cache.maxDiskCacheSize = 50 * 1024 * 1024
     }
 
     func applicationWillResignActive(application: UIApplication) {

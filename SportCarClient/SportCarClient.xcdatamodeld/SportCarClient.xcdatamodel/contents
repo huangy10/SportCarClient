@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15E49a" minimumToolsVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15E64a" minimumToolsVersion="Automatic">
     <entity name="Activity" representedClassName=".Activity" syncable="YES">
         <attribute name="actDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="activityID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="applyAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="atString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="commentNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
@@ -211,7 +212,7 @@
         <relationship name="statusComment" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="StatusComment" inverseName="user" inverseEntity="StatusComment" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Activity" positionX="-783" positionY="-126" width="128" height="315"/>
+        <element name="Activity" positionX="-783" positionY="-126" width="128" height="330"/>
         <element name="ActivityComment" positionX="-783" positionY="-126" width="128" height="195"/>
         <element name="ChatRecord" positionX="-783" positionY="-126" width="128" height="345"/>
         <element name="Club" positionX="-506" positionY="372" width="128" height="300"/>

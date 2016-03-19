@@ -103,7 +103,7 @@ class SideBarController: UIViewController {
             })
         }
         // 创建左侧的一列按钮
-        let titles = $.each(["资讯", "动态", "雷达", "活动", "消息", "搜索"]) { (value) -> () in
+        let titles = $.each(["雷达", "活动", "资讯", "动态", "消息", "搜索"]) { (value) -> () in
             return LS(value)
         }
         var preView: UIView = nameLbl!
@@ -149,19 +149,19 @@ class SideBarController: UIViewController {
             make.size.equalTo(18)
         }
         
-        let statusBtn = btnArray[1]
+        let radarBtn = btnArray[0]
         let marker = UIImage(named: "home_slct_marker")
         btnMarker = UIImageView(image: marker)
         superview.addSubview(btnMarker!)
         btnMarker?.snp_makeConstraints(closure: { (make) -> Void in
             make.size.equalTo(CGSize(width: 243, height: 36))
-            make.centerY.equalTo(statusBtn)
+            make.centerY.equalTo(radarBtn)
             make.left.equalTo(superview).offset(34)
         })
         superview.sendSubviewToBack(btnMarker!)
         superview.sendSubviewToBack(bgImg!)
         
-        self.selectedBtn = statusBtn
+        self.selectedBtn = radarBtn
     }
     
     func animateBG() {

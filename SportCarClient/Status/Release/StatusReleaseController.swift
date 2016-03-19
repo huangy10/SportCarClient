@@ -13,19 +13,19 @@ import Cent
 import Dollar
 
 
-class StatusReleaseController: InputableViewController, StatusReleasePhotoSelectDelegate, FFSelectDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate {
+class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate, ImageInputSelectorDelegate, ProgressProtocol {
     /*
     ================================================================================================ 子控件
     */
     ///
     weak var home: StatusHomeController?
+    //
+    var pp_progressView: UIProgressView?
     /// 面板
     var board: UIScrollView?
     /// 添加图片的操作面板
-    var addImagePanel: UICollectionView?
-    var addImagePanelDataSource: StatusReleaseAddImagePanelDataSource?
-    /// 图片数量计数标签
-    var imageCountLbl: UILabel?
+    var addImageBtn: UIButton!
+    var selectedImage: UIImage?
     /// 状态文字内容输入框
     var statusContentInput: UITextView?
     var firstEditting = true
@@ -61,7 +61,6 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
         super.viewDidLoad()
         locationService = BMKLocationService()
         locationService?.allowsBackgroundLocationUpdates = true
-        locationService?.startUserLocationService()
         locSearch = BMKGeoCodeSearch()
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardAppears:", name: UIKeyboardWillShowNotification, object: nil)
@@ -74,6 +73,7 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
         mapView.viewWillAppear()
         mapView.delegate = self
         locSearch?.delegate = self
+        locationService?.startUserLocationService()
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -87,11 +87,12 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
         super.createSubviews()
         navSettings()
         self.view.backgroundColor = UIColor.whiteColor()
-                let superview = self.view
+        let superview = self.view
         //
         board = UIScrollView()
         board?.backgroundColor = UIColor.whiteColor()
         board?.contentSize = self.view.bounds.size
+        board?.bounces = false
         superview.addSubview(board!)
         board?.snp_makeConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(superview).offset(0)
@@ -99,40 +100,15 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
             make.left.equalTo(superview)
             make.height.equalTo(superview)
         })
-        //
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .Vertical
-        let screenWidth = UIScreen.mainScreen().bounds.width
-        flowLayout.minimumInteritemSpacing = 0
-        flowLayout.minimumLineSpacing = 0
-        flowLayout.itemSize = CGSizeMake(screenWidth / 3, screenWidth / 3)
-        addImagePanel = UICollectionView(frame: CGRectZero, collectionViewLayout: flowLayout)
-        // 开始时没有选中图片，传入空的数据
-        addImagePanelDataSource = StatusReleaseAddImagePanelDataSource(newImages: [])
-        addImagePanelDataSource?.controller = self
-        addImagePanel?.dataSource = addImagePanelDataSource
-        board?.addSubview(addImagePanel!)
-        addImagePanel?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(superview)
-            make.right.equalTo(superview)
-            make.top.equalTo(board!)
-            make.height.equalTo(120)
-        })
-        addImagePanel?.backgroundColor = UIColor.whiteColor()
-        addImagePanel?.registerClass(StatusReleaseAddImageCell.self, forCellWithReuseIdentifier: StatusReleaseAddImageCell.reuseIdentifier)
-        addImagePanel?.registerClass(StatusReleaseAddImageBtnCell.self, forCellWithReuseIdentifier: StatusReleaseAddImageBtnCell.reuseIdentifier)
-        // 图片数量计数
-        imageCountLbl = UILabel()
-        imageCountLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        imageCountLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-        imageCountLbl?.textAlignment = .Right
-        imageCountLbl?.text = "0/\(addImagePanelDataSource!.maxImageNum)"
-        board?.addSubview(imageCountLbl!)
-        imageCountLbl?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(superview).offset(-15)
-            make.top.equalTo(addImagePanel!.snp_bottom)
-            make.height.equalTo(17)
-        })
+        addImageBtn = UIButton()
+        addImageBtn.setImage(UIImage(named: "status_add_image"), forState: .Normal)
+        addImageBtn.addTarget(self, action: "addImageBtnPressed", forControlEvents: .TouchUpInside)
+        board?.addSubview(addImageBtn)
+        addImageBtn.snp_makeConstraints { (make) -> Void in
+            make.left.equalTo(superview).offset(15)
+            make.top.equalTo(board!).offset(20)
+            make.size.equalTo(100)
+        }
         // 状态内容
         statusContentInput = UITextView()
         statusContentInput?.text = LS("有什么想说的呢...")
@@ -144,7 +120,7 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
         statusContentInput?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.right.equalTo(superview).offset(-15)
-            make.top.equalTo(imageCountLbl!.snp_bottom).offset(15)
+            make.top.equalTo(addImageBtn.snp_bottom).offset(15)
             make.height.equalTo(150)
         })
         // 状态内容的字数统计
@@ -273,28 +249,46 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
     }
     
     func navRightBtnPressed() {
+        // Check the validate of the data
         // 发布这条状态
-        let content = statusContentInput?.text ?? ""
-        let selectedImages = addImagePanelDataSource!.images
+        if selectedImage == nil {
+            showToast(LS("您的动态还差一张图片"))
+            return
+        }
+        guard let content = statusContentInput?.text where content != "" else {
+            showToast(LS("请输入动态详情"))
+            return
+        }
         let car_id = sportCarList?.selectedCar?.carID
-        let lat: Double? = userLocation?.location.coordinate.latitude
-        let lon: Double? = userLocation?.location.coordinate.longitude
+        guard let lat: Double? = userLocation?.location.coordinate.latitude else {
+            showToast(LS("无法获取当前位置"))
+            return
+        }
+        guard let lon: Double? = userLocation?.location.coordinate.longitude else {
+            return
+        }
         let loc_description = locationDesInput?.text == "" ? "未知未知" : locationDesInput!.text
         let requester = StatusRequester.SRRequester
         let toast = self.showStaticToast(LS("发布中..."))
         let informUserIds = informOfUsers.map { (user) -> String in
             return user.userID!
         }
-        requester.postNewStatus(content, images: selectedImages, car_id: car_id, lat: lat, lon: lon, loc_description: loc_description, informOf: informUserIds, onSuccess: { (let data) -> () in
+        pp_showProgressView()
+        requester.postNewStatus(content, images: [selectedImage!], car_id: car_id, lat: lat, lon: lon, loc_description: loc_description, informOf: informUserIds, onSuccess: { (json) -> () in
             self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
             self.home?.followStatusCtrl.loadLatestData()
             self.hideToast(toast)
             self.showToast(LS("发布成功！"))
-            }) { (code) -> () in
+            self.pp_hideProgressView()
+            }, onError: { (code) -> () in
                 print(code)
                 self.hideToast(toast)
                 self.showToast(LS("发布失败，请检查网络设置"))
-                self.displayAlertController(nil, message: LS("发送失败"))
+                self.pp_hideProgressView()
+            }) { (progress) -> () in
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.pp_updateProgress(progress)
+                })
         }
     }
     
@@ -307,37 +301,21 @@ class StatusReleaseController: InputableViewController, StatusReleasePhotoSelect
 // MARK: - About photo Select
 extension StatusReleaseController {
     
-    func photoSelected(images: [UIImage]) {
-        self.dismissViewControllerAnimated(true, completion: {
-            
-        })
-        addImagePanelDataSource?.images.appendContentsOf(images)
-        imageCountLbl?.text = "\(addImagePanelDataSource!.images.count)/\(addImagePanelDataSource!.maxImageNum)"
-        addImagePanel?.reloadData()
-        self.autoSetImageSelectPanelSize()
+    func addImageBtnPressed() {
+        let detail = ImageInputSelectorController()
+        detail.delegate = self
+        detail.bgImage = self.getScreenShotBlurred(false)
+        self.presentViewController(detail, animated: false, completion: nil)
     }
     
-    func autoSetImageSelectPanelSize() {
-        addImagePanel?.snp_updateConstraints(closure: { (make) -> Void in
-            make.height.equalTo(addImagePanel!.collectionViewLayout.collectionViewContentSize())
-        })
-        autoSetBoardContentSize()
+    func imageInputSelectorDidCancel() {
+        self.dismissViewControllerAnimated(false, completion: nil)
     }
     
-    func photeSelectCancelled() {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func wrapperDidPress(images: [UIImage]) {
-        print("wrapper")
-    }
-    
-    func doneButtonDidPress(images: [UIImage]) {
-        print("done")
-    }
-    
-    func cancelButtonDidPress() {
-        print("cancel")
+    func imageInputSelectorDidSelectImage(image: UIImage) {
+        self.dismissViewControllerAnimated(false, completion: nil)
+        selectedImage = image
+        addImageBtn?.setImage(image, forState: .Normal)
     }
 }
 
@@ -367,10 +345,9 @@ extension StatusReleaseController {
 extension StatusReleaseController {
     
     func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
+        locationService?.stopUserLocationService()
         self.userLocation = userLocation
         // 只需要获取当前的数据
-        locationService?.stopUserLocationService()
-
         self.userLocation = userLocation
         annotation = BMKPointAnnotation()
         annotation.coordinate = userLocation.location.coordinate
@@ -468,154 +445,5 @@ extension StatusReleaseController {
             make.bottom.equalTo(self.view).offset(0)
         })
         self.view.layoutIfNeeded()
-    }
-}
-
-
-class StatusReleaseAddImagePanelDataSource: NSObject, UICollectionViewDataSource{
-    /// 最大的可选图像
-    let maxImageNum: Int = 9
-    var images: [UIImage]
-    
-    var controller: StatusReleaseController?
-    
-    
-    init(newImages: [UIImage]) {
-        if newImages.count > maxImageNum{
-            assertionFailure()
-        }
-        self.images = newImages
-        super.init()
-    }
-    
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let imageNum = self.images.count
-        if imageNum == maxImageNum {
-            return maxImageNum
-        }
-        return imageNum + 1
-    }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let imageCount = images.count
-        if imageCount != maxImageNum && indexPath.row == imageCount {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StatusReleaseAddImageBtnCell.reuseIdentifier, forIndexPath: indexPath) as! StatusReleaseAddImageBtnCell
-            cell.onAddImagePressed = { (let sender) in
-                let photoPicker = StatusReleasePhotoAlbumListController(maxSelectLimit: kMaxPhotoSelect - self.images.count)
-                photoPicker.delegate = self.controller
-                let nav = BlackBarNavigationController(rootViewController: photoPicker)
-                self.controller?.presentViewController(nav, animated: true, completion: nil)
-            }
-            return cell
-        }
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StatusReleaseAddImageCell.reuseIdentifier, forIndexPath: indexPath) as! StatusReleaseAddImageCell
-        cell.deleteBtn?.tag = indexPath.row
-        cell.imageView?.image = images[indexPath.row]
-        cell.onDeletePressed = { (sender: UIButton) in
-            let row = sender.tag
-            self.images.removeAtIndex(row)
-            self.controller?.addImagePanel?.reloadData()
-            self.controller?.autoSetImageSelectPanelSize()
-        }
-        return cell
-    }
-}
-
-
-class StatusReleaseAddImageCell: UICollectionViewCell {
-    
-    static let reuseIdentifier: String = "status_release_add_image_cell"
-    
-    /// 显示选中的图像
-    var imageView: UIImageView?
-    /// 左上角的删除按钮
-    var deleteBtn: UIButton?
-    /// 为了简化结构，这里用closure来传递消息
-    var onDeletePressed: ((sender: UIButton)->())?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        createSubviews()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    internal func createSubviews() {
-        let superview = self.contentView
-        //
-        imageView = UIImageView()
-        imageView?.contentMode = .ScaleAspectFill
-        imageView?.clipsToBounds = true
-        superview.addSubview(imageView!)
-        imageView?.snp_makeConstraints(closure: { (make) -> Void in
-            make.edges.equalTo(superview).inset(7.5)
-        })
-        //
-        deleteBtn = UIButton()
-        deleteBtn?.setImage(UIImage(named: "status_delete_image_btn"), forState: .Normal)
-        deleteBtn?.addTarget(self, action: "deletePressed", forControlEvents: .TouchUpInside)
-        superview.addSubview(deleteBtn!)
-        deleteBtn?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(superview)
-            make.top.equalTo(superview)
-            make.size.equalTo(25)
-        })
-    }
-    
-    /**
-     删除按钮按的响应函数
-     */
-    func deletePressed() {
-        if let handler = onDeletePressed {
-            handler(sender: deleteBtn!)
-        }else{
-            assertionFailure("Event handler not found")
-        }
-    }
-}
-
-
-class StatusReleaseAddImageBtnCell: UICollectionViewCell {
-    
-    static let reuseIdentifier = "status_release_add_image_btn_cell"
-    
-    /// 添加按钮
-    var addBtn: UIButton?
-    
-    var onAddImagePressed: ((sender: UIButton)->())?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        createSubviews()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func createSubviews() {
-        let superview = self.contentView
-        //
-        addBtn = UIButton()
-        superview.addSubview(addBtn!)
-        addBtn?.setImage(UIImage(named: "status_add_image_btn"), forState: .Normal)
-        addBtn?.snp_makeConstraints(closure: { (make) -> Void in
-            make.edges.equalTo(superview).inset(7.5)
-        })
-        addBtn?.addTarget(self, action: "addImagePressed", forControlEvents: .TouchUpInside)
-    }
-    
-    func addImagePressed() {
-        if let handler = onAddImagePressed {
-            handler(sender: addBtn!)
-        }else{
-            assertionFailure("Event handler not found")
-        }
     }
 }

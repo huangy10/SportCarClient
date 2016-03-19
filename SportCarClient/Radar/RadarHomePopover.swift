@@ -13,7 +13,6 @@ class RadarHomePopoverController: UIViewController {
     var newStatusBtn: UIButton!
     var newChatBtn: UIButton!
     var newActivityBtn: UIButton!
-    
 
     
     func createSubviews() {

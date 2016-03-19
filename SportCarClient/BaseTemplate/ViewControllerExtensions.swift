@@ -38,19 +38,19 @@ extension UIViewController {
      - parameter blurred: 是否进行模糊
      */
     func getScreenShotBlurred(blurred: Bool) -> UIImage {
-        let window = UIApplication.sharedApplication().keyWindow!
-        UIGraphicsBeginImageContextWithOptions(window.frame.size, window.opaque, UIScreen.mainScreen().scale)
-        window.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        if blurred {
-            let imageToBlur = CIImage(image: image)
-            let blurFilter = CIFilter(name: "CIGaussianBlur")
-            blurFilter?.setValue(imageToBlur, forKey: "inputImage")
-            let resultImage = blurFilter?.valueForKey("outputImage") as? CIImage
-            return UIImage(CIImage: resultImage!)
-        }
-        return image
+//        let window = UIApplication.sharedApplication().keyWindow!
+//        UIGraphicsBeginImageContextWithOptions(window.frame.size, window.opaque, UIScreen.mainScreen().scale)
+//        window.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+//        let image = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        if blurred {
+//            let imageToBlur = CIImage(image: image)
+//            let blurFilter = CIFilter(name: "CIGaussianBlur")
+//            blurFilter?.setValue(imageToBlur, forKey: "inputImage")
+//            let resultImage = blurFilter?.valueForKey("outputImage") as? CIImage
+//            return UIImage(CIImage: resultImage!)
+//        }
+        return UIImage()
     }
     
     func blurImageUsingCoreImage(inputImage: UIImage) -> UIImage {
@@ -185,7 +185,7 @@ extension UIViewController {
             make.right.equalTo(confirmBtn.snp_left)
         }
         
-        let superview = self.view
+        let superview = UIApplication.sharedApplication().keyWindow!.rootViewController!.view
         superview.addSubview(container)
         container.snp_makeConstraints { (make) -> Void in
             make.width.equalTo(containerWidth)

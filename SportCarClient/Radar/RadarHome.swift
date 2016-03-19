@@ -32,6 +32,10 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         createSubviews()
     }
     
+    deinit {
+        print("~~~~~~~~~")
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
@@ -197,16 +201,16 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             make.bottom.equalTo(superview)
             make.width.equalTo(width)
         }
-        //
-        club = ClubDiscoverController()
-        club.radarHome = self
-        board.addSubview(club.view)
-        club.view.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(board).offset(width)
-            make.top.equalTo(superview)
-            make.bottom.equalTo(superview)
-            make.width.equalTo(width)
-        }
+//        //
+//        club = ClubDiscoverController()
+//        club.radarHome = self
+//        board.addSubview(club.view)
+//        club.view.snp_makeConstraints { (make) -> Void in
+//            make.left.equalTo(board).offset(width)
+//            make.top.equalTo(superview)
+//            make.bottom.equalTo(superview)
+//            make.width.equalTo(width)
+//        }
         
         createReleaseBoard()
     }

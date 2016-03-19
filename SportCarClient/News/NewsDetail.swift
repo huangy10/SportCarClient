@@ -72,7 +72,6 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     }
     
     override func viewDidLoad() {
-        super.viewDidLoad()
         navSetting()
         createSubviews()
         createNewsContentViews()

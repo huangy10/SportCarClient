@@ -83,6 +83,8 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
             switch roomType {
             case .Private:
                 chatRecords?._item = ChatRecordListItem.UserItem(targetUser!)
+                // send a place holder to hold this chat
+                confirmSendChatMessage(nil, image: nil, audio: nil, messageType: "placeholder")
                 break
             case .Club:
                 chatRecords?._item = ChatRecordListItem.ClubItem(targetClub!)
@@ -107,6 +109,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         ChatRecordDataSource.sharedDataSource.curRoom = self
         // 重新载入club的信息
         self.navigationItem.title = navTitle
+        self.talkBoard?.reloadData()
     }
     
     override func createSubviews() {
@@ -316,6 +319,8 @@ extension ChatRoomController {
                 let cache = KingfisherManager.sharedManager.cache
                 cache.storeImage(image!, forKey: imageURL.absoluteString)
             }
+            let identifier = getIdentifierForChatRoom(self)
+            ChatRecordDataSource.sharedDataSource.chatRecords.bringKeyToFront(identifier)
             }) { (code) -> () in
                 print(code)
         }

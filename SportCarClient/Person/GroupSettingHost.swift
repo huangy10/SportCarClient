@@ -173,6 +173,13 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             modifier.delegate = self
             self.navigationController?.pushViewController(modifier, animated: true)
             break
+        case 3:
+            switch indexPath.row {
+            case 1:
+                toast = showConfirmToast(LS("确定清除聊天记录?"), target: self, confirmSelector: "clearChatContent", cancelSelector: "hideToast")
+            default:
+                break
+            }
         default:
             break
         }

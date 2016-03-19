@@ -353,7 +353,11 @@ extension PrivateChatSettingController {
      情况聊天内容
      */
     func clearChatContent() {
-        
+        let hostID = User.objects.hostUserID
+        let targetID = targetUser.userID
+        let identifier = getIdentifierForIdPair(hostID!, targetID!)
+        ChatRecordDataSource.sharedDataSource.clearChatContentForIdentifier(identifier)
+        hideToast()
     }
 
     /**

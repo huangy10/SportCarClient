@@ -11,7 +11,7 @@ import UIKit
 
 class ClubDiscoverCell: DriverMapUserCell {
     var valueLbl: UILabel!
-    var club: Club!
+    weak var club: Club!
     
     override func createSubviews() {
         super.createSubviews()

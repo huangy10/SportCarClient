@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, SportCarBrandSelecterControllerDelegate {
+class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, SportCarBrandSelecterControllerDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate {
     var homeDelegate: HomeDelegate?
     // 显示的用户的信息
     var data: PersonDataSource!
@@ -19,6 +19,9 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     var carsViewList: SportsCarViewListController!
     
     var carsViewListShowAddBtn: Bool = true
+    var locationService: BMKLocationService?
+    var userLocation: BMKUserLocation?
+    var userAnno: BMKPointAnnotation!
     
     init(user: User) {
         let flowLayout = UICollectionViewFlowLayout()
@@ -44,6 +47,8 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onStatusDelete:", name: kStatusDidDeletedNotification, object: nil)
         
         createSubviews()
+        
+        locationService = BMKLocationService()
         
         // 发出网络请求
         let requester = PersonRequester.requester
@@ -83,8 +88,17 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         // 
-        
+        locationService?.delegate = self
+        locationService?.startUserLocationService()
+        header.map.delegate = self
         header.loadDataAndUpdateUI()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        locationService?.delegate = nil
+        locationService?.stopUserLocationService()
+        header.map.delegate = self
     }
     
     /**
@@ -235,12 +249,12 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let screenWidth = UIScreen.mainScreen().bounds.width
         if data.selectedCar == nil {
-            return CGSizeMake(screenWidth / 2, screenWidth / 2)
+            return CGSizeMake(screenWidth / 3, screenWidth / 3)
         }else {
             if indexPath.section == 0 {
                 return SportCarInfoCell.getPreferredSizeForSignature(data.selectedCar!.signature ?? "", carName: data.selectedCar!.car!.name!)
             }else{
-                return CGSizeMake(screenWidth / 2, screenWidth / 2)
+                return CGSizeMake(screenWidth / 3, screenWidth / 3)
             }
         }
     }
@@ -268,6 +282,30 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height - 1 {
             loadMoreStatusData()
         }
+    }
+}
+
+// MARK: - About map
+extension PersonBasicController {
+    func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
+        if self.userLocation == nil {
+            userAnno = BMKPointAnnotation()
+            header.map.addAnnotation(userAnno)
+        }
+        userAnno.coordinate = userLocation.location.coordinate
+        self.userLocation = userLocation
+        let userLocInScreen = header.map.convertCoordinate(userLocation.location.coordinate, toPointToView: header.map)
+        let userLocWithOffset = CGPointMake(userLocInScreen.x + header.frame.width / 4, userLocInScreen.y + header.frame.height / 3)
+        let newCoordinate = header.map.convertPoint(userLocWithOffset, toCoordinateFromView: header.map)
+        let region = BMKCoordinateRegionMakeWithDistance(newCoordinate, 3000, 5000)
+
+        header.map.setRegion(region, animated: true)
+    }
+    
+    func mapView(mapView: BMKMapView!, viewForAnnotation annotation: BMKAnnotation!) -> BMKAnnotationView! {
+        let view = UserSelectAnnotationView(annotation: annotation, reuseIdentifier: "user_location")
+        view.annotation = annotation
+        return view
     }
 }
 
