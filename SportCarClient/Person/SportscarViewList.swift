@@ -12,7 +12,7 @@ import UIKit
 import SnapKit
 
 
-protocol SportCarViewListDelegate {
+protocol SportCarViewListDelegate: class {
     /**
      选中了一个车辆，当参数是nil时表示选择的是最前面的『动态』按钮
      
@@ -33,7 +33,7 @@ class SportsCarViewListController: UICollectionViewController {
     
     var selectedCar: SportCarOwnerShip?
     
-    var delegate: SportCarViewListDelegate?
+    weak var delegate: SportCarViewListDelegate?
     
     var showAddBtn: Bool = true
     

@@ -8,6 +8,8 @@
 
 import UIKit
 
+let kAppManagerNotificationLogout = "app_manager_notification_logout"
+
 /// 这个类的作用是以全局的角度来调度主要功能模块
 class AppManager: UIViewController {
     
@@ -57,5 +59,6 @@ class AppManager: UIViewController {
         self.presentViewController(nav, animated: true, completion: nil)
         self.navigationController?.popToRootViewControllerAnimated(false)
         
+        NSNotificationCenter.defaultCenter().postNotificationName(kAppManagerNotificationLogout, object: nil)
     }
 }

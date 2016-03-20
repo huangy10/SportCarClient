@@ -27,7 +27,7 @@ class SideBarController: UIViewController {
     var unreadMessagesLbl: UILabel!
     var unreadMessagesIcon: UIImageView!
     
-    var delegate: HomeDelegate?
+    weak var delegate: HomeDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()

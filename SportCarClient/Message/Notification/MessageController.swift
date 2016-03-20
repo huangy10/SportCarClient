@@ -12,7 +12,7 @@ import SnapKit
 
 class MessageController: UIViewController {
     
-    var homeDelegate: HomeDelegate?
+    weak var homeDelegate: HomeDelegate?
     
     var board: UIScrollView!
     

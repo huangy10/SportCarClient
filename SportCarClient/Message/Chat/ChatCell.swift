@@ -10,7 +10,7 @@ import UIKit
 
 let kChatCellTimeMarkSpaceHeight: CGFloat = 25      // 上方的时间标签栏显示时需要占用的高度
 
-protocol ChatCellDelegat {
+protocol ChatCellDelegat: class {
     func avatarPressed(chatRecord: ChatRecord)
 }
 
@@ -23,7 +23,7 @@ class ChatCell: UITableViewCell {
         tableView.registerClass(self, forCellReuseIdentifier: "audio")
     }
     
-    var delegate: ChatCellDelegat?
+    weak var delegate: ChatCellDelegat?
     /// 数据
     var chat: ChatRecord?
     var bubbleType: String? {

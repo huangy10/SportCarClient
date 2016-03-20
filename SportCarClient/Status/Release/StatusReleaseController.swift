@@ -13,12 +13,13 @@ import Cent
 import Dollar
 
 
-class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate, ImageInputSelectorDelegate, ProgressProtocol {
+class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate, ImageInputSelectorDelegate, ProgressProtocol, PresentableProtocol {
     /*
     ================================================================================================ 子控件
     */
     ///
     weak var home: StatusHomeController?
+    weak var presenter: UIViewController?
     //
     var pp_progressView: UIProgressView?
     /// 面板
@@ -54,6 +55,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     }
     
     deinit {
+        print("deinit status releaser")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -137,12 +139,15 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         })
         //
         informOfList = InformOtherUserController()
-        informOfList?.onInvokeUserSelectController = { (sender: InformOtherUserController) in
+        informOfList?.onInvokeUserSelectController = { [weak self] (sender: InformOtherUserController) in
             // 在这里弹出用户选择页面
-            let userSelect = FFSelectController(maxSelectNum: kMaxSelectUserNum, preSelectedUsers: self.informOfUsers)
+            guard let sSelf = self else {
+                return
+            }
+            let userSelect = FFSelectController(maxSelectNum: kMaxSelectUserNum, preSelectedUsers: sSelf.informOfUsers)
             userSelect.delegate = self
             let nav = BlackBarNavigationController(rootViewController: userSelect)
-            self.presentViewController(nav, animated: true, completion: nil)
+            sSelf.presentViewController(nav, animated: true, completion: nil)
         }
         let informOfListView = informOfList?.view
         board?.addSubview(informOfListView!)
@@ -226,7 +231,6 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         for view in board!.subviews {
             contentRect = CGRectUnion(contentRect, view.frame)
         }
-        print(mapView.frame)
         board?.contentSize = CGSizeMake(self.view.frame.width, contentRect.height)
         UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
             self.view.layoutIfNeeded()
@@ -280,6 +284,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             self.hideToast(toast)
             self.showToast(LS("发布成功！"))
             self.pp_hideProgressView()
+            self.navLeftBtnPressed()
             }, onError: { (code) -> () in
                 print(code)
                 self.hideToast(toast)
@@ -293,7 +298,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     }
     
     func navLeftBtnPressed() {
-        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        pp_dismissSelf()
     }
 }
 

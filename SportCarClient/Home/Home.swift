@@ -14,7 +14,7 @@ import Kingfisher
 /**
  *  HomeController来实现
  */
-protocol HomeDelegate {
+protocol HomeDelegate: class {
     
     /**
      返回到边栏
@@ -63,13 +63,17 @@ class HomeController: UIViewController, HomeDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("deinit home controller")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.createSubviews()
         
-        radar = RadarHomeController()
-        radar?.homeDelegate = self
-        self.navigationController?.pushViewController(radar!, animated: false)
+//        radar = RadarHomeController()
+//        radar?.homeDelegate = self
+//        self.navigationController?.pushViewController(radar!, animated: false)
         
         ChatRecordDataSource.sharedDataSource.start()
         
@@ -114,7 +118,7 @@ class HomeController: UIViewController, HomeDelegate {
     }
     
     func boardPressed() {
-        self.switchController(0, to: board.tag)
+        switchController(0, to: board.tag)
     }
 }
 
@@ -125,7 +129,7 @@ extension HomeController {
      重新载入hostuser的数据
      */
     func reloadData() {
-        self.sideBarCtl.reloadUserData()
+        sideBarCtl.reloadUserData()
     }
 }
 
@@ -138,7 +142,7 @@ extension HomeController {
     func showSideBar(animated:Bool) {
         
         sideBarCtl.reloadUserData()
-        let screenWidth = self.view.frame.width
+        let screenWidth = view.frame.width
         var move = CATransform3DTranslate(CATransform3DIdentity, 0.876 * screenWidth, 0, 0)
         move.m34 = 1.0 / -500
         var scale = CATransform3DScale(move, 0.8, 0.8, 1)
@@ -146,7 +150,7 @@ extension HomeController {
         var trans = CATransform3DRotate(scale, -3.14/9.0, 0, 1, 0)
         trans.m34 = 1.0 / -500.0
         if !animated {
-            self.board.layer.transform = trans
+            board.layer.transform = trans
             return
         }
         SpringAnimation.spring(0.5) { () -> Void in
@@ -181,7 +185,7 @@ extension HomeController {
         board.layer.transform = CATransform3DIdentity
         board.setImage(screenShot, forState: .Normal)
         self.navigationController?.popViewControllerAnimated(false)
-        self.radar = nil
+        radar = nil
         showSideBar(true)
     }
     
@@ -241,8 +245,6 @@ extension HomeController {
             radar = nil
         }
         let cache = KingfisherManager.sharedManager.cache
-        
-        // Set max disk cache to 50 mb. Default is no limit.
         cache.clearMemoryCache()
         print("clear cache")
     }

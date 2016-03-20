@@ -32,6 +32,11 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
     
     weak var locationUpdatingRequest: Request?
     
+    deinit {
+        timer?.invalidate()
+        print("deinit driver map")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(false, animated: false)
@@ -56,6 +61,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         map.delegate = nil
         locationService.delegate = nil
         timer?.invalidate()
+        locationUpdatingRequest?.cancel()
     }
     
     func createSubviews() {
@@ -185,7 +191,6 @@ extension RadarDriverMapController {
         }
         return nil
     }
-    
 }
 
 // MARK: - 网络&数据

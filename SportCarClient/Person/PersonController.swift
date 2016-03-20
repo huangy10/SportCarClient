@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 
 class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, SportCarBrandSelecterControllerDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate {
-    var homeDelegate: HomeDelegate?
+    weak var homeDelegate: HomeDelegate?
     // 显示的用户的信息
     var data: PersonDataSource!
     

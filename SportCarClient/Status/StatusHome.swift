@@ -18,7 +18,8 @@ enum StatusHomeDisplayMode {
 
 
 class StatusHomeController: UIViewController, UIScrollViewDelegate {
-    var homeDelegate: HomeDelegate?
+    
+    weak var homeDelegate: HomeDelegate?
     
     var displayStatus: StatusHomeDisplayMode = .NearBy
     // 三个tableView
@@ -71,7 +72,6 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
     
     internal func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-//        self.navigationItem.title = LS("动态")
         // 导航栏左侧按钮
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
@@ -146,8 +146,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
     func navRightBtnPressed() {
         let release = StatusReleaseController()
         release.home = self
-        let wrapper = BlackBarNavigationController(rootViewController: release)
-        self.presentViewController(wrapper, animated: true, completion: nil)
+        release.pp_presentWithWrapperFromController(self)
     }
     
     func navTitleBtnPressed(sender: UIButton) {
@@ -156,9 +155,9 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
             return
         }
         let btns = [titleNearbyBtn, titleFollowBtn, titleHotBtn]
-//        let controllers = [nearByStatusCtrl, followStatusCtrl, hotStatusCtrl]
-//        controllers[_curTag].viewWillDisappear(true)
-//        controllers[sender.tag].viewWillAppear(true)
+        let controllers = [nearByStatusCtrl, followStatusCtrl, hotStatusCtrl]
+        controllers[_curTag].viewWillDisappear(true)
+        controllers[sender.tag].viewWillAppear(true)
         let targetBtn = btns[sender.tag]
         let sourceBtn = btns[_curTag]
         targetBtn.setTitleColor(kBarBgColor, forState: .Normal)

@@ -46,6 +46,10 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         return mapCell.map
     }
     
+    deinit {
+        print("deinit activity releaser")
+    }
+    
     override func viewDidLoad() {
         navSettings()
         super.viewDidLoad()
@@ -65,6 +69,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         super.viewWillDisappear(animated)
         locationService?.delegate = nil
         geoSearch?.delegate = nil
+        mapView?.delegate = nil
     }
     
     func navSettings() {

@@ -10,14 +10,14 @@ import UIKit
 import Kingfisher
 
 
-protocol GroupChatSetupDelegate {
+protocol GroupChatSetupDelegate: class {
     func groupChatSetupControllerDidSuccessCreatingClub(newClub: Club)
 }
 
 
 class GroupChatSetupController: InputableViewController, ImageInputSelectorDelegate {
     
-    var delegate: GroupChatSetupDelegate?
+    weak var delegate: GroupChatSetupDelegate?
     
     var users: [User] = []
     

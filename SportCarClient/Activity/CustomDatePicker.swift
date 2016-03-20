@@ -8,7 +8,7 @@
 
 import UIKit
 import SnapKit
-protocol CustomDatePickerDelegate {
+protocol CustomDatePickerDelegate: class {
     
     func dateDidPicked(date: NSDate)
     
@@ -18,7 +18,7 @@ protocol CustomDatePickerDelegate {
 
 class CustomDatePicker: UIView {
     
-    var delegate: CustomDatePickerDelegate?
+    weak var delegate: CustomDatePickerDelegate?
     
     var header: UIView!
     var doneBtn: UIButton!

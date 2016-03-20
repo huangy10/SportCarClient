@@ -23,11 +23,16 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     var showClubListBtnIcon: UIImageView!
     var shadowLine: UIView!
     
+    deinit {
+        bubbles.endUpdate()
+        print("deinit club discover")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         createSubviews()
-        
+
         let requester = ChatRequester.requester
         requester.discoverClub("recent", skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
@@ -42,11 +47,21 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        bubbles.updator?.paused = true
+    }
+
     func createSubviews() {
         let superview = self.view
         superview.clipsToBounds = true
 
         bubbles = ClubBubbleView()
+        bubbles.backgroundColor = UIColor.redColor()
         bubbles.delegate = self
         superview.addSubview(bubbles)
         bubbles.snp_makeConstraints { (make) -> Void in
@@ -55,7 +70,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             make.top.equalTo(superview).offset(100)
             make.height.equalTo(250)
         }
-        
+
         clubList = UITableView(frame: CGRectZero, style: .Plain)
         clubList.separatorStyle = .None
         clubList.rowHeight = 90
@@ -142,10 +157,10 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             bubbles.snp_updateConstraints(closure: { (make) -> Void in
                 make.top.equalTo(self.view).offset(0)
             })
-            SpringAnimation.spring(0.6, animations: { () -> Void in
-                self.view.layoutIfNeeded()
-                self.showClubListBtnIcon.transform = CGAffineTransformIdentity
-            })
+//            SpringAnimation.spring(0.6, animations: { () -> Void in
+//                self.view.layoutIfNeeded()
+//                self.showClubListBtnIcon.transform = CGAffineTransformIdentity
+//            })
             clubList.reloadData()
             showClubListBtn.tag = 1
         }else {
@@ -158,10 +173,10 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             bubbles.snp_updateConstraints(closure: { (make) -> Void in
                 make.top.equalTo(self.view).offset(100)
             })
-            SpringAnimation.spring(0.6, animations: { () -> Void in
-                self.view.layoutIfNeeded()
-                self.showClubListBtnIcon.transform = CGAffineTransformMakeRotation(CGFloat( M_PI))
-            })
+//            SpringAnimation.spring(0.6, animations: { () -> Void in
+//                self.view.layoutIfNeeded()
+//                self.showClubListBtnIcon.transform = CGAffineTransformMakeRotation(CGFloat( M_PI))
+//            })
             showClubListBtn.tag = 0
         }
     }

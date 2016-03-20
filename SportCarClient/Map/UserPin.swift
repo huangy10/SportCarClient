@@ -13,7 +13,7 @@ class UserAnnotation: BMKPointAnnotation {
 }
 
 class UserAnnotationView: BMKAnnotationView {
-    var parent: UIViewController!
+    weak var parent: UIViewController!
     var user: User! {
         didSet {
             if let avatarURL = SFURL(user.avatarUrl!) {

@@ -11,7 +11,7 @@ import SnapKit
 import Kingfisher
 
 
-protocol SportCarInfoCellDelegate {
+protocol SportCarInfoCellDelegate: class {
     func carNeedEdit(own: SportCarOwnerShip)
 }
 
@@ -19,7 +19,7 @@ protocol SportCarInfoCellDelegate {
 class SportCarInfoCell: UICollectionViewCell{
     static let reuseIdentifier = "sport_car_info_cell"
     
-    var delegate: SportCarInfoCellDelegate?
+    weak var delegate: SportCarInfoCellDelegate?
     var own: SportCarOwnerShip!
     
     var carCover: UIImageView!

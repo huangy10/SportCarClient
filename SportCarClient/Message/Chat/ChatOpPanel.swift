@@ -17,7 +17,7 @@ enum ChatOpPanelInputMode {
 }
 
 
-protocol ChatOpPanelDelegate {
+protocol ChatOpPanelDelegate: class {
     func opPanelWillSwitchInputMode(opPanel: ChatOpPanelController)
     func opPanelDidSwitchInputModel(opPanel: ChatOpPanelController)
     /**
@@ -33,7 +33,7 @@ class ChatOpPanelController: UIViewController {
     static let barHeight: CGFloat = 45
     var inputMode = ChatOpPanelInputMode.Text
     
-    var delegate: ChatOpPanelDelegate?
+    weak var delegate: ChatOpPanelDelegate?
 
     
     /// 输入方式切换按钮

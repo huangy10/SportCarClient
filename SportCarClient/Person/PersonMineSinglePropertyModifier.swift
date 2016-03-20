@@ -8,14 +8,14 @@
 
 import UIKit
 
-protocol PersonMineSinglePropertyModifierDelegate {
+protocol PersonMineSinglePropertyModifierDelegate: class {
     func didModify(newValue: String?, indexPath: NSIndexPath)
     func modificationCancelled()
 }
 
 class PersonMineSinglePropertyModifierController: InputableViewController {
     
-    var delegate: PersonMineSinglePropertyModifierDelegate?
+    weak var delegate: PersonMineSinglePropertyModifierDelegate?
     var initValue: String?
     var propertyName: String?
     var contentInput: UITextField!

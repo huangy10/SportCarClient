@@ -9,18 +9,24 @@
 import UIKit
 
 
-protocol ClubBubbleViewDelegate {
+protocol ClubBubbleViewDelegate: class {
+    
     func clubBubbleDidClickOn(club: Club)
+    
 }
 
 
 class ClubBubbleView: UIView {
     
-    var delegate: ClubBubbleViewDelegate?
-    
+    weak var delegate: ClubBubbleViewDelegate?
     var bubbles: [ClubBubbleCell] = []
     var clubs: [Club] = []
     var updator: CADisplayLink?
+    weak var aaa: UIViewController?
+    
+    deinit {
+        print("deinit club bubble view")
+    }
     
     func reloadBubble() {
         updator?.invalidate()
@@ -51,6 +57,12 @@ class ClubBubbleView: UIView {
         updator = CADisplayLink(target: self, selector: "update")
         updator?.frameInterval = 0
         updator?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
+    }
+    
+    func endUpdate() {
+        updator?.paused = true
+        updator?.invalidate()
+        updator = nil
     }
     
     func update() {

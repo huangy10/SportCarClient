@@ -13,7 +13,7 @@ import UIKit
 
 class ActivityHomeController: UIViewController {
     
-    var homeDelegate: HomeDelegate?
+    weak var homeDelegate: HomeDelegate?
     
     var nearBy: ActivityNearByController!
     var mine: ActivityHomeMineListController!

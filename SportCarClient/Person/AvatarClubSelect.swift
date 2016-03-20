@@ -11,7 +11,7 @@
 import UIKit
 
 
-protocol AvatarClubSelectDelegate {
+protocol AvatarClubSelectDelegate: class {
     func avatarClubSelectDidFinish(selectedClub: Club)
     func avatarClubSelectDidCancel()
 }
@@ -19,7 +19,7 @@ protocol AvatarClubSelectDelegate {
 
 class AvatarClubSelectController: AvatarItemSelectController {
     
-    var delegate: AvatarClubSelectDelegate?
+    weak var delegate: AvatarClubSelectDelegate?
     
     var clubs: [Club] = []
     var user: User = User.objects.hostUser()!

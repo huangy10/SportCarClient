@@ -10,7 +10,7 @@ import UIKit
 
 
 class ActivityReleaseInfoBoard: UIView {
-    var releaser: ActivityReleaseController!
+    weak var releaser: ActivityReleaseController!
     
     var posterBtn: UIButton!
     var posterLbl: UILabel!

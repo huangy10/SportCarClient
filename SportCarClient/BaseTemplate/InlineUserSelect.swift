@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-protocol InlineUserSelectDelegate {
+protocol InlineUserSelectDelegate: class {
     func inlineUserSelectNeedAddMembers()
 }
 
@@ -33,7 +33,7 @@ class InlineUserSelectController: UICollectionViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    var delegate: InlineUserSelectDelegate?
+    weak var delegate: InlineUserSelectDelegate?
     // 显示的用户列表
     var users: [User] = []
     var relatedClub: Club?

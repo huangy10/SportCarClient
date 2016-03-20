@@ -11,7 +11,7 @@ import UIKit
 
 class SportCarBrandSelecterDetailController: UITableViewController {
     var manufacturer: String?
-    var delegate: SportCarBrandSelecterControllerDelegate?
+    weak var delegate: SportCarBrandSelecterControllerDelegate?
     let dataManager = SportCarBrandDataManager.sharedManager
     var data: [String] = []
     

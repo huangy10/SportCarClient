@@ -10,14 +10,14 @@ import UIKit
 import Spring
 
 
-protocol ShareControllorDelegate {
+protocol ShareControllorDelegate: class {
     func shareControllerFinished()
 }
 
 // TODO: 将这个类改成PresentTemplateViewController的子类
 
 class ShareController: UIViewController {
-    var delegate: ShareControllorDelegate?
+    weak var delegate: ShareControllorDelegate?
     // 背景图
     var bgImg: UIImage!
     var bg: UIImageView!

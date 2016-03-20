@@ -9,14 +9,14 @@
 import UIKit
 
 
-protocol RadarFilterDelegate {
+protocol RadarFilterDelegate: class {
     func radarFilterDidChange()
 }
 
 
 class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
     
-    var delegate: RadarFilterDelegate?
+    weak var delegate: RadarFilterDelegate?
     
     var selectedRow: Int = 0
     var selectedClub: String?

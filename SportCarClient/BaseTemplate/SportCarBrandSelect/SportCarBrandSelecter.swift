@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 
-protocol SportCarBrandSelecterControllerDelegate {
+protocol SportCarBrandSelecterControllerDelegate: class {
     func brandSelected(manufacturer: String?, carType: String?)
 }
 
@@ -99,7 +99,7 @@ class SportCarBrandDataManager {
 
 
 class SportCarBrandSelecterController: InputableViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
-    var delegate: SportCarBrandSelecterControllerDelegate?
+    weak var delegate: SportCarBrandSelecterControllerDelegate?
     let dataManager = SportCarBrandDataManager.sharedManager
     
     var tableView: UITableView?

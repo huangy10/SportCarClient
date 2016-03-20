@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 
 
-protocol DetailCommentCellDelegate {
+protocol DetailCommentCellDelegate: class {
     func avatarPressed(cell: DetailCommentCell)
     
     func replyPressed(cell: DetailCommentCell)
@@ -25,7 +25,7 @@ class DetailCommentCell: UITableViewCell {
     static let reuseIdentifier = "DetailCommentCell"
     
     /// 代理，一般指向对应的tableViewController
-    var delegate: DetailCommentCellDelegate?
+    weak var delegate: DetailCommentCellDelegate?
     /// 头像
     var avatarBtn: UIButton?
     /// 姓名标签

@@ -68,6 +68,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     var likeRequesting: Bool = false
     
     deinit {
+        print("deinit news detail")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     

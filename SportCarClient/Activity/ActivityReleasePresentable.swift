@@ -11,13 +11,17 @@ import UIKit
 
 class ActivityReleasePresentableController: ActivityReleaseController {
     /// The view controller who present this controller
-    var presenter: UIViewController?
+    weak var presenter: UIViewController?
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         if presenter == nil {
             assertionFailure("Present this controller by calling presentFrom:")
         }
+    }
+    
+    deinit {
+        print("deinit activity release presentable")
     }
     
     override func navLeftBtnPressed() {

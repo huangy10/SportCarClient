@@ -27,6 +27,7 @@
 		BF26FD441C6879820077D1F0 /* Activity.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF26FD431C6879820077D1F0 /* Activity.generated.swift */; };
 		BF27E6CD1C38457F0074771D /* MakeCommentPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF27E6CC1C38457F0074771D /* MakeCommentPanel.swift */; };
 		BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2959911C1DC9870071385D /* SportCarSelect.swift */; };
+		BF2BB97C1C9D995100049337 /* PresntableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2BB97B1C9D995100049337 /* PresntableProtocol.swift */; };
 		BF2BE2141C2938B000DD0CF9 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2BE20E1C2938B000DD0CF9 /* Profile.swift */; };
 		BF2BE2161C2938B000DD0CF9 /* Club.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2BE2101C2938B000DD0CF9 /* Club.swift */; };
 		BF2BE2181C2938B000DD0CF9 /* ClubJoining.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2BE2121C2938B000DD0CF9 /* ClubJoining.swift */; };
@@ -191,7 +192,7 @@
 		BFFA15471C9D2B1700E985DF /* RequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15461C9D2B1700E985DF /* RequestProtocol.swift */; };
 		BFFA51161C05D9910019E5EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA51151C05D9910019E5EF /* AppDelegate.swift */; };
 		BFFA511E1C05D9920019E5EF /* SportCarClient.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BFFA511C1C05D9920019E5EF /* SportCarClient.xcdatamodeld */; };
-		BFFA51201C05D9920019E5EF /* status.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFFA511F1C05D9920019E5EF /* status.xcassets */; };
+		BFFA51201C05D9920019E5EF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFFA511F1C05D9920019E5EF /* Assets.xcassets */; };
 		BFFA512E1C05D9920019E5EF /* SportCarClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA512D1C05D9920019E5EF /* SportCarClientTests.swift */; };
 		BFFA51391C05D9920019E5EF /* SportCarClientUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA51381C05D9920019E5EF /* SportCarClientUITests.swift */; };
 		BFFA61B31C7DDC88003BCB2B /* RadarRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA61B21C7DDC88003BCB2B /* RadarRequester.swift */; };
@@ -241,6 +242,7 @@
 		BF26FD431C6879820077D1F0 /* Activity.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Activity.generated.swift; path = Model/Activity.generated.swift; sourceTree = "<group>"; };
 		BF27E6CC1C38457F0074771D /* MakeCommentPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MakeCommentPanel.swift; path = News/MakeCommentPanel.swift; sourceTree = "<group>"; };
 		BF2959911C1DC9870071385D /* SportCarSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarSelect.swift; path = Accounts/SportCarSelect.swift; sourceTree = "<group>"; };
+		BF2BB97B1C9D995100049337 /* PresntableProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PresntableProtocol.swift; path = BaseTemplate/PresntableProtocol.swift; sourceTree = "<group>"; };
 		BF2BE20E1C2938B000DD0CF9 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Profile.swift; path = Model/Profile.swift; sourceTree = "<group>"; };
 		BF2BE2101C2938B000DD0CF9 /* Club.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Club.swift; path = Model/Club.swift; sourceTree = "<group>"; };
 		BF2BE2121C2938B000DD0CF9 /* ClubJoining.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubJoining.swift; path = Model/ClubJoining.swift; sourceTree = "<group>"; };
@@ -407,7 +409,7 @@
 		BFFA51121C05D9910019E5EF /* SportCarClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SportCarClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFFA51151C05D9910019E5EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFFA511D1C05D9920019E5EF /* SportCarClient.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SportCarClient.xcdatamodel; sourceTree = "<group>"; };
-		BFFA511F1C05D9920019E5EF /* status.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = status.xcassets; sourceTree = "<group>"; };
+		BFFA511F1C05D9920019E5EF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFFA51241C05D9920019E5EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BFFA51291C05D9920019E5EF /* SportCarClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SportCarClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFFA512D1C05D9920019E5EF /* SportCarClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportCarClientTests.swift; sourceTree = "<group>"; };
@@ -874,6 +876,7 @@
 				BF5107141C60D28A008DC14F /* MyOrderedDict.swift */,
 				BF60D7B91C9C1DAF00D25E6B /* ProgressProtocl.swift */,
 				BFFA15461C9D2B1700E985DF /* RequestProtocol.swift */,
+				BF2BB97B1C9D995100049337 /* PresntableProtocol.swift */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -1279,7 +1282,7 @@
 				BF32EEAA1C088CF60098FEC1 /* Account */,
 				BFFA51461C05D9E20019E5EF /* Model */,
 				BFFA51151C05D9910019E5EF /* AppDelegate.swift */,
-				BFFA511F1C05D9920019E5EF /* status.xcassets */,
+				BFFA511F1C05D9920019E5EF /* Assets.xcassets */,
 				BFFA51241C05D9920019E5EF /* Info.plist */,
 				BFFA511C1C05D9920019E5EF /* SportCarClient.xcdatamodeld */,
 				BF3BD5E91C28E89000499674 /* Settings.bundle */,
@@ -1491,7 +1494,7 @@
 				BFBE19231C952FB3005114A0 /* custom_config_黑夜 in Resources */,
 				BF63089F1C1972050087A4F0 /* agreement.rtf in Resources */,
 				BF3BD5EA1C28E89000499674 /* Settings.bundle in Resources */,
-				BFFA51201C05D9920019E5EF /* status.xcassets in Resources */,
+				BFFA51201C05D9920019E5EF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1675,6 +1678,7 @@
 				BFB98A271C92A9FB00459CCE /* ModelManager.swift in Sources */,
 				BF77F3191C85357D00B09D9A /* ReportAndBlacklist.swift in Sources */,
 				BFC032861C73507600ECA69A /* ActivityMapCell.swift in Sources */,
+				BF2BB97C1C9D995100049337 /* PresntableProtocol.swift in Sources */,
 				BF9664061C89F0B60096D131 /* AvatarClubSelect.swift in Sources */,
 				BFCB96381C1F0DA8004F77E8 /* SportCarBrandSelecterDetail.swift in Sources */,
 				BFAA0CAC1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift in Sources */,

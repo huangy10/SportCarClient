@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol AvatarCarSelectDelegate {
+protocol AvatarCarSelectDelegate: class {
     func avatarCarSelectDidFinish(selectedCar: SportCarOwnerShip)
     
     func avatarCarSelectDidCancel()
@@ -17,7 +17,7 @@ protocol AvatarCarSelectDelegate {
 
 class AvatarCarSelectController: AvatarItemSelectController {
     
-    var delegate: AvatarCarSelectDelegate?
+    weak var delegate: AvatarCarSelectDelegate?
     
     var cars: [SportCarOwnerShip] = []
     var user: User = User.objects.hostUser()!

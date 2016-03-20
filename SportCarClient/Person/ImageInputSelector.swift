@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ImageInputSelectorDelegate {
+protocol ImageInputSelectorDelegate: class {
     func imageInputSelectorDidSelectImage(image: UIImage)
     
     func imageInputSelectorDidCancel()
@@ -16,7 +16,7 @@ protocol ImageInputSelectorDelegate {
 
 
 class ImageInputSelectorController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    var delegate: ImageInputSelectorDelegate?
+    weak var delegate: ImageInputSelectorDelegate?
     
     var loadAnimated: Bool = true
     var bgImage: UIImage!

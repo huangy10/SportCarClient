@@ -9,7 +9,7 @@
 import UIKit
 
 
-protocol CityElementSelectDelegate {
+protocol CityElementSelectDelegate: class {
     func cityElementSelectDidSelect(dataSource: CityElementSelectDataSource)
 }
 
@@ -47,7 +47,7 @@ class CityElementSelectDataSource {
 
 
 class CityElementSelectController: UITableViewController {
-    var delegate: CityElementSelectDelegate?
+    weak var delegate: CityElementSelectDelegate?
     var level: Int = 0      // 可以通过修改这个level值来控制选择的深度
     var maxLevel: Int = 2
     var datas: [String] = []

@@ -458,9 +458,6 @@ class LoginRegisterController: InputableViewController {
             User.objects.login("\(userID!)")
             let app = AppManager.sharedAppManager
             app.guideToContent()
-//            let ctl = HomeController()
-//            ctl.hostUser = user.value
-//            self.navigationController?.pushViewController(ctl, animated: true)
             }) { (code) -> (Void) in
                 self.loginBtn?.enabled = true
                 // 显示错误信息

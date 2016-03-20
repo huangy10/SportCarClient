@@ -12,14 +12,14 @@ import UIKit
 let kStatusDidDeletedNotification = "status_did_deleted_notification"
 let kStatusDidDeletedStatusIDKey = "statusID"
 
-protocol StatusDeleteDelegate {
+protocol StatusDeleteDelegate: class {
     func statusDidDeleted()
 }
 
 
 class StatusDeleteController: PresentTemplateViewController {
     
-    var delegate: StatusDeleteDelegate?
+    weak var delegate: StatusDeleteDelegate?
     
     var deleteBtn: UIButton!
     var status: Status!

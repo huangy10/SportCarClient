@@ -11,7 +11,7 @@ import SnapKit
 
 let maxWordLimit = 200
 
-protocol MakeCommentControllerDelegate {
+protocol MakeCommentControllerDelegate: class {
     /**
      评论取消了会调用这个函数
      
@@ -60,7 +60,7 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
     var responseToName: String? // 回复对象的名称
     var row: Int =  -1          // 回复对象所处的行
     var commentPrefix: String?
-    var delegate: MakeCommentControllerDelegate?
+    weak var delegate: MakeCommentControllerDelegate?
     /*
     ======================================================================================================================== 数据
     */

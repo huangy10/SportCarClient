@@ -9,14 +9,14 @@
 import UIKit
 
 
-protocol BlackListViewDelegate {
+protocol BlackListViewDelegate: class {
     func didSelectUser(users: [User])
 }
 
 
 class BlackListViewController: UserSelectController {
     
-    var delegate: BlackListViewDelegate?
+    weak var delegate: BlackListViewDelegate?
     
     var blUsers: [User] = []
     override var users: [User] {

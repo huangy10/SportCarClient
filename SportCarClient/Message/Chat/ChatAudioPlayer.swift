@@ -11,7 +11,7 @@ import AVFoundation
 
 let kUniversalAudioPlayerStopNotification = "universal_audio_player_stop"
 
-protocol UniversalAudioPlayerDelegate {
+protocol UniversalAudioPlayerDelegate: class {
     // 即将播放另一段音频
     func willPlayAnotherAudioFile()
     // 即将开始播放
@@ -31,7 +31,7 @@ class UniversalAudioPlayer: NSObject, AVAudioPlayerDelegate {
     
     static let sharedPlayer = UniversalAudioPlayer()
     
-    var delegate: UniversalAudioPlayerDelegate? {
+    weak var delegate: UniversalAudioPlayerDelegate? {
         willSet {
             if self.delegate != nil && self.delegate?.getIdentifier() != newValue?.getIdentifier() {
                 self.delegate?.willPlayAnotherAudioFile()

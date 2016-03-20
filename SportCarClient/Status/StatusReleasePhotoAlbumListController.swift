@@ -14,7 +14,7 @@ import Photos
 class StatusReleasePhotoAlbumListController: UITableViewController {
     
     /// 代理
-    var delegate: StatusReleasePhotoSelectDelegate?
+    weak var delegate: StatusReleasePhotoSelectDelegate?
     /// 最大选择的照片数量
     var maxSelectLimit: Int
     /// 从照片库里面获取结果

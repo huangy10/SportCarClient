@@ -15,7 +15,7 @@ enum FFSelectState {
     case Follow
 }
 
-protocol FFSelectDelegate {
+protocol FFSelectDelegate: class {
     
     func userSelected(users: [User])
     
@@ -27,7 +27,7 @@ protocol FFSelectDelegate {
 /// Selector for fans and follows
 class FFSelectController: UserSelectController {
     
-    var delegate: FFSelectDelegate?
+    weak var delegate: FFSelectDelegate?
     
     let targetUser: User = User.objects.hostUser()!
     

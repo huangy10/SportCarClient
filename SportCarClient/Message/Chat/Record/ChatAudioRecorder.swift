@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 
-protocol ChatAudioRecordDelegate {
+protocol ChatAudioRecordDelegate: class {
     func audioWillStartRecording()
     func audioDidFinishRecording(audioURL: NSURL?)
     func audioDidCancelRecording()
@@ -19,7 +19,7 @@ protocol ChatAudioRecordDelegate {
 
 class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
     // 代理
-    var delegate: ChatAudioRecordDelegate?
+    weak var delegate: ChatAudioRecordDelegate?
     /// An audio session to manage recording.
     private var recordingSession: AVAudioSession!
     /// An audio recorder to handle the actual reading and saving of data.

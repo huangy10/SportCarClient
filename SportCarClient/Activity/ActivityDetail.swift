@@ -40,6 +40,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
     }
     
     deinit {
+        print("deinit activity detail")
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }

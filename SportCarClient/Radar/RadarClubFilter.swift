@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol RadarClubFilterDelegate {
+protocol RadarClubFilterDelegate: class {
     func radarClubFilterDidChange(controller: RadarClubFilterController)
 }
 
 
 class RadarClubFilterController: UITableViewController {
-    var delegate: RadarClubFilterDelegate?
+    weak var delegate: RadarClubFilterDelegate?
     
     var clubs: [Club] = []
     var selectdClubID: String?

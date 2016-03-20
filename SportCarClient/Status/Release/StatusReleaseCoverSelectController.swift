@@ -11,7 +11,7 @@ import Photos
 import SnapKit
 
 
-protocol StatusReleasePhotoSelectDelegate {
+protocol StatusReleasePhotoSelectDelegate: class {
     
     /**
      完成了图片筛选的
@@ -29,7 +29,7 @@ protocol StatusReleasePhotoSelectDelegate {
 
 class StatusReleasePhotoSelectController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     //
-    var delegate: StatusReleasePhotoSelectDelegate?
+    weak var delegate: StatusReleasePhotoSelectDelegate?
     /// 最大选择的数量
     var maxSelectLimit: Int
     
@@ -225,7 +225,7 @@ extension StatusReleasePhotoSelectController {
 }
 
 
-protocol StatusReleasePhotoSelectCellDelegate {
+protocol StatusReleasePhotoSelectCellDelegate: class {
     func photoSelected(cell: StatusReleasePhotoSelectCell)
 }
 
@@ -236,7 +236,7 @@ class StatusReleasePhotoSelectCell: UICollectionViewCell {
     var imageView: UIImageView?
     var selectBtn: UIButton?
     
-    var delegate: StatusReleasePhotoSelectCellDelegate?
+    weak var delegate: StatusReleasePhotoSelectCellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

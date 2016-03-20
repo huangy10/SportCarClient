@@ -13,7 +13,7 @@ import Dollar
 /// 资讯页面的入口
 class NewsController: UITableViewController {
     /// 指向Home
-    var homeDelegate: HomeDelegate?
+    weak var homeDelegate: HomeDelegate?
     
     /// 展示的资讯的内容
     var news: [News] = []

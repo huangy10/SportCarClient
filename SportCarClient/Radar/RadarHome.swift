@@ -10,7 +10,7 @@ import UIKit
 
 
 class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDelegate{
-    var homeDelegate: HomeDelegate?
+    weak var homeDelegate: HomeDelegate?
     
     var driver: RadarDriverMapController!
     var club: ClubDiscoverController!
@@ -33,7 +33,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     }
     
     deinit {
-        print("~~~~~~~~~")
+        print("deinit radar home")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -43,7 +43,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         if navRightBtn.tag == 0 {
             driver.viewWillAppear(animated)
         } else {
-            
+            club.viewWillAppear(animated)
         }
     }
     
@@ -51,6 +51,8 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         super.viewWillDisappear(animated)
         if navRightBtn.tag == 0 {
             driver.viewWillDisappear(animated)
+        } else {
+            club.viewWillDisappear(animated)
         }
     }
     
@@ -64,7 +66,6 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         //
         navRightBtn = UIButton()
         navRightBtn.tag = 0
-//        navRightBtn.setImage(UIImage(named: "status_add_btn_white"), forState: .Normal)
         navRightIcon = UIImageView(image: UIImage(named: "status_add_btn_white"))
         navRightBtn.addSubview(navRightIcon)
         navRightIcon.frame = CGRectMake(0, 0, 21, 21)
@@ -201,16 +202,16 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             make.bottom.equalTo(superview)
             make.width.equalTo(width)
         }
-//        //
-//        club = ClubDiscoverController()
-//        club.radarHome = self
-//        board.addSubview(club.view)
-//        club.view.snp_makeConstraints { (make) -> Void in
-//            make.left.equalTo(board).offset(width)
-//            make.top.equalTo(superview)
-//            make.bottom.equalTo(superview)
-//            make.width.equalTo(width)
-//        }
+        //
+        club = ClubDiscoverController()
+        club.radarHome = self
+        board.addSubview(club.view)
+        club.view.snp_makeConstraints { (make) -> Void in
+            make.left.equalTo(board).offset(width)
+            make.top.equalTo(superview)
+            make.bottom.equalTo(superview)
+            make.width.equalTo(width)
+        }
         
         createReleaseBoard()
     }
@@ -316,8 +317,9 @@ extension RadarHomeController {
         switch sender.tag {
         case 0:
             let release = StatusReleaseController()
-            let wrapper = BlackBarNavigationController(rootViewController: release)
-            self.presentViewController(wrapper, animated: true, completion: nil)
+            release.pp_presentWithWrapperFromController(self)
+//            let wrapper = BlackBarNavigationController(rootViewController: release)
+//            self.presentViewController(wrapper, animated: true, completion: nil)
         case 1:
             let selector = FFSelectController()
             selector.delegate = self
