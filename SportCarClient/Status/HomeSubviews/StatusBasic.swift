@@ -20,7 +20,7 @@ class StatusBasicController: UITableViewController {
     
     var myRefreshControl: UIRefreshControl?
     
-    var homeController: StatusHomeController?
+    weak var homeController: StatusHomeController?
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)

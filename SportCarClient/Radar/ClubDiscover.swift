@@ -19,6 +19,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     
     var clubList: UITableView!
     var clubFilter: ClubFilterController!
+    var clubFilterView: UIView!
     var showClubListBtn: UIButton!
     var showClubListBtnIcon: UIImageView!
     var shadowLine: UIView!
@@ -61,7 +62,6 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         superview.clipsToBounds = true
 
         bubbles = ClubBubbleView()
-        bubbles.backgroundColor = UIColor.redColor()
         bubbles.delegate = self
         superview.addSubview(bubbles)
         bubbles.snp_makeConstraints { (make) -> Void in
@@ -130,8 +130,14 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         clubFilter = ClubFilterController()
         clubFilter.selectedRow = 5
         clubFilter.delegate = self
-        superview.addSubview(clubFilter.view)
-        clubFilter.view.snp_makeConstraints { (make) -> Void in
+        let wrapper = BlackBarNavigationController(rootViewController: clubFilter)
+        clubFilterView = wrapper.view
+        clubFilterView.layer.shadowRadius = 4
+        clubFilterView.layer.shadowColor = UIColor.blackColor().CGColor
+        clubFilterView.layer.shadowOffset = CGSizeMake(0, 3)
+        clubFilterView.layer.shadowOpacity = 0.4
+        superview.addSubview(clubFilterView)
+        clubFilterView.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(self.view).offset(10)
             make.left.equalTo(self.view).offset(15)
             make.size.equalTo(CGSizeMake(124, 41))
@@ -140,7 +146,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         self.view.addSubview(mapFilterToggleBtn)
         mapFilterToggleBtn.addTarget(self, action: "toggleMapFilter", forControlEvents: .TouchUpInside)
         mapFilterToggleBtn.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(clubFilter.view)
+            make.top.equalTo(clubFilterView)
             make.left.equalTo(self.view).offset(15)
             make.size.equalTo(CGSizeMake(124, 41))
         }
@@ -157,10 +163,10 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             bubbles.snp_updateConstraints(closure: { (make) -> Void in
                 make.top.equalTo(self.view).offset(0)
             })
-//            SpringAnimation.spring(0.6, animations: { () -> Void in
-//                self.view.layoutIfNeeded()
-//                self.showClubListBtnIcon.transform = CGAffineTransformIdentity
-//            })
+            SpringAnimation.spring(0.6, animations: { () -> Void in
+                self.view.layoutIfNeeded()
+                self.showClubListBtnIcon.transform = CGAffineTransformIdentity
+            })
             clubList.reloadData()
             showClubListBtn.tag = 1
         }else {
@@ -173,10 +179,10 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             bubbles.snp_updateConstraints(closure: { (make) -> Void in
                 make.top.equalTo(self.view).offset(100)
             })
-//            SpringAnimation.spring(0.6, animations: { () -> Void in
-//                self.view.layoutIfNeeded()
-//                self.showClubListBtnIcon.transform = CGAffineTransformMakeRotation(CGFloat( M_PI))
-//            })
+            SpringAnimation.spring(0.6, animations: { () -> Void in
+                self.view.layoutIfNeeded()
+                self.showClubListBtnIcon.transform = CGAffineTransformMakeRotation(CGFloat( M_PI))
+            })
             showClubListBtn.tag = 0
         }
     }
@@ -212,13 +218,13 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     func toggleMapFilter() {
         
         if clubFilter.expanded {
-            clubFilter.view.snp_remakeConstraints(closure: { (make) -> Void in
+            clubFilterView.snp_remakeConstraints(closure: { (make) -> Void in
                 make.top.equalTo(self.view).offset(10)
                 make.left.equalTo(self.view).offset(15)
                 make.size.equalTo(CGSizeMake(124, 41))
             })
         }else {
-            clubFilter.view.snp_remakeConstraints(closure: { (make) -> Void in
+            clubFilterView.snp_remakeConstraints(closure: { (make) -> Void in
                 make.top.equalTo(self.view).offset(10)
                 make.left.equalTo(self.view).offset(15)
                 make.size.equalTo(CGSizeMake(124, 42 * 7))

@@ -12,7 +12,7 @@ import SwiftyJSON
 class StatusHotController: UICollectionViewController {
     var status: [Status] = []
     var myRefreshControl: UIRefreshControl?
-    var homeController: StatusHomeController?
+    weak var homeController: StatusHomeController?
     
     convenience init () {
         let layout = UICollectionViewFlowLayout()

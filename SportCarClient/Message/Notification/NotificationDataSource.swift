@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import Dollar
 
 
 class NotificationDataSource: NSObject {
@@ -53,6 +54,17 @@ class NotificationDataSource: NSObject {
             let notification = Notification.objects.getOrCreate(data)
             self.notifications.append(notification!)
             updated = true
+        }
+        notifications = $.uniq(notifications) { (notif) -> String in
+            return notif.notificationID!
+        }
+        notifications.sortInPlace { (notif1, notif2) -> Bool in
+            switch notif1.createdAt!.compare(notif2.createdAt!) {
+            case .OrderedDescending:
+                return true
+            default:
+                return false
+            }
         }
         if updated {
             Notification.objects.saveAll()

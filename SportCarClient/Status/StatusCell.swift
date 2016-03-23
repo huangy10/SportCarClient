@@ -14,7 +14,7 @@ import Dollar
 /// 状态页面的cell
 class StatusCell: UITableViewCell, UICollectionViewDataSource{
     
-    var parent: UIViewController?
+    weak var parent: UIViewController?
     
     static let reuseIdentifier = "statuc_cell"
     

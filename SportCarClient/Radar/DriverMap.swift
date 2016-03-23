@@ -165,7 +165,6 @@ extension RadarDriverMapController {
         }
         self.userLocation = userLocation
         userAnnotate.coordinate = userLocation.location.coordinate
-        print(userLocation.location.coordinate)
         updateUserLocationToServer()
     }
     

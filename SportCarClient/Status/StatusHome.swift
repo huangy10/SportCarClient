@@ -36,6 +36,10 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
     
     private var _curTag = 1
     
+    deinit {
+        print("deinit status home")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()

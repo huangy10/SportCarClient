@@ -38,11 +38,11 @@ extension UIViewController {
      - parameter blurred: 是否进行模糊
      */
     func getScreenShotBlurred(blurred: Bool) -> UIImage {
-//        let window = UIApplication.sharedApplication().keyWindow!
-//        UIGraphicsBeginImageContextWithOptions(window.frame.size, window.opaque, UIScreen.mainScreen().scale)
-//        window.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-//        let image = UIGraphicsGetImageFromCurrentImageContext()
-//        UIGraphicsEndImageContext()
+        let window = UIApplication.sharedApplication().keyWindow!
+        UIGraphicsBeginImageContextWithOptions(window.frame.size, window.opaque, UIScreen.mainScreen().scale)
+        window.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
 //        if blurred {
 //            let imageToBlur = CIImage(image: image)
 //            let blurFilter = CIFilter(name: "CIGaussianBlur")
@@ -50,7 +50,7 @@ extension UIViewController {
 //            let resultImage = blurFilter?.valueForKey("outputImage") as? CIImage
 //            return UIImage(CIImage: resultImage!)
 //        }
-        return UIImage()
+        return image
     }
     
     func blurImageUsingCoreImage(inputImage: UIImage) -> UIImage {

@@ -11,7 +11,7 @@ import UIKit
 
 class ActivityNearByController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate {
     
-    var home: ActivityHomeController!
+    weak var home: ActivityHomeController!
     
     var acts: [Activity] = []
     
@@ -60,7 +60,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
         }
         //
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSizeMake(170, 250)
+        layout.itemSize = CGSizeMake(170, 200)
         layout.scrollDirection = .Horizontal
         layout.minimumInteritemSpacing = 0.01
         actsBoard = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
@@ -74,7 +74,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
             make.bottom.equalTo(superview)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.height.equalTo(270)
+            make.height.equalTo(220)
         }
         //
         pageCount = UIPageControl()

@@ -40,6 +40,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         //
         imageBtn1 = UIButton()
         imageBtn1.tag = 0
+        imageBtn1.imageView?.contentMode = .ScaleAspectFill
         imageBtn1.setImage(defaultCover, forState: .Normal)
         container.addSubview(imageBtn1)
         imageBtn1.snp_makeConstraints { (make) -> Void in
@@ -60,6 +61,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         imageBtn2 = UIButton()
         imageBtn2.tag = 1
         imageBtn2.setImage(defaultCover, forState: .Normal)
+        imageBtn2.imageView?.contentMode = .ScaleAspectFill
         container.addSubview(imageBtn2)
         imageBtn2.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(container)
@@ -79,6 +81,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         imageBtn3 = UIButton()
         imageBtn3.tag = 2
         imageBtn3.setImage(defaultCover, forState: .Normal)
+        imageBtn3.contentMode = .ScaleAspectFill
         container.addSubview(imageBtn3)
         imageBtn3.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(container)

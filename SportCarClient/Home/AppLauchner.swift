@@ -58,7 +58,6 @@ class AppManager: UIViewController {
         let nav = BlackBarNavigationController(rootViewController: ctrl)
         self.presentViewController(nav, animated: true, completion: nil)
         self.navigationController?.popToRootViewControllerAnimated(false)
-        
         NSNotificationCenter.defaultCenter().postNotificationName(kAppManagerNotificationLogout, object: nil)
     }
 }

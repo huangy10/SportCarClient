@@ -23,6 +23,10 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     var userLocation: BMKUserLocation?
     var userAnno: BMKPointAnnotation!
     
+    deinit {
+        print("deinit person basic controller")
+    }
+    
     init(user: User) {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .Vertical

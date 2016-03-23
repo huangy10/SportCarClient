@@ -26,6 +26,10 @@ class ActivityHomeController: UIViewController {
     var titleBtnIcon: UIImageView!
     var curTag: Int = 1
     
+    deinit {
+        print("deinit activity home controller")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
@@ -132,7 +136,6 @@ class ActivityHomeController: UIViewController {
     }
     
     func navLeftBtnPressed() {
-//        self.navigationController?.popViewControllerAnimated(true)
         homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false))
     }
     

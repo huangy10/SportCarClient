@@ -22,12 +22,11 @@ let kBarTitleFont = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
 let kTextInputFont = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
 
 // Network
-let kHostName = "101.5.64.174"
+let kHostName = "localhost"
 //let kHostName = "111.206.219.158"
 let kPortName = "8000"
 let kChatPortName = "8888"
 let kProtocalName = "http"
-let kMapStyleURL = NSURL(string: "mapbox://styles/woodyhuang1992/ciigr1ml4009q9xkjihwlpgbh")
 
 //
 let kMaxPhotoSelect: Int = 9    // 最大可以选择的照片的数量

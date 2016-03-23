@@ -27,7 +27,7 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
-//        self.view.backgroundColor = UIColor.clearColor()
+        self.view.backgroundColor = kBarBgColor
         tableView.separatorStyle = .None
         tableView.layer.cornerRadius = 4
         tableView.registerClass(RadarFilterHeader.self, forHeaderFooterViewReuseIdentifier: "header")

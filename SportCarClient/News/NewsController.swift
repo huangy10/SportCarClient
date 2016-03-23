@@ -18,6 +18,10 @@ class NewsController: UITableViewController {
     /// 展示的资讯的内容
     var news: [News] = []
     
+    deinit {
+        print("deinit news controller")
+    }
+    
     override init(style: UITableViewStyle) {
         super.init(style: style)
     }
