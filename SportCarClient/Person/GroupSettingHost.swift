@@ -166,6 +166,14 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
                 modifier.initValue = targetClub.clubDescription
             case 4:
                 modifier.initValue = targetClub.clubJoining?.nickName ?? User.objects.hostUser()?.nickName
+            case 2:
+                if !targetClub.identified {
+                    // If the club is not identified, show auth controller
+                    let auth = ClubAuthController()
+                    auth.club = targetClub
+                    self.navigationController?.pushViewController(auth, animated: true)
+                    return
+                }
             default:
                 return
             }

@@ -57,6 +57,10 @@ class ChatURLMaker {
         return website + "/club/\(clubID)/members"
     }
     
+    func clubAuth(clubID: String) -> String {
+        return website + "/club/\(clubID)/auth"
+    }
+    
     func unreadInformation() -> String {
         return website + "/chat/unread"
     }
@@ -448,5 +452,22 @@ class ChatRequester: AccountRequester {
         return manager.request(.POST, url, parameters: ["op_type": opType, "target_users": members], encoding: .JSON).responseJSON(completionHandler: { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
         })
+    }
+    
+    /**
+     认证车辆
+     */
+    func clubAuth(clubID: String, district: String, description: String, onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()) -> Request {
+        let url = ChatURLMaker.sharedMaker.clubAuth(clubID)
+        return manager.request(.POST, url, parameters: ["city": district, "description": description], encoding: .JSON)
+            .progress({ (_, written, total) -> Void in
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    let progress = Float(written) / Float(total)
+                    onProgress(progress: progress)
+                })
+            })
+            .responseJSON(completionHandler: { (response) -> Void in
+                self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
+            })
     }
 }

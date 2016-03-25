@@ -38,6 +38,7 @@
 		BF2F7E921C644A3400E3A3A2 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F7E901C644A3400E3A3A2 /* Notification.swift */; };
 		BF2F7E951C644A8A00E3A3A2 /* Notification.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F7E941C644A8A00E3A3A2 /* Notification.generated.swift */; };
 		BF2F7E971C644C7600E3A3A2 /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2F7E961C644C7600E3A3A2 /* NotificationCell.swift */; };
+		BF313B7C1CA3D62A00545DB7 /* LabelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF313B7B1CA3D62A00545DB7 /* LabelFactory.swift */; };
 		BF32EEB01C08B22F0098FEC1 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = BF32EEAF1C08B22F0098FEC1 /* Podfile */; };
 		BF3387E61C47C2AF00B95CAB /* StatusReleaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3387E51C47C2AF00B95CAB /* StatusReleaseController.swift */; };
 		BF3BD5EA1C28E89000499674 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BF3BD5E91C28E89000499674 /* Settings.bundle */; };
@@ -79,6 +80,7 @@
 		BF67816C1C15AA77001C89AE /* AccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816B1C15AA77001C89AE /* AccountController.swift */; };
 		BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816F1C15AB10001C89AE /* LoginRegister.swift */; };
 		BF77F3191C85357D00B09D9A /* ReportAndBlacklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF77F3181C85357D00B09D9A /* ReportAndBlacklist.swift */; };
+		BF8495C31CA50C0C003B1B2D /* StatusNearby.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8495C21CA50C0C003B1B2D /* StatusNearby.swift */; };
 		BF8D0DC31C424E710070B921 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D0DC21C424E710070B921 /* ViewControllerExtensions.swift */; };
 		BF8D42FA1C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D42F91C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift */; };
 		BF8D42FD1C7481F5009AD4BA /* ActivityReleaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D42FC1C7481F5009AD4BA /* ActivityReleaseCell.swift */; };
@@ -188,6 +190,7 @@
 		BFDFF2871C8CB11000055C1C /* ClubFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFF2861C8CB11000055C1C /* ClubFilter.swift */; };
 		BFE0CD151C8D79810031C45B /* AlamofireExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE0CD141C8D79810031C45B /* AlamofireExtension.swift */; };
 		BFEFB5E31C5E4C8600841BF4 /* chatAccessoryBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEFB5E21C5E4C8600841BF4 /* chatAccessoryBoard.swift */; };
+		BFF5EEF91CA428E700F64301 /* ClubRank.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5EEF81CA428E700F64301 /* ClubRank.swift */; };
 		BFFA15451C9D271E00E985DF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15441C9D271E00E985DF /* Location.swift */; };
 		BFFA15471C9D2B1700E985DF /* RequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15461C9D2B1700E985DF /* RequestProtocol.swift */; };
 		BFFA51161C05D9910019E5EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA51151C05D9910019E5EF /* AppDelegate.swift */; };
@@ -253,6 +256,7 @@
 		BF2F7E901C644A3400E3A3A2 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Notification.swift; path = Model/Notification.swift; sourceTree = "<group>"; };
 		BF2F7E941C644A8A00E3A3A2 /* Notification.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Notification.generated.swift; path = Model/Notification.generated.swift; sourceTree = "<group>"; };
 		BF2F7E961C644C7600E3A3A2 /* NotificationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationCell.swift; path = Message/Notification/NotificationCell.swift; sourceTree = "<group>"; };
+		BF313B7B1CA3D62A00545DB7 /* LabelFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LabelFactory.swift; path = BaseTemplate/factory/LabelFactory.swift; sourceTree = "<group>"; };
 		BF32EEAF1C08B22F0098FEC1 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		BF3387E51C47C2AF00B95CAB /* StatusReleaseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusReleaseController.swift; path = Status/Release/StatusReleaseController.swift; sourceTree = "<group>"; };
 		BF3BD5E91C28E89000499674 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -294,6 +298,7 @@
 		BF67816B1C15AA77001C89AE /* AccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountController.swift; path = Accounts/AccountController.swift; sourceTree = "<group>"; };
 		BF67816F1C15AB10001C89AE /* LoginRegister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginRegister.swift; path = Accounts/LoginRegister.swift; sourceTree = "<group>"; };
 		BF77F3181C85357D00B09D9A /* ReportAndBlacklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportAndBlacklist.swift; path = Status/Report/ReportAndBlacklist.swift; sourceTree = "<group>"; };
+		BF8495C21CA50C0C003B1B2D /* StatusNearby.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusNearby.swift; path = Status/HomeSubviews/StatusNearby.swift; sourceTree = "<group>"; };
 		BF8D0DC21C424E710070B921 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewControllerExtensions.swift; path = BaseTemplate/ViewControllerExtensions.swift; sourceTree = "<group>"; };
 		BF8D42F91C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityReleaseInfoBoard.swift; path = Activity/ActivityReleaseInfoBoard.swift; sourceTree = "<group>"; };
 		BF8D42FC1C7481F5009AD4BA /* ActivityReleaseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityReleaseCell.swift; path = Activity/ActivityReleaseCell.swift; sourceTree = "<group>"; };
@@ -404,6 +409,7 @@
 		BFDFF2861C8CB11000055C1C /* ClubFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubFilter.swift; path = Radar/ClubFilter.swift; sourceTree = "<group>"; };
 		BFE0CD141C8D79810031C45B /* AlamofireExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlamofireExtension.swift; path = 3rdParty/AlamofireExtension.swift; sourceTree = "<group>"; };
 		BFEFB5E21C5E4C8600841BF4 /* chatAccessoryBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = chatAccessoryBoard.swift; path = Message/Chat/chatAccessoryBoard.swift; sourceTree = "<group>"; };
+		BFF5EEF81CA428E700F64301 /* ClubRank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubRank.swift; path = Radar/ClubRank.swift; sourceTree = "<group>"; };
 		BFFA15441C9D271E00E985DF /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Location.swift; path = Map/Location.swift; sourceTree = "<group>"; };
 		BFFA15461C9D2B1700E985DF /* RequestProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestProtocol.swift; path = BaseTemplate/RequestProtocol.swift; sourceTree = "<group>"; };
 		BFFA51121C05D9910019E5EF /* SportCarClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SportCarClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -601,6 +607,14 @@
 				BF2F7E901C644A3400E3A3A2 /* Notification.swift */,
 			);
 			name = Notification;
+			sourceTree = "<group>";
+		};
+		BF313B7A1CA39DA200545DB7 /* factory */ = {
+			isa = PBXGroup;
+			children = (
+				BF313B7B1CA3D62A00545DB7 /* LabelFactory.swift */,
+			);
+			name = factory;
 			sourceTree = "<group>";
 		};
 		BF32EEAA1C088CF60098FEC1 /* Account */ = {
@@ -843,6 +857,7 @@
 		BF9B54B01C80107D0006D673 /* Club */ = {
 			isa = PBXGroup;
 			children = (
+				BFF5EEF71CA428A200F64301 /* rank */,
 				BFDFF27F1C8C0E6100055C1C /* Cell */,
 				BFDFF27C1C8BF73300055C1C /* Bubbles */,
 				BFDFF27A1C8BF6EA00055C1C /* ClubDiscover.swift */,
@@ -895,6 +910,7 @@
 		BFAC52281C1C849000107F71 /* BaseTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				BF313B7A1CA39DA200545DB7 /* factory */,
 				BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */,
 				BF1D93541C52775900FD9997 /* Views */,
 				BFA2C7671C40F96400202EF0 /* Tools */,
@@ -1162,6 +1178,7 @@
 				BFCA900E1C50A09100B05E74 /* StatusBasic.swift */,
 				BFCA90101C50A0C000B05E74 /* StatusFollow.swift */,
 				BFA64EFF1C946AB900BA460F /* StatusHot.swift */,
+				BF8495C21CA50C0C003B1B2D /* StatusNearby.swift */,
 			);
 			name = HomeSubViews;
 			sourceTree = "<group>";
@@ -1239,6 +1256,14 @@
 				BFE0CD141C8D79810031C45B /* AlamofireExtension.swift */,
 			);
 			name = Extension;
+			sourceTree = "<group>";
+		};
+		BFF5EEF71CA428A200F64301 /* rank */ = {
+			isa = PBXGroup;
+			children = (
+				BFF5EEF81CA428E700F64301 /* ClubRank.swift */,
+			);
+			name = rank;
 			sourceTree = "<group>";
 		};
 		BFFA51091C05D9910019E5EF = {
@@ -1602,6 +1627,7 @@
 				BF9664001C89449F0096D131 /* ClubAuth.swift in Sources */,
 				BFC36BA51C6AE5F500DC6FE2 /* SportCarInfo.swift in Sources */,
 				BF54DD7A1C303D5100F635C0 /* NewsRequester.swift in Sources */,
+				BFF5EEF91CA428E700F64301 /* ClubRank.swift in Sources */,
 				BFFBA80D1C6595CF00991642 /* privateSettings.swift in Sources */,
 				BF2336901C5669A000F0AE41 /* ChatRecordDataSource.swift in Sources */,
 				BF2BE21C1C29390200DD0CF9 /* Club.generated.swift in Sources */,
@@ -1687,6 +1713,7 @@
 				BF1EC23F1C49414F0016F425 /* UserSelect.swift in Sources */,
 				BFDFF27B1C8BF6EA00055C1C /* ClubDiscover.swift in Sources */,
 				BFCA900F1C50A09100B05E74 /* StatusBasic.swift in Sources */,
+				BF313B7C1CA3D62A00545DB7 /* LabelFactory.swift in Sources */,
 				BFC0326C1C6F39EA00ECA69A /* ActivityHome.swift in Sources */,
 				BFC032671C6F19D300ECA69A /* SportCarDetailView.swift in Sources */,
 				BF54DD681C2EB4FE00F635C0 /* NewsController.swift in Sources */,
@@ -1735,6 +1762,7 @@
 				BFCA90141C50D6CB00B05E74 /* StatusDetail.swift in Sources */,
 				BFC032511C6DCD6200ECA69A /* AuthBasic.swift in Sources */,
 				BF9663FE1C8889220096D131 /* GroupSettingHost.swift in Sources */,
+				BF8495C31CA50C0C003B1B2D /* StatusNearby.swift in Sources */,
 				BF6308981C1965AF0087A4F0 /* Agreement.swift in Sources */,
 				BFC032911C7451AD00ECA69A /* ActivityRelease.swift in Sources */,
 				BFCA900C1C4FC74B00B05E74 /* StatusCell.swift in Sources */,

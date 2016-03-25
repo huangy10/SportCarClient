@@ -258,6 +258,17 @@ extension RadarDriverMapController {
         return cell
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let anno = userAnnos.valueForIndex(indexPath.row)
+        guard let user = anno?.user else {
+            assertionFailure()
+            return
+        }
+        assert(user.userID != User.objects.hostUserID)
+        let detail = PersonOtherController(user: user)
+        radarHome?.navigationController?.pushViewController(detail, animated: true)
+    }
+    
     func showUserBtnPressed() {
         if showUserListBtn.tag == 0 {
             userList.snp_remakeConstraints { (make) -> Void in

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Dollar
 
 class FansSelectController: UserSelectController {
     var targetUser: User?
@@ -72,6 +73,7 @@ class FansSelectController: UserSelectController {
                     self.fansDateThreshold = DateSTR(json["created_at"].stringValue)
                 }
                 if fansJSONData.count > 0 {
+                    self.fans = $.uniq(self.fans, by: {$0.userID!})
                     self.userTableView?.reloadData()
                 }
             }

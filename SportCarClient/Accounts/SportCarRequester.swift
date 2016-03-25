@@ -124,17 +124,21 @@ class SportCarRequester: AccountRequester {
      - parameter idCard:       身份证
      - parameter licenseNum:   车牌照
      */
-    func authenticateSportscar(carID: String, driveLicense: UIImage, photo: UIImage, idCard: UIImage, licenseNum: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+    func authenticateSportscar(carID: String, driveLicense: UIImage, photo: UIImage, idCard: UIImage, licenseNum: String, onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()) {
         let url = SportCarURLMaker.sharedMaker.authenticateSportscar()
         manager.upload(.POST, url, multipartFormData: { (form) -> Void in
             form.appendBodyPart(data: carID.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "car_id")
             form.appendBodyPart(data: UIImagePNGRepresentation(driveLicense)!, name: "drive_license", fileName: "drive_license.png", mimeType: "image/png")
             form.appendBodyPart(data: UIImagePNGRepresentation(photo)!, name: "photo", fileName: "photo.png", mimeType: "image/png")
-            form.appendBodyPart(data: UIImagePNGRepresentation(idCard)!, name: "idCard", fileName: "id_card", mimeType: "image/png")
+            form.appendBodyPart(data: UIImagePNGRepresentation(idCard)!, name: "id_card", fileName: "id_card", mimeType: "image/png")
             form.appendBodyPart(data: licenseNum.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "license")
             }) { (result) -> Void in
                 switch result {
                 case .Success(let upload, _, _):
+                    upload.progress({ (_, totalWritten, total) -> Void in
+                        let progress = Float(totalWritten) / Float(total)
+                        onProgress(progress: progress)
+                    })
                     upload.responseJSON(completionHandler: { (response) -> Void in
                         self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
                     })

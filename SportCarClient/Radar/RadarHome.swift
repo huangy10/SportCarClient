@@ -165,6 +165,8 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             titleBtnIcon.snp_remakeConstraints(closure: { (make) -> Void in
                 make.edges.equalTo(titleDriverBtn)
             })
+            driver.viewWillAppear(true)
+            club.viewWillDisappear(true)
         }else {
             board.setContentOffset(CGPointMake(self.view.frame.width, 0), animated: true)
             titleDriverBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -172,6 +174,8 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             titleBtnIcon.snp_remakeConstraints(closure: { (make) -> Void in
                 make.edges.equalTo(titleClubBtn)
             })
+            driver.viewWillDisappear(true)
+            club.viewWillAppear(true)
         }
         curTag = sender.tag
         UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in

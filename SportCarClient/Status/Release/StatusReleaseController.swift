@@ -82,6 +82,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         super.viewDidDisappear(animated)
         mapView.viewWillDisappear()
         mapView.delegate = nil
+        locationService?.delegate = nil
         locSearch?.delegate = nil
     }
     

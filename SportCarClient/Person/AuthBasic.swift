@@ -79,6 +79,7 @@ class AuthBasicController: InputableViewController {
             make.left.equalTo(self.view).offset(15)
             make.right.equalTo(self.view).offset(-15)
             make.top.equalTo(privilegeBoard.snp_bottom)
+            make.height.equalTo(getHeightForDescriptionLable())
         }
         //
         imagesInputPanel = createImagesImputPanel()

@@ -145,6 +145,7 @@ class SportCarInfoDetailController: UITableViewController {
             self.showToast(LS("您的爱车已认证"))
         }else {
             let detail = SportscarAuthController()
+            detail.car = own
             self.navigationController?.pushViewController(detail, animated: true)
         }
     }

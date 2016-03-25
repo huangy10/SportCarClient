@@ -22,9 +22,9 @@ let kBarTitleFont = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
 let kTextInputFont = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
 
 // Network
-let kHostName = "localhost"
-//let kHostName = "111.206.219.158"
-let kPortName = "8000"
+//let kHostName = "localhost"
+let kHostName = "111.206.219.158"
+let kPortName = "80"
 let kChatPortName = "8888"
 let kProtocalName = "http"
 
@@ -91,7 +91,7 @@ func DateSTR(str: String?) -> NSDate? {
  */
 func STRDate(date: NSDate) -> String {
     let formatter = NSDateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSSSS Z"
+    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSSSS z"
     formatter.timeZone = NSTimeZone(abbreviation: "UTC")
     return formatter.stringFromDate(date)
 }

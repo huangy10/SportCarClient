@@ -109,6 +109,7 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
         }
         if logoImage == nil {
             self.displayAlertController(LS("请为俱乐部选择一个标志"), message: nil)
+            return
         }
         let userIDs = users.map { $0.userID! }
         // send creation request
@@ -116,7 +117,7 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
         requester.createNewClub(clubName, clubLogo: logoImage!, members: userIDs, description: "Description", onSuccess: { (json) -> () in
             // Notice: here we create the club instance after receiving response from server for simplicity
             let newClub = Club.objects.getOrCreate(json!)
-            //
+            Club.objects.saveAll()
             let kingfisherCache = KingfisherManager.sharedManager.cache
             kingfisherCache.storeImage(self.logoImage!, forKey: SFURL(newClub.logo_url!)!.absoluteString)
             self.delegate?.groupChatSetupControllerDidSuccessCreatingClub(newClub)

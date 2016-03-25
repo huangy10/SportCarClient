@@ -23,7 +23,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
     
     var displayStatus: StatusHomeDisplayMode = .NearBy
     // 三个tableView
-    var nearByStatusCtrl = StatusBasicController()
+    var nearByStatusCtrl = StatusNearbyController()
     var followStatusCtrl = StatusFollowController()
     var hotStatusCtrl = StatusHotController()
     //

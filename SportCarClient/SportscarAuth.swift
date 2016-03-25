@@ -30,21 +30,26 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
     override func navRightBtnPressed() {
         for im in self.selectedImages {
             if im == nil {
-                self.displayAlertController(LS("错误"), message: LS("请完整提供要求的信息"))
+                self.showToast(LS("请完整提供要求的信息"))
                 return
             }
         }
         guard let carLicenseNum = carLicense.text where carLicenseNum.length > 0 else {
-            self.displayAlertController(LS("错误"), message: LS("请完整提供要求的信息"))
+            self.showToast(LS("请完整提供要求的信息"))
             return
         }
         let requester = SportCarRequester.sharedSCRequester
+        pp_showProgressView()
         requester.authenticateSportscar(car.car!.carID!, driveLicense: selectedImages[0]!, photo: selectedImages[2]!, idCard: selectedImages[1]!, licenseNum: districtLabel.text! + carLicenseNum, onSuccess: { (json) -> () in
-            
+            self.pp_hideProgressView()
+            self.showToast(LS("认证申请已经成功发送"))
+            }, onProgress: { (progress) -> () in
+                self.pp_updateProgress(progress)
             }) { (code) -> () in
-                print(code)
+                self.pp_hideProgressView()
+                self.showToast(LS("认证申请发送失败"))
         }
-        // TODO: 提交完成以后要弹出toast
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     override func getStaticLabelContentForIndex(index: Int) -> String {

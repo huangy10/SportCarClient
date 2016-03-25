@@ -114,7 +114,12 @@ class Notification: NSManagedObject {
 //            relatedObject = act
 //            image = act.poster
 //            break
-//            
+        case "auth_car_denied":
+            break
+            
+        case "auth_car_approved":
+            break
+            
         default:
             print(json)
             assertionFailure()

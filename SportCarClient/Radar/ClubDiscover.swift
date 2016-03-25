@@ -19,10 +19,14 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     
     var clubList: UITableView!
     var clubFilter: ClubFilterController!
+    var clubWrapper: BlackBarNavigationController!
     var clubFilterView: UIView!
     var showClubListBtn: UIButton!
     var showClubListBtnIcon: UIImageView!
     var shadowLine: UIView!
+    
+    var firstShow = false
+    var allowToShow = false
     
     deinit {
         bubbles.endUpdate()
@@ -35,7 +39,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         createSubviews()
 
         let requester = ChatRequester.requester
-        requester.discoverClub("recent", skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
+        requester.discoverClub("nearby", skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
                 let club = Club.objects.getOrCreate(data)
                 self.clubs.append(club)
@@ -43,6 +47,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             self.bubbles.clubs = self.clubs
             self.bubbles.reloadBubble()
             self.bubbles.startUpdate()
+            self.bubbles.updator?.paused = true
             }) { (code) -> () in
                 print(code)
         }
@@ -50,6 +55,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        bubbles.updator?.paused = false
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -128,10 +134,10 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         btnLbl.frame = CGRectMake(47.5, 0, 60, 50)
         //
         clubFilter = ClubFilterController()
-        clubFilter.selectedRow = 5
+        clubFilter.selectedRow = 0
         clubFilter.delegate = self
-        let wrapper = BlackBarNavigationController(rootViewController: clubFilter)
-        clubFilterView = wrapper.view
+        clubWrapper = BlackBarNavigationController(rootViewController: clubFilter)
+        clubFilterView = clubWrapper.view
         clubFilterView.layer.shadowRadius = 4
         clubFilterView.layer.shadowColor = UIColor.blackColor().CGColor
         clubFilterView.layer.shadowOffset = CGSizeMake(0, 3)

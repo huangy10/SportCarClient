@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Dollar
 
 
 class FollowSelectController: UserSelectController {
@@ -74,6 +75,7 @@ class FollowSelectController: UserSelectController {
                     self.followsDateThreshold = DateSTR(json["created_at"].stringValue)
                 }
                 if fansJSONData.count > 0 {
+                    self.follows = $.uniq(self.follows, by: {return $0.userID!})
                     self.userTableView?.reloadData()
                 }
             }

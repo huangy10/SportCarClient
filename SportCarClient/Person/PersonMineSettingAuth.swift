@@ -8,7 +8,9 @@
 
 import UIKit
 
-class PersonMineSettingsAuthController: AuthThreeImagesController {
+class PersonMineSettingsAuthController: AuthThreeImagesController, ProgressProtocol {
+    
+    var pp_progressView: UIProgressView?
     
     override func titleForRightNavBtn() -> String {
         return LS("提交")
@@ -30,11 +32,15 @@ class PersonMineSettingsAuthController: AuthThreeImagesController {
             }
             uploadImages.append(x!)
         }
-        let requester = PersonRequester.requester
-        requester.postCorporationUserApplication(uploadImages, onSuccess: { (data) -> () in
-            print("down")
+        pp_showProgressView()
+        PersonRequester.requester.postCorporationUserApplication(uploadImages, onSuccess: { (data) -> () in
+            self.pp_hideProgressView()
+            self.showToast(LS("认证请求已发送"))
+            }, onProgress: { (let progress) in
+                self.pp_updateProgress(progress)
             }) { (code) -> () in
-                print(code)
+                self.pp_hideProgressView()
+                self.showToast(LS("认证请求发送失败"))
         }
         self.navigationController?.popViewControllerAnimated(true)
     }

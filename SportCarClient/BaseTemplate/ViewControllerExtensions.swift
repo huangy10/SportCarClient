@@ -64,8 +64,7 @@ extension UIViewController {
      - parameter maxLastLength: 最大显示的时长
      */
     func showToast(message: String, maxLastLength: Double=3) {
-//        let rootViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
-        let superview = self.view
+        let superview = UIApplication.sharedApplication().keyWindow!.rootViewController!.view
         let toastContainer = UIView()
         toastContainer.backgroundColor = UIColor(red: 0.067, green: 0.051, blue: 0.051, alpha: 1)
         toastContainer.layer.shadowColor = UIColor(white: 0, alpha: 0.4).CGColor
@@ -100,7 +99,7 @@ extension UIViewController {
     }
     
     func showStaticToast(message: String) -> UIView {
-        let superview = self.view
+        let superview = UIApplication.sharedApplication().keyWindow!.rootViewController!.view
         let toastContainer = UIView()
         toastContainer.backgroundColor = UIColor(red: 0.067, green: 0.051, blue: 0.051, alpha: 1)
         toastContainer.layer.shadowColor = UIColor(white: 0, alpha: 0.4).CGColor

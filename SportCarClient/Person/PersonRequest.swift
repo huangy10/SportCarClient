@@ -107,7 +107,7 @@ class PersonRequester: AccountRequester{
      - parameter onSuccess: 成功以后调用的closure
      - parameter onError:   失败以后调用的closure
      */
-    func postCorporationUserApplication(images: [UIImage], onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+    func postCorporationUserApplication(images: [UIImage], onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()) {
         if images.count != 3 {
             assertionFailure()
         }
@@ -119,6 +119,10 @@ class PersonRequester: AccountRequester{
             }) { (result) -> Void in
                 switch result {
                 case .Success(let upload, _, _):
+                    upload.progress({ (_, written, total) -> Void in
+                        let progress = Float(written) / Float(total)
+                        onProgress(progress: progress)
+                    })
                     upload.responseJSON(completionHandler: { (response) -> Void in
                         self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
                     })

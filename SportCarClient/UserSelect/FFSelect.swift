@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Dollar
 
 let kMaxSelectUserNum = 9
 
@@ -202,6 +203,7 @@ class FFSelectController: UserSelectController {
                         self.fansDateThreshold = DateSTR(json["created_at"].stringValue)
                     }
                     if fansJSONData.count > 0 {
+                        self.fans = $.uniq(self.fans, by: { return $0.userID! })
                         self.userTableView?.reloadData()
                     }
                 }
@@ -220,6 +222,7 @@ class FFSelectController: UserSelectController {
                         self.followDateThreshold = DateSTR(json["created_at"].stringValue)
                     }
                     if followJSONData.count > 0 {
+                        self.follows = $.uniq(self.follows, by: {return $0.userID!})
                         self.userTableView?.reloadData()
                     }
                 }

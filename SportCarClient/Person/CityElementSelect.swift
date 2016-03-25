@@ -48,8 +48,8 @@ class CityElementSelectDataSource {
 
 class CityElementSelectController: UITableViewController {
     weak var delegate: CityElementSelectDelegate?
-    var level: Int = 0      // 可以通过修改这个level值来控制选择的深度
-    var maxLevel: Int = 2
+    var level: Int = 0
+    var maxLevel: Int = 2// 可以通过修改这个level值来控制选择的深度
     var datas: [String] = []
     var selectedElement: String?
     var dataSource: CityElementSelectDataSource!
@@ -118,6 +118,7 @@ class CityElementSelectController: UITableViewController {
         }
         let detail = CityElementSelectController()
         detail.dataSource = dataSource
+        detail.maxLevel = maxLevel
         detail.level = level + 1
         detail.delegate = delegate
         self.navigationController?.pushViewController(detail, animated: true)
