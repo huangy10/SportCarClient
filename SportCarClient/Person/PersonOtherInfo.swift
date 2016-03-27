@@ -14,7 +14,7 @@ class PersonOtherInfoController: PersonMineInfoController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
-            cell.avatarImage.kf_setImageWithURL(SFURL(user.avatarUrl!)!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+            cell.avatarImage.kf_setImageWithURL(user.avatarURL!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
                 if error == nil {
                     cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
                 }
@@ -30,11 +30,8 @@ class PersonOtherInfoController: PersonMineInfoController {
             case 0:
                 break
             case 2:
-                if let clubID = user.profile?.avatarClubID {
-                    let club = Club.objects.getOrLoad(clubID)
-                    club?.logo_url = user.profile?.avatarClubLogo
-                    club?.name = user.profile?.avatarClubName
-                    let detail = ClubBriefInfoController()
+                if let club = user.avatarClubModel {
+                    let detail = ClubBriefInfoController() 
                     detail.targetClub = club
                     self.navigationController?.pushViewController(detail, animated: true)
                 }

@@ -31,7 +31,7 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
     /// 搜索栏
     var searchBar: UISearchBar?
     /// 在地图上选人
-    var findOnMapBtn: UIButton?
+//    var findOnMapBtn: UIButton?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,25 +51,25 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
         searchBar?.translucent = true
         searchBar?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview)
-            make.right.equalTo(superview).offset(-90)
+            make.right.equalTo(superview)
             make.top.equalTo(superview)
             make.height.equalTo(44)
         })
         searchBar?.returnKeyType = .Search
         self.inputFields.append(searchBar)
         //
-        findOnMapBtn = UIButton()
-        findOnMapBtn?.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-        findOnMapBtn?.setTitle(LS("在地图上选人"), forState: .Normal)
-        findOnMapBtn?.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        superview.addSubview(findOnMapBtn!)
-        findOnMapBtn?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(superview).offset(-15)
-            make.centerY.equalTo(searchBar!)
-            make.width.equalTo(72)
-            make.height.equalTo(searchBar!)
-        })
-        findOnMapBtn?.addTarget(self, action: "findOnMapBtnPressed", forControlEvents: .TouchUpInside)
+//        findOnMapBtn = UIButton()
+//        findOnMapBtn?.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
+//        findOnMapBtn?.setTitle(LS("在地图上选人"), forState: .Normal)
+//        findOnMapBtn?.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+//        superview.addSubview(findOnMapBtn!)
+//        findOnMapBtn?.snp_makeConstraints(closure: { (make) -> Void in
+//            make.right.equalTo(superview).offset(-15)
+//            make.centerY.equalTo(searchBar!)
+//            make.width.equalTo(72)
+//            make.height.equalTo(searchBar!)
+//        })
+//        findOnMapBtn?.addTarget(self, action: "findOnMapBtnPressed", forControlEvents: .TouchUpInside)
         //
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSizeMake(35, 35)
@@ -183,12 +183,12 @@ extension UserSelectController {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(UserSelectCell.reuseIdentifier, forIndexPath: indexPath) as! UserSelectCell
         let user = users[indexPath.row]
-        cell.avatarImg?.kf_setImageWithURL(SFURL(user.avatarUrl!)!)
+        cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
         
         cell.selectBtn?.tag = indexPath.row
-        if selectedUsers.filter({$0.userID == user.userID}).count > 0 {
+        if selectedUsers.filter({$0.ssid == user.ssid}).count > 0 {
             cell.selectBtn?.selected = true
         } else {
             cell.selectBtn?.selected = false
@@ -251,7 +251,7 @@ extension UserSelectController {
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(UserSelectedcell.reuseIdentifier, forIndexPath: indexPath) as! UserSelectedcell
         let user = selectedUsers[indexPath.row]
-        cell.imageView?.kf_setImageWithURL(SFURL(user.avatarUrl!)!)
+        cell.imageView?.kf_setImageWithURL(user.avatarURL!)
         return cell
     }
 }

@@ -264,7 +264,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             showToast(LS("请输入动态详情"))
             return
         }
-        let car_id = sportCarList?.selectedCar?.carID
+        let car_id = sportCarList?.selectedCar?.ssidString
         guard let lat: Double? = userLocation?.location.coordinate.latitude else {
             showToast(LS("无法获取当前位置"))
             return
@@ -276,7 +276,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         let requester = StatusRequester.SRRequester
         let toast = self.showStaticToast(LS("发布中..."))
         let informUserIds = informOfUsers.map { (user) -> String in
-            return user.userID!
+            return user.ssidString
         }
         pp_showProgressView()
         requester.postNewStatus(content, images: [selectedImage!], car_id: car_id, lat: lat, lon: lon, loc_description: loc_description, informOf: informUserIds, onSuccess: { (json) -> () in
@@ -336,9 +336,7 @@ extension StatusReleaseController {
     
     func userSelected(users: [User]) {
         informOfUsers.appendContentsOf(users)
-        informOfUsers = $.uniq(informOfUsers, by: { (user: User) -> String in
-            return user.userID!
-        })
+        informOfUsers = $.uniq(informOfUsers, by: { return $0.ssid })
         informOfList?.users = informOfUsers
         informOfList?.collectionView?.reloadData()
         informOfListCountLbl?.text = "\(informOfUsers.count)/9"

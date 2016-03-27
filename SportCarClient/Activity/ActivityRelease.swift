@@ -28,7 +28,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     var endAt: String = LS("请选择活动截止时间")
     var endAtDate: NSDate?
     var clubLimit: String = LS("全部")
-    var clubLimitID: String? = nil
+    var clubLimitID: Int32? = nil
     var poster: UIImage?
     
     var locationService: BMKLocationService?
@@ -126,16 +126,15 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         
         var informUser: [String]? = nil
         if board.informOfUsers.count > 0 {
-            informUser = board.informOfUsers.map({ (user) -> String in
-                return user.userID!
-            })
+            informUser = board.informOfUsers.map({$0.ssidString})
         }
         
         // 上传数据
         let toast = showStaticToast(LS("发布中..."))
         pp_showProgressView()
         let requester = ActivityRequester.requester
-        requester.createNewActivity(actName, des: actDes, informUser: informUser, maxAttend: attendNum, startAt: startAtDate!, endAt: endAtDate!, clubLimit: clubLimitID, poster: posterImage, lat: userLocation!.latitude, lon: userLocation!.longitude, loc_des: locDescriptin ?? "", onSuccess: { (json) -> () in
+        let clubLimitIDString: String? = clubLimitID == nil ? nil : "\(clubLimitID!)"
+        requester.createNewActivity(actName, des: actDes, informUser: informUser, maxAttend: attendNum, startAt: startAtDate!, endAt: endAtDate!, clubLimit: clubLimitIDString, poster: posterImage, lat: userLocation!.latitude, lon: userLocation!.longitude, loc_des: locDescriptin ?? "", onSuccess: { (json) -> () in
             self.navigationController?.popViewControllerAnimated(true)
             let mine = self.actHomeController?.mine
             mine?.refreshControl?.beginRefreshing()

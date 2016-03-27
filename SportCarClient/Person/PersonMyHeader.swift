@@ -258,18 +258,18 @@ class PersonHeaderMine: UIView {
     
     func loadDataAndUpdateUI() {
         // 头像
-        avatarBtn.kf_setImageWithURL(SFURL(user.avatarUrl!)!, forState: .Normal)
+        avatarBtn.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
         // 认证跑车
-        if let carID = user.profile?.avatarCarID where carID != "" {
-            avatarCarBtn.kf_setImageWithURL(SFURL(user.profile!.avatarCarLogo!)!, forState: .Normal)
-            avatarCarNameLbl.text = user.profile?.avatarCarName
-        }else {
+        if let car = user.avatarCarModel {
+            avatarCarBtn.kf_setImageWithURL(car.logoURL!, forState: .Normal)
+            avatarCarNameLbl.text = car.name
+        } else {
             avatarCarBtn.setImage(nil, forState: .Normal)
             avatarCarNameLbl.text = ""
         }
         // 认证俱乐部
-        if let clubID = user.profile?.avatarClubID where clubID != "" {
-            avatarClubLogo.kf_setImageWithURL(SFURL(user.profile!.avatarClubLogo!)!, forState: .Normal)
+        if let club = user.avatarClubModel {
+            avatarClubLogo.kf_setImageWithURL(club.logoURL!, forState: .Normal)
         }else {
             avatarClubLogo.setImage(nil, forState: .Normal)
         }
@@ -285,11 +285,10 @@ class PersonHeaderMine: UIView {
         }
         let age = user.age
         genderAgeLbl.text = "\(gender!) \(age) "
-        // 
-        let profile = user.profile
-        fansNumLbl.text = "\(profile!.fansNum)"
-        followNumLbl.text = "\(profile!.followNum)"
-        statusNumLbl.text = "\(profile!.statusNum)"
+        //
+        fansNumLbl.text = "\(user.fansNum)"
+        followNumLbl.text = "\(user.followsNum)"
+        statusNumLbl.text = "\(user.statusNum)"
     }
 }
 

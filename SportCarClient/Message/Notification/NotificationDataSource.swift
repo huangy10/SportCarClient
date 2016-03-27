@@ -24,7 +24,7 @@ class NotificationDataSource: NSObject {
                 notifications.each({ (notification) -> () in
                     notification.read = true
                 })
-                Notification.objects.saveAll()
+                try! NotificationModelManager.sharedManager.save()
             }
         }
     }
@@ -42,7 +42,7 @@ class NotificationDataSource: NSObject {
     }
     
     func loadHistoricalNotifications() {
-        self.notifications.appendContentsOf(Notification.objects.historicalList(40))
+        self.notifications.appendContentsOf(Notification.loadHistoricalList(40))
     }
     
     /**
@@ -51,13 +51,11 @@ class NotificationDataSource: NSObject {
     func loadNotificationListFromJSON(json: [JSON]) {
         var updated = false
         for data in json {
-            let notification = Notification.objects.getOrCreate(data)
-            self.notifications.append(notification!)
+            let notification: Notification = try! NotificationModelManager.sharedManager.getOrCreate(data)
+            self.notifications.append(notification)
             updated = true
         }
-        notifications = $.uniq(notifications) { (notif) -> String in
-            return notif.notificationID!
-        }
+        notifications = $.uniq(notifications, by: { $0.ssid })
         notifications.sortInPlace { (notif1, notif2) -> Bool in
             switch notif1.createdAt!.compare(notif2.createdAt!) {
             case .OrderedDescending:
@@ -67,7 +65,7 @@ class NotificationDataSource: NSObject {
             }
         }
         if updated {
-            Notification.objects.saveAll()
+            try! NotificationModelManager.sharedManager.save()
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.list?.tableView.reloadData()
             })
@@ -77,7 +75,7 @@ class NotificationDataSource: NSObject {
     func updateNotification() {
         let threshold = notifications.first()?.createdAt ?? NSDate()
         let opType = notifications.first() != nil ? "latest" : "more"
-        let dateFix = notifications.first()?.notificationID ?? ""
+        let dateFix = notifications.first()?.ssidString ?? ""
         requester.getNotifications(threshold, limit: 10, opType: opType, dateFix: dateFix, onSuccess: { (json) -> () in
             self.loadNotificationListFromJSON(json!.arrayValue)
             var delayTime: dispatch_time_t = DISPATCH_TIME_NOW

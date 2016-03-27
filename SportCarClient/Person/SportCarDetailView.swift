@@ -14,7 +14,7 @@ let kSportsCarInfoDetailStaticLabelString2 = [LS("价格"), LS("发动机"), LS(
 
 class SportCarInfoDetailController: UITableViewController {
     
-    var own: SportCarOwnerShip!
+    var car: SportCar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,10 +75,10 @@ class SportCarInfoDetailController: UITableViewController {
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! SportCarInfoDetailHeader
-            header.carImage.kf_setImageWithURL(SFURL(own.car!.image!)!)
-            header.carNameLbl.text = own.car?.name
+            header.carImage.kf_setImageWithURL(car.imageURL!)
+            header.carNameLbl.text = car.name
             header.authBtn.addTarget(self, action: "carAuthBtnPressed", forControlEvents: .TouchUpInside)
-            if own.identified {
+            if car.identified {
                 header.carAuthStatusIcon.image = UIImage(named: "auth_status_authed")
             }else{
                 header.carAuthStatusIcon.image = UIImage(named: "auth_status_unauthed")
@@ -100,15 +100,15 @@ class SportCarInfoDetailController: UITableViewController {
             switch indexPath.row {
             case 0:
                 cell.editable = false
-                cell.infoLbl.text = own.car?.name
+                cell.infoLbl.text = car.name
                 break
             case 1:
                 cell.editable = true
-                cell.infoLbl.text = own.car?.name
+                cell.infoLbl.text = car.name
                 break
             case 2:
                 cell.editable = true
-                cell.infoLbl.text = own.signature
+                cell.infoLbl.text = car.signature
                 break
             default:
                 break
@@ -118,19 +118,19 @@ class SportCarInfoDetailController: UITableViewController {
             cell.editable = true
             switch indexPath.row {
             case 0:
-                cell.infoLbl.text = own.car?.price
+                cell.infoLbl.text = car.price
                 break
             case 1:
-                cell.infoLbl.text = own.car?.engine
+                cell.infoLbl.text = car.engine
                 break
             case 2:
-                cell.infoLbl.text = own.car?.transimission
+                cell.infoLbl.text = car.torque
                 break
             case 3:
-                cell.infoLbl.text = own.car?.max_speed
+                cell.infoLbl.text = car.maxSpeed
                 break
             case 4:
-                cell.infoLbl.text = own.car?.zeroTo60
+                cell.infoLbl.text = car.zeroTo60
                 break
             default:
                 break
@@ -140,12 +140,12 @@ class SportCarInfoDetailController: UITableViewController {
     }
     
     func carAuthBtnPressed() {
-        if own.identified {
+        if car.identified {
             // TODO: 显示toast您的爱车已经认证
             self.showToast(LS("您的爱车已认证"))
         }else {
             let detail = SportscarAuthController()
-            detail.car = own
+            detail.car = car
             self.navigationController?.pushViewController(detail, animated: true)
         }
     }
@@ -175,6 +175,8 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
         //
         carImage = UIImageView()
         superview.addSubview(carImage)
+        carImage.contentMode = .ScaleAspectFill
+        carImage.clipsToBounds = true
         carImage.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.top.equalTo(superview)

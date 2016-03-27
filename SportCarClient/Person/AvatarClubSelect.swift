@@ -22,7 +22,7 @@ class AvatarClubSelectController: AvatarItemSelectController {
     weak var delegate: AvatarClubSelectDelegate?
     
     var clubs: [Club] = []
-    var user: User = User.objects.hostUser()!
+    var user: User = MainManager.sharedManager.hostUser!
     
     var selectedRow: Int = -1
     
@@ -35,9 +35,9 @@ class AvatarClubSelectController: AvatarItemSelectController {
         requester.getClubListAuthed({ (json) -> () in
             var i = 0
             for data in json!.arrayValue {
-                let club = Club.objects.getOrCreate(data["club"])
+                let club: Club = try! MainManager.sharedManager.getOrCreate(data)
                 self.clubs.append(club)
-                if club.clubID == self.user.profile?.avatarClubID {
+                if club.ssid == self.user.avatarClubModel?.ssid{
                     self.selectedRow = i
                 }
                 i += 1
@@ -97,7 +97,7 @@ class AvatarClubSelectController: AvatarItemSelectController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(AvatarItemSelectCell.reuseIdentifier, forIndexPath: indexPath) as! AvatarItemSelectCell
         let club = clubs[indexPath.row]
-        cell.avatarImg?.kf_setImageWithURL(SFURL(club.logo_url!)!, placeholderImage: nil)
+        cell.avatarImg?.kf_setImageWithURL(club.logoURL!, placeholderImage: nil)
         cell.selectBtn?.tag = indexPath.row
         cell.nickNameLbl?.text = club.name
         cell.authIcon.hidden = true

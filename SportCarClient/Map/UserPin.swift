@@ -16,11 +16,9 @@ class UserAnnotationView: BMKAnnotationView {
     weak var parent: UIViewController!
     var user: User! {
         didSet {
-            if let avatarURL = SFURL(user.avatarUrl!) {
-                avatar.kf_setImageWithURL(avatarURL, forState: .Normal)
-            }
-            if let avatarCarURLStr = user.profile!.avatarCarLogo {
-                avatarCar.kf_setImageWithURL(SFURL(avatarCarURLStr)!)
+            avatar.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
+            if let avatarCarURL = user.avatarCarModel?.logoURL {
+                avatarCar.kf_setImageWithURL(avatarCarURL)
             }
         }
     }

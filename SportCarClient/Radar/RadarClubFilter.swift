@@ -17,7 +17,7 @@ class RadarClubFilterController: UITableViewController {
     weak var delegate: RadarClubFilterDelegate?
     
     var clubs: [Club] = []
-    var selectdClubID: String?
+    var selectdClubID: Int32?
     var selectdClub: String?
     
     override func viewDidLoad() {
@@ -37,7 +37,7 @@ class RadarClubFilterController: UITableViewController {
         let requester = ChatRequester.requester
         requester.getClubList({ (json) -> () in
             for data in json!.arrayValue {
-                let club = Club.objects.getOrCreate(data["club"])
+                let club: Club = try! MainManager.sharedManager.getOrCreate(data["club"])
                 self.clubs.append(club)
             }
             self.tableView.reloadData()
@@ -56,8 +56,8 @@ class RadarClubFilterController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let club = clubs[indexPath.row]
-        if club.clubID != selectdClubID {
-            selectdClubID = club.clubID
+        if club.ssid != selectdClubID {
+            selectdClubID = club.ssid
             delegate?.radarClubFilterDidChange(self)
         }
     }
@@ -65,7 +65,7 @@ class RadarClubFilterController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! RadarFilterCell
         cell.titleLbl.text = clubs[indexPath.row].name
-        cell.marker.hidden = clubs[indexPath.row].clubID != selectdClubID
+        cell.marker.hidden = clubs[indexPath.row].ssid != selectdClubID
         return cell
     }
     

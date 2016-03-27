@@ -103,57 +103,58 @@ class AccountRequester {
         }
     }
     
-    func postToLogin(phoneNum: String, password: String, onSuccess: (userID: String?)->(Void), onError: (code: String?)->(Void)) {
+    func postToLogin(phoneNum: String, password: String, onSuccess: (json: JSON?)->(Void), onError: (code: String?)->(Void)) {
         manager.request(.POST, urlMaker.login()!.absoluteString, parameters: ["username": phoneNum, "password": password]).responseJSON { (response) -> Void in
-            switch response.result {
-            case .Success(let value):
-                let json = JSON(value)
-                if json["success"].boolValue {
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        let userID = json["userID"].stringValue
-                        onSuccess(userID: userID)
-                    })
-                }else{
-                    dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
-                        onError(code: json["code"].string)
-                    })
-                }
-                break
-            case .Failure(let error):
-                print("\(error)")
-                dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
-                    onError(code: "0000")
-                })
-                break
-            }
+            self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
+//            switch response.result {
+//            case .Success(let value):
+//                let json = JSON(value)
+//                if json["success"].boolValue {
+//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                        let userID = json["userID"].stringValue
+//                        onSuccess(userID: userID)
+//                    })
+//                }else{
+//                    dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
+//                        onError(code: json["code"].string)
+//                    })
+//                }
+//                break
+//            case .Failure(let error):
+//                print("\(error)")
+//                dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
+//                    onError(code: "0000")
+//                })
+//                break
+//            }
         }
     }
     
-    func postToRegister(phoneNum: String, passwd: String, authCode: String, onSuccess: (userID: String?)->(Void), onError: (code: String?)->(Void)) {
+    func postToRegister(phoneNum: String, passwd: String, authCode: String, onSuccess: (json: JSON?)->(Void), onError: (code: String?)->(Void)) {
         manager.request(.POST, urlMaker.register()!.absoluteString, parameters: ["username": phoneNum, "password1": passwd, "password2": passwd, "auth_code": authCode]).responseJSON { (response) -> Void in
-            
-            switch response.result {
-            case .Success(let value):
-                let json = JSON(value)
-                if json["success"].boolValue {
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        let userID = json["userID"].stringValue
-                        onSuccess(userID: userID)
-                    })
-                }else{
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        onError(code: json["code"].string)
-                    })
-                }
-                break
-            case .Failure(let error):
-                print(error)
-                dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
-                    onError(code: "0000")
-                })
-                break
-            }
-//            
+            self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
+//            switch response.result {
+//            case .Success(let value):
+//                let json = JSON(value)
+//                if json["success"].boolValue {
+//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                        let userID = json["userID"].stringValue
+//                        onSuccess(userID: userID)
+//                    })
+//                }else{
+//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                        onError(code: json["code"].string)
+//                    })
+//                }
+//                break
+//            case .Failure(let error):
+//                print(error)
+//                dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
+//                    onError(code: "0000")
+//                })
+//                break
+//            }
+//
 //            guard response.result.isSuccess else{
 //                dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
 //                    onError(code: "0000")

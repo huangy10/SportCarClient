@@ -16,10 +16,6 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     var targetClub: Club!
     // 是否设置发生了更改
     var dirty: Bool = false
-    //
-    var clubJoining: ClubJoining? {
-        return targetClub.clubJoining
-    }
     
     // 活动描述：
     var activityDescription: String?
@@ -50,15 +46,18 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "quit")
         
         let requester = ChatRequester.requester
-        requester.getClubInfo(targetClub.clubID!, onSuccess: { (json) -> () in
-            self.targetClub.loadValueFromJSON(json!["club"], ctx: ChatRecord.objects.context)
-            self.targetClub.clubJoining?.updateFromJson(json!)
+        requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
+            try! self.targetClub.loadDataFromJSON(json!, detailLevel: 0)
+            self.targetClub.members.removeAll()
             for data in json!["club"]["members"].arrayValue {
                 // 添加成员
-                let user = User.objects.getOrCreate(data)
-                self.targetClub.addMember(user)
+                let user: User = try! MainManager.sharedManager.getOrCreate(data)
+                self.targetClub.members.append(user)
             }
             self.tableView.reloadData()
+            self.inlineUserSelect?.users = self.targetClub.members
+            self.inlineUserSelect?.collectionView?.reloadData()
+            
             }) { (code) -> () in
                 print(code)
         }
@@ -160,7 +159,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
-            cell.avatarImage.kf_setImageWithURL(SFURL(targetClub.logo_url!)!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+            cell.avatarImage.kf_setImageWithURL(targetClub.logoURL!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
                 if error == nil {
                     cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
                 }
@@ -188,14 +187,14 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                     break
                 case 3:
                     cell.staticLbl.text = LS("我在本群的昵称")
-                    cell.infoLbl.text = clubJoining?.nickName ?? User.objects.hostUser()?.nickName
+                    cell.infoLbl.text = targetClub.remarkName ?? MainManager.sharedManager.hostUser!.nickName
                     cell.boolSelect.hidden = true
                     break
                 default:
                     cell.staticLbl.text = LS("显示本群昵称")
                     cell.boolSelect.hidden = false
                     cell.infoLbl.text = ""
-                    cell.boolSelect.on = clubJoining?.showNickName ?? true
+                    cell.boolSelect.on = targetClub.showNickName ?? true
                     cell.tag = 0
                     cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
                 }
@@ -213,7 +212,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                     inlineUserSelect?.relatedClub = targetClub
                 }
                 inlineUserSelect?.users = Array(targetClub.members)
-                inlineUserSelect?.showAddBtn = !targetClub.onlyHostInvites
+                inlineUserSelect?.showAddBtn = !targetClub.onlyHostCanInvite
                 inlineUserSelect?.collectionView?.reloadData()
                 return cell
             }
@@ -226,7 +225,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 cell.infoLbl.text = ""
                 cell.boolSelect.hidden = false
                 cell.boolSelect.tag = 1
-                cell.boolSelect.on = clubJoining?.noDisturbing ?? false
+                cell.boolSelect.on = targetClub.noDisturbing
                 cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
                 break
             case 1:
@@ -234,7 +233,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 cell.infoLbl.text = ""
                 cell.boolSelect.hidden = false
                 cell.boolSelect.tag = 2
-                cell.boolSelect.on = clubJoining?.alwaysOnTop ?? false
+                cell.boolSelect.on = targetClub.alwayOnTop
                 cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
                 break
             default:
@@ -253,7 +252,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 if deleteQuitBtn == nil {
                     deleteQuitBtn = UIButton()
                     deleteQuitBtn?.setImage(UIImage(named: "delete_and_quit_btn"), forState: .Normal)
-                    deleteQuitBtn?.addTarget(self, action: "deletedAndQuitBtnPressed", forControlEvents: .TouchUpInside)
+                    deleteQuitBtn?.addTarget(self, action: "deleteAndQuitBtnPressed", forControlEvents: .TouchUpInside)
                     cell.contentView.addSubview(deleteQuitBtn!)
                     deleteQuitBtn?.snp_makeConstraints(closure: { (make) -> Void in
                         make.centerX.equalTo(cell.contentView)
@@ -271,7 +270,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         if indexPath.section == 1 && indexPath.row == 3 {
             // 修改本群昵称
             let detail = PersonMineSinglePropertyModifierController()
-            detail.initValue = clubJoining?.nickName ?? User.objects.hostUser()?.nickName
+            detail.initValue = targetClub.remarkName ?? MainManager.sharedManager.hostUser!.nickName
             detail.focusedIndexPath = indexPath
             detail.delegate = self
             self.navigationController?.pushViewController(detail, animated: true)
@@ -283,7 +282,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     func didModify(newValue: String?, indexPath: NSIndexPath) {
         if indexPath.section == 1 && indexPath.row == 3 {
             dirty = true
-            clubJoining?.nickName = newValue
+            targetClub.remarkName = newValue
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         }
     }
@@ -293,7 +292,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     }
     
     func inlineUserSelectNeedAddMembers() {
-        if targetClub.onlyHostInvites {
+        if targetClub.onlyHostCanInvite {
             self.showToast(LS("本群只有群主能够邀请成员"))
             return
         }
@@ -312,12 +311,13 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         // send request to the server
         dismissViewControllerAnimated(true, completion: nil)
         if users.count == 0 { return }
-        let userIDs = users.map({return $0.userID!})
-        let originIDs = Array(targetClub.members).map({return $0.userID!})
+        let userIDs = users.map({return $0.ssidString})
+        let originIDs = Array(targetClub.members).map({return $0.ssidString})
         let targets = userIDs.filter({!originIDs.contains($0)})
         let requester = ChatRequester.requester
-        requester.updateClubMembers(targetClub.clubID!, members: targets, opType: "add", onSuccess: { (json) -> () in
-            self.targetClub.addMembers(Set(users))
+        requester.updateClubMembers(targetClub.ssidString, members: targets, opType: "add", onSuccess: { (json) -> () in
+            // TODO: 放到请求外面
+            self.targetClub.members.appendContentsOf(users)
             self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 5, inSection: 1)], withRowAnimation: .Automatic)
             }) { (code) -> () in
                 if code == "no permission" {
@@ -328,8 +328,8 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     }
     
     func clearChatContent() {
-        let identifier = targetClub.clubID
-        ChatRecordDataSource.sharedDataSource.clearChatContentForIdentifier(identifier!)
+        let identifier = targetClub.ssidString
+        ChatRecordDataSource.sharedDataSource.clearChatContentForIdentifier(identifier)
         hideToast()
     }
     
@@ -346,13 +346,13 @@ extension GroupChatSettingController {
         dirty = true
         switch sender.tag {
         case 0:
-            clubJoining?.showNickName = sender.on
+            targetClub.showNickName = sender.on
             break
         case 1:
-            clubJoining?.noDisturbing = sender.on
+            targetClub.noDisturbing = sender.on
             break
         case 2:
-            clubJoining?.alwaysOnTop = sender.on
+            targetClub.alwayOnTop = sender.on
         default:
             break
         }

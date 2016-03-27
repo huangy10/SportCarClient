@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, SportCarBrandSelecterControllerDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate {
+class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, SportCarBrandSelecterControllerDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate, SportCarSelectDetailProtocol {
     weak var homeDelegate: HomeDelegate?
     // 显示的用户的信息
     var data: PersonDataSource!
@@ -58,28 +58,28 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         let requester = PersonRequester.requester
         
         // 这个请求是保证当前用户的数据是最新的，而hostuser中的数据可以暂时先直接拿来展示
-        requester.getProfileDataFor(data.user.userID!, onSuccess: { (json) -> () in
+        requester.getProfileDataFor(data.user.ssidString, onSuccess: { (json) -> () in
             let hostUser = self.data.user
-            hostUser.loadFromJSON(json!, ctx: nil, basic: false)
+            try! hostUser.loadDataFromJSON(json!, detailLevel: 1)
             self.header.user = hostUser
             self.header.loadDataAndUpdateUI()
             }) { (code) -> ()? in
                 print(code)
         }
         // 获取认证车辆的列表
-        requester.getAuthedCars(data.user.userID!, onSuccess: { (json) -> () in
+        requester.getAuthedCars(data.user.ssidString, onSuccess: { (json) -> () in
             self.data.handleAuthedCarsJSONResponse(json!, user: self.data.user)
-            self.data.selectedCar = self.data.owns.first()
-            self.carsViewList.owns = self.data.owns
+            self.data.selectedCar = self.data.cars.first()
+            self.carsViewList.cars = self.data.cars
             // 默认选择第一辆认证的车辆
-            self.carsViewList.selectedCar = self.data.owns.first()
+            self.carsViewList.selectedCar = self.data.cars.first()
             self.carsViewList.collectionView?.reloadData()
             }) { (code) -> () in
                 print(code)
         }
         // 第三个响应：开始获取的动态列表，每次获取十个
         let statusRequester = StatusRequester.SRRequester
-        statusRequester.getStatusListSimplified(data.user.userID!, carID: nil, dateThreshold: NSDate(), limit: 10, onSuccess: { (json) -> () in
+        statusRequester.getStatusListSimplified(data.user.ssidString, carID: nil, dateThreshold: NSDate(), limit: 10, onSuccess: { (json) -> () in
             //
             self.jsonDataHandler(json!, container: &self.data.statusList)
             self.collectionView?.reloadData()
@@ -202,7 +202,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             if section == 0 {
                 return 1
             }else {
-                return data.statusDict[data.selectedCar!.car!.carID!]!.count
+                return data.statusDict[data.selectedCar!.ssidString]!.count
             }
         }
     }
@@ -218,13 +218,13 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         }else {
             if indexPath.section == 0 {
                 let cell = collectionView.dequeueReusableCellWithReuseIdentifier(SportCarInfoCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarInfoCell
-                cell.own = data.selectedCar
+                cell.car = data.selectedCar
                 cell.delegate = self
                 cell.loadDataAndUpdateUI()
                 return cell
             }else {
                 let cell = collectionView.dequeueReusableCellWithReuseIdentifier(PersonStatusListCell.reuseIdentifier, forIndexPath: indexPath) as! PersonStatusListCell
-                let statusList = data.statusDict[data.selectedCar!.car!.carID!]!
+                let statusList = data.statusDict[data.selectedCar!.ssidString]!
                 let status = statusList[indexPath.row]
                 let statusImages = status.image
                 let statusCover = statusImages?.split(";").first()
@@ -243,7 +243,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             if indexPath.section == 0 {
                 return
             }
-            status = data.statusDict[data.selectedCar!.car!.carID!]![indexPath.row]
+            status = data.statusDict[data.selectedCar!.ssidString]![indexPath.row]
         }
         let detail = StatusDetailController(status: status)
         detail.loadAnimated = false
@@ -256,7 +256,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             return CGSizeMake(screenWidth / 3, screenWidth / 3)
         }else {
             if indexPath.section == 0 {
-                return SportCarInfoCell.getPreferredSizeForSignature(data.selectedCar!.signature ?? "", carName: data.selectedCar!.car!.name!)
+                return SportCarInfoCell.getPreferredSizeForSignature(data.selectedCar!.signature ?? "", carName: data.selectedCar!.name!)
             }else{
                 return CGSizeMake(screenWidth / 3, screenWidth / 3)
             }
@@ -315,7 +315,7 @@ extension PersonBasicController {
 
 extension PersonBasicController {
     
-    func didSelectSportCar(own: SportCarOwnerShip?) {
+    func didSelectSportCar(own: SportCar?) {
         data.selectedCar = own
         // 当car是nil时，代表显示所有的动态，直接
         collectionView?.reloadData()
@@ -332,9 +332,9 @@ extension PersonBasicController {
     /**
      按下跑车编辑按钮
      */
-    func carNeedEdit(own: SportCarOwnerShip) {
+    func carNeedEdit(own: SportCar) {
         let detail = SportCarInfoDetailController()
-        detail.own = own
+        detail.car = own
         self.navigationController?.pushViewController(detail, animated: true)
     }
     
@@ -357,9 +357,10 @@ extension PersonBasicController {
         requester.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
             self.hideToast(toast)
             let carImgURL = SF(data["image_url"].stringValue)
-            let headers = [LS("具体型号"), LS("跑车签名"), LS("价格"), LS("发动机"), LS("变速箱"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
+            let headers = [LS("具体型号"), LS("跑车签名"), LS("价格"), LS("发动机"), LS("扭矩"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
             let contents = [carType, nil, data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
             let detail = SportCarSelectDetailController()
+            detail.delegate = self
             detail.headers = headers
             detail.carId = data["carID"].stringValue
             detail.contents = contents
@@ -371,6 +372,13 @@ extension PersonBasicController {
                 self.hideToast(toast)
                 self.showToast(LS("获取跑车数据失败"))
         }
+    }
+    
+    func sportCarSelectDeatilDidAddCar(car: SportCar) {
+        data.addCar(car)
+        carsViewList.cars = data.cars
+        carsViewList.selectedCar = car
+        carsViewList.collectionView?.reloadData()
     }
 }
 
@@ -386,7 +394,7 @@ extension PersonBasicController {
     func jsonDataHandler(json: JSON, inout container: [Status]) {
         let data = json.arrayValue
         for statusJSON in data {
-            let newStatus = Status.objects.getOrCreate(statusJSON)
+            let newStatus: Status = try! MainManager.sharedManager.getOrCreate(statusJSON)
             container.append(newStatus)
         }
         container.sortInPlace { (s1, s2) -> Bool in
@@ -401,14 +409,14 @@ extension PersonBasicController {
     
     func loadMoreStatusData() {
         if data.selectedCar != nil{
-            let selectedCarID = data.selectedCar!.car!.carID!
+            let selectedCarID = data.selectedCar!.ssidString
             let targetStatusList = data.statusDict[selectedCarID]
             var dateThreshold = NSDate()
             if targetStatusList!.count > 0 {
                 dateThreshold = targetStatusList!.last()!.createdAt!
             }
             let statusRequester = StatusRequester.SRRequester
-            statusRequester.getStatusListSimplified(data.user.userID!, carID: selectedCarID, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
+            statusRequester.getStatusListSimplified(data.user.ssidString, carID: selectedCarID, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
                 self.jsonDataHandler(json!, container: &(self.data.statusDict[selectedCarID]!))
                 self.collectionView?.reloadData()
                 }, onError: { (code) -> () in
@@ -421,7 +429,7 @@ extension PersonBasicController {
                 dateThreshold = targetStatusList.last()!.createdAt!
             }
             let statusRequester = StatusRequester.SRRequester
-            statusRequester.getStatusListSimplified(data.user.userID!, carID: nil, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
+            statusRequester.getStatusListSimplified(data.user.ssidString, carID: nil, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
                 self.jsonDataHandler(json!, container: &(self.data.statusList))
                 self.collectionView?.reloadData()
                 }, onError: { (code) -> () in

@@ -38,7 +38,7 @@ class InlineUserSelectDeletable: InlineUserSelectController {
         }
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("deletable_cell", forIndexPath: indexPath) as! InlineUserSelectDeletableCell
         let user = users[indexPath.row]
-        if relatedClub != nil && relatedClub?.host?.userID == user.userID {
+        if relatedClub != nil && relatedClub?.founderUser?.ssid == user.ssid {
             // Owner of this club/group chat
             cell.nameLbl.textColor = kHighlightedRedTextColor
             cell.showDeleteBtn = false
@@ -50,9 +50,9 @@ class InlineUserSelectDeletable: InlineUserSelectController {
                 self.delegate?.inlineUserSelectShouldDeleteUser(user)
             }
         }
-        cell.avatarImg.kf_setImageWithURL(SFURL(user.avatarUrl!)!)
-        if let carURL = user.profile?.avatarCarLogo {
-            cell.avatarCarLogo.kf_setImageWithURL(SFURL(carURL)!)
+        cell.avatarImg.kf_setImageWithURL(user.avatarURL!)
+        if let carURL = user.avatarCarModel?.logoURL {
+            cell.avatarCarLogo.kf_setImageWithURL(carURL)
         } else {
             cell.avatarCarLogo.image = nil
         }

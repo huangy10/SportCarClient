@@ -75,28 +75,11 @@ class SportCarRequester: AccountRequester {
      - parameter onSuccess: 成功以后调用这个
      - parameter onError:   失败以后调用这个
      */
-    func postToFollow(signature:String?, carId: String, onSuccess: ()->(), onError: (code: String?)->()) {
+    func postToFollow(signature:String?, carId: String, onSuccess: (json: JSON?)->(), onError: (code: String?)->()) {
         let urlStr = SportCarURLMaker.sharedMaker.followSportCar(carId)
        
         self.manager.request(.POST, urlStr, parameters: ["signature": signature ?? ""]).responseJSON { (response) -> Void in
-            switch response.result {
-            case .Success(let data):
-                let json = JSON(data)
-                if json["success"].boolValue {
-                    dispatch_async(dispatch_get_main_queue(), onSuccess)
-                }else{
-                    dispatch_async(dispatch_get_main_queue(), {
-                        onError(code: json["code"].string)
-                    })
-                }
-                break
-            case .Failure(let error):
-                print("\(error)")
-                dispatch_async(dispatch_get_main_queue(), {
-                    onError(code: "0000")
-                })
-                break
-            }
+            self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
         }
     }
     

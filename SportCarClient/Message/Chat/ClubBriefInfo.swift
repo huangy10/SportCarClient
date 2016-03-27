@@ -29,20 +29,21 @@ class ClubBriefInfoController: UITableViewController {
         tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
         // Request data for the club
         let requester = ChatRequester.requester
-        requester.getClubInfo(targetClub.clubID!, onSuccess: { (json) -> () in
+        requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
             var clubJson: JSON
-            if json!["clubID"].stringValue != ""{
-                self.targetClub.loadValueFromJSON(json!)
+            if json!["clubID"].isExists() {
+                try! self.targetClub.loadDataFromJSON(json!)
                 clubJson = json!
             }else {
-                self.targetClub.loadValueFromJSON(json!["club"])
+                try! self.targetClub.loadDataFromJSON(json!["club"])
                 self.navigationItem.rightBarButtonItem = nil
                 clubJson = json!["club"]
             }
+            self.targetClub.members.removeAll()
             for data in clubJson["members"].arrayValue {
                 // 添加成员
-                let user = User.objects.getOrCreate(data)
-                self.targetClub.addMember(user)
+                let user: User = try! MainManager.sharedManager.getOrCreate(data)
+                self.targetClub.members.append(user)
             }
             self.tableView.reloadData()
             }) { (code) -> () in
@@ -80,7 +81,7 @@ class ClubBriefInfoController: UITableViewController {
         case 0:
             return 1
         case 1:
-            return targetClub.show_members ? 4 : 3
+            return targetClub.showMembers ? 4 : 3
         default:
             return 0
         }
@@ -89,7 +90,7 @@ class ClubBriefInfoController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
-            cell.avatarImage.kf_setImageWithURL(SFURL(targetClub.logo_url!)!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+            cell.avatarImage.kf_setImageWithURL(targetClub.logoURL!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
                 if error == nil {
                     cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
                 }

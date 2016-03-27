@@ -187,7 +187,7 @@ extension ActivityNearByController {
     */
     func activityFocusedChanged() {
         let focusedActivity = acts[pageCount.currentPage]
-        let center = CLLocationCoordinate2D(latitude: focusedActivity.location_y, longitude: focusedActivity.location_x)
+        let center = focusedActivity.location!.coordinate
         map.setCenterCoordinate(center, animated: true)
         if actAnno != nil {
             map.removeAnnotation(actAnno!)
@@ -210,7 +210,7 @@ extension ActivityNearByController {
             ActivityRequester.requester.getNearByActivities(userLocation.location, queryDistance: 1000, skip: 0, limit: 10, onSuccess: { (json) -> () in
                 self.acts.removeAll()
                 for data in json!.arrayValue {
-                    let act = Activity.objects.getOrCreate(data)
+                    let act: Activity = try! MainManager.sharedManager.getOrCreate(data)
                     self.acts.append(act)
                 }
                 self.actsBoard.reloadData()

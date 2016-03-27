@@ -452,10 +452,10 @@ class LoginRegisterController: InputableViewController {
             return
         }
         loginBtn?.enabled = false
-        self.requester.postToLogin(username, password: password, onSuccess: { (userID) -> (Void) in
+        self.requester.postToLogin(username, password: password, onSuccess: { (json) -> (Void) in
             self.loginBtn?.enabled = true
-
-            User.objects.login("\(userID!)")
+            let user: User = try! MainManager.sharedManager.getOrCreate(json!)
+            MainManager.sharedManager.login(user)
             let app = AppManager.sharedAppManager
             app.guideToContent()
             }) { (code) -> (Void) in
@@ -500,8 +500,9 @@ class LoginRegisterController: InputableViewController {
             return
         }
     
-        self.requester.postToRegister(phone, passwd: passwd, authCode: authCode, onSuccess: { (userID) -> (Void) in
-            User.objects.login(userID!)
+        self.requester.postToRegister(phone, passwd: passwd, authCode: authCode, onSuccess: { (json) -> (Void) in
+            let user: User = try! MainManager.sharedManager.getOrCreate(json!)
+            MainManager.sharedManager.login(user)
             self.registerConfirm()
             }) { (code) -> (Void) in
                 switch code! {

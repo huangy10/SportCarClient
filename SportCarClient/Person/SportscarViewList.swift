@@ -18,7 +18,7 @@ protocol SportCarViewListDelegate: class {
      
      - parameter car: 选中的车辆
      */
-    func didSelectSportCar(car: SportCarOwnerShip?)
+    func didSelectSportCar(car: SportCar?)
     
     /**
      按下了最后的添加按钮
@@ -27,11 +27,11 @@ protocol SportCarViewListDelegate: class {
 }
 
 
-class SportsCarViewListController: UICollectionViewController {
+class SportsCarViewListController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
-    var owns: [SportCarOwnerShip] = []
+    var cars: [SportCar] = []
     
-    var selectedCar: SportCarOwnerShip?
+    var selectedCar: SportCar?
     
     weak var delegate: SportCarViewListDelegate?
     
@@ -40,6 +40,7 @@ class SportsCarViewListController: UICollectionViewController {
     convenience init() {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSizeMake(120, 62)
+        layout.estimatedItemSize = CGSizeMake(120, 62)
         layout.sectionInset = UIEdgeInsetsMake(0, 9, 0, 9)
         layout.minimumInteritemSpacing = 9
         layout.scrollDirection = .Horizontal
@@ -55,11 +56,11 @@ class SportsCarViewListController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return owns.count + (showAddBtn ? 2 : 1)
+        return cars.count + (showAddBtn ? 2 : 1)
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        if indexPath.row < owns.count + 1 {
+        if indexPath.row < cars.count + 1 {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(SportCarViewListTextCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarViewListTextCell
             if indexPath.row == 0{
                 cell.titleLbl.text = LS("动态")
@@ -69,9 +70,9 @@ class SportsCarViewListController: UICollectionViewController {
                     cell.setCellSelected(false)
                 }
             }else {
-                let car = owns[indexPath.row - 1].car!
+                let car = cars[indexPath.row - 1]
                 cell.titleLbl.text = car.name
-                if car.carID == selectedCar?.car?.carID {
+                if car.ssid == selectedCar?.ssid {
                     cell.setCellSelected(true)
                 }else {
                     cell.setCellSelected(false)
@@ -88,13 +89,27 @@ class SportsCarViewListController: UICollectionViewController {
         if indexPath.row == 0 {
             selectedCar = nil
             delegate?.didSelectSportCar(selectedCar)
-        } else if indexPath.row < owns.count + 1 {
-            selectedCar = owns[indexPath.row - 1]
+        } else if indexPath.row < cars.count + 1 {
+            selectedCar = cars[indexPath.row - 1]
             delegate?.didSelectSportCar(selectedCar)
         } else {
             delegate?.needAddSportCar()
         }
         collectionView.reloadData()
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        if indexPath.row >= cars.count + 1 || indexPath.row == 0 {
+            return CGSizeMake(120, 62)
+        }
+        let car = cars[indexPath.row - 1]
+        let name = car.name!
+        let size = name.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold), boundingSize: CGSizeMake(CGFloat.max, CGFloat.max))
+        if size.width > 80 {
+            return CGSizeMake(size.width + 40, 62)
+        } else {
+            return CGSizeMake(120, 62)
+        }
     }
     
 }

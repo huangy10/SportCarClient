@@ -160,8 +160,11 @@ extension NewsController {
                 self.refreshControl?.endRefreshing()
                 return
             }
-            let newNews = News.objects.createOrUpdate(data.arrayValue)
-            self.news += newNews
+            var newNews: [News] = []
+            for newsJSON in data.arrayValue {
+                newNews.append(try! News().loadDataFromJSON(newsJSON))
+            }
+            self.news.appendContentsOf(newNews)
             self.reorganizeNews()
             self.refreshControl?.endRefreshing()
             self.tableView.reloadData()
@@ -181,7 +184,10 @@ extension NewsController {
                 self.refreshControl?.endRefreshing()
                 return
             }
-            let newNews = News.objects.createOrUpdate(data.arrayValue)
+            var newNews: [News] = []
+            for newsJSON in data.arrayValue {
+                newNews.append(try! News().loadDataFromJSON(newsJSON))
+            }
             self.news.appendContentsOf(newNews)
             self.reorganizeNews()
             self.refreshControl?.endRefreshing()
@@ -197,9 +203,7 @@ extension NewsController {
      重新整理资讯，避免重复以及的保证排序
      */
     func reorganizeNews() {
-        news = $.uniq(news, by: { (news: News) -> String in
-            return news.newsID!
-        })
+        news = $.uniq(news, by: {return $0.ssidString})
         news.sortInPlace { (news1 , news2) -> Bool in
             switch news1.createdAt!.compare(news2.createdAt!) {
             case .OrderedDescending:

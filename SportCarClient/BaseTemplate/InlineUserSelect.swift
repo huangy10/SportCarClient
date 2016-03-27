@@ -67,15 +67,15 @@ class InlineUserSelectController: UICollectionViewController {
         if indexPath.row < users.count {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(InlineUserSelectCell.reuseIdentifier, forIndexPath: indexPath) as! InlineUserSelectCell
             let user = users[indexPath.row]
-            if relatedClub != nil && relatedClub?.host?.userID == user.userID {
+            if relatedClub != nil && relatedClub?.founderUser?.ssid == user.ssid {
                 cell.nameLbl.textColor = kHighlightedRedTextColor
-            }else {
+            } else {
                 cell.nameLbl.textColor = UIColor.blackColor()
             }
-            cell.avatarImg.kf_setImageWithURL(SFURL(user.avatarUrl!)!)
-            if let carURL = user.profile?.avatarCarLogo {
-                cell.avatarCarLogo.kf_setImageWithURL(SFURL(carURL)!)
-            }else {
+            cell.avatarImg.kf_setImageWithURL(user.avatarURL!)
+            if let carURL = user.avatarCarModel?.logoURL {
+                cell.avatarCarLogo.kf_setImageWithURL(carURL)
+            } else {
                 cell.avatarCarLogo.image = nil
             }
             var userNickName = user.remarkName ?? user.nickName!
@@ -155,12 +155,13 @@ class InlineUserSelectCell: UICollectionViewCell {
             if user == nil {
                 return
             }
-            avatarImg.kf_setImageWithURL(SFURL(user!.avatarUrl!)!)
-            if let avatarCarURLStr = user?.profile?.avatarCarLogo {
+            avatarImg.kf_setImageWithURL(user!.avatarURL!)
+            if let avatarCarURL = user?.avatarCarModel?.logoURL {
                 avatarCarLogo.hidden = false
-                avatarCarLogo.kf_setImageWithURL(SFURL(avatarCarURLStr)!)
-            }else{
+                avatarCarLogo.kf_setImageWithURL(avatarCarURL)
+            } else {
                 avatarCarLogo.hidden = true
+                avatarCarLogo.image = nil
             }
             let name = user?.nickName
             if name!.length > 5{

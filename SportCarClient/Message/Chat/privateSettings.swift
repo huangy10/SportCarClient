@@ -56,7 +56,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
         // 从网络获取配置数据
         let requester = ChatRequester.requester
-        requester.getUserRelationSettings(targetUser.userID!, onSuccess: { (data) -> () in
+        requester.getUserRelationSettings(targetUser.ssidString, onSuccess: { (data) -> () in
             self.targetUser.remarkName = data!["remark_name"].string
             self.allowSeeStatus = data!["allow_see_status"].boolValue
             self.seeHisStatus = data!["see_his_status"].boolValue
@@ -89,7 +89,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     func navLeftBtnPressed() {
         self.navigationController?.popViewControllerAnimated(true)
         let requester = ChatRequester.requester
-        requester.postUpdateUserRelationSettings(targetUser.userID!, remark_name: targetUser.remarkName!, allowSeeStatus: allowSeeStatus, seeHisStatus: seeHisStatus, onSuccess: { (_) -> () in
+        requester.postUpdateUserRelationSettings(targetUser.ssidString, remark_name: targetUser.remarkName!, allowSeeStatus: allowSeeStatus, seeHisStatus: seeHisStatus, onSuccess: { (_) -> () in
             
             }) { (code) -> () in
                 
@@ -139,7 +139,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
             cell.selectionStyle = .None
-            cell.avatarImage.kf_setImageWithURL(SFURL(targetUser.avatarUrl!)!)
+            cell.avatarImage.kf_setImageWithURL(targetUser.avatarURL!)
             return cell
         case 1:
             if indexPath.row < 1 {
@@ -329,7 +329,7 @@ extension PrivateChatSettingController {
     func userSelected(var users: [User]) {
         self.dismissViewControllerAnimated(true, completion: nil)
         if userSelectPurpose == "group_chat" {
-            if users.findIndex({ $0.userID == self.targetUser.userID}) == nil {
+            if users.findIndex({ $0.ssid == self.targetUser.ssid}) == nil {
                 users.insert(self.targetUser, atIndex: 0)
             }
             if users.count <= 1 {
@@ -353,9 +353,9 @@ extension PrivateChatSettingController {
      情况聊天内容
      */
     func clearChatContent() {
-        let hostID = User.objects.hostUserID
-        let targetID = targetUser.userID
-        let identifier = getIdentifierForIdPair(hostID!, targetID!)
+        let hostID = MainManager.sharedManager.hostUserIDString
+        let targetID = targetUser.ssidString
+        let identifier = getIdentifierForIdPair(hostID!, targetID)
         ChatRecordDataSource.sharedDataSource.clearChatContentForIdentifier(identifier)
         hideToast()
     }

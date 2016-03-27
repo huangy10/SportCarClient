@@ -155,7 +155,7 @@ extension RadarDriverMapController {
         locationService.stopUserLocationService()
         if self.userLocation == nil {
             let annotate = UserAnnotation()
-            annotate.user = User.objects.hostUser()
+            annotate.user = MainManager.sharedManager.hostUser!
             annotate.coordinate = userLocation.location.coordinate
             map.addAnnotation(annotate)
 //            map.setCenterCoordinate(annotate.coordinate, animated: true)
@@ -171,7 +171,7 @@ extension RadarDriverMapController {
     func mapView(mapView: BMKMapView!, viewForAnnotation annotation: BMKAnnotation!) -> BMKAnnotationView! {
         if let userAnno = annotation as? UserAnnotation {
             let user = userAnno.user
-            if user.userID == User.objects.hostUserID {
+            if user.isHost {
                 let cell = HostUserOnRadarAnnotationView(annotation: annotation, reuseIdentifier: "host")
                 cell.startScan()
                 return cell
@@ -216,8 +216,8 @@ extension RadarDriverMapController {
             // 当前正在显示的用户
             for data in json!.arrayValue {
                 // 创建用户对象
-                let user = User.objects.getOrCreate(data)
-                let userID = user.userID!
+                let user: User = try! MainManager.sharedManager.getOrCreate(data)
+                let userID = user.ssidString
                 if let anno = self.userAnnos[userID] {
                     let loc = data["loc"]
                     anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
@@ -264,7 +264,7 @@ extension RadarDriverMapController {
             assertionFailure()
             return
         }
-        assert(user.userID != User.objects.hostUserID)
+        assert(!user.isHost)
         let detail = PersonOtherController(user: user)
         radarHome?.navigationController?.pushViewController(detail, animated: true)
     }

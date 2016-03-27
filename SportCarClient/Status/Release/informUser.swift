@@ -82,7 +82,7 @@ class InformOtherUserController: UIViewController, UICollectionViewDelegate, UIC
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(InformOtherUserCell.reuseIdentifier, forIndexPath: indexPath) as! InformOtherUserCell
         let user = users[indexPath.row]
         cell.user = user
-        cell.imageView?.kf_setImageWithURL(SFURL(user.avatarUrl!)!)
+        cell.imageView?.kf_setImageWithURL(user.avatarURL!)
         return cell
     }
 }

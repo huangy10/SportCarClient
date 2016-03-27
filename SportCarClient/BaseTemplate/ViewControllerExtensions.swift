@@ -225,3 +225,13 @@ extension UIViewController {
     }
     
 }
+
+
+extension CALayer {
+    func addDefaultLayer() {
+        self.shadowRadius = 2
+        self.shadowColor = UIColor.blackColor().CGColor
+        self.shadowOpacity = 0.4
+        self.shadowOffset = CGSizeMake(0, 3)
+    }
+}

@@ -42,6 +42,7 @@ class StatusBasicController: UITableViewController {
         tableView.registerClass(StatusCell.self, forCellReuseIdentifier: StatusCell.reuseIdentifier)
         myRefreshControl = UIRefreshControl()
         tableView.addSubview(myRefreshControl!)
+        tableView.contentInset = UIEdgeInsetsMake(5, 0, 5, 0)
         myRefreshControl?.addTarget(self, action: "loadLatestData", forControlEvents: .ValueChanged)
         
         tableView.separatorStyle = .None
@@ -117,7 +118,7 @@ extension StatusBasicController {
     func jsonDataHandler(json: JSON) -> Int{
         let statusJSONData = json.arrayValue
         for statusJSON in statusJSONData {
-            let newStatus = Status.objects.getOrCreate(statusJSON)
+            let newStatus: Status = try! MainManager.sharedManager.getOrCreate(statusJSON)
             self.status.append(newStatus)
         }
         statusDataSort()
@@ -125,11 +126,12 @@ extension StatusBasicController {
     }
     
     func onStatusDelete(notification: NSNotification) {
-        if let statusID = notification.userInfo![kStatusDidDeletedStatusIDKey] as? String{
+        // TODO: check id type
+        if let statusID = notification.userInfo![kStatusDidDeletedStatusIDKey] as? Int32{
             var index = 0
             var flag = false
             for s in status {
-                if s.statusID == statusID {
+                if s.ssid == statusID {
                     flag = true
                     break
                 }

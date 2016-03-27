@@ -28,15 +28,15 @@ func getIdentifierForIdPair(id1: String, _ id2: String) -> String{
 func getIdentifierForChatRoom(room: ChatRoomController) -> String {
     switch room.roomType {
     case .Private:
-        let senderID = Int(User.objects.hostUser(ChatRecord.objects.context)!.userID!)!
-        let targetID = Int(room.targetUser!.userID!)!
+        let senderID = ChatModelManger.sharedManager.hostUserID!
+        let targetID = room.targetUser!.ssid
         if senderID < targetID {
             return "\(senderID)_\(targetID)"
         }else {
             return "\(targetID)_\(senderID)"
         }
     case .Club:
-        return room.targetClub!.clubID!
+        return room.targetClub!.ssidString
     }
 }
 
@@ -44,16 +44,16 @@ func getIdentiferForChatRecord(chatRecord: ChatRecord) -> String{
     /* 
      注意，identifier是由对方id和聊天的类型组成的聊天窗口的唯一标识符
     */
-    if chatRecord.chat_type == "private" {
-        let senderID = Int(chatRecord.sender!.userID!)!
-        let targetID = Int(chatRecord.targetUser!.userID!)!
+    if chatRecord.chatType == "private" {
+        let senderID = chatRecord.senderUser!.ssid
+        let targetID = chatRecord.targetUser!.ssid
         if senderID < targetID {
             return "\(senderID)_\(targetID)"
         }else {
             return "\(targetID)_\(senderID)"
         }
     }else {
-        return chatRecord.targetClub!.clubID!
+        return chatRecord.targetClub!.ssidString
     }
 }
 
@@ -85,15 +85,12 @@ class ChatRecordDataSource {
     func parseChatRecordData(
         data: JSON,
         downloadAudio: Bool = true,
-        context: DataContext = ChatRecord.objects.context,
         autoBringToFront: Bool = true,
         reversed: Bool = false,
         unreadCheck: Bool = false
         ) -> ChatRecord {
-            let newRecordID = data["chatID"].stringValue
             let messageType = data["message_type"].stringValue
-            let newRecord = ChatRecord.objects.getOrCreateEmpty(newRecordID)
-            newRecord.loadValueFromJSON(data, ctx: ChatRecord.objects.context)
+            let newRecord = try! ChatModelManger.sharedManager.getOrCreate(data) as ChatRecord
             // get the locally unique identifier for the chat
             let identifier = getIdentiferForChatRecord(newRecord)
             // put the new record to the corresponding queue, if the queue does not exist, then create one
@@ -111,19 +108,18 @@ class ChatRecordDataSource {
                 }
             } else {
                 let newRecords = ChatRecordList()
-                if newRecord.chat_type == "private" {
-                    var targetUser = User.objects.getOrCreate(data["sender"], ctx: context)
-                    let host = User.objects.hostUser(context)
-                    if targetUser.userID == host?.userID {
+                if newRecord.chatType == "private" {
+                    var targetUser = try! ChatModelManger.sharedManager.getOrCreate(data["sender"]) as User
+                    if targetUser.isHost {
                         targetUser = newRecord.targetUser!
                     }
                     newRecords._item = ChatRecordListItem.UserItem(targetUser)
-                } else if newRecord.chat_type == "group" {
-                    let targetClub = Club.objects.getOrCreate(data["target_club"], ctx: context)
+                } else if newRecord.chatType == "group" {
+                    let targetClub = try! ChatModelManger.sharedManager.getOrCreate(data["target_club"]) as Club
                     newRecords._item = ChatRecordListItem.ClubItem(targetClub)
                 } else {
                     print(data)
-                    print(newRecord.chat_type)
+                    print(newRecord.chatType)
                     assertionFailure()
                 }
                 newRecords.append(newRecord)
@@ -147,8 +143,8 @@ class ChatRecordDataSource {
                     }, async: false)
                     // Set up cache
                     record.cachedWaveData = analyzer.sampledata
-                    record.audioLengthInSec = analyzer.lengthInSec
-                    record.readyForDisplay = true
+                    record.audioLength = analyzer.lengthInSec
+                    record.audioReady = true
                     dispatch_semaphore_signal(semaphore)
                     }, onError: { (record) -> () in
                         print("Error: fail to download the audio file")
@@ -171,73 +167,29 @@ class ChatRecordDataSource {
             // 处理聊天内容
             for data in json!["chats"].arrayValue {
                 self.parseChatRecordData(data, autoBringToFront: true)
-//                let semaphore = dispatch_semaphore_create(0)
-//                let newRecord = ChatRecord.objects.getOrCreateEmpty(data["chatID"].stringValue)
-//                newRecord.loadValueFromJSON(data, ctx: ChatRecord.objects.context)
-//                // 创建对应的消息
-//                let identifier = getIdentiferForChatRecord(newRecord)
-//                //
-//                if let records = self.chatRecords[identifier] {
-//                    records.appendContentsOf([newRecord])
-//                }else{
-//                    let newRecords = ChatRecordList()
-//                    if newRecord.chat_type == "private" {
-//                        var target_user = User.objects.getOrCreate(data["sender"], ctx: ChatRecord.objects.context)
-//                        let host = User.objects.hostUser(ChatRecord.objects.context)
-//                        if target_user.userID == host?.userID {
-//                            target_user = newRecord.targetUser!
-//                        }
-//                        newRecords._item = ChatRecordListItem.UserItem(target_user)
-//                    }else {
-//                        let target_club = Club.objects.getOrCreate(data["target_club"], ctx: ChatRecord.objects.context)
-//                        newRecords._item = ChatRecordListItem.ClubItem(target_club)
-//                    }
-//                    newRecords.appendContentsOf([newRecord])
-//                    self.chatRecords[identifier] = newRecords
-//                }
-//                //                self.chatRecords[identifier]?.appendContentsOf([newRecord])
-//                if newRecord.messageType == "audio"{
-//                    // 如果是音频数据的话直接开始下载
-//                    self.requester.download_audio_file_async( newRecord, onComplete: { (record, localURL) -> () in
-//                        // 下载完成后开始分析波形
-//                        record.audioLocal = localURL.absoluteString
-//                        let anaylzer = AudioWaveDrawEngine(audioFileURL: localURL, preferredSampleNum: 30, onFinished: { (engine) -> () in
-//                            }, async: false)
-//                        record.cachedWaveData = anaylzer.sampledata
-//                        record.audioLengthInSec = anaylzer.lengthInSec
-//                        record.readyForDisplay = true
-//                        // 重新载入数据
-//                        // self.talkBoard?.reloadData()
-//                        dispatch_semaphore_signal(semaphore)
-//                        }, onError: { (record) -> () in
-//                            dispatch_semaphore_signal(semaphore)
-//                    })
-//                } else {
-//                    dispatch_semaphore_signal(semaphore)
-//                }
-//                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-//                self.chatRecords.bringKeyToFront(identifier)
             }
             // 解析聊天设置
             for data in json!["club_settings"].arrayValue {
-                let clubID = data["club"]["id"].stringValue
-                if let club = Club.objects.getOrLoad(clubID, ctx: ChatRecord.objects.context) {
+                let clubID = data["club"]["id"].int32Value
+                if let club: Club = ChatModelManger.sharedManager.objectWithSSID(clubID) {
                     club.memberNum = data["club"]["members_num"].int32Value
-                    club.clubJoining?.updateFromJson(data)
+                    club.updateClubSettings(data)
                     // 其他设置消息需呀单独手动配置
-                    club.onlyHostInvites = data["club"]["only_host_can_invite"].boolValue
-                    club.show_members = data["club"]["show_members_to_public"].boolValue
+                    club.updateClubSettings(data["club"])
                 }
             }
             // 个人聊天设置
-            for data in json!["private_settings"].arrayValue {
-                let userID = data["target_id"].stringValue
-                if let user = User.objects.getOrLoad(userID, ctx: ChatRecord.objects.context) {
-                    user.remarkName = data["remarkName"].string
-                }
-            }
+            // TODO：个人聊天设置需要再考虑一下
+//            for data in json!["private_settings"].arrayValue {
+//                let userID = data["target_id"].stringValue
+//                if let user = User.objects.getOrLoad(userID, ctx: ChatRecord.objects.context) {
+//                    user.remarkName = data["remarkName"].string
+//                }
+//            }
             //
-            ChatRecord.objects.saveAll()
+            do {
+                try ChatModelManger.sharedManager.save()
+            } catch {}
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 if self.curRoom != nil{
                     self.curRoom?.needsUpdate()
@@ -260,8 +212,8 @@ class ChatRecordDataSource {
             for data in json!.arrayValue {
                 let chatType = data["chat_type"].stringValue
                 if chatType == "private" {
-                    let user = User.objects.getOrCreate(data["user"])
-                    let identifier = getIdentifierForIdPair(user.userID!, User.objects.hostUser(ChatRecord.objects.context)!.userID!)
+                    let user: User = try! ChatModelManger.sharedManager.getOrCreate(data["user"])
+                    let identifier = getIdentifierForIdPair(user.ssidString, ChatModelManger.sharedManager.hostUserIDString!)
                     if let records = self.chatRecords[identifier] {
                         records.unread = data["unread"].intValue
                         self.totalUnreadNum += records.unread
@@ -272,8 +224,8 @@ class ChatRecordDataSource {
                         self.totalUnreadNum += newRecords.unread
                     }
                 }else {
-                    let club = Club.objects.getOrCreate(data["club"])
-                    let identifier = club.clubID!
+                    let club: Club = try! ChatModelManger.sharedManager.getOrCreate(data["club"])
+                    let identifier = club.ssidString
                     if let records = self.chatRecords[identifier] {
                         records.unread = data["unread"].intValue
                         self.totalUnreadNum += records.unread

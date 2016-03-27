@@ -65,9 +65,9 @@ class UserOnMapView: UIButton {
         if user == nil {
             return
         }
-        avatar.kf_setImageWithURL(SFURL(user!.avatarUrl!)!)
-        if let avatarCarURL = user?.profile?.avatarCarLogo {
-            avatarCar.kf_setImageWithURL(SFURL(avatarCarURL)!)
+        avatar.kf_setImageWithURL(user!.avatarURL!)
+        if let avatarURL = user?.avatarCarModel?.logoURL {
+            avatarCar.kf_setImageWithURL(avatarURL)
         }
         updatedAt = NSDate()
     }

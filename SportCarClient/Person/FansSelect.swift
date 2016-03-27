@@ -34,7 +34,6 @@ class FansSelectController: UserSelectController {
             make.right.equalTo(superview).offset(0)
         })
         //
-        findOnMapBtn?.hidden = true
         selectedUserList?.hidden = true
         userTableView?.registerClass(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
     }
@@ -51,7 +50,7 @@ class FansSelectController: UserSelectController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UserSelectCellUnselectable
         let user = users[indexPath.row]
-        cell.avatarImg?.kf_setImageWithURL(SFURL(user.avatarUrl!)!)
+        cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
         return cell
@@ -64,16 +63,16 @@ class FansSelectController: UserSelectController {
     func getMoreUserData() {
         let threshold: NSDate = fansDateThreshold ?? NSDate()
         let requester = AccountRequester.sharedRequester
-        requester.getFansList(targetUser!.userID!, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
+        requester.getFansList(targetUser!.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
             if let fansJSONData = data?.arrayValue {
                 for json in fansJSONData {
-                    let user = User.objects.getOrCreate(json)
+                    let user: User = try! MainManager.sharedManager.getOrCreate(json)
                     user.recentStatusDes = json["recent_status_des"].string
                     self.fans.append(user)
                     self.fansDateThreshold = DateSTR(json["created_at"].stringValue)
                 }
                 if fansJSONData.count > 0 {
-                    self.fans = $.uniq(self.fans, by: {$0.userID!})
+                    self.fans = $.uniq(self.fans, by: {$0.ssid})
                     self.userTableView?.reloadData()
                 }
             }

@@ -15,7 +15,7 @@ import SwiftyJSON
 
 class NewsDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource, UIWebViewDelegate, MakeCommentControllerDelegate, DetailCommentCellDelegate, ShareControllorDelegate {
     /// 这个详情页面需要展示的相关资讯
-    var news: News?
+    var news: News!
     /// 评论列表
     var comments: [NewsComment] = []
     /// 动画需要：cover的初始位置
@@ -536,12 +536,12 @@ extension NewsDetailController{
         }
         likeRequesting = true
         let requester = NewsRequester.newsRequester
-        requester.likeNews(news!.newsID!, onSuccess: { (json) -> () in
+        requester.likeNews(news!.ssidString, onSuccess: { (json) -> () in
             
             let liked = json!["like_state"].boolValue
             
-            self.news?.liked = liked
-            self.news?.likeNum = json!["like_num"].int32Value
+            self.news.liked = liked
+            self.news.likeNum = json!["like_num"].int32Value
             self.commentPanel.setLikedAnimated(liked)
             self.likeIcon.image = liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
             self.likeRequesting = false
@@ -566,18 +566,24 @@ extension NewsDetailController{
             responseToComment = comments[responseToRow!]
         }
         
-        let newComment = NewsComment.objects.postNewCommentToNews(news!, commentString: commentString!, responseToComment: responseToComment, atString: JSON(atUser).string)
+//        let newComment = NewsComment.objects.postNewCommentToNews(news!, commentString: commentString!, responseToComment: responseToComment, atString: JSON(atUser).string)
+        let newComment = NewsComment(news: news!)
+        newComment.content = commentString
+        newComment.responseTo = responseToComment
+        newComment.sent = false
+        newComment.user = MainManager.sharedManager.hostUser
         // 将这个新建的commnet添加在列表的头部
         comments.insert(newComment, atIndex: 0)
         //
         let requester = NewsRequester.newsRequester
-        requester.postCommentToNews(self.news!.newsID!, content: commentString, image: nil, responseTo: responseToComment?.commentID, informOf: atUser, onSuccess: { (data) -> () in
+        requester.postCommentToNews(news.ssidString, content: commentString, image: nil, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (data) -> () in
             // data里面的只有一个id
             if data == nil {
                 assertionFailure()
             }
-            let newCommentID = data!.stringValue
-            NewsComment.objects.confirmSent(newComment, commentID: newCommentID)
+            let newCommentID = data!.int32Value
+            newComment.ssid = newCommentID
+            newComment.sent = true
             }) { (code) -> () in
                 print(code)
         }
@@ -658,15 +664,14 @@ extension NewsDetailController {
      载入数据并刷新UI
      */
     private func loadDataAndUpdateUI() {
-        likeDescriptionLbl?.attributedText = news?.getLikeDescription()
-        let imageURL = SFURL(news!.cover!)!
+        likeDescriptionLbl?.attributedText = news.getLikeDescription()
+        let imageURL = SFURL(news.cover)!
         newsCover?.kf_setImageWithURL(imageURL)
-        newsTitleFake.text = news?.title
-        newsTitle.text = news?.title
-        likeNumLbl.text = "\(news?.likeNum ?? 0)"
-        commentNumLbl.text = "\(news?.commentNum ?? 0)"
-        let url = NSURL(string: news!.contentURL!)!
-        let request = NSURLRequest(URL: url)
+        newsTitleFake.text = news.title
+        newsTitle.text = news.title
+        likeNumLbl.text = "\(news.likeNum)"
+        commentNumLbl.text = "\(news.commentNum)"
+        let request = NSURLRequest(URL: news.contentURL!)
         newsDetailPanelView?.loadRequest(request)
         loadMoreCommentData()
         if news!.liked {
@@ -692,9 +697,9 @@ extension NewsDetailController {
             dateThreshold  = lastComment.createdAt ?? dateThreshold
         }
         requestingCommentData = true
-        requester.getMoreNewsComment(dateThreshold, newsID: news!.newsID!, onSuccess: { (json) -> () in
+        requester.getMoreNewsComment(dateThreshold, newsID: news.ssidString, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
-                let newComment = NewsComment.objects.getOrCreate(data, news: self.news!)
+                let newComment = try! NewsComment(news: self.news).loadDataFromJSON(data)
                 self.comments.append(newComment)
             }
             //
@@ -716,9 +721,7 @@ extension NewsDetailController {
      */
     func reorganizComments() {
         // 去冗余
-        comments = $.uniq(comments, by: { (comment: NewsComment) -> String in
-            return comment.commentID!
-        })
+        comments = $.uniq(comments, by: {return $0.ssid})
         // 排序
         comments.sortInPlace { (comment1, comment2) -> Bool in
             switch comment1.createdAt!.compare(comment2.createdAt!) {
@@ -768,7 +771,7 @@ extension NewsDetailController {
         print("tapped")
     }
     func startLoadWebContent() {
-        guard let url = NSURL(string: news!.contentURL!) else{
+        guard let url = news.contentURL else{
             return
         }
         let request = NSURLRequest(URL: url)

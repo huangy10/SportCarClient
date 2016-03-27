@@ -10,15 +10,13 @@ import UIKit
 import SwiftyJSON
 import Cent
 import MapKit
+import Dollar
 
 class ActivityDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource, InlineUserSelectDelegate, FFSelectDelegate{
     weak var parentTableView: UITableView?
     
     var act: Activity!
     var comments: [ActivityComment] = []
-    var isMineAct: Bool{
-        return act.user?.userID == User.objects.hostUserID
-    }
     
     var actInfoBoard: ActivityDetailBoardView!
     var tableView: UITableView!
@@ -55,8 +53,8 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         //
         let requester = ActivityRequester.requester
         // 尽管已经传入了一个较为完整的活动对象，但是为了保证数据最新，仍然向服务器发起请求
-        requester.getActivityDetail(act.activityID!, onSuccess: { (json) -> () in
-            self.act.loadValueFromJSON(json!)
+        requester.getActivityDetail(act.ssidString, onSuccess: { (json) -> () in
+            try! self.act.loadDataFromJSON(json!, detailLevel: 1)
             self.actInfoBoard.act = self.act
             self.commentPanel.setLikedAnimated(self.act.liked, flag: false)
             self.boardHeight = self.actInfoBoard.loadDataAndUpdateUI()
@@ -120,7 +118,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: isMineAct ? LS("关闭活动") : LS("报名"), style: .Done, target: self, action: "navRightBtnPressed")
+        let rightItem = UIBarButtonItem(title: act.mine ? LS("关闭活动") : LS("报名"), style: .Done, target: self, action: "navRightBtnPressed")
         rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }
@@ -135,14 +133,14 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
      */
     func navRightBtnPressed() {
         let requester = ActivityRequester()
-        if isMineAct {
+        if act.mine {
             let endAt = act.endAt!
             if endAt.compare(NSDate()) == NSComparisonResult.OrderedAscending {
                 self.displayAlertController(LS("活动已结束，无法关闭报名"), message: nil)
                 return
             }
             // 关闭报名
-            requester.closeActivty(act.activityID!, onSuccess: { (json) -> () in
+            requester.closeActivty(act.ssidString, onSuccess: { (json) -> () in
                 // 成功以后修改活动的状态
                 self.act.endAt = NSDate()
                 self.parentTableView?.reloadData()
@@ -158,8 +156,9 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
                 self.displayAlertController(LS("活动已结束，无法报名"), message: nil)
                 return
             }
-            requester.postToApplyActivty(act.activityID!, onSuccess: { (json) -> () in
+            requester.postToApplyActivty(act.ssidString, onSuccess: { (json) -> () in
                 // 当前用户加入
+                // TODO: 把下面的修改放在网络请求前面
                 self.act.hostApply()
                 self.actInfoBoard.loadDataAndUpdateUI()
                 }, onError: { (code) -> () in
@@ -190,10 +189,10 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
             return cell
         }else{
             let cell = tableView.dequeueReusableCellWithIdentifier(MapCell.reuseIdentifier, forIndexPath: indexPath) as! MapCell
-            let center = CLLocationCoordinate2D(latitude: act.location_y, longitude: act.location_x)
+            let center = CLLocationCoordinate2D(latitude: act.location!.latitude, longitude: act.location!.longitude)
             cell.setMapCenter(center)
             cell.locBtn.addTarget(self, action: "needNavigation", forControlEvents: .TouchUpInside)
-            cell.locLbl.text = LS("导航至 ") + (act.location_des ?? LS("未知地点"))
+            cell.locLbl.text = LS("导航至 ") + (act.location?.descr ?? LS("未知地点"))
             cell.locDesIcon.image = UIImage(named: "person_guide_to")
             return cell
         }
@@ -209,8 +208,8 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
     
     func inlineUserSelectShouldDeleteUser(user: User) {
         let requester = ActivityRequester.requester
-        requester.activityOperation(act.activityID!, targetUserID: user.userID!, opType: "apply_deny", onSuccess: { (json) -> () in
-            self.act.applicant.remove(user)
+        requester.activityOperation(act.ssidString, targetUserID: user.ssidString, opType: "apply_deny", onSuccess: { (json) -> () in
+            self.act.removeApplicant(user)
             self.boardHeight = self.actInfoBoard.loadDataAndUpdateUI()
             self.actInfoBoard.frame = CGRectMake(0, -self.boardHeight, self.tableView.frame.width, self.boardHeight)
             self.tableView.contentInset = UIEdgeInsetsMake(self.boardHeight, 0, self.commentPanel.barheight, 0)
@@ -223,7 +222,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
     func inlineUserSelectNeedAddMembers() {
         let select = FFSelectController()
         select.delegate = self
-        select.selectedUsers.appendContentsOf(act.applicant)
+        select.selectedUsers.appendContentsOf(act.applicants)
         let wrapper = BlackBarNavigationController(rootViewController: select)
         self.presentViewController(wrapper, animated: true, completion: nil)
     }
@@ -236,10 +235,10 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         // send invitation to those guys
         self.dismissViewControllerAnimated(true, completion: nil)
         let requester = ActivityRequester.requester
-        let userIDs = users.map { return $0.userID! }
+        let userIDs = users.map { return $0.ssidString }
         let userIDData = try! JSON(userIDs).rawData()
         let userJSONString = String(data: userIDData, encoding: NSUTF8StringEncoding)
-        requester.activityOperation(act.activityID!, targetUserID: userJSONString!, opType: "invite", onSuccess: { (json) -> () in
+        requester.activityOperation(act.ssidString, targetUserID: userJSONString!, opType: "invite", onSuccess: { (json) -> () in
             self.showToast(LS("邀请已发送"))
             }) { (code) -> () in
                 self.showToast(LS("邀请发送失败，请坚持您的网络状况"))
@@ -254,11 +253,12 @@ extension ActivityDetailController {
         // 获取时间阈值
         let dateThreshold = comments.last()?.createdAt ?? NSDate()
         let requester = ActivityRequester.requester
-        requester.getActivityComments(act.activityID!, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
+        requester.getActivityComments(act.ssidString, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
-                let comment = ActivityComment.objects.create(data, act: self.act)
+                let comment = try! ActivityComment(act: self.act).loadDataFromJSON(data)
                 self.comments.append(comment)
             }
+            self.comments = $.uniq(self.comments, by: { return $0.ssid })
             self.tableView.reloadData()
             }) { (code) -> () in
                 print(code)
@@ -276,7 +276,7 @@ extension ActivityDetailController {
         if responseToRow >= 0 {
             responseToComment = comments[responseToRow]
         }
-        let newComment = ActivityComment.objects.postToNewCommentToActivity(act, commentString: content, atString: JSON(atUser).string, responseToComment: responseToComment)
+        let newComment = ActivityComment(act: act).initForPost(content, responseTo: responseToComment)
         comments.insert(newComment, atIndex: 0)
         tableView.reloadData()
         commentPanel.contentInput?.text = ""
@@ -284,9 +284,9 @@ extension ActivityDetailController {
             make.height.equalTo(commentPanel.barheight)
         }
         let requester = ActivityRequester.requester
-        requester.sendActivityComment(act.activityID!, content: content, image: image, responseTo: responseToComment?.commentID, informOf: atUser, onSuccess: { (json) -> () in
-            let newCommentID = json!["id"].stringValue
-            ActivityComment.objects.confirmSent(newComment, commentID: newCommentID)
+        requester.sendActivityComment(act.ssidString, content: content, image: image, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (json) -> () in
+            let newCommentID = json!["id"].int32Value
+            newComment.confirmSent(newCommentID)
             // update the comment number
             let commentNum = json!["comment_num"].int32Value
             self.act.commentNum = commentNum
@@ -364,7 +364,7 @@ extension ActivityDetailController {
     }
     
     func likeBtnPressed() {
-        ActivityRequester.requester.activityOperation(act.activityID!, targetUserID: "", opType: "like", onSuccess: { (json) -> () in
+        ActivityRequester.requester.activityOperation(act.ssidString, targetUserID: "", opType: "like", onSuccess: { (json) -> () in
             let liked = json!["liked"].boolValue
             let likeNum = json!["like_num"].int32Value
             self.actInfoBoard.setLikeIconState(liked)
@@ -389,9 +389,10 @@ extension ActivityDetailController {
         self.hideToast(toast!)
         let param = BMKNaviPara()
         let end = BMKPlanNode()
-        let center = CLLocationCoordinate2D(latitude: act.location_y, longitude: act.location_x)
+
+        let center = act.location!.coordinate
         end.pt = center
-        let targetName = act.location_des
+        let targetName = act.location?.descr ?? LS("位置地点")
         end.name = targetName
         param.endPoint = end
         param.appScheme = "baidumapsdk://mapsdk.baidu.com"

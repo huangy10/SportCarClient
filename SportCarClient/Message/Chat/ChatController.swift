@@ -47,9 +47,9 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     
     var navRightBtnImageURLStr: String? {
         if targetUser != nil {
-            return targetUser?.avatarUrl
+            return targetUser?.avatar
         }else if targetClub != nil{
-            return targetClub?.logo_url
+            return targetClub?.logo
         }
         return nil
     }
@@ -179,7 +179,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
             self.navigationController?.pushViewController(detail, animated: true)
             break
         case .Club:
-            if targetClub?.host?.userID == User.objects.hostUserID {
+            if targetClub!.founderUser!.isHost {
                 let detail = GroupChatSettingHostController(targetClub: targetClub!)
                 self.navigationController?.pushViewController(detail, animated: true)
                 break
@@ -216,10 +216,10 @@ extension ChatRoomController {
         switch chatRecords!._item! {
         case .UserItem(let user) :
             chatType = "private"
-            targetID = user.userID!
+            targetID = user.ssidString
         case .ClubItem(let club) :
             chatType = "group"
-            targetID = club.clubID!
+            targetID = club.ssidString
         }
         let dateThreshold = chatRecords?.first()?.createdAt ?? NSDate()
         requester.getChatHistory(targetID, chatType: chatType, dateThreshold: dateThreshold, limit: limit, onSuccess: { (json) -> () in
@@ -282,17 +282,22 @@ extension ChatRoomController {
 extension ChatRoomController {
     
     func confirmSendChatMessage(text: String? = nil, image: UIImage? = nil, audio: NSURL? = nil, messageType: String="text") {
-        let newChat = ChatRecord.objects.postNewChatRecord(messageType, textContent: text, image: image, audio: audio, relatedID: nil)
+        let newChat: ChatRecord = try! ChatModelManger.sharedManager.createNew()
+        newChat.initForPost(messageType, textContent: text, image: image, audio: audio)
+//        newChat.image = image
+//        newChat.audio = audio
+//        let newChat = ChatRecord.objects.postNewChatRecord(messageType, textContent: text, image: image, audio: audio, relatedID: nil)
         switch chatRecords!._item! {
         case .UserItem(let user):
-            newChat.targetID = user.userID
+            newChat.targetID = user.ssid
+            
             newChat.targetUser = user
-            newChat.chat_type = "private"
+            newChat.chatType = "private"
             break
         case .ClubItem(let club):
-            newChat.targetID = club.clubID
-            newChat.targetClub = ChatRecord.objects.context.objectWithID(club.objectID) as? Club
-            newChat.chat_type = "group"
+            newChat.targetID = club.ssid
+            newChat.targetClub = club.toContext(ChatModelManger.sharedManager.getOperationContext()) as? Club
+            newChat.chatType = "group"
             break
         }
         let dataSource = ChatRecordDataSource.sharedDataSource
@@ -303,17 +308,17 @@ extension ChatRoomController {
             let analyzer = AudioWaveDrawEngine(audioFileURL: audio!, preferredSampleNum: 30, onFinished: { (engine) -> () in
                 }, async: false)
             newChat.cachedWaveData = analyzer.sampledata
-            newChat.audioLengthInSec = analyzer.lengthInSec
-            newChat.readyForDisplay = true
+            newChat.audioLength = analyzer.lengthInSec
+            newChat.audioReady = true
         }
         //
         talkBoard?.reloadData()
         let targetPath = NSIndexPath(forRow: self.chatRecords!.count - 1, inSection: 0)
         talkBoard?.scrollToRowAtIndexPath(targetPath, atScrollPosition: .Top, animated: false)
         self.chatOpPanelController?.contentInput?.text = ""
-        ChatRequester.requester.postNewChatRecord(newChat.chat_type!, messageType: messageType, targetID: newChat.targetID!, image: image, audio: audio, textContent: text, onSuccess: { (json) -> () in
-            let newID = json!["chatID"].stringValue
-            ChatRecord.objects.confirmSent(newChat, chatRecordID: newID, image: json!["image"].string, audio: json!["audio"].string)
+        ChatRequester.requester.postNewChatRecord(newChat.chatType!, messageType: messageType, targetID: newChat.targetIDString, image: image, audio: audio, textContent: text, onSuccess: { (json) -> () in
+            let newID = json!["chatID"].int32Value
+            newChat.confirmSent(newID, image: json!["image"].string, audio: json!["audio"].string)
             if messageType == "image" {
                 let imageURL = SFURL(newChat.image!)!
                 let cache = KingfisherManager.sharedManager.cache

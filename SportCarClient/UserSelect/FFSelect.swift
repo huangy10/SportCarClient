@@ -30,7 +30,7 @@ class FFSelectController: UserSelectController {
     
     weak var delegate: FFSelectDelegate?
     
-    let targetUser: User = User.objects.hostUser()!
+    let targetUser: User = MainManager.sharedManager.hostUser!
     
     var fans: [User] = []
     var follows: [User] = []
@@ -194,16 +194,16 @@ class FFSelectController: UserSelectController {
         switch navTitlestate {
         case .Fans:
             threshold = fansDateThreshold ?? NSDate()
-            requester.getFansList(targetUser.userID!, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
+            requester.getFansList(targetUser.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
                 if let fansJSONData = data?.arrayValue {
                     for json in fansJSONData {
-                        let user = User.objects.getOrCreate(json)
+                        let user: User = try! MainManager.sharedManager.getOrCreate(json)
                         user.recentStatusDes = json["recent_status_des"].string
                         self.fans.append(user)
                         self.fansDateThreshold = DateSTR(json["created_at"].stringValue)
                     }
                     if fansJSONData.count > 0 {
-                        self.fans = $.uniq(self.fans, by: { return $0.userID! })
+                        self.fans = $.uniq(self.fans, by: { return $0.ssid })
                         self.userTableView?.reloadData()
                     }
                 }
@@ -213,16 +213,16 @@ class FFSelectController: UserSelectController {
             break
         case .Follow:
             threshold = followDateThreshold ?? NSDate()
-            requester.getFollowList(targetUser.userID!, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
+            requester.getFollowList(targetUser.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
                 if let followJSONData = data?.arrayValue {
                     for json in followJSONData {
-                        let user = User.objects.getOrCreate(json)
+                        let user: User = try! MainManager.sharedManager.getOrCreate(json)
                         user.recentStatusDes = json["recent_status_des"].string
                         self.follows.append(user)
                         self.followDateThreshold = DateSTR(json["created_at"].stringValue)
                     }
                     if followJSONData.count > 0 {
-                        self.follows = $.uniq(self.follows, by: {return $0.userID!})
+                        self.follows = $.uniq(self.follows, by: {return $0.ssid})
                         self.userTableView?.reloadData()
                     }
                 }

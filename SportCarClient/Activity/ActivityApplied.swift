@@ -16,7 +16,7 @@ class ActivityAppliedController: ActivityHomeMineListController {
         let dateThreshold = data.last()?.applyAt ?? NSDate()
         requester.getActivityApplied(dateThreshold, op_type: "more", limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
-                let act = Activity.objects.getOrCreate(data["activity"])
+                let act: Activity = try! MainManager.sharedManager.getOrCreate(data["activity"])
                 self.data.append(act)
             }
             self.tableView.reloadData()
@@ -31,7 +31,7 @@ class ActivityAppliedController: ActivityHomeMineListController {
             self.refreshControl?.endRefreshing()
             var new = [Activity]()
             for data in json!.arrayValue {
-                let act = Activity.objects.getOrCreate(data["activity"])
+                let act: Activity = try! MainManager.sharedManager.getOrCreate(data["activity"])
                 act.applyAt = DateSTR(data["created_at"].stringValue)
                 new.append(act)
             }

@@ -20,7 +20,7 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
     
     var selectedRow: Int = 0
     var selectedClub: String?
-    var selectedClubID: String?
+    var selectedClubID: Int32?
     
     var expanded: Bool = false
     

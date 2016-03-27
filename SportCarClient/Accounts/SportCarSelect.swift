@@ -166,7 +166,7 @@ class SportCarSelectController: InputableViewController, SportCarBrandSelecterCo
         let requester = SportCarRequester.sharedSCRequester
         requester.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
             let carImgURL = SF(data["image_url"].stringValue)
-            let headers = [LS("具体型号"), LS("跑车签名"), LS("价格"), LS("发动机"), LS("变速箱"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
+            let headers = [LS("具体型号"), LS("跑车签名"), LS("价格"), LS("发动机"), LS("扭矩"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
             let contents = [carType, self.signatureInput?.text, data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
             let detail = SportCarSelectDetailController()
             detail.headers = headers

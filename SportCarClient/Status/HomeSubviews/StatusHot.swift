@@ -81,7 +81,7 @@ class StatusHotController: UICollectionViewController {
     func jsonDataHandler(json: JSON) -> Int{
         let statusJSONData = json.arrayValue
         for statusJSON in statusJSONData {
-            let newStatus = Status.objects.getOrCreate(statusJSON)
+            let newStatus = try! MainManager.sharedManager.getOrCreate(statusJSON) as Status
             self.status.append(newStatus)
         }
         statusDataSort()
@@ -115,8 +115,7 @@ class StatusHotController: UICollectionViewController {
 class StatusHotCell: UICollectionViewCell {
     var status: Status! {
         didSet {
-            let coverURL = SFURL(status.coverImage!)!
-            cover.kf_setImageWithURL(coverURL)
+            cover.kf_setImageWithURL(status.coverURL!)
         }
     }
     

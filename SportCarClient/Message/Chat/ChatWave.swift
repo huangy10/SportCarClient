@@ -89,7 +89,7 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate {
     }
     
     func getRemainingTimeString(process: Double) -> String {
-        guard let duration = chatRecord?.audioLengthInSec else{
+        guard let duration = chatRecord?.audioLength else{
             return "--:--"
         }
         let leftTime = Int(duration * (1 - process))

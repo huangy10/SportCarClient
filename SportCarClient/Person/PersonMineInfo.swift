@@ -13,7 +13,7 @@ import Kingfisher
 
 class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyModifierDelegate, ImageInputSelectorDelegate, AvatarCarSelectDelegate, AvatarClubSelectDelegate, CityElementSelectDelegate {
     
-    var user: User = User.objects.hostUser()!
+    var user: User = MainManager.sharedManager.hostUser!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,7 +87,7 @@ class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyM
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
-            cell.avatarImage.kf_setImageWithURL(SFURL(user.avatarUrl!)!)
+            cell.avatarImage.kf_setImageWithURL(user.avatarURL!)
             return cell
         }else {
             let cell = tableView.dequeueReusableCellWithIdentifier(PersonMineInfoCell.reuseIdentifier, forIndexPath: indexPath) as! PersonMineInfoCell
@@ -100,18 +100,18 @@ class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyM
                     cell.editable = true
                     break
                 case 1:
-                    if let avatarLogo = user.profile?.avatarCarLogo {
-                        cell.infoLbl.text = user.profile?.avatarCarName
-                        cell.iconImage.kf_setImageWithURL(SFURL(avatarLogo)!)
+                    if let car = user.avatarCarModel {
+                        cell.infoLbl.text = car.name
+                        cell.iconImage.kf_setImageWithURL(car.logoURL!)
                     }else {
                         cell.infoLbl.text = ""
                         cell.iconImage.image = nil
                     }
                     cell.editable = true
                 case 2:
-                    if let avatarClubLogo = user.profile!.avatarClubLogo {
-                        cell.infoLbl.text = user.profile?.avatarClubName
-                        cell.iconImage.kf_setImageWithURL(SFURL(avatarClubLogo)!)
+                    if let club = user.avatarClubModel {
+                        cell.infoLbl.text = club.name
+                        cell.iconImage.kf_setImageWithURL(club.logoURL!)
                     }else{
                         cell.infoLbl.text = ""
                         cell.iconImage.image = nil
@@ -300,7 +300,7 @@ extension PersonMineInfoController {
         requester.profileModifyUploadAvatar(image, onSuccess: { (json) -> () in
             let avatarURL = SFURL(json!.stringValue)!
             KingfisherManager.sharedManager.cache.storeImage(image, forKey: avatarURL.absoluteString)
-            self.user.avatarUrl = json!.stringValue
+            self.user.avatar = json!.stringValue
             self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
             }) { (code) -> () in
                 print(code)
@@ -311,14 +311,13 @@ extension PersonMineInfoController {
         //
     }
     
-    func avatarCarSelectDidFinish(selectedCar: SportCarOwnerShip) {
+    func avatarCarSelectDidFinish(selectedCar: SportCar) {
         // 将修改的内容提交到服务器
         let requester = PersonRequester.requester
-        requester.profileModifiy(["avatar_car": selectedCar.car!.carID!], onSuccess: { (data) -> () in
+        requester.profileModifiy(["avatar_car": selectedCar.ssidString], onSuccess: { (data) -> () in
             // 
             let targetUser = self.user
-            let car = selectedCar.car
-            targetUser.setAvatarCar(car!)
+            targetUser.avatarCarModel = selectedCar
             self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 1)], withRowAnimation: .Automatic)
             }) { (code) -> () in
                 
@@ -331,10 +330,10 @@ extension PersonMineInfoController {
     
     func avatarClubSelectDidFinish(selectedClub: Club) {
         let requester = PersonRequester.requester
-        requester.profileModifiy(["avatar_club": selectedClub.clubID!], onSuccess: { (data) -> () in
+        requester.profileModifiy(["avatar_club": selectedClub.ssidString], onSuccess: { (data) -> () in
             //
             let targetUser = self.user
-            targetUser.setAvatarClub(selectedClub)
+            targetUser.avatarClubModel = selectedClub
             self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 2, inSection: 1)], withRowAnimation: .Automatic)
             }) { (code) -> () in
                 

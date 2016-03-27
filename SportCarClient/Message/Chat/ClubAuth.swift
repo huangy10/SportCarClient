@@ -34,7 +34,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
         }
         self.pp_showProgressView()
         ChatRequester.requester.clubAuth(
-            club.clubID!,
+            club.ssidString,
             district: district,
             description: desc,
             onSuccess: { (json) -> () in

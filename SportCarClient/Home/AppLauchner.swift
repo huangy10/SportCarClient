@@ -25,7 +25,7 @@ class AppManager: UIViewController {
      启动App，这个函数负责检查登录状态
      */
     func launch() {
-        if let hostUser = User.objects.resumeLoginStatus() {
+        if let hostUser = MainManager.sharedManager.resumeLoginStatus().hostUser {
             // 当获取到了非nil的hostUser时，直接进入Home界面
             let ctl = HomeController()
             ctl.hostUser = hostUser
@@ -39,7 +39,7 @@ class AppManager: UIViewController {
     }
     
     func guideToContent() {
-        if let hostUser = User.objects.hostUser() {
+        if let hostUser = MainManager.sharedManager.hostUser {
             let ctl = HomeController()
             ctl.hostUser = hostUser
             self.navigationController?.pushViewController(ctl, animated: false)
@@ -53,7 +53,9 @@ class AppManager: UIViewController {
      推出当前所有的展示内容回到登陆页面
      */
     func logout() {
-        User.objects.logout()
+        MainManager.sharedManager.logout()
+        ChatModelManger.sharedManager.logout()
+        NotificationModelManager.sharedManager.logout()
         let ctrl = AccountController()
         let nav = BlackBarNavigationController(rootViewController: ctrl)
         self.presentViewController(nav, animated: true, completion: nil)

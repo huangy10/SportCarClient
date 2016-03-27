@@ -197,7 +197,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     
     func navRightBtnPressed() {
         // 根据的状态的发布者来确定弹出的窗口
-        if status?.user?.userID == User.objects.hostUserID {
+        if status!.user!.isHost {
             // 是当前用户发布的状态，则弹出删除
             let delete = StatusDeleteController(parent: self)
             delete.delegate = self
@@ -518,24 +518,25 @@ extension StatusDetailController {
         header区域的数据
         */
         let user: User = status!.user!
-        avatarBtn?.kf_setImageWithURL(SFURL(user.avatarUrl!)!, forState: .Normal)
+        avatarBtn?.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
         nameLbl?.text = user.nickName
         releaseDateLbl?.text = dateDisplay(status!.createdAt!)
-        let profile = user.profile!
-        if profile.avatarClubLogo != nil {
+        if let club = user.avatarClubModel {
             avatarClubBtn?.hidden = false
-            avatarClubBtn?.kf_setImageWithURL(SFURL(profile.avatarClubLogo!)!, forState: .Normal)
+            avatarClubBtn?.kf_setImageWithURL(club.logoURL!, forState: .Normal)
         }else{
             avatarClubBtn?.hidden = true
+            avatarClubBtn?.setImage(nil, forState: .Normal)
         }
-        if profile.avatarCarLogo != nil && profile.avatarCarName != nil {
+        if let car = user.avatarCarModel {
             avatarCarNameLbl?.hidden = false
-            avatarCarNameLbl?.text = profile.avatarCarName
+            avatarCarNameLbl?.text = car.name
             avatarCarLogoIcon?.hidden = false
-            avatarCarLogoIcon?.kf_setImageWithURL(SFURL(profile.avatarCarLogo!)!)
+            avatarCarLogoIcon?.kf_setImageWithURL(car.logoURL!)
         }else{
             avatarCarLogoIcon?.hidden = true
             avatarCarNameLbl?.hidden = true
+            avatarCarLogoIcon?.image = nil
         }
         /*
         中间内容区域
@@ -558,7 +559,7 @@ extension StatusDetailController {
         /*
         底部区域数据
         */
-        if let loc_des = status?.location_des {
+        if let loc_des = status?.location?.descr {
             locationLbL?.text = loc_des
         }else{
             locationLbL?.text = LS("未知地点")
@@ -600,9 +601,9 @@ extension StatusDetailController {
         requestingCommentData = true
         let requester = StatusRequester.SRRequester
         let dateThreshold = comments.last()?.createdAt ?? NSDate()
-        requester.getMoreStatusComment(dateThreshold, statusID: status!.statusID!, onSuccess: { (json) -> () in
+        requester.getMoreStatusComment(dateThreshold, statusID: status!.ssidString, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
-                let newComment = StatusComment.objects.getOrCreate(data, status: self.status!)
+                let newComment = try! StatusComment(status: self.status!).loadDataFromJSON(data)
                 self.comments.append(newComment)
             }
             self.reorgnizeComments()
@@ -683,7 +684,7 @@ extension StatusDetailController {
     
     func likeBtnPressed() {
         let requester = StatusRequester.SRRequester
-        requester.likeStatus(status!.statusID!, onSuccess: { (json) -> () in
+        requester.likeStatus(status!.ssidString, onSuccess: { (json) -> () in
             self.status?.likeNum = json!["like_num"].int32Value
             let liked = json!["like_state"].boolValue
             self.status?.liked = liked
@@ -706,17 +707,17 @@ extension StatusDetailController {
         if responseToRow != nil {
             responseToComment = comments[responseToRow!]
         }
-        
-        let newComment = StatusComment.objects.postNewCommentToStatus(status!, commentString: commentString, responseToComment: responseToComment, atString: JSON(atUser).string)
+        let newComment = StatusComment(status: status!).initForPost(commentString, responseTo: responseToComment)
+//        let newComment = StatusComment.objects.postNewCommentToStatus(status!, commentString: commentString, responseToComment: responseToComment, atString: JSON(atUser).string)
         comments.insert(newComment, atIndex: 0)
         let requester = StatusRequester.SRRequester
-        requester.postCommentToStatus(self.status!.statusID!, content: commentString, image: nil, responseTo: responseToComment?.commentID, informOf: atUser, onSuccess: { (data) -> () in
+        requester.postCommentToStatus(self.status!.ssidString, content: commentString, image: nil, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (data) -> () in
             // data里面的只有一个id
             if data == nil {
                 assertionFailure()
             }
-            let newCommentID = data!.stringValue
-            StatusComment.objects.confirmSent(newComment, commentID: newCommentID)
+            let newCommentID = data!.int32Value
+            newComment.confirmSent(newCommentID)
             self.status?.commentNum += 1
             self.loadDataAndUpdateUI()
             }) { (code) -> () in

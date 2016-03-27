@@ -46,13 +46,13 @@ class ActivityHomeMineListController: UITableViewController {
         let dateThreshold = data.first()?.createdAt ?? NSDate()
         requester.getMineActivityList(dateThreshold, op_type: "latest", limit: 10, onSuccess: { (json) -> () in
             var i = 0
-            let curIdList = self.data.map({return $0.activityID!})
+            let curIdList = self.data.map({return $0.ssid})
             for data in json!.arrayValue {
-                let id = data["actID"].stringValue
+                let id = data["actID"].int32Value
                 if curIdList.contains(id) {
                     continue
                 }
-                let act = Activity.objects.getOrCreate(data)
+                let act: Activity = try! MainManager.sharedManager.getOrCreate(data)
                 self.data.insert(act, atIndex: i)
                 i += 1
             }
@@ -76,7 +76,7 @@ class ActivityHomeMineListController: UITableViewController {
 
         requester.getMineActivityList(dateThreshold, op_type: "more", limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
-                let act = Activity.objects.getOrCreate(data)
+                let act: Activity = try! MainManager.sharedManager.getOrCreate(data)
                 self.data.append(act)
             }
             self.loading = false

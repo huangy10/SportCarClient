@@ -13,8 +13,8 @@ class PersonDataSource {
     // 目标用户
     var user: User!
     // 拥有的跑车
-    var owns: [SportCarOwnerShip] = []
-    var selectedCar: SportCarOwnerShip?
+    var cars: [SportCar] = []
+    var selectedCar: SportCar?
     // 是否关注了此人
     var hasFollowed: Bool = false
     // 状态字典, 按照跑车组织的状态数据
@@ -27,17 +27,18 @@ class PersonDataSource {
      
      - parameter json: json数据包，已经剔除了success
      */
-    func handleAuthedCarsJSONResponse(json: JSON, user: User = User.objects.hostUser()!) {
+    func handleAuthedCarsJSONResponse(json: JSON, user: User = MainManager.sharedManager.hostUser!) {
         // 认证汽车的获取不存在分页获取的问题，故每次获取的json数据包含的都是所有的认证汽车，故此处需要将原有的数据删除
-        owns.removeAll()
+        cars.removeAll()
         let data = json.arrayValue
         for carJSON in data {
-            let own = SportCarOwnerShip.objects.createOrLoadOwnedCars(carJSON, owner: user)
-            owns.append(own!)
-            if statusDict[own!.car!.carID!] == nil {
-                statusDict[own!.car!.carID!] = []
+            // 重整一下数据结构钢    
+            let tempJSON = SportCar.reorgnaizeJSON(carJSON)
+            let car = try! MainManager.sharedManager.getOrCreate(tempJSON) as SportCar
+            cars.append(car)
+            if statusDict[car.ssidString] == nil {
+                statusDict[car.ssidString] = []
             }
-            print(own?.car?.carID)
         }
     }
     
@@ -53,12 +54,19 @@ class PersonDataSource {
         if car == nil {
             targetStatusList = statusList
         }else {
-            targetStatusList = statusDict[car!.carID!]!
+            targetStatusList = statusDict[car!.ssidString]!
         }
         
         for statusJSON in data {
-            let status = Status.objects.getOrCreate(statusJSON)
+            let status = try! MainManager.sharedManager.getOrCreate(statusJSON) as Status
             targetStatusList.append(status)
+        }
+    }
+    
+    func addCar(car: SportCar) {
+        cars.append(car)
+        if statusDict[car.ssidString] == nil {
+            statusDict[car.ssidString] = []
         }
     }
 }

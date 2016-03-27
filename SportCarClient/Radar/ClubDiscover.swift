@@ -41,7 +41,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         let requester = ChatRequester.requester
         requester.discoverClub("nearby", skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
-                let club = Club.objects.getOrCreate(data)
+                let club: Club = try! MainManager.sharedManager.getOrCreate(data)
                 self.clubs.append(club)
             }
             self.bubbles.clubs = self.clubs
@@ -252,7 +252,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         let opType = ["nearby", "value", "average", "members", "beauty", "recent"][clubFilter.selectedRow]
         requester.discoverClub(opType, skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
-                let club = Club.objects.getOrCreate(data)
+                let club: Club = try! MainManager.sharedManager.getOrCreate(data)
                 self.clubs.append(club)
             }
             self.bubbles.clubs = self.clubs

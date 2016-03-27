@@ -62,7 +62,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         self.contentView.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         self.contentView.addSubview(superview)
         superview.snp_makeConstraints { (make) -> Void in
-            make.edges.equalTo(self.contentView).inset(10)
+            make.edges.equalTo(self.contentView).inset(UIEdgeInsetsMake(5, 10, 5, 10))
         }
         superview.backgroundColor = UIColor.whiteColor()
         superContainer = superview
@@ -264,21 +264,20 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
          header区域的数据
         */
         let user: User = status!.user!
-        avatarBtn?.kf_setImageWithURL(SFURL(user.avatarUrl!)!, forState: .Normal)
+        avatarBtn?.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
         nameLbl?.text = user.nickName
         releaseDateLbl?.text = dateDisplay(status!.createdAt!)
-        let profile = user.profile!
-        if profile.avatarClubLogo != nil {
+        if let club = user.avatarClubModel {
             avatarClubBtn?.hidden = false
-            avatarClubBtn?.kf_setImageWithURL(SFURL(profile.avatarClubLogo!)!, forState: .Normal)
+            avatarClubBtn?.kf_setImageWithURL(club.logoURL!, forState: .Normal)
         }else{
             avatarClubBtn?.hidden = true
         }
-        if profile.avatarCarLogo != nil && profile.avatarCarName != nil {
+        if let car = user.avatarCarModel {
             avatarCarNameLbl?.hidden = false
-            avatarCarNameLbl?.text = profile.avatarCarName
+            avatarCarNameLbl?.text = car.name
             avatarCarLogoIcon?.hidden = false
-            avatarCarLogoIcon?.kf_setImageWithURL(SFURL(profile.avatarCarLogo!)!)
+            avatarCarLogoIcon?.kf_setImageWithURL(car.logoURL!)
         }else{
             avatarCarLogoIcon?.hidden = true
             avatarCarNameLbl?.hidden = true
@@ -308,7 +307,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         /* 
          底部区域数据
         */
-        if let loc_des = status?.location_des {
+        if let loc_des = status?.location?.descr {
             locationLbL?.text = loc_des
         }else{
             locationLbL?.text = LS("未知地点")
@@ -342,7 +341,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
     }
     
     func avatarBtnPressed() {
-        if status?.user?.userID != User.objects.hostUserID {
+        if status!.user!.isHost {
             let detail = PersonOtherController(user: status!.user!)
             parent?.navigationController?.pushViewController(detail, animated: true)
         } else {

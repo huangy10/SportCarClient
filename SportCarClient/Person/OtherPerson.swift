@@ -89,7 +89,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     
     func followBtnPressed(sender: UIButton) {
         let requester = PersonRequester.requester
-        requester.follow(self.data.user.userID!, onSuccess: { (json) -> () in
+        requester.follow(self.data.user.ssidString, onSuccess: { (json) -> () in
             let board = self.header as! PersonHeaderOther
             
             if json!.boolValue {
@@ -175,7 +175,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
             header.map.setRegion(region, animated: true)
             userLoc = backOffLocation
         } else {
-            rp_currentRequest = RadarRequester.requester.trackUser(data.user.userID!, onSuccess: { (json) -> () in
+            rp_currentRequest = RadarRequester.requester.trackUser(data.user.ssidString, onSuccess: { (json) -> () in
                 self.userLoc = Location(latitude: json!["lat"].doubleValue, longitude: json!["lon"].doubleValue, description: json!["description"].stringValue)
                 self.userAnno.coordinate = self.userLoc!.location
                 let region = BMKCoordinateRegionMakeWithDistance(self.userLoc!.location, 3000, 5000)

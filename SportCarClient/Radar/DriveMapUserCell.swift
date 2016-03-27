@@ -103,7 +103,7 @@ class DriverMapUserCell: UITableViewCell {
     }
     
     func loadDataAndUpdateUI() {
-        avatar.kf_setImageWithURL(SFURL(user.avatarUrl!)!)
+        avatar.kf_setImageWithURL(user.avatarURL!)
         nameLbl.text = user.nickName
         var distance = hostLoc.distanceFromLocation(userLoc)
         var showKM = false

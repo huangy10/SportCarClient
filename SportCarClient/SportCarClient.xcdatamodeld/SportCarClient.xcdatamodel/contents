@@ -1,230 +1,146 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15E64a" minimumToolsVersion="Automatic">
-    <entity name="Activity" representedClassName=".Activity" syncable="YES">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15E64a" minimumToolsVersion="Xcode 7.0">
+    <entity name="Activity" representedClassName=".Activity" parentEntity="BaseModel" syncable="YES">
         <attribute name="actDescription" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="activityID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="applyAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="atString" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="commentNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="endAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="liked" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="likeNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="location_des" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="location_x" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="location_y" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="loc" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="maxAttend" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="mine" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="poster" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sent" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="sent" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="startAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <relationship name="club" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Club" inverseName="activity" inverseEntity="Club" syncable="YES"/>
-        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ActivityComment" inverseName="activity" inverseEntity="ActivityComment" syncable="YES"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="activity" inverseEntity="User" syncable="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="acts" inverseEntity="User" syncable="YES"/>
     </entity>
-    <entity name="ActivityComment" representedClassName=".ActivityComment" syncable="YES">
-        <attribute name="atString" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="commentID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sent" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <relationship name="activity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Activity" inverseName="comments" inverseEntity="Activity" syncable="YES"/>
-        <relationship name="replies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ActivityComment" inverseName="responseTo" inverseEntity="ActivityComment" syncable="YES"/>
-        <relationship name="responseTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ActivityComment" inverseName="replies" inverseEntity="ActivityComment" syncable="YES"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="actComments" inverseEntity="User" syncable="YES"/>
+    <entity name="BaseModel" representedClassName=".BaseModel" isAbstract="YES" syncable="YES">
+        <attribute name="hostSSID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="ssid" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
-    <entity name="ChatRecord" representedClassName=".ChatRecord" syncable="YES">
+    <entity name="ChatRecord" representedClassName=".ChatRecord" parentEntity="BaseModel" syncable="YES">
         <attribute name="audio" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="audioCaches" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="audioLength" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="audioLocal" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="chat_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="audioReady" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="chatType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="draft" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="draft" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="hidden" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="imageHeight" optional="YES" attributeType="Double" defaultValueString="20" syncable="YES"/>
-        <attribute name="imageWidth" optional="YES" attributeType="Double" defaultValueString="20" syncable="YES"/>
+        <attribute name="imageHeight" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="imageWidth" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="messageType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="read" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="recordID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="relatedID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sent" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="targetID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mine" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="read" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="relatedClub" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="relatedUser" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sender" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sent" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="targetID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="textContent" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="club" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Club" inverseName="chats" inverseEntity="Club" syncable="YES"/>
-        <relationship name="related_clubs" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Club" inverseName="mostRecentChat" inverseEntity="Club" syncable="YES"/>
-        <relationship name="related_users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="mostRecentChat" inverseEntity="User" syncable="YES"/>
-        <relationship name="sender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="chatRecords" inverseEntity="User" syncable="YES"/>
     </entity>
-    <entity name="Club" representedClassName=".Club" syncable="YES">
+    <entity name="Club" representedClassName=".Club" parentEntity="BaseModel" syncable="YES">
+        <attribute name="alwayOnTop" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="alwaysOnTopDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="attended" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="clubDescription" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="clubID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="founder" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="identified" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="logo_url" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="logo" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="memberNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="mine" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="mostRecentChat" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="onlyHostInvites" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="show_members" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="noDisturbing" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="onlyHostCanInvite" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="remarkName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="showMembers" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="showNickName" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="value" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="valueAverage" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <relationship name="activity" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Activity" inverseName="club" inverseEntity="Activity" syncable="YES"/>
-        <relationship name="chats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ChatRecord" inverseName="club" inverseEntity="ChatRecord" syncable="YES"/>
-        <relationship name="host" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="clubCreated" inverseEntity="User" syncable="YES"/>
-        <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="club" inverseEntity="User" syncable="YES"/>
-        <relationship name="mostRecentChat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ChatRecord" inverseName="related_clubs" inverseEntity="ChatRecord" syncable="YES"/>
     </entity>
-    <entity name="ClubJoining" representedClassName=".ClubJoining" syncable="YES">
-        <attribute name="alwaysOnTop" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="alwaysOnTopDate" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="clubID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="joinDate" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="nickName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="noDisturbing" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="showNickName" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-    </entity>
-    <entity name="News" representedClassName=".News" syncable="YES">
-        <attribute name="commentNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="contentURL" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="cover" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="likeNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="newsID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="recentLikerName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="shareNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NewsComment" inverseName="news" inverseEntity="NewsComment" syncable="YES"/>
-        <relationship name="likedBy" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="likeNews" inverseEntity="User" syncable="YES"/>
-    </entity>
-    <entity name="NewsComment" representedClassName=".NewsComment" syncable="YES">
-        <attribute name="alreaySent" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="atString" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="commentID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="commentTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NewsComment" inverseName="replys" inverseEntity="NewsComment" syncable="YES"/>
-        <relationship name="news" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="News" inverseName="comments" inverseEntity="News" syncable="YES"/>
-        <relationship name="replys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NewsComment" inverseName="commentTo" inverseEntity="NewsComment" syncable="YES"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="newsComment" inverseEntity="User" syncable="YES"/>
-    </entity>
-    <entity name="Notification" representedClassName=".Notification" syncable="YES">
+    <entity name="Notification" representedClassName=".Notification" parentEntity="BaseModel" syncable="YES">
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="flag" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="messageBody" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="messageType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="notificationID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="read" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="relatedID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="relatedObj" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="notifications" inverseEntity="User" syncable="YES"/>
     </entity>
-    <entity name="Profile" representedClassName=".Profile" syncable="YES">
-        <attribute name="avatarCarID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="avatarCarImage" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="avatarCarLogo" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="avatarCarName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="avatarClubID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="avatarClubLogo" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="avatarClubName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fansNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="followNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="statusNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="profile" inverseEntity="User" syncable="YES"/>
-    </entity>
-    <entity name="SportCar" representedClassName=".SportCar" syncable="YES">
+    <entity name="SportCar" representedClassName=".SportCar" parentEntity="BaseModel" syncable="YES">
         <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="carID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="engine" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="identified" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="logo" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="manufacturer" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="max_speed" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="maxSpeed" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mine" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="transimission" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="zeroTo60" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="followers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="carsLiked" inverseEntity="User" syncable="YES"/>
-        <relationship name="ownership" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SportCarOwnerShip" inverseName="car" inverseEntity="SportCarOwnerShip" syncable="YES"/>
-        <relationship name="related_status" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Status" inverseName="car" inverseEntity="Status" syncable="YES"/>
-    </entity>
-    <entity name="SportCarOwnerShip" representedClassName=".SportCarOwnerShip" syncable="YES">
-        <attribute name="identified" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="car" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SportCar" inverseName="ownership" inverseEntity="SportCar" syncable="YES"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="ownership" inverseEntity="User" syncable="YES"/>
+        <attribute name="torque" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="zeroTo60" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Status" representedClassName=".Status" syncable="YES">
+    <entity name="Status" representedClassName=".Status" parentEntity="BaseModel" syncable="YES">
+        <attribute name="carID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="carInfo" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="commentNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="fromFollow" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="fromHot" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="fromPerson" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="liked" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="likeNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="location_des" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="location_x" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="location_y" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="statusID" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="car" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SportCar" inverseName="related_status" inverseEntity="SportCar" syncable="YES"/>
-        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="StatusComment" inverseName="status" inverseEntity="StatusComment" syncable="YES"/>
+        <attribute name="loc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mine" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="sent" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="thumbnail" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="status" inverseEntity="User" syncable="YES"/>
     </entity>
-    <entity name="StatusComment" representedClassName=".StatusComment" syncable="YES">
-        <attribute name="alreadySent" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="atString" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="commentID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="commentTo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StatusComment" inverseName="replys" inverseEntity="StatusComment" syncable="YES"/>
-        <relationship name="replys" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="StatusComment" inverseName="commentTo" inverseEntity="StatusComment" syncable="YES"/>
-        <relationship name="status" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Status" inverseName="comments" inverseEntity="Status" syncable="YES"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="statusComment" inverseEntity="User" syncable="YES"/>
-    </entity>
-    <entity name="User" representedClassName=".User" syncable="YES">
+    <entity name="User" representedClassName=".User" parentEntity="BaseModel" syncable="YES">
         <attribute name="age" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="avatarCarID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="avatarUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="avatar" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="avatarCar" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="avatarClub" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="birthDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="district" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fansNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="followed" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="followsNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="job" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nickName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="phoneNum" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recentStatusDes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remarkName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="starSign" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="userID" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="actComments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ActivityComment" inverseName="user" inverseEntity="ActivityComment" syncable="YES"/>
-        <relationship name="activity" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Activity" inverseName="user" inverseEntity="Activity" syncable="YES"/>
-        <relationship name="carsLiked" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SportCar" inverseName="followers" inverseEntity="SportCar" syncable="YES"/>
-        <relationship name="chatRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ChatRecord" inverseName="sender" inverseEntity="ChatRecord" syncable="YES"/>
-        <relationship name="club" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Club" inverseName="members" inverseEntity="Club" syncable="YES"/>
-        <relationship name="clubCreated" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Club" inverseName="host" inverseEntity="Club" syncable="YES"/>
-        <relationship name="fans" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="follows" inverseEntity="User" syncable="YES"/>
-        <relationship name="follows" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="fans" inverseEntity="User" syncable="YES"/>
-        <relationship name="likeNews" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="News" inverseName="likedBy" inverseEntity="News" syncable="YES"/>
-        <relationship name="mostRecentChat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ChatRecord" inverseName="related_users" inverseEntity="ChatRecord" syncable="YES"/>
-        <relationship name="newsComment" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NewsComment" inverseName="user" inverseEntity="NewsComment" syncable="YES"/>
-        <relationship name="notifications" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Notification" inverseName="user" inverseEntity="Notification" syncable="YES"/>
-        <relationship name="ownership" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SportCarOwnerShip" inverseName="user" inverseEntity="SportCarOwnerShip" syncable="YES"/>
-        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Profile" inverseName="user" inverseEntity="Profile" syncable="YES"/>
-        <relationship name="status" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Status" inverseName="user" inverseEntity="Status" syncable="YES"/>
-        <relationship name="statusComment" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="StatusComment" inverseName="user" inverseEntity="StatusComment" syncable="YES"/>
+        <attribute name="statusNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="acts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Activity" inverseName="user" inverseEntity="Activity" syncable="YES"/>
+        <relationship name="notifications" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Notification" inverseName="user" inverseEntity="Notification" syncable="YES"/>
+        <relationship name="status" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Status" inverseName="user" inverseEntity="Status" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Activity" positionX="-783" positionY="-126" width="128" height="330"/>
-        <element name="ActivityComment" positionX="-783" positionY="-126" width="128" height="195"/>
-        <element name="ChatRecord" positionX="-783" positionY="-126" width="128" height="345"/>
-        <element name="Club" positionX="-506" positionY="372" width="128" height="300"/>
-        <element name="ClubJoining" positionX="-758" positionY="342" width="128" height="150"/>
-        <element name="News" positionX="-774" positionY="-117" width="128" height="210"/>
-        <element name="NewsComment" positionX="-765" positionY="-108" width="128" height="195"/>
-        <element name="Notification" positionX="-783" positionY="-126" width="128" height="180"/>
-        <element name="Profile" positionX="-981" positionY="63" width="128" height="210"/>
-        <element name="SportCar" positionX="-459" positionY="-270" width="128" height="255"/>
-        <element name="SportCarOwnerShip" positionX="-630" positionY="-270" width="128" height="105"/>
-        <element name="Status" positionX="-461" positionY="36" width="128" height="225"/>
-        <element name="StatusComment" positionX="-711" positionY="117" width="128" height="195"/>
-        <element name="User" positionX="-785" positionY="-126" width="128" height="480"/>
+        <element name="Activity" positionX="-63" positionY="-18" width="128" height="268"/>
+        <element name="BaseModel" positionX="358" positionY="48" width="128" height="73"/>
+        <element name="ChatRecord" positionX="-54" positionY="-9" width="128" height="358"/>
+        <element name="Club" positionX="198" positionY="18" width="128" height="345"/>
+        <element name="Notification" positionX="63" positionY="-351" width="128" height="180"/>
+        <element name="SportCar" positionX="349" positionY="189" width="128" height="240"/>
+        <element name="Status" positionX="-36" positionY="0" width="128" height="283"/>
+        <element name="User" positionX="196" positionY="510" width="128" height="360"/>
     </elements>
 </model>

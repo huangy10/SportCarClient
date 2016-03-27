@@ -13,7 +13,7 @@ import SwiftyJSON
 
 internal class StatusURLMaker: AccountURLMaker {
     
-    static let sharedMaker = StatusURLMaker(user: User.objects.hostUser())
+    static let sharedMaker = StatusURLMaker(user: MainManager.sharedManager.hostUser!)
     
     
     func getStatusFollowList() -> String{
@@ -114,7 +114,7 @@ class StatusRequester: AccountRequester {
                 let informJSON = JSON(informOf!)
                 data.appendBodyPart(data: try! informJSON.rawData(), name: "inform_of")
             }
-            let hostUserID = User.objects.hostUserID!
+            let hostUserID = MainManager.sharedManager.hostUserIDString!
             data.appendBodyPart(data: hostUserID.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "user_id")
             
             }) { (let encodingResult) -> Void in

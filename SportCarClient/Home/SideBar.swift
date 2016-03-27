@@ -40,7 +40,7 @@ class SideBarController: UIViewController {
     
     func createSubviewsHigherResolution() {
         let superview = self.view
-        guard let host = User.objects.hostUser() else{
+        guard let host = MainManager.sharedManager.hostUser else{
             assertionFailure()
             return
         }
@@ -56,7 +56,7 @@ class SideBarController: UIViewController {
         avatarBtn = LoadingButton(size: CGSize(width: 125, height: 125))
         avatarBtn?.layer.cornerRadius = 62.5
         avatarBtn?.clipsToBounds = true
-        avatarBtn?.loadImageFromURLSTR(SF(host.avatarUrl ?? ""), placeholderImage: UIImage(named: "account_profile_avatar_btn"))
+        avatarBtn?.loadImageFromURL(host.avatarURL!, placeholderImage: UIImage(named: "account_profile_avatar_btn"))
         avatarBtn?.tag = 0
         superview.addSubview(avatarBtn!)
         let screenWidth = superview.frame.width
@@ -79,12 +79,11 @@ class SideBarController: UIViewController {
             make.width.equalTo(superview).multipliedBy(0.8)
             make.height.equalTo(33)
         })
-        if let carID = host.profile?.avatarCarID where carID != "" {
-
-            carNameLbl = UILabel()
+        if let car = host.avatarCarModel {
+            carNameLbl = carNameLbl ?? UILabel()
             carNameLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
             carNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-            carNameLbl?.text = host.profile?.avatarCarName
+            carNameLbl?.text = car.name
             superview.addSubview(carNameLbl!)
             let size = carNameLbl?.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max))
             carNameLbl?.translatesAutoresizingMaskIntoConstraints = true
@@ -94,7 +93,7 @@ class SideBarController: UIViewController {
             })
             
             carIcon = UIImageView()
-            carIcon?.kf_setImageWithURL(SFURL(host.profile!.avatarCarLogo!)!)
+            carIcon?.kf_setImageWithURL(car.logoURL!)
             superview.addSubview(carIcon!)
             carIcon?.snp_makeConstraints(closure: { (make) -> Void in
                 make.right.equalTo(carNameLbl!.snp_left).offset(-5)
@@ -192,13 +191,12 @@ extension SideBarController {
      */
     func reloadUserData() {
         // 获取当前用户
-        guard let user = User.objects.hostUser() else{
+        guard let user = MainManager.sharedManager.hostUser else{
             // 如果没有当前登录用户，直接退出
             return
         }
-        avatarBtn?.loadImageFromURLSTR(SF(user.avatarUrl ?? ""), placeholderImage: avatarBtn?.imageView?.image)
+        avatarBtn?.loadImageFromURL(user.avatarURL!, placeholderImage: avatarBtn?.imageView?.image)
         nameLbl?.text = user.nickName ?? LS("离线用户")
-        
         let messageDatasource = ChatRecordDataSource.sharedDataSource
         if messageDatasource.totalUnreadNum > 0 {
             unreadMessagesLbl.hidden = false

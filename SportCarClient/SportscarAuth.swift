@@ -21,7 +21,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
     var districtBtn: UIButton!
     /// 车牌号输入
     var carLicense: UITextField!
-    var car: SportCarOwnerShip!
+    var car: SportCar!
     
     override func navTitle() -> String {
         return LS("跑车认证")
@@ -40,7 +40,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         }
         let requester = SportCarRequester.sharedSCRequester
         pp_showProgressView()
-        requester.authenticateSportscar(car.car!.carID!, driveLicense: selectedImages[0]!, photo: selectedImages[2]!, idCard: selectedImages[1]!, licenseNum: districtLabel.text! + carLicenseNum, onSuccess: { (json) -> () in
+        requester.authenticateSportscar(car.ssidString, driveLicense: selectedImages[0]!, photo: selectedImages[2]!, idCard: selectedImages[1]!, licenseNum: districtLabel.text! + carLicenseNum, onSuccess: { (json) -> () in
             self.pp_hideProgressView()
             self.showToast(LS("认证申请已经成功发送"))
             }, onProgress: { (progress) -> () in

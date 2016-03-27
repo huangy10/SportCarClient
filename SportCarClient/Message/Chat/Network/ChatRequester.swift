@@ -273,7 +273,7 @@ class ChatRequester: AccountRequester {
      - parameter onSuccess:   成功以后的调用的closure
      - parameter onError:     失败以后调用的closure
      */
-    func createNewClub(clubName: String, clubLogo: UIImage, members: [String], description: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+    func createNewClub(clubName: String, clubLogo: UIImage, members: [String], description: String, onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()) {
         let url = ChatURLMaker.sharedMaker.groupChatCreate()
         manager.upload(.POST, url, multipartFormData: { (form) -> Void in
             form.appendBodyPart(data: clubName.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "name")
@@ -283,6 +283,10 @@ class ChatRequester: AccountRequester {
             }) { (result) -> Void in
                 switch result {
                 case .Success(let request, _, _):
+                    request.progress({ (_, written, total) -> Void in
+                        let progress = Float(written) / Float(total)
+                        onProgress(progress: progress)
+                    })
                     request.responseJSON(completionHandler: { (response) -> Void in
                         self.resultValueHandler(response.result, dataFieldName: "club", onSuccess: onSuccess, onError: onError)
                     })
@@ -377,7 +381,7 @@ class ChatRequester: AccountRequester {
      */
     
     func updateClubLogo(club: Club, newLogo: UIImage, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
-        let url = ChatURLMaker.sharedMaker.clubUpdate(club.clubID!)
+        let url = ChatURLMaker.sharedMaker.clubUpdate(club.ssidString)
         manager.upload(.POST, url, multipartFormData: { (form) -> Void in
             form.appendBodyPart(data: UIImagePNGRepresentation(newLogo)!, name: "logo", fileName: "new_logo.png", mimeType: "image/png")
             }) { (result) -> Void in
@@ -396,15 +400,14 @@ class ChatRequester: AccountRequester {
     func updateClubSettings(
         club: Club,
         onSuccess: (JSON?)->(), onError: (code: String?)->()) {
-            let clubJoining = club.clubJoining!
-            let url = ChatURLMaker.sharedMaker.clubUpdate(club.clubID!)
+            let url = ChatURLMaker.sharedMaker.clubUpdate(club.ssidString)
             let params: [String: AnyObject] = [
-                "only_host_can_invite": club.onlyHostInvites,
-                "show_members_to_public": club.show_members,
-                "nick_name": clubJoining.nickName ?? User.objects.hostUser()!.nickName!,
-                "show_nick_name": clubJoining.showNickName,
-                "no_disturbing": clubJoining.noDisturbing,
-                "always_on_top": clubJoining.alwaysOnTop,
+                "only_host_can_invite": club.onlyHostCanInvite,
+                "show_members_to_public": club.showMembers,
+                "nick_name": club.remarkName ?? MainManager.sharedManager.hostUser!.nickName!,
+                "show_nick_name": club.showNickName,
+                "no_disturbing": club.noDisturbing,
+                "always_on_top": club.alwayOnTop,
                 "name": club.name!,
                 "description": club.clubDescription!
             ]

@@ -283,7 +283,7 @@ class ActivityDetailBoardView: UIView {
         // 活动海报
         actCover.kf_setImageWithURL(SFURL(act.poster!)!)
         // 是否显示编辑按钮
-        if User.objects.hostUserID == act.user?.userID {
+        if act.user!.isHost {
             showEditBtn = true
             memberDisplay.showDeleteBtn = true
         }else{
@@ -299,23 +299,23 @@ class ActivityDetailBoardView: UIView {
         doneIcon.hidden = endAt!.compare(NSDate()) == NSComparisonResult.OrderedDescending
         // 举办者的信息
         let host = act.user
-        hostAvatar.kf_setImageWithURL(SFURL(host!.avatarUrl!)!, forState: .Normal)
+        hostAvatar.kf_setImageWithURL(host!.avatarURL!, forState: .Normal)
         hostNameLbL.text = host?.nickName
-        if let avatarCarURL = host?.profile?.avatarCarLogo {
-            avatarCarLogo.kf_setImageWithURL(SFURL(avatarCarURL)!)
-            avatarCarNameLbl.text = host?.profile?.avatarCarName
+        if let avatarCarURL = host?.avatarCarModel?.logoURL {
+            avatarCarLogo.kf_setImageWithURL(avatarCarURL)
+            avatarCarNameLbl.text = host?.avatarCarModel?.name
         }
         // 活动发布时间
         releaseDateLbl.text = dateDisplay(act.createdAt!)
         // 地址
-        locationLbl.text = act.location_des
+        locationLbl.text = act.location?.descr
         // 评论数量
         commentNumLbl.text = "\(act.commentNum)"
         // 点赞数量
         likeNumLbl.text = "\(act.likeNum)"
         setLikeIconState(act.liked)
         // 
-        let users = act.applicant
+        let users = act.applicants
         memberDisplay.users = users
         memberDisplay.collectionView?.reloadData()
         let memberDisplayHeight = UIScreen.mainScreen().bounds.width / 4 * CGFloat((users.count + (memberDisplay.showDeleteBtn ? 2 : 1) - 1) / 4 + 1)
@@ -325,7 +325,7 @@ class ActivityDetailBoardView: UIView {
         // 人数要求
         attendNumLbl.text = "要求人数:\(act.maxAttend) 已报名:\(users.count)"
         // 
-        actTimeLbl.text = activityTimeDes(act)
+        actTimeLbl.text = act.timeDes
         //
         self.updateConstraints()
         self.layoutIfNeeded()

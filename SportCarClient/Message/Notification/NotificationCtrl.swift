@@ -38,7 +38,7 @@ class NotificationController: UITableViewController {
         case "status_like":
             // 给状态点赞了
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellWithCoverThumbnail.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellWithCoverThumbnail
-            cell.avatarBtn.kf_setImageWithURL(SFURL(notification.user!.avatarUrl!)!, forState: .Normal)
+            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("赞了你的动态")
@@ -49,7 +49,7 @@ class NotificationController: UITableViewController {
         case "status_comment":
             // One of your status is commented
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellWithCoverThumbnail.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellWithCoverThumbnail
-            cell.avatarBtn.kf_setImageWithURL(SFURL(notification.user!.avatarUrl!)!, forState: .Normal)
+            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("评论了你的动态")
@@ -58,7 +58,7 @@ class NotificationController: UITableViewController {
             
         case "status_comment_replied":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellWithCoverThumbnail.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellWithCoverThumbnail
-            cell.avatarBtn.kf_setImageWithURL(SFURL(notification.user!.avatarUrl!)!, forState: .Normal)
+            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("回复了你")
@@ -67,7 +67,7 @@ class NotificationController: UITableViewController {
         
         case "relation_follow":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationBaseCell.reuseIdentifier(), forIndexPath: indexPath) as! NotificationBaseCell
-            cell.avatarBtn.kf_setImageWithURL(SFURL(notification.user!.avatarUrl!)!, forState: .Normal)
+            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("关注了你")
@@ -75,7 +75,7 @@ class NotificationController: UITableViewController {
         
         case "status_inform":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellWithCoverThumbnail.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellWithCoverThumbnail
-            cell.avatarBtn.kf_setImageWithURL(SFURL(notification.user!.avatarUrl!)!, forState: .Normal)
+            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("提到了你")
@@ -85,8 +85,8 @@ class NotificationController: UITableViewController {
         
         case "act_applied":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
-            let act: Activity = notification.getRelatedObject()!
-            cell.avatarBtn.kf_setImageWithURL(SFURL(notification.user!.avatarUrl!)!, forState: .Normal)
+            let act: Activity = try! notification.getRelatedObj()!
+            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("报名了")
@@ -97,8 +97,8 @@ class NotificationController: UITableViewController {
         
         case "act_invited":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
-            let act: Activity = notification.getRelatedObject()!
-            cell.avatarBtn.kf_setImageWithURL(SFURL(notification.user!.avatarUrl!)!, forState: .Normal)
+            let act: Activity = try! notification.getRelatedObj()!
+            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("邀请你参加")
@@ -106,28 +106,28 @@ class NotificationController: UITableViewController {
             cell.inform2Lbl.text = ""
             cell.showBtns = true
             cell.closeOperation = notification.flag
-            cell.onAgreeBtnPressed = { _ in
+            cell.onAgreeBtnPressed = { [weak self] _ in
                 let requester = ActivityRequester.requester
-                requester.activityOperation(act.activityID!, targetUserID: "", opType: "invite_accepted", onSuccess: { (json) -> () in
+                requester.activityOperation(act.ssidString, targetUserID: "", opType: "invite_accepted", onSuccess: { (json) -> () in
                     cell.closeOperation = true
                     }, onError: { (code) -> () in
-                        self.showToast(LS("无法连接到服务器"))
+                        self?.showToast(LS("无法连接到服务器"))
                 })
             }
-            cell.onDenyBtnPressed = { _ in
+            cell.onDenyBtnPressed = { [weak self] _ in
                 let requester = ActivityRequester.requester
-                requester.activityOperation(act.activityID!, targetUserID: "", opType: "invite_accepted", onSuccess: { (json) -> () in
+                requester.activityOperation(act.ssidString, targetUserID: "", opType: "invite_accepted", onSuccess: { (json) -> () in
                     cell.closeOperation = true
                     }, onError: { (code) -> () in
-                        self.showToast(LS("无法连接到服务器"))
+                        self?.showToast(LS("无法连接到服务器"))
                 })
             }
             return cell
             
         case "act_denied":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
-            let act: Activity = notification.getRelatedObject()!
-            cell.avatarBtn.kf_setImageWithURL(SFURL(notification.user!.avatarUrl!)!, forState: .Normal)
+            let act: Activity = try! notification.getRelatedObj()!
+            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = ""
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("你报名的")
@@ -138,7 +138,7 @@ class NotificationController: UITableViewController {
             
         case "act_invitation_accepted":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
-            cell.avatarBtn.kf_setImageWithURL(SFURL(notification.user!.avatarUrl!)!, forState: .Normal)
+            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user?.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("接受了你的邀请")
@@ -178,14 +178,14 @@ class NotificationController: UITableViewController {
         let messageType = notification.messageType!
         switch messageType {
         case "status_like", "status_inform":
-            let detail = StatusDetailController(status: notification.getRelatedObject()!)
+            let detail = StatusDetailController(status: try! notification.getRelatedObj()!)
             detail.loadAnimated = false
             self.messageHome?.navigationController?.pushViewController(detail, animated: true)
             
         case "status_comment", "status_comment_replied":
-            let relatedStatusComment: StatusComment = notification.getRelatedObject()!
+            let relatedStatusComment: StatusComment = try! notification.getRelatedObj()!
             let relatedStatus = relatedStatusComment.status
-            let detail = StatusDetailController(status: relatedStatus!)
+            let detail = StatusDetailController(status: relatedStatus)
             detail.loadAnimated = false
             self.messageHome?.navigationController?.pushViewController(detail, animated: true)
             
@@ -194,7 +194,7 @@ class NotificationController: UITableViewController {
             self.messageHome?.navigationController?.pushViewController(detail, animated: true)
             
         case "act_applied", "act_invited", "act_denied", "act_invitation_accepted":
-            let detail = ActivityDetailController(act: notification.getRelatedObject()!)
+            let detail = ActivityDetailController(act: try! notification.getRelatedObj()!)
             self.messageHome?.navigationController?.pushViewController(detail, animated: true)
             
         default:

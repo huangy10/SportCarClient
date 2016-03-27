@@ -82,6 +82,12 @@ class ActivityNearByCell: UICollectionViewCell {
             make.left.equalTo(sepLine)
             make.top.equalTo(sepLine.snp_bottom).offset(20)
         }
+        //
+        self.clipsToBounds = false
+        self.layer.shadowColor = UIColor.redColor().CGColor
+        self.layer.shadowOffset = CGSizeMake(0, 5)
+        self.layer.shadowOpacity = 0.5
+        self.layer.shadowRadius = 2
     }
     
     func loadDataAndUpdateUI() {

@@ -51,7 +51,7 @@ class ChatListController: UITableViewController, FFSelectDelegate, GroupChatSetu
         cell.listItem = chatData?._item
         cell.setUnreadNumber(chatData!.unread)
         if let recentChat = chatData?.last(){
-            cell.recentTalkLbl.text = recentChat.getDescription()
+            cell.recentTalkLbl.text = recentChat.summary
             cell.recentTalkTimeLbl.text = dateDisplay(recentChat.createdAt!)
         }else {
             cell.recentTalkTimeLbl.text = ""

@@ -32,7 +32,7 @@ class ChatCell: UITableViewCell {
         }
     }
     var isMineBubble: Bool {
-        return (chat?.sender?.userID == User.objects.hostUserID) ?? false
+        return chat?.senderUser?.isHost ?? false
     }
     var loading: Bool = true {
         didSet {
@@ -214,7 +214,7 @@ class ChatCell: UITableViewCell {
             triangle?.image = UIImage(named: "chat_triangle_light_gray")
             bubbleLbL?.textColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         }
-        avatarBtn?.kf_setImageWithURL(SFURL(chat!.sender!.avatarUrl!)!, forState: .Normal)
+        avatarBtn?.kf_setImageWithURL(chat!.senderUser!.avatarURL!, forState: .Normal)
         var bubbleContentSize = CGSizeZero
         if reuseIdentifier == "text"{
             bubbleLbL?.text = chat?.textContent

@@ -48,7 +48,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             let requester = ChatRequester.requester
             requester.updateClubLogo(targetClub, newLogo: newLogo!, onSuccess: { (json) -> () in
                 if let newLogoURL = json?.string where self.newLogo != nil {
-                    self.targetClub.logo_url = newLogoURL
+                    self.targetClub.logo = newLogoURL
                     // save the uploaded image to the shared cache
                     let logoURL = SFURL(newLogoURL)!
                     let cache = KingfisherManager.sharedManager.cache
@@ -65,7 +65,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         // TODO: pop up activity-release window
         //
         let detail = ActivityReleasePresentableController()
-        detail.clubLimitID = targetClub.clubID
+        detail.clubLimitID = targetClub.ssid
         detail.clubLimit = targetClub.name!
         detail.presentFrom(self)
     }
@@ -85,7 +85,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
                 cell.avatarImage.image = newLogo
                 return cell
             }
-            cell.avatarImage.kf_setImageWithURL(SFURL(targetClub.logo_url!)!)
+            cell.avatarImage.kf_setImageWithURL(targetClub.logoURL!)
             return cell
         case 1:
             switch indexPath.row {
@@ -102,7 +102,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
                 let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
                 cell.boolSelect.hidden = false
                 cell.infoLbl.text = ""
-                cell.boolSelect.on = [targetClub.onlyHostInvites, targetClub.show_members][indexPath.row - 6]
+                cell.boolSelect.on = [targetClub.onlyHostCanInvite, targetClub.showMembers][indexPath.row - 6]
                 // 0，1，2已经被占用了，这里从3开始编号，此时页面的5个switch按钮的对应关系如下：
                 // 0 - 显示本群昵称； 1 - 消息免打扰； 2 - 置顶聊天； 3 - 仅我可以邀请，4 - 对外公布成员信息
                 cell.boolSelect.tag = indexPath.row - 3
@@ -165,7 +165,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             case 1:
                 modifier.initValue = targetClub.clubDescription
             case 4:
-                modifier.initValue = targetClub.clubJoining?.nickName ?? User.objects.hostUser()?.nickName
+                modifier.initValue = targetClub.remarkName ?? MainManager.sharedManager.hostUser!.nickName!
             case 2:
                 if !targetClub.identified {
                     // If the club is not identified, show auth controller
@@ -198,9 +198,9 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         if sender.tag < 3 {
             super.switchBtnPressed(sender)
         }else if sender.tag == 3 {
-            targetClub.onlyHostInvites = sender.on
+            targetClub.onlyHostCanInvite = sender.on
         }else {
-            targetClub.show_members = sender.on
+            targetClub.showMembers = sender.on
         }
     }
     
@@ -231,7 +231,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             break
         case 4:
             // 我在本群的昵称
-            clubJoining?.nickName = newValue
+            targetClub.remarkName = newValue
             break
         default:
             break
@@ -245,11 +245,15 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
     }
     
     func inlineUserSelectShouldDeleteUser(user: User) {
-        
+        // TODO finish this
     }
     
     override func inlineUserSelectNeedAddMembers() {
-        
+        let select = FFSelectController()
+        select.selectedUsers = Array(targetClub.members)
+        select.delegate = self
+        let wrapper = BlackBarNavigationController(rootViewController: select)
+        self.presentViewController(wrapper, animated: true, completion: nil)
     }
 }
 

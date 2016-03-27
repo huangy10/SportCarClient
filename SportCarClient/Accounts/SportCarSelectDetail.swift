@@ -11,16 +11,23 @@ import SnapKit
 import Kingfisher
 
 
+protocol SportCarSelectDetailProtocol: class {
+    func sportCarSelectDeatilDidAddCar(car: SportCar)
+}
+
+
 class SportCarSelectParamCell: UITableViewCell {
     
     static let reuseIdentifier = "SportCarSelectParamCell"
     
     var content: UILabel?
     var header: UILabel?
+    var icon: UIImageView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.createSubviews()
+        self.selectionStyle = .None
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -40,7 +47,7 @@ class SportCarSelectParamCell: UITableViewCell {
         header?.textAlignment = .Left
         self.contentView.addSubview(header!)
         
-        let icon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
+        icon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         self.contentView.addSubview(icon)
         
         let superview = self.contentView
@@ -67,12 +74,27 @@ class SportCarSelectParamCell: UITableViewCell {
     }
 }
 
-class SportCarSelectDetailController: UIViewController, SportCarBrandSelecterControllerDelegate, UITableViewDataSource, UITableViewDelegate {
+class SportCarSelectParamEditableCell: SportCarSelectParamCell {
+    var contentInput: UITextField!
+
+    override func createSubviews() {
+        super.createSubviews()
+        contentInput = UITextField()
+        contentInput.font = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
+        contentInput.textColor = UIColor.blackColor()
+        contentInput.textAlignment = .Right
+        self.contentView.addSubview(contentInput)
+        contentInput.snp_makeConstraints { (make) -> Void in
+            make.edges.equalTo(content!)
+        }
+        content?.text = ""
+        content?.userInteractionEnabled = false
+        self.contentView.addSubview(contentInput)
+    }
+}
+
+class SportCarSelectDetailController: UITableViewController, SportCarBrandSelecterControllerDelegate {
     
-    var carDisplay: UIImageView?
-    var carSelectBtn: UIButton?
-    
-    var tableView: UITableView?
     var headers: [String]?
     var contents: [String?]?
     
@@ -80,6 +102,9 @@ class SportCarSelectDetailController: UIViewController, SportCarBrandSelecterCon
     var carDisplayURL: NSURL?
     
     var carId: String?
+    
+    weak var contentInput: UITextField?
+    weak var delegate: SportCarSelectDetailProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,11 +148,19 @@ class SportCarSelectDetailController: UIViewController, SportCarBrandSelecterCon
      下一步，将本处选择的跑车设置为未认证的关注跑车
      */
     func nextBtnPressed() {
+        contentInput?.resignFirstResponder()
+        let signature: String = contentInput?.text ?? ""
         let requester = SportCarRequester.sharedSCRequester
-        requester.postToFollow(contents![1], carId: carId!, onSuccess: { () -> () in
-            print("Done！")
-            let app = AppManager.sharedAppManager
-            app.guideToContent()
+        requester.postToFollow(signature, carId: carId!, onSuccess: { (json) -> () in
+            // add this car to current users
+            let car: SportCar = try! MainManager.sharedManager.getOrCreate(SportCar.reorgnaizeJSON(json!))
+            if MainManager.sharedManager.hostUser != nil {
+                self.navigationController?.popViewControllerAnimated(true)
+            } else {
+                let app = AppManager.sharedAppManager
+                app.guideToContent()
+            }
+            self.delegate?.sportCarSelectDeatilDidAddCar(car)
             }) { (code) -> () in
                 self.displayAlertController(LS("错误"), message: LS("服务器发生了内部错误"))
         }
@@ -136,72 +169,19 @@ class SportCarSelectDetailController: UIViewController, SportCarBrandSelecterCon
     func createSubviews() {
         let superview = self.view
         superview.backgroundColor = UIColor.whiteColor()
-        //
-        carDisplay = UIImageView()
-        let downloadIndicator = UIActivityIndicatorView(activityIndicatorStyle: .White)
-        superview.addSubview(carDisplay!)
-        carDisplay?.kf_setImageWithURL(carDisplayURL!, placeholderImage: UIImage(named: "account_car_select_placeholder"), optionsInfo: nil, progressBlock: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
-            downloadIndicator.stopAnimating()
-        })
-        carDisplay?.snp_makeConstraints(closure: { (make) -> Void in
-            make.top.equalTo(superview)
-            make.left.equalTo(superview)
-            make.width.equalTo(superview).multipliedBy(0.5)
-            make.height.equalTo(carDisplay!.snp_width).multipliedBy(0.58)
-        })
-        
-        carDisplay?.addSubview(downloadIndicator)
-        downloadIndicator.snp_makeConstraints { (make) -> Void in
-            make.center.equalTo(carDisplay!)
-            make.size.equalTo(CGSize(width: 44, height: 44))
-        }
-        downloadIndicator.startAnimating()
-        downloadIndicator.hidesWhenStopped = true
-        //
-        carSelectBtn = UIButton()
-        carSelectBtn?.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        carSelectBtn?.setTitle(carType, forState: .Normal)
-        carSelectBtn?.titleLabel?.font = UIFont.systemFontOfSize(19, weight: UIFontWeightSemibold)
-        carSelectBtn?.titleLabel?.textAlignment = .Center
-        superview.addSubview(carSelectBtn!)
-        carSelectBtn?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(carDisplay!.snp_right)
-            make.right.equalTo(superview)
-            make.centerY.equalTo(carDisplay!)
-            make.height.equalTo(44)
-        })
-        carSelectBtn?.addTarget(self, action: "selectSportCarBrandPressed", forControlEvents: .TouchUpInside)
-        //
-        let btnIcon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
-        carSelectBtn?.addSubview(btnIcon)
-        btnIcon.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(carSelectBtn!).offset(-15)
-            make.centerY.equalTo(carSelectBtn!)
-            make.size.equalTo(CGSize(width: 9, height: 15))
-        }
-        //
-        tableView = UITableView(frame: CGRect.zero, style: .Plain)
-        tableView?.dataSource = self
-        tableView?.delegate = self
-        tableView?.registerClass(SportCarSelectParamCell.self, forCellReuseIdentifier: SportCarSelectParamCell.reuseIdentifier)
-        tableView?.separatorColor = UIColor(white: 0.92, alpha: 1)
-        superview.addSubview(tableView!)
-        tableView?.snp_makeConstraints(closure: { (make) -> Void in
-            make.top.equalTo(carDisplay!.snp_bottom)
-            make.right.equalTo(superview)
-            make.left.equalTo(superview)
-            make.bottom.equalTo(superview)
-        })
+        tableView.registerClass(SportCarSelectParamCell.self, forCellReuseIdentifier: SportCarSelectParamCell.reuseIdentifier)
+        tableView.registerClass(SportCarSelectParamEditableCell.self, forCellReuseIdentifier: "edit")
+        tableView.separatorColor = UIColor(white: 0.92, alpha: 1)
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if headers == nil {
             return 0
         }
         return 2
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if headers == nil {
             return 0
         }
@@ -211,7 +191,14 @@ class SportCarSelectDetailController: UIViewController, SportCarBrandSelecterCon
         return headers!.count - 2
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if indexPath.section == 0 && indexPath.row == 1 {
+            let cell = tableView.dequeueReusableCellWithIdentifier("edit", forIndexPath: indexPath) as! SportCarSelectParamEditableCell
+            cell.header?.text = LS(headers![indexPath.row])
+            cell.contentInput.placeholder = LS("为爱车写一段签名吧(选填)")
+            self.contentInput = cell.contentInput
+            return cell
+        }
         let cell = tableView.dequeueReusableCellWithIdentifier(SportCarSelectParamCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarSelectParamCell
         if indexPath.section == 0 {
             cell.header?.text = LS(headers![indexPath.row])
@@ -223,23 +210,26 @@ class SportCarSelectDetailController: UIViewController, SportCarBrandSelecterCon
         return cell
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0{
-            return nil
+            return LS("爱车型号")
         }else{
             return LS("性能参数")
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 53
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0{
-            return 0.01
-        }
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.section == 0 && indexPath.row == 0 {
+            selectSportCarBrandPressed()
+        }
     }
     
     func selectSportCarBrandPressed() {
@@ -248,36 +238,22 @@ class SportCarSelectDetailController: UIViewController, SportCarBrandSelecterCon
         let nav = BlackBarNavigationController(rootViewController: select)
         self.presentViewController(nav, animated: true, completion: nil)
     }
+    
     func brandSelected(manufacturer: String?, carType: String?) {
         self.dismissViewControllerAnimated(true, completion: nil)
         if manufacturer == nil || carType == nil {
             return
         }
-        carSelectBtn?.setTitle(LS("获取跑车资料中..."), forState: .Normal)
-        carSelectBtn?.enabled = false
         let requester = SportCarRequester.sharedSCRequester
         requester.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
             let carImgURL = SF(data["image_url"].stringValue)
             self.carDisplayURL = NSURL(string: carImgURL ?? "")
-            let downloadIndicator = self.carDisplay?.subviews.first! as! UIActivityIndicatorView
-            downloadIndicator.startAnimating()
-            self.carDisplay?.kf_setImageWithURL(self.carDisplayURL!, placeholderImage: UIImage(named: "account_car_select_placeholder"), optionsInfo: nil, progressBlock: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
-                downloadIndicator.stopAnimating()
-            })
-            
             self.carId = data["carID"].stringValue
             self.contents = [carType, self.contents![1], data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
-            self.carSelectBtn?.enabled = true
-            self.carSelectBtn?.setTitle(carType, forState: .Normal)
             self.tableView?.reloadData()
-            
+
             }) { (code) -> () in
-                // 弹窗说明错误
-                let alert = UIAlertController(title: LS("载入跑车数据失败"), message: nil, preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: LS("取消"), style: .Cancel, handler: { (action) -> Void in
-                    self.carSelectBtn?.setTitle(LS("重选跑车"), forState: .Normal)
-                }))
-                self.carSelectBtn?.enabled = true
+                self.showToast(LS("载入爱车数据失败"))
         }
     }
 }

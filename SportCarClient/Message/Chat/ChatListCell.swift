@@ -20,11 +20,11 @@ class ChatListCell: UITableViewCell {
             }
             switch listItem! {
             case .ClubItem(let club):
-                avatarBtn.kf_setImageWithURL(SFURL(club.logo_url!)!, forState: .Normal)
-                nickNameLbl.text = club.name
+                avatarBtn.kf_setImageWithURL(club.logoURL!, forState: .Normal)
+                nickNameLbl.text = club.name! + "(\(club.memberNum))"
                 break
             case .UserItem(let user):
-                avatarBtn.kf_setImageWithURL(SFURL(user.avatarUrl!)!, forState: .Normal)
+                avatarBtn.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
                 nickNameLbl.text = user.nickName
                 break
             }

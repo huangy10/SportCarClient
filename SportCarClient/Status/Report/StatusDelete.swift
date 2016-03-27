@@ -48,9 +48,9 @@ class StatusDeleteController: PresentTemplateViewController {
         hideConfirmToast(toast!)
         let requester = StatusRequester.SRRequester
         let waitSignal = dispatch_semaphore_create(0)
-        requester.deleteStatus(status.statusID!, onSuccess: { (json) -> () in
+        requester.deleteStatus(status.ssidString, onSuccess: { (json) -> () in
             // 删除成功以后发送一个notification
-            NSNotificationCenter.defaultCenter().postNotificationName(kStatusDidDeletedNotification, object: nil, userInfo: [kStatusDidDeletedStatusIDKey: self.status.statusID!])
+            NSNotificationCenter.defaultCenter().postNotificationName(kStatusDidDeletedNotification, object: nil, userInfo: [kStatusDidDeletedStatusIDKey: self.status.ssidString])
             dispatch_semaphore_signal(waitSignal)
             }) { (code) -> () in
                 dispatch_semaphore_signal(waitSignal)

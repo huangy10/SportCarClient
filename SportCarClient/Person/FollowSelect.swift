@@ -35,7 +35,6 @@ class FollowSelectController: UserSelectController {
             make.right.equalTo(superview).offset(0)
         })
         //
-        findOnMapBtn?.hidden = true
         selectedUserList?.hidden = true
         userTableView?.registerClass(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
     }
@@ -52,7 +51,7 @@ class FollowSelectController: UserSelectController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UserSelectCellUnselectable
         let user = users[indexPath.row]
-        cell.avatarImg?.kf_setImageWithURL(SFURL(user.avatarUrl!)!)
+        cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
         return cell
@@ -65,17 +64,17 @@ class FollowSelectController: UserSelectController {
     func getMoreUserData() {
         let threshold: NSDate = followsDateThreshold ?? NSDate()
         let requester = AccountRequester.sharedRequester
-        requester.getFollowList(targetUser!.userID!, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
+        requester.getFollowList(targetUser!.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
             print(data)
             if let fansJSONData = data?.arrayValue {
                 for json in fansJSONData {
-                    let user = User.objects.getOrCreate(json)
+                    let user: User = try! MainManager.sharedManager.getOrCreate(json)
                     user.recentStatusDes = json["recent_status_des"].string
                     self.follows.append(user)
                     self.followsDateThreshold = DateSTR(json["created_at"].stringValue)
                 }
                 if fansJSONData.count > 0 {
-                    self.follows = $.uniq(self.follows, by: {return $0.userID!})
+                    self.follows = $.uniq(self.follows, by: { return $0.ssid })
                     self.userTableView?.reloadData()
                 }
             }

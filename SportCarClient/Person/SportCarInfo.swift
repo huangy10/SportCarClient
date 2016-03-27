@@ -12,7 +12,7 @@ import Kingfisher
 
 
 protocol SportCarInfoCellDelegate: class {
-    func carNeedEdit(own: SportCarOwnerShip)
+    func carNeedEdit(own: SportCar)
 }
 
 
@@ -20,7 +20,8 @@ class SportCarInfoCell: UICollectionViewCell{
     static let reuseIdentifier = "sport_car_info_cell"
     
     weak var delegate: SportCarInfoCellDelegate?
-    var own: SportCarOwnerShip!
+    var car: SportCar!
+    var mine: Bool = false
     
     var carCover: UIImageView!
     var carNameLbl: UILabel!
@@ -232,29 +233,28 @@ class SportCarInfoCell: UICollectionViewCell{
     
     func loadDataAndUpdateUI() {
         // 设置数据
-        if let car = own.car {
-            // 设置跑车名
-            carNameLbl.text = car.name
-            // 设置封面图
-            carCover.kf_setImageWithURL(SFURL(car.image!)!)
-            // 设置认证标签
-            if own.identified {
-                carAuthIcon.image = UIImage(named: "auth_status_authed")
-            }else {
-                carAuthIcon.image = UIImage(named: "auth_status_unauthed")
-            }
-            // 跑车签名
-            carSignatureLbl.text = own.signature
-            // 跑车性能指标设置
-            carPrice.text = car.price
-            carEngine.text = car.engine
-            carTrans.text = car.transimission
-            carBody.text = car.body
-            carSpeed.text = car.max_speed
-            carAcce.text = car.zeroTo60
-            //
-            carEditBtn.hidden = own.user?.userID != User.objects.hostUserID
+        // 设置跑车名
+        carNameLbl.text = car.name
+        // 设置封面图
+        carCover.kf_setImageWithURL(car.imageURL!)
+        // 设置认证标签
+        if car.identified {
+            carAuthIcon.image = UIImage(named: "auth_status_authed")
+        }else {
+            carAuthIcon.image = UIImage(named: "auth_status_unauthed")
         }
+        // 跑车签名
+        carSignatureLbl.text = car.signature
+        // 跑车性能指标设置
+        carPrice.text = car.price
+        carEngine.text = car.engine
+        carTrans.text = car.torque
+        carBody.text = car.body
+        carSpeed.text = car.maxSpeed
+        carAcce.text = car.zeroTo60
+        // TODO: set mine
+        carEditBtn.hidden = !mine
+
     }
     
     func getCarParamStaticLabel() -> UILabel {
@@ -272,7 +272,7 @@ class SportCarInfoCell: UICollectionViewCell{
     }
     
     func carEditBtnPressed() {
-        delegate?.carNeedEdit(own)
+        delegate?.carNeedEdit(car)
     }
     
     class func getPreferredSizeForSignature(signature: String, carName: String) -> CGSize {

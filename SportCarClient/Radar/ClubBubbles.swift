@@ -91,7 +91,7 @@ class ClubBubbleCell: UIButton {
     var club: Club? {
         didSet {
             if club != nil {
-                let logoURL = SFURL(club!.logo_url!)!
+                let logoURL = club!.logoURL!
                 self.kf_setImageWithURL(logoURL, forState: .Normal)
                 switch club!.memberNum {
                 case 0..<30:

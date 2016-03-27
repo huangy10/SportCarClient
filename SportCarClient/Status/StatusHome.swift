@@ -49,6 +49,14 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        let controllers = [nearByStatusCtrl, followStatusCtrl, hotStatusCtrl]
+        controllers[_curTag].viewWillAppear(animated)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        let controllers = [nearByStatusCtrl, followStatusCtrl, hotStatusCtrl]
+        controllers[_curTag].viewWillDisappear(true)
     }
     
     internal func createSubviews() {
@@ -61,17 +69,24 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         board.contentSize = CGSizeMake(screenSize.width * 3, screenSize.height)
         board.setContentOffset(CGPointMake(screenSize.width, 0), animated: true)
         superview.addSubview(board!)
-        board.frame = superview.bounds
+        var rect = superview.bounds
+        rect.size.height -= 44 + 20
+        board.frame = rect
         // 关注
         followStatusCtrl.homeController = self
         let followView = followStatusCtrl.view
         board.addSubview(followView)
-        followView.frame = CGRectMake(screenSize.width, 0, screenSize.width, screenSize.height)
+        followView.frame = CGRectMake(screenSize.width, 0, screenSize.width, rect.height)
         //
         hotStatusCtrl.homeController = self
         let hotView = hotStatusCtrl.view
         board.addSubview(hotView)
-        hotView.frame = CGRectMake(screenSize.width * 2, 0, screenSize.width, screenSize.height)
+        hotView.frame = CGRectMake(screenSize.width * 2, 0, screenSize.width, rect.height)
+        // 附近
+        nearByStatusCtrl.homeController = self
+        let nearbyView = nearByStatusCtrl.view
+        board.addSubview(nearbyView)
+        nearbyView.frame = CGRectMake(0, 0, screenSize.width, rect.height)
     }
     
     internal func navSettings() {

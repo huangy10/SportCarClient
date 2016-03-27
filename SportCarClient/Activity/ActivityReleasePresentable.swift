@@ -67,14 +67,15 @@ class ActivityReleasePresentableController: ActivityReleaseController {
         var informUser: [String]? = nil
         if board.informOfUsers.count > 0 {
             informUser = board.informOfUsers.map({ (user) -> String in
-                return user.userID!
+                return user.ssidString
             })
         }
         
         // make the request
         let requester = ActivityRequester.requester
         self.pp_showProgressView()
-        requester.createNewActivity(actName, des: actDes, informUser: informUser, maxAttend: attendNum, startAt: startAtDate!, endAt: endAtDate!, clubLimit: clubLimitID, poster: posterImage, lat: userLocation!.latitude, lon: userLocation!.longitude, loc_des: locDescriptin ?? "", onSuccess: { (json) -> () in
+        let clubLimitIDString: String? = clubLimitID == nil ? nil : "\(clubLimitID!)"
+        requester.createNewActivity(actName, des: actDes, informUser: informUser, maxAttend: attendNum, startAt: startAtDate!, endAt: endAtDate!, clubLimit: clubLimitIDString, poster: posterImage, lat: userLocation!.latitude, lon: userLocation!.longitude, loc_des: locDescriptin ?? "", onSuccess: { (json) -> () in
             // TODO: send a global notification to make corresponding activity list update
             self.pp_hideProgressView()
                 self.presenter?.dismissViewControllerAnimated(true, completion: nil)

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol AvatarCarSelectDelegate: class {
-    func avatarCarSelectDidFinish(selectedCar: SportCarOwnerShip)
+    func avatarCarSelectDidFinish(selectedCar: SportCar)
     
     func avatarCarSelectDidCancel()
 }
@@ -19,8 +19,8 @@ class AvatarCarSelectController: AvatarItemSelectController {
     
     weak var delegate: AvatarCarSelectDelegate?
     
-    var cars: [SportCarOwnerShip] = []
-    var user: User = User.objects.hostUser()!
+    var cars: [SportCar] = []
+    var user: User = MainManager.sharedManager.hostUser!
     
     var selectedRow: Int = -1
     
@@ -32,13 +32,13 @@ class AvatarCarSelectController: AvatarItemSelectController {
         createSubviews()
         //
         let requester = PersonRequester.requester
-        requester.getAuthedCars(user.userID!, onSuccess: { (json) -> () in
+        requester.getAuthedCars(user.ssidString, onSuccess: { (json) -> () in
             let data = json!.arrayValue
             var i = 0
             for carJSON in data {
-                let own = SportCarOwnerShip.objects.createOrLoadOwnedCars(carJSON, owner: self.user)
-                self.cars.append(own!)
-                if own!.car?.carID == self.user.profile?.avatarCarID {
+                let car = try! MainManager.sharedManager.getOrCreate(carJSON) as SportCar
+                self.cars.append(car)
+                if car.ssid == self.user.avatarCarModel?.ssid {
                     self.selectedRow = i
                 }
                 i += 1
@@ -110,12 +110,11 @@ class AvatarCarSelectController: AvatarItemSelectController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(AvatarItemSelectCell.reuseIdentifier, forIndexPath: indexPath) as! AvatarItemSelectCell
-        let own = cars[indexPath.row]
-        let car = own.car
-        cell.avatarImg?.kf_setImageWithURL(SFURL(car!.logo!)!)
-        cell.nickNameLbl?.text = car?.name
+        let car = cars[indexPath.row]
+        cell.avatarImg?.kf_setImageWithURL(car.logoURL!)
+        cell.nickNameLbl?.text = car.name
         cell.selectBtn?.tag = indexPath.row
-        if own.identified {
+        if car.identified {
             cell.authed = true
             cell.authIcon.image = UIImage(named: "auth_status_authed")
         }else{
