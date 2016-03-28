@@ -17,6 +17,7 @@ import AlecrimCoreData
 extension Activity {
 
     @NSManaged var actDescription: String?
+    @NSManaged var applied: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var applyAt: NSDate?
     @NSManaged var commentNum: Int32 // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var createdAt: NSDate?
@@ -40,6 +41,7 @@ extension Activity {
 extension Activity {
 
     static let actDescription = AlecrimCoreData.NullableAttribute<String>("actDescription")
+    static let applied = AlecrimCoreData.NullableAttribute<Bool>("applied")
     static let applyAt = AlecrimCoreData.NullableAttribute<NSDate>("applyAt")
     static let commentNum = AlecrimCoreData.NullableAttribute<Int32>("commentNum")
     static let createdAt = AlecrimCoreData.NullableAttribute<NSDate>("createdAt")
@@ -63,6 +65,7 @@ extension Activity {
 extension AlecrimCoreData.AttributeType where Self.ValueType: Activity {
 
     var actDescription: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("actDescription", self) }
+    var applied: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("applied", self) }
     var applyAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("applyAt", self) }
     var commentNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("commentNum", self) }
     var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }

@@ -37,7 +37,7 @@ class FFSelectController: UserSelectController {
     
     override var users: [User] {
         get {
-            switch navTitlestate{
+            switch navTitlestate {
             case .Fans:
                 return fans
             case .Follow:
@@ -57,10 +57,15 @@ class FFSelectController: UserSelectController {
     var titleBtnIcon: UIImageView?
     var navRightBtn: UIButton?
     
-    convenience init(maxSelectNum: Int, preSelectedUsers: [User] = []) {
+    convenience init(maxSelectNum: Int, preSelectedUsers: [User] = [], preSelect: Bool = true, forced: Bool = true) {
         self.init(nibName: nil, bundle: nil)
         maxSelectUserNum = maxSelectNum
-        selectedUsers.appendContentsOf(preSelectedUsers)
+        if forced {
+            forceSelectedUsers.appendContentsOf(preSelectedUsers)
+        }
+        if preSelect {
+            selectedUsers.appendContentsOf(preSelectedUsers)
+        }
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {

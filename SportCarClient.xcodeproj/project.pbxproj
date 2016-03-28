@@ -188,6 +188,7 @@
 		BFE967601CA6EE080097C42C /* ChatModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE9675F1CA6EE080097C42C /* ChatModelManager.swift */; };
 		BFE967621CA7699B0097C42C /* Chater.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967611CA7699B0097C42C /* Chater.swift */; };
 		BFE967641CA7863C0097C42C /* NotificationModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967631CA7863C0097C42C /* NotificationModelManager.swift */; };
+		BFE967661CA81E060097C42C /* ActivityEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967651CA81E060097C42C /* ActivityEdit.swift */; };
 		BFEFB5E31C5E4C8600841BF4 /* chatAccessoryBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEFB5E21C5E4C8600841BF4 /* chatAccessoryBoard.swift */; };
 		BFF5EEF91CA428E700F64301 /* ClubRank.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5EEF81CA428E700F64301 /* ClubRank.swift */; };
 		BFFA15451C9D271E00E985DF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15441C9D271E00E985DF /* Location.swift */; };
@@ -405,6 +406,7 @@
 		BFE9675F1CA6EE080097C42C /* ChatModelManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatModelManager.swift; path = LocalModel/Manager/ChatModelManager.swift; sourceTree = "<group>"; };
 		BFE967611CA7699B0097C42C /* Chater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Chater.swift; path = LocalModel/InMem/Chater.swift; sourceTree = "<group>"; };
 		BFE967631CA7863C0097C42C /* NotificationModelManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationModelManager.swift; path = LocalModel/Manager/NotificationModelManager.swift; sourceTree = "<group>"; };
+		BFE967651CA81E060097C42C /* ActivityEdit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityEdit.swift; path = Activity/ActivityEdit.swift; sourceTree = "<group>"; };
 		BFEFB5E21C5E4C8600841BF4 /* chatAccessoryBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = chatAccessoryBoard.swift; path = Message/Chat/chatAccessoryBoard.swift; sourceTree = "<group>"; };
 		BFF5EEF81CA428E700F64301 /* ClubRank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubRank.swift; path = Radar/ClubRank.swift; sourceTree = "<group>"; };
 		BFFA15441C9D271E00E985DF /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Location.swift; path = Map/Location.swift; sourceTree = "<group>"; };
@@ -1007,6 +1009,7 @@
 				BF8D42FB1C7481CE009AD4BA /* Cell */,
 				BF8D42F81C745FAB009AD4BA /* InfoBoard */,
 				BFC032901C7451AD00ECA69A /* ActivityRelease.swift */,
+				BFE967651CA81E060097C42C /* ActivityEdit.swift */,
 			);
 			name = Release;
 			sourceTree = "<group>";
@@ -1666,6 +1669,7 @@
 				BF23368B1C563F4200F0AE41 /* ChatAudioPlayer.swift in Sources */,
 				BF5E7EEB1C860804004B8305 /* PersonOtherInfo.swift in Sources */,
 				BFC032641C6EF55400ECA69A /* AvatarCarSelect.swift in Sources */,
+				BFE967661CA81E060097C42C /* ActivityEdit.swift in Sources */,
 				BF5E7EE41C85E568004B8305 /* ClearCache.swift in Sources */,
 				BFBE19211C9521FF005114A0 /* LocSelectPin.swift in Sources */,
 				BF26FD3D1C686E5A0077D1F0 /* GroupSettings.swift in Sources */,

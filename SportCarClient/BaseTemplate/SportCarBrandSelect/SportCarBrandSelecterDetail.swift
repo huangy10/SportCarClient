@@ -28,7 +28,7 @@ class SportCarBrandSelecterDetailController: UITableViewController {
     }
     
     func navBarSettings() {
-        self.navigationItem.title = NSLocalizedString("品牌型号", comment: "")
+        self.navigationItem.title = LS("品牌型号")
         self.navigationItem.leftBarButtonItem = navBarLeftBtn()
     }
     

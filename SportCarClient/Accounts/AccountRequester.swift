@@ -175,7 +175,7 @@ class AccountRequester {
         }
     }
     
-    func postToSetProfile(nickName: String, gender: String, birthDate: String, avatar: UIImage, onSuccess: ()->(), onError: (code: String?) -> ()) {
+    func postToSetProfile(nickName: String, gender: String, birthDate: String, avatar: UIImage, onSuccess: (json: JSON?)->(), onProgress: (progress: Float) -> (), onError: (code: String?) -> ()) {
         let urlStr = self.urlMaker.setProfile()!.absoluteString
         // 这里将gender数据映射成字母的m和f
         guard let genderLetter = ["男": "m", "女": "f"][gender] else{
@@ -183,7 +183,6 @@ class AccountRequester {
             return
         }
         manager.upload(.POST, urlStr, multipartFormData: { (multipartFormData) -> Void in
-//            multipartFormData.appendBodyPart(data: UIImagePNGRepresentation(avatar)!, name: "avatar")
             multipartFormData.appendBodyPart(data: UIImagePNGRepresentation(avatar)!, name: "avatar", fileName: "avatar.png", mimeType: "image/png")
             multipartFormData.appendBodyPart(data: nickName.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "nick_name")
             multipartFormData.appendBodyPart(data: genderLetter.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "gender")
@@ -191,16 +190,18 @@ class AccountRequester {
             }) { (result) -> Void in
                 switch result{
                 case .Success(let upload, _, _):
+                    upload.progress({ (_, written, total) -> Void in
+                        let progress = Float(written) / Float(total)
+                        onProgress(progress: progress)
+                    })
                     upload.responseJSON(completionHandler: { (response) -> Void in
                         switch response.result {
                         case .Success(let value):
                             let json = JSON(value)
                             if json["success"].boolValue {
-                                dispatch_async(dispatch_get_main_queue(), onSuccess)
+                                dispatch_async(dispatch_get_main_queue(), { onSuccess(json: json["data"]) })
                             }else{
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    onError(code: json["code"].string)
-                                })
+                                dispatch_async(dispatch_get_main_queue(), { onError(code: json["code"].string) })
                             }
                             break
                         case .Failure(let error):
@@ -211,21 +212,6 @@ class AccountRequester {
 
                             break
                         }
-//                        guard response.result.isSuccess else {
-//                            dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
-//                                onError(code: "0000")
-//                            })
-//                            return
-//                        }
-//                        let result = response.result.value
-//                        if result?["success"] as! Bool {
-//                            dispatch_async(dispatch_get_main_queue(), onSuccess)
-//                        }else{
-//                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                                onError(code: result?["code"] as? String)
-//                            })
-//                        }
-
                     })
                     break
                 case .Failure(let error):

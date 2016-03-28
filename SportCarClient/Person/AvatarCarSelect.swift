@@ -36,7 +36,7 @@ class AvatarCarSelectController: AvatarItemSelectController {
             let data = json!.arrayValue
             var i = 0
             for carJSON in data {
-                let car = try! MainManager.sharedManager.getOrCreate(carJSON) as SportCar
+                let car = try! MainManager.sharedManager.getOrCreate(SportCar.reorgnaizeJSON(carJSON)) as SportCar
                 self.cars.append(car)
                 if car.ssid == self.user.avatarCarModel?.ssid {
                     self.selectedRow = i
@@ -127,19 +127,23 @@ class AvatarCarSelectController: AvatarItemSelectController {
         }else {
             cell.selectBtn?.selected = false
         }
-        cell.onSelect = { (sender: UIButton) in
+        cell.onSelect = { [weak self] (sender: UIButton) in
+            guard let sSelf = self else {
+                return false
+            }
             let row = sender.tag
-            let targetOwn = self.cars[row]
+            let targetOwn = sSelf.cars[row]
             if targetOwn.identified == false {
-                self.showToast(LS("请返回认证跑车"))
-                return
+                sSelf.showToast(LS("请返回认证跑车"))
+                return true
             }
             if sender.selected {
-                self.selectedRow = -1
+                sSelf.selectedRow = -1
             }else{
-                self.selectedRow = row
+                sSelf.selectedRow = row
             }
-            self.tableView.reloadData()
+            sSelf.tableView.reloadData()
+            return true
         }
         return cell
     }

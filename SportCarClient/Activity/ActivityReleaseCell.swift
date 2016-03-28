@@ -15,6 +15,7 @@ class ActivityReleaseCell: UITableViewCell {
     
     var staticLbl: UILabel!
     var infoInput: UITextField!
+    var wrapper: UIScrollView!
     var arrowIcon: UIImageView!
     var staticInfoLabel: UILabel!
     
@@ -34,10 +35,10 @@ class ActivityReleaseCell: UITableViewCell {
     var editable: Bool = true{
         didSet {
             if editable {
-                infoInput.hidden = false
+                wrapper.hidden = false
                 staticInfoLabel.hidden = true
             }else {
-                infoInput.hidden = true
+                wrapper.hidden = true
                 staticInfoLabel.hidden = false
             }
         }
@@ -46,6 +47,7 @@ class ActivityReleaseCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
+        self.selectionStyle = .None
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -74,7 +76,7 @@ class ActivityReleaseCell: UITableViewCell {
             make.size.equalTo(15)
         }
         //
-        let wrapper = UIScrollView()
+        wrapper = UIScrollView()
         superview.addSubview(wrapper)
         wrapper.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(arrowIcon.snp_left).offset(-15)
@@ -82,6 +84,7 @@ class ActivityReleaseCell: UITableViewCell {
             make.left.equalTo(staticLbl.snp_right)
             make.height.equalTo(staticLbl)
         }
+        wrapper.userInteractionEnabled = false
         //
         infoInput = UITextField()
         infoInput.textColor = UIColor.blackColor()
@@ -91,14 +94,10 @@ class ActivityReleaseCell: UITableViewCell {
         infoInput.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(wrapper)
             make.size.equalTo(wrapper)
-//            make.right.equalTo(arrowIcon.snp_left).offset(-15)
-//            make.centerY.equalTo(superview)
-//            make.left.equalTo(staticLbl.snp_right)
-//            make.height.equalTo(staticLbl)
         }
+        
         staticInfoLabel = UILabel()
         staticInfoLabel.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        staticInfoLabel.userInteractionEnabled = false
         staticInfoLabel.textColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(staticInfoLabel)
         staticInfoLabel.snp_makeConstraints { (make) -> Void in

@@ -40,6 +40,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
         userLocation = nil
         locationService.delegate = self
         locationService.startUserLocationService()
+        map.viewWillAppear()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -47,6 +48,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
         map.delegate = nil
         locationService.delegate = nil
         locationService.stopUserLocationService()
+        map.viewWillDisappear()
     }
     
     func createSubviews() {
@@ -136,7 +138,11 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
             cell.container.transform = trans
         }
         if maxCell != nil {
-            pageCount.currentPage = actsBoard.indexPathForCell(maxCell!)!.row
+            let temp = actsBoard.indexPathForCell(maxCell!)!.row
+            if pageCount.currentPage != temp {
+                pageCount.currentPage = temp
+                activityFocusedChanged()
+            }
         }
     }
     
@@ -171,10 +177,10 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
         var offset = scrollView.contentOffset
         offset.x += minOffset
         scrollView.setContentOffset(offset, animated: true)
-        if _prePage != pageCount.currentPage {
-            activityFocusedChanged()
-            _prePage = pageCount.currentPage
-        }
+//        if _prePage != pageCount.currentPage {
+//            activityFocusedChanged()
+//            _prePage = pageCount.currentPage
+//        }
     }
 }
 
@@ -186,6 +192,7 @@ extension ActivityNearByController {
     当前focus的活动发生了变化
     */
     func activityFocusedChanged() {
+        print("focus change")
         let focusedActivity = acts[pageCount.currentPage]
         let center = focusedActivity.location!.coordinate
         map.setCenterCoordinate(center, animated: true)

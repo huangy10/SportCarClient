@@ -65,13 +65,13 @@ extension UIViewController {
      */
     func showToast(message: String, maxLastLength: Double=3) {
         let superview = UIApplication.sharedApplication().keyWindow!.rootViewController!.view
+//        let superview = self.view
         let toastContainer = UIView()
         toastContainer.backgroundColor = UIColor(red: 0.067, green: 0.051, blue: 0.051, alpha: 1)
-        toastContainer.layer.shadowColor = UIColor(white: 0, alpha: 0.4).CGColor
-        toastContainer.layer.shadowOffset = CGSizeMake(0, 4.5)
-        toastContainer.layer.shadowRadius = 6
+        toastContainer.layer.addDefaultShadow(6, opacity: 0.3, offset: CGSizeMake(0, 4))
         toastContainer.clipsToBounds = false
         superview.addSubview(toastContainer)
+        superview.bringSubviewToFront(toastContainer)
         toastContainer.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(40)
@@ -102,9 +102,7 @@ extension UIViewController {
         let superview = UIApplication.sharedApplication().keyWindow!.rootViewController!.view
         let toastContainer = UIView()
         toastContainer.backgroundColor = UIColor(red: 0.067, green: 0.051, blue: 0.051, alpha: 1)
-        toastContainer.layer.shadowColor = UIColor(white: 0, alpha: 0.4).CGColor
-        toastContainer.layer.shadowOffset = CGSizeMake(0, 4.5)
-        toastContainer.layer.shadowRadius = 6
+        toastContainer.layer.addDefaultShadow(6, opacity: 0.3, offset: CGSizeMake(0, 4))
         toastContainer.clipsToBounds = false
         superview.addSubview(toastContainer)
         toastContainer.snp_makeConstraints { (make) -> Void in
@@ -146,7 +144,7 @@ extension UIViewController {
         let container = UIView()
         let containerWidth = UIScreen.mainScreen().bounds.width * 0.5
         container.backgroundColor = UIColor(red: 0.067, green: 0.051, blue: 0.051, alpha: 1)
-        
+        container.layer.addDefaultShadow(6, opacity: 0.3, offset: CGSizeMake(0, 4))
         let staticLbl = UILabel()
         staticLbl.font = UIFont.systemFontOfSize(14)
         staticLbl.textColor = UIColor.whiteColor()
@@ -195,7 +193,6 @@ extension UIViewController {
         
         superview.updateConstraints()
         superview.layoutIfNeeded()
-        
         container.snp_remakeConstraints { (make) -> Void in
             make.width.equalTo(containerWidth)
             make.height.equalTo(lblHeight + 64)
@@ -226,12 +223,16 @@ extension UIViewController {
     
 }
 
-
 extension CALayer {
-    func addDefaultLayer() {
-        self.shadowRadius = 2
-        self.shadowColor = UIColor.blackColor().CGColor
-        self.shadowOpacity = 0.4
-        self.shadowOffset = CGSizeMake(0, 3)
+    func addDefaultShadow(
+        blur: CGFloat = 2,
+        color: UIColor = UIColor.blackColor(),
+        opacity: Float = 0.4,
+        offset: CGSize = CGSizeMake(0, 3)
+        ) {
+        self.shadowRadius = blur
+        self.shadowColor = color.CGColor
+        self.shadowOpacity = opacity
+        self.shadowOffset = offset
     }
 }

@@ -125,5 +125,17 @@ class User: BaseModel {
     var isHost: Bool {
         return ssid == manager.hostUserID
     }
+    
+    class func reorganizeJSON(json: JSON) -> JSON {
+        var tempJSON = json["user"]
+        for (key, value) in json {
+            if key == "user" {
+                continue
+            }
+            tempJSON[key] = value
+        }
+        return tempJSON
+
+    }
 
 }

@@ -27,6 +27,7 @@ class StatusHotController: UICollectionViewController {
         super.viewDidLoad()
         collectionView?.contentInset = UIEdgeInsetsMake(5, 5, 5, 5)
         collectionView?.registerClass(StatusHotCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView?.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         myRefreshControl = UIRefreshControl()
         myRefreshControl?.addTarget(self, action: "loadLatestStatusData", forControlEvents: .TouchUpInside)
         collectionView?.addSubview(myRefreshControl!)

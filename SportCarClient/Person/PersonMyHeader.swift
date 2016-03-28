@@ -276,7 +276,7 @@ class PersonHeaderMine: UIView {
         // 
         nameLbl.text = user.nickName
         //
-        let genderText = user.gender ?? "m"
+        let genderText = user.gender ?? "女"
         let gender = ["男": "♂", "女": "♀"][genderText]
         if genderText == "男" {
             genderAgeLbl.backgroundColor = UIColor(red: 0.227, green: 0.439, blue: 0.686, alpha: 1)

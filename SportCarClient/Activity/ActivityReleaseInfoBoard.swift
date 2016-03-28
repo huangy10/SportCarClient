@@ -53,6 +53,7 @@ class ActivityReleaseInfoBoard: UIView {
         posterLbl = UILabel()
         posterLbl.textAlignment = .Center
         posterLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        posterLbl.font = UIFont.systemFontOfSize(12)
         posterLbl.text = LS("上传一个活动海报")
         posterBtn.addSubview(posterLbl)
         posterLbl.snp_makeConstraints { (make) -> Void in

@@ -121,6 +121,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
                     select.relatedClub = targetClub
                     select.delegate = self
                     inlineUserSelect = select
+                    inlineUserSelect?.parentController = self
                 }
                 inlineUserSelect?.users = Array(targetClub.members)
                 inlineUserSelect?.showAddBtn = true

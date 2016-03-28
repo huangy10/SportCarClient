@@ -49,6 +49,8 @@ class SportCarInfoCell: UICollectionViewCell{
         let superview = self.contentView
         //
         carCover = UIImageView()
+        carCover.contentMode = .ScaleAspectFill
+        carCover.clipsToBounds = true
         superview.addSubview(carCover)
         carCover.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
@@ -252,7 +254,6 @@ class SportCarInfoCell: UICollectionViewCell{
         carBody.text = car.body
         carSpeed.text = car.maxSpeed
         carAcce.text = car.zeroTo60
-        // TODO: set mine
         carEditBtn.hidden = !mine
 
     }

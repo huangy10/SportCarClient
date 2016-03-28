@@ -84,10 +84,7 @@ class ActivityNearByCell: UICollectionViewCell {
         }
         //
         self.clipsToBounds = false
-        self.layer.shadowColor = UIColor.redColor().CGColor
-        self.layer.shadowOffset = CGSizeMake(0, 5)
-        self.layer.shadowOpacity = 0.5
-        self.layer.shadowRadius = 2
+        self.layer.addDefaultShadow()
     }
     
     func loadDataAndUpdateUI() {

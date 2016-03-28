@@ -209,13 +209,19 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandSelect
         }
         return cell
     }
+//    
+//    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        if section == 0{
+//            return LS("爱车型号")
+//        }else{
+//            return LS("性能参数")
+//        }
+//    }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0{
-            return LS("爱车型号")
-        }else{
-            return LS("性能参数")
-        }
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! PrivateChatSettingsHeader
+        header.titleLbl.text = [LS("爱车型号"), LS("性能参数")][section]
+        return header
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

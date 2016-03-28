@@ -2,6 +2,7 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15E64a" minimumToolsVersion="Xcode 7.0">
     <entity name="Activity" representedClassName=".Activity" parentEntity="BaseModel" syncable="YES">
         <attribute name="actDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="applied" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="applyAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="commentNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
@@ -130,11 +131,11 @@
         <attribute name="starSign" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="statusNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="acts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Activity" inverseName="user" inverseEntity="Activity" syncable="YES"/>
-        <relationship name="notifications" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Notification" inverseName="user" inverseEntity="Notification" syncable="YES"/>
-        <relationship name="status" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Status" inverseName="user" inverseEntity="Status" syncable="YES"/>
+        <relationship name="notifications" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Notification" inverseName="user" inverseEntity="Notification" syncable="YES"/>
+        <relationship name="status" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Status" inverseName="user" inverseEntity="Status" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Activity" positionX="-63" positionY="-18" width="128" height="268"/>
+        <element name="Activity" positionX="-63" positionY="-18" width="128" height="285"/>
         <element name="BaseModel" positionX="358" positionY="48" width="128" height="73"/>
         <element name="ChatRecord" positionX="-54" positionY="-9" width="128" height="358"/>
         <element name="Club" positionX="198" positionY="18" width="128" height="345"/>

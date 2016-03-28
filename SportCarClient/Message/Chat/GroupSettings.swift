@@ -63,6 +63,11 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
     func navSettings() {
         self.navigationItem.title = targetClub.name
         let leftBtn = UIButton()
@@ -210,6 +215,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                         make.edges.equalTo(cell.contentView)
                     })
                     inlineUserSelect?.relatedClub = targetClub
+                    inlineUserSelect?.parentController = self
                 }
                 inlineUserSelect?.users = Array(targetClub.members)
                 inlineUserSelect?.showAddBtn = !targetClub.onlyHostCanInvite

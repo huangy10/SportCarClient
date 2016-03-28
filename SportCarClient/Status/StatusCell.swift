@@ -342,10 +342,10 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
     
     func avatarBtnPressed() {
         if status!.user!.isHost {
-            let detail = PersonOtherController(user: status!.user!)
+            let detail = PersonBasicController(user: status!.user!)
             parent?.navigationController?.pushViewController(detail, animated: true)
         } else {
-            let detail = PersonBasicController(user: status!.user!)
+            let detail = PersonOtherController(user: status!.user!)
             parent?.navigationController?.pushViewController(detail, animated: true)
         }
     }

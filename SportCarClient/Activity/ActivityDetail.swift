@@ -12,7 +12,7 @@ import Cent
 import MapKit
 import Dollar
 
-class ActivityDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource, InlineUserSelectDelegate, FFSelectDelegate{
+class ActivityDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource, InlineUserSelectDelegate, FFSelectDelegate, DetailCommentCellDelegate {
     weak var parentTableView: UITableView?
     
     var act: Activity!
@@ -27,7 +27,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
     var atUser: [String] = []
     var responseToPrefixStr = ""
     var toast: UIView?
-    
+    weak var navRightItem: UIBarButtonItem?
     init(act: Activity) {
         super.init(nibName: nil, bundle: nil)
         self.act = act
@@ -55,6 +55,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         // 尽管已经传入了一个较为完整的活动对象，但是为了保证数据最新，仍然向服务器发起请求
         requester.getActivityDetail(act.ssidString, onSuccess: { (json) -> () in
             try! self.act.loadDataFromJSON(json!, detailLevel: 1)
+            self.navRightItem?.title = self.act.mine ? LS("关闭活动") : (self.act.applied ? LS("已报名") : LS("报名"))
             self.actInfoBoard.act = self.act
             self.commentPanel.setLikedAnimated(self.act.liked, flag: false)
             self.boardHeight = self.actInfoBoard.loadDataAndUpdateUI()
@@ -67,6 +68,11 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
                 print(code)
         }
         loadMoreComments()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     override func createSubviews() {
@@ -89,6 +95,8 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         actInfoBoard = ActivityDetailBoardView()
         actInfoBoard.frame = self.view.bounds
         actInfoBoard.hostAvatar.addTarget(self, action: "hostAvatarPressed", forControlEvents: .TouchUpInside)
+        actInfoBoard.editBtn.addTarget(self, action: "editBtnPressed", forControlEvents: .TouchUpInside)
+        actInfoBoard.parentController = self
         actInfoBoard.memberDisplay.delegate = self
         //
         tableView.addSubview(actInfoBoard)
@@ -118,8 +126,9 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: act.mine ? LS("关闭活动") : LS("报名"), style: .Done, target: self, action: "navRightBtnPressed")
+        let rightItem = UIBarButtonItem(title: act.mine ? LS("关闭活动") : (act.applied ? LS("已报名") : LS("报名")), style: .Done, target: self, action: "navRightBtnPressed")
         rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        self.navRightItem = rightItem
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
@@ -150,6 +159,9 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
                     print(code)
             })
         }else{
+            if act.applied {
+                return
+            }
             // 报名
             let endAt = act.endAt!
             if endAt.compare(NSDate()) == NSComparisonResult.OrderedAscending {
@@ -161,6 +173,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
                 // TODO: 把下面的修改放在网络请求前面
                 self.act.hostApply()
                 self.actInfoBoard.loadDataAndUpdateUI()
+                self.navRightItem?.title = LS("已报名")
                 }, onError: { (code) -> () in
                     print(code)
             })
@@ -185,6 +198,8 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         if indexPath.section == 0{
             let cell = tableView.dequeueReusableCellWithIdentifier(ActivityCommentCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityCommentCell
             cell.comment = comments[indexPath.row]
+            cell.replyBtn?.tag = indexPath.row
+            cell.delegate = self
             cell.loadDataAndUpdateUI()
             return cell
         }else{
@@ -220,9 +235,10 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
     }
     
     func inlineUserSelectNeedAddMembers() {
-        let select = FFSelectController()
+        var forceUsers = act.applicants
+        forceUsers.append(act.user!)
+        let select = FFSelectController(maxSelectNum: kMaxSelectUserNum, preSelectedUsers: act.applicants, preSelect: false)
         select.delegate = self
-        select.selectedUsers.appendContentsOf(act.applicants)
         let wrapper = BlackBarNavigationController(rootViewController: select)
         self.presentViewController(wrapper, animated: true, completion: nil)
     }
@@ -406,5 +422,39 @@ extension ActivityDetailController {
             MKMapItem.openMapsWithItems([target], launchOptions: options)
         }
     }
+    
+    func editBtnPressed() {
+        let detail = ActivityEditController()
+        detail.act = act
+        self.navigationController?.pushViewController(detail, animated: true)
+    }
+    
+    
+    // 评论列表的代理
+    func avatarPressed(cell: DetailCommentCell) {
+        
+    }
+    
+    func replyPressed(cell: DetailCommentCell) {
+        commentPressed(cell.replyBtn!)
+    }
+    
+    func checkImageDetail(cell: DetailCommentCell) {
+        
+    }
+    
+    func commentPressed(sender: UIButton) {
+        responseToRow = sender.tag
+        // 取出改行的用户信息并在评论内容输入框里面填入『回复 某人：』字样
+        let targetComment = comments[responseToRow]
+        if let responseToName = targetComment.user?.nickName {
+            responseToPrefixStr = LS("回复 ") + responseToName + ": "
+            commentPanel?.contentInput?.text = responseToPrefixStr
+        }
+        
+        atUser.removeAll()
+        commentPanel?.contentInput?.becomeFirstResponder()
+    }
+
 }
 

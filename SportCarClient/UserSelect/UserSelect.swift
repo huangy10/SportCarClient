@@ -20,6 +20,8 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
     }
     /// 被选中的用户列表
     var selectedUsers: [User] = []
+    //  强制预先选中的
+    var forceSelectedUsers: [User] = []
     /// 搜索关键词
     var searchText: String?
     /*
@@ -30,8 +32,6 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
     var userTableView: UITableView?
     /// 搜索栏
     var searchBar: UISearchBar?
-    /// 在地图上选人
-//    var findOnMapBtn: UIButton?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,19 +57,6 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
         })
         searchBar?.returnKeyType = .Search
         self.inputFields.append(searchBar)
-        //
-//        findOnMapBtn = UIButton()
-//        findOnMapBtn?.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-//        findOnMapBtn?.setTitle(LS("在地图上选人"), forState: .Normal)
-//        findOnMapBtn?.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-//        superview.addSubview(findOnMapBtn!)
-//        findOnMapBtn?.snp_makeConstraints(closure: { (make) -> Void in
-//            make.right.equalTo(superview).offset(-15)
-//            make.centerY.equalTo(searchBar!)
-//            make.width.equalTo(72)
-//            make.height.equalTo(searchBar!)
-//        })
-//        findOnMapBtn?.addTarget(self, action: "findOnMapBtnPressed", forControlEvents: .TouchUpInside)
         //
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSizeMake(35, 35)
@@ -188,35 +175,45 @@ extension UserSelectController {
         cell.recentStatusLbL?.text = user.recentStatusDes
         
         cell.selectBtn?.tag = indexPath.row
-        if selectedUsers.filter({$0.ssid == user.ssid}).count > 0 {
+        if forceSelectedUsers.findIndex({$0.ssid == user.ssid}) != nil {
+            cell.forceSelected = true
             cell.selectBtn?.selected = true
         } else {
-            cell.selectBtn?.selected = false
+            cell.forceSelected = false
+            if selectedUsers.filter({$0.ssid == user.ssid}).count > 0 {
+                cell.selectBtn?.selected = true
+            } else {
+                cell.selectBtn?.selected = false
+            }
         }
-        cell.onSelect = { (let sender) in
+        cell.onSelect = { [weak self] (let sender) -> Bool in
+            guard let sSelf = self else {
+                return false
+            }
             let row = sender.tag
-            let targetUser = self.users.fetch(row)
+            let targetUser = sSelf.users.fetch(row)
             
-            if !self.userSelectionShouldChange(targetUser, addOrDelete: !sender.selected) {
-                return
+            if !sSelf.userSelectionShouldChange(targetUser, addOrDelete: !sender.selected) {
+                return false
             }
             
             if sender.selected {
-                self.selectedUsers.remove(targetUser)
-                if self.selectedUsers.count == 0 {
-                    self.selectedUserList?.reloadData()
-                    self.setSelectedUserListHiddenAnimated(true)
+                sSelf.selectedUsers.remove(targetUser)
+                if sSelf.selectedUsers.count == 0 {
+                    sSelf.selectedUserList?.reloadData()
+                    sSelf.setSelectedUserListHiddenAnimated(true)
                 }
             }else{
-                self.selectedUsers.append(targetUser)
-                if self.selectedUsers.count == 1{
-                    self.setSelectedUserListHiddenAnimated(false)
-                    self.userSelectionDidChange()
-                    return
+                sSelf.selectedUsers.append(targetUser)
+                if sSelf.selectedUsers.count == 1{
+                    sSelf.setSelectedUserListHiddenAnimated(false)
+                    sSelf.userSelectionDidChange()
+                    return true
                 }
             }
-            self.selectedUserList?.reloadData()
-            self.userSelectionDidChange()
+            sSelf.selectedUserList?.reloadData()
+            sSelf.userSelectionDidChange()
+            return true
         }
         return cell
     }
@@ -224,6 +221,17 @@ extension UserSelectController {
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         // cell的高度固定为90
         return 90
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let user = self.users[indexPath.row]
+        if user.isHost {
+            let detail = PersonBasicController(user: user)
+            navigationController?.pushViewController(detail, animated: true)
+        } else {
+            let detail = PersonOtherController(user: user)
+            navigationController?.pushViewController(detail, animated: true)
+        }
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
@@ -268,14 +276,23 @@ class UserSelectCell: UITableViewCell {
     static let reuseIdentifier = "user_select_cell"
     /// 选择按钮
     var selectBtn: UIButton?
-    var onSelect: ((sender: UIButton)->())?
+    var onSelect: ((sender: UIButton)->Bool)?
     /// 用户头像
     var avatarImg: UIImageView?
     /// 昵称
     var nickNameLbl: UILabel?
     /// 签名
     var recentStatusLbL: UILabel?
-    
+    /// 强制选中
+    var forceSelected: Bool = false {
+        didSet {
+            if forceSelected {
+                selectBtn?.setImage(UIImage(named: "status_photo_selected_forced"), forState: .Selected)
+            } else {
+                selectBtn?.setImage(UIImage(named: "status_photo_selected_small"), forState: .Selected)
+            }
+        }
+    }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -298,7 +315,6 @@ class UserSelectCell: UITableViewCell {
         selectBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.centerY.equalTo(superview)
             make.left.equalTo(superview).offset(15)
-//            make.size.equalTo(22.5)
             make.size.equalTo(32.5)
         })
         //
@@ -353,12 +369,17 @@ class UserSelectCell: UITableViewCell {
     }
     
     func selectBtnPressed() {
+        if forceSelected {
+            // 强制选中情况下不调用回调closure
+            return
+        }
         if let handler = onSelect {
-            handler(sender: selectBtn!)
+            if handler(sender: selectBtn!) {
+                selectBtn?.selected = !selectBtn!.selected
+            }
         }else{
             assertionFailure()
         }
-        selectBtn?.selected = !selectBtn!.selected
     }
 }
 

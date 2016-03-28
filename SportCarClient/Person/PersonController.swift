@@ -220,6 +220,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
                 let cell = collectionView.dequeueReusableCellWithReuseIdentifier(SportCarInfoCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarInfoCell
                 cell.car = data.selectedCar
                 cell.delegate = self
+                cell.mine = data.user.isHost
                 cell.loadDataAndUpdateUI()
                 return cell
             }else {

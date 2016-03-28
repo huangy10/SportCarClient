@@ -89,7 +89,7 @@ class ReportBlacklistViewController: PresentTemplateViewController {
             btn.setTitle(title, forState: .Normal)
             btn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             btn.tag = index
-            btn.addTarget(self, action: "reportItemPressed", forControlEvents: .TouchUpInside)
+            btn.addTarget(self, action: "reportItemPressed:", forControlEvents: .TouchUpInside)
             container2.addSubview(btn)
             btn.snp_makeConstraints(closure: { (make) -> Void in
                 make.centerX.equalTo(container2)

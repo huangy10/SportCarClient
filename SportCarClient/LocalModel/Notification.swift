@@ -39,6 +39,7 @@ class Notification: BaseModel {
             let commentJSON = data["related_news_comment"]
             if commentJSON.isExists() {
                 let comment = try NewsComment(news: news).loadDataFromJSON(commentJSON)
+                user = comment.user
                 _objInMem = comment
             } else {
                 _objInMem = news
@@ -56,13 +57,14 @@ class Notification: BaseModel {
                 _obj = status
             }
         }
-        let activityJSON = data["related_activity"]
+        let activityJSON = data["related_act"]
         if activityJSON.isExists() {
             let act = try manager.getOrCreate(activityJSON) as Activity
             let commentJSON = data["related_act_comment"]
             if commentJSON.isExists() {
                 let comment = try ActivityComment(act: act).loadDataFromJSON(commentJSON)
                 _objInMem = comment
+                user = comment.user
             } else {
                 _obj = act
             }

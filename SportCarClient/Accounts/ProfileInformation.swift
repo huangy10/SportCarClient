@@ -10,7 +10,9 @@ import UIKit
 import SnapKit
 
 
-class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ProgressProtocol {
+    
+    var pp_progressView: UIProgressView?
     
     var avatarBtn: UIButton?
     var nickNameInput: UITextField?
@@ -60,35 +62,40 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         nextBtn?.enabled = false
         //
         guard let nickName = nickNameInput?.text else{
-            self.displayAlertController(LS("错误"), message: LS("请填写昵称"))
+            showToast(LS("请填写昵称"))
             return
         }
         guard let gender = genderInput?.titleLabel?.text else{
-            self.displayAlertController(LS("错误"), message: LS("请选择性别"))
+            showToast(LS("请选择性别"))
             return
         }
 
         guard let birthDate = birthDateInput?.titleLabel?.text else{
-            self.displayAlertController(LS("错误"), message: LS("请选择生日"))
+            showToast(LS("请选择生日"))
             return
         }
         guard let avatar = avatarBtn?.backgroundImageForState(.Normal) else{
-            self.displayAlertController(LS("错误"), message: LS("请选择头像"))
+            showToast(LS("请选择头像"))
             return
         }
         let requester = AccountRequester.sharedRequester
-        requester.postToSetProfile(nickName, gender: gender, birthDate: birthDate, avatar: avatar, onSuccess: { () -> () in
+        pp_showProgressView()
+        requester.postToSetProfile(nickName, gender: gender, birthDate: birthDate, avatar: avatar, onSuccess: { (_) -> () in
+            self.pp_hideProgressView()
             self.nextBtn?.enabled = true
             let ctrl = SportCarSelectController()
             self.navigationController?.pushViewController(ctrl, animated: true)
+            }, onProgress: { (progress) in
+                self.pp_updateProgress(progress)
             }) { (code) -> () in
+                self.pp_hideProgressView()
                 self.nextBtn?.enabled = true
                 switch code! {
                 case "0000":
-                    self.displayAlertController(LS("网络连接失败"), message: nil)
+                    self.showToast(LS("网络连接失败"))
                     break
                 default:
-                    self.displayAlertController(LS("未知错误"), message: nil)
+                    self.showToast(LS("未知错误"))
                     break
                 }
         }

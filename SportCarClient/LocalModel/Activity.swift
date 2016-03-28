@@ -69,6 +69,9 @@ class Activity: BaseModel {
         name = data["name"].stringValue
         poster = data["poster"].stringValue
         liked = data["liked"].boolValue
+        if data["applied"].isExists() {
+            applied = data["applied"].boolValue
+        }
         if let liked = data["liked"].bool {
             self.liked = liked
         }
@@ -86,7 +89,7 @@ class Activity: BaseModel {
             if applicantsJSON.count > 0 {
                 applicants.removeAll()
                 for applicant in applicantsJSON {
-                    applicants.append(try manager.getOrCreate(applicant))
+                    applicants.append(try manager.getOrCreate(User.reorganizeJSON(applicant)))
                 }
             }
         }

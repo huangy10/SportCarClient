@@ -9,7 +9,7 @@
 import UIKit
 
 
-class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, FFSelectDelegate, CustomDatePickerDelegate, ImageInputSelectorDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate, BMKGeoCodeSearchDelegate, ProgressProtocol {
+class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, FFSelectDelegate, CustomDatePickerDelegate, ImageInputSelectorDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate, BMKGeoCodeSearchDelegate, ProgressProtocol, AvatarClubSelectDelegate {
     
     weak var actHomeController: ActivityHomeController?
     
@@ -63,6 +63,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         locationService?.delegate = self
         locationService?.startUserLocationService()
         geoSearch?.delegate = self
+        mapView?.viewWillAppear()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -70,6 +71,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         locationService?.delegate = nil
         geoSearch?.delegate = nil
         mapView?.delegate = nil
+        mapView?.viewWillDisappear()
     }
     
     func navSettings() {
@@ -270,7 +272,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             return cell
         }else{
             if !setCenterFlag && self.userLocation != nil {
-                let region = BMKCoordinateRegionMakeWithDistance(self.userLocation!, 3000, 5000)
+                let region = BMKCoordinateRegionMakeWithDistance(self.userLocation!, 3, 5)
                 setCenterFlag = true
                 mapView?.setRegion(region, animated: true)
             }
@@ -289,6 +291,11 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             datePickerMode = "endAt"
             showDatePicker()
             break
+        case 3:
+            let detail = AvatarClubSelectController()
+            detail.delegate = self
+            detail.preSelectID = clubLimitID
+            self.navigationController?.pushViewController(detail, animated: true)
         default:
             datePickerMode = ""
             break
@@ -336,7 +343,6 @@ extension ActivityReleaseController {
         while true {
             if let cell = view as? UITableViewCell {
                 index = self.tableView.indexPathForRowAtPoint(cell.center)!
-//                index = self.tableView.indexPathForCell(cell)!
                 break
             }
             view = view?.superview
@@ -399,8 +405,9 @@ extension ActivityReleaseController {
     func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
         locationService?.stopUserLocationService()
         self.userLocation = userLocation.location.coordinate
-        let region = BMKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 3000, 5000)
+        let region = BMKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 3, 5)
         mapView?.setRegion(region, animated: true)
+        setCenterFlag = true
         mapView?.delegate = self
     }
     
@@ -530,4 +537,14 @@ extension ActivityReleaseController {
     func datePickCancel() {
         hideDatePicker()
     }
+    
+    func avatarClubSelectDidFinish(selectedClub: Club) {
+        clubLimitID = selectedClub.ssid
+        clubLimit = selectedClub.name!
+    }
+    
+    func avatarClubSelectDidCancel() {
+        
+    }
+
 }

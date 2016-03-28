@@ -24,6 +24,7 @@ extension InlineUserSelectDelegate {
 class InlineUserSelectDeletable: InlineUserSelectController {
     
     var showCellDeleteBtn: Bool = false
+
     /**
      Register cells here
      */
@@ -67,6 +68,15 @@ class InlineUserSelectDeletable: InlineUserSelectController {
             collectionView.reloadData()
         } else if indexPath.row == users.count {
             delegate?.inlineUserSelectNeedAddMembers()
+        } else {
+            let user = users[indexPath.row]
+            if user.isHost {
+                let detail = PersonBasicController(user: user)
+                parentViewController?.navigationController?.pushViewController(detail, animated: true)
+            } else {
+                let detail = PersonOtherController(user: user)
+                parentViewController?.navigationController?.pushViewController(detail, animated: true)
+            }
         }
     }
 }

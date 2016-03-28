@@ -23,6 +23,7 @@ class AvatarClubSelectController: AvatarItemSelectController {
     
     var clubs: [Club] = []
     var user: User = MainManager.sharedManager.hostUser!
+    var preSelectID: Int32? = nil
     
     var selectedRow: Int = -1
     
@@ -37,7 +38,7 @@ class AvatarClubSelectController: AvatarItemSelectController {
             for data in json!.arrayValue {
                 let club: Club = try! MainManager.sharedManager.getOrCreate(data)
                 self.clubs.append(club)
-                if club.ssid == self.user.avatarClubModel?.ssid{
+                if club.ssid == self.preSelectID ?? self.user.avatarClubModel?.ssid{
                     self.selectedRow = i
                 }
                 i += 1
@@ -102,14 +103,15 @@ class AvatarClubSelectController: AvatarItemSelectController {
         cell.nickNameLbl?.text = club.name
         cell.authIcon.hidden = true
         cell.selectBtn?.selected = selectedRow == indexPath.row
-        cell.onSelect = { (sender: UIButton) in
+        cell.onSelect = { [weak self] (sender: UIButton) in
             let row = sender.tag
             if sender.selected {
-                self.selectedRow = -1
+                self?.selectedRow = -1
             }else{
-                self.selectedRow = row
+                self?.selectedRow = row
             }
-            self.tableView.reloadData()
+            self?.tableView.reloadData()
+            return true
         }
         return cell
     }

@@ -39,8 +39,6 @@ class SportsCarViewListController: UICollectionViewController, UICollectionViewD
     
     convenience init() {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSizeMake(120, 62)
-        layout.estimatedItemSize = CGSizeMake(120, 62)
         layout.sectionInset = UIEdgeInsetsMake(0, 9, 0, 9)
         layout.minimumInteritemSpacing = 9
         layout.scrollDirection = .Horizontal
@@ -161,10 +159,6 @@ class SportCarViewListAddBtnCell: UICollectionViewCell {
     
     static let reuseIdentifier = "sport_car_view_list_add_btn_cell"
     
-    var addBtn: UIButton!
-    
-    var onAddBtnPressed: (()->())?
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         createSubviews()
@@ -177,12 +171,11 @@ class SportCarViewListAddBtnCell: UICollectionViewCell {
     func createSubviews() {
         let superview = self.contentView
         superview.backgroundColor = UIColor(white: 0.945, alpha: 1)
-        //
-        addBtn = UIButton()
-        addBtn.setImage(UIImage(named: "person_add_more"), forState: .Normal)
-        super.addSubview(addBtn)
-        addBtn.snp_makeConstraints { (make) -> Void in
-            make.center.equalTo(superview)
+        
+        let icon = UIImageView(image: UIImage(named: "person_add_more"))
+        self.addSubview(icon)
+        icon.snp_makeConstraints { (make) -> Void in
+            make.center.equalTo(self)
             make.size.equalTo(18)
         }
     }

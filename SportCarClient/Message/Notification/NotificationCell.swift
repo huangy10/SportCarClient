@@ -24,6 +24,7 @@ class NotificationBaseCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
+        self.selectionStyle = .None
     }
 
     required init?(coder aDecoder: NSCoder) {

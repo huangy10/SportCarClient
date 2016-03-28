@@ -35,10 +35,9 @@ extension User {
     @NSManaged var starSign: String?
     @NSManaged var statusNum: Int32 // cannot mark as optional because Objective-C compatibility issues
 
-    @NSManaged var notifications: Notification?
-    @NSManaged var status: Status?
-
     @NSManaged var acts: Set<Activity>
+    @NSManaged var notifications: Set<Notification>
+    @NSManaged var status: Set<Status>
 
 }
 
@@ -51,8 +50,24 @@ extension User {
     @NSManaged func addActs(acts: Set<Activity>)
     @NSManaged func removeActs(acts: Set<Activity>)
 
+    @NSManaged private func addNotificationsObject(object: Notification)
+    @NSManaged private func removeNotificationsObject(object: Notification)
+    @NSManaged func addNotifications(notifications: Set<Notification>)
+    @NSManaged func removeNotifications(notifications: Set<Notification>)
+
+    @NSManaged private func addStatusObject(object: Status)
+    @NSManaged private func removeStatusObject(object: Status)
+    @NSManaged func addStatus(status: Set<Status>)
+    @NSManaged func removeStatus(status: Set<Status>)
+
     func addAct(act: Activity) { self.addActsObject(act) }
     func removeAct(act: Activity) { self.removeActsObject(act) }
+
+    func addNotification(notification: Notification) { self.addNotificationsObject(notification) }
+    func removeNotification(notification: Notification) { self.removeNotificationsObject(notification) }
+
+    func addStatu(statu: Status) { self.addStatusObject(statu) }
+    func removeStatu(statu: Status) { self.removeStatusObject(statu) }
 
 }
 
@@ -79,10 +94,9 @@ extension User {
     static let starSign = AlecrimCoreData.NullableAttribute<String>("starSign")
     static let statusNum = AlecrimCoreData.NullableAttribute<Int32>("statusNum")
 
-    static let notifications = AlecrimCoreData.NullableAttribute<Notification>("notifications")
-    static let status = AlecrimCoreData.NullableAttribute<Status>("status")
-
     static let acts = AlecrimCoreData.Attribute<Set<Activity>>("acts")
+    static let notifications = AlecrimCoreData.Attribute<Set<Notification>>("notifications")
+    static let status = AlecrimCoreData.Attribute<Set<Status>>("status")
 
 }
 
@@ -109,10 +123,9 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: User {
     var starSign: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("starSign", self) }
     var statusNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("statusNum", self) }
 
-    var notifications: AlecrimCoreData.NullableAttribute<Notification> { return AlecrimCoreData.NullableAttribute<Notification>("notifications", self) }
-    var status: AlecrimCoreData.NullableAttribute<Status> { return AlecrimCoreData.NullableAttribute<Status>("status", self) }
-
     var acts: AlecrimCoreData.Attribute<Set<Activity>> { return AlecrimCoreData.Attribute<Set<Activity>>("acts", self) }
+    var notifications: AlecrimCoreData.Attribute<Set<Notification>> { return AlecrimCoreData.Attribute<Set<Notification>>("notifications", self) }
+    var status: AlecrimCoreData.Attribute<Set<Status>> { return AlecrimCoreData.Attribute<Set<Status>>("status", self) }
 
 }
 

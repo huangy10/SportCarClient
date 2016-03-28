@@ -202,13 +202,6 @@ class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyM
                 detail.delegate = self
                 detail.maxLevel = 2
                 self.navigationController?.pushViewController(detail, animated: true)
-//
-//                let detail = PersonMineSinglePropertyModifierController()
-//                detail.focusedIndexPath = indexPath
-//                detail.delegate = self
-//                detail.initValue = user.district
-//                detail.propertyName = LS("活跃地区")
-//                self.navigationController?.pushViewController(detail, animated: true)
             case 3:
                 let detail = PersonMineSinglePropertyModifierController()
                 detail.focusedIndexPath = indexPath

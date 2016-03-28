@@ -39,6 +39,16 @@ class ActivityHomeController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        if curTag == 0 {
+            nearBy.viewWillAppear(true)
+        }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if curTag == 0 {
+            nearBy.viewWillDisappear(animated)
+        }
     }
     
     func navSettings() {
@@ -116,7 +126,7 @@ class ActivityHomeController: UIViewController {
         }
         if sender.tag == 0 {
             nearBy.viewWillAppear(true)
-        }else{
+        } else {
             nearBy.viewWillDisappear(true)
         }
         
@@ -147,7 +157,7 @@ class ActivityHomeController: UIViewController {
     func createSubviews() {
         let superview = self.view
         superview.backgroundColor = UIColor.whiteColor()
-        //
+        
         board = UIScrollView()
         board.pagingEnabled = true
         board.scrollEnabled = false
@@ -159,7 +169,7 @@ class ActivityHomeController: UIViewController {
         board.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
-        //
+        
         mine = ActivityHomeMineListController()
         let mineView = mine.view
         board.addSubview(mineView)
@@ -169,7 +179,7 @@ class ActivityHomeController: UIViewController {
             make.left.equalTo(board).offset(width)
         }
         mine.home = self
-        //
+        
         nearBy = ActivityNearByController()
         let nearByView = nearBy.view
         board.addSubview(nearByView)

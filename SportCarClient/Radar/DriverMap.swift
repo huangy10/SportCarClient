@@ -120,6 +120,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         mapFilter.delegate = self
         mapNav = BlackBarNavigationController(rootViewController: mapFilter)
         mapFilterView = mapNav.view
+        
         mapFilterView.layer.shadowColor = UIColor.blackColor().CGColor
         mapFilterView.layer.shadowRadius = 2
         mapFilterView.layer.shadowOpacity = 0.4

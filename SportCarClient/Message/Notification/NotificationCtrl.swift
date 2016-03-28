@@ -86,6 +86,8 @@ class NotificationController: UITableViewController {
         case "act_applied":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
             let act: Activity = try! notification.getRelatedObj()!
+            print(notification)
+            print(notification.user)
             cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
@@ -161,7 +163,7 @@ class NotificationController: UITableViewController {
             return 75
         case "status_comment", "status_comment_replied":
             let messageBody = notification.messageBody ?? ""
-            return 80 + messageBody.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightLight), boundingSize: CGSizeMake(NotificationCellWithCoverThumbnail.messageBodyLblMaxWidth, CGFloat.max)).height
+            return 90 + messageBody.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightLight), boundingSize: CGSizeMake(NotificationCellWithCoverThumbnail.messageBodyLblMaxWidth, CGFloat.max)).height
         case "act_invited":
             if notification.flag {
                 return 75

@@ -118,8 +118,6 @@ class ChatRecordDataSource {
                     let targetClub = try! ChatModelManger.sharedManager.getOrCreate(data["target_club"]) as Club
                     newRecords._item = ChatRecordListItem.ClubItem(targetClub)
                 } else {
-                    print(data)
-                    print(newRecord.chatType)
                     assertionFailure()
                 }
                 newRecords.append(newRecord)

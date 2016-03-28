@@ -16,6 +16,8 @@ protocol InlineUserSelectDelegate: class {
 
 class InlineUserSelectController: UICollectionViewController {
     
+    weak var parentController: UIViewController?
+    
     convenience init() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .Vertical
@@ -98,6 +100,15 @@ class InlineUserSelectController: UICollectionViewController {
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == users.count {
             delegate?.inlineUserSelectNeedAddMembers()
+        } else if indexPath.row < users.count{
+            let user = users[indexPath.row]
+            if user.isHost {
+                let detail = PersonBasicController(user: user)
+                parentController?.navigationController?.pushViewController(detail, animated: true)
+            } else {
+                let detail = PersonOtherController(user: user)
+                parentController?.navigationController?.pushViewController(detail, animated: true)
+            }
         }
     }
 }

@@ -25,7 +25,10 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
     var cancelBtn: UIButton!
     var takePhotoBtn: UIButton!
     var albumBtn: UIButton!
+    
     var bg: UIImageView!
+    var bgBlurred: UIImageView!
+    var bgMask: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,62 +42,44 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
         if !loadAnimated {
             return
         }
-        
-        container.snp_remakeConstraints { (make) -> Void in
-            make.edges.equalTo(self.view)
-        }
-        UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
-            self.view.layoutIfNeeded()
-            }, completion: nil)
+        showAnimated()
     }
     
     func createSubviews() {
         let superview = self.view
         //
-        let fakeBg = UIImageView()
-        fakeBg.image = bgImage
-        superview.addSubview(fakeBg)
-        fakeBg.snp_makeConstraints { (make) -> Void in
-            make.edges.equalTo(superview)
-        }
-        //
-        container = UIView()
-        container.clipsToBounds = true
-        superview.addSubview(container)
-        if loadAnimated {
-            container.snp_makeConstraints(closure: { (make) -> Void in
-                make.right.equalTo(superview)
-                make.top.equalTo(superview.snp_bottom)
-                make.left.equalTo(superview)
-                make.height.equalTo(superview)
-            })
-        }else {
-            container.snp_makeConstraints(closure: { (make) -> Void in
-                make.edges.equalTo(superview)
-            })
-        }
-        //
         bg = UIImageView()
-        bg.image = self.blurImageUsingCoreImage(bgImage)
-        container.addSubview(bg)
+        bg.image = bgImage
+        superview.addSubview(bg)
         bg.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
-        //
-//        let blurEffect = UIBlurEffect(style: .Light)
-//        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-//        container.addSubview(blurEffectView)
-//        blurEffectView.snp_makeConstraints { (make) -> Void in
-//            make.edges.equalTo(container)
-//        }
-        //
-//        let bgCover = UIView()
-//        bgCover.backgroundColor = UIColor(white: 0, alpha: 0.7)
-//        bg.addSubview(bgCover)
-//        bgCover.snp_makeConstraints { (make) -> Void in
-//            make.edges.equalTo(bg)
-//        }
-        //
+        
+        bgBlurred = UIImageView()
+        bgBlurred.image = blurImageUsingCoreImage(bgImage)
+        superview.addSubview(bgBlurred)
+        bgBlurred.snp_makeConstraints { (make) -> Void in
+            make.edges.equalTo(bg)
+        }
+        bgBlurred.layer.opacity = 0
+        
+        bgMask = UIView()
+        bgMask.backgroundColor = UIColor(white: 1, alpha: 0.7)
+        superview.addSubview(bgMask)
+        bgMask.snp_makeConstraints { (make) -> Void in
+            make.edges.equalTo(bg)
+        }
+        bgMask.layer.opacity = 0
+        
+        container = UIView()
+        container.backgroundColor = UIColor.clearColor()
+        container.clipsToBounds = true
+        superview.addSubview(container)
+        container.snp_makeConstraints(closure: { (make) -> Void in
+            make.edges.equalTo(superview)
+        })
+        container.layer.opacity = 0
+        
         cancelBtn = UIButton()
         cancelBtn.setImage(UIImage(named: "news_comment_cancel_btn"), forState: .Normal)
         cancelBtn.addTarget(self, action: "cancelBtnPressed", forControlEvents: .TouchUpInside)
@@ -141,24 +126,13 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
     }
     
     func cancelBtnPressed() {
-        let superview = self.view
-        container.snp_remakeConstraints { (make) -> Void in
-            make.right.equalTo(superview)
-            make.top.equalTo(superview.snp_bottom)
-            make.left.equalTo(superview)
-            make.height.equalTo(superview)
-        }
-        UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
-            self.view.layoutIfNeeded()
-            }, completion: { (finished) in
-                self.delegate?.imageInputSelectorDidCancel()
-        })
+        hideAnimated()
     }
     
     func takePhotoBtnPressed() {
         let sourceType = UIImagePickerControllerSourceType.Camera
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-            self.displayAlertController(LS("错误"), message: LS("无法打开相机"))
+            showToast(LS("无法打开相机"))
             return
         }
         let imagePicker = UIImagePickerController()
@@ -171,7 +145,7 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
     func albumBtnPressed() {
         let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-            self.displayAlertController(LS("错误"), message: LS("无法打开相册"))
+            showToast(LS("无法打开相册"))
             return
         }
         let imagePicker = UIImagePickerController()
@@ -183,21 +157,30 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         self.dismissViewControllerAnimated(true, completion: nil)
-        let superview = self.view
-        container.snp_remakeConstraints { (make) -> Void in
-            make.right.equalTo(superview)
-            make.top.equalTo(superview.snp_bottom)
-            make.left.equalTo(superview)
-            make.height.equalTo(superview)
-        }
-        UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
-            self.view.layoutIfNeeded()
-            }, completion: { (finished) in
-                self.delegate?.imageInputSelectorDidSelectImage(image)
-        })
+        hideAnimated()
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func showAnimated() {
+        UIView.animateWithDuration(0.5) { () -> Void in
+            self.bg.layer.opacity = 0
+            self.bgBlurred.layer.opacity = 1
+//            self.bgMask.layer.opacity = 1
+            self.container.layer.opacity = 1
+        }
+    }
+    
+    func hideAnimated() {
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            self.bg.layer.opacity = 1
+            self.bgBlurred.layer.opacity = 0
+            self.bgMask.layer.opacity = 0
+            self.container.layer.opacity = 0
+            }) { (_) -> Void in
+                self.presentingViewController?.dismissViewControllerAnimated(false, completion: nil)
+        }
     }
 }

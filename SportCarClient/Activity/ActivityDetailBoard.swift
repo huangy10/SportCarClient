@@ -38,7 +38,13 @@ class ActivityDetailBoardView: UIView {
     var likeNumLbl: UILabel!
     var likeIcon: UIImageView!
     var commentNumLbl: UILabel!
-    var memberDisplay: InlineUserSelectDeletable!
+    var memberDisplay: InlineUserSelectController!
+    
+    weak var parentController: UIViewController? {
+        didSet {
+            memberDisplay.parentController = parentController
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -199,7 +205,7 @@ class ActivityDetailBoardView: UIView {
         superview.addSubview(timeIcon)
         timeIcon.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(15)
-            make.top.equalTo(locationLbl.snp_bottom).offset(10)
+            make.top.equalTo(locationLbl.snp_bottom).offset(20)
             make.size.equalTo(14)
         }
         //
@@ -246,7 +252,7 @@ class ActivityDetailBoardView: UIView {
             make.size.equalTo(15)
         }
         //
-        memberDisplay = InlineUserSelectDeletable()
+        memberDisplay = InlineUserSelectController()
         superview.addSubview(memberDisplay.view)
         memberDisplay.view.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
@@ -254,6 +260,7 @@ class ActivityDetailBoardView: UIView {
             make.top.equalTo(timeIcon.snp_bottom).offset(23)
             make.height.equalTo(70)
         }
+        memberDisplay.parentController = parentController
         //
         let sepLine2 = UIView()
         sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
@@ -285,10 +292,8 @@ class ActivityDetailBoardView: UIView {
         // 是否显示编辑按钮
         if act.user!.isHost {
             showEditBtn = true
-            memberDisplay.showDeleteBtn = true
         }else{
             showEditBtn = false
-            memberDisplay.showDeleteBtn = false
         }
         // 活动名称
         actNameLbl.text = act.name
