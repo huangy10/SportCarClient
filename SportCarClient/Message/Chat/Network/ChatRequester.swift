@@ -53,6 +53,10 @@ class ChatURLMaker {
         return website + "/club/\(clubID)/update"
     }
     
+    func clubQuit(clubID: String) -> String {
+        return website + "/club/\(clubID)/quit"
+    }
+    
     func clubMembers(clubID: String) -> String {
         return website + "/club/\(clubID)/members"
     }
@@ -76,6 +80,10 @@ class ChatURLMaker {
     func getNotifications() -> String {
         return website + "/notification/"
     }
+    
+    func markNotificationRead(notifID: String) -> String {
+        return website + "/notification/\(notifID)"
+    }
 }
 
 
@@ -83,11 +91,10 @@ class ChatRequester: AccountRequester {
     
     static let requester = ChatRequester()
     
-    let privateQueue = dispatch_queue_create("chat_update", DISPATCH_QUEUE_SERIAL)
-    let notificationQueue = dispatch_queue_create("notification_update", DISPATCH_QUEUE_SERIAL)
-    let context = DataContext()
-
     
+    let privateQueue = ChatModelManger.sharedManager.workQueue
+    let notificationQueue = NotificationModelManager.sharedManager.workQueue
+    // TODO: 将监听功能整合进ChatModelManager
     func startListenning(onMessageCome: (JSON)->(), onError: (code: String?)->()) {
         dispatch_async(privateQueue) { () -> Void in
             self.updateChat(onMessageCome, onError: onError)
@@ -95,9 +102,12 @@ class ChatRequester: AccountRequester {
     }
     
     func updateChat(onMessageCome: (JSON)->(), onError: (code: String?)->()) {
+        print("updateMessage")
         let urlStr = ChatURLMaker.sharedMaker.updateChat()
-        manager.request(.POST, urlStr).responseJSON { (response) -> Void in
-            var delayTime: dispatch_time_t = DISPATCH_TIME_NOW
+        let mutableRequest = NSMutableURLRequest(URL: NSURL(string: urlStr)!)
+        mutableRequest.timeoutInterval = 3600
+        manager.request(.POST, mutableRequest).responseJSON { (response) -> Void in
+//            var delayTime: dispatch_time_t = DISPATCH_TIME_NOW
             switch response.result {
             case .Success(let value):
                 let data = JSON(value)
@@ -109,7 +119,7 @@ class ChatRequester: AccountRequester {
                     dispatch_async(self.privateQueue, { () -> Void in
                         onError(code: data["code"].string)
                     })
-                    delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC) * 3)
+//                    delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC) * 3)
                 }
                 break
             case .Failure(let err):
@@ -117,17 +127,17 @@ class ChatRequester: AccountRequester {
                 dispatch_async(self.privateQueue, { () -> Void in
                     onError(code: "0000")
                 })
-                delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC) * 3)
+//                delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC) * 3)
                 break
             }
             // 继续请求
             // 如果发生了错误，则延迟三秒以后再次发送请求
-            dispatch_after(delayTime, self.privateQueue, { () -> Void in
-                self.updateChat(onMessageCome, onError: onError)
-            })
-//            dispatch_async(self.privateQueue, { () -> Void in
+//            dispatch_after(delayTime, self.privateQueue, { () -> Void in
 //                self.updateChat(onMessageCome, onError: onError)
 //            })
+            dispatch_async(self.privateQueue, { () -> Void in
+                self.updateChat(onMessageCome, onError: onError)
+            })
         }
     }
     
@@ -444,6 +454,13 @@ class ChatRequester: AccountRequester {
         }
     }
     
+    func notifMarkRead(notifID:String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+        let url = ChatURLMaker.sharedMaker.markNotificationRead(notifID)
+        return manager.request(.POST, url).responseJSON(notificationQueue, completionHandler: { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
+        })
+    }
+    
     /**
      变更俱乐部的成员
      
@@ -472,5 +489,13 @@ class ChatRequester: AccountRequester {
             .responseJSON(completionHandler: { (response) -> Void in
                 self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
             })
+    }
+    
+    
+    func clubQuit(clubID: String, newHostID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request{
+        let url = ChatURLMaker.sharedMaker.clubQuit(clubID)
+        return manager.request(.POST, url, parameters: ["new_host": newHostID], encoding: .JSON).responseJSON(self.privateQueue) { (response) -> Void in
+            self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
+        }
     }
 }

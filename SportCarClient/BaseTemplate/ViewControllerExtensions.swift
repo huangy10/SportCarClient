@@ -64,6 +64,7 @@ extension UIViewController {
      - parameter maxLastLength: 最大显示的时长
      */
     func showToast(message: String, maxLastLength: Double=3) {
+        assert(NSThread.isMainThread())
         let superview = UIApplication.sharedApplication().keyWindow!.rootViewController!.view
 //        let superview = self.view
         let toastContainer = UIView()

@@ -29,9 +29,24 @@ class SideBarController: UIViewController {
     
     weak var delegate: HomeDelegate?
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         createSubviews()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        reloadUserData()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "unreadMessageNumDidChange", name: kUnreadNumberDidChangeNotification, object: nil)
     }
     
     func createSubviews() {
@@ -197,12 +212,24 @@ extension SideBarController {
         }
         avatarBtn?.loadImageFromURL(user.avatarURL!, placeholderImage: avatarBtn?.imageView?.image)
         nameLbl?.text = user.nickName ?? LS("离线用户")
-        let messageDatasource = ChatRecordDataSource.sharedDataSource
-        if messageDatasource.totalUnreadNum > 0 {
+        let unreadNum = ChatRecordDataSource.sharedDataSource.totalUnreadNum + NotificationDataSource.sharedDataSource.unreadNum
+        if unreadNum > 0 {
             unreadMessagesLbl.hidden = false
-            unreadMessagesLbl.text = "\(messageDatasource.totalUnreadNum)"
+            unreadMessagesLbl.text = "\(unreadNum)"
         }else {
             unreadMessagesLbl.hidden = true
+        }
+    }
+    
+    func unreadMessageNumDidChange() {
+        let unreadNum = ChatRecordDataSource.sharedDataSource.totalUnreadNum + NotificationDataSource.sharedDataSource.unreadNum
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            if unreadNum > 0 {
+                self.unreadMessagesLbl.hidden = false
+                self.unreadMessagesLbl.text = "\(unreadNum)"
+            }else {
+                self.unreadMessagesLbl.hidden = true
+            }   
         }
     }
 }

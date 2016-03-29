@@ -171,6 +171,7 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandSelect
         superview.backgroundColor = UIColor.whiteColor()
         tableView.registerClass(SportCarSelectParamCell.self, forCellReuseIdentifier: SportCarSelectParamCell.reuseIdentifier)
         tableView.registerClass(SportCarSelectParamEditableCell.self, forCellReuseIdentifier: "edit")
+        tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.separatorColor = UIColor(white: 0.92, alpha: 1)
     }
     
@@ -209,14 +210,6 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandSelect
         }
         return cell
     }
-//    
-//    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        if section == 0{
-//            return LS("爱车型号")
-//        }else{
-//            return LS("性能参数")
-//        }
-//    }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! PrivateChatSettingsHeader

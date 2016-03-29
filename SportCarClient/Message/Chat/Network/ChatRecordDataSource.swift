@@ -71,13 +71,18 @@ class ChatRecordDataSource {
     var curRoom: ChatRoomController?
     var listCtrl: ChatListController?
     // 总的未读消息的数量
-    var totalUnreadNum: Int = 0
+    var totalUnreadNum: Int = 0 {
+        didSet {
+            ss_sendUnreadNumberDidChangeNotification()
+        }
+    }
     // 所有的内存中的聊天条目
     var chatRecords = MyOrderedDict<String, ChatRecordList>()
     // 网络请求工具
     var requester: ChatRequester = ChatRequester.requester
     
     var started: Bool = false
+    var pauser: dispatch_semaphore_t?
     
     /**
      create a chat record from a json record, might block the current thread so call it in a background thread
@@ -176,6 +181,22 @@ class ChatRecordDataSource {
                     club.updateClubSettings(data["club"])
                 }
             }
+            self.chatRecords.resort({ (v1, v2) -> Bool in
+                let chat1 = v1.last()
+                let chat2 = v2.last()
+                // TODO: always on top
+                if chat1 == nil && chat2 == nil {
+                    return false
+                } else if chat2 == nil {
+                    return true
+                }
+                switch chat1!.createdAt!.compare(chat2!.createdAt!) {
+                case .OrderedDescending:
+                    return true
+                default:
+                    return false
+                }
+            })
             // 个人聊天设置
             // TODO：个人聊天设置需要再考虑一下
 //            for data in json!["private_settings"].arrayValue {
@@ -244,6 +265,10 @@ class ChatRecordDataSource {
     func start() {
         /* 初始创建时启动监听
         */
+        if pauser != nil {
+            dispatch_semaphore_signal(pauser!)
+            pauser = nil
+        }
         if started {
             return
         }
@@ -251,58 +276,7 @@ class ChatRecordDataSource {
         self.loadChatList()
         self.requester.startListenning({ (let json) -> () in
             for data in json.arrayValue {
-                self.parseChatRecordData(data)
-//                let semaphore = dispatch_semaphore_create(0)
-//                let newRecord = ChatRecord.objects.getOrCreateEmpty(data["chatID"].stringValue)
-//                newRecord.loadValueFromJSON(data, ctx: ChatRecord.objects.context)
-//                // 创建对应的消息
-//                let identifier = getIdentiferForChatRecord(newRecord)
-//                //
-//                if let records = self.chatRecords[identifier] {
-//                    records.appendContentsOf([newRecord])
-//                    if newRecord.sender?.userID != User.objects.hostUserID {
-//                        if self.curRoom == nil || getIdentifierForChatRoom(self.curRoom!) != identifier {
-//                            records.unread += 1
-//                            self.totalUnreadNum += 1
-//                        }
-//                    }
-//                }else{
-//                    let newRecords = ChatRecordList()
-//                    if newRecord.chat_type == "private" {
-//                        let target_user = User.objects.getOrCreate(data["sender"], ctx: ChatRecord.objects.context)
-//                        newRecords._item = ChatRecordListItem.UserItem(target_user)
-//                    }else {
-//                        let target_club = Club.objects.getOrCreate(data["target_club"], ctx: ChatRecord.objects.context)
-//                        newRecords._item = ChatRecordListItem.ClubItem(target_club)
-//                    }
-//                    newRecords.appendContentsOf([newRecord])
-//                    self.chatRecords[identifier] = newRecords
-//                    newRecords.unread = 1
-//                    self.totalUnreadNum += 1
-//                }
-//                if newRecord.messageType == "audio"{
-//                    // 如果是音频数据的话直接开始下载
-//                    self.requester.download_audio_file_async( newRecord, onComplete: { (record, localURL) -> () in
-//                        // 下载完成后开始分析波形
-//                        record.audioLocal = localURL.absoluteString
-//                        
-//                        let anaylzer = AudioWaveDrawEngine(audioFileURL: localURL, preferredSampleNum: 30, onFinished: { (engine) -> () in
-//                        }, async: false)
-//                        
-//                        record.cachedWaveData = anaylzer.sampledata
-//                        record.audioLengthInSec = anaylzer.lengthInSec
-//                        record.readyForDisplay = true
-//                        // 重新载入数据
-//                        // self.talkBoard?.reloadData()
-//                        dispatch_semaphore_signal(semaphore)
-//                        }, onError: { (record) -> () in
-//                             dispatch_semaphore_signal(semaphore)
-//                    })
-//                } else {
-//                    dispatch_semaphore_signal(semaphore)
-//                }
-//                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-//                self.chatRecords.bringKeyToFront(identifier)
+                self.parseChatRecordData(data, unreadCheck: true)
             }
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 if self.curRoom != nil {
@@ -313,6 +287,15 @@ class ChatRecordDataSource {
             })
             }) { (code) -> () in
                 print(code)
+        }
+    }
+    
+    func pause() {
+        started = false
+        pauser = dispatch_semaphore_create(0)
+        dispatch_async(ChatRequester.requester.privateQueue) { () -> Void in
+            // TODO : 将这个功能整合进ChatRequester，在阻塞这个queue之前要注意取消上一次监听请求
+            dispatch_semaphore_wait(self.pauser!, DISPATCH_TIME_FOREVER)
         }
     }
     
@@ -334,53 +317,6 @@ class ChatRecordDataSource {
     func parseHistoryFromServer(json: JSON) {
         for data in json.arrayValue {
             self.parseChatRecordData(data, autoBringToFront: false, reversed: true)
-//            let semaphore = dispatch_semaphore_create(0)
-//            let newRecord = ChatRecord.objects.getOrCreateEmpty(data["chatID"].stringValue)
-//            newRecord.loadValueFromJSON(data, ctx: ChatRecord.objects.context)
-//            //
-//            let identifier = getIdentiferForChatRecord(newRecord)
-//            //
-//            if let records = self.chatRecords[identifier] {
-//                records.addAtFirst(newRecord)
-//            }else{
-//                let newRecords = ChatRecordList()
-//                if newRecord.chat_type == "private" {
-//                    var target_user = User.objects.getOrCreate(data["sender"])
-//                    if target_user.userID == User.objects.hostUserID {
-//                        target_user = newRecord.targetUser!
-//                    }
-//                    newRecords._item = ChatRecordListItem.UserItem(target_user)
-//                }else {
-//                    let target_club = Club.objects.getOrCreate(data["target_club"])
-//                    newRecords._item = ChatRecordListItem.ClubItem(target_club)
-//                }
-//                newRecords.addAtFirst(newRecord)
-//                self.chatRecords[identifier] = newRecords
-//            }
-//            //                self.chatRecords[identifier]?.appendContentsOf([newRecord])
-//            if newRecord.messageType == "audio"{
-//                // 如果是音频数据的话直接开始下载
-//                self.requester.download_audio_file_async( newRecord, onComplete: { (record, localURL) -> () in
-//                    // 下载完成后开始分析波形
-//                    record.audioLocal = localURL.absoluteString
-//                    
-//                    let anaylzer = AudioWaveDrawEngine(audioFileURL: localURL, preferredSampleNum: 30, onFinished: { (engine) -> () in
-//                        }, async: false)
-//                    
-//                    record.cachedWaveData = anaylzer.sampledata
-//                    record.audioLengthInSec = anaylzer.lengthInSec
-//                    record.readyForDisplay = true
-//                    // 重新载入数据
-//                    // self.talkBoard?.reloadData()
-//                    dispatch_semaphore_signal(semaphore)
-//                    }, onError: { (record) -> () in
-//                        dispatch_semaphore_signal(semaphore)
-//                })
-//            } else {
-//                dispatch_semaphore_signal(semaphore)
-//            }
-//            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-//            self.chatRecords.bringKeyToFront(identifier)
         }
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             if self.curRoom != nil{
@@ -395,6 +331,21 @@ class ChatRecordDataSource {
         if let records = chatRecords[identifier] {
             records.clear()
         }
+    }
+    
+    func deleteClub(club: Club) {
+        clearChatContentForIdentifier(club.ssidString)
+        chatRecords[club.ssidString] = nil
+        self.listCtrl?.needUpdate()
+    }
+    
+    func flushAll() {
+        do {
+            try ChatModelManger.sharedManager.save()
+        } catch {
+            print("ChatModelManager: Fail to save")
+        }
+        self.chatRecords.removeAll()
     }
 }
 

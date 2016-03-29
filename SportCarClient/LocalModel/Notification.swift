@@ -17,12 +17,22 @@ class Notification: BaseModel {
     override class var idField: String {
         return "notification_id"
     }
+    
+    var imageURL: NSURL? {
+        if image == nil {
+            return nil
+        }
+        return SFURL(image!)
+    }
 
     override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool) throws -> Self {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         createdAt = DateSTR(data["created_at"].stringValue)
         messageBody = data["message_body"].stringValue
         messageType = data["message_type"].stringValue
+        if messageType == "status_inform" {
+            print(data)
+        }
         read = data["read"].boolValue
         flag = data["flag"].boolValue
         let userJSON = data["related_user"]
@@ -36,9 +46,12 @@ class Notification: BaseModel {
         let newsJSON = data["related_news"]
         if newsJSON.isExists() {
             let news = try News().loadDataFromJSON(newsJSON)
+            image = news.cover
+            
             let commentJSON = data["related_news_comment"]
             if commentJSON.isExists() {
                 let comment = try NewsComment(news: news).loadDataFromJSON(commentJSON)
+                messageBody = comment.content
                 user = comment.user
                 _objInMem = comment
             } else {
@@ -48,10 +61,17 @@ class Notification: BaseModel {
         let statusJSON = data["related_status"]
         if statusJSON.isExists() {
             let status = try manager.getOrCreate(statusJSON) as Status
+            messageBody = status.content
+            image = status.image
+            
+            if user == nil {
+                user = status.user
+            }
             let commentJSON = data["related_status_comment"]
             if commentJSON.isExists() {
                 let comment = try StatusComment(status: status).loadDataFromJSON(commentJSON)
                 _objInMem = comment
+                messageBody = comment.content
                 user = comment.user
             } else {
                 _obj = status
@@ -60,11 +80,17 @@ class Notification: BaseModel {
         let activityJSON = data["related_act"]
         if activityJSON.isExists() {
             let act = try manager.getOrCreate(activityJSON) as Activity
+            messageBody = act.actDescription
+            image = act.poster
+            if user == nil {
+                user = act.user
+            }
             let commentJSON = data["related_act_comment"]
             if commentJSON.isExists() {
                 let comment = try ActivityComment(act: act).loadDataFromJSON(commentJSON)
                 _objInMem = comment
                 user = comment.user
+                messageBody = comment.content
             } else {
                 _obj = act
             }

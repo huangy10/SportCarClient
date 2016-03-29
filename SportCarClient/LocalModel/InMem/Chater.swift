@@ -12,6 +12,8 @@ import SwiftyJSON
 
 class Chater: BaseInMemModel {
     
+    weak var chat: ChatRecord?
+    
     var isHost: Bool {
         return ssid == MainManager.sharedManager.hostUserID
     }
@@ -48,5 +50,15 @@ class Chater: BaseInMemModel {
 //        let json = JSON(data: data)
 //        try self.loadDataFromJSON(json) as Chater
         return self
+    }
+    
+    func toUser() -> User? {
+        if let manager = chat?.manager {
+            let user: User = try! manager.getOrCreate(try! toJSONObject(0), detailLevel: 0)
+            return user
+        } else {
+            assertionFailure()
+            return nil
+        }
     }
 }

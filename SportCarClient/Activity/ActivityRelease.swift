@@ -470,7 +470,7 @@ extension ActivityReleaseController {
     }
     
     func imageInputSelectorDidCancel() {
-        self.dismissViewControllerAnimated(false, completion: nil)
+        // Do nothing
     }
     
     func imageInputSelectorDidSelectImage(image: UIImage) {

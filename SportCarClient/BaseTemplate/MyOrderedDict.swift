@@ -39,6 +39,14 @@ class MyOrderedDict<Key: Hashable, Value> {
         }
     }
     
+    /**
+     清除所有的内容
+     */
+    func removeAll() {
+        _keys.removeAll()
+        _dict.removeAll()
+    }
+    
     func resort(isOrderredBefore: (Value, Value)-> Bool) {
         _keys.sortInPlace { (key1, key2) -> Bool in
             let v1 = _dict[key1]

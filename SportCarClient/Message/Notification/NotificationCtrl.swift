@@ -177,6 +177,14 @@ class NotificationController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let notification = data.notifications[indexPath.row]
+        if !notification.read {
+            ChatRequester.requester.notifMarkRead(notification.ssidString, onSuccess: { (_) -> () in
+                }, onError: { (code) -> () in
+                    // Do nothing
+            })
+            notification.read = true
+            NotificationDataSource.sharedDataSource.unreadNum -= 1
+        }
         let messageType = notification.messageType!
         switch messageType {
         case "status_like", "status_inform":

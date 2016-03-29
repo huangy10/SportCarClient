@@ -37,21 +37,24 @@ class Club: BaseModel {
         }
         return _founderUser
     }
+    
+    var recentActivity: Activity? = nil
 
     override func loadDataFromJSON(var data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Self {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         // TODO: 统一数据的样式
-        if data["club"].isExists() {
-            // Club Joining的样式，重整json的结构
-            var clubJSON = data["club"]
-            for (key, value) in clubJSON {
-                if key == "club" {
-                    continue
-                }
-                clubJSON[key] = value
-            }
-            data = clubJSON
-        }
+//        if data["club"].isExists() {
+//            // Club Joining的样式，重整json的结构
+//            var clubJSON = data["club"]
+//            for (key, value) in clubJSON {
+//                if key == "club" {
+//                    continue
+//                }
+//                clubJSON[key] = value
+//            }
+//            data = clubJSON
+//        }
+        data = Club.reorganizeJSON(data)
         name = data["club_name"].stringValue
         if name == "" {
             print(data)
@@ -65,8 +68,10 @@ class Club: BaseModel {
         founder = founderJSON.rawString()
         _founderUser = try! manager.getOrCreate(founderJSON) as User
         mine = _founderUser?.ssid == manager.hostUserID
-        // TODO: most recent chat
-        
+        let actJSON = data["recent_act"]
+        if actJSON.isExists() {
+            self.recentActivity = try manager.getOrCreate(actJSON) as Activity
+        }
         let attendedJSON = data["attended"]
         if attendedJSON.isExists() {
             attended = attendedJSON.boolValue
@@ -137,5 +142,19 @@ class Club: BaseModel {
         json["host"] = try _founderUser!.toJSONObject(0)
         return json
     }
-
+    
+    class func reorganizeJSON(json: JSON) -> JSON{
+        var temp = json["club"]
+        if temp.isExists() {
+            for (key, value) in json {
+                if key == "club" {
+                    continue
+                }
+                temp[key] = value
+            }
+            return temp
+        } else {
+            return json
+        }
+    }
 }

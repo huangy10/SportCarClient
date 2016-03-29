@@ -36,7 +36,6 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
-        createSubviews()
     }
     
     override func createSubviews() {

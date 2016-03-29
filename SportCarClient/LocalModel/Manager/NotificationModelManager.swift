@@ -14,10 +14,12 @@ import SwiftyJSON
 
 class NotificationModelManager: MainManager {
     private static let _sharedNotificationModelManager = NotificationModelManager()
-    private let _workQueue = dispatch_queue_create("notification_update", DISPATCH_QUEUE_SERIAL)
     
-    var workQueue: dispatch_queue_t {
-        return _workQueue
+    override var workQueue: dispatch_queue_t {
+        if _workQueue == nil {
+            _workQueue = dispatch_queue_create("notification_update", DISPATCH_QUEUE_SERIAL)
+        }
+        return _workQueue!
     }
     
     override class var sharedManager: MainManager {

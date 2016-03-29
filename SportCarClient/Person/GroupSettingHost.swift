@@ -12,7 +12,7 @@ import UIKit
 import Kingfisher
 
 
-class GroupChatSettingHostController: GroupChatSettingController, ImageInputSelectorDelegate {
+class GroupChatSettingHostController: GroupChatSettingController, ImageInputSelectorDelegate, GroupMemberSelectDelegate {
     
     var newLogo: UIImage?
     
@@ -64,6 +64,10 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
     override func navRightBtnPressed() {
         // TODO: pop up activity-release window
         //
+        if !targetClub.identified {
+            showToast(LS("请先认证您的俱乐部"))
+            return
+        }
         let detail = ActivityReleasePresentableController()
         detail.clubLimitID = targetClub.ssid
         detail.clubLimit = targetClub.name!
@@ -112,6 +116,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             case 8:
                 // user inlineUserSelectDeletable
                 let cell = tableView.dequeueReusableCellWithIdentifier("inline_user_select_deletable", forIndexPath: indexPath)
+                cell.selectionStyle = .None
                 if inlineUserSelect == nil {
                     let select = InlineUserSelectDeletable()
                     cell.contentView.addSubview(select.view)
@@ -173,8 +178,14 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
                     let auth = ClubAuthController()
                     auth.club = targetClub
                     self.navigationController?.pushViewController(auth, animated: true)
-                    return
                 }
+                return
+            case 3:
+                if let act = targetClub.recentActivity {
+                    let detail = ActivityDetailController(act: act)
+                    self.navigationController?.pushViewController(detail, animated: true)
+                }
+                return
             default:
                 return
             }
@@ -186,6 +197,9 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             switch indexPath.row {
             case 1:
                 toast = showConfirmToast(LS("确定清除聊天记录?"), target: self, confirmSelector: "clearChatContent", cancelSelector: "hideToast")
+            case 2:
+                let report = ReportBlacklistViewController(parent: self)
+                self.presentViewController(report, animated: false, completion: nil)
             default:
                 break
             }
@@ -250,11 +264,45 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
     }
     
     override func inlineUserSelectNeedAddMembers() {
-        let select = FFSelectController()
-        select.selectedUsers = Array(targetClub.members)
+        let select = FFSelectController(maxSelectNum: kMaxSelectUserNum, preSelectedUsers: targetClub.members, preSelect: false, forced: true)
         select.delegate = self
         let wrapper = BlackBarNavigationController(rootViewController: select)
         self.presentViewController(wrapper, animated: true, completion: nil)
+    }
+    
+    // MARK: 退出群聊
+    override func deleteAndQuitConfirm() {
+        hideToast()
+        let select = GroupMemberSelectController(club: targetClub)
+        select.delegate = self
+        select.presentFrom(self)
+    }
+    
+    func groupMemberSelectControllerDidSelectUser(user: User) {
+        let waiter = dispatch_semaphore_create(0)
+        var success = false
+        ChatRequester.requester.clubQuit(targetClub.ssidString, newHostID: user.ssidString, onSuccess: { (json) -> () in
+            success = true
+            dispatch_semaphore_signal(waiter)
+            }) { (code) -> () in
+                print(code)
+                dispatch_semaphore_signal(waiter)
+        }
+        dispatch_semaphore_wait(waiter, DISPATCH_TIME_FOREVER)
+        if success {
+            targetClub.attended = false
+            targetClub.mine = true
+            ChatRecordDataSource.sharedDataSource.deleteClub(targetClub)
+            let nav = self.navigationController
+            nav?.popViewControllerAnimated(true)
+            nav?.popViewControllerAnimated(true)
+        } else {
+            showToast(LS("删除失败"))
+        }
+    }
+    
+    func groupMemberSelectControllerDidCancel() {
+        // Do nothing
     }
 }
 

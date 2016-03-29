@@ -24,7 +24,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
     var car: SportCar!
     
     override func navTitle() -> String {
-        return LS("跑车认证")
+        return LS("爱车认证")
     }
     
     override func navRightBtnPressed() {

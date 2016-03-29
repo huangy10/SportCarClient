@@ -16,7 +16,7 @@ enum ChatRoomType {
 }
 
 
-class ChatRoomController: InputableViewController, UITableViewDataSource, UITableViewDelegate, ChatOpPanelDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChatAudioRecordDelegate {
+class ChatRoomController: InputableViewController, UITableViewDataSource, UITableViewDelegate, ChatOpPanelDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChatAudioRecordDelegate, ChatCellDelegate {
     
     var chatList: ChatListController?
     
@@ -65,6 +65,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     
     var accessoryBoard: ChatAccessoryBoard?
     var displayAccessoryBoard: Bool = false
+    var firstShowFlag: Bool = false
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -108,8 +109,16 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         super.viewWillAppear(animated)
         ChatRecordDataSource.sharedDataSource.curRoom = self
         // 重新载入club的信息
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = navTitle
-        self.talkBoard?.reloadData()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if chatRecords?.unread > 0 && firstShowFlag {
+            self.talkBoard?.reloadData()
+        }
+        firstShowFlag = true
     }
     
     override func createSubviews() {
@@ -253,6 +262,7 @@ extension ChatRoomController {
             return tableView.dequeueReusableCellWithIdentifier("invisible_cell", forIndexPath: indexPath)
         }
         let cell = tableView.dequeueReusableCellWithIdentifier(messageType, forIndexPath: indexPath) as! ChatCell
+        cell.delegate = self
         let displayTimeMark: Bool = {
             if indexPath.row == 0 {
                 return true
@@ -521,5 +531,21 @@ extension ChatRoomController {
     
     func audioWillStartRecording() {
         
+    }
+}
+
+extension ChatRoomController {
+    func avatarPressed(chatRecord: ChatRecord) {
+        if let user = chatRecord.senderUser?.toUser() {
+            if user.isHost {
+                let detail = PersonBasicController(user: user)
+                self.navigationController?.pushViewController(detail, animated: true)
+            } else {
+                let detail = PersonOtherController(user: user)
+                self.navigationController?.pushViewController(detail, animated: true)
+            }
+        } else {
+            assertionFailure()
+        }
     }
 }

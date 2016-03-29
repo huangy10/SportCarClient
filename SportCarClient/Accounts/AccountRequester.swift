@@ -62,7 +62,7 @@ class AccountURLMaker {
 class AccountRequester {
     var urlMaker = AccountURLMaker(user: nil)
     let manager: Alamofire.Manager
-    
+
     static let sharedRequester = AccountRequester()
     
     // 下面是一些待提交的数据

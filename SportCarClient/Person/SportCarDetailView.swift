@@ -19,10 +19,10 @@ class SportCarInfoDetailController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
-        //
-        tableView.registerClass(SportCarInfoDetailHeader.self, forHeaderFooterViewReuseIdentifier: "header")
+
         tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "text_header")
         tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
+        tableView.registerClass(SportCarAuthHeader.self, forHeaderFooterViewReuseIdentifier: "header_auth")
         tableView.separatorStyle = .None
         tableView.rowHeight = 50
     }
@@ -65,24 +65,18 @@ class SportCarInfoDetailController: UITableViewController {
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
-            return UIScreen.mainScreen().bounds.width * 0.588 / 2
-        }
-        else{
+            return 50
+        } else {
             return 50
         }
     }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
-            let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! SportCarInfoDetailHeader
-            header.carImage.kf_setImageWithURL(car.imageURL!)
-            header.carNameLbl.text = car.name
+            let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header_auth") as! SportCarAuthHeader
+            header.titleLbl.text = LS("爱车型号")
+            header.authed = car.identified
             header.authBtn.addTarget(self, action: "carAuthBtnPressed", forControlEvents: .TouchUpInside)
-            if car.identified {
-                header.carAuthStatusIcon.image = UIImage(named: "auth_status_authed")
-            }else{
-                header.carAuthStatusIcon.image = UIImage(named: "auth_status_unauthed")
-            }
             return header
         }else{
             let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("text_header") as! PrivateChatSettingsHeader

@@ -187,7 +187,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                     break
                 case 2:
                     cell.staticLbl.text = LS("本群活动")
-                    cell.infoLbl.text = activityDescription
+                    cell.infoLbl.text = targetClub.recentActivity?.name
                     cell.boolSelect.hidden = true
                     break
                 case 3:
@@ -255,6 +255,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 return cell
             }else {
                 let cell = tableView.dequeueReusableCellWithIdentifier("quit", forIndexPath: indexPath)
+                cell.selectionStyle = .None
                 if deleteQuitBtn == nil {
                     deleteQuitBtn = UIButton()
                     deleteQuitBtn?.setImage(UIImage(named: "delete_and_quit_btn"), forState: .Normal)
@@ -282,6 +283,15 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             self.navigationController?.pushViewController(detail, animated: true)
         } else if indexPath.section == 3 && indexPath.row == 1 {
             showConfirmToast(LS("确定清除聊天记录?"), target: self, confirmSelector: "clearChatContent", cancelSelector: "hideToast")
+        } else if indexPath.section == 3 && indexPath.row == 2 {
+            // 举报
+            let report = ReportBlacklistViewController(parent: self)
+            self.presentViewController(report, animated: false, completion: nil)
+        } else if indexPath.section == 1 && indexPath.row == 2 {
+            if let act = targetClub.recentActivity {
+                let detail = ActivityDetailController(act: act)
+                self.navigationController?.pushViewController(detail, animated: true)
+            }
         }
     }
     
@@ -302,8 +312,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             self.showToast(LS("本群只有群主能够邀请成员"))
             return
         }
-        let select = FFSelectController()
-        select.selectedUsers = Array(targetClub.members)
+        let select = FFSelectController(maxSelectNum: kMaxSelectUserNum, preSelectedUsers: targetClub.members, preSelect: false, forced: true)
         select.delegate = self
         let wrapper = BlackBarNavigationController(rootViewController: select)
         self.presentViewController(wrapper, animated: true, completion: nil)
@@ -365,6 +374,26 @@ extension GroupChatSettingController {
     }
     
     func deleteAndQuitBtnPressed() {
-        
+        toast = showConfirmToast(LS("确认删除并退出？"), target: self, confirmSelector: "deleteAndQuitConfirm", cancelSelector: "hideToast")
+    }
+    
+    func deleteAndQuitConfirm() {
+        hideToast()
+        let waiter = dispatch_semaphore_create(0)
+        var success = false
+        ChatRequester.requester.clubQuit(targetClub.ssidString, newHostID: "", onSuccess: { (json) -> () in
+            success = true
+            dispatch_semaphore_signal(waiter)
+            }) { (code) -> () in
+            dispatch_semaphore_signal(waiter)
+        }
+        dispatch_semaphore_wait(waiter, DISPATCH_TIME_FOREVER)
+        if success {
+            ChatRecordDataSource.sharedDataSource.deleteClub(targetClub)
+            self.navigationController?.popViewControllerAnimated(true)
+            self.navigationController?.popViewControllerAnimated(true)
+        } else {
+            showToast(LS("删除失败"))
+        }
     }
 }

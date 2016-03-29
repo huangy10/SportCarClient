@@ -10,7 +10,7 @@ import UIKit
 
 let kChatCellTimeMarkSpaceHeight: CGFloat = 25      // 上方的时间标签栏显示时需要占用的高度
 
-protocol ChatCellDelegat: class {
+protocol ChatCellDelegate: class {
     func avatarPressed(chatRecord: ChatRecord)
 }
 
@@ -23,7 +23,7 @@ class ChatCell: UITableViewCell {
         tableView.registerClass(self, forCellReuseIdentifier: "audio")
     }
     
-    weak var delegate: ChatCellDelegat?
+    weak var delegate: ChatCellDelegate?
     /// 数据
     var chat: ChatRecord?
     var bubbleType: String? {
@@ -86,7 +86,6 @@ class ChatCell: UITableViewCell {
         superview.addSubview(timeMarkerLbL!)
         timeMarkerLbL?.snp_makeConstraints(closure: { (make) -> Void in
             make.centerX.equalTo(superview)
-            make.width.equalTo(44)
             make.height.equalTo(11)
             make.top.equalTo(superview).offset(10)
         })
@@ -118,13 +117,6 @@ class ChatCell: UITableViewCell {
         bubbleView?.clipsToBounds = true
         superview.addSubview(bubbleView!)
         bubbleView?.backgroundColor = UIColor(white: 0.945, alpha: 1)
-        //
-//        container = UIView()
-//        container?.backgroundColor = UIColor.clearColor()
-//        bubbleView?.addSubview(container!)
-//        container?.snp_makeConstraints(closure: { (make) -> Void in
-//            make.edges.equalTo(bubbleView!).inset(UIEdgeInsetsMake(15, 11, 15, 11))
-//        })
         //
         if self.reuseIdentifier == "text" {
             let templbl = UILabel()
@@ -263,7 +255,7 @@ class ChatCell: UITableViewCell {
     }
     
     func avatarBtnPressed() {
-        
+        delegate?.avatarPressed(chat!)
     }
     
     class func getContentHeightForChatRecord(chat: ChatRecord) -> CGFloat {

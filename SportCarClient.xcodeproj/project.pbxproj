@@ -189,6 +189,8 @@
 		BFE967621CA7699B0097C42C /* Chater.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967611CA7699B0097C42C /* Chater.swift */; };
 		BFE967641CA7863C0097C42C /* NotificationModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967631CA7863C0097C42C /* NotificationModelManager.swift */; };
 		BFE967661CA81E060097C42C /* ActivityEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967651CA81E060097C42C /* ActivityEdit.swift */; };
+		BFE9676A1CA90CF60097C42C /* SportCarAuthHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967691CA90CF60097C42C /* SportCarAuthHeader.swift */; };
+		BFE9676C1CA92AD40097C42C /* GroupMemberSelecter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE9676B1CA92AD40097C42C /* GroupMemberSelecter.swift */; };
 		BFEFB5E31C5E4C8600841BF4 /* chatAccessoryBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEFB5E21C5E4C8600841BF4 /* chatAccessoryBoard.swift */; };
 		BFF5EEF91CA428E700F64301 /* ClubRank.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5EEF81CA428E700F64301 /* ClubRank.swift */; };
 		BFFA15451C9D271E00E985DF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15441C9D271E00E985DF /* Location.swift */; };
@@ -407,6 +409,8 @@
 		BFE967611CA7699B0097C42C /* Chater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Chater.swift; path = LocalModel/InMem/Chater.swift; sourceTree = "<group>"; };
 		BFE967631CA7863C0097C42C /* NotificationModelManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationModelManager.swift; path = LocalModel/Manager/NotificationModelManager.swift; sourceTree = "<group>"; };
 		BFE967651CA81E060097C42C /* ActivityEdit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityEdit.swift; path = Activity/ActivityEdit.swift; sourceTree = "<group>"; };
+		BFE967691CA90CF60097C42C /* SportCarAuthHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarAuthHeader.swift; path = Person/SportCarAuthHeader.swift; sourceTree = "<group>"; };
+		BFE9676B1CA92AD40097C42C /* GroupMemberSelecter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GroupMemberSelecter.swift; path = Message/Chat/GroupMemberSelecter.swift; sourceTree = "<group>"; };
 		BFEFB5E21C5E4C8600841BF4 /* chatAccessoryBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = chatAccessoryBoard.swift; path = Message/Chat/chatAccessoryBoard.swift; sourceTree = "<group>"; };
 		BFF5EEF81CA428E700F64301 /* ClubRank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubRank.swift; path = Radar/ClubRank.swift; sourceTree = "<group>"; };
 		BFFA15441C9D271E00E985DF /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Location.swift; path = Map/Location.swift; sourceTree = "<group>"; };
@@ -784,6 +788,7 @@
 			children = (
 				BF9B54B41C802E3B0006D673 /* GroupChatSetUp.swift */,
 				BF9664031C89CBD10096D131 /* ClubBriefInfo.swift */,
+				BFE9676B1CA92AD40097C42C /* GroupMemberSelecter.swift */,
 			);
 			name = Group;
 			sourceTree = "<group>";
@@ -944,6 +949,7 @@
 			children = (
 				BFC032661C6F19D300ECA69A /* SportCarDetailView.swift */,
 				BF5E7EE71C85EC45004B8305 /* SportscarAuth.swift */,
+				BFE967691CA90CF60097C42C /* SportCarAuthHeader.swift */,
 			);
 			name = SportCarSelect;
 			sourceTree = "<group>";
@@ -1622,6 +1628,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFE967571CA6D9B90097C42C /* Notification.swift in Sources */,
+				BFE9676A1CA90CF60097C42C /* SportCarAuthHeader.swift in Sources */,
 				BF5107111C60CB65008DC14F /* ChatList.swift in Sources */,
 				BFE967311CA588580097C42C /* BaseInMemModel.swift in Sources */,
 				BFE967601CA6EE080097C42C /* ChatModelManager.swift in Sources */,
@@ -1684,6 +1691,7 @@
 				BFC0324E1C6D7A8400ECA69A /* PersonSettingMineDataSource.swift in Sources */,
 				BF972F101C9D6D9A00AF997B /* imageResizer.swift in Sources */,
 				BFFA61B31C7DDC88003BCB2B /* RadarRequester.swift in Sources */,
+				BFE9676C1CA92AD40097C42C /* GroupMemberSelecter.swift in Sources */,
 				BFC36BAF1C6C5E1D00DC6FE2 /* PersonMineSettings.swift in Sources */,
 				BF6308A31C19A8040087A4F0 /* ResetPassword.swift in Sources */,
 				BFE967491CA6D8920097C42C /* SportCarClient.xcdatamodeld in Sources */,

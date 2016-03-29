@@ -36,7 +36,7 @@ class AvatarClubSelectController: AvatarItemSelectController {
         requester.getClubListAuthed({ (json) -> () in
             var i = 0
             for data in json!.arrayValue {
-                let club: Club = try! MainManager.sharedManager.getOrCreate(data)
+                let club: Club = try! MainManager.sharedManager.getOrCreate(Club.reorganizeJSON(data))
                 self.clubs.append(club)
                 if club.ssid == self.preSelectID ?? self.user.avatarClubModel?.ssid{
                     self.selectedRow = i

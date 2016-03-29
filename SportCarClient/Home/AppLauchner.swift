@@ -35,12 +35,13 @@ class AppManager: UIViewController {
         let ctl = AccountController()
         let wrapper = BlackBarNavigationController(rootViewController: ctl)
         self.presentViewController(wrapper, animated: false, completion: nil)
-//        self.navigationController?.pushViewController(ctl, animated: true)
     }
     
     func guideToContent() {
         if let hostUser = MainManager.sharedManager.hostUser {
             let ctl = HomeController()
+            NotificationDataSource.sharedDataSource.start()
+            ChatRecordDataSource.sharedDataSource.start()
             ctl.hostUser = hostUser
             self.navigationController?.pushViewController(ctl, animated: false)
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -53,9 +54,17 @@ class AppManager: UIViewController {
      推出当前所有的展示内容回到登陆页面
      */
     func logout() {
+        // 在三个modelmanager上面注销用户
         MainManager.sharedManager.logout()
         ChatModelManger.sharedManager.logout()
         NotificationModelManager.sharedManager.logout()
+        // 停止聊天更新
+        ChatRecordDataSource.sharedDataSource.pause()
+        ChatRecordDataSource.sharedDataSource.flushAll()
+        //
+        NotificationDataSource.sharedDataSource.pause()
+        NotificationDataSource.sharedDataSource.flushAll()
+        
         let ctrl = AccountController()
         let nav = BlackBarNavigationController(rootViewController: ctrl)
         self.presentViewController(nav, animated: true, completion: nil)

@@ -26,23 +26,24 @@ class NotificationDataSource: NSObject {
                 })
                 try! NotificationModelManager.sharedManager.save()
             }
+            ss_sendUnreadNumberDidChangeNotification()
         }
     }
     let requester = ChatRequester.requester
     let privateQueue: dispatch_queue_t
     var started: Bool = false
+    var waiter: dispatch_semaphore_t?
     
     override init() {
         privateQueue = requester.notificationQueue
         super.init()
         loadHistoricalNotifications()
-        dispatch_async(privateQueue) { () -> Void in
-            self.updateNotification()
-        }
+        start()
     }
     
     func loadHistoricalNotifications() {
         self.notifications.appendContentsOf(Notification.loadHistoricalList(40))
+        self.unreadNum = 0
     }
     
     /**
@@ -52,6 +53,9 @@ class NotificationDataSource: NSObject {
         var updated = false
         for data in json {
             let notification: Notification = try! NotificationModelManager.sharedManager.getOrCreate(data)
+            if !notification.read {
+                self.unreadNum += 1
+            }
             self.notifications.append(notification)
             updated = true
         }
@@ -99,6 +103,32 @@ class NotificationDataSource: NSObject {
             self.loadNotificationListFromJSON(json!.arrayValue)
             }) { (code) -> () in
                 print(code)
+        }
+    }
+    
+    func flushAll() {
+        try! NotificationModelManager.sharedManager.save()
+        notifications.removeAll()
+    }
+    
+    func pause() {
+        waiter = dispatch_semaphore_create(0)
+        dispatch_async(privateQueue) { () -> Void in
+            dispatch_semaphore_wait(self.waiter!, DISPATCH_TIME_FOREVER)
+        }
+    }
+    
+    func start() {
+        if started {
+            if waiter != nil {
+                dispatch_semaphore_signal(waiter!)
+                waiter = nil
+            }
+            return
+        }
+        started = true
+        dispatch_async(privateQueue) { () -> Void in
+            self.updateNotification()
         }
     }
 }

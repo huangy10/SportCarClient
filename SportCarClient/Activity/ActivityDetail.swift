@@ -67,6 +67,9 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
             }) { (code) -> () in
                 print(code)
         }
+        self.actInfoBoard.act = act
+        self.commentPanel.setLikedAnimated(self.act.liked, flag: false)
+        self.actInfoBoard.loadDataAndUpdateUI()
         loadMoreComments()
     }
     

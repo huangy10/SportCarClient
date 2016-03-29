@@ -13,10 +13,12 @@ import SwiftyJSON
 
 class ChatModelManger: MainManager {
     private static let _sharedClubModelManager = ChatModelManger()
-    private let _workQueue: dispatch_queue_t = dispatch_queue_create("chat_update", DISPATCH_QUEUE_SERIAL)
     
-    var workQueue: dispatch_queue_t {
-        return _workQueue
+    override var workQueue: dispatch_queue_t {
+        if _workQueue == nil {
+            _workQueue = dispatch_queue_create("chat_update", DISPATCH_QUEUE_SERIAL)
+        }
+        return _workQueue!
     }
     
     override var hostUser: User? {
@@ -31,6 +33,10 @@ class ChatModelManger: MainManager {
     
     override var hostUserID: Int32? {
         return MainManager.sharedManager.hostUserID
+    }
+    
+    override var hostUserIDString: String? {
+        return MainManager.sharedManager.hostUserIDString
     }
     
     override class var sharedManager: MainManager {

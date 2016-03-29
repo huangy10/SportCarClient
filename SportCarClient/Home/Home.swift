@@ -96,7 +96,12 @@ class HomeController: UIViewController, HomeDelegate {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         // 更新页面数据
-        self.sideBarCtl.reloadUserData()
+        self.sideBarCtl.viewWillAppear(animated)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.sideBarCtl.viewWillDisappear(animated)
     }
     
     func createSubviews() {

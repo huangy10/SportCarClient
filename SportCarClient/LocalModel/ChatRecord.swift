@@ -20,15 +20,23 @@ class ChatRecord: BaseModel {
     var cachedWaveData: [Float]?
     var displayTimeMark: Bool = false
     
-    private var _senderUser: Chater?
+    private var _senderUser: Chater? {
+        didSet {
+            _senderUser?.chat = self
+        }
+    }
+    
     var senderUser : Chater? {
         if mine {
-            return manager.hostUser?.toChatter()
+            let chater = manager.hostUser?.toChatter()
+            chater?.chat = self
+            return chater
         }
         assert(sender != nil, "No sender for chat")
         if _senderUser == nil {
             let json = JSON(data: sender!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
             _senderUser = try! Chater().loadDataFromJSON(json)
+            _senderUser?.chat = self
         }
         return _senderUser
     }
@@ -98,6 +106,7 @@ class ChatRecord: BaseModel {
         let userJSON = data["sender"]
         sender = userJSON.rawString()
         _senderUser = try Chater().loadDataFromJSON(userJSON)
+        _senderUser?.chat = self
         mine = _senderUser?.ssid == manager.hostUserID
         image = data["image"].stringValue
         imageWidth = data["image_width"].int32Value

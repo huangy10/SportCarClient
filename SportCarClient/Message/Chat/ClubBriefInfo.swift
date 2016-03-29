@@ -31,9 +31,12 @@ class ClubBriefInfoController: UITableViewController {
         let requester = ChatRequester.requester
         requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
             var clubJson: JSON
-            if json!["clubID"].isExists() {
+            if json!["id"].isExists() {
                 try! self.targetClub.loadDataFromJSON(json!)
                 clubJson = json!
+                let barBtnItem = UIBarButtonItem(title: LS("申请加入"), style: .Plain, target: self, action: "navRightBtnPressed")
+                barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+                self.navigationItem.rightBarButtonItem = barBtnItem
             }else {
                 try! self.targetClub.loadDataFromJSON(json!["club"])
                 self.navigationItem.rightBarButtonItem = nil
@@ -59,13 +62,13 @@ class ClubBriefInfoController: UITableViewController {
         leftBtn.frame = CGRectMake(0, 0, 9, 15)
         leftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
-        let barBtnItem = UIBarButtonItem(title: LS("申请加入"), style: .Plain, target: self, action: "navRightBtnPressed")
-        barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
-        self.navigationItem.rightBarButtonItem = barBtnItem
+//        let barBtnItem = UIBarButtonItem(title: LS("申请加入"), style: .Plain, target: self, action: "navRightBtnPressed")
+//        barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+//        self.navigationItem.rightBarButtonItem = barBtnItem
     }
     
     func navRightBtnPressed() {
-        
+        // TODO: 申请加入
     }
     
     func navLeftBtnPressed() {

@@ -47,6 +47,7 @@ class ChatListController: UITableViewController, FFSelectDelegate, GroupChatSetu
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(ChatListCell.reuseIdentifier, forIndexPath: indexPath) as! ChatListCell
+        cell.selectionStyle = .None
         let chatData = ChatRecordDataSource.sharedDataSource.chatRecords.valueForIndex(indexPath.row)
         cell.listItem = chatData?._item
         cell.setUnreadNumber(chatData!.unread)

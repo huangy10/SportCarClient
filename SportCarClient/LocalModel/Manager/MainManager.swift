@@ -25,6 +25,15 @@ class MainManager {
     internal var _hostUser: User?
     internal var _hostUserID: Int32?
     
+    internal var _workQueue: dispatch_queue_t?
+    
+    var workQueue: dispatch_queue_t {
+        if _workQueue == nil {
+            _workQueue = dispatch_get_main_queue()
+        }
+        return _workQueue!
+    }
+    
     var hostUser: User? {
         if _hostUser == nil {
             return nil

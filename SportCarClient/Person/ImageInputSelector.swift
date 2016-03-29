@@ -126,6 +126,7 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
     }
     
     func cancelBtnPressed() {
+        delegate?.imageInputSelectorDidCancel()
         hideAnimated()
     }
     
@@ -156,8 +157,10 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-        hideAnimated()
+        self.dismissViewControllerAnimated(true, completion: {
+            self.hideAnimated()
+            self.delegate?.imageInputSelectorDidSelectImage(image)
+        })
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
