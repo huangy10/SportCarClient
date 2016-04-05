@@ -101,8 +101,8 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         ChatCell.registerCellForTableView(talkBoard!)
         talkBoard?.registerClass(UITableViewCell.self, forCellReuseIdentifier: "invisible_cell")
         // 添加键盘出现时时间的监听
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardAppears:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardDisappears:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatRoomController.changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatRoomController.changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -151,7 +151,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
             make.top.equalTo(superview)
         })
         refresh = UIRefreshControl()
-        refresh.addTarget(self, action: "loadChatHistory", forControlEvents: .ValueChanged)
+        refresh.addTarget(self, action: #selector(ChatRoomController.loadChatHistory as (ChatRoomController) -> () -> ()), forControlEvents: .ValueChanged)
         talkBoard?.addSubview(refresh)
     }
     
@@ -161,13 +161,13 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 10.5, 18)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(ChatRoomController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         
         let navRightBtn = UIButton()
         let navRightBtnIconURLStr = navRightBtnImageURLStr
         navRightBtn.kf_setImageWithURL(SFURL(navRightBtnIconURLStr!)!, forState: .Normal)
-        navRightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+        navRightBtn.addTarget(self, action: #selector(ChatRoomController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         navRightBtn.layer.cornerRadius = 17.5
         navRightBtn.clipsToBounds = true
         navRightBtn.frame = CGRectMake(0, 0, 35, 35)

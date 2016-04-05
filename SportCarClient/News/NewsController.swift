@@ -39,7 +39,7 @@ class NewsController: UITableViewController {
         tableView.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         tableView.separatorStyle = .None
         refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: "handleRefreshing", forControlEvents: .TouchUpInside)
+        refreshControl?.addTarget(self, action: #selector(NewsController.handleRefreshing), forControlEvents: .TouchUpInside)
         tableView.addSubview(refreshControl!)
         refreshControl?.enabled = true
         // 开始准备获取数据
@@ -125,7 +125,7 @@ extension NewsController {
     func leftBarBtn() -> UIBarButtonItem? {
         let homeBtn = UIButton()
         homeBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
-        homeBtn.addTarget(self, action: "backToHomePressed", forControlEvents: .TouchUpInside)
+        homeBtn.addTarget(self, action: #selector(NewsController.backToHomePressed), forControlEvents: .TouchUpInside)
         homeBtn.frame = CGRect(x: 0, y: 0, width: 15, height: 13.5)
         let leftBtnItem = UIBarButtonItem(customView: homeBtn)
         return leftBtnItem

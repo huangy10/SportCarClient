@@ -172,7 +172,7 @@ class NotificationCellAboutActivity: NotificationBaseCell{
             make.top.equalTo(dateLbl.snp_bottom).offset(13)
             make.size.equalTo(CGSizeMake(44, 20))
         }
-        agreenBtn.addTarget(self, action: "agreeBtnPressed", forControlEvents: .TouchUpInside)
+        agreenBtn.addTarget(self, action: #selector(NotificationCellAboutActivity.agreeBtnPressed), forControlEvents: .TouchUpInside)
         //
         denyBtn = UIButton()
         denyBtn.setTitle(LS("谢绝"), forState: .Normal)
@@ -184,7 +184,7 @@ class NotificationCellAboutActivity: NotificationBaseCell{
             make.centerY.equalTo(agreenBtn)
             make.size.equalTo(agreenBtn)
         }
-        denyBtn.addTarget(self, action: "denyBtnPressed", forControlEvents: .TouchUpInside)
+        denyBtn.addTarget(self, action: #selector(NotificationCellAboutActivity.denyBtnPressed), forControlEvents: .TouchUpInside)
         //
         doneLbl = UILabel()
         doneLbl.font = UIFont.systemFontOfSize(14)

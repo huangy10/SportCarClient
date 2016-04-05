@@ -120,9 +120,11 @@ class Activity: BaseModel {
         if $.find(applicants, callback: {return $0.ssid == self.manager.hostUserID!}) != nil {
             // 发现已经报名了
             applicants = $.remove(applicants, callback: {return $0.ssid == self.manager.hostUserID!})
+            applied = false
         } else {
             // 否则报名
             applicants.append(manager.hostUser!)
+            applied = true
         }
         return self
     }

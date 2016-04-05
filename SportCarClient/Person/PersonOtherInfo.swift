@@ -12,16 +12,48 @@ import UIKit
 class PersonOtherInfoController: PersonMineInfoController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
-            cell.avatarImage.kf_setImageWithURL(user.avatarURL!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
-                if error == nil {
-                    cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
-                }
-            })
-            return cell
+        switch indexPath.section {
+        case 0:
+            return tableView.ss_reuseablePropertyCell(SSAvatarCell.self, forIndexPath: indexPath)
+                .setData(user.avatarURL!, zoomable: true)
+        case 1:
+            let rawCell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
+            switch indexPath.row {
+            case 0:
+                return rawCell.setData(LS("昵称"), propertyValue: user.nickName, editable: false)
+            case 1:
+                return rawCell.setData(
+                    LS("签名车"),
+                    propertyValue: user.avatarCarModel?.name,
+                    propertyImageURL: user.avatarCarModel?.logoURL,
+                    propertyEmptyPlaceHolder: LS("无签名车"),
+                    editable: false)
+            case 2:
+                return rawCell.setData(
+                    LS("签名俱乐部"),
+                    propertyValue: user.avatarClubModel?.name,
+                    propertyImageURL: user.avatarClubModel?.logoURL,
+                    propertyEmptyPlaceHolder: LS("无签名俱乐部"),
+                    editable: false
+                )
+            case 3:
+                return rawCell.setData(LS("性别"), propertyValue: user.gender, editable: false)
+            default:
+                return rawCell.setData(LS("年龄"), propertyValue: "\(user.age)", editable: false)
+            }
+        default:
+            let rawCell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
+            switch indexPath.row {
+            case 0:
+                return rawCell.setData(LS("星座"), propertyValue: user.starSign, editable: false)
+            case 1:
+                return rawCell.setData(LS("职业"), propertyValue: user.job, editable: false)
+            case 2:
+                return rawCell.setData(LS("活跃地区"), propertyValue: user.district, editable: false)
+            default:
+                return rawCell.setData(LS("个性签名"), propertyValue: user.signature, editable: false)
+            }
         }
-        return super.tableView(tableView, cellForRowAtIndexPath: indexPath)
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

@@ -34,7 +34,7 @@ class PersonDataSource {
         for carJSON in data {
             // 重整一下数据结构钢    
             let tempJSON = SportCar.reorgnaizeJSON(carJSON)
-            let car = try! MainManager.sharedManager.getOrCreate(tempJSON) as SportCar
+            let car = try! MainManager.sharedManager.getOrCreate(tempJSON, detailLevel: 1) as SportCar
             cars.append(car)
             if statusDict[car.ssidString] == nil {
                 statusDict[car.ssidString] = []

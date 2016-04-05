@@ -58,7 +58,7 @@ class UniversalAudioPlayer: NSObject, AVAudioPlayerDelegate {
             player?.stop()
             player = try AVAudioPlayer(contentsOfURL: audioURL)
             player?.delegate = self
-            playProccessListener = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "audioPlayerProcessUpdate", userInfo: nil, repeats: true)
+            playProccessListener = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(UniversalAudioPlayer.audioPlayerProcessUpdate), userInfo: nil, repeats: true)
             delegate?.willStartPlaying()
             player?.play()
         }catch _ {

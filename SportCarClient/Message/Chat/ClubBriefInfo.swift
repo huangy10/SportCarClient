@@ -23,8 +23,8 @@ class ClubBriefInfoController: UITableViewController {
         super.viewDidLoad()
         navSettings()
         tableView.separatorStyle = .None
-        tableView.registerClass(PrivateChatSettingsAvatarCell.self, forCellReuseIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier)
-        tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
+        SSPropertyCell.registerTableView(tableView)
+        SSAvatarCell.registerTableView(tableView)
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select")
         tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
         // Request data for the club
@@ -34,7 +34,7 @@ class ClubBriefInfoController: UITableViewController {
             if json!["id"].isExists() {
                 try! self.targetClub.loadDataFromJSON(json!)
                 clubJson = json!
-                let barBtnItem = UIBarButtonItem(title: LS("申请加入"), style: .Plain, target: self, action: "navRightBtnPressed")
+                let barBtnItem = UIBarButtonItem(title: LS("申请加入"), style: .Plain, target: self, action: #selector(ClubBriefInfoController.navRightBtnPressed))
                 barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
                 self.navigationItem.rightBarButtonItem = barBtnItem
             }else {
@@ -54,17 +54,19 @@ class ClubBriefInfoController: UITableViewController {
         }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
     func navSettings() {
         // Override this method to enable "release activity" button
         self.navigationItem.title = targetClub.name
         let leftBtn = UIButton()
         leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         leftBtn.frame = CGRectMake(0, 0, 9, 15)
-        leftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        leftBtn.addTarget(self, action: #selector(ClubBriefInfoController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
-//        let barBtnItem = UIBarButtonItem(title: LS("申请加入"), style: .Plain, target: self, action: "navRightBtnPressed")
-//        barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
-//        self.navigationItem.rightBarButtonItem = barBtnItem
     }
     
     func navRightBtnPressed() {
@@ -84,7 +86,7 @@ class ClubBriefInfoController: UITableViewController {
         case 0:
             return 1
         case 1:
-            return targetClub.showMembers ? 4 : 3
+            return targetClub.showMembers ? 3 : 2
         default:
             return 0
         }
@@ -92,36 +94,16 @@ class ClubBriefInfoController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
-            cell.avatarImage.kf_setImageWithURL(targetClub.logoURL!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
-                if error == nil {
-                    cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
-                }
-            })
-            return cell
+            return tableView.ss_reuseablePropertyCell(SSAvatarCell.self, forIndexPath: indexPath)
+                .setData(targetClub.logoURL!, showArrow: false, zoomable: true)
         }
         switch indexPath.row {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-            cell.selectionStyle = .None
-            cell.boolSelect.hidden = true
-            cell.staticLbl.text = LS("群聊名称")
-            cell.infoLbl.text = targetClub.name ?? LS("正在获取数据...")
-            return cell
+            return tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
+                .setData(LS("群聊名称"), propertyValue: targetClub.name ?? LS("正在获取数据..."), editable: false)
         case 1:
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-            cell.selectionStyle = .None
-            cell.boolSelect.hidden = true
-            cell.staticLbl.text = LS("本群简介")
-            cell.infoLbl.text = targetClub.clubDescription ?? LS("正在获取数据...")
-            return cell
-        case 2:
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-            cell.selectionStyle = .None
-            cell.boolSelect.hidden = true
-            cell.staticLbl.text = LS("本群活动")
-            cell.infoLbl.text = targetClub.name ?? LS("正在获取数据")
-            return cell
+            return tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
+                .setData(LS("本群简介"), propertyValue: targetClub.clubDescription ?? LS("正在获取数据..."), editable: false)
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("inline_user_select", forIndexPath: indexPath)
             cell.selectionStyle = .None
@@ -130,6 +112,7 @@ class ClubBriefInfoController: UITableViewController {
                 inlineUserSelect?.users = Array(targetClub.members)
                 inlineUserSelect?.showAddBtn = false
                 inlineUserSelect?.showDeleteBtn = false
+                inlineUserSelect?.parentController = self
                 cell.contentView.addSubview(inlineUserSelect!.view)
                 inlineUserSelect?.view.snp_makeConstraints(closure: { (make) -> Void in
                     make.edges.equalTo(cell.contentView).inset(UIEdgeInsetsMake(20, 0, 0, 0))
@@ -144,7 +127,7 @@ class ClubBriefInfoController: UITableViewController {
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return 114
-        }else if indexPath.row < 3{
+        }else if indexPath.row < 2 {
             return 50
         }else {
             let userNum = targetClub.members.count

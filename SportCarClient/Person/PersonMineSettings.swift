@@ -27,6 +27,8 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
         return PersonMineSettingsDataSource.sharedDataSource.cacheSizeDes ?? LS("正在获取缓存大小")
     }
     
+    private weak var toast: UIView?
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
@@ -36,12 +38,13 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
         navSettings()
         tableView.registerClass(PersonMineSettingsBtnsCell.self, forCellReuseIdentifier: PersonMineSettingsBtnsCell.reuseIdentifier)
         // 复用这个cell
+        SSPropertyCell.registerTableView(tableView)
         tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
         
         tableView.separatorStyle = .None
         //
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dataSourceDidFinishUpdating:", name: PMUpdateFinishedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dataSourceUpateError:", name: PMUpdateErrorNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonMineSettings.dataSourceDidFinishUpdating(_:)), name: PMUpdateFinishedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonMineSettings.dataSourceUpateError(_:)), name: PMUpdateErrorNotification, object: nil)
         let dataSource = PersonMineSettingsDataSource.sharedDataSource
         dataSource.update()
     }
@@ -51,6 +54,13 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
         tableView.reloadData()
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(true)
+        if toast != nil {
+            hideToast(toast!)
+        }
+    }
+    
     func navSettings() {
         self.navigationItem.title = LS("设置")
         self.navigationController?.setNavigationBarHidden(false, animated: false)
@@ -58,7 +68,7 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(PersonMineSettings.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
     }
     
@@ -80,30 +90,23 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
+            let cell =  tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
             cell.staticLbl.text = kMineSettingsStaticLabelString[indexPath.row]
-            cell.boolSelect.hidden = true
             switch indexPath.row {
             case 2:
-                cell.editable = true
-                cell.infoLbl.text = locationVisible
-                break
+                return cell.setData(kMineSettingsStaticLabelString[indexPath.row], propertyValue: locationVisible)
             case 3:
-                cell.editable = true
-                cell.infoLbl.text = acceptInvitation
-                break
+                return cell.setData(kMineSettingsStaticLabelString[indexPath.row], propertyValue: acceptInvitation)
             case 4:
-                cell.editable = false
-                cell.infoLbl.text = cacheSizeRepre
-                break
+                return cell.setData(kMineSettingsStaticLabelString[indexPath.row], propertyValue: cacheSizeRepre)
             default:
-                break
+                return cell.setData(kMineSettingsStaticLabelString[indexPath.row], propertyValue: nil)
             }
-            return cell
         }else{
             let cell = tableView.dequeueReusableCellWithIdentifier(PersonMineSettingsBtnsCell.reuseIdentifier,
                 forIndexPath: indexPath) as! PersonMineSettingsBtnsCell
-            cell.quitBtn.addTarget(self, action: "quitBtnPressed", forControlEvents: .TouchUpInside)
+            cell.quitBtn.addTarget(self, action: #selector(PersonMineSettings.quitBtnPressed), forControlEvents: .TouchUpInside)
+            cell.selectionStyle = .None
             return cell
         }
     }
@@ -159,7 +162,7 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
     }
     
     func didSelectUser(users: [User]) {
-        
+        // TODO
     }
     
     func dataSourceDidFinishUpdating(notif: Notification) {
@@ -171,8 +174,19 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
     }
     
     func quitBtnPressed() {
+        toast = showConfirmToast(LS("是否确认退出?"), target: self, confirmSelector: #selector(quitConfirmed), cancelSelector: #selector(hideToast as ()->()))
+    }
+    
+    func quitConfirmed() {
+        hideToast()
         let app = AppManager.sharedAppManager
         app.logout()
+    }
+    
+    func hideToast() {
+        if toast != nil {
+            hideToast(toast!)
+        }
     }
 }
 

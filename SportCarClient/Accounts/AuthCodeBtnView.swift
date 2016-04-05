@@ -34,7 +34,7 @@ class AuthCodeBtnView: UIButton {
             case .CountDown:
                 self.indicator.stopAnimating()
                 self.setTitle("\(maxCD)", forState: .Normal)
-                updateTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "countDownUpdater", userInfo: nil, repeats: true)
+                updateTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(AuthCodeBtnView.countDownUpdater), userInfo: nil, repeats: true)
                 self.userInteractionEnabled = false
                 break
             }

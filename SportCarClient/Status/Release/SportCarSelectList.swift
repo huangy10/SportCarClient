@@ -15,6 +15,7 @@ class SportCarSelectListController: UICollectionViewController{
     var cars: [SportCar] = []
     
     var selectedCar: SportCar?
+    private var _preSel: Int = -1
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
@@ -65,13 +66,26 @@ class SportCarSelectListController: UICollectionViewController{
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(SportCarSelectListCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarSelectListCell
         let car = cars[indexPath.row]
         cell.car = car
+        cell.marked = (car.ssid == selectedCar?.ssid)
         cell.sportCarNameLbL?.text = car.name
         return cell
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row < cars.count{
-            selectedCar = cars[indexPath.row]
+            if indexPath.row != _preSel {
+                selectedCar = cars[indexPath.row]
+                if _preSel >= 0 {
+                    collectionView.reloadItemsAtIndexPaths([indexPath, NSIndexPath(forItem: _preSel, inSection: 0)])
+                } else {
+                    collectionView.reloadItemsAtIndexPaths([indexPath])
+                }
+                _preSel = indexPath.row
+            } else {
+                selectedCar = nil
+                collectionView.reloadItemsAtIndexPaths([indexPath])
+                _preSel = -1
+            }
         }
     }
     
@@ -104,9 +118,9 @@ class SportCarSelectListCell: UICollectionViewCell {
     var selectMarker: UIImageView?
     var sportCarNameLbL: UILabel?
     
-    override var selected: Bool {
+    var marked: Bool = false {
         didSet {
-            if selected {
+            if marked {
                 selectMarker?.image = UIImage(named: "status_add_sport_car_selected")
                 sportCarNameLbL?.textColor = UIColor.blackColor()
             }else {
@@ -171,7 +185,7 @@ class SportCarSelectListAddCell: UICollectionViewCell {
         //
         addBtn = UIButton()
         addBtn?.setImage(UIImage(named: "person_add_more"), forState: .Normal)
-        addBtn?.addTarget(self, action: "addPressed", forControlEvents: .TouchUpInside)
+        addBtn?.addTarget(self, action: #selector(SportCarSelectListAddCell.addPressed), forControlEvents: .TouchUpInside)
         superview.addSubview(addBtn!)
         addBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.center.equalTo(superview).offset(CGPointMake(-20, 0))

@@ -35,29 +35,32 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     override func viewWillDisappear(animated: Bool) {
         // Override this to disable self.locating
         rp_cancelRequest()
+        if toast != nil {
+            hideToast()
+        }
     }
     
     func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         navigationItem.title = LS("个人信息")
         //
-        let backBtn = UIButton()
-        backBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        backBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
-        backBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        let backBtn = UIButton().config(
+            self, selector: #selector(navLeftBtnPressed),
+            image: UIImage(named: "account_header_back_btn"))
+            .setFrame(CGRectMake(0, 0, 10.5, 18))
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
         //
-        let shareBtn = UIButton()
-        shareBtn.setImage(UIImage(named: "status_detail_other_operation"), forState: .Normal)
+        let shareBtn = UIButton().config(
+            self, selector: #selector(navRightBtnPressed),
+            image: UIImage(named: "status_detail_other_operation"))
+            .setFrame(CGRectMake(0, 0, 24, 214))
         shareBtn.imageView?.contentMode = .ScaleAspectFit
-        shareBtn.frame = CGRect(x: 0, y: 0, width: 24, height: 214)
-        shareBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareBtn)
         //
     }
     
     override func navRightBtnPressed() {
-        let report = ReportBlacklistViewController(parent: self)
+        let report = ReportBlacklistViewController(user: data.user, parent: self)
         self.presentViewController(report, animated: false, completion: nil)
     }
     
@@ -72,18 +75,18 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     override func getPersonInfoPanel() -> PersonHeaderMine {
         let panel = PersonHeaderOther()
         totalHeaderHeight = 906 / 750 * self.view.frame.width
-        panel.followBtn.addTarget(self, action: "followBtnPressed:", forControlEvents: .TouchUpInside)
-        panel.chatBtn.addTarget(self, action: "chatBtnPressed", forControlEvents: .TouchUpInside)
-        panel.locBtn.addTarget(self, action: "locateBtnPressed", forControlEvents: .TouchUpInside)
+        panel.followBtn.addTarget(self, action: #selector(PersonOtherController.followBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        panel.chatBtn.addTarget(self, action: #selector(PersonOtherController.chatBtnPressed), forControlEvents: .TouchUpInside)
+        panel.locBtn.addTarget(self, action: #selector(PersonOtherController.locateBtnPressed), forControlEvents: .TouchUpInside)
         //
         if data.user.followed {
             panel.followBtn.setImage(UIImage(named: "person_followed"), forState: .Normal)
             panel.followBtnTmpImage.image = UIImage(named: "person_followed")
         }
-        panel.fanslistBtn.addTarget(self, action: "fanslistPressed", forControlEvents: .TouchUpInside)
-        panel.followlistBtn.addTarget(self, action: "followlistPressed", forControlEvents: .TouchUpInside)
-        panel.statuslistBtn.addTarget(self, action: "statuslistPressed", forControlEvents: .TouchUpInside)
-        panel.detailBtn.addTarget(self, action: "detailBtnPressed", forControlEvents: .TouchUpInside)
+        panel.fanslistBtn.addTarget(self, action: #selector(fanslistPressed), forControlEvents: .TouchUpInside)
+        panel.followlistBtn.addTarget(self, action: #selector(followlistPressed), forControlEvents: .TouchUpInside)
+        panel.statuslistBtn.addTarget(self, action: #selector(statuslistPressed), forControlEvents: .TouchUpInside)
+        panel.detailBtn.addTarget(self, action: #selector(PersonBasicController.detailBtnPressed), forControlEvents: .TouchUpInside)
         return panel
     }
     
@@ -131,7 +134,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
         needNavigation()
     }
     func needNavigation() {
-        toast = self.showConfirmToast(LS("跳转到地图导航?"), target: self, confirmSelector: "openMapToNavigate", cancelSelector: "hideToast")
+        toast = self.showConfirmToast(LS("跳转到地图导航?"), target: self, confirmSelector: #selector(PersonOtherController.openMapToNavigate), cancelSelector: #selector(PersonOtherController.hideToast as (PersonOtherController) -> () -> ()))
     }
     
     func hideToast() {

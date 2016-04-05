@@ -30,8 +30,8 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     init(user: User) {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .Vertical
-        flowLayout.minimumInteritemSpacing = 0
-        flowLayout.minimumLineSpacing = 0
+        flowLayout.minimumInteritemSpacing = 2.5
+        flowLayout.minimumLineSpacing = 2.5
         super.init(collectionViewLayout: flowLayout)
         
         data = PersonDataSource()
@@ -48,7 +48,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onStatusDelete:", name: kStatusDidDeletedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonBasicController.onStatusDelete(_:)), name: kStatusDidDeletedNotification, object: nil)
         
         createSubviews()
         
@@ -114,19 +114,20 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         let screenWidth = self.view.frame.width
         totalHeaderHeight = 848.0 / 750 * screenWidth
         let header = PersonHeaderMine()
-        header.navRightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
-        header.navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
-        header.detailBtn.addTarget(self, action: "detailBtnPressed", forControlEvents: .TouchUpInside)
+        header.navRightBtn.addTarget(self, action: #selector(PersonBasicController.navRightBtnPressed), forControlEvents: .TouchUpInside)
+        header.navLeftBtn.addTarget(self, action: #selector(PersonBasicController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        header.detailBtn.addTarget(self, action: #selector(PersonBasicController.detailBtnPressed), forControlEvents: .TouchUpInside)
         
-        header.fanslistBtn.addTarget(self, action: "fanslistPressed", forControlEvents: .TouchUpInside)
-        header.followlistBtn.addTarget(self, action: "followlistPressed", forControlEvents: .TouchUpInside)
-        header.statuslistBtn.addTarget(self, action: "statuslistPressed", forControlEvents: .TouchUpInside)
+        header.fanslistBtn.addTarget(self, action: #selector(PersonBasicController.fanslistPressed), forControlEvents: .TouchUpInside)
+        header.followlistBtn.addTarget(self, action: #selector(PersonBasicController.followlistPressed), forControlEvents: .TouchUpInside)
+        header.statuslistBtn.addTarget(self, action: #selector(PersonBasicController.statuslistPressed), forControlEvents: .TouchUpInside)
         return header
     }
     
     func createSubviews() {
         let superview = self.view
         collectionView?.backgroundColor = UIColor.whiteColor()
+        collectionView?.contentInset = UIEdgeInsetsMake(5, 5, 5, 5)
         //
         let screenWidth = superview.frame.width
         let authCarListHeight: CGFloat = 62
@@ -254,12 +255,12 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let screenWidth = UIScreen.mainScreen().bounds.width
         if data.selectedCar == nil {
-            return CGSizeMake(screenWidth / 3, screenWidth / 3)
+            return CGSizeMake(screenWidth / 3 - 5, screenWidth / 3 - 5)
         }else {
             if indexPath.section == 0 {
                 return SportCarInfoCell.getPreferredSizeForSignature(data.selectedCar!.signature ?? "", carName: data.selectedCar!.name!)
             }else{
-                return CGSizeMake(screenWidth / 3, screenWidth / 3)
+                return CGSizeMake(screenWidth / 3 - 5, screenWidth / 3 - 5)
             }
         }
     }
@@ -300,7 +301,7 @@ extension PersonBasicController {
         userAnno.coordinate = userLocation.location.coordinate
         self.userLocation = userLocation
         let userLocInScreen = header.map.convertCoordinate(userLocation.location.coordinate, toPointToView: header.map)
-        let userLocWithOffset = CGPointMake(userLocInScreen.x + header.frame.width / 4, userLocInScreen.y + header.frame.height / 3)
+        let userLocWithOffset = CGPointMake(userLocInScreen.x + header.frame.width / 4, userLocInScreen.y + header.frame.height / 2)
         let newCoordinate = header.map.convertPoint(userLocWithOffset, toCoordinateFromView: header.map)
         let region = BMKCoordinateRegionMakeWithDistance(newCoordinate, 3000, 5000)
 

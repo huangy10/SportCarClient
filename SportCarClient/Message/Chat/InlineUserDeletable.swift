@@ -99,7 +99,7 @@ class InlineUserSelectDeletableCell: InlineUserSelectCell {
         
         deleteBtn = UIButton()
         deleteBtn.setImage(UIImage(named: "status_delete_image_btn"), forState: .Normal)
-        deleteBtn.addTarget(self, action: "deleteBtnPressed", forControlEvents: .TouchUpInside)
+        deleteBtn.addTarget(self, action: #selector(InlineUserSelectDeletableCell.deleteBtnPressed), forControlEvents: .TouchUpInside)
         superview.addSubview(deleteBtn)
         deleteBtn.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(avatarImg)

@@ -88,7 +88,7 @@ class ShareController: UIViewController {
         //
         let cancelBtn = UIButton()
         cancelBtn.setImage(UIImage(named: "news_comment_cancel_btn"), forState: .Normal)
-        cancelBtn.addTarget(self, action: "cancelBtnPressed", forControlEvents: .TouchUpInside)
+        cancelBtn.addTarget(self, action: #selector(ShareController.cancelBtnPressed), forControlEvents: .TouchUpInside)
         container.addSubview(cancelBtn)
         cancelBtn.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
@@ -119,7 +119,7 @@ class ShareController: UIViewController {
         shareSina = UIButton()
         shareSina.tag = 2
         shareSina.setImage(UIImage(named: "share_sinaweibo"), forState: .Normal)
-        shareSina.addTarget(self, action: "shareBtnPressed:", forControlEvents: .TouchUpInside)
+        shareSina.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(shareSina)
         shareSina.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(container.snp_centerX).offset(15)
@@ -130,7 +130,7 @@ class ShareController: UIViewController {
         shareQQ = UIButton()
         shareQQ.tag = 3
         shareQQ.setImage(UIImage(named: "share_qq"), forState: .Normal)
-        shareQQ.addTarget(self, action: "shareBtnPressed:", forControlEvents: .TouchUpInside)
+        shareQQ.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(shareQQ)
         shareQQ.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(shareSina.snp_right).offset(30)
@@ -141,7 +141,7 @@ class ShareController: UIViewController {
         shareWechatFriend = UIButton()
         shareWechatFriend.tag = 1
         shareWechatFriend.setImage(UIImage(named: "share_wechat_friend"), forState: .Normal)
-        shareWechatFriend.addTarget(self, action: "shareBtnPressed:", forControlEvents: .TouchUpInside)
+        shareWechatFriend.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(shareWechatFriend)
         shareWechatFriend.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(container.snp_centerX).offset(-15)
@@ -152,7 +152,7 @@ class ShareController: UIViewController {
         shareWechat = UIButton()
         shareWechat.tag = 0
         shareWechat.setImage(UIImage(named: "share_wechat"), forState: .Normal)
-        shareWechat.addTarget(self, action: "shareBtnPressed:", forControlEvents: .TouchUpInside)
+        shareWechat.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(shareWechat)
         shareWechat.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(shareWechatFriend.snp_left).offset(-30)

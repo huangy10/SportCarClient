@@ -84,7 +84,7 @@ class ImageViewer: UIViewController {
         
         closeButton.setImage(image, forState: .Normal)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.addTarget(self, action: "closeButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
+        closeButton.addTarget(self, action: #selector(ImageViewer.closeButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(closeButton)
         
         view.setNeedsUpdateConstraints()
@@ -139,7 +139,7 @@ class ImageViewer: UIViewController {
     
     // MARK: - Gestures
     func addPanGestureToView() {
-        panGesture = UIPanGestureRecognizer(target: self, action: "gestureRecognizerDidPan:")
+        panGesture = UIPanGestureRecognizer(target: self, action: #selector(ImageViewer.gestureRecognizerDidPan(_:)))
         panGesture.cancelsTouchesInView = false
         panGesture.delegate = self
         
@@ -147,12 +147,12 @@ class ImageViewer: UIViewController {
     }
     
     func addGestures() {
-        let singleTapRecognizer = UITapGestureRecognizer(target: self, action: "didSingleTap:")
+        let singleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ImageViewer.didSingleTap(_:)))
         singleTapRecognizer.numberOfTapsRequired = 1
         singleTapRecognizer.numberOfTouchesRequired = 1
         scrollView.addGestureRecognizer(singleTapRecognizer)
         
-        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: "didDoubleTap:")
+        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ImageViewer.didDoubleTap(_:)))
         doubleTapRecognizer.numberOfTapsRequired = 2
         doubleTapRecognizer.numberOfTouchesRequired = 1
         scrollView.addGestureRecognizer(doubleTapRecognizer)

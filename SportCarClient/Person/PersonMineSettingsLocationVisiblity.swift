@@ -39,10 +39,10 @@ class PersonMineSettingsLocationVisiblityController: UITableViewController {
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(PersonMineSettingsLocationVisiblityController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: "navRightBtnPressed")
+        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: #selector(PersonMineSettingsLocationVisiblityController.navRightBtnPressed))
         rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }
@@ -78,7 +78,7 @@ class PersonMineSettingsLocationVisiblityController: UITableViewController {
                 cell.useAsMark = false
                 cell.boolSelect.hidden = false
                 cell.boolSelect.on = showOnMap
-                cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
+                cell.boolSelect.addTarget(self, action: #selector(PersonMineSettingsLocationVisiblityController.switchBtnPressed(_:)), forControlEvents: .ValueChanged)
             }else{
                 cell.useAsMark = true
                 if cell.staticLbl.text == kPersonMineSettingsLocationVisibleMapping[selectedType!] {

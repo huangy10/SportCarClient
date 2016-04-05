@@ -48,8 +48,8 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         //
         navSettings()
         //
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardAppears:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardDisappears:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivityDetailController.changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivityDetailController.changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
         //
         let requester = ActivityRequester.requester
         // 尽管已经传入了一个较为完整的活动对象，但是为了保证数据最新，仍然向服务器发起请求
@@ -97,8 +97,8 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         //
         actInfoBoard = ActivityDetailBoardView()
         actInfoBoard.frame = self.view.bounds
-        actInfoBoard.hostAvatar.addTarget(self, action: "hostAvatarPressed", forControlEvents: .TouchUpInside)
-        actInfoBoard.editBtn.addTarget(self, action: "editBtnPressed", forControlEvents: .TouchUpInside)
+        actInfoBoard.hostAvatar.addTarget(self, action: #selector(ActivityDetailController.hostAvatarPressed), forControlEvents: .TouchUpInside)
+        actInfoBoard.editBtn.addTarget(self, action: #selector(ActivityDetailController.editBtnPressed), forControlEvents: .TouchUpInside)
         actInfoBoard.parentController = self
         actInfoBoard.memberDisplay.delegate = self
         //
@@ -109,7 +109,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         self.inputFields.append(commentPanel.contentInput)
         commentPanel.contentInput?.delegate = self
         self.view.addSubview(commentPanel)
-        commentPanel.likeBtn?.addTarget(self, action: "likeBtnPressed", forControlEvents: .TouchUpInside)
+        commentPanel.likeBtn?.addTarget(self, action: #selector(ActivityDetailController.likeBtnPressed), forControlEvents: .TouchUpInside)
         commentPanel.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -126,10 +126,10 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(ActivityDetailController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: act.mine ? LS("关闭活动") : (act.applied ? LS("已报名") : LS("报名")), style: .Done, target: self, action: "navRightBtnPressed")
+        let rightItem = UIBarButtonItem(title: act.mine ? LS("关闭活动") : (act.applied ? LS("已报名") : LS("报名")), style: .Done, target: self, action: #selector(ActivityDetailController.navRightBtnPressed))
         rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navRightItem = rightItem
         self.navigationItem.rightBarButtonItem = rightItem
@@ -168,17 +168,19 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
             // 报名
             let endAt = act.endAt!
             if endAt.compare(NSDate()) == NSComparisonResult.OrderedAscending {
-                self.displayAlertController(LS("活动已结束，无法报名"), message: nil)
+                self.showToast(LS("活动已结束，无法报名"))
                 return
             }
             requester.postToApplyActivty(act.ssidString, onSuccess: { (json) -> () in
                 // 当前用户加入
-                // TODO: 把下面的修改放在网络请求前面
+                // TODO: 把下面的修改放在网络请求前面OA
                 self.act.hostApply()
                 self.actInfoBoard.loadDataAndUpdateUI()
                 self.navRightItem?.title = LS("已报名")
+                self.showToast(LS("报名成功"))
                 }, onError: { (code) -> () in
                     print(code)
+                    self.showToast(LS("报名失败"))
             })
             
         }
@@ -209,7 +211,7 @@ class ActivityDetailController: InputableViewController, UITableViewDelegate, UI
             let cell = tableView.dequeueReusableCellWithIdentifier(MapCell.reuseIdentifier, forIndexPath: indexPath) as! MapCell
             let center = CLLocationCoordinate2D(latitude: act.location!.latitude, longitude: act.location!.longitude)
             cell.setMapCenter(center)
-            cell.locBtn.addTarget(self, action: "needNavigation", forControlEvents: .TouchUpInside)
+            cell.locBtn.addTarget(self, action: #selector(ActivityDetailController.needNavigation), forControlEvents: .TouchUpInside)
             cell.locLbl.text = LS("导航至 ") + (act.location?.descr ?? LS("未知地点"))
             cell.locDesIcon.image = UIImage(named: "person_guide_to")
             return cell
@@ -395,7 +397,7 @@ extension ActivityDetailController {
     }
     
     func needNavigation() {
-        toast = self.showConfirmToast(LS("跳转到地图导航?"), target: self, confirmSelector: "openMapToNavigate", cancelSelector: "hideToast")
+        toast = self.showConfirmToast(LS("跳转到地图导航?"), target: self, confirmSelector: #selector(ActivityDetailController.openMapToNavigate), cancelSelector: #selector(ActivityDetailController.hideToast as (ActivityDetailController) -> () -> ()))
     }
     
     func hideToast() {

@@ -148,7 +148,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
         }
         let districtSelectBtn = UIButton()
         container.addSubview(districtSelectBtn)
-        districtSelectBtn.addTarget(self, action: "districtSelectBtnPressed", forControlEvents: .TouchUpInside)
+        districtSelectBtn.addTarget(self, action: #selector(ClubAuthController.districtSelectBtnPressed), forControlEvents: .TouchUpInside)
         districtSelectBtn.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(container)
             make.top.equalTo(container)
@@ -194,7 +194,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             make.height.equalTo(0.5)
         }
         let desEditBtn = UIButton()
-        desEditBtn.addTarget(self, action: "desEditBtnPressed", forControlEvents: .TouchUpInside)
+        desEditBtn.addTarget(self, action: #selector(ClubAuthController.desEditBtnPressed), forControlEvents: .TouchUpInside)
         container.addSubview(desEditBtn)
         desEditBtn.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(desStaticLbl)

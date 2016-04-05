@@ -35,7 +35,7 @@ class LocationModel: BaseInMemModel {
         try super.loadDataFromJSON(data)
         latitude = data["lat"].doubleValue
         longitude = data["lon"].doubleValue
-        descr = data["des"].stringValue
+        descr = data["description"].stringValue
         if latitude == 0 && longitude == 0 {
             throw SSModelError.InvalidJSON
         }

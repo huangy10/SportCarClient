@@ -23,6 +23,8 @@ class MessageController: UIViewController {
     var chatList: ChatListController!
     var notificationList: NotificationController!
     
+    private var _curTag = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
@@ -32,6 +34,11 @@ class MessageController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        if _curTag == 0 {
+            notificationList.viewWillAppear(animated)
+        } else {
+            chatList.viewWillAppear(animated)
+        }
     }
     
     func createSubviews() {
@@ -77,13 +84,13 @@ class MessageController: UIViewController {
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 15, 13.5)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(MessageController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         
         let navRightBtn = UIButton()
         navRightBtn.setImage(UIImage(named: "status_add_btn_white"), forState: .Normal)
         navRightBtn.frame = CGRectMake(0, 0, 21, 21)
-        navRightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+        navRightBtn.addTarget(self, action: #selector(MessageController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navRightBtn)
     }
     
@@ -105,7 +112,7 @@ class MessageController: UIViewController {
             make.right.equalTo(container.snp_centerX).offset(-8)
         }
         titleNotifBtn.tag = 0
-        titleNotifBtn.addTarget(self, action: "titleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleNotifBtn.addTarget(self, action: #selector(MessageController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         //
         titleChatBtn = UIButton()
         titleChatBtn.setTitle(LS("聊天"), forState: .Normal)
@@ -119,7 +126,7 @@ class MessageController: UIViewController {
             make.left.equalTo(container.snp_centerX).offset(8)
         }
         titleChatBtn.tag = 1
-        titleChatBtn.addTarget(self, action: "titleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleChatBtn.addTarget(self, action: #selector(MessageController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         //
         titleBtnIcon = UIImageView(image: UIImage(named: "account_header_button"))
         container.addSubview(titleBtnIcon)
@@ -140,8 +147,13 @@ class MessageController: UIViewController {
     }
     
     func titleBtnPressed(sender: UIButton) {
+        if sender.tag == _curTag {
+            return
+        }
         if sender.tag == 1 {
             // 按下了聊天按钮
+            chatList.viewWillAppear(true)
+            notificationList.viewWillDisappear(true)
             board.setContentOffset(CGPointMake(board.frame.width, 0), animated: true)
             titleBtnIcon.snp_remakeConstraints(closure: { (make) -> Void in
                 make.edges.equalTo(titleChatBtn)
@@ -152,6 +164,8 @@ class MessageController: UIViewController {
                 self.titleBtnIcon.superview!.layoutIfNeeded()
                 }, completion: nil)
         }else {
+            chatList.viewWillDisappear(true)
+            notificationList.viewWillAppear(true)
             board.setContentOffset(CGPoint.zero, animated: true)
             titleBtnIcon.snp_remakeConstraints(closure: { (make) -> Void in
                 make.edges.equalTo(titleNotifBtn)
@@ -162,7 +176,7 @@ class MessageController: UIViewController {
                 self.titleBtnIcon.superview!.layoutIfNeeded()
                 }, completion: nil)
         }
-
+        _curTag = sender.tag
     }
     
 }

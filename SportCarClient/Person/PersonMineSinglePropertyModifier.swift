@@ -62,10 +62,10 @@ class PersonMineSinglePropertyModifierController: InputableViewController {
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(PersonMineSinglePropertyModifierController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: "navRightBtnPressed")
+        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: #selector(PersonMineSinglePropertyModifierController.navRightBtnPressed))
         rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }

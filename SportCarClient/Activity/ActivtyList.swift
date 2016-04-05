@@ -27,7 +27,7 @@ class ActivityHomeMineListController: UITableViewController {
         tableView.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         //
         refreshControl = UIRefreshControl()
-        refreshControl!.addTarget(self, action: "getLatestActData", forControlEvents: .ValueChanged)
+        refreshControl!.addTarget(self, action: #selector(ActivityHomeMineListController.getLatestActData), forControlEvents: .ValueChanged)
         tableView.addSubview(refreshControl!)
         getMoreActData()
     }

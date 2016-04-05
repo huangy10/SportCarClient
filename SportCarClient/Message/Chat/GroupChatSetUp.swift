@@ -56,7 +56,7 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
             make.top.equalTo(logoLbl.snp_bottom).offset(20)
             make.size.equalTo(90)
         }
-        logo.addTarget(self, action: "logoBtnPressed", forControlEvents: .TouchUpInside)
+        logo.addTarget(self, action: #selector(GroupChatSetupController.logoBtnPressed), forControlEvents: .TouchUpInside)
         //
         nameInput = UITextField()
         nameInput.delegate = self
@@ -90,10 +90,10 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(GroupChatSetupController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: "navRightBtnPressed")
+        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: #selector(GroupChatSetupController.navRightBtnPressed))
         rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }

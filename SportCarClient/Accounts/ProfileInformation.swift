@@ -36,7 +36,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
     func navBarLeftBtn() -> UIBarButtonItem! {
         let backBtn = UIButton()
         backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        backBtn.addTarget(self, action: "backBtnPressed", forControlEvents: .TouchUpInside)
+        backBtn.addTarget(self, action: #selector(ProfileInfoController.backBtnPressed), forControlEvents: .TouchUpInside)
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.2, height: 18)
         
         let leftBtnItem = UIBarButtonItem(customView: backBtn)
@@ -48,7 +48,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         nextStepBtn.setTitle(NSLocalizedString("下一步", comment: ""), forState: .Normal)
         nextStepBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
         nextStepBtn.titleLabel?.font = kBarTextFont
-        nextStepBtn.addTarget(self, action: "nextBtnPressed", forControlEvents: .TouchUpInside)
+        nextStepBtn.addTarget(self, action: #selector(ProfileInfoController.nextBtnPressed), forControlEvents: .TouchUpInside)
         let rightBtnItem = UIBarButtonItem(customView: nextStepBtn)
         return rightBtnItem
     }
@@ -118,7 +118,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(42)
         }
-        avatarBtn?.addTarget(self, action: "avatarPressed", forControlEvents: .TouchUpInside)
+        avatarBtn?.addTarget(self, action: #selector(ProfileInfoController.avatarPressed), forControlEvents: .TouchUpInside)
         // 
         nickNameInput = UITextField()
         nickNameInput?.placeholder = NSLocalizedString("请输入您的昵称", comment: "")
@@ -157,7 +157,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
             make.right.equalTo(nickNameInput!)
             make.height.equalTo(27.5)
         })
-        genderInput?.addTarget(self, action: "genderPressed", forControlEvents: .TouchUpInside)
+        genderInput?.addTarget(self, action: #selector(ProfileInfoController.genderPressed), forControlEvents: .TouchUpInside)
         //
         let arrowIcon = UIImageView(image: UIImage(named: "account_profile_down_arrow"))
         genderInput?.addSubview(arrowIcon)
@@ -189,7 +189,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
             make.right.equalTo(genderInput!)
             make.height.equalTo(27.5)
         })
-        birthDateInput?.addTarget(self, action: "birthDatePressed", forControlEvents: .TouchUpInside)
+        birthDateInput?.addTarget(self, action: #selector(ProfileInfoController.birthDatePressed), forControlEvents: .TouchUpInside)
         //
         let arrowIcon2 = UIImageView(image: UIImage(named: "account_profile_down_arrow"))
         birthDateInput?.addSubview(arrowIcon2)
@@ -252,7 +252,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
             make.height.equalTo(pickerHeader)
             make.width.equalTo(30)
         }
-        pickerDoneBtn.addTarget(self, action: "pickerDonePressed", forControlEvents: .TouchUpInside)
+        pickerDoneBtn.addTarget(self, action: #selector(ProfileInfoController.pickerDonePressed), forControlEvents: .TouchUpInside)
         //
         genderPickerView = UIPickerView()
         genderPickerView?.delegate = self

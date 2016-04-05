@@ -85,7 +85,7 @@ class ShinyButton: UIView {
     
     func start() {
         preScreenShot = nil
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "updateSelf", userInfo: nil, repeats: true)
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(ShinyButton.updateSelf), userInfo: nil, repeats: true)
         self.timer?.fire()
     }
 }

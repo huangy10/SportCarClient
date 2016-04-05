@@ -291,6 +291,7 @@ class ChatRecordDataSource {
     }
     
     func pause() {
+        requester.chatRequest?.cancel()
         started = false
         pauser = dispatch_semaphore_create(0)
         dispatch_async(ChatRequester.requester.privateQueue) { () -> Void in

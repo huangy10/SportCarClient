@@ -40,7 +40,8 @@ class Club: BaseModel {
     
     var recentActivity: Activity? = nil
 
-    override func loadDataFromJSON(var data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Self {
+    override func loadDataFromJSON(data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Self {
+        var data = data
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         // TODO: 统一数据的样式
 //        if data["club"].isExists() {

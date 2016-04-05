@@ -15,10 +15,36 @@ class AppManager: UIViewController {
     
     /// 全局的instance对象
     static let sharedAppManager = AppManager()
+    var deviceTokenString: String? {
+        didSet {
+            // TODO: 将这个token上传给服务器
+            if MainManager.sharedManager.hostUser == nil {
+                
+            } else {
+                
+            }
+        }
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         launch()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(unreadChange(_:)), name: kNotificationUnreadClearNotification, object: nil)
+    }
+    
+    func unreadChange(notification: NSNotification) {
+        let unreadNum = ChatRecordDataSource.sharedDataSource.totalUnreadNum
+        UIApplication.sharedApplication().applicationIconBadgeNumber = unreadNum
+        // sync to the backend
+        ChatRequester.requester.clearNotificationUnreadNum({ (json) in
+            print("success")
+            }) { (code) in
+                print("fail")
+        }
     }
     
     /**
@@ -54,6 +80,11 @@ class AppManager: UIViewController {
      推出当前所有的展示内容回到登陆页面
      */
     func logout() {
+        AccountRequester.sharedRequester.logout({ (json) -> (Void) in
+            print("logout")
+            }) { (code) -> (Void) in
+                print("logout fails")
+        }
         // 在三个modelmanager上面注销用户
         MainManager.sharedManager.logout()
         ChatModelManger.sharedManager.logout()
@@ -70,5 +101,18 @@ class AppManager: UIViewController {
         self.presentViewController(nav, animated: true, completion: nil)
         self.navigationController?.popToRootViewControllerAnimated(false)
         NSNotificationCenter.defaultCenter().postNotificationName(kAppManagerNotificationLogout, object: nil)
+    }
+    
+    // push notifications
+    
+    func registerForPushNotifications(application: UIApplication) {
+        let notificationSettings = UIUserNotificationSettings(forTypes: [.Sound, .Alert, .Badge], categories: nil)
+        application.registerUserNotificationSettings(notificationSettings)
+    }
+    
+    func loadHistoricalNotifications(launchOptions: [NSObject: AnyObject]?) {
+        if let notification = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [String: AnyObject] {
+            print(notification)
+        }
     }
 }

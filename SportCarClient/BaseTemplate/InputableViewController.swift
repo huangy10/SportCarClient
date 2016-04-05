@@ -24,7 +24,7 @@ class InputableViewController: UIViewController, UITextFieldDelegate, UITextView
     }
     
     func createSubviews(){
-        self.tapper = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.tapper = UITapGestureRecognizer(target: self, action: #selector(InputableViewController.dismissKeyboard))
         tapper?.enabled = false
         self.view.addGestureRecognizer(tapper!)
         

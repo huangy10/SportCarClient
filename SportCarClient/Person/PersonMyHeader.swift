@@ -52,7 +52,7 @@ class PersonHeaderMine: UIView {
         map.backgroundColor = UIColor.blackColor()
         superview.addSubview(map)
         map.snp_makeConstraints { (make) -> Void in
-            make.edges.equalTo(superview)
+            make.edges.equalTo(superview).inset(UIEdgeInsetsMake(-300, 0, 0, 0))
         }
         //
         backMask = BackMaskView()
@@ -82,6 +82,8 @@ class PersonHeaderMine: UIView {
         avatarCarBtn = UIButton()
         avatarCarBtn.layer.cornerRadius = 16.5
 //        avatarCarBtn.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        avatarCarBtn.imageView?.layer.cornerRadius = 16.5
+        avatarCarBtn.imageView?.contentMode = .ScaleAspectFit
         superview.addSubview(avatarCarBtn)
         avatarCarBtn.snp_makeConstraints { (make) -> Void in
             make.bottom.equalTo(avatarBtn)
@@ -144,67 +146,46 @@ class PersonHeaderMine: UIView {
             make.right.equalTo(arrowIcon)
         }
         //
-        fansNumLbl = UILabel()
-        fansNumLbl.textColor = UIColor.blackColor()
-        fansNumLbl.font = UIFont.systemFontOfSize(17, weight: UIFontWeightSemibold)
-        fansNumLbl.textAlignment = .Center
-        superview.addSubview(fansNumLbl)
-        fansNumLbl.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(avatarBtn)
-            make.top.equalTo(avatarBtn.snp_bottom).offset(35)
+        fansNumLbl = superview.addSubview(UILabel.self)
+            .config(21, fontWeight: UIFontWeightSemibold, textAlignment: .Center)
+            .layout({ (make) in
+                make.centerX.equalTo(avatarBtn)
+                make.top.equalTo(avatarBtn.snp_bottom).offset(35)
+            })
+        //
+        superview.addSubview(UILabel.self)
+            .config(15, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .Center, text: LS("粉丝"))
+            .layout { (make) in
+                make.top.equalTo(fansNumLbl.snp_bottom).offset(2)
+                make.centerX.equalTo(fansNumLbl)
         }
         //
-        let staticFansNumLbl = UILabel()
-        staticFansNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        staticFansNumLbl.font = UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)
-        staticFansNumLbl.textAlignment = .Center
-        staticFansNumLbl.text = LS("粉丝")
-        superview.addSubview(staticFansNumLbl)
-        staticFansNumLbl.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(fansNumLbl.snp_bottom).offset(2)
-            make.centerX.equalTo(fansNumLbl)
+        statusNumLbl = superview.addSubview(UILabel.self)
+            .config(21, fontWeight: UIFontWeightSemibold, textAlignment: .Center)
+            .layout({ (make) in
+                make.centerX.equalTo(fansNumLbl).offset(-85)
+                make.centerY.equalTo(fansNumLbl)
+            })
+        //
+        superview.addSubview(UILabel.self)
+            .config(15, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .Center, text: LS("动态"))
+            .layout { (make) in
+                make.centerX.equalTo(statusNumLbl)
+                make.top.equalTo(statusNumLbl.snp_bottom).offset(2)
         }
         //
-        statusNumLbl = UILabel()
-        statusNumLbl.font = UIFont.systemFontOfSize(17, weight: UIFontWeightSemibold)
-        statusNumLbl.textColor = UIColor.blackColor()
-        statusNumLbl.textAlignment = .Center
-        superview.addSubview(statusNumLbl)
-        statusNumLbl.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(fansNumLbl).offset(-85)
-            make.centerY.equalTo(fansNumLbl)
-        }
+        followNumLbl = superview.addSubview(UILabel.self)
+            .config(21, fontWeight: UIFontWeightSemibold, textAlignment: .Center)
+            .layout({ (make) in
+                make.centerX.equalTo(fansNumLbl).offset(85)
+                make.centerY.equalTo(fansNumLbl)
+            })
         //
-        let staticStatusNumLbl = UILabel()
-        staticStatusNumLbl.font = UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)
-        staticStatusNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        staticStatusNumLbl.textAlignment = .Center
-        staticStatusNumLbl.text = LS("动态")
-        superview.addSubview(staticStatusNumLbl)
-        staticStatusNumLbl.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(statusNumLbl)
-            make.top.equalTo(statusNumLbl.snp_bottom).offset(2)
-        }
-        //
-        followNumLbl = UILabel()
-        followNumLbl.textAlignment = .Center
-        followNumLbl.textColor = UIColor.blackColor()
-        followNumLbl.font = UIFont.systemFontOfSize(17, weight: UIFontWeightSemibold)
-        superview.addSubview(followNumLbl)
-        followNumLbl.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(fansNumLbl).offset(85)
-            make.centerY.equalTo(fansNumLbl)
-        }
-        //
-        let staticFollowNumLbl = UILabel()
-        staticFollowNumLbl.font = UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)
-        staticFollowNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        staticFollowNumLbl.textAlignment = .Center
-        staticFollowNumLbl.text = LS("关注")
-        superview.addSubview(staticFollowNumLbl)
-        staticFollowNumLbl.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(followNumLbl)
-            make.top.equalTo(followNumLbl.snp_bottom).offset(2)
+        superview.addSubview(UILabel.self)
+            .config(15, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .Center, text: LS("关注"))
+            .layout { (make) in
+                make.centerX.equalTo(followNumLbl)
+                make.top.equalTo(followNumLbl.snp_bottom).offset(2)
         }
         // 
         navLeftBtn = UIButton()

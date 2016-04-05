@@ -94,7 +94,7 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
         let leftBtn = UIButton()
         leftBtn.frame = CGRectMake(0, 0, 10.5, 18)
         leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        leftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        leftBtn.addTarget(self, action: #selector(UserSelectController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         let leftBtnItem = UIBarButtonItem(customView: leftBtn)
         self.navigationItem.leftBarButtonItem = leftBtnItem
     }
@@ -296,6 +296,7 @@ class UserSelectCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
+        self.selectionStyle = .None
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -307,7 +308,7 @@ class UserSelectCell: UITableViewCell {
         selectBtn = UIButton()
         selectBtn?.setImage(UIImage(named: "status_photo_unselected_small"), forState: .Normal)
         selectBtn?.setImage(UIImage(named: "status_photo_selected_small"), forState: .Selected)
-        selectBtn?.addTarget(self, action: "selectBtnPressed", forControlEvents: .TouchUpInside)
+        selectBtn?.addTarget(self, action: #selector(UserSelectCell.selectBtnPressed), forControlEvents: .TouchUpInside)
         selectBtn?.contentEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5)
         selectBtn?.selected = false
         superview.addSubview(selectBtn!)

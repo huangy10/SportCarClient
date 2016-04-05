@@ -23,6 +23,14 @@ class NotificationController: UITableViewController {
         data.list = self
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if data.unreadNum > 0 {
+            data.unreadNum = 0
+            NSNotificationCenter.defaultCenter().postNotificationName(kNotificationUnreadClearNotification, object: nil)
+        }
+    }
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -138,7 +146,7 @@ class NotificationController: UITableViewController {
             cell.showBtns = false
             return cell
             
-        case "act_invitation_accepted":
+        case "act_invitation_agreed":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
             cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user?.nickName
@@ -203,7 +211,7 @@ class NotificationController: UITableViewController {
             let detail = PersonOtherController(user: notification.user!)
             self.messageHome?.navigationController?.pushViewController(detail, animated: true)
             
-        case "act_applied", "act_invited", "act_denied", "act_invitation_accepted":
+        case "act_applied", "act_invited", "act_denied", "act_invitation_agreed":
             let detail = ActivityDetailController(act: try! notification.getRelatedObj()!)
             self.messageHome?.navigationController?.pushViewController(detail, animated: true)
             

@@ -44,7 +44,7 @@ class UserMapLocationManager: UIView {
         radarScan.frame = CGRectMake(0, 0, _size.width, _size.width)
         radarScan.transform = CGAffineTransformMakeRotation(3.14 / 2)
         //
-        updator = CADisplayLink(target: self, selector: "scanUpdate")
+        updator = CADisplayLink(target: self, selector: #selector(UserMapLocationManager.scanUpdate))
         updator.paused = true
         updator.frameInterval = 1
         updator.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)

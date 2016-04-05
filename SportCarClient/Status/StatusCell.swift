@@ -87,7 +87,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
             make.centerY.equalTo(headerContainer!)
             make.size.equalTo(35)
         })
-        avatarBtn?.addTarget(self, action: "avatarBtnPressed", forControlEvents: .TouchUpInside)
+        avatarBtn?.addTarget(self, action: #selector(StatusCell.avatarBtnPressed), forControlEvents: .TouchUpInside)
         //
         nameLbl = UILabel()
         nameLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightBlack)
@@ -102,6 +102,8 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         avatarClubBtn = UIButton()
         avatarClubBtn?.layer.cornerRadius = 10
         avatarClubBtn?.clipsToBounds = true
+        avatarClubBtn?.imageView?.layer.cornerRadius = 10
+        avatarClubBtn?.imageView?.contentMode = .ScaleAspectFill
         headerContainer?.addSubview(avatarClubBtn!)
         avatarClubBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.size.equalTo(20)
@@ -131,7 +133,9 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         })
         //
         avatarCarLogoIcon = UIImageView()
-        avatarCarLogoIcon?.contentMode = .ScaleAspectFit
+        avatarCarLogoIcon?.contentMode = .ScaleAspectFill
+        avatarCarLogoIcon?.layer.cornerRadius = 10.5
+        avatarCarLogoIcon?.clipsToBounds = true
         superview.addSubview(avatarCarLogoIcon!)
         avatarCarLogoIcon?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(avatarCarNameLbl!.snp_left)
@@ -170,7 +174,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         //
         contentLbl = UILabel()
         contentLbl?.textColor = UIColor.blackColor()
-        contentLbl?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)
+        contentLbl?.font = UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)
         contentLbl?.numberOfLines = 0
         superview.addSubview(contentLbl!)
         contentLbl?.snp_makeConstraints(closure: { (make) -> Void in
@@ -249,14 +253,15 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
     class func heightForStatus(data: Status) -> CGFloat{
         let content = data.content! as NSString
         let screenWidth = UIScreen.mainScreen().bounds.width
-        let textRect = content.boundingRectWithSize(CGSizeMake(screenWidth - 50, 1000), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)], context: nil)
+        let textRect = content.boundingRectWithSize(CGSizeMake(screenWidth - 50, 1000), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)], context: nil)
         // 1080 + 40 - 200 - 114
         let imageInfo = data.image!
         let otherImageHeight: CGFloat = imageInfo.split(";").count > 1 ? 100 : 0
-        return 550 + textRect.height + otherImageHeight
+        return 530 + textRect.height + otherImageHeight
     }
     
     func loadDataAndUpdateUI() {
+        assert(NSThread.isMainThread())
         if status == nil {
             return
         }
@@ -275,8 +280,8 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         }
         if let car = user.avatarCarModel {
             avatarCarNameLbl?.hidden = false
-            avatarCarNameLbl?.text = car.name
             avatarCarLogoIcon?.hidden = false
+            avatarCarNameLbl?.text = car.name
             avatarCarLogoIcon?.kf_setImageWithURL(car.logoURL!)
         }else{
             avatarCarLogoIcon?.hidden = true

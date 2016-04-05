@@ -34,7 +34,8 @@ class SportCar: BaseModel{
     override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool) throws -> Self {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         image = data["image"].stringValue
-        logo = data["image"].stringValue
+        logo = data["logo"].stringValue
+
         name = data["name"].stringValue
         if detailLevel >= 1 {
             price = data["price"].stringValue
@@ -47,6 +48,15 @@ class SportCar: BaseModel{
         identified = data["identified"].boolValue
         signature = data["signature"].stringValue
         return self
+    }
+    
+    override func toJSONObject(detailLevel: Int) throws -> JSON {
+        return [
+            SportCar.idField: ssidString,
+            "image": image!,
+            "name": name!,
+            "logo": logo!
+        ]
     }
     
     class func reorgnaizeJSON(json: JSON) -> JSON {

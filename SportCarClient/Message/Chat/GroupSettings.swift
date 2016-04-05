@@ -73,14 +73,14 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         let leftBtn = UIButton()
         leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         leftBtn.frame = CGRectMake(0, 0, 9, 15)
-        leftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        leftBtn.addTarget(self, action: #selector(GroupChatSettingController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
         let rightBtn = UIButton()
         rightBtn.hidden = true
         rightBtn.setImage(UIImage(named: "status_detail_other_operation"), forState: .Normal)
         rightBtn.imageView?.contentMode = .ScaleAspectFit
         rightBtn.frame = CGRectMake(0, 0, 21, 21)
-        rightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+        rightBtn.addTarget(self, action: #selector(GroupChatSettingController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
     }
     
@@ -201,7 +201,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                     cell.infoLbl.text = ""
                     cell.boolSelect.on = targetClub.showNickName ?? true
                     cell.tag = 0
-                    cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
+                    cell.boolSelect.addTarget(self, action: #selector(GroupChatSettingController.switchBtnPressed(_:)), forControlEvents: .ValueChanged)
                 }
                 return cell
             }else {
@@ -232,7 +232,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 cell.boolSelect.hidden = false
                 cell.boolSelect.tag = 1
                 cell.boolSelect.on = targetClub.noDisturbing
-                cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
+                cell.boolSelect.addTarget(self, action: #selector(GroupChatSettingController.switchBtnPressed(_:)), forControlEvents: .ValueChanged)
                 break
             case 1:
                 cell.staticLbl.text = LS("置顶聊天")
@@ -240,7 +240,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 cell.boolSelect.hidden = false
                 cell.boolSelect.tag = 2
                 cell.boolSelect.on = targetClub.alwayOnTop
-                cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
+                cell.boolSelect.addTarget(self, action: #selector(GroupChatSettingController.switchBtnPressed(_:)), forControlEvents: .ValueChanged)
                 break
             default:
                 break
@@ -259,7 +259,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 if deleteQuitBtn == nil {
                     deleteQuitBtn = UIButton()
                     deleteQuitBtn?.setImage(UIImage(named: "delete_and_quit_btn"), forState: .Normal)
-                    deleteQuitBtn?.addTarget(self, action: "deleteAndQuitBtnPressed", forControlEvents: .TouchUpInside)
+                    deleteQuitBtn?.addTarget(self, action: #selector(GroupChatSettingController.deleteAndQuitBtnPressed), forControlEvents: .TouchUpInside)
                     cell.contentView.addSubview(deleteQuitBtn!)
                     deleteQuitBtn?.snp_makeConstraints(closure: { (make) -> Void in
                         make.centerX.equalTo(cell.contentView)
@@ -282,10 +282,10 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             detail.delegate = self
             self.navigationController?.pushViewController(detail, animated: true)
         } else if indexPath.section == 3 && indexPath.row == 1 {
-            showConfirmToast(LS("确定清除聊天记录?"), target: self, confirmSelector: "clearChatContent", cancelSelector: "hideToast")
+            showConfirmToast(LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(GroupChatSettingController.clearChatContent), cancelSelector: #selector(GroupChatSettingController.hideToast as (GroupChatSettingController) -> () -> ()))
         } else if indexPath.section == 3 && indexPath.row == 2 {
             // 举报
-            let report = ReportBlacklistViewController(parent: self)
+            let report = ReportBlacklistViewController(user: nil, parent: self)
             self.presentViewController(report, animated: false, completion: nil)
         } else if indexPath.section == 1 && indexPath.row == 2 {
             if let act = targetClub.recentActivity {
@@ -374,7 +374,7 @@ extension GroupChatSettingController {
     }
     
     func deleteAndQuitBtnPressed() {
-        toast = showConfirmToast(LS("确认删除并退出？"), target: self, confirmSelector: "deleteAndQuitConfirm", cancelSelector: "hideToast")
+        toast = showConfirmToast(LS("确认删除并退出？"), target: self, confirmSelector: #selector(GroupChatSettingController.deleteAndQuitConfirm), cancelSelector: #selector(GroupChatSettingController.hideToast as (GroupChatSettingController) -> () -> ()))
     }
     
     func deleteAndQuitConfirm() {

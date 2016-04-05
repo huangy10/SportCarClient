@@ -439,30 +439,30 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             make.height.equalTo(commentPanel!.barheight)
         })
         
-        commentPanel.likeBtn?.addTarget(self, action: "likePressed", forControlEvents: .TouchUpInside)
-        commentPanel.shareBtn?.addTarget(self, action: "sharePressed", forControlEvents: .TouchUpInside)
+        commentPanel.likeBtn?.addTarget(self, action: #selector(NewsDetailController.likePressed), forControlEvents: .TouchUpInside)
+        commentPanel.shareBtn?.addTarget(self, action: #selector(NewsDetailController.sharePressed), forControlEvents: .TouchUpInside)
         
         // 添加键盘出现时时间的监听
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardAppears:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardDisappears:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NewsDetailController.changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NewsDetailController.changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func navSetting() {
         navigationItem.title = LS("资讯详情")
         //
-        let backBtn = UIButton()
-        backBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        backBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
-        backBtn.addTarget(self, action: "backBtnPressed", forControlEvents: .TouchUpInside)
+        let backBtn = UIButton().config(
+            self, selector: #selector(backBtnPressed),
+            image: UIImage(named: "account_header_back_btn"))
+            .setFrame(CGRectMake(0, 0, 10.5, 18))
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
         //
-        let shareBtn = UIButton()
-        shareBtn.setImage(UIImage(named: "news_share_white"), forState: .Normal)
-        shareBtn.frame = CGRect(x: 0, y: 0, width: 24, height: 21)
-        shareBtn.addTarget(self, action: "shareBtnPressed", forControlEvents: .TouchUpInside)
+        let shareBtn = UIButton().config(
+            self, selector: #selector(shareBtnPressed),
+            image: UIImage(named: "news_share_white"))
+            .setFrame(CGRectMake(0, 0, 24, 21))
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareBtn)
         //
-        hideBarGestureRecognizer = UIPanGestureRecognizer(target: self, action: "hideNavBar:")
+        hideBarGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(hideNavBar(_:)))
     }
     
     func hideNavBar(gestureRecognizer: UIPanGestureRecognizer) {

@@ -34,10 +34,10 @@ class SportCarInfoDetailController: UITableViewController {
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(SportCarInfoDetailController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: LS("删除"), style: .Done, target: self, action: "navRightBtnPressed")
+        let rightItem = UIBarButtonItem(title: LS("删除"), style: .Done, target: self, action: #selector(SportCarInfoDetailController.navRightBtnPressed))
         rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }
@@ -76,7 +76,7 @@ class SportCarInfoDetailController: UITableViewController {
             let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header_auth") as! SportCarAuthHeader
             header.titleLbl.text = LS("爱车型号")
             header.authed = car.identified
-            header.authBtn.addTarget(self, action: "carAuthBtnPressed", forControlEvents: .TouchUpInside)
+            header.authBtn.addTarget(self, action: #selector(SportCarInfoDetailController.carAuthBtnPressed), forControlEvents: .TouchUpInside)
             return header
         }else{
             let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("text_header") as! PrivateChatSettingsHeader

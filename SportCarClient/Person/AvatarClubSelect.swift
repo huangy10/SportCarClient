@@ -22,10 +22,11 @@ class AvatarClubSelectController: AvatarItemSelectController {
     weak var delegate: AvatarClubSelectDelegate?
     
     var clubs: [Club] = []
-    var user: User = MainManager.sharedManager.hostUser!
+    private var user: User = MainManager.sharedManager.hostUser!
     var preSelectID: Int32? = nil
     
     var selectedRow: Int = -1
+    var noIntialSelect: Bool = false
     
     var noClubLbl: UILabel!
     
@@ -38,7 +39,7 @@ class AvatarClubSelectController: AvatarItemSelectController {
             for data in json!.arrayValue {
                 let club: Club = try! MainManager.sharedManager.getOrCreate(Club.reorganizeJSON(data))
                 self.clubs.append(club)
-                if club.ssid == self.preSelectID ?? self.user.avatarClubModel?.ssid{
+                if club.ssid == self.preSelectID ?? self.user.avatarClubModel?.ssid && !self.noIntialSelect{
                     self.selectedRow = i
                 }
                 i += 1

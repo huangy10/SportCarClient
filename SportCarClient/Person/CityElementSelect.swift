@@ -76,7 +76,7 @@ class CityElementSelectController: UITableViewController {
         self.navigationItem.title = LS("活跃地区")
         let backBtn = UIButton()
         backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        backBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        backBtn.addTarget(self, action: #selector(CityElementSelectController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.2, height: 18)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
     }

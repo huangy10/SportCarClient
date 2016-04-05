@@ -46,7 +46,7 @@ class SideBarController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         reloadUserData()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "unreadMessageNumDidChange", name: kUnreadNumberDidChangeNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SideBarController.unreadMessageNumDidChange), name: kUnreadNumberDidChangeNotification, object: nil)
     }
     
     func createSubviews() {
@@ -80,7 +80,7 @@ class SideBarController: UIViewController {
             make.centerX.equalTo(superview.snp_left).offset(screenWidth * 0.45)
             make.top.equalTo(superview).offset(40)
         })
-        avatarBtn?.addTarget(self, action: "sideBtnPressed:", forControlEvents: .TouchUpInside)
+        avatarBtn?.addTarget(self, action: #selector(SideBarController.sideBtnPressed(_:)), forControlEvents: .TouchUpInside)
         // 姓名
         nameLbl = UILabel()
         nameLbl?.font = UIFont.systemFontOfSize(24)
@@ -95,7 +95,7 @@ class SideBarController: UIViewController {
             make.height.equalTo(33)
         })
         if let car = host.avatarCarModel {
-            carNameLbl = carNameLbl ?? UILabel()
+            carNameLbl = UILabel()
             carNameLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
             carNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
             carNameLbl?.text = car.name
@@ -108,6 +108,8 @@ class SideBarController: UIViewController {
             })
             
             carIcon = UIImageView()
+            carIcon?.layer.cornerRadius = 10.5
+            carIcon?.clipsToBounds = true
             carIcon?.kf_setImageWithURL(car.logoURL!)
             superview.addSubview(carIcon!)
             carIcon?.snp_makeConstraints(closure: { (make) -> Void in
@@ -117,17 +119,17 @@ class SideBarController: UIViewController {
             })
         }
         // 创建左侧的一列按钮
-        let titles = $.each(["雷达", "活动", "资讯", "动态", "消息", "搜索"]) { (value) -> () in
+        let titles = $.each(["雷达", "活动", "资讯", "动态", "消息"]) { (value) -> () in
             return LS(value)
         }
         var preView: UIView = nameLbl!
-        for i in 0..<6 {
+        for i in 0..<5 {
             let btn = UIButton()
             btn.setTitle(titles[i], forState: .Normal)
             btn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             btn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
             btn.contentHorizontalAlignment = .Left
-            btn.addTarget(self, action: "sideBtnPressed:", forControlEvents: .TouchUpInside)
+            btn.addTarget(self, action: #selector(SideBarController.sideBtnPressed(_:)), forControlEvents: .TouchUpInside)
             btn.tag = i + 1
             btnArray.append(btn)
             superview.addSubview(btn)
@@ -212,6 +214,26 @@ extension SideBarController {
         }
         avatarBtn?.loadImageFromURL(user.avatarURL!, placeholderImage: avatarBtn?.imageView?.image)
         nameLbl?.text = user.nickName ?? LS("离线用户")
+        if let car = user.avatarCarModel {
+            carNameLbl?.text = car.name
+            let size = carNameLbl?.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max))
+            carNameLbl?.translatesAutoresizingMaskIntoConstraints = true
+            carNameLbl?.snp_remakeConstraints(closure: { (make) -> Void in
+                make.left.equalTo(avatarBtn!.snp_centerX).offset((25 - size!.width) / 2)
+                make.top.equalTo(nameLbl!.snp_bottom).offset(10)
+            })
+
+            carIcon?.kf_setImageWithURL(car.logoURL!)
+            carIcon?.snp_remakeConstraints(closure: { (make) -> Void in
+                make.right.equalTo(carNameLbl!.snp_left).offset(-5)
+                make.centerY.equalTo(carNameLbl!)
+                make.size.equalTo(CGSize(width: 21, height: 21))
+            })
+
+            
+        }
+        print(ChatRecordDataSource.sharedDataSource.totalUnreadNum)
+        print(NotificationDataSource.sharedDataSource.unreadNum)
         let unreadNum = ChatRecordDataSource.sharedDataSource.totalUnreadNum + NotificationDataSource.sharedDataSource.unreadNum
         if unreadNum > 0 {
             unreadMessagesLbl.hidden = false

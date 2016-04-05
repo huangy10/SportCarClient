@@ -48,7 +48,7 @@ class AudioWaveDrawEngine: NSObject {
         self.preferredSampleNum = preferredSampleNum
         super.init()
         if async{
-            self.performSelectorInBackground("startSampling", withObject: nil)
+            self.performSelectorInBackground(#selector(AudioWaveDrawEngine.startSampling), withObject: nil)
         }else{
             startSampling()
         }
@@ -191,7 +191,8 @@ class AudioWaveDrawEngine: NSObject {
     func caculateSampleFromCache(audioCache: [[Float]], length: Int) {
         var index: Int = 0
         let sampleInterval = Int(binSize)
-        for var v: Int = 0; v < length; v += sampleInterval {
+        for v in 0.stride(to: length, by: sampleInterval) {
+//        for var v: Int = 0; v < length; v += sampleInterval {
             var maxVal: Float = 0
             for c in 0..<extAFNumChannels {
                 for p in 0..<sampleInterval {

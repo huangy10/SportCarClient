@@ -113,7 +113,7 @@ class HomeController: UIViewController, HomeDelegate {
         sideBarCtl.delegate = self
         // 
         board.backgroundColor = UIColor.whiteColor()
-        board.addTarget(self, action: "boardPressed", forControlEvents: .TouchUpInside)
+        board.addTarget(self, action: #selector(HomeController.boardPressed), forControlEvents: .TouchUpInside)
         superview.addSubview(board)
         board.tag = 1
         self.board.layer.anchorPoint = CGPoint(x: 0, y: 0.5)

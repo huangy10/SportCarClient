@@ -72,7 +72,7 @@ class ChatOpPanelController: UIViewController {
             make.bottom.equalTo(superview).offset(-edgeInset)
             make.left.equalTo(superview).offset(15)
         })
-        inputToggleBtn?.addTarget(self, action: "inputToggleBtnPressed", forControlEvents: .TouchUpInside)
+        inputToggleBtn?.addTarget(self, action: #selector(ChatOpPanelController.inputToggleBtnPressed), forControlEvents: .TouchUpInside)
         // 创建右侧按钮
         accessoryBtn = UIButton()
         accessoryBtn?.setImage(UIImage(named: "chat_add_asscessory"), forState: .Normal)
@@ -82,7 +82,7 @@ class ChatOpPanelController: UIViewController {
             make.size.equalTo(contentHeight)
             make.bottom.equalTo(superview).offset(-edgeInset)
         })
-        accessoryBtn?.addTarget(self, action: "accessoryBtnPressed", forControlEvents: .TouchUpInside)
+        accessoryBtn?.addTarget(self, action: #selector(ChatOpPanelController.accessoryBtnPressed), forControlEvents: .TouchUpInside)
         //
         let contentInputContainer = UIView()
         contentInputContainer.layer.cornerRadius = contentHeight / 2
@@ -126,9 +126,9 @@ class ChatOpPanelController: UIViewController {
             make.edges.equalTo(contentInputContainer)
         })
         voiceInputBtn?.hidden = true
-        voiceInputBtn?.addTarget(self, action: "startRecording", forControlEvents: .TouchDown)
-        voiceInputBtn?.addTarget(self, action: "cancelRecording", forControlEvents: .TouchDragExit)
-        voiceInputBtn?.addTarget(self, action: "finishRecording", forControlEvents: .TouchUpInside)
+        voiceInputBtn?.addTarget(self, action: #selector(ChatOpPanelController.startRecording), forControlEvents: .TouchDown)
+        voiceInputBtn?.addTarget(self, action: #selector(ChatOpPanelController.cancelRecording), forControlEvents: .TouchDragExit)
+        voiceInputBtn?.addTarget(self, action: #selector(ChatOpPanelController.finishRecording), forControlEvents: .TouchUpInside)
     }
 }
 

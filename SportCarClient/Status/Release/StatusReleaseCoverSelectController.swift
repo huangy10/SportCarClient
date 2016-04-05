@@ -92,7 +92,7 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
         cancelBtn.setTitle(LS("取消"), forState: .Normal)
         cancelBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), forState: .Normal)
         cancelBtn.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        cancelBtn.addTarget(self, action: "bottomBtnPressed", forControlEvents: .TouchUpInside)
+        cancelBtn.addTarget(self, action: #selector(StatusReleasePhotoSelectController.bottomBtnPressed), forControlEvents: .TouchUpInside)
         bottomBar.addSubview(cancelBtn)
         cancelBtn.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(bottomBar)
@@ -109,14 +109,14 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
         rightNavBtn?.setTitle(LS("确定") + "(0/\(maxSelectLimit))", forState: .Normal)
         rightNavBtn?.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
         rightNavBtn?.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        rightNavBtn?.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+        rightNavBtn?.addTarget(self, action: #selector(StatusReleasePhotoSelectController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         rightNavBtn?.frame = CGRectMake(0, 0, 60, 20)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightNavBtn!)
         
         let leftNavBtn = UIButton()
         leftNavBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         leftNavBtn.frame = CGRectMake(0, 0, 10.5, 18)
-        leftNavBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        leftNavBtn.addTarget(self, action: #selector(StatusReleasePhotoSelectController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftNavBtn)
     }
     
@@ -257,7 +257,7 @@ class StatusReleasePhotoSelectCell: UICollectionViewCell {
         })
         //
         selectBtn = UIButton()
-        selectBtn?.addTarget(self, action: "selectBtnPressed", forControlEvents: .TouchUpInside)
+        selectBtn?.addTarget(self, action: #selector(StatusReleasePhotoSelectCell.selectBtnPressed), forControlEvents: .TouchUpInside)
         selectBtn?.setImage(UIImage(named: "status_photo_unselected_small"), forState: .Normal)
         selectBtn?.setImage(UIImage(named: "status_photo_selected_small"), forState: .Selected)
         contentView.addSubview(selectBtn!)

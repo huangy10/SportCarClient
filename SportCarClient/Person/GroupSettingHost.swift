@@ -28,9 +28,9 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         let leftBtn = UIButton()
         leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         leftBtn.frame = CGRectMake(0, 0, 9, 15)
-        leftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        leftBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
-        let barBtnItem = UIBarButtonItem(title: LS("发布活动"), style: .Plain, target: self, action: "navRightBtnPressed")
+        let barBtnItem = UIBarButtonItem(title: LS("发布活动"), style: .Plain, target: self, action: #selector(navRightBtnPressed))
         barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.rightBarButtonItem = barBtnItem
     }
@@ -111,7 +111,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
                 // 0 - 显示本群昵称； 1 - 消息免打扰； 2 - 置顶聊天； 3 - 仅我可以邀请，4 - 对外公布成员信息
                 cell.boolSelect.tag = indexPath.row - 3
                 cell.staticLbl.text = [LS("仅我可以邀请"), LS("对外公布群成员信息")][indexPath.row - 6]
-                cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
+                cell.boolSelect.addTarget(self, action: #selector(switchBtnPressed(_:)), forControlEvents: .ValueChanged)
                 return cell
             case 8:
                 // user inlineUserSelectDeletable
@@ -196,9 +196,9 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         case 3:
             switch indexPath.row {
             case 1:
-                toast = showConfirmToast(LS("确定清除聊天记录?"), target: self, confirmSelector: "clearChatContent", cancelSelector: "hideToast")
+                toast = showConfirmToast(LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(clearChatContent), cancelSelector: #selector(hideToast as ()->()))
             case 2:
-                let report = ReportBlacklistViewController(parent: self)
+                let report = ReportBlacklistViewController(user: nil, parent: self)
                 self.presentViewController(report, animated: false, completion: nil)
             default:
                 break

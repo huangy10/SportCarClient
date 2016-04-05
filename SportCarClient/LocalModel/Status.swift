@@ -66,7 +66,6 @@ class Status: BaseModel {
         // TODO:
         loc = data["location"].rawString()
         _location = try LocationModel().fromJSONString(loc!, detailLevel: 0)
-        
         if let likeNum = data["like_num"].int32 {
             self.likeNum = likeNum
         }

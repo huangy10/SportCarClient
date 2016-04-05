@@ -37,7 +37,7 @@ class ClubBubbleView: UIView {
     
         for club in clubs {
             let bubble = ClubBubbleCell()
-            bubble.addTarget(self, action: "bubblePressed:", forControlEvents: .TouchUpInside)
+            bubble.addTarget(self, action: #selector(ClubBubbleView.bubblePressed(_:)), forControlEvents: .TouchUpInside)
             bubble.borderLimit = self.bounds
             bubble.club = club
             bubbles.append(bubble)
@@ -54,7 +54,7 @@ class ClubBubbleView: UIView {
     
     func startUpdate() {
         updator?.invalidate()
-        updator = CADisplayLink(target: self, selector: "update")
+        updator = CADisplayLink(target: self, selector: #selector(ClubBubbleView.update))
         updator?.frameInterval = 0
         updator?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
     }

@@ -82,7 +82,7 @@ class SportCarInfoCell: UICollectionViewCell{
         carEditBtn.setTitle(LS("认证"), forState: .Normal)
         carEditBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
         carEditBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        carEditBtn.addTarget(self, action: "carEditBtnPressed", forControlEvents: .TouchUpInside)
+        carEditBtn.addTarget(self, action: #selector(carEditBtnPressed), forControlEvents: .TouchUpInside)
         superview.addSubview(carEditBtn)
         carEditBtn.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
@@ -91,36 +91,32 @@ class SportCarInfoCell: UICollectionViewCell{
         }
         //
         let sepLineBackgroundColor = UIColor(white: 0.1, alpha: 1)
-        let sepLine = UIView()
-        sepLine.backgroundColor = sepLineBackgroundColor
-        superview.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(carNameLbl.snp_bottom).offset(12.5)
-            make.left.equalTo(carNameLbl)
-            make.width.equalTo(carNameLbl)
-            make.height.equalTo(0.5)
-        }
+//        let sepLine = UIView()
+//        sepLine.backgroundColor = sepLineBackgroundColor
+//        superview.addSubview(sepLine)
+//        sepLine.snp_makeConstraints { (make) -> Void in
+//            make.top.equalTo(carNameLbl.snp_bottom).offset(12.5)
+//            make.left.equalTo(carNameLbl)
+//            make.width.equalTo(carNameLbl)
+//            make.height.equalTo(0.5)
+//        }
         //
-        carSignatureLbl = UILabel()
-        carSignatureLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        carSignatureLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        carSignatureLbl.numberOfLines = 0
-        superview.addSubview(carSignatureLbl)
-        carSignatureLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(superview).offset(20)
-            make.top.equalTo(sepLine).offset(12)
-            make.width.equalTo(carNameLbl)
-        }
+        carSignatureLbl = superview.addSubview(UILabel.self)
+            .config(14, textColor: UIColor(white: 0.72, alpha: 1), multiLine: true)
+            .layout({ (make) in
+                make.left.equalTo(superview).offset(20)
+                make.top.equalTo(carNameLbl.snp_bottom).offset(20)
+                make.width.equalTo(carNameLbl)
+            })
         //
-        carParamBoard = UIView()
-        carParamBoard.backgroundColor = UIColor(red: 0.145, green: 0.161, blue: 0.173, alpha: 1)
-        superview.addSubview(carParamBoard)
-        carParamBoard.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(superview)
-            make.right.equalTo(superview)
-            make.top.equalTo(carSignatureLbl.snp_bottom).offset(22.5)
-            make.height.equalTo(250)
-        }
+        carParamBoard = superview.addSubview(UIView.self)
+            .config(UIColor(red: 0.145, green: 0.161, blue: 0.173, alpha: 1))
+            .layout({ (make) in
+                make.left.equalTo(superview)
+                make.right.equalTo(superview)
+                make.top.equalTo(carSignatureLbl.snp_bottom).offset(22.5)
+                make.height.equalTo(250)
+            })
         //
         let staticCarPriceLbl = getCarParamStaticLabel()
         carParamBoard.addSubview(staticCarPriceLbl)

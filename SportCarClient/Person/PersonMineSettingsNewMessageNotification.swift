@@ -27,8 +27,8 @@ class PersonMineSettingsNewsMessageNotificationController: UITableViewController
         tableView.separatorStyle = .None
         tableView.rowHeight = 50
         //
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dataSourceDidFinishUpdating:", name: PMUpdateFinishedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dataSourceUpateError:", name: PMUpdateErrorNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonMineSettingsNewsMessageNotificationController.dataSourceDidFinishUpdating(_:)), name: PMUpdateFinishedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonMineSettingsNewsMessageNotificationController.dataSourceUpateError(_:)), name: PMUpdateErrorNotification, object: nil)
         //
         let dataSource = PersonMineSettingsDataSource.sharedDataSource
         settings[0] = dataSource.newMessageNotificationAccept
@@ -43,10 +43,10 @@ class PersonMineSettingsNewsMessageNotificationController: UITableViewController
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(PersonMineSettingsNewsMessageNotificationController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: "navRightBtnPressed")
+        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: #selector(PersonMineSettingsNewsMessageNotificationController.navRightBtnPressed))
         rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }
@@ -79,7 +79,7 @@ class PersonMineSettingsNewsMessageNotificationController: UITableViewController
         let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
         cell.boolSelect.hidden = false
         cell.staticLbl.text = [LS("接受通知"), LS("声音"), LS("振动")][indexPath.row]
-        cell.boolSelect.addTarget(self, action: "switchBtnPressed:", forControlEvents: .ValueChanged)
+        cell.boolSelect.addTarget(self, action: #selector(PersonMineSettingsNewsMessageNotificationController.switchBtnPressed(_:)), forControlEvents: .ValueChanged)
         cell.boolSelect.tag = indexPath.row
         cell.boolSelect.on = settings[indexPath.row]
         return cell

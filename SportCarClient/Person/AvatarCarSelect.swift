@@ -24,31 +24,44 @@ class AvatarCarSelectController: AvatarItemSelectController {
     
     var selectedRow: Int = -1
     
-    var addAuthCarBtn: UIButton!
-    var addAuthCarLbl: UILabel!
+    private var addAuthCarBtn: UIButton!
+    private var addAuthCarLbl: UILabel!
+    private weak var toast: UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        createSubviews()
         //
         let requester = PersonRequester.requester
+        toast = showStaticToast(LS("载入中...请稍后"))
         requester.getAuthedCars(user.ssidString, onSuccess: { (json) -> () in
             let data = json!.arrayValue
             var i = 0
-            for carJSON in data {
-                let car = try! MainManager.sharedManager.getOrCreate(SportCar.reorgnaizeJSON(carJSON)) as SportCar
-                self.cars.append(car)
-                if car.ssid == self.user.avatarCarModel?.ssid {
-                    self.selectedRow = i
+            if data.count > 0 {
+                for carJSON in data {
+                    let car = try! MainManager.sharedManager.getOrCreate(SportCar.reorgnaizeJSON(carJSON)) as SportCar
+                    self.cars.append(car)
+                    if car.ssid == self.user.avatarCarModel?.ssid {
+                        self.selectedRow = i
+                    }
+                    i += 1
                 }
-                i += 1
+                self.tableView.reloadData()
+            } else {
+                self.showNoCars()
             }
-            self.tableView.reloadData()
+            if self.toast != nil {
+                self.hideToast(self.toast!)
+            }
             }) { (code) -> () in
+                assert(NSThread.isMainThread())
+                self.showNoCars()
+                if self.toast != nil {
+                    self.hideToast(self.toast!)
+                }
         }
     }
     
-    func createSubviews() {
+    func showNoCars() {
         let superview = self.view
         //
         addAuthCarBtn = UIButton()
@@ -59,7 +72,7 @@ class AvatarCarSelectController: AvatarItemSelectController {
             make.top.equalTo(superview).offset(35)
             make.size.equalTo(90)
         }
-        addAuthCarBtn.addTarget(self, action: "addAuthBtnPressed", forControlEvents: .TouchUpInside)
+        addAuthCarBtn.addTarget(self, action: #selector(AvatarCarSelectController.addAuthBtnPressed), forControlEvents: .TouchUpInside)
         //
         addAuthCarLbl = UILabel()
         addAuthCarLbl.text = LS("暂无认证跑车，点击添加")
@@ -103,8 +116,6 @@ class AvatarCarSelectController: AvatarItemSelectController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        addAuthCarLbl.hidden = cars.count != 0
-        addAuthCarBtn.hidden = addAuthCarLbl.hidden
         return cars.count
     }
     

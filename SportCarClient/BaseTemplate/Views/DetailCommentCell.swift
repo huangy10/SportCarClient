@@ -45,6 +45,7 @@ class DetailCommentCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
+        self.selectionStyle = .None
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -58,7 +59,7 @@ class DetailCommentCell: UITableViewCell {
         let superview = self.contentView
         //
         avatarBtn = UIButton()
-        avatarBtn?.addTarget(self, action: "avatarPressed", forControlEvents: .TouchUpInside)
+        avatarBtn?.addTarget(self, action: #selector(DetailCommentCell.avatarPressed), forControlEvents: .TouchUpInside)
         avatarBtn?.layer.cornerRadius = 17.5
         avatarBtn?.clipsToBounds = true
         avatarBtn?.backgroundColor = UIColor.grayColor()
@@ -122,7 +123,7 @@ class DetailCommentCell: UITableViewCell {
             make.height.equalTo(17)
             make.width.equalTo(25)
         })
-        replyBtn?.addTarget(self, action: "replyPressed", forControlEvents: .TouchUpInside)
+        replyBtn?.addTarget(self, action: #selector(DetailCommentCell.replyPressed), forControlEvents: .TouchUpInside)
         //
         commentContentLbl = UILabel()
         commentContentLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
@@ -138,7 +139,7 @@ class DetailCommentCell: UITableViewCell {
         //
         commentImage = UIButton()
         superview.addSubview(commentImage!)
-        commentImage?.addTarget(self, action: "commentImagePressed", forControlEvents: .TouchUpInside)
+        commentImage?.addTarget(self, action: #selector(DetailCommentCell.commentImagePressed), forControlEvents: .TouchUpInside)
         commentImage?.hidden = true
     }
     

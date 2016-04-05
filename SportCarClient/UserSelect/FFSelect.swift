@@ -105,7 +105,7 @@ class FFSelectController: UserSelectController {
             make.centerY.equalTo(container)
             make.right.equalTo(container.snp_centerX).offset(-9)
         })
-        titleFansBtn?.addTarget(self, action: "titleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleFansBtn?.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         // 创建关注按钮
         titleFollowBtn = UIButton()
         titleFollowBtn?.tag = 1
@@ -119,7 +119,7 @@ class FFSelectController: UserSelectController {
             make.centerY.equalTo(container)
             make.left.equalTo(container.snp_centerX).offset(9)
         })
-        titleFollowBtn?.addTarget(self, action: "titleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleFollowBtn?.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         // 创建可以平移的白色按钮形状
         titleBtnIcon = UIImageView(image: UIImage(named: "account_header_button"))
         container.addSubview(titleBtnIcon!)
@@ -129,7 +129,7 @@ class FFSelectController: UserSelectController {
         })
         self.navigationItem.titleView = container
         
-        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: "navLeftBtnPressed")
+        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: #selector(UserSelectController.navLeftBtnPressed))
         leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.leftBarButtonItem = leftBtnItem
 
@@ -138,7 +138,7 @@ class FFSelectController: UserSelectController {
         navRightBtn?.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
         navRightBtn?.setTitle(LS("确定") + "(\(selectedUsers.count)/\(maxSelectUserNum))", forState: .Normal)
         navRightBtn?.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        navRightBtn?.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+        navRightBtn?.addTarget(self, action: #selector(FFSelectController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         navRightBtn?.frame = CGRectMake(0, 0, 67, 20)
         let rightBtnItem = UIBarButtonItem(customView: navRightBtn!)
         self.navigationItem.rightBarButtonItem = rightBtnItem

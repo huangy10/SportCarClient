@@ -232,36 +232,14 @@ class ActivityRequester: AccountRequester {
                         let progress = Float(totalWritten) / Float(total)
                         onProgress(progress: progress)
                     })
-                    upload.responseJSON(completionHandler: { (response) -> Void in
-                        switch response.result {
-                        case .Success(let value):
-                            let json = JSON(value)
-                            if json["success"].boolValue == true {
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    onSuccess(json["id"])
-                                })
-                            }else{
-                                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                    onError(code: json["code"].string)
-                                })
-                            }
-                            break
-                        case .Failure(let err):
-                            print(err)
-                            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                onError(code: "0000")
-                            })
-                            break
-                        }
+                    upload.responseJSON(completionHandler: { (response) in
+                        self.resultValueHandler(response.result, dataFieldName: "id", onSuccess: onSuccess, onError: onError)
                     })
-                    break
                 case .Failure(let error):
                     print(error)
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         onError(code: "0000")
                     })
-                    
-                    break
                 }
         }
     }

@@ -118,7 +118,7 @@ class ResetPasswordController: LoginRegisterController {
             make.right.equalTo(inputContainer).offset(-13)
             make.centerY.equalTo(registerPhoneInput!)
         }
-        sendCodeBtn.addTarget(self, action: "sendAuthCodePressed", forControlEvents: .TouchUpInside)
+        sendCodeBtn.addTarget(self, action: #selector(sendAuthCodePressed), forControlEvents: .TouchUpInside)
         self.authCodeBtn = sendCodeBtn
         //
         registerAuthCode = TextFieldWithLeadingIconView()
@@ -179,7 +179,7 @@ class ResetPasswordController: LoginRegisterController {
     }
 //    
     override func leftBarBtn() -> UIBarButtonItem! {
-        let btn = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: "backBtnPressed:")
+        let btn = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: #selector(LoginRegisterController.backBtnPressed(_:)))
         btn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         return btn
     }

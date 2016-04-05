@@ -105,10 +105,6 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
             make.right.equalTo(superview)
             make.left.equalTo(superview)
             make.bottom.equalTo(superview).offset(0)
-//            make.right.equalTo(self.view)
-//            make.left.equalTo(self.view)
-//            make.height.equalTo(self.view.frame.height)
-//            make.top.equalTo(self.view)
         })
         if loadAnimated {
             tmpBackgroundImg = UIImageView()
@@ -143,8 +139,8 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         createStatusBoard()
         createOtherSubivews()
         loadDataAndUpdateUI()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardAppears:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardDisappears:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusDetailController.changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusDetailController.changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -176,23 +172,20 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         let backBtn = UIButton()
         backBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
-        backBtn.addTarget(self, action: "backBtnPressed", forControlEvents: .TouchUpInside)
+        backBtn.addTarget(self, action: #selector(StatusDetailController.backBtnPressed), forControlEvents: .TouchUpInside)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
         //
         let shareBtn = UIButton()
         shareBtn.setImage(UIImage(named: "status_detail_other_operation"), forState: .Normal)
         shareBtn.imageView?.contentMode = .ScaleAspectFit
         shareBtn.frame = CGRect(x: 0, y: 0, width: 24, height: 214)
-        shareBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+        shareBtn.addTarget(self, action: #selector(StatusDetailController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareBtn)
         //
     }
     
     func backBtnPressed() {
         self.navigationController?.popViewControllerAnimated(true)
-        if list != nil || indexPath != nil {
-            list?.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .None)
-        }
     }
     
     func navRightBtnPressed() {
@@ -205,7 +198,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
             self.presentViewController(delete, animated: false, completion: nil)
         }else {
             // 否则弹出举报
-            let report = ReportBlacklistViewController(parent: self)
+            let report = ReportBlacklistViewController(user: status?.user, parent: self)
             self.presentViewController(report, animated: false, completion: nil)
         }
     }
@@ -270,7 +263,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         
         commentPanel = CommentBarView()
         commentPanel?.shareBtnHidden = true
-        commentPanel?.likeBtn?.addTarget(self, action: "likeBtnPressed", forControlEvents: .TouchUpInside)
+        commentPanel?.likeBtn?.addTarget(self, action: #selector(StatusDetailController.likeBtnPressed), forControlEvents: .TouchUpInside)
         self.view?.addSubview(commentPanel!)
         if loadAnimated {
             commentPanel?.snp_makeConstraints(closure: { (make) -> Void in
@@ -347,7 +340,7 @@ extension StatusDetailController {
         headerContainer?.addSubview(avatarBtn!)
         avatarBtn?.layer.cornerRadius = 35 / 2.0
         avatarBtn?.clipsToBounds = true
-        avatarBtn?.addTarget(self, action: "statusHostAvatarPressed", forControlEvents: .TouchUpInside)
+        avatarBtn?.addTarget(self, action: #selector(StatusDetailController.statusHostAvatarPressed), forControlEvents: .TouchUpInside)
         avatarBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(headerContainer!).offset(15)
             make.centerY.equalTo(headerContainer!)
@@ -544,6 +537,11 @@ extension StatusDetailController {
         let imageInfo = status!.image!
         statusImages = imageInfo.split(";")
         mainCover?.kf_setImageWithURL(SFURL(statusImages[0])!)
+        mainCover?.kf_setImageWithURL(status!.coverURL!, placeholderImage: mainCover?.image, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) in
+            if error == nil {
+                self.mainCover?.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+            }
+        })
         if statusImages.count <= 1 {
             otherImgList?.reloadData()
             otherImgList?.snp_updateConstraints(closure: { (make) -> Void in
@@ -642,6 +640,20 @@ extension StatusDetailController {
         return cell
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let comment = comments[indexPath.row]
+        if comment.user.isHost {
+            return
+        } else {
+            responseToRow = indexPath.row
+            let responseToName = comment.user.nickName!
+            responseToPrefixStr = LS("回复 ") + responseToName + ": "
+            commentPanel?.contentInput?.text = responseToPrefixStr
+            atUser.removeAll()
+            commentPanel?.contentInput?.becomeFirstResponder()
+        }
+    }
+    
     func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 88
     }
@@ -684,6 +696,16 @@ extension StatusDetailController {
     
     func likeBtnPressed() {
         let requester = StatusRequester.SRRequester
+        if status!.liked {
+            status!.likeNum -= 1
+        } else {
+            status!.likeNum += 1
+        }
+        status?.liked = !status!.liked
+        self.commentPanel?.setLikedAnimated(status!.liked)
+        self.likeNumLbl?.text = "\(self.status!.likeNum)"
+        self.likeIcon?.image = status!.liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
+        
         requester.likeStatus(status!.ssidString, onSuccess: { (json) -> () in
             self.status?.likeNum = json!["like_num"].int32Value
             let liked = json!["like_state"].boolValue

@@ -59,7 +59,7 @@ class StatusReleasePhotoAlbumListController: UITableViewController {
     
     func navSettings() {
         self.navigationItem.title = LS("相册")
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: LS("取消"), style: .Done, target: self, action: "photoSelectCancelled")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: LS("取消"), style: .Done, target: self, action: #selector(StatusReleasePhotoAlbumListController.photoSelectCancelled))
     }
     
     func photoSelectCancelled() {

@@ -78,11 +78,11 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = LS("发布活动")
         //
-        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: "navLeftBtnPressed")
+        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: #selector(ActivityReleaseController.navLeftBtnPressed))
         leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.leftBarButtonItem = leftBtnItem
         //
-        let rightItem = UIBarButtonItem(title: LS("发布"), style: .Done, target: self, action: "navRightBtnPressed")
+        let rightItem = UIBarButtonItem(title: LS("发布"), style: .Done, target: self, action: #selector(ActivityReleaseController.navRightBtnPressed))
         rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }
@@ -97,32 +97,32 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         }
         // 检查数据完整性
         guard let actName = board.actNameInput.text where actName != "" else{
-            self.displayAlertController(LS("请填写活动名称"), message: nil)
+            showToast(LS("请填写活动名称"), onSelf: true)
             return
         }
         
         guard let actDes = board.actDesInput.text where board.actDesEditStart else {
-            self.displayAlertController(LS("请填写活动描述"), message: nil)
+            showToast(LS("请填写活动描述"), onSelf: true)
             return
         }
         
         guard let posterImage = self.poster else{
-            self.displayAlertController(LS("请选择活动海报"), message: nil)
+            showToast(LS("请选择活动海报"), onSelf: true)
             return
         }
         
         if userLocation == nil{
-            self.displayAlertController(LS("无法获取当前位置"), message: nil)
+            showToast(LS("无法获取当前位置"), onSelf: true)
             return
         }
         
         if startAtDate == nil {
-            self.displayAlertController(LS("请选择活动开始时间"), message: nil)
+            showToast(LS("请选择活动开始时间"), onSelf: true)
             return
         }
         
         if endAtDate == nil {
-            self.displayAlertController(LS("请选择活动结束时间"), message: nil)
+            showToast(LS("请选择活动结束时间"), onSelf: true)
             return
         }
         
@@ -142,7 +142,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             mine?.refreshControl?.beginRefreshing()
             mine?.getLatestActData()
             self.hideToast(toast)
-            self.showToast(LS("发布成功！"))
+            self.showToast(LS("发布成功！"), onSelf: true)
             self.pp_hideProgressView()
             }, onProgress: { (progress) -> () in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -179,7 +179,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         board.actDesInput.delegate = self
         self.inputFields.append(board.actNameInput)
         self.inputFields.append(board.actDesInput)
-        board.posterBtn.addTarget(self, action: "posterSelectBtnPressed", forControlEvents: .TouchUpInside)
+        board.posterBtn.addTarget(self, action: #selector(ActivityReleaseController.posterSelectBtnPressed), forControlEvents: .TouchUpInside)
         //
         tableView.separatorStyle = .None
         tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
@@ -295,6 +295,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             let detail = AvatarClubSelectController()
             detail.delegate = self
             detail.preSelectID = clubLimitID
+            detail.noIntialSelect = true
             self.navigationController?.pushViewController(detail, animated: true)
         default:
             datePickerMode = ""
@@ -515,13 +516,11 @@ extension ActivityReleaseController {
     func dateDidPicked(date: NSDate) {
         
         if datePickerMode == "startAt" {
-            if endAtDate != nil && endAtDate!.compare(date) == NSComparisonResult.OrderedAscending {
-                self.displayAlertController(LS("结束时间不能早于开始时间"), message: nil)
-                return
-            }
             startAt = date.stringDisplay()!
             startAtDate = date
-            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: .Automatic)
+            endAt = LS("请选择活动截止时间")
+            endAtDate = nil
+            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0), NSIndexPath(forRow: 2, inSection: 0)], withRowAnimation: .Automatic)
         }else if datePickerMode == "endAt" {
             if startAtDate != nil && startAtDate!.compare(date) == NSComparisonResult.OrderedDescending {
                 self.displayAlertController(LS("开始时间不能晚于结束时间"), message: nil)

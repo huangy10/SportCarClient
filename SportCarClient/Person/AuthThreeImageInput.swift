@@ -48,7 +48,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
             make.top.equalTo(container)
             make.size.equalTo(btnSize)
         }
-        imageBtn1.addTarget(self, action: "imageInputBtnPressed:", forControlEvents: .TouchUpInside)
+        imageBtn1.addTarget(self, action: #selector(AuthThreeImagesController.imageInputBtnPressed(_:)), forControlEvents: .TouchUpInside)
         //
         staticLabel2 = getStaticLabel()
         staticLabel2.text = getStaticLabelContentForIndex(1)
@@ -68,7 +68,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
             make.top.equalTo(staticLabel2)
             make.size.equalTo(btnSize)
         }
-        imageBtn2.addTarget(self, action: "imageInputBtnPressed:", forControlEvents: .TouchUpInside)
+        imageBtn2.addTarget(self, action: #selector(AuthThreeImagesController.imageInputBtnPressed(_:)), forControlEvents: .TouchUpInside)
         //
         staticLabel3 = getStaticLabel()
         staticLabel3.text = getStaticLabelContentForIndex(2)
@@ -81,14 +81,14 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         imageBtn3 = UIButton()
         imageBtn3.tag = 2
         imageBtn3.setImage(defaultCover, forState: .Normal)
-        imageBtn3.contentMode = .ScaleAspectFill
+        imageBtn3.imageView?.contentMode = .ScaleAspectFill
         container.addSubview(imageBtn3)
         imageBtn3.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(container)
             make.top.equalTo(staticLabel3)
             make.size.equalTo(btnSize)
         }
-        imageBtn3.addTarget(self, action: "imageInputBtnPressed:", forControlEvents: .TouchUpInside)
+        imageBtn3.addTarget(self, action: #selector(AuthThreeImagesController.imageInputBtnPressed(_:)), forControlEvents: .TouchUpInside)
         //
         quitBtn = UIButton()
         quitBtn.setImage(UIImage(named: "auth_not_now_btn"), forState: .Normal)

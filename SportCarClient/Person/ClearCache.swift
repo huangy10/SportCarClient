@@ -29,7 +29,7 @@ class ClearCacheController: PresentTemplateViewController {
         //
         clearBtn = UIButton()
         clearBtn.setImage(UIImage(named: "clear_cache_confirm"), forState: .Normal)
-        clearBtn.addTarget(self, action: "clearBtnPressed", forControlEvents: .TouchUpInside)
+        clearBtn.addTarget(self, action: #selector(ClearCacheController.clearBtnPressed), forControlEvents: .TouchUpInside)
         container.addSubview(clearBtn)
         clearBtn.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)

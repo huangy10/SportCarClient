@@ -11,29 +11,28 @@ import SnapKit
 import Kingfisher
 
 
-class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyModifierDelegate, ImageInputSelectorDelegate, AvatarCarSelectDelegate, AvatarClubSelectDelegate, CityElementSelectDelegate {
+class PersonMineInfoController: UITableViewController, ImageInputSelectorDelegate, AvatarCarSelectDelegate, AvatarClubSelectDelegate, CityElementSelectDelegate, SinglePropertyModifierDelegate {
     
     var user: User = MainManager.sharedManager.hostUser!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
-        tableView.registerClass(PersonMineInfoCell.self, forCellReuseIdentifier: PersonMineInfoCell.reuseIdentifier)
-        tableView.registerClass(PrivateChatSettingsAvatarCell.self, forCellReuseIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier)
-        tableView.separatorStyle = .None
+        SSPropertyCell.registerTableView(tableView)
+        SSAvatarCell.registerTableView(tableView)
         tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
+        tableView.separatorStyle = .None
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 80, 0)
     }
     
     func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = user.nickName
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
         
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
     }
     
@@ -85,75 +84,46 @@ class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyM
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
-            cell.avatarImage.kf_setImageWithURL(user.avatarURL!)
-            return cell
-        }else {
-            let cell = tableView.dequeueReusableCellWithIdentifier(PersonMineInfoCell.reuseIdentifier, forIndexPath: indexPath) as! PersonMineInfoCell
-            if indexPath.section == 1 {
-                cell.staticLbl.text = [LS("昵称"), LS("签名车"), LS("签名俱乐部"), LS("性别"), LS("年龄")][indexPath.row]
-                switch indexPath.row {
-                case 0:
-                    cell.infoLbl.text = user.nickName
-                    cell.iconImage.image = nil
-                    cell.editable = true
-                    break
-                case 1:
-                    if let car = user.avatarCarModel {
-                        cell.infoLbl.text = car.name
-                        cell.iconImage.kf_setImageWithURL(car.logoURL!)
-                    }else {
-                        cell.infoLbl.text = ""
-                        cell.iconImage.image = nil
-                    }
-                    cell.editable = true
-                case 2:
-                    if let club = user.avatarClubModel {
-                        cell.infoLbl.text = club.name
-                        cell.iconImage.kf_setImageWithURL(club.logoURL!)
-                    }else{
-                        cell.infoLbl.text = ""
-                        cell.iconImage.image = nil
-                    }
-                    cell.editable = true
-                    break
-                case 3:
-                    cell.infoLbl.text = user.gender
-                    cell.iconImage.image = nil
-                    cell.editable = false
-                case 4:
-                    cell.infoLbl.text = "\(user.age)"
-                    cell.iconImage.image = nil
-                    cell.editable = false
-                default:
-                    break
-                }
-            }else {
-                cell.staticLbl.text = [LS("星座"), LS("职业"), LS("活跃地区"), LS("个性签名")][indexPath.row]
-                switch indexPath.row {
-                case 0:
-                    cell.editable = false
-                    cell.infoLbl.text = user.starSign
-                    cell.iconImage.image = nil
-                    break
-                case 1:
-                    cell.editable = true
-                    cell.infoLbl.text = user.job
-                    cell.iconImage.image = nil
-                case 2:
-                    cell.editable = true
-                    cell.infoLbl.text = user.district
-                    cell.iconImage.image = nil
-                case 3:
-                    cell.editable = true
-                    cell.iconImage.image = nil
-                    cell.infoLbl.text = user.signature
-                default:
-                    break
-                }
+        switch indexPath.section {
+        case 0:
+            return tableView.ss_reuseablePropertyCell(SSAvatarCell.self, forIndexPath: indexPath)
+                .setData(user.avatarURL!)
+        case 1:
+            let rawCell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
+            switch indexPath.row {
+            case 0:
+                return rawCell.setData(LS("昵称"), propertyValue: user.nickName)
+            case 1:
+                return rawCell.setData(
+                    LS("签名车"),
+                    propertyValue: user.avatarCarModel?.name,
+                    propertyImageURL: user.avatarCarModel?.logoURL,
+                    propertyEmptyPlaceHolder: LS("无签名车")
+                )
+            case 2:
+                return rawCell.setData(
+                    LS("签名俱乐部"),
+                    propertyValue: user.avatarClubModel?.name,
+                    propertyImageURL: user.avatarClubModel?.logoURL,
+                    propertyEmptyPlaceHolder: LS("无签名俱乐部")
+                )
+            case 3:
+                return rawCell.setData(LS("性别"), propertyValue: user.gender, editable: false)
+            default:
+                return rawCell.setData(LS("年龄"), propertyValue: "\(user.age)", editable: false)
             }
-            return cell
+        default:
+            let rawCell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
+            switch indexPath.row {
+            case 0:
+                return rawCell.setData(LS("星座"), propertyValue: user.starSign, editable: false)
+            case 1:
+                return rawCell.setData(LS("职业"), propertyValue: user.job)
+            case 2:
+                return rawCell.setData(LS("活跃地区"), propertyValue: user.district)
+            default:
+                return rawCell.setData(LS("个性签名"), propertyValue: user.signature)
+            }
         }
     }
     
@@ -168,12 +138,12 @@ class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyM
         case 1:
             switch indexPath.row{
             case 0:
-                let detail = PersonMineSinglePropertyModifierController()
-                detail.focusedIndexPath = indexPath
-                detail.delegate = self
-                detail.initValue = user.nickName
-                self.navigationController?.pushViewController(detail, animated: true)
-                break
+                SinglePropertyModifierController(
+                    propertyName: LS("修改昵称"),
+                    delegate: self,
+                    forcusedIndexPath: indexPath,
+                    placeholder: LS("请输入昵称"),
+                    text: user.nickName).pushFromViewController(self)
             case 1:
                 let detail = AvatarCarSelectController()
                 detail.delegate = self
@@ -190,25 +160,24 @@ class PersonMineInfoController: UITableViewController, PersonMineSinglePropertyM
         case 2:
             switch indexPath.row {
             case 1:
-                let detail = PersonMineSinglePropertyModifierController()
-                detail.focusedIndexPath = indexPath
-                detail.delegate = self
-                detail.initValue = user.job
-                detail.propertyName = LS("职业")
-                self.navigationController?.pushViewController(detail, animated: true)
-                break
+                SinglePropertyModifierController(
+                    propertyName: LS("职业"),
+                    delegate: self,
+                    forcusedIndexPath: indexPath,
+                    placeholder: LS("请输入职业"),
+                    text: user.job).pushFromViewController(self)
             case 2:
                 let detail = CityElementSelectController()
                 detail.delegate = self
                 detail.maxLevel = 2
                 self.navigationController?.pushViewController(detail, animated: true)
             case 3:
-                let detail = PersonMineSinglePropertyModifierController()
-                detail.focusedIndexPath = indexPath
-                detail.delegate = self
-                detail.initValue = user.signature
-                detail.propertyName = LS("个性签名")
-                self.navigationController?.pushViewController(detail, animated: true)
+                SinglePropertyModifierController(
+                    propertyName: LS("个性签名"),
+                    delegate: self,
+                    forcusedIndexPath: indexPath,
+                    placeholder: LS("请输入个性签名"),
+                    text: user.signature).pushFromViewController(self)
             default:
                 break
             }
@@ -223,10 +192,10 @@ extension PersonMineInfoController {
     
     func cityElementSelectDidSelect(dataSource: CityElementSelectDataSource) {
         let district = dataSource.selectedCity! + dataSource.selectedDistrict!
-        self.didModify(district, indexPath: NSIndexPath(forItem: 2, inSection: 2))
+        self.singlePropertyModifierDidModify(district, forIndexPath: NSIndexPath(forRow: 2, inSection: 2))
     }
     
-    func didModify(newValue: String?, indexPath: NSIndexPath) {
+    func singlePropertyModifierDidModify(newValue: String?, forIndexPath indexPath: NSIndexPath) {
         let requester = PersonRequester.requester
         switch indexPath.section {
         case 0:
@@ -248,24 +217,30 @@ extension PersonMineInfoController {
         case 2:
             switch indexPath.row {
             case 1:
+                self.user.job = newValue
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                 requester.profileModifiy(["job": newValue!], onSuccess: { (json) -> () in
-                    self.user.job = newValue
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+//                    self.user.job = newValue
+//                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                     }, onError: { (code) -> () in
                         print(code)
                 })
                 break
             case 2:
+                self.user.district = newValue
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                 requester.profileModifiy(["district": newValue!], onSuccess: { (json) -> () in
-                    self.user.district = newValue
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+//                    self.user.district = newValue
+//                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                     }, onError: { (code) -> () in
                         print(code)
                 })
             case 3:
+                self.user.signature = newValue
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                 requester.profileModifiy(["signature": newValue!], onSuccess: { (json) -> () in
-                    self.user.signature = newValue
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+//                    self.user.signature = newValue
+//                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                     }, onError: { (code) -> () in
                         print(code)
                 })
@@ -278,8 +253,8 @@ extension PersonMineInfoController {
         }
     }
     
-    func modificationCancelled() {
-        
+    func singlePropertyModifierDidCancelled() {
+        // DO NOTHING
     }
     
     func imageInputSelectorDidCancel() {

@@ -27,6 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate {
         let wrapper = BlackBarNavigationController(rootViewController: home)
         window?.rootViewController = wrapper
         window?.makeKeyAndVisible()
+        home.registerForPushNotifications(application)
+        home.loadHistoricalNotifications(launchOptions)
         return true
     }
     
@@ -43,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate {
 
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+        // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
@@ -71,6 +73,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate {
         try! ChatModelManger.sharedManager.save()
         try! NotificationModelManager.sharedManager.save()
         try! MainManager.sharedManager.save()
+    }
+    
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        // handle real time notification
+        print(userInfo)
+        print(application.applicationIconBadgeNumber)
+    }
+    
+    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        if notificationSettings.types != .None {
+            application.registerForRemoteNotifications()
+        }
+    }
+    
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        let tokenChars = UnsafePointer<CChar>(deviceToken.bytes)
+        var tokenString = ""
+        for i in 0..<deviceToken.length {
+            tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
+        }
+        AppManager.sharedAppManager.deviceTokenString = tokenString
+    }
+    
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        print(error)
     }
 
 //    // MARK: - Core Data stack

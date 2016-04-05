@@ -65,8 +65,8 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         locationService?.allowsBackgroundLocationUpdates = true
         locSearch = BMKGeoCodeSearch()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardAppears:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "changeLayoutWhenKeyboardDisappears:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusReleaseController.changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusReleaseController.changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -95,7 +95,6 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         board = UIScrollView()
         board?.backgroundColor = UIColor.whiteColor()
         board?.contentSize = self.view.bounds.size
-        board?.bounces = false
         superview.addSubview(board!)
         board?.snp_makeConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(superview).offset(0)
@@ -105,7 +104,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         })
         addImageBtn = UIButton()
         addImageBtn.setImage(UIImage(named: "status_add_image"), forState: .Normal)
-        addImageBtn.addTarget(self, action: "addImageBtnPressed", forControlEvents: .TouchUpInside)
+        addImageBtn.addTarget(self, action: #selector(StatusReleaseController.addImageBtnPressed), forControlEvents: .TouchUpInside)
         board?.addSubview(addImageBtn)
         addImageBtn.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(15)
@@ -145,7 +144,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             guard let sSelf = self else {
                 return
             }
-            let userSelect = FFSelectController(maxSelectNum: kMaxSelectUserNum, preSelectedUsers: sSelf.informOfUsers)
+            let userSelect = FFSelectController(maxSelectNum: kMaxSelectUserNum, preSelectedUsers: sSelf.informOfUsers, forced: false)
             userSelect.delegate = self
             let nav = BlackBarNavigationController(rootViewController: userSelect)
             sSelf.presentViewController(nav, animated: true, completion: nil)
@@ -187,7 +186,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             make.right.equalTo(superview)
             make.top.equalTo(sportCarListView.snp_bottom)
             make.left.equalTo(superview)
-            make.height.equalTo(250)
+            make.height.equalTo(650)
         })
         //
         let locDesContainer = UIView()
@@ -232,7 +231,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         for view in board!.subviews {
             contentRect = CGRectUnion(contentRect, view.frame)
         }
-        board?.contentSize = CGSizeMake(self.view.frame.width, contentRect.height)
+        board?.contentSize = CGSizeMake(self.view.frame.width, contentRect.height - 250)
         UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
             self.view.layoutIfNeeded()
             }, completion: nil)
@@ -241,7 +240,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = LS("发布动态")
-        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: "navLeftBtnPressed")
+        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: #selector(StatusReleaseController.navLeftBtnPressed))
         leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
         self.navigationItem.leftBarButtonItem = leftBtnItem
         
@@ -249,7 +248,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         rightBtn.setTitle(LS("发布"), forState: .Normal)
         rightBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
         rightBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        rightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+        rightBtn.addTarget(self, action: #selector(StatusReleaseController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
     }
     

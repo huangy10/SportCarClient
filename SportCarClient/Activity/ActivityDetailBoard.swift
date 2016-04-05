@@ -166,13 +166,13 @@ class ActivityDetailBoardView: UIView {
             make.centerY.equalTo(hostAvatar)
         }
         //
-        avatarCarLogo = UIImageView()
-        superview.addSubview(avatarCarLogo)
-        avatarCarLogo.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(avatarCarNameLbl.snp_left).offset(-2)
-            make.centerY.equalTo(avatarCarNameLbl)
-            make.size.equalTo(21)
-        }
+        avatarCarLogo = superview.addSubview(UIImageView.self)
+            .config(nil)
+            .layout(10.5, closurer: { (make) in
+                make.right.equalTo(avatarCarNameLbl.snp_left).offset(-2)
+                make.centerY.equalTo(avatarCarNameLbl)
+                make.size.equalTo(21)
+            })
         //
         let locIcon = UIImageView(image: UIImage(named: "status_location_icon"))
         superview.addSubview(locIcon)

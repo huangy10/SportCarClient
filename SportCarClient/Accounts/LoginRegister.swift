@@ -200,7 +200,7 @@ class LoginRegisterController: InputableViewController {
             make.top.equalTo(inputContainer.snp_bottom).offset(15)
             make.right.equalTo(inputContainer)
         }
-        forgetBtn.addTarget(self, action: "forgetBtnPressed", forControlEvents: .TouchUpInside)
+        forgetBtn.addTarget(self, action: #selector(LoginRegisterController.forgetBtnPressed), forControlEvents: .TouchUpInside)
         //
         let login = UIButton()
         login.setBackgroundImage(UIImage(named: "account_login_btn"), forState: .Normal)
@@ -215,7 +215,7 @@ class LoginRegisterController: InputableViewController {
             make.top.equalTo(inputContainer.snp_bottom).offset(75)
             make.centerX.equalTo(container)
         }
-        login.addTarget(self, action: "loginPressed", forControlEvents: .TouchUpInside)
+        login.addTarget(self, action: #selector(LoginRegisterController.loginPressed), forControlEvents: .TouchUpInside)
         self.loginBtn = login
         return container
     }
@@ -280,7 +280,7 @@ class LoginRegisterController: InputableViewController {
             make.right.equalTo(inputContainer).offset(-13)
             make.centerY.equalTo(registerPhoneInput!)
         }
-        sendCodeBtn.addTarget(self, action: "sendAuthCodePressed", forControlEvents: .TouchUpInside)
+        sendCodeBtn.addTarget(self, action: #selector(LoginRegisterController.sendAuthCodePressed), forControlEvents: .TouchUpInside)
         authCodeBtn = sendCodeBtn
         //
         registerAuthCode = TextFieldWithLeadingIconView()
@@ -325,7 +325,7 @@ class LoginRegisterController: InputableViewController {
             make.top.equalTo(inputContainer.snp_bottom).offset(15)
             make.right.equalTo(inputContainer)
         }
-        agreementBtn.addTarget(self, action: "checkAgreement", forControlEvents: .TouchUpInside)
+        agreementBtn.addTarget(self, action: #selector(LoginRegisterController.checkAgreement), forControlEvents: .TouchUpInside)
         
         let agreementCheckIcon = UIImageView(image: UIImage(named: "account_agreement_check"))
         container.addSubview(agreementCheckIcon)
@@ -349,7 +349,7 @@ class LoginRegisterController: InputableViewController {
             make.top.equalTo(inputContainer.snp_bottom).offset(75)
             make.centerX.equalTo(container)
         }
-        registerBtn.addTarget(self, action: "registerPressed", forControlEvents: .TouchUpInside)
+        registerBtn.addTarget(self, action: #selector(LoginRegisterController.registerPressed), forControlEvents: .TouchUpInside)
         return container
     }
     /**
@@ -375,7 +375,7 @@ class LoginRegisterController: InputableViewController {
             make.centerY.equalTo(container)
             make.left.equalTo(container.snp_centerX).offset(9)
         }
-        titleLoginBtn?.addTarget(self, action: "barTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleLoginBtn?.addTarget(self, action: #selector(LoginRegisterController.barTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         
         // 创建注册按钮
         titleRegisterBtn = UIButton()
@@ -389,7 +389,7 @@ class LoginRegisterController: InputableViewController {
             make.centerY.equalTo(container)
             make.right.equalTo(container.snp_centerX).offset(9)
         }
-        titleRegisterBtn?.addTarget(self, action: "barTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleRegisterBtn?.addTarget(self, action: #selector(LoginRegisterController.barTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
 
         // 创建背景ICON
         titleBtnIcon = UIImageView(image: UIImage(named: "account_header_button"))
@@ -404,7 +404,7 @@ class LoginRegisterController: InputableViewController {
     func leftBarBtn() -> UIBarButtonItem! {
         let backBtn = UIButton()
 //        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        backBtn.addTarget(self, action: "backBtnPressed:", forControlEvents: .TouchUpInside)
+        backBtn.addTarget(self, action: #selector(LoginRegisterController.backBtnPressed(_:)), forControlEvents: .TouchUpInside)
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
         
         let leftBtnItem = UIBarButtonItem(customView: backBtn)

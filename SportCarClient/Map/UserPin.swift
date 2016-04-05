@@ -33,7 +33,7 @@ class UserAnnotationView: BMKAnnotationView {
         avatar.layer.cornerRadius = 32.5
         avatar.clipsToBounds = true
         self.addSubview(avatar)
-        avatar.addTarget(self, action: "avatarPressed", forControlEvents: .TouchUpInside)
+        avatar.addTarget(self, action: #selector(UserAnnotationView.avatarPressed), forControlEvents: .TouchUpInside)
         avatar.frame = CGRectMake(0, 0, 65, 65)
         
         avatarCar = UIImageView()
@@ -73,7 +73,7 @@ class HostUserOnRadarAnnotationView: BMKAnnotationView {
         scan.frame = self.bounds
         self.addSubview(scan)
         
-        updator = CADisplayLink(target: self, selector: "scanUpdate")
+        updator = CADisplayLink(target: self, selector: #selector(HostUserOnRadarAnnotationView.scanUpdate))
         updator?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
         updator?.frameInterval = 1
         updator?.paused = true

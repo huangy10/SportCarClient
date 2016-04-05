@@ -61,7 +61,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 15, 13.5)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(RadarHomeController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
         navRightBtn = UIButton()
@@ -70,7 +70,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         navRightBtn.addSubview(navRightIcon)
         navRightIcon.frame = CGRectMake(0, 0, 21, 21)
         navRightBtn.frame = CGRectMake(0, 0, 21, 21)
-        navRightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+        navRightBtn.addTarget(self, action: #selector(RadarHomeController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navRightBtn)
         //
         let barHeight = self.navigationController!.navigationBar.frame.height
@@ -84,7 +84,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         titleDriverBtn.setTitle(LS("车主"), forState: .Normal)
         titleDriverBtn.setTitleColor(kBarBgColor, forState: .Normal)
         titleDriverBtn.titleLabel?.font = kBarTextFont
-        titleDriverBtn.addTarget(self, action: "navTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleDriverBtn.addTarget(self, action: #selector(RadarHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(titleDriverBtn)
         titleDriverBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(30)
@@ -98,7 +98,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         titleClubBtn.setTitle(LS("俱乐部"), forState: .Normal)
         titleClubBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         titleClubBtn.titleLabel?.font = kBarTextFont
-        titleClubBtn.addTarget(self, action: "navTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleClubBtn.addTarget(self, action: #selector(RadarHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(titleClubBtn)
         titleClubBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(30)
@@ -235,7 +235,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         superview = releaseBoard
         let releaseStatus = UIButton()
         releaseStatus.tag = 0
-        releaseStatus.addTarget(self, action: "releaseBtnPressed:", forControlEvents: .TouchUpInside)
+        releaseStatus.addTarget(self, action: #selector(RadarHomeController.releaseBtnPressed(_:)), forControlEvents: .TouchUpInside)
         releaseStatus.setTitle(LS("发布动态"), forState: .Normal)
         releaseStatus.setTitleColor(UIColor.blackColor(), forState: .Normal)
         releaseStatus.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
@@ -264,7 +264,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         }
         let addChat = UIButton()
         addChat.tag = 1
-        addChat.addTarget(self, action: "releaseBtnPressed:", forControlEvents: .TouchUpInside)
+        addChat.addTarget(self, action: #selector(RadarHomeController.releaseBtnPressed(_:)), forControlEvents: .TouchUpInside)
         addChat.setTitleColor(UIColor.blackColor(), forState: .Normal)
         addChat.setTitle(LS("新建聊天"), forState: .Normal)
         addChat.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
@@ -293,7 +293,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         }
         let startActivity = UIButton()
         startActivity.tag = 2
-        startActivity.addTarget(self, action: "releaseBtnPressed:", forControlEvents: .TouchUpInside)
+        startActivity.addTarget(self, action: #selector(RadarHomeController.releaseBtnPressed(_:)), forControlEvents: .TouchUpInside)
         startActivity.setTitle(LS("发起活动"), forState: .Normal)
         startActivity.setTitleColor(UIColor.blackColor(), forState: .Normal)
         startActivity.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)

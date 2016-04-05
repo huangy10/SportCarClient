@@ -87,6 +87,9 @@ class User: BaseModel {
             if let f = data["followed"].bool {
                 followed = f
             }
+            if let b = data["blacklisted"].bool {
+                blacklisted = b
+            }
             
             fansNum = data["fans_num"].int32Value
             followsNum = data["follow_num"].int32Value

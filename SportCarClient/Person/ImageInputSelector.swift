@@ -82,7 +82,7 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
         
         cancelBtn = UIButton()
         cancelBtn.setImage(UIImage(named: "news_comment_cancel_btn"), forState: .Normal)
-        cancelBtn.addTarget(self, action: "cancelBtnPressed", forControlEvents: .TouchUpInside)
+        cancelBtn.addTarget(self, action: #selector(ImageInputSelectorController.cancelBtnPressed), forControlEvents: .TouchUpInside)
         container.addSubview(cancelBtn)
         cancelBtn.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
@@ -110,7 +110,7 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
             make.centerX.equalTo(container)
             make.centerY.equalTo(sepLine.snp_bottom).offset(56)
         }
-        takePhotoBtn.addTarget(self, action: "takePhotoBtnPressed", forControlEvents: .TouchUpInside)
+        takePhotoBtn.addTarget(self, action: #selector(ImageInputSelectorController.takePhotoBtnPressed), forControlEvents: .TouchUpInside)
         //
         albumBtn = UIButton()
         albumBtn.setTitle(LS("相册"), forState: .Normal)
@@ -122,11 +122,11 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
             make.centerX.equalTo(container)
             make.centerY.equalTo(takePhotoBtn).offset(56)
         }
-        albumBtn.addTarget(self, action: "albumBtnPressed", forControlEvents: .TouchUpInside)
+        albumBtn.addTarget(self, action: #selector(ImageInputSelectorController.albumBtnPressed), forControlEvents: .TouchUpInside)
     }
     
     func cancelBtnPressed() {
-        delegate?.imageInputSelectorDidCancel()
+//        delegate?.imageInputSelectorDidCancel()
         hideAnimated()
     }
     

@@ -9,12 +9,24 @@
 import Foundation
 import UIKit
 import SwiftDate
+import SwiftyJSON
+// Type define
+typealias SSSuccessCallback = (json: JSON?) -> Void
+typealias SSFailureCallback = (code: String?) -> Void
+typealias SSProgressCallback = (progress: Float) -> Void
 
 // Notifications
 let kUnreadNumberDidChangeNotification = "unread_number_did_change_notification"
 func ss_sendUnreadNumberDidChangeNotification() {
     NSNotificationCenter.defaultCenter().postNotificationName(kUnreadNumberDidChangeNotification, object: nil)
 }
+let kNotificationUnreadClearNotification = "unread_notif_clear"
+
+let kStatusDidDeletedNotification = "status_did_deleted_notification"
+let kStatusDidDeletedStatusIDKey = "statusID"
+
+let kUserBlacklistedNotification = "user_blacklisted"
+let kUserSSIDKey = "userID"
 
 // Colors
 let kBarBgColor = UIColor(red: 0.09, green: 0.075, blue: 0.075, alpha: 1)
@@ -27,7 +39,7 @@ let kBarTitleFont = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
 let kTextInputFont = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
 
 // Network
-let kHostName = "166.111.17.100"
+let kHostName = "166.111.17.88"
 //let kHostName = "111.206.219.158"
 let kPortName = "8000"
 let kChatPortName = "8888"

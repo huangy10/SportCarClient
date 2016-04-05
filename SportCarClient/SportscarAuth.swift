@@ -127,7 +127,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
             make.right.equalTo(container)
             make.bottom.equalTo(sepLine1)
         }
-        districtBtn.addTarget(self, action: "showDistrictPicker", forControlEvents: .TouchUpInside)
+        districtBtn.addTarget(self, action: #selector(SportscarAuthController.showDistrictPicker), forControlEvents: .TouchUpInside)
         //
         let licenseStaticLbl = UILabel()
         licenseStaticLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
@@ -207,7 +207,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         doneBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
         doneBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
         pickerHeader.addSubview(doneBtn)
-        doneBtn.addTarget(self, action: "donePickDistrictBtnPressed", forControlEvents: .TouchUpInside)
+        doneBtn.addTarget(self, action: #selector(SportscarAuthController.donePickDistrictBtnPressed), forControlEvents: .TouchUpInside)
         doneBtn.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(pickerHeader).offset(-20)
             make.centerY.equalTo(pickerHeader)

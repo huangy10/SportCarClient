@@ -37,13 +37,14 @@ class StatusBasicController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onStatusDelete:", name: kStatusDidDeletedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusBasicController.onStatusDelete(_:)), name: kStatusDidDeletedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUserBlacklisted(_:)), name: kUserBlacklistedNotification, object: nil)
         
         tableView.registerClass(StatusCell.self, forCellReuseIdentifier: StatusCell.reuseIdentifier)
         myRefreshControl = UIRefreshControl()
         tableView.addSubview(myRefreshControl!)
         tableView.contentInset = UIEdgeInsetsMake(5, 0, 5, 0)
-        myRefreshControl?.addTarget(self, action: "loadLatestData", forControlEvents: .ValueChanged)
+        myRefreshControl?.addTarget(self, action: #selector(StatusBasicController.loadLatestData), forControlEvents: .ValueChanged)
         
         tableView.separatorStyle = .None
         tableView.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
@@ -70,9 +71,9 @@ class StatusBasicController: UITableViewController {
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let curStatus = status[indexPath.row]
         if curStatus.image?.split(";").count <= 1{
-            return 440
+            return 420
         }else{
-            return 540
+            return 520
         }
     }
     
@@ -127,20 +128,20 @@ extension StatusBasicController {
     
     func onStatusDelete(notification: NSNotification) {
         // TODO: check id type
-        if let statusID = notification.userInfo![kStatusDidDeletedStatusIDKey] as? Int32{
-            var index = 0
-            var flag = false
-            for s in status {
-                if s.ssid == statusID {
-                    flag = true
-                    break
-                }
-                index += 1
-            }
-            if flag {
+        if let statusID = notification.userInfo![kStatusDidDeletedStatusIDKey] as? String{
+            if let index = status.findIndex({$0.ssidString == statusID}) {
                 status.removeAtIndex(index)
+                tableView.reloadData()
             }
-            
+        } else {
+            assertionFailure()
+        }
+    }
+    
+    func onUserBlacklisted(notification: NSNotification) {
+        if let userID = notification.userInfo?[kUserSSIDKey] as? String {
+            status = status.filter({$0.ssidString != userID})
+            tableView.reloadData()
         } else {
             assertionFailure()
         }

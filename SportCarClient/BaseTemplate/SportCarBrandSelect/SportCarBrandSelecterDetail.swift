@@ -35,7 +35,7 @@ class SportCarBrandSelecterDetailController: UITableViewController {
     func navBarLeftBtn() -> UIBarButtonItem! {
         let backBtn = UIButton()
         backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        backBtn.addTarget(self, action: "backBtnPressed", forControlEvents: .TouchUpInside)
+        backBtn.addTarget(self, action: #selector(SportCarBrandSelecterDetailController.backBtnPressed), forControlEvents: .TouchUpInside)
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.2, height: 18)
         
         let leftBtnItem = UIBarButtonItem(customView: backBtn)

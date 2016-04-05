@@ -52,7 +52,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         map.viewWillAppear()
         map.delegate = self
         locationService.delegate = self
-        timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "getLocationData", userInfo: nil, repeats: true)
+        timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(RadarDriverMapController.getLocationData), userInfo: nil, repeats: true)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -95,7 +95,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         showUserListBtn.layer.shadowOffset = CGSizeMake(0, 3)
         showUserListBtn.layer.cornerRadius = 4
         showUserListBtn.clipsToBounds = false
-        showUserListBtn.addTarget(self, action: "showUserBtnPressed", forControlEvents: .TouchUpInside)
+        showUserListBtn.addTarget(self, action: #selector(RadarDriverMapController.showUserBtnPressed), forControlEvents: .TouchUpInside)
         self.view.addSubview(showUserListBtn)
         showUserListBtn.snp_makeConstraints { (make) -> Void in
             make.bottom.equalTo(userList.snp_top).offset(-15)
@@ -135,7 +135,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         //
         let mapFilterToggleBtn = UIButton()
         self.view.addSubview(mapFilterToggleBtn)
-        mapFilterToggleBtn.addTarget(self, action: "toggleMapFilter", forControlEvents: .TouchUpInside)
+        mapFilterToggleBtn.addTarget(self, action: #selector(RadarDriverMapController.toggleMapFilter), forControlEvents: .TouchUpInside)
         mapFilterToggleBtn.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(mapFilterView)
             make.left.equalTo(self.view).offset(15)

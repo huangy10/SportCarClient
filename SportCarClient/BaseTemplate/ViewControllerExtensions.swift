@@ -63,9 +63,9 @@ extension UIViewController {
      - parameter message:       显示的文字内容
      - parameter maxLastLength: 最大显示的时长
      */
-    func showToast(message: String, maxLastLength: Double=3) {
+    func showToast(message: String, maxLastLength: Double=3, onSelf: Bool = false) {
         assert(NSThread.isMainThread())
-        let superview = UIApplication.sharedApplication().keyWindow!.rootViewController!.view
+        let superview = onSelf ? self.view : UIApplication.sharedApplication().keyWindow!.rootViewController!.view
 //        let superview = self.view
         let toastContainer = UIView()
         toastContainer.backgroundColor = UIColor(red: 0.067, green: 0.051, blue: 0.051, alpha: 1)
@@ -75,7 +75,7 @@ extension UIViewController {
         superview.bringSubviewToFront(toastContainer)
         toastContainer.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
-            make.top.equalTo(superview).offset(40)
+            make.top.equalTo(superview).offset(40 + 44)
             make.size.equalTo(CGSizeMake(200, 45))
         }
         let lbl = UILabel()
@@ -100,7 +100,8 @@ extension UIViewController {
     }
     
     func showStaticToast(message: String) -> UIView {
-        let superview = UIApplication.sharedApplication().keyWindow!.rootViewController!.view
+//        let superview = UIApplication.sharedApplication().keyWindow!.rootViewController!.view
+        let superview = self.view
         let toastContainer = UIView()
         toastContainer.backgroundColor = UIColor(red: 0.067, green: 0.051, blue: 0.051, alpha: 1)
         toastContainer.layer.addDefaultShadow(6, opacity: 0.3, offset: CGSizeMake(0, 4))
@@ -141,7 +142,7 @@ extension UIViewController {
      
      - parameter message:   Message content to be displayed
      */
-    func showConfirmToast(message: String, target: AnyObject, confirmSelector: Selector, cancelSelector: Selector) -> UIView {
+    func showConfirmToast(message: String, target: AnyObject, confirmSelector: Selector, cancelSelector: Selector, onSelf: Bool = false) -> UIView {
         let container = UIView()
         let containerWidth = UIScreen.mainScreen().bounds.width * 0.5
         container.backgroundColor = UIColor(red: 0.067, green: 0.051, blue: 0.051, alpha: 1)
@@ -183,7 +184,7 @@ extension UIViewController {
             make.right.equalTo(confirmBtn.snp_left)
         }
         
-        let superview = UIApplication.sharedApplication().keyWindow!.rootViewController!.view
+        let superview = onSelf ? self.view : UIApplication.sharedApplication().keyWindow!.rootViewController!.view
         superview.addSubview(container)
         container.snp_makeConstraints { (make) -> Void in
             make.width.equalTo(containerWidth)

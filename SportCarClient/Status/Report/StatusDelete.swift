@@ -9,8 +9,6 @@
 import UIKit
 
 
-let kStatusDidDeletedNotification = "status_did_deleted_notification"
-let kStatusDidDeletedStatusIDKey = "statusID"
 
 protocol StatusDeleteDelegate: class {
     func statusDidDeleted()
@@ -37,11 +35,11 @@ class StatusDeleteController: PresentTemplateViewController {
             make.top.equalTo(sepLine).offset(45)
             make.size.equalTo(CGSizeMake(40, 25))
         }
-        deleteBtn.addTarget(self, action: "deleteBtnPressed", forControlEvents: .TouchUpInside)
+        deleteBtn.addTarget(self, action: #selector(StatusDeleteController.deleteBtnPressed), forControlEvents: .TouchUpInside)
     }
     
     func deleteBtnPressed() {
-        toast = showConfirmToast(LS("确认删除这条状态吗？"), target: self, confirmSelector: "deleteConfirmed", cancelSelector: "deleteCancelled")
+        toast = showConfirmToast(LS("确认删除这条状态吗？"), target: self, confirmSelector: #selector(StatusDeleteController.deleteConfirmed), cancelSelector: #selector(StatusDeleteController.deleteCancelled), onSelf: true)
     }
     
     func deleteConfirmed() {
@@ -57,7 +55,11 @@ class StatusDeleteController: PresentTemplateViewController {
         }
         dispatch_semaphore_wait(waitSignal, DISPATCH_TIME_FOREVER)
         delegate?.statusDidDeleted()
-        hideAnimated()
+        hideAnimated({ [weak delegate] in
+            dispatch_async(dispatch_get_main_queue(), { 
+                delegate?.statusDidDeleted()
+            })
+        })
     }
     
     func deleteCancelled() {

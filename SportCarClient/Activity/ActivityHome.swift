@@ -57,13 +57,13 @@ class ActivityHomeController: UIViewController {
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 15, 13.5)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(ActivityHomeController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         // 导航栏右侧按钮
         let navRightBtn = UIButton()
         navRightBtn.setImage(UIImage(named: "status_add_btn_white"), forState: .Normal)
         navRightBtn.frame = CGRectMake(0, 0, 21, 21)
-        navRightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+        navRightBtn.addTarget(self, action: #selector(ActivityHomeController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navRightBtn)
         // 导航栏内容
         let barHeight = self.navigationController!.navigationBar.frame.height
@@ -76,7 +76,7 @@ class ActivityHomeController: UIViewController {
         titleMineBtn.setTitle(LS("发布"), forState: .Normal)
         titleMineBtn.setTitleColor(kBarBgColor, forState: .Normal)
         titleMineBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        titleMineBtn.addTarget(self, action: "navTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleMineBtn.addTarget(self, action: #selector(ActivityHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(titleMineBtn)
         titleMineBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(30)
@@ -89,7 +89,7 @@ class ActivityHomeController: UIViewController {
         titleNearByBtn.setTitle(LS("发现"), forState: .Normal)
         titleNearByBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         titleNearByBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        titleNearByBtn.addTarget(self, action: "navTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleNearByBtn.addTarget(self, action: #selector(ActivityHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(titleNearByBtn)
         titleNearByBtn.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(container)
@@ -102,7 +102,7 @@ class ActivityHomeController: UIViewController {
         titleAppliedBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         titleAppliedBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         titleAppliedBtn.tag = 2
-        titleAppliedBtn.addTarget(self, action: "navTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleAppliedBtn.addTarget(self, action: #selector(ActivityHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(titleAppliedBtn)
         titleAppliedBtn.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(titleMineBtn.snp_right).offset(9)

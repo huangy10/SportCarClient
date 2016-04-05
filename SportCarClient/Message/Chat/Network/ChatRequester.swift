@@ -84,6 +84,10 @@ class ChatURLMaker {
     func markNotificationRead(notifID: String) -> String {
         return website + "/notification/\(notifID)"
     }
+    
+    func clearNotificationUnread() -> String {
+        return website + "/notification/clear"
+    }
 }
 
 
@@ -94,6 +98,7 @@ class ChatRequester: AccountRequester {
     
     let privateQueue = ChatModelManger.sharedManager.workQueue
     let notificationQueue = NotificationModelManager.sharedManager.workQueue
+    weak var chatRequest: Request?
     // TODO: 将监听功能整合进ChatModelManager
     func startListenning(onMessageCome: (JSON)->(), onError: (code: String?)->()) {
         dispatch_async(privateQueue) { () -> Void in
@@ -106,7 +111,7 @@ class ChatRequester: AccountRequester {
         let urlStr = ChatURLMaker.sharedMaker.updateChat()
         let mutableRequest = NSMutableURLRequest(URL: NSURL(string: urlStr)!)
         mutableRequest.timeoutInterval = 3600
-        manager.request(.POST, mutableRequest).responseJSON { (response) -> Void in
+        chatRequest = manager.request(.POST, mutableRequest).responseJSON { (response) -> Void in
 //            var delayTime: dispatch_time_t = DISPATCH_TIME_NOW
             switch response.result {
             case .Success(let value):
@@ -497,5 +502,12 @@ class ChatRequester: AccountRequester {
         return manager.request(.POST, url, parameters: ["new_host": newHostID], encoding: .JSON).responseJSON(self.privateQueue) { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
         }
+    }
+    
+    func clearNotificationUnreadNum(onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+        let url = ChatURLMaker.sharedMaker.clearNotificationUnread()
+        return manager.request(.POST, url).responseJSON(completionHandler: { (response) in
+            self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
+        })
     }
 }

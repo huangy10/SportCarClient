@@ -95,7 +95,7 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         //
         cancelBtn = UIButton()
         cancelBtn?.setImage(UIImage(named: "news_comment_cancel_btn"), forState: .Normal)
-        cancelBtn?.addTarget(self, action: "commentCancelled", forControlEvents: .TouchUpInside)
+        cancelBtn?.addTarget(self, action: #selector(MakeCommentController.commentCancelled), forControlEvents: .TouchUpInside)
         superview.addSubview(cancelBtn!)
         cancelBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.size.equalTo(21)
@@ -126,7 +126,7 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
             make.centerX.equalTo(superview)
             make.top.equalTo(sepLine!.snp_bottom).offset(33)
         })
-        confirmBtn?.addTarget(self, action: "commentConfirmed", forControlEvents: .TouchUpInside)
+        confirmBtn?.addTarget(self, action: #selector(MakeCommentController.commentConfirmed), forControlEvents: .TouchUpInside)
         //
         opPanel = UIView()
         opPanel?.backgroundColor = UIColor(white: 0.92, alpha: 1)
@@ -179,7 +179,7 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
             make.top.equalTo(inputContainer.snp_bottom).offset(9)
             make.size.equalTo(CGSize(width: 75, height: 43))
         })
-        attachImageBtn?.addTarget(self, action: "attachImageBtnPressed", forControlEvents: .TouchUpInside)
+        attachImageBtn?.addTarget(self, action: #selector(MakeCommentController.attachImageBtnPressed), forControlEvents: .TouchUpInside)
     }
     
     override func viewWillAppear(animated: Bool) {

@@ -41,6 +41,10 @@ class AccountURLMaker {
         return NSURL(string: website + "/account/login")
     }
     
+    func logout() -> String {
+        return website + "/account/logout"
+    }
+    
     func setProfile() -> NSURL? {
         return NSURL(string: website + "/account/profile")
     }
@@ -55,6 +59,10 @@ class AccountURLMaker {
     
     func getFollowList(userID: String) -> String {
         return website + "/profile/\(userID)/follows"
+    }
+    
+    func blacklistUpdate() -> String {
+        return website + "/profile/blacklist/update"
     }
 }
 
@@ -85,7 +93,6 @@ class AccountRequester {
      */
     func requestAuthCode(phoneNum: String, onSuccess: ()->(Void), onError: ()->(Void)){
         manager.request(.POST, urlMaker.requestForCode()!.absoluteString, parameters: ["phone_num": phoneNum]).responseJSON { (response) -> Void in
-            
             switch response.result {
             case .Success(let value):
                 let json = JSON(value)
@@ -104,74 +111,28 @@ class AccountRequester {
     }
     
     func postToLogin(phoneNum: String, password: String, onSuccess: (json: JSON?)->(Void), onError: (code: String?)->(Void)) {
-        manager.request(.POST, urlMaker.login()!.absoluteString, parameters: ["username": phoneNum, "password": password]).responseJSON { (response) -> Void in
+        var param = ["username": phoneNum, "password": password]
+        if let token = AppManager.sharedAppManager.deviceTokenString {
+            param["device_token"] = token
+        }
+        manager.request(.POST, urlMaker.login()!.absoluteString, parameters: param).responseJSON { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
-//            switch response.result {
-//            case .Success(let value):
-//                let json = JSON(value)
-//                if json["success"].boolValue {
-//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                        let userID = json["userID"].stringValue
-//                        onSuccess(userID: userID)
-//                    })
-//                }else{
-//                    dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
-//                        onError(code: json["code"].string)
-//                    })
-//                }
-//                break
-//            case .Failure(let error):
-//                print("\(error)")
-//                dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
-//                    onError(code: "0000")
-//                })
-//                break
-//            }
         }
     }
     
     func postToRegister(phoneNum: String, passwd: String, authCode: String, onSuccess: (json: JSON?)->(Void), onError: (code: String?)->(Void)) {
-        manager.request(.POST, urlMaker.register()!.absoluteString, parameters: ["username": phoneNum, "password1": passwd, "password2": passwd, "auth_code": authCode]).responseJSON { (response) -> Void in
+        var param = ["username": phoneNum, "password1": passwd, "password2": passwd, "auth_code": authCode]
+        if let token = AppManager.sharedAppManager.deviceTokenString {
+            param["device_token"] = token
+        }
+        manager.request(.POST, urlMaker.register()!.absoluteString, parameters: param).responseJSON { (response) -> Void in
             self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
-//            switch response.result {
-//            case .Success(let value):
-//                let json = JSON(value)
-//                if json["success"].boolValue {
-//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                        let userID = json["userID"].stringValue
-//                        onSuccess(userID: userID)
-//                    })
-//                }else{
-//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                        onError(code: json["code"].string)
-//                    })
-//                }
-//                break
-//            case .Failure(let error):
-//                print(error)
-//                dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
-//                    onError(code: "0000")
-//                })
-//                break
-//            }
-//
-//            guard response.result.isSuccess else{
-//                dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
-//                    onError(code: "0000")
-//                })
-//                return
-//            }
-//            let result = response.result.value
-//            if result?["success"] as! Bool {
-//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                    let userID = result?["userID"] as? Int
-//                    onSuccess(userID: userID)
-//                })
-//            }else {
-//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                    onError(code: result?["code"] as? String)
-//                })
-//            }
+        }
+    }
+    
+    func logout(onSuccess: (json: JSON?)->(Void), onError: (code: String?)->(Void)) {
+        manager.request(.POST, urlMaker.logout()).responseJSON { (response) in
+            self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
         }
     }
     
@@ -289,5 +250,17 @@ extension AccountRequester {
             .responseJSON { (response) -> Void in
                 self.resultValueHandler(response.result, dataFieldName: "follow", onSuccess: onSuccess, onError: onError)
         }
+    }
+    
+    func blacklistUser(user: User, blacklist: Bool, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+        let urlStr = urlMaker.blacklistUpdate()
+        let request = NSMutableURLRequest(URL: NSURL(string: urlStr)!)
+        request.HTTPMethod = "POST"
+        let params = ["op_type": blacklist ? "add" : "remove", "users": [user.ssidString]] as JSON
+        request.HTTPBody = try! params.rawData()
+        return manager.request(request)
+            .responseJSON(completionHandler: { (response) in
+            self.resultValueHandler(response.result, dataFieldName: "state", onSuccess: onSuccess, onError: onError)
+        })
     }
 }

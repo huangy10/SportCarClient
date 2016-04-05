@@ -23,7 +23,7 @@ class SuggestionController: PresentTemplateViewController {
     }
     
     override func createSubviews() {
-        self.tapper = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.tapper = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         tapper?.enabled = false
         self.view.addGestureRecognizer(tapper!)
         let superview = self.view
@@ -93,7 +93,7 @@ class SuggestionController: PresentTemplateViewController {
         //
         cancelBtn = UIButton()
         cancelBtn.setTitle(LS("取消"), forState: .Normal)
-        cancelBtn.addTarget(self, action: "hideAnimated", forControlEvents: .TouchUpInside)
+        cancelBtn.addTarget(self, action: #selector(PresentTemplateViewController.hideAnimated), forControlEvents: .TouchUpInside)
         cancelBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), forState: .Normal)
         cancelBtn.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
         container.addSubview(cancelBtn)
@@ -121,7 +121,7 @@ class SuggestionController: PresentTemplateViewController {
             }, completion: nil)
     }
     
-    override func hideAnimated() {
+    override func hideAnimated(completion: (() -> ())?) {
         self.view.layoutIfNeeded()
         container.snp_remakeConstraints { (make) -> Void in
             make.size.equalTo(CGSizeMake(250, 175))

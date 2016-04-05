@@ -14,16 +14,28 @@ let kReportTitles = [LS("色情低俗"), LS("广告骚扰"), LS("政治敏感"),
 
 class ReportBlacklistViewController: PresentTemplateViewController {
     
-    var displayStage: Int = 0
+    var user: User?
     
-    var container1: UIView!
-    var container2: UIView!
+    private var displayStage: Int = 0
+    
+    private var container1: UIView!
+    private var container2: UIView!
     // 第一版面
-    var reportBtn: UIButton!
-    var blacklistLbl: UILabel!
-    var blacklistBtn: UISwitch!
+    private var reportBtn: UIButton!
+    private var blacklistLbl: UILabel!
+    private var blacklistBtn: UISwitch!
     var blacklist: Bool = false
+    var dirty: Bool = false
     // 第二版面
+    
+    init (user: User?, parent: UIViewController) {
+        super.init(parent: parent)
+        self.user = user
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func createContent() {
         let superview = self.view
@@ -47,32 +59,23 @@ class ReportBlacklistViewController: PresentTemplateViewController {
             make.top.equalTo(container1).offset(45)
             make.size.equalTo(CGSizeMake(40, 25))
         }
-        reportBtn.addTarget(self, action: "reportBtnPressed", forControlEvents: .TouchUpInside)
-        // 
-        blacklistLbl = UILabel()
-        blacklistLbl.font = UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)
-        blacklistLbl.textColor = UIColor.whiteColor()
-        blacklistLbl.text = LS("屏蔽")
-        container1.addSubview(blacklistLbl)
-        blacklistLbl.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(container1)
-            make.top.equalTo(reportBtn.snp_bottom).offset(45)
+        reportBtn.addTarget(self, action: #selector(ReportBlacklistViewController.reportBtnPressed), forControlEvents: .TouchUpInside)
+        if user != nil {
+            blacklistLbl = container1.addSubview(UILabel.self)
+                .config(17, textColor: UIColor.whiteColor(), textAlignment: .Center, text: LS("屏蔽"))
+                .layout({ (make) in
+                    make.centerX.equalTo(container1)
+                    make.top.equalTo(reportBtn.snp_bottom).offset(45)
+                })
+            blacklistBtn = container1.addSubview(UISwitch.self)
+                .config(self, selector: #selector(blacklistPressed))
+                .layout({ (make) in
+                    make.centerX.equalTo(container1)
+                    make.top.equalTo(blacklistLbl.snp_bottom).offset(3)
+                    make.size.equalTo(CGSizeMake(51, 31))
+                })
+            blacklistBtn.on = user!.blacklisted
         }
-        //
-        blacklistBtn = UISwitch()
-        blacklistBtn.tintColor = UIColor(white: 0.72, alpha: 1)
-        blacklistBtn.onTintColor = kHighlightedRedTextColor
-        blacklistBtn.backgroundColor = UIColor(white: 0.72, alpha: 1)
-        blacklistBtn.clipsToBounds = true
-        blacklistBtn.layer.cornerRadius = 15.5
-        container1.addSubview(blacklistBtn)
-        blacklistBtn.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(container1)
-            make.top.equalTo(blacklistLbl.snp_bottom).offset(3)
-            make.size.equalTo(CGSizeMake(51, 31))
-        }
-        blacklistBtn.addTarget(self, action: "blacklistPressed", forControlEvents: .ValueChanged)
-        
         // 创建第二版面
         container2 = UIView()
         container.addSubview(container2)
@@ -89,7 +92,7 @@ class ReportBlacklistViewController: PresentTemplateViewController {
             btn.setTitle(title, forState: .Normal)
             btn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             btn.tag = index
-            btn.addTarget(self, action: "reportItemPressed:", forControlEvents: .TouchUpInside)
+            btn.addTarget(self, action: #selector(ReportBlacklistViewController.reportItemPressed(_:)), forControlEvents: .TouchUpInside)
             container2.addSubview(btn)
             btn.snp_makeConstraints(closure: { (make) -> Void in
                 make.centerX.equalTo(container2)
@@ -114,11 +117,28 @@ class ReportBlacklistViewController: PresentTemplateViewController {
     
     func reportItemPressed(sender: UIButton) {
         // TODO: 将举报内容发送给服务器
+        showToast(LS("举报内容发送成功"))
         hideAnimated()
     }
     
     func blacklistPressed() {
         blacklist = blacklistBtn.on
-        
+        dirty = true
+    }
+    
+    override func hideAnimated(completion: (() -> ())? = nil) {
+        if dirty {
+            // 提交拉黑请求
+            user?.blacklisted = blacklist
+            AccountRequester.sharedRequester.blacklistUser(user!, blacklist: blacklist, onSuccess: { (json) in
+                print("blacklist done")
+                }, onError: { (code) in
+                    AppManager.sharedAppManager.showToast(LS("操作失败，请检查您的网络设置"))
+            })
+//            if blacklist {
+//                NSNotificationCenter.defaultCenter().postNotificationName(kUserBlacklistedNotification, object: nil, userInfo: [kUserSSIDKey: user!.ssidString])
+//            }
+        }
+        super.hideAnimated()
     }
 }

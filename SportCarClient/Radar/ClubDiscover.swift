@@ -112,7 +112,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         showClubListBtn.layer.shadowOffset = CGSizeMake(0, 4)
         showClubListBtn.layer.cornerRadius = 4
         showClubListBtn.clipsToBounds = false
-        showClubListBtn.addTarget(self, action: "showClubBtnPressed", forControlEvents: .TouchUpInside)
+        showClubListBtn.addTarget(self, action: #selector(ClubDiscoverController.showClubBtnPressed), forControlEvents: .TouchUpInside)
         self.view.addSubview(showClubListBtn)
         showClubListBtn.snp_makeConstraints { (make) -> Void in
             make.bottom.equalTo(clubList.snp_top).offset(-15)
@@ -150,7 +150,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         }
         let mapFilterToggleBtn = UIButton()
         self.view.addSubview(mapFilterToggleBtn)
-        mapFilterToggleBtn.addTarget(self, action: "toggleMapFilter", forControlEvents: .TouchUpInside)
+        mapFilterToggleBtn.addTarget(self, action: #selector(ClubDiscoverController.toggleMapFilter), forControlEvents: .TouchUpInside)
         mapFilterToggleBtn.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(clubFilterView)
             make.left.equalTo(self.view).offset(15)
@@ -209,16 +209,37 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let detail = ClubBriefInfoController()
-        detail.targetClub = clubs[indexPath.row]
-        radarHome?.navigationController?.pushViewController(detail, animated: true)
+        let club = clubs[indexPath.row]
+        if club.attended {
+            if club.founderUser!.isHost {
+                let detail = GroupChatSettingHostController(targetClub: club)
+                radarHome?.navigationController?.pushViewController(detail, animated: true)
+            } else {
+                let detail = GroupChatSettingController(targetClub: club)
+                radarHome?.navigationController?.pushViewController(detail, animated: true)
+            }
+        } else {
+            let detail = ClubBriefInfoController()
+            detail.targetClub = clubs[indexPath.row]
+            radarHome?.navigationController?.pushViewController(detail, animated: true)
+        }
 
     }
     
     func clubBubbleDidClickOn(club: Club) {
-        let detail = ClubBriefInfoController()
-        detail.targetClub = club
-        radarHome?.navigationController?.pushViewController(detail, animated: true)
+        if club.attended {
+            if club.founderUser!.isHost {
+                let detail = GroupChatSettingHostController(targetClub: club)
+                radarHome?.navigationController?.pushViewController(detail, animated: true)
+            } else {
+                let detail = GroupChatSettingController(targetClub: club)
+                radarHome?.navigationController?.pushViewController(detail, animated: true)
+            }
+        } else {
+            let detail = ClubBriefInfoController()
+            detail.targetClub = club
+            radarHome?.navigationController?.pushViewController(detail, animated: true)
+        }
     }
     
     func toggleMapFilter() {
@@ -258,6 +279,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             self.bubbles.clubs = self.clubs
             self.bubbles.reloadBubble()
             self.bubbles.startUpdate()
+            self.clubList.reloadData()
             }) { (code) -> () in
                 print(code)
         }

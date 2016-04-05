@@ -51,7 +51,7 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate {
         //
         playBtn = UIButton()
         playBtn?.setImage(UIImage(named: "chat_voice_play"), forState: .Normal)
-        playBtn?.addTarget(self, action: "playBtnPressed", forControlEvents: .TouchUpInside)
+        playBtn?.addTarget(self, action: #selector(ChatWaveView.playBtnPressed), forControlEvents: .TouchUpInside)
         playBtn?.imageView?.contentMode = .ScaleAspectFit
         playBtn?.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4)
         playBtn?.tag = 0

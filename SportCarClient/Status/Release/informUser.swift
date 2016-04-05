@@ -36,7 +36,7 @@ class InformOtherUserController: UIViewController, UICollectionViewDelegate, UIC
         atBtn?.setTitleColor(UIColor.blackColor(), forState: .Normal)
         atBtn?.titleLabel?.textAlignment = .Center
         atBtn?.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        atBtn?.addTarget(self, action: "atBtnPressed", forControlEvents: .TouchUpInside)
+        atBtn?.addTarget(self, action: #selector(InformOtherUserController.atBtnPressed), forControlEvents: .TouchUpInside)
         atBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.centerY.equalTo(superview)

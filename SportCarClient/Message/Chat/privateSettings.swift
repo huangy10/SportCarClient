@@ -71,7 +71,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         let leftBtn = UIButton()
         leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         leftBtn.frame = CGRectMake(0, 0, 9, 15)
-        leftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        leftBtn.addTarget(self, action: #selector(PrivateChatSettingController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
 //        let rightBtn = UIButton()
 //        rightBtn.setImage(UIImage(named: "status_detail_other_operation"), forState: .Normal)
@@ -82,7 +82,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     }
     
     func navRightBtnPressed() {
-        let report = ReportBlacklistViewController(parent: self)
+        let report = ReportBlacklistViewController(user: targetUser, parent: self)
         self.presentViewController(report, animated: false, completion: nil)
     }
     
@@ -156,7 +156,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                 cell.selectionStyle = .None
                 if startGroupChatBtn == nil {
                     startGroupChatBtn = UIButton()
-                    startGroupChatBtn?.addTarget(self, action: "startGroupChatPressed", forControlEvents: .TouchUpInside)
+                    startGroupChatBtn?.addTarget(self, action: #selector(PrivateChatSettingController.startGroupChatPressed), forControlEvents: .TouchUpInside)
                     startGroupChatBtn?.setImage(UIImage(named: "chat_settings_add_person"), forState: .Normal)
                     cell.contentView.addSubview(startGroupChatBtn!)
                     startGroupChatBtn?.snp_makeConstraints(closure: { (make) -> Void in
@@ -185,10 +185,10 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
             cell.boolSelect.tag = indexPath.row
             if indexPath.row == 0 {
                 cell.boolSelect.setOn(!allowSeeStatus, animated: false)
-                cell.boolSelect.addTarget(self, action: "allowSeeStatusSwitchPressed:", forControlEvents: .ValueChanged)
+                cell.boolSelect.addTarget(self, action: #selector(PrivateChatSettingController.allowSeeStatusSwitchPressed(_:)), forControlEvents: .ValueChanged)
             }else{
                 cell.boolSelect.setOn(!seeHisStatus, animated: false)
-                cell.boolSelect.addTarget(self, action: "seeHisStatusSwitchPressed:", forControlEvents: .ValueChanged)
+                cell.boolSelect.addTarget(self, action: #selector(PrivateChatSettingController.seeHisStatusSwitchPressed(_:)), forControlEvents: .ValueChanged)
             }
             return cell
         default:
@@ -281,9 +281,9 @@ extension PrivateChatSettingController {
             self.navigationController?.pushViewController(detail, animated: true)
         case 3:
             if indexPath.row == 0 {
-                toast = showConfirmToast(LS("确定要清除聊天信息吗？"), target: self, confirmSelector: "clearChatContent", cancelSelector: "hideToast")
+                toast = showConfirmToast(LS("确定要清除聊天信息吗？"), target: self, confirmSelector: #selector(PrivateChatSettingController.clearChatContent), cancelSelector: #selector(PrivateChatSettingController.hideToast as (PrivateChatSettingController) -> () -> ()))
             } else if indexPath.row == 1 {
-                let report = ReportBlacklistViewController(parent: self)
+                let report = ReportBlacklistViewController(user: targetUser, parent: self)
                 self.presentViewController(report, animated: false, completion: nil)
             }
             break
@@ -326,7 +326,8 @@ extension PrivateChatSettingController {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func userSelected(var users: [User]) {
+    func userSelected(users: [User]) {
+        var users = users
         self.dismissViewControllerAnimated(true, completion: nil)
         if userSelectPurpose == "group_chat" {
             if users.findIndex({ $0.ssid == self.targetUser.ssid}) == nil {

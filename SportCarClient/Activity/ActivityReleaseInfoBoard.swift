@@ -75,18 +75,18 @@ class ActivityReleaseInfoBoard: UIView {
         wrapper.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(staticTitleLbl.snp_bottom).offset(13)
-            make.height.equalTo(17)
+            make.height.equalTo(24)
             make.width.equalTo(superview).multipliedBy(0.8)
         }
         wrapper.contentSize = CGSizeMake(UIScreen.mainScreen().bounds.width * 0.8, 17)
         //
         actNameInput = UITextField()
-        actNameInput.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        actNameInput.font = UIFont.systemFontOfSize(19, weight: UIFontWeightUltraLight)
         actNameInput.textColor = UIColor(white: 0.72, alpha: 1)
         actNameInput.placeholder = LS("为活动取一个名字")
         actNameInput.textAlignment = .Center
         wrapper.addSubview(actNameInput)
-        actNameInput.frame = CGRectMake(0, 0, wrapper.contentSize.width, 17)
+        actNameInput.frame = CGRectMake(0, 0, wrapper.contentSize.width, 24)
         //
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.933, alpha: 11)

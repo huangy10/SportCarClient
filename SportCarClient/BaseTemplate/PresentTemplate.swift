@@ -76,7 +76,7 @@ class PresentTemplateViewController: InputableViewController {
         //
         cancelBtn = UIButton()
         cancelBtn.setImage(UIImage(named: "news_comment_cancel_btn"), forState: .Normal)
-        cancelBtn.addTarget(self, action: "cancelBtnPressed", forControlEvents: .TouchUpInside)
+        cancelBtn.addTarget(self, action: #selector(PresentTemplateViewController.cancelBtnPressed), forControlEvents: .TouchUpInside)
         superview.addSubview(cancelBtn)
         cancelBtn.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
@@ -112,14 +112,14 @@ class PresentTemplateViewController: InputableViewController {
         }
     }
     
-    func hideAnimated() {
+    func hideAnimated(completion: (()->())? = nil) {
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             self.bg.layer.opacity = 1
             self.bgBlurred.layer.opacity = 0
             self.bgMask.layer.opacity = 0
             self.container.layer.opacity = 0
             }) { (_) -> Void in
-                self.presentingViewController?.dismissViewControllerAnimated(false, completion: nil)
+                self.presentingViewController?.dismissViewControllerAnimated(false, completion: completion)
         }
     }
     

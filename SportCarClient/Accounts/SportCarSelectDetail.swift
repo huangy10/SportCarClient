@@ -123,7 +123,7 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandSelect
     func navBarLeftBtn() -> UIBarButtonItem! {
         let backBtn = UIButton()
         backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        backBtn.addTarget(self, action: "backBtnPressed", forControlEvents: .TouchUpInside)
+        backBtn.addTarget(self, action: #selector(SportCarSelectDetailController.backBtnPressed), forControlEvents: .TouchUpInside)
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.2, height: 18)
         
         let leftBtnItem = UIBarButtonItem(customView: backBtn)
@@ -135,7 +135,7 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandSelect
         nextStepBtn.setTitle(NSLocalizedString("下一步", comment: ""), forState: .Normal)
         nextStepBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
         nextStepBtn.titleLabel?.font = kBarTextFont
-        nextStepBtn.addTarget(self, action: "nextBtnPressed", forControlEvents: .TouchUpInside)
+        nextStepBtn.addTarget(self, action: #selector(SportCarSelectDetailController.nextBtnPressed), forControlEvents: .TouchUpInside)
         let rightBtnItem = UIBarButtonItem(customView: nextStepBtn)
         return rightBtnItem
     }

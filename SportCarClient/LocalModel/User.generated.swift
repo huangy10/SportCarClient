@@ -21,6 +21,7 @@ extension User {
     @NSManaged var avatarCar: String?
     @NSManaged var avatarClub: String?
     @NSManaged var birthDate: NSDate?
+    @NSManaged var blacklisted: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var district: String?
     @NSManaged var fansNum: Int32 // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var followed: Bool // cannot mark as optional because Objective-C compatibility issues
@@ -80,6 +81,7 @@ extension User {
     static let avatarCar = AlecrimCoreData.NullableAttribute<String>("avatarCar")
     static let avatarClub = AlecrimCoreData.NullableAttribute<String>("avatarClub")
     static let birthDate = AlecrimCoreData.NullableAttribute<NSDate>("birthDate")
+    static let blacklisted = AlecrimCoreData.NullableAttribute<Bool>("blacklisted")
     static let district = AlecrimCoreData.NullableAttribute<String>("district")
     static let fansNum = AlecrimCoreData.NullableAttribute<Int32>("fansNum")
     static let followed = AlecrimCoreData.NullableAttribute<Bool>("followed")
@@ -109,6 +111,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: User {
     var avatarCar: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("avatarCar", self) }
     var avatarClub: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("avatarClub", self) }
     var birthDate: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("birthDate", self) }
+    var blacklisted: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("blacklisted", self) }
     var district: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("district", self) }
     var fansNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("fansNum", self) }
     var followed: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("followed", self) }

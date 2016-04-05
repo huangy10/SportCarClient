@@ -35,7 +35,7 @@ class ChatAccessoryBoard: UIView {
         //
         takePhotoBtn = UIButton()
         takePhotoBtn?.setImage(UIImage(named: "chat_accessory_take_photo"), forState: .Normal)
-        takePhotoBtn?.addTarget(self, action: "takePhotoBtnPressed", forControlEvents: .TouchUpInside)
+        takePhotoBtn?.addTarget(self, action: #selector(ChatAccessoryBoard.takePhotoBtnPressed), forControlEvents: .TouchUpInside)
         superview.addSubview(takePhotoBtn!)
         takePhotoBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview).offset(15)
@@ -55,7 +55,7 @@ class ChatAccessoryBoard: UIView {
         //
         photoAlbumBtn = UIButton()
         photoAlbumBtn?.setImage(UIImage(named: "chat_accessory_photos"), forState: .Normal)
-        photoAlbumBtn?.addTarget(self, action: "photoAlbumBtnPressed", forControlEvents: .TouchUpInside)
+        photoAlbumBtn?.addTarget(self, action: #selector(ChatAccessoryBoard.photoAlbumBtnPressed), forControlEvents: .TouchUpInside)
         superview.addSubview(photoAlbumBtn!)
         photoAlbumBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.top.equalTo(takePhotoBtn!)

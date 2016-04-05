@@ -107,7 +107,7 @@ class ChatCell: UITableViewCell {
         avatarBtn?.clipsToBounds = true
         avatarBtn?.backgroundColor = UIColor(white: 0.92, alpha: 1)
         superview.addSubview(avatarBtn!)
-        avatarBtn?.addTarget(self, action: "avatarBtnPressed", forControlEvents: .TouchUpInside)
+        avatarBtn?.addTarget(self, action: #selector(ChatCell.avatarBtnPressed), forControlEvents: .TouchUpInside)
         //
         triangle = UIImageView()
         superview.addSubview(triangle!)

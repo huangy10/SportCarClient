@@ -95,13 +95,13 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         let navLeftBtn = UIButton()
         navLeftBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
         navLeftBtn.frame = CGRectMake(0, 0, 15, 13.5)
-        navLeftBtn.addTarget(self, action: "navLeftBtnPressed", forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(StatusHomeController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         // 导航栏右侧按钮
         let navRightBtn = UIButton()
         navRightBtn.setImage(UIImage(named: "status_add_btn_white"), forState: .Normal)
         navRightBtn.frame = CGRectMake(0, 0, 21, 21)
-        navRightBtn.addTarget(self, action: "navRightBtnPressed", forControlEvents: .TouchUpInside)
+        navRightBtn.addTarget(self, action: #selector(StatusHomeController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navRightBtn)
         // 导航栏内容
         let barHeight = self.navigationController!.navigationBar.frame.height
@@ -114,7 +114,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         titleFollowBtn.setTitle(LS("关注"), forState: .Normal)
         titleFollowBtn.setTitleColor(kBarBgColor, forState: .Normal)
         titleFollowBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        titleFollowBtn.addTarget(self, action: "navTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleFollowBtn.addTarget(self, action: #selector(StatusHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(titleFollowBtn)
         titleFollowBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(30)
@@ -127,7 +127,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         titleNearbyBtn.setTitle(LS("附近"), forState: .Normal)
         titleNearbyBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         titleNearbyBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        titleNearbyBtn.addTarget(self, action: "navTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleNearbyBtn.addTarget(self, action: #selector(StatusHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(titleNearbyBtn)
         titleNearbyBtn.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(container)
@@ -140,7 +140,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         titleHotBtn.setTitle(LS("热门"), forState: .Normal)
         titleHotBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         titleHotBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        titleHotBtn.addTarget(self, action: "navTitleBtnPressed:", forControlEvents: .TouchUpInside)
+        titleHotBtn.addTarget(self, action: #selector(StatusHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(titleHotBtn)
         titleHotBtn.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(titleFollowBtn.snp_right).offset(9)
