@@ -26,8 +26,8 @@ class PersonMineSettingsAuthController: AuthThreeImagesController, ProgressProto
         var uploadImages: [UIImage] = []
         for x in selectedImages {
             // 如果三张图片没有选全，则放弃之
-            if x == nil {
-                self.displayAlertController(LS("错误"), message: LS("请完整提供要求的信息"))
+            guard x != nil else {
+                showToast(LS("请完整提供要求的信息"))
                 return
             }
             uploadImages.append(x!)

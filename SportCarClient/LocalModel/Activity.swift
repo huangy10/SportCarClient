@@ -56,6 +56,10 @@ class Activity: BaseModel {
         }
         return result
     }
+    
+    var finished: Bool {
+        return endAt!.compare(NSDate()) == .OrderedAscending
+    }
 
     override func loadDataFromJSON(data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Activity {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)

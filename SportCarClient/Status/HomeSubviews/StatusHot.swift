@@ -25,11 +25,12 @@ class StatusHotController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView?.alwaysBounceVertical = true
         collectionView?.contentInset = UIEdgeInsetsMake(5, 5, 5, 5)
         collectionView?.registerClass(StatusHotCell.self, forCellWithReuseIdentifier: "cell")
         collectionView?.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         myRefreshControl = UIRefreshControl()
-        myRefreshControl?.addTarget(self, action: #selector(loadMoreStatusData), forControlEvents: .TouchUpInside)
+        myRefreshControl?.addTarget(self, action: #selector(loadLatestStatusData), forControlEvents: .ValueChanged)
         collectionView?.addSubview(myRefreshControl!)
         loadMoreStatusData()
     }
@@ -46,7 +47,7 @@ class StatusHotController: UICollectionViewController {
         }
     }
     
-    func loadLatestStatusData(limit: Int = 12) {
+    func loadLatestStatusData() {
         let threshold = status.first()?.createdAt ?? NSDate()
         StatusRequester.SRRequester.getLatestStatusList(threshold, queryType: "hot", onSuccess: { (json) -> () in
             if self.jsonDataHandler(json!) > 0 {
@@ -54,6 +55,7 @@ class StatusHotController: UICollectionViewController {
             }
             self.myRefreshControl?.endRefreshing()
             }) { (code) -> () in
+                self.myRefreshControl?.endRefreshing()
                 print(code)
         }
     }

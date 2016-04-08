@@ -43,6 +43,12 @@ func ss_labelFactory(
         return wrapped
 }
 
+extension UIColor {
+    class func RGB(red: CGFloat, _ green: CGFloat, _ blue: CGFloat, alpha: CGFloat = 1) -> UIColor {
+        return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: alpha)
+    }
+}
+
 extension UIView {
     
     @nonobjc func addSubview<T: UIView>(type: T.Type) -> T {
@@ -66,8 +72,8 @@ extension UIView {
     @nonobjc func addShadow(
         blur: CGFloat = 2,
         color: UIColor = UIColor.blackColor(),
-        opacity: Float = 0.4,
-        offset: CGSize = CGSizeMake(0, 3)
+        opacity: Float = 0.2,
+        offset: CGSize = CGSizeMake(0, 2)
         ) -> Self {
         self.layer.shadowColor = color.CGColor
         self.layer.shadowOffset = offset
@@ -78,6 +84,18 @@ extension UIView {
     
     @nonobjc func setFrame(frame: CGRect) -> Self {
         self.frame = frame
+        return self
+    }
+    
+    @nonobjc func toRound(corner: CGFloat, clipsToBound: Bool = true) -> Self {
+        self.layer.cornerRadius = corner
+        self.clipsToBounds = clipsToBounds
+        return self
+    }
+    
+    @nonobjc func toRound(clipsToBounds: Bool = true) -> Self {
+        self.layer.cornerRadius = self.frame.width / 2
+        self.clipsToBounds = clipsToBounds
         return self
     }
     
@@ -106,6 +124,16 @@ extension UILabel {
         } else{
             numberOfLines = 1
         }
+        return self
+    }
+    
+    
+    @nonobjc func styleCopy(lbl: UILabel, text: String? = nil) -> Self {
+        font = lbl.font
+        textColor = lbl.textColor
+        textAlignment = lbl.textAlignment
+        numberOfLines = lbl.numberOfLines
+        self.text = text
         return self
     }
     
@@ -149,7 +177,7 @@ extension UITextField {
 extension UIImageView {
     @nonobjc func config(
         image: UIImage? = nil,
-        contentMode: UIViewContentMode = .ScaleToFill
+        contentMode: UIViewContentMode = .ScaleAspectFill
         ) -> Self {
         self.image = image
         self.contentMode = contentMode
@@ -167,16 +195,38 @@ extension UIImageView {
     }
 }
 
+extension UIRefreshControl {
+    @nonobjc func config(
+        target: AnyObject,
+        selector: Selector
+        ) -> Self {
+        self.addTarget(target, action: selector, forControlEvents: .ValueChanged)
+        return self
+    }
+}
+
 extension UIButton {
     @nonobjc func config(
         target: AnyObject,
         selector: Selector,
         title: String? = nil,
-        image: UIImage? = nil
-        ) -> Self {
+        titleColor: UIColor? = kHighlightedRedTextColor,
+        titleSize: CGFloat = 14,
+        titleWeight: CGFloat = UIFontWeightUltraLight,
+        image: UIImage? = nil,
+        contentMode: UIViewContentMode = .ScaleAspectFill
+        ) -> UIButton {
         self.setTitle(title, forState: .Normal)
         self.setImage(image, forState: .Normal)
+        self.imageView?.contentMode = contentMode
+        self.setTitleColor(titleColor, forState: .Normal)
+        self.titleLabel?.font = UIFont.systemFontOfSize(titleSize, weight: titleWeight)
         self.addTarget(target, action: selector, forControlEvents: .TouchUpInside)
+        return self
+    }
+    
+    @nonobjc func toRoundButton(corner: CGFloat) -> UIButton {
+        imageView?.layer.cornerRadius = corner
         return self
     }
 }
@@ -204,6 +254,14 @@ extension UIScrollView {
         contentSize: CGSize
         ) -> Self {
         return self
+    }
+}
+
+
+extension UIViewController {
+    func toNavWrapper() -> BlackBarNavigationController {
+        let wrapper = BlackBarNavigationController(rootViewController: self)
+        return wrapper
     }
 }
 

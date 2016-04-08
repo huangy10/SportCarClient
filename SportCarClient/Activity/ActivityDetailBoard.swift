@@ -111,7 +111,7 @@ class ActivityDetailBoardView: UIView {
             make.top.equalTo(actNameLbl.snp_bottom).offset(10)
         }
         //
-        doneIcon = UIImageView(image: UIImage(named: "activity_done"))
+        doneIcon = UIImageView(image: UIImage(named: "activity_done_2"))
         superview.addSubview(doneIcon)
         doneIcon.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(actNameLbl.snp_bottom)

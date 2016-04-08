@@ -358,7 +358,7 @@ class UserSelectCell: UITableViewCell {
         }
         //
         let sepLine = UIView()
-        sepLine.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        sepLine.backgroundColor = UIColor(white: 0.945, alpha: 1)
         superview .addSubview(sepLine)
         sepLine.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(0.5)

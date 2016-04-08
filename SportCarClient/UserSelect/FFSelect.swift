@@ -251,7 +251,7 @@ class FFSelectController: UserSelectController {
     
     override func userSelectionShouldChange(user: User, addOrDelete: Bool) -> Bool {
         if selectedUsers.count >= maxSelectUserNum && addOrDelete {
-            self.displayAlertController(nil, message: LS("你最多只能同时@\(maxSelectUserNum)名用户"))
+            showToast(LS("你最多只能同时@\(maxSelectUserNum)名用户"))
             return false
         }
         return true

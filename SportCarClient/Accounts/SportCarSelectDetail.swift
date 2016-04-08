@@ -162,7 +162,7 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandSelect
             }
             self.delegate?.sportCarSelectDeatilDidAddCar(car)
             }) { (code) -> () in
-                self.displayAlertController(LS("错误"), message: LS("服务器发生了内部错误"))
+                self.showToast(LS("服务器发生了内部错误"))
         }
     }
     

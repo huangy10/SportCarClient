@@ -30,25 +30,25 @@ class PrivateChatSettingsHeader: UITableViewHeaderFooterView {
             make.left.equalTo(self).offset(15)
             make.centerY.equalTo(self)
         }
-        let sepLine1 = UIView()
-        sepLine1.backgroundColor = UIColor(white: 0.72, alpha: 1)
-        self.addSubview(sepLine1)
-        sepLine1.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(self)
-            make.bottom.equalTo(self)
-            make.left.equalTo(self)
-            make.height.equalTo(0.5)
-        }
-        //
-        let sepLine2 = UIView()
-        sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
-        self.addSubview(sepLine2)
-        sepLine2.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(self)
-            make.right.equalTo(self)
-            make.top.equalTo(self)
-            make.height.equalTo(0.5)
-        }
+//        let sepLine1 = UIView()
+//        sepLine1.backgroundColor = UIColor(white: 0.72, alpha: 1)
+//        self.addSubview(sepLine1)
+//        sepLine1.snp_makeConstraints { (make) -> Void in
+//            make.right.equalTo(self)
+//            make.bottom.equalTo(self)
+//            make.left.equalTo(self)
+//            make.height.equalTo(0.5)
+//        }
+//        //
+//        let sepLine2 = UIView()
+//        sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
+//        self.addSubview(sepLine2)
+//        sepLine2.snp_makeConstraints { (make) -> Void in
+//            make.left.equalTo(self)
+//            make.right.equalTo(self)
+//            make.top.equalTo(self)
+//            make.height.equalTo(0.5)
+//        }
     }
 }
 

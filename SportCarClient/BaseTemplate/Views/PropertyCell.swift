@@ -23,6 +23,17 @@ class SSPropertyCell: SSPropertyBaseCell {
     var editable: Bool = false {
         didSet {
             arrowIcon.hidden = !editable
+            if arrowIcon.hidden {
+                infoLbl.snp_remakeConstraints(closure: { (make) in
+                    make.centerY.equalTo(staticLbl)
+                    make.right.equalTo(arrowIcon)
+                })
+            } else {
+                infoLbl.snp_updateConstraints(closure: { (make) in
+                    make.centerY.equalTo(staticLbl)
+                    make.right.equalTo(arrowIcon.snp_left).offset(-15)
+                })
+            }
         }
     }
     

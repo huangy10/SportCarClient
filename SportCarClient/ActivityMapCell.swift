@@ -13,13 +13,17 @@ class MapCell: UITableViewCell {
     static let reuseIdentifier = "user_usable_map_cell"
     
     var map: BMKMapView!
+    var centerSet: Bool = false
     var locBtn: UIButton!
     var locLbl: UILabel!
     var locDesIcon: UIImageView!
     var loc: CLLocationCoordinate2D?
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    var trailingHeight: CGFloat = 0
+    
+    init (trailingHeight: CGFloat) {
+        super.init(style: .Default, reuseIdentifier: MapCell.reuseIdentifier)
+        self.trailingHeight = trailingHeight
         createSubviews()
     }
 
@@ -34,8 +38,10 @@ class MapCell: UITableViewCell {
     func createSubviews() {
         map = BMKMapView()
         self.contentView.addSubview(map)
+        map.scrollEnabled = false
+        map.zoomEnabled = false
         map.snp_makeConstraints { (make) -> Void in
-            make.edges.equalTo(self.contentView)
+            make.edges.equalTo(self.contentView).inset(UIEdgeInsetsMake(0, 0, -trailingHeight, 0))
         }
         //
         let locDesContainer = UIButton()
@@ -75,17 +81,16 @@ class MapCell: UITableViewCell {
         let marker = UIImageView(image: UIImage(named: "map_default_marker"))
         self.contentView.addSubview(marker)
         marker.snp_makeConstraints { (make) -> Void in
-            make.center.equalTo(map)
+            make.center.equalTo(map) //.offset(CGPointMake(0, -trailingHeight/2))
             make.size.equalTo(CGSizeMake(38, 74))
         }
     }
     
     func setMapCenter(center: CLLocationCoordinate2D) {
         loc = center
-//        map.zoomLevel = 12
-//        map.setCenterCoordinate(center, animated: true)
-        let region = BMKCoordinateRegionMakeWithDistance(center, 3000, 5000)
+        let region = BMKCoordinateRegionMakeWithDistance(center, 3, 5)
         map.setRegion(region, animated: true)
+        centerSet = true
     }
     
 }

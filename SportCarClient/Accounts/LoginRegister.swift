@@ -11,17 +11,9 @@ import SnapKit
 
 
 class LoginRegisterController: InputableViewController {
-//    init(){
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//    
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//    }
     /**
     *  登陆和注册页面
     */
-    
     var board : UIScrollView?
     
     var bgImgView: UIImageView!
@@ -443,12 +435,12 @@ class LoginRegisterController: InputableViewController {
     func loginPressed() {
         // 首先确保手机号码和密码都已经填入了数据
         guard let username = loginPhoneInput?.text where username.characters.count > 0 else{
-            self.displayAlertController("请输入手机号码", message: "")
+            showToast(LS("请输入手机号码"), onSelf: true)
             return
         }
         
         guard let password = loginPasswordInput?.text where password.characters.count > 0 else{
-            self.displayAlertController("请输入密码", message: "")
+            showToast(LS("请输入密码"), onSelf: true)
             return
         }
         loginBtn?.enabled = false
@@ -480,7 +472,7 @@ class LoginRegisterController: InputableViewController {
                     // 没有接收到错误信息
                     assertionFailure()
                 }
-                self.displayAlertController(NSLocalizedString("登录错误", comment: ""), message: errorMessage)
+                self.showToast(errorMessage, onSelf: true)
         }
     }
     
@@ -488,15 +480,15 @@ class LoginRegisterController: InputableViewController {
         // TODO: 完成注册接口
         // 检查所有的空是否都填写了
         guard let phone = registerPhoneInput?.text else{
-            self.displayAlertController(NSLocalizedString("错误", comment: ""), message: NSLocalizedString("请输入手机号", comment: ""))
+            showToast(LS("请输入手机号"), onSelf: true)
             return
         }
         guard let authCode = registerAuthCode?.text else{
-            self.displayAlertController(NSLocalizedString("错误", comment: ""), message: NSLocalizedString("请输入验证码", comment: ""))
+            showToast(LS("请输入验证码"), onSelf: true)
             return
         }
         guard let passwd = registerPasswordInput?.text else{
-            self.displayAlertController(NSLocalizedString("错误", comment: ""), message: NSLocalizedString("请输入密码", comment: ""))
+            showToast(LS("请输入密码"), onSelf: true)
             return
         }
     
@@ -507,16 +499,13 @@ class LoginRegisterController: InputableViewController {
             }) { (code) -> (Void) in
                 switch code! {
                 case "1003":
-                    self.displayAlertController("注册失败", message: "密码太短，密码长度请设置在8位以上")
-                    break
+                    self.showToast(LS("密码太短，密码长度请设置在8位以上"), onSelf: true)
                 case "1002":
-                    self.displayAlertController("注册失败", message: "验证码输入失败")
-                    break
+                    self.showToast(LS("验证码错误"), onSelf: true)
                 case "0000":
-                    self.displayAlertController("注册失败", message: "请检查您的网络连接")
-                    break
+                    self.showToast(LS("请检查您的网络连接"), onSelf: true)
                 default:
-                    self.displayAlertController("注册失败", message: "您的手机号已经被注册")
+                    self.showToast(LS("您的手机号已经被注册"), onSelf: true)
                 }
         }
     }
@@ -536,7 +525,7 @@ class LoginRegisterController: InputableViewController {
     
     func sendAuthCodePressed() {
         guard let phone = registerPhoneInput?.text where phone.characters.count > 0 else{
-            self.displayAlertController("请输入手机号码", message: "")
+            showToast(LS("请输入手机号"), onSelf: true)
             return
         }
         authCodeBtn?.status = AuthCodeBtnViewStatus.Pending
@@ -545,7 +534,7 @@ class LoginRegisterController: InputableViewController {
             }) { () -> (Void) in
                 // 弹窗
                 self.authCodeBtn?.status = AuthCodeBtnViewStatus.Normal
-                self.displayAlertController("未能获取验证码", message: "可能是网络原因或者服务器内部错误")
+                self.showToast(LS("获取验证码失败"), onSelf: true)
         }
 //        self.requester.requestAuthCode(registerPhoneInput!.text!) { (code) -> (Void) in
 //            print("\(code)")

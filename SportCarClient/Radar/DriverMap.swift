@@ -23,7 +23,6 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
     
     var userList: UITableView!
     var showUserListBtn: UIButton!
-    var showUserListBtnIcon: UIImageView!
     
     var mapFilter: RadarFilterController!
     var mapNav: BlackBarNavigationController!
@@ -85,61 +84,49 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
             make.top.equalTo(self.view.snp_bottom)
         }
         userList.registerClass(DriverMapUserCell.self, forCellReuseIdentifier: "cell")
-        //
-        showUserListBtn = UIButton()
-        showUserListBtn.tag = 0
-        showUserListBtn.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
-        showUserListBtn.layer.shadowColor = UIColor.blackColor().CGColor
-        showUserListBtn.layer.shadowRadius = 2
-        showUserListBtn.layer.shadowOpacity = 0.4
-        showUserListBtn.layer.shadowOffset = CGSizeMake(0, 3)
-        showUserListBtn.layer.cornerRadius = 4
-        showUserListBtn.clipsToBounds = false
-        showUserListBtn.addTarget(self, action: #selector(RadarDriverMapController.showUserBtnPressed), forControlEvents: .TouchUpInside)
-        self.view.addSubview(showUserListBtn)
-        showUserListBtn.snp_makeConstraints { (make) -> Void in
-            make.bottom.equalTo(userList.snp_top).offset(-15)
-            make.right.equalTo(self.view).offset(-15)
-            make.size.equalTo(CGSizeMake(125, 50))
+        self.view.addSubview(UIView)
+            .config(UIColor.whiteColor())
+            .addShadow(3, color: UIColor.blackColor(), opacity: 0.1, offset: CGSizeMake(0, -2))
+            .layout { (make) in
+                make.edges.equalTo(userList)
         }
+        self.view.bringSubviewToFront(userList)
         //
-        showUserListBtnIcon = UIImageView(image: UIImage(named: "user_list_invoke"))
-        showUserListBtn.addSubview(showUserListBtnIcon)
-        showUserListBtnIcon.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
-        showUserListBtnIcon.bounds = CGRectMake(0, 0, 20, 20)
-        showUserListBtnIcon.center = CGPointMake(27, 25)
-        //
-        let btnLbl = UILabel()
-        showUserListBtn.addSubview(btnLbl)
-        btnLbl.text = LS("浏览列表")
-        btnLbl.textColor = UIColor.whiteColor()
-        btnLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        btnLbl.frame = CGRectMake(47.5, 0, 60, 50)
-        //
+        showUserListBtn = self.view.addSubview(UIButton.self)
+            .config(kBarBgColor)
+            .config(self, selector: #selector(showUserBtnPressed))
+            .toRound(20)
+            .addShadow().layout({ (make) in
+                make.bottom.equalTo(userList.snp_top).offset(-25)
+                make.right.equalTo(self.view).offset(-20)
+                make.size.equalTo(CGSizeMake(40, 40))
+            })
+        showUserListBtn.addSubview(UIImageView)
+            .config(UIImage(named: "view_list"), contentMode: .ScaleAspectFit)
+            .layout { (make) in
+                make.center.equalTo(showUserListBtn)
+                make.size.equalTo(showUserListBtn).dividedBy(2)
+        }
+
         mapFilter = RadarFilterController()
         mapFilter.delegate = self
-        mapNav = BlackBarNavigationController(rootViewController: mapFilter)
-        mapFilterView = mapNav.view
-        
-        mapFilterView.layer.shadowColor = UIColor.blackColor().CGColor
-        mapFilterView.layer.shadowRadius = 2
-        mapFilterView.layer.shadowOpacity = 0.4
-        mapFilterView.layer.shadowOffset = CGSizeMake(0, 3)
-        mapFilterView.layer.cornerRadius = 4
-        self.view.addSubview(mapFilterView)
-        mapFilterView.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(self.view).offset(10)
-            make.left.equalTo(self.view).offset(15)
-            make.size.equalTo(CGSizeMake(124, 41))
-        }
-        //
-        let mapFilterToggleBtn = UIButton()
-        self.view.addSubview(mapFilterToggleBtn)
-        mapFilterToggleBtn.addTarget(self, action: #selector(RadarDriverMapController.toggleMapFilter), forControlEvents: .TouchUpInside)
-        mapFilterToggleBtn.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(mapFilterView)
-            make.left.equalTo(self.view).offset(15)
-            make.size.equalTo(CGSizeMake(124, 41))
+        mapNav = mapFilter.toNavWrapper()
+
+        self.view.addSubview(mapNav.view)
+        mapFilter.view.toRound(20, clipsToBound: false)
+        mapFilterView = mapNav.view.addShadow()
+            .layout({ (make) in
+            make.bottom.equalTo(showUserListBtn)
+            make.right.equalTo(showUserListBtn.snp_left).offset(-13)
+            make.width.equalTo(115)
+            make.height.equalTo(40)
+        })
+
+        self.view.addSubview(UIButton.self).config(self, selector: #selector(toggleMapFilter))
+            .layout { (make) in
+                make.top.equalTo(mapFilterView)
+                make.left.equalTo(mapFilterView)
+                make.size.equalTo(CGSizeMake(115, 40))
         }
     }
 }
@@ -190,6 +177,12 @@ extension RadarDriverMapController {
             }
         }
         return nil
+    }
+    
+    func mapView(mapView: BMKMapView!, didSelectAnnotationView view: BMKAnnotationView!) {
+        if let user = view.annotation as? UserAnnotation {
+            radarHome?.navigationController?.pushViewController(user.user.showDetailController(), animated: true)
+        }
     }
 }
 
@@ -280,7 +273,6 @@ extension RadarDriverMapController {
             }
             SpringAnimation.spring(0.6, animations: { () -> Void in
                 self.view.layoutIfNeeded()
-                self.showUserListBtnIcon.transform = CGAffineTransformIdentity
             })
             userList.reloadData()
             showUserListBtn.tag = 1
@@ -293,7 +285,6 @@ extension RadarDriverMapController {
             }
             SpringAnimation.spring(0.6, animations: { () -> Void in
                 self.view.layoutIfNeeded()
-                self.showUserListBtnIcon.transform = CGAffineTransformMakeRotation(CGFloat( M_PI))
             })
             showUserListBtn.tag = 0
         }
@@ -311,21 +302,30 @@ extension RadarDriverMapController {
         
         if mapFilter.expanded {
             mapFilterView.snp_remakeConstraints(closure: { (make) -> Void in
-                make.top.equalTo(self.view).offset(10)
-                make.left.equalTo(self.view).offset(15)
-                make.size.equalTo(CGSizeMake(124, 41))
+                make.bottom.equalTo(showUserListBtn)
+                make.right.equalTo(showUserListBtn.snp_left).offset(-13)
+                make.width.equalTo(115)
+                make.height.equalTo(40)
             })
+            UIView.animateWithDuration(0.3) { () -> Void in
+                self.view.layoutIfNeeded()
+                self.mapFilter.view.toRound(20)
+            }
         }else {
             mapFilterView.snp_remakeConstraints(closure: { (make) -> Void in
-                make.top.equalTo(self.view).offset(10)
-                make.left.equalTo(self.view).offset(15)
-                make.size.equalTo(CGSizeMake(124, 42 * 6))
+                make.bottom.equalTo(showUserListBtn)
+                make.right.equalTo(showUserListBtn.snp_left).offset(-13)
+                make.width.equalTo(115)
+                make.height.equalTo(40 * 6)
             })
+            
+            UIView.animateWithDuration(0.3) { () -> Void in
+                self.view.layoutIfNeeded()
+                self.mapFilter.view.toRound(5)
+            }
         }
         mapFilter.expanded = !mapFilter.expanded
-        UIView.animateWithDuration(0.3) { () -> Void in
-            self.view.layoutIfNeeded()
-        }
+        
     }
     
     func radarFilterDidChange() {

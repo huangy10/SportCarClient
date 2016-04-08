@@ -106,11 +106,11 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
         nameInput.resignFirstResponder()
         // Check the data
         guard let clubName = nameInput.text where clubName.length > 0 else {
-            self.displayAlertController(LS("请填写俱乐部名称"), message: nil)
+            showToast(LS("请填写俱乐部名称"))
             return
         }
         if logoImage == nil {
-            self.displayAlertController(LS("请为俱乐部选择一个标志"), message: nil)
+            showToast(LS("请为俱乐部选择一个标志"))
             return
         }
         let userIDs = users.map { $0.ssidString }
@@ -127,7 +127,7 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
             }, onProgress: { (progress) in
                 self.pp_updateProgress(progress)
             }) { (code) -> () in
-                self.displayAlertController(LS("创建群聊失败"), message: nil)
+                self.showToast(LS("创建群聊失败"))
                 self.pp_hideProgressView()
                 print(code)
         }

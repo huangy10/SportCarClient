@@ -164,6 +164,9 @@
 		BFDFF2831C8C584900055C1C /* NotificationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFF2821C8C584900055C1C /* NotificationDataSource.swift */; };
 		BFDFF2871C8CB11000055C1C /* ClubFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFF2861C8CB11000055C1C /* ClubFilter.swift */; };
 		BFE0CD151C8D79810031C45B /* AlamofireExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE0CD141C8D79810031C45B /* AlamofireExtension.swift */; };
+		BFE598561CB40AA700001F99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFE598551CB40AA700001F99 /* Assets.xcassets */; };
+		BFE598591CB4107300001F99 /* ActivityDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE598581CB4107300001F99 /* ActivityDetailHeader.swift */; };
+		BFE5985D1CB4A31100001F99 /* InlineUserSelectMiniCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE5985C1CB4A31100001F99 /* InlineUserSelectMiniCell.swift */; };
 		BFE966C51CA57C220097C42C /* MainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE966C41CA57C220097C42C /* MainManager.swift */; };
 		BFE967011CA584740097C42C /* BaseModel.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE966FF1CA584740097C42C /* BaseModel.generated.swift */; };
 		BFE967021CA584740097C42C /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967001CA584740097C42C /* BaseModel.swift */; };
@@ -200,7 +203,6 @@
 		BFFA15451C9D271E00E985DF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15441C9D271E00E985DF /* Location.swift */; };
 		BFFA15471C9D2B1700E985DF /* RequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15461C9D2B1700E985DF /* RequestProtocol.swift */; };
 		BFFA51161C05D9910019E5EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA51151C05D9910019E5EF /* AppDelegate.swift */; };
-		BFFA51201C05D9920019E5EF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFFA511F1C05D9920019E5EF /* Assets.xcassets */; };
 		BFFA512E1C05D9920019E5EF /* SportCarClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA512D1C05D9920019E5EF /* SportCarClientTests.swift */; };
 		BFFA51391C05D9920019E5EF /* SportCarClientUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA51381C05D9920019E5EF /* SportCarClientUITests.swift */; };
 		BFFA61B31C7DDC88003BCB2B /* RadarRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA61B21C7DDC88003BCB2B /* RadarRequester.swift */; };
@@ -388,6 +390,9 @@
 		BFDFF2821C8C584900055C1C /* NotificationDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationDataSource.swift; path = Message/Notification/NotificationDataSource.swift; sourceTree = "<group>"; };
 		BFDFF2861C8CB11000055C1C /* ClubFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubFilter.swift; path = Radar/ClubFilter.swift; sourceTree = "<group>"; };
 		BFE0CD141C8D79810031C45B /* AlamofireExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlamofireExtension.swift; path = 3rdParty/AlamofireExtension.swift; sourceTree = "<group>"; };
+		BFE598551CB40AA700001F99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BFE598581CB4107300001F99 /* ActivityDetailHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityDetailHeader.swift; path = Activity/ActivityDetailHeader.swift; sourceTree = "<group>"; };
+		BFE5985C1CB4A31100001F99 /* InlineUserSelectMiniCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InlineUserSelectMiniCell.swift; path = BaseTemplate/Views/InlineUserSelectMiniCell.swift; sourceTree = "<group>"; };
 		BFE966C41CA57C220097C42C /* MainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainManager.swift; path = LocalModel/Manager/MainManager.swift; sourceTree = "<group>"; };
 		BFE966FF1CA584740097C42C /* BaseModel.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseModel.generated.swift; path = LocalModel/BaseModel.generated.swift; sourceTree = "<group>"; };
 		BFE967001CA584740097C42C /* BaseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseModel.swift; path = LocalModel/BaseModel.swift; sourceTree = "<group>"; };
@@ -425,7 +430,6 @@
 		BFFA15461C9D2B1700E985DF /* RequestProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestProtocol.swift; path = BaseTemplate/RequestProtocol.swift; sourceTree = "<group>"; };
 		BFFA51121C05D9910019E5EF /* SportCarClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SportCarClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFFA51151C05D9910019E5EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		BFFA511F1C05D9920019E5EF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFFA51241C05D9920019E5EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BFFA51291C05D9920019E5EF /* SportCarClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SportCarClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFFA512D1C05D9920019E5EF /* SportCarClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportCarClientTests.swift; sourceTree = "<group>"; };
@@ -507,6 +511,7 @@
 				BF630EDC1CABDBF900EFD37E /* PropertyBaseCell.swift */,
 				BF630EDE1CABE46C00EFD37E /* AvatarCell.swift */,
 				BF630EE01CABF6DD00EFD37E /* SinglePropertyModifer.swift */,
+				BFE5985C1CB4A31100001F99 /* InlineUserSelectMiniCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1013,6 +1018,7 @@
 		BFC0327E1C72EED600ECA69A /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				BFE598571CB40F5500001F99 /* cell&header */,
 				BFC0327F1C72EEEB00ECA69A /* ActivityDetail.swift */,
 				BFC032811C72F69300ECA69A /* ActivityDetailBoard.swift */,
 				BFC032831C734C8300ECA69A /* ActivityCommentPanel.swift */,
@@ -1168,6 +1174,14 @@
 				BFE0CD141C8D79810031C45B /* AlamofireExtension.swift */,
 			);
 			name = Extension;
+			sourceTree = "<group>";
+		};
+		BFE598571CB40F5500001F99 /* cell&header */ = {
+			isa = PBXGroup;
+			children = (
+				BFE598581CB4107300001F99 /* ActivityDetailHeader.swift */,
+			);
+			name = "cell&header";
 			sourceTree = "<group>";
 		};
 		BFE966AF1CA57AD70097C42C /* Model */ = {
@@ -1372,8 +1386,8 @@
 				BFCB963E1C205DE2004F77E8 /* Home */,
 				BFAC52281C1C849000107F71 /* BaseTemplate */,
 				BF32EEAA1C088CF60098FEC1 /* Account */,
+				BFE598551CB40AA700001F99 /* Assets.xcassets */,
 				BFFA51151C05D9910019E5EF /* AppDelegate.swift */,
-				BFFA511F1C05D9920019E5EF /* Assets.xcassets */,
 				BFFA51241C05D9920019E5EF /* Info.plist */,
 				BFE967471CA6D8920097C42C /* SportCarClient.xcdatamodeld */,
 				BF3BD5E91C28E89000499674 /* Settings.bundle */,
@@ -1568,8 +1582,8 @@
 				BFDFF2771C8BC36200055C1C /* ChineseSubdivisions.plist in Resources */,
 				BFBE19231C952FB3005114A0 /* custom_config_黑夜 in Resources */,
 				BF63089F1C1972050087A4F0 /* agreement.rtf in Resources */,
+				BFE598561CB40AA700001F99 /* Assets.xcassets in Resources */,
 				BF3BD5EA1C28E89000499674 /* Settings.bundle in Resources */,
-				BFFA51201C05D9920019E5EF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1742,6 +1756,7 @@
 				BF9664041C89CBD10096D131 /* ClubBriefInfo.swift in Sources */,
 				BF2429221C7C8E15005D4C6E /* UIImage+Gif.swift in Sources */,
 				BFC36B9C1C698DD200DC6FE2 /* PersonMyHeader.swift in Sources */,
+				BFE5985D1CB4A31100001F99 /* InlineUserSelectMiniCell.swift in Sources */,
 				BF58990E1C4D14A3005496EA /* SportCarSelectList.swift in Sources */,
 				BFFFAFED1C84B1FB00EBA314 /* FollowSelect.swift in Sources */,
 				BF9B54B51C802E3B0006D673 /* GroupChatSetUp.swift in Sources */,
@@ -1777,6 +1792,7 @@
 				BFE9671A1CA584870097C42C /* Club.swift in Sources */,
 				BF54DD681C2EB4FE00F635C0 /* NewsController.swift in Sources */,
 				BFE967251CA584A20097C42C /* Status.generated.swift in Sources */,
+				BFE598591CB4107300001F99 /* ActivityDetailHeader.swift in Sources */,
 				BFC36BB21C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift in Sources */,
 				BFCB963A1C1FB0AE004F77E8 /* SportCarRequester.swift in Sources */,
 				BFC032721C6F508B00ECA69A /* ActivtyList.swift in Sources */,

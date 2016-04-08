@@ -78,7 +78,7 @@ class ChatAccessoryBoard: UIView {
         // 拍摄照片
         let sourceType = UIImagePickerControllerSourceType.Camera
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-            chatRoomController?.displayAlertController(LS("错误"), message: LS("无法打开相机"))
+            chatRoomController?.showToast(LS("无法打开相机"))
             return
         }
         let imagePicker = UIImagePickerController()
@@ -92,7 +92,7 @@ class ChatAccessoryBoard: UIView {
         // 从已有的相册中选择
         let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-            chatRoomController?.displayAlertController(LS("错误"), message: LS("无法打开相册"))
+            chatRoomController?.showToast(LS("无法打开相册"))
             return
         }
         let imagePicker = UIImagePickerController()

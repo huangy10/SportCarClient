@@ -51,6 +51,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonBasicController.onStatusDelete(_:)), name: kStatusDidDeletedNotification, object: nil)
         
         createSubviews()
+        navSettings()
         
         locationService = BMKLocationService()
         
@@ -90,11 +91,12 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(false, animated: false)
         // 
         locationService?.delegate = self
         locationService?.startUserLocationService()
         header.map.delegate = self
+        header.map.viewWillAppear()
         header.loadDataAndUpdateUI()
     }
     
@@ -103,6 +105,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         locationService?.delegate = nil
         locationService?.stopUserLocationService()
         header.map.delegate = self
+        header.map.viewWillDisappear()
     }
     
     /**
@@ -112,10 +115,8 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
      */
     func getPersonInfoPanel() -> PersonHeaderMine {
         let screenWidth = self.view.frame.width
-        totalHeaderHeight = 848.0 / 750 * screenWidth
+        totalHeaderHeight = 773.0 / 750 * screenWidth
         let header = PersonHeaderMine()
-        header.navRightBtn.addTarget(self, action: #selector(PersonBasicController.navRightBtnPressed), forControlEvents: .TouchUpInside)
-        header.navLeftBtn.addTarget(self, action: #selector(PersonBasicController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         header.detailBtn.addTarget(self, action: #selector(PersonBasicController.detailBtnPressed), forControlEvents: .TouchUpInside)
         
         header.fanslistBtn.addTarget(self, action: #selector(PersonBasicController.fanslistPressed), forControlEvents: .TouchUpInside)
@@ -173,6 +174,25 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         collectionView?.registerClass(PersonStatusListCell.self, forCellWithReuseIdentifier: PersonStatusListCell.reuseIdentifier)
         collectionView?.registerClass(SportCarInfoCell.self, forCellWithReuseIdentifier: SportCarInfoCell.reuseIdentifier)
         collectionView?.registerClass(PersonStatusHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: PersonStatusHeader.reuseIdentifier)
+    }
+    
+    func navSettings() {
+        navigationItem.title = LS("我")
+        
+        let backBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "home_back"), contentMode: .ScaleAspectFit)
+            .setFrame(CGRectMake(0, 0, 15, 15))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
+        
+        let setting = UIButton().config(self, selector: #selector(navRightBtnPressed))
+            .setFrame(CGRectMake(0, 0, 44, 44))
+        setting.addSubview(UIImageView).config(UIImage(named: "person_setting"), contentMode: .ScaleAspectFit)
+            .layout { (make) in
+                make.centerY.equalTo(setting)
+                make.right.equalTo(setting)
+                make.size.equalTo(20)
+        }
+        setting.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: setting)
     }
     
     func navRightBtnPressed() {

@@ -31,7 +31,7 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
         tableView.layer.cornerRadius = 4
         tableView.registerClass(RadarFilterHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.registerClass(RadarFilterCell.self, forCellReuseIdentifier: "cell")
-        tableView.rowHeight = 42
+        tableView.rowHeight = 40
         tableView.scrollEnabled = false
         tableView.backgroundColor = kBarBgColor
     }
@@ -62,7 +62,7 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
     }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 42
+        return 40
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -156,13 +156,19 @@ class RadarFilterHeader: UITableViewHeaderFooterView {
             make.centerY.equalTo(superview)
         }
         //
-        marker = UIImageView(image: UIImage(named: "down_arrow"))
-        superview.addSubview(marker)
-        marker.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(superview).offset(-20)
-            make.centerY.equalTo(superview)
-            make.size.equalTo(CGSizeMake(13, 8))
-        }
+        marker = superview.addSubview(UIImageView.self).config(UIImage(named: "up_arrow"))
+            .layout({ (make) in
+                make.right.equalTo(superview).offset(-20)
+                make.centerY.equalTo(superview)
+                make.size.equalTo(CGSizeMake(13, 8))
+            })
+//        marker = UIImageView(image: UIImage(named: "down_arrow"))
+//        superview.addSubview(marker)
+//        marker.snp_makeConstraints { (make) -> Void in
+//            make.right.equalTo(superview).offset(-20)
+//            make.centerY.equalTo(superview)
+//            make.size.equalTo(CGSizeMake(13, 8))
+//        }
         //
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.27, alpha: 1)

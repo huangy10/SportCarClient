@@ -15,9 +15,8 @@ class UserSelectAnnotationView: BMKAnnotationView {
     override init!(annotation: BMKAnnotation!, reuseIdentifier: String!) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         self.bounds = CGRectMake(0, 0, 38, 74)
-        icon = UIImageView(image: UIImage(named: "map_default_marker"))
-        self.addSubview(icon)
-        icon.frame = self.bounds
+        icon = self.addSubview(UIImageView).config(UIImage(named: "map_default_marker"), contentMode: .ScaleAspectFit)
+            .setFrame(self.bounds)
     }
 
     required init?(coder aDecoder: NSCoder) {

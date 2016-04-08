@@ -29,7 +29,7 @@ class RadarClubFilterController: UITableViewController {
         tableView.registerClass(RadarClubFilterHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.registerClass(RadarFilterCell.self, forCellReuseIdentifier: "cell")
         tableView.rowHeight = 42
-        tableView.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
+        tableView.backgroundColor = kBarBgColor
         self.getClubList()
     }
     
@@ -85,7 +85,7 @@ class RadarClubFilterHeader: RadarFilterHeader {
     
     override func createSubviews() {
         let superview = self.contentView
-        superview.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
+        superview.backgroundColor = kBarBgColor
         //
         marker = UIImageView(image: UIImage(named: "account_header_back_btn"))
         superview.addSubview(marker)

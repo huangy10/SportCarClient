@@ -196,7 +196,7 @@ extension StatusReleasePhotoSelectController {
         }else {
             // 检查是否已经到了选择上限
             if selectedImageRow.count >= maxSelectLimit {
-                displayAlertController(nil, message: "你最多只能选择\(maxSelectLimit)张照片")
+                showToast("你最多只能选择\(maxSelectLimit)张照片")
                 return
             }
             cell.setSelected(true, animtated: true)

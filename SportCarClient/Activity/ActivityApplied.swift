@@ -19,7 +19,7 @@ class ActivityAppliedController: ActivityHomeMineListController {
                 let act: Activity = try! MainManager.sharedManager.getOrCreate(data["activity"])
                 self.data.append(act)
             }
-            self.tableView.reloadData()
+            self.collectionView?.reloadData()
             }) { (code) -> () in
                 print(code)
         }
@@ -36,7 +36,7 @@ class ActivityAppliedController: ActivityHomeMineListController {
                 new.append(act)
             }
             self.data.insertContentsOf(new, at: 0)
-            self.tableView.reloadData()
+            self.collectionView?.reloadData()
             }) { (code) -> () in
                 self.refreshControl?.endRefreshing()
                 print(code)

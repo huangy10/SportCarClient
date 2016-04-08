@@ -40,7 +40,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
         }
     }
     
-    func navSettings() {
+    override func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         navigationItem.title = LS("个人信息")
         //
@@ -74,7 +74,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     
     override func getPersonInfoPanel() -> PersonHeaderMine {
         let panel = PersonHeaderOther()
-        totalHeaderHeight = 906 / 750 * self.view.frame.width
+        totalHeaderHeight = 821 / 750 * self.view.frame.width
         panel.followBtn.addTarget(self, action: #selector(PersonOtherController.followBtnPressed(_:)), forControlEvents: .TouchUpInside)
         panel.chatBtn.addTarget(self, action: #selector(PersonOtherController.chatBtnPressed), forControlEvents: .TouchUpInside)
         panel.locBtn.addTarget(self, action: #selector(PersonOtherController.locateBtnPressed), forControlEvents: .TouchUpInside)

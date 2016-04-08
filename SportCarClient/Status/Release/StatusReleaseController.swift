@@ -189,19 +189,26 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             make.height.equalTo(650)
         })
         //
-        let locDesContainer = UIView()
-        locDesContainer.backgroundColor = UIColor.whiteColor()
-        locDesContainer.layer.cornerRadius = 4
-        locDesContainer.layer.shadowColor = UIColor.blackColor().CGColor
-        locDesContainer.layer.shadowOpacity = 0.5
-        locDesContainer.layer.shadowOffset = CGSizeMake(1, 1.5)
-        board?.addSubview(locDesContainer)
-        locDesContainer.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(superview)
-            make.height.equalTo(50)
-            make.width.equalTo(superview).multipliedBy(0.776)
-            make.top.equalTo(mapView!).offset(22)
+        let locDesContainer = board!.addSubview(UIView).config(UIColor.whiteColor())
+            .addShadow()
+            .layout { (make) in
+                make.centerX.equalTo(superview)
+                make.height.equalTo(50)
+                make.width.equalTo(superview).multipliedBy(0.776)
+                make.top.equalTo(mapView!).offset(22)
         }
+//        locDesContainer.backgroundColor = UIColor.whiteColor()
+//        locDesContainer.layer.cornerRadius = 4
+//        locDesContainer.layer.shadowColor = UIColor.blackColor().CGColor
+//        locDesContainer.layer.shadowOpacity = 0.5
+//        locDesContainer.layer.shadowOffset = CGSizeMake(1, 1.5)
+//        board?.addSubview(locDesContainer)
+//        locDesContainer.snp_makeConstraints { (make) -> Void in
+//            make.centerX.equalTo(superview)
+//            make.height.equalTo(50)
+//            make.width.equalTo(superview).multipliedBy(0.776)
+//            make.top.equalTo(mapView!).offset(22)
+//        }
         let locDesIcon = UIImageView(image: UIImage(named: "news_comment_icon"))
         locDesContainer.addSubview(locDesIcon)
         locDesIcon.snp_makeConstraints { (make) -> Void in

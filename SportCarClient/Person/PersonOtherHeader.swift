@@ -60,13 +60,10 @@ class PersonHeaderOther: PersonHeaderMine {
             make.centerX.equalTo(avatarBtn)
         }
         // 更改maskView的高度
-        backMask.centerHegiht = 225
-        avatarBtn.snp_updateConstraints { (make) -> Void in
-            make.bottom.equalTo(self).offset(-156)
-        }
-        //
-        navLeftBtn.hidden = true
-        navRightBtn.hidden = true
+//        avatarBtn.snp_updateConstraints { (make) -> Void in
+//            make.bottom.equalTo(self).offset(-156)
+//        }
+        //=
     }
     
     override func loadDataAndUpdateUI() {

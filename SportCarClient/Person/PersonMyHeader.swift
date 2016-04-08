@@ -27,9 +27,6 @@ class PersonHeaderMine: UIView {
     var followNumLbl: UILabel!
     var map: BMKMapView!
     
-    var navRightBtn: UIButton!      // 单独创建的类似导航栏的按钮，但是并不在导航栏中
-    var navLeftBtn: UIButton!       // 同上
-    
     var fanslistBtn: UIButton!
     var followlistBtn: UIButton!
     var statuslistBtn: UIButton!
@@ -64,7 +61,7 @@ class PersonHeaderMine: UIView {
             make.bottom.equalTo(superview)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.height.equalTo(300)
+            make.height.equalTo(225)
         }
         backMask.setNeedsDisplay()
         //
@@ -186,30 +183,6 @@ class PersonHeaderMine: UIView {
             .layout { (make) in
                 make.centerX.equalTo(followNumLbl)
                 make.top.equalTo(followNumLbl.snp_bottom).offset(2)
-        }
-        // 
-        navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
-        navLeftBtn.imageEdgeInsets = UIEdgeInsetsMake(16, 15, 16, 15)
-        superview.addSubview(navLeftBtn)
-        navLeftBtn.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(superview)
-            make.centerY.equalTo(superview.snp_top).offset(40)
-            make.size.equalTo(44)
-        }
-        //
-        navRightBtn = UIButton()
-        superview.addSubview(navRightBtn)
-        navRightBtn.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(superview)
-            make.centerY.equalTo(superview.snp_top).offset(40)
-            make.size.equalTo(44)
-        }
-        let icon = UIImageView(image: UIImage(named: "person_setting"))
-        navRightBtn.addSubview(icon)
-        icon.snp_makeConstraints { (make) -> Void in
-            make.center.equalTo(navRightBtn)
-            make.size.equalTo(20)
         }
         // 在粉丝和关注上方加一个透明按钮以实现点击进入粉丝列表
         fanslistBtn = UIButton()

@@ -17,6 +17,7 @@ extension UIViewController {
      - parameter title:   标题
      - parameter message: 消息内容
      */
+    @available(*, deprecated=1)
     func displayAlertController(title: String?, message: String?, onConfirm: (()->())? = nil) {
         if onConfirm == nil {
             self.showToast(title ?? message!)

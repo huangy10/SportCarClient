@@ -140,5 +140,17 @@ class User: BaseModel {
         return tempJSON
 
     }
+}
 
+// MARK: - 导出UI
+extension User {
+    
+    func showDetailController() -> UIViewController {
+        if isHost {
+            return PersonBasicController(user: self)
+        } else {
+            return PersonOtherController(user: self)
+        }
+    }
+    
 }

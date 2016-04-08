@@ -43,7 +43,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     }
     
     var mapView: BMKMapView? {
-        return mapCell.map
+        return mapCell.map!
     }
     
     deinit {
@@ -272,11 +272,13 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             return cell
         }else{
             if !setCenterFlag && self.userLocation != nil {
-                let region = BMKCoordinateRegionMakeWithDistance(self.userLocation!, 3, 5)
-                setCenterFlag = true
-                mapView?.setRegion(region, animated: true)
+//                let region = BMKCoordinateRegionMakeWithDistance(self.userLocation!, 3000, 5000)
+//                setCenterFlag = true
+//                
+//                mapView?.setRegion(region, animated: true)
+                mapView?.setCenterCoordinate(self.userLocation!, animated: true)
+                mapView?.zoomLevel = 12
             }
-            
             return mapCell
         }
     }
@@ -406,9 +408,11 @@ extension ActivityReleaseController {
     func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
         locationService?.stopUserLocationService()
         self.userLocation = userLocation.location.coordinate
-        let region = BMKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 3, 5)
-        mapView?.setRegion(region, animated: true)
-        setCenterFlag = true
+//        print(userLocation.location.coordinate)
+//        let region = BMKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 3000, 5000)
+//        mapView?.setRegion(region, animated: true)
+//        setCenterFlag = true
+        mapView?.setCenterCoordinate(userLocation.location.coordinate, animated: true)
         mapView?.delegate = self
     }
     
@@ -523,7 +527,7 @@ extension ActivityReleaseController {
             tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0), NSIndexPath(forRow: 2, inSection: 0)], withRowAnimation: .Automatic)
         }else if datePickerMode == "endAt" {
             if startAtDate != nil && startAtDate!.compare(date) == NSComparisonResult.OrderedDescending {
-                self.displayAlertController(LS("开始时间不能晚于结束时间"), message: nil)
+                self.showToast(LS("开始时间不能晚于结束时间"))
                 return
             }
             endAt = date.stringDisplay()!

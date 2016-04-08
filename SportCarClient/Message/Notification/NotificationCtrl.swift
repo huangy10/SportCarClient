@@ -20,6 +20,7 @@ class NotificationController: UITableViewController {
         tableView.registerClass(NotificationBaseCell.self, forCellReuseIdentifier: NotificationBaseCell.reuseIdentifier())
         tableView.registerClass(NotificationCellAboutActivity.self, forCellReuseIdentifier: NotificationCellAboutActivity.reuseIdentifier())
         tableView.registerClass(NotificationCellWithCoverThumbnail.self, forCellReuseIdentifier: NotificationCellWithCoverThumbnail.reuseIdentifier())
+        tableView.separatorColor = UIColor(white: 0.945, alpha: 1)
         data.list = self
     }
     
@@ -62,6 +63,7 @@ class NotificationController: UITableViewController {
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("评论了你的动态")
             cell.messageBodyLbl.text = notification.messageBody
+            cell.cover.kf_setImageWithURL(notification.imageURL!)
             return cell
             
         case "status_comment_replied":
@@ -71,6 +73,7 @@ class NotificationController: UITableViewController {
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("回复了你")
             cell.messageBodyLbl.text = notification.messageBody
+            cell.cover.kf_setImageWithURL(notification.imageURL!)
             return cell
         
         case "relation_follow":
@@ -144,6 +147,7 @@ class NotificationController: UITableViewController {
             cell.name2LbL.text = act.name
             cell.inform2Lbl.text = LS("被发起者拒绝了")
             cell.showBtns = false
+
             return cell
             
         case "act_invitation_agreed":

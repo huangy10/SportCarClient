@@ -27,21 +27,19 @@ class UserAnnotationView: BMKAnnotationView {
     
     override init!(annotation: BMKAnnotation!, reuseIdentifier: String!) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-
-        self.bounds = CGRectMake(0, 0, 65, 65)
-        avatar = UIButton()
-        avatar.layer.cornerRadius = 32.5
-        avatar.clipsToBounds = true
-        self.addSubview(avatar)
-        avatar.addTarget(self, action: #selector(UserAnnotationView.avatarPressed), forControlEvents: .TouchUpInside)
-        avatar.frame = CGRectMake(0, 0, 65, 65)
-        
-        avatarCar = UIImageView()
-        avatarCar.layer.cornerRadius = 12.5
-        self.addSubview(avatarCar)
-        avatarCar.frame = CGRectMake(40, 40, 25, 25)
+        avatar = self.addSubview(UIButton.self)
+            .config(self, selector: #selector(avatarPressed))
+            .setFrame(CGRectMake(0, 0, 65, 65))
+            .toRound()
+        avatarCar = self.addSubview(UIImageView.self)
+            .config(nil)
+            .setFrame(CGRectMake(40, 40, 25, 25))
+            .toRound()
+        self.clipsToBounds = false
+        self.addShadow()
     }
     
+//    @available(*, deprecated=1)
     func avatarPressed() {
         let detail = PersonOtherController(user: user)
         parent.navigationController?.pushViewController(detail, animated: true)

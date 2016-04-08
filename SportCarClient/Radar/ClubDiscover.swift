@@ -22,7 +22,6 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     var clubWrapper: BlackBarNavigationController!
     var clubFilterView: UIView!
     var showClubListBtn: UIButton!
-    var showClubListBtnIcon: UIImageView!
     var shadowLine: UIView!
     
     var firstShow = false
@@ -94,7 +93,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         shadowLine.backgroundColor = UIColor.whiteColor()
         shadowLine.clipsToBounds = false
         shadowLine.layer.shadowRadius = 3
-        shadowLine.layer.shadowOpacity = 0.3
+        shadowLine.layer.shadowOpacity = 0.1
         shadowLine.layer.shadowColor = UIColor.blackColor().CGColor
         shadowLine.layer.shadowOffset = CGSizeMake(0, -2)
         superview.addSubview(shadowLine)
@@ -103,58 +102,79 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         }
         superview.sendSubviewToBack(shadowLine)
         //
-        showClubListBtn = UIButton()
-        showClubListBtn.tag = 0
-        showClubListBtn.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
-        showClubListBtn.layer.shadowColor = UIColor.blackColor().CGColor
-        showClubListBtn.layer.shadowRadius = 2
-        showClubListBtn.layer.shadowOpacity = 0.3
-        showClubListBtn.layer.shadowOffset = CGSizeMake(0, 4)
-        showClubListBtn.layer.cornerRadius = 4
-        showClubListBtn.clipsToBounds = false
-        showClubListBtn.addTarget(self, action: #selector(ClubDiscoverController.showClubBtnPressed), forControlEvents: .TouchUpInside)
-        self.view.addSubview(showClubListBtn)
-        showClubListBtn.snp_makeConstraints { (make) -> Void in
-            make.bottom.equalTo(clubList.snp_top).offset(-15)
-            make.right.equalTo(self.view).offset(-15)
-            make.size.equalTo(CGSizeMake(125, 50))
+        showClubListBtn = self.view.addSubview(UIButton.self)
+            .config(kBarBgColor)
+            .config(self, selector: #selector(showClubBtnPressed))
+            .toRound(20)
+            .addShadow().layout({ (make) in
+                make.bottom.equalTo(clubList.snp_top).offset(-25)
+                make.right.equalTo(self.view).offset(-20)
+                make.size.equalTo(40)
+            })
+        showClubListBtn.addSubview(UIImageView)
+            .config(UIImage(named: "view_list"), contentMode: .ScaleAspectFit)
+            .layout { (make) in
+                make.center.equalTo(showClubListBtn)
+                make.size.equalTo(showClubListBtn).dividedBy(2)
         }
-        //
-        showClubListBtnIcon = UIImageView(image: UIImage(named: "user_list_invoke"))
-        showClubListBtn.addSubview(showClubListBtnIcon)
-        showClubListBtnIcon.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
-        showClubListBtnIcon.bounds = CGRectMake(0, 0, 20, 20)
-        showClubListBtnIcon.center = CGPointMake(27, 25)
-        //
-        let btnLbl = UILabel()
-        showClubListBtn.addSubview(btnLbl)
-        btnLbl.text = LS("浏览列表")
-        btnLbl.textColor = UIColor.whiteColor()
-        btnLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        btnLbl.frame = CGRectMake(47.5, 0, 60, 50)
-        //
+//
+//        showClubListBtn = UIButton()
+//        showClubListBtn.tag = 0
+//        showClubListBtn.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
+//        showClubListBtn.layer.shadowColor = UIColor.blackColor().CGColor
+//        showClubListBtn.layer.shadowRadius = 2
+//        showClubListBtn.layer.shadowOpacity = 0.3
+//        showClubListBtn.layer.shadowOffset = CGSizeMake(0, 4)
+//        showClubListBtn.layer.cornerRadius = 4
+//        showClubListBtn.clipsToBounds = false
+//        showClubListBtn.addTarget(self, action: #selector(ClubDiscoverController.showClubBtnPressed), forControlEvents: .TouchUpInside)
+//        self.view.addSubview(showClubListBtn)
+//        showClubListBtn.snp_makeConstraints { (make) -> Void in
+//            make.bottom.equalTo(clubList.snp_top).offset(-15)
+//            make.right.equalTo(self.view).offset(-15)
+//            make.size.equalTo(CGSizeMake(125, 50))
+//        }
+//        //
+//        showClubListBtnIcon = UIImageView(image: UIImage(named: "user_list_invoke"))
+//        showClubListBtn.addSubview(showClubListBtnIcon)
+//        showClubListBtnIcon.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+//        showClubListBtnIcon.bounds = CGRectMake(0, 0, 20, 20)
+//        showClubListBtnIcon.center = CGPointMake(27, 25)
+//        //
+//        let btnLbl = UILabel()
+//        showClubListBtn.addSubview(btnLbl)
+//        btnLbl.text = LS("浏览列表")
+//        btnLbl.textColor = UIColor.whiteColor()
+//        btnLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+//        btnLbl.frame = CGRectMake(47.5, 0, 60, 50)
+//        //
         clubFilter = ClubFilterController()
         clubFilter.selectedRow = 0
         clubFilter.delegate = self
-        clubWrapper = BlackBarNavigationController(rootViewController: clubFilter)
-        clubFilterView = clubWrapper.view
-        clubFilterView.layer.shadowRadius = 4
-        clubFilterView.layer.shadowColor = UIColor.blackColor().CGColor
-        clubFilterView.layer.shadowOffset = CGSizeMake(0, 3)
-        clubFilterView.layer.shadowOpacity = 0.4
-        superview.addSubview(clubFilterView)
-        clubFilterView.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(self.view).offset(10)
-            make.left.equalTo(self.view).offset(15)
-            make.size.equalTo(CGSizeMake(124, 41))
-        }
-        let mapFilterToggleBtn = UIButton()
-        self.view.addSubview(mapFilterToggleBtn)
-        mapFilterToggleBtn.addTarget(self, action: #selector(ClubDiscoverController.toggleMapFilter), forControlEvents: .TouchUpInside)
-        mapFilterToggleBtn.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(clubFilterView)
-            make.left.equalTo(self.view).offset(15)
-            make.size.equalTo(CGSizeMake(124, 41))
+        clubWrapper = clubFilter.toNavWrapper()
+        self.view.addSubview(clubWrapper.view)
+        
+        clubFilter.view.toRound(20)
+        clubFilterView = clubWrapper.view.addShadow().layout({ (make) in
+            make.bottom.equalTo(showClubListBtn)
+            make.right.equalTo(showClubListBtn.snp_left).offset(-13)
+            make.size.equalTo(CGSizeMake(115, 40))
+        })
+//        clubFilterView.layer.shadowRadius = 4
+//        clubFilterView.layer.shadowColor = UIColor.blackColor().CGColor
+//        clubFilterView.layer.shadowOffset = CGSizeMake(0, 3)
+//        clubFilterView.layer.shadowOpacity = 0.4
+//        superview.addSubview(clubFilterView)
+//        clubFilterView.snp_makeConstraints { (make) -> Void in
+//            make.top.equalTo(self.view).offset(10)
+//            make.left.equalTo(self.view).offset(15)
+//            make.size.equalTo(CGSizeMake(124, 41))
+//        }
+        self.view.addSubview(UIButton.self).config(self, selector: #selector(toggleMapFilter))
+            .layout { (make) in
+                make.top.equalTo(clubFilterView)
+                make.left.equalTo(clubFilterView)
+                make.size.equalTo(CGSizeMake(115, 40))
         }
     }
     
@@ -171,7 +191,6 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             })
             SpringAnimation.spring(0.6, animations: { () -> Void in
                 self.view.layoutIfNeeded()
-                self.showClubListBtnIcon.transform = CGAffineTransformIdentity
             })
             clubList.reloadData()
             showClubListBtn.tag = 1
@@ -187,7 +206,6 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             })
             SpringAnimation.spring(0.6, animations: { () -> Void in
                 self.view.layoutIfNeeded()
-                self.showClubListBtnIcon.transform = CGAffineTransformMakeRotation(CGFloat( M_PI))
             })
             showClubListBtn.tag = 0
         }
@@ -246,21 +264,26 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         
         if clubFilter.expanded {
             clubFilterView.snp_remakeConstraints(closure: { (make) -> Void in
-                make.top.equalTo(self.view).offset(10)
-                make.left.equalTo(self.view).offset(15)
-                make.size.equalTo(CGSizeMake(124, 41))
+                make.bottom.equalTo(showClubListBtn)
+                make.right.equalTo(showClubListBtn.snp_left).offset(-13)
+                make.size.equalTo(CGSizeMake(115, 40))
             })
+            UIView.animateWithDuration(0.3) { () -> Void in
+                self.clubFilter.view.toRound(20)
+                self.view.layoutIfNeeded()
+            }
         }else {
             clubFilterView.snp_remakeConstraints(closure: { (make) -> Void in
-                make.top.equalTo(self.view).offset(10)
-                make.left.equalTo(self.view).offset(15)
-                make.size.equalTo(CGSizeMake(124, 42 * 7))
+                make.bottom.equalTo(showClubListBtn)
+                make.right.equalTo(showClubListBtn.snp_left).offset(-13)
+                make.size.equalTo(CGSizeMake(115, 40 * 7))
             })
+            UIView.animateWithDuration(0.3) { () -> Void in
+                self.clubFilter.view.toRound(5)
+                self.view.layoutIfNeeded()
+            }
         }
         clubFilter.expanded = !clubFilter.expanded
-        UIView.animateWithDuration(0.3) { () -> Void in
-            self.view.layoutIfNeeded()
-        }
     }
     
     func radarFilterDidChange() {

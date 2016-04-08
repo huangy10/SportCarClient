@@ -29,7 +29,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
         super.viewDidLoad()
         createSubviews()
         
-        actsBoard.registerClass(ActivityNearByCell.self, forCellWithReuseIdentifier: ActivityNearByCell.reuseIdentifier)
+        actsBoard.registerClass(ActivityCell.self, forCellWithReuseIdentifier: ActivityCell.reuseIdentifier)
         // 启动位置跟踪
         locationService = BMKLocationService()
     }
@@ -99,9 +99,8 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ActivityNearByCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityNearByCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ActivityCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityCell
         cell.act = acts[indexPath.row]
-        cell.loadDataAndUpdateUI()
         //
         let cellWidth: CGFloat = 170
         let offset = cell.frame.origin.x - collectionView.contentOffset.x + cellWidth / 2
@@ -246,52 +245,5 @@ extension ActivityNearByController {
             return view
         }
     }
-    
-//    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//
-//        let needRequest = userLocation == nil
-//        userLocation = locations.last()
-//        if needRequest {
-//            let requester = ActivityRequester.requester
-//            requester.getNearByActivities(userLocation!, queryDistance: 10, skip: 0, limit: 10, onSuccess: { (json) -> () in
-//                self.acts.removeAll()
-//                for data in json!.arrayValue {
-//                    let act = Activity.objects.getOrCreate(data)
-//                    self.acts.append(act)
-//                }
-//                self.actsBoard.reloadData()
-//                self.pageCount.currentPage = 0
-//                if self.acts.count > 0 {
-//                    self.activityFocusedChanged()
-//                }
-//                }, onError: { (code) -> () in
-//                    print(code)
-//            })
-//            let center = CLLocationCoordinate2D(latitude: userLocation!.coordinate.latitude, longitude: userLocation!.coordinate.longitude)
-//            map.setCenterCoordinate(center, zoomLevel: 12, animated: true)
-//            if userLocationUpdator == nil {
-//                userLocationUpdator = CADisplayLink(target: self, selector: "userLocationOnScreenUpdate")
-//                userLocationUpdator?.frameInterval = 1
-//                userLocationUpdator?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
-//                userLocationUpdator?.paused = false
-//            }
-//            if userLocMarker == nil {
-//            let userMarkLocationOnScreen = map.convertCoordinate(center, toPointToView: map)
-//                userLocMarker = UserMapLocationManager(size: CGSizeMake(400, 400))
-//                map.addSubview(userLocMarker)
-//                userLocMarker.center = userMarkLocationOnScreen
-//            }
-//        }
-//    }
-//    
-//    func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
-//        var annoationImage = mapView.dequeueReusableAnnotationImageWithIdentifier("act_current_location")
-//        
-//        if annoationImage == nil {
-//            annoationImage = MGLAnnotationImage(image: UIImage(named: "map_default_marker")!, reuseIdentifier: "act_current_location")
-//        }
-//        
-//        return annoationImage
-//    }
 }
 
