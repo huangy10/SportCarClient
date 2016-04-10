@@ -76,6 +76,26 @@ class StatusRequester: AccountRequester {
         }
     }
     
+    func getNearByStatus(
+        dateThreshold: NSDate,
+        opType: String, lat: Double,
+        lon: Double, distance: Double,
+        onSuccess: SSSuccessCallback,
+        onError: SSFailureCallback) -> Request {
+        let dtStr = STRDate(dateThreshold)
+        return manager.request(.GET, StatusURLMaker.sharedMaker.getStatusFollowList(), parameters: [
+            "date_threshold": dtStr,
+            "op_type": opType,
+            "limit": fetchLimit,
+            "lat": lat,
+            "lon": lon,
+            "distance": distance,
+            "query_type": "nearby"
+        ]).responseJSON(completionHandler: { (response) in
+            self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
+        })
+    }
+    
     /**
      发布新的状态
      

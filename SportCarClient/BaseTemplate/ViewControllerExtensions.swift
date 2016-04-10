@@ -64,7 +64,7 @@ extension UIViewController {
      - parameter message:       显示的文字内容
      - parameter maxLastLength: 最大显示的时长
      */
-    func showToast(message: String, maxLastLength: Double=3, onSelf: Bool = false) {
+    func showToast(message: String, maxLastLength: Double=2, onSelf: Bool = false) {
         assert(NSThread.isMainThread())
         let superview = onSelf ? self.view : UIApplication.sharedApplication().keyWindow!.rootViewController!.view
 //        let superview = self.view
@@ -76,7 +76,7 @@ extension UIViewController {
         superview.bringSubviewToFront(toastContainer)
         toastContainer.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
-            make.top.equalTo(superview).offset(40 + 44)
+            make.bottom.equalTo(superview.snp_top)
             make.size.equalTo(CGSizeMake(200, 45))
         }
         let lbl = UILabel()
@@ -89,15 +89,95 @@ extension UIViewController {
             make.center.equalTo(toastContainer)
         }
         //
-        toastContainer.layer.opacity = 0
-        UIView.animateWithDuration(0.5) { () -> Void in
-            toastContainer.layer.opacity = 1
+        superview.layoutIfNeeded()
+        toastContainer.snp_remakeConstraints { (make) -> Void in
+            make.centerX.equalTo(superview)
+            make.top.equalTo(superview).offset(40 + 44)
+            make.size.equalTo(CGSizeMake(200, 45))
         }
-        UIView.animateWithDuration(0.5, delay: maxLastLength, options: [], animations: { () -> Void in
-            toastContainer.layer.opacity = 0
+        SpringAnimation.spring(0.3) { 
+            superview.layoutIfNeeded()
+        }
+        UIView.animateWithDuration(0.3, delay: maxLastLength, options: [], animations: { () -> Void in
+            toastContainer.snp_remakeConstraints { (make) -> Void in
+                make.centerX.equalTo(superview)
+                make.bottom.equalTo(superview.snp_top)
+                make.size.equalTo(CGSizeMake(200, 45))
+            }
+            superview.layoutIfNeeded()
             }) { (_) -> Void in
                 toastContainer.removeFromSuperview()
         }
+    }
+    
+    func showConfirmToast(title: String, message: String, target: AnyObject, confirmSelector: Selector, cancelSelector: Selector, onSelf: Bool = true) -> UIView {
+        let superview = onSelf ? self.view : UIApplication.sharedApplication().keyWindow!.rootViewController!.view
+        let container = superview.addSubview(UIView).config(UIColor.clearColor())
+            .layout { (make) in
+                make.edges.equalTo(superview)
+        }
+        let bgView = container.addSubview(UIView).config(UIColor(white: 0, alpha: 0.2))
+            .layout { (make) in
+                make.edges.equalTo(superview)
+        }
+        bgView.layer.opacity = 0
+        
+        let toast = container.addSubview(UIView).config(UIColor.whiteColor()).toRound(4).layout { (make) in
+            make.centerX.equalTo(superview)
+            make.top.equalTo(superview.snp_bottom).offset(30)
+            make.width.equalTo(250)
+            make.height.equalTo(150)
+        }.addShadow()
+        let titleLbl = toast.addSubview(UILabel)
+            .config(17, fontWeight: UIFontWeightSemibold, text: title)
+            .layout { (make) in
+                make.left.equalTo(toast).offset(15)
+                make.top.equalTo(toast).offset(20)
+        }
+        let messageLbl = toast.addSubview(UILabel)
+            .config(12, textColor: UIColor(white: 0.72, alpha: 1), text: message, multiLine: true)
+            .layout { (make) in
+                make.left.equalTo(titleLbl)
+                make.right.equalTo(toast).offset(-15)
+                make.top.equalTo(titleLbl.snp_bottom).offset(10)
+        }
+        let confirmBtn = toast.addSubview(UIButton)
+            .config(target, selector: confirmSelector, title: LS("确定"), titleColor: kHighlightedRedTextColor)
+            .layout { (make) in
+                make.size.equalTo(CGSizeMake(74, 43))
+                make.right.equalTo(toast)
+                make.top.equalTo(messageLbl.snp_bottom).offset(15)
+        }
+        toast.addSubview(UIButton)
+            .config(self, selector: cancelSelector, title: LS("取消"), titleColor: UIColor(white: 0.72, alpha: 1))
+            .layout { (make) in
+                make.centerY.equalTo(confirmBtn)
+                make.size.equalTo(CGSizeMake(74, 43))
+                make.right.equalTo(confirmBtn.snp_left)
+        }
+        var contentRect = CGRectZero
+        toast.layoutIfNeeded()
+        for view in toast.subviews {
+            contentRect = CGRectUnion(contentRect, view.frame)
+        }
+        let size = CGSizeMake(
+            contentRect.width - contentRect.origin.x,
+            contentRect.height - contentRect.origin.y)
+        toast.snp_updateConstraints { (make) in
+            make.height.equalTo(size.height)
+        }
+        container.layoutIfNeeded()
+        toast.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(superview)
+            make.top.equalTo(superview).offset(100)
+            make.width.equalTo(250)
+            make.height.equalTo(size.height)
+        }
+        SpringAnimation.spring(0.3) { 
+            container.layoutIfNeeded()
+            bgView.layer.opacity = 1
+        }
+        return container
     }
     
     func showStaticToast(message: String) -> UIView {
@@ -143,6 +223,7 @@ extension UIViewController {
      
      - parameter message:   Message content to be displayed
      */
+    @available(*, deprecated=1)
     func showConfirmToast(message: String, target: AnyObject, confirmSelector: Selector, cancelSelector: Selector, onSelf: Bool = false) -> UIView {
         let container = UIView()
         let containerWidth = UIScreen.mainScreen().bounds.width * 0.5
@@ -211,14 +292,8 @@ extension UIViewController {
     }
     
     func hideConfirmToast(toast: UIView) {
-        self.view.layoutIfNeeded()
-        let superview = self.view
-        toast.snp_updateConstraints { (make) -> Void in
-            make.top.equalTo(superview).offset(-UIScreen.mainScreen().bounds.height - 30)
-        }
-        
         SpringAnimation.springWithCompletion(0.5, animations: { () -> Void in
-            self.view.layoutIfNeeded()
+            toast.layer.opacity = 0
             }) { (_) -> Void in
                 toast.removeFromSuperview()
         }

@@ -120,7 +120,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        let cells = actsBoard.visibleCells() as! [ActivityNearByCell]
+        let cells = actsBoard.visibleCells() as! [ActivityCell]
         let cellWidth: CGFloat = 170
         var maxCell: UICollectionViewCell?
         var maxRatio: CGFloat = 0
@@ -191,7 +191,6 @@ extension ActivityNearByController {
     当前focus的活动发生了变化
     */
     func activityFocusedChanged() {
-        print("focus change")
         let focusedActivity = acts[pageCount.currentPage]
         let center = focusedActivity.location!.coordinate
         map.setCenterCoordinate(center, animated: true)

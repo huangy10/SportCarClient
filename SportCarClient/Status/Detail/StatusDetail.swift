@@ -9,10 +9,11 @@
 import UIKit
 import SnapKit
 import Spring
+import Alamofire
 import SwiftyJSON
 
 
-class StatusDetailController: InputableViewController, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate {
+class StatusDetailController: InputableViewController, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol {
     
     var list: UITableView?
     var indexPath: NSIndexPath?
@@ -66,6 +67,12 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     var responseToPrefixStr: String?        // 回应内容前缀：当回复某人时会预填充『回复：XXX』字样
     var atUser: [String] = []
     
+    // MARK: variable for waitable protocol
+    var wp_waitingContainer: UIView?
+    weak var requestOnFly: Request?
+    
+    // MARK: init
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -90,6 +97,8 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
+    
+    // MARK: view load
     
     override func viewDidLoad() {
         navSetting()
@@ -165,6 +174,8 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         }
     }
     
+    // MARK: Navigator
+    
     func navSetting() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         navigationItem.title = LS("动态详情")
@@ -186,6 +197,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     
     func backBtnPressed() {
         self.navigationController?.popViewControllerAnimated(true)
+        wp_abortWaiting()
     }
     
     func navRightBtnPressed() {
@@ -696,25 +708,29 @@ extension StatusDetailController {
     
     func likeBtnPressed() {
         let requester = StatusRequester.SRRequester
-        if status!.liked {
-            status!.likeNum -= 1
-        } else {
-            status!.likeNum += 1
-        }
-        status?.liked = !status!.liked
-        self.commentPanel?.setLikedAnimated(status!.liked)
-        self.likeNumLbl?.text = "\(self.status!.likeNum)"
-        self.likeIcon?.image = status!.liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
-        
-        requester.likeStatus(status!.ssidString, onSuccess: { (json) -> () in
+//        if status!.liked {
+//            status!.likeNum -= 1
+//        } else {
+//            status!.likeNum += 1
+//        }
+//        status?.liked = !status!.liked
+//        self.commentPanel?.setLikedAnimated(status!.liked)
+//        self.likeNumLbl?.text = "\(self.status!.likeNum)"
+//        self.likeIcon?.image = status!.liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
+        wp_startWaiting()
+        requestOnFly = requester.likeStatus(status!.ssidString, onSuccess: { (json) -> () in
             self.status?.likeNum = json!["like_num"].int32Value
             let liked = json!["like_state"].boolValue
             self.status?.liked = liked
             self.commentPanel?.setLikedAnimated(liked)
             self.likeNumLbl?.text = "\(self.status!.likeNum)"
             self.likeIcon?.image = liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
+            
+            self.wp_stopWaiting()
             }) { (code) -> () in
                 print(code)
+                self.wp_stopWaiting()
+                self.showToast(LS("无法访问服务器"))
         }
     }
     
@@ -730,7 +746,6 @@ extension StatusDetailController {
             responseToComment = comments[responseToRow!]
         }
         let newComment = StatusComment(status: status!).initForPost(commentString, responseTo: responseToComment)
-//        let newComment = StatusComment.objects.postNewCommentToStatus(status!, commentString: commentString, responseToComment: responseToComment, atString: JSON(atUser).string)
         comments.insert(newComment, atIndex: 0)
         let requester = StatusRequester.SRRequester
         requester.postCommentToStatus(self.status!.ssidString, content: commentString, image: nil, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (data) -> () in

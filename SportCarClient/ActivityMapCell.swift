@@ -24,6 +24,7 @@ class MapCell: UITableViewCell {
     init (trailingHeight: CGFloat) {
         super.init(style: .Default, reuseIdentifier: MapCell.reuseIdentifier)
         self.trailingHeight = trailingHeight
+        self.selectionStyle = .None
         createSubviews()
     }
 

@@ -76,7 +76,7 @@ class MainManager {
             let obj = hostUser!
             return try obj.loadDataFromJSON(data, detailLevel: detailLevel) as! T
         }
-        print(id, T.description())
+//        print(id, T.description())
         let obj = table.first({$0.ssid == id && $0.hostSSID == hostUserID}) ?? {
             let obj = table.createEntity()
             obj.ssid = id

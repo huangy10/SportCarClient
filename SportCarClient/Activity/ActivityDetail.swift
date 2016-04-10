@@ -398,7 +398,8 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     // MARK: navigation
     
     func needNavigation() {
-        toast = showConfirmToast(LS("跳转到地图导航?"), target: self, confirmSelector: #selector(openMapToNavigate), cancelSelector: #selector(hideToast as ()->()))
+        toast = showConfirmToast(LS("导航"), message: LS("跳转到地图导航?"), target: self, confirmSelector: #selector(openMapToNavigate), cancelSelector: #selector(hideToast as ()->()))
+//        toast = showConfirmToast(LS("跳转到地图导航?"), target: self, confirmSelector: #selector(openMapToNavigate), cancelSelector: #selector(hideToast as ()->()))
     }
     
     func hideToast() {

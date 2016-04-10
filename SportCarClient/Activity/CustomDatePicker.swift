@@ -8,6 +8,8 @@
 
 import UIKit
 import SnapKit
+import Spring
+
 protocol CustomDatePickerDelegate: class {
     
     func dateDidPicked(date: NSDate)
@@ -94,5 +96,32 @@ class CustomDatePicker: UIView {
         let now = NSDate()
         picker.minimumDate = now
         picker.setDate(now, animated: false)
+    }
+    
+    func show(date: NSDate? = nil) {
+        self.snp_remakeConstraints { (make) in
+            make.right.equalTo(self.superview!)
+            make.left.equalTo(self.superview!)
+            make.bottom.equalTo(self.superview!)
+            make.height.equalTo(CustomDatePicker.requiredHegiht)
+        }
+        if date != nil {
+            picker.setDate(date!, animated: false)
+        }
+        SpringAnimation.spring(0.3) { 
+            self.superview?.layoutIfNeeded()
+        }
+    }
+    
+    func hide() {
+        self.snp_remakeConstraints { (make) in
+            make.right.equalTo(self.superview!)
+            make.left.equalTo(self.superview!)
+            make.top.equalTo(self.superview!.snp_bottom)
+            make.height.equalTo(CustomDatePicker.requiredHegiht)
+        }
+        SpringAnimation.spring(0.3) { 
+            self.superview?.layoutIfNeeded()
+        }
     }
 }

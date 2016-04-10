@@ -789,7 +789,7 @@ extension NewsDetailController {
     }
     
     func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
-        if error == nil {
+        if error != nil {
             showToast(LS("无法获取资讯详情"))
         }
     }
@@ -864,8 +864,6 @@ extension NewsDetailController {
             make.bottom.equalTo(self.view).offset(-keyboardFrame.height)
         })
         self.view.layoutIfNeeded()
-//        print(notif)
-//        print("hahahahahahha")
     }
     
     func changeLayoutWhenKeyboardDisappears(notif: NSNotification) {

@@ -12,17 +12,21 @@ let kSportsCarInfoDetailStaticLabelString1 = [LS("品牌型号"), LS("跑车全�
 let kSportsCarInfoDetailStaticLabelString2 = [LS("价格"), LS("发动机"), LS("变速箱"), LS("最高车速"), LS("百公里加速")]
 
 
-class SportCarInfoDetailController: UITableViewController {
+class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate {
     
     var car: SportCar!
+    
+    weak var toast: UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
 
-        tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "text_header")
-        tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
-        tableView.registerClass(SportCarAuthHeader.self, forHeaderFooterViewReuseIdentifier: "header_auth")
+        SportCarAuthHeader.registerTableView(tableView)
+        SSCommonHeader.registerTableView(tableView)
+        SSPropertyCell.registerTableView(tableView)
+        SSPropertyInputableCell.registerTableView(tableView)
+        
         tableView.separatorStyle = .None
         tableView.rowHeight = 50
     }
@@ -48,7 +52,14 @@ class SportCarInfoDetailController: UITableViewController {
     
     func navRightBtnPressed() {
         // TODO: 删除该跑车
-        self.navigationController?.popViewControllerAnimated(true)
+        toast = showConfirmToast(
+            LS("删除"), message: LS("确认删除爱车?"),
+            target: self,
+            confirmSelector: #selector(confirmDelete),
+            cancelSelector: #selector(hideConfirmToast as ()->()),
+            onSelf: false
+        )
+//        self.navigationController?.popViewControllerAnimated(true)
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -64,53 +75,47 @@ class SportCarInfoDetailController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 50
-        } else {
-            return 50
-        }
+        return 50
     }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
-            let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header_auth") as! SportCarAuthHeader
+            let header = tableView.ss_reusableHeader(SportCarAuthHeader)
             header.titleLbl.text = LS("爱车型号")
             header.authed = car.identified
             header.authBtn.addTarget(self, action: #selector(SportCarInfoDetailController.carAuthBtnPressed), forControlEvents: .TouchUpInside)
             return header
         }else{
-            let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("text_header") as! PrivateChatSettingsHeader
+            let header = tableView.ss_reusableHeader(SSCommonHeader.self)
             header.titleLbl.text = LS("性能参数")
             return header
         }
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-        cell.boolSelect.hidden = true
-        cell.selectionStyle = .None
-        if indexPath.section == 0{
+        if indexPath.section == 0 && indexPath.row == 2 {
+            let cell = tableView.ss_reuseablePropertyCell(SSPropertyInputableCell.self, forIndexPath: indexPath)
+            cell.staticLbl.text = LS("跑车签名")
+            cell.extraSettings(self, text: car.signature, placeholder: LS("请输入跑车签名"))
+            return cell
+        }
+        let cell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
+        cell.editable = false
+        if indexPath.section == 0 {
             cell.staticLbl.text = kSportsCarInfoDetailStaticLabelString1[indexPath.row]
             switch indexPath.row {
             case 0:
-                cell.editable = false
                 cell.infoLbl.text = car.name
-                break
             case 1:
-                cell.editable = true
                 cell.infoLbl.text = car.name
-                break
             case 2:
-                cell.editable = true
                 cell.infoLbl.text = car.signature
-                break
             default:
-                break
+                assertionFailure()
             }
-        }else{
+        } else {
             cell.staticLbl.text = kSportsCarInfoDetailStaticLabelString2[indexPath.row]
-            cell.editable = true
-            switch indexPath.row {
+            switch  indexPath.row {
             case 0:
                 cell.infoLbl.text = car.price
                 break
@@ -141,6 +146,19 @@ class SportCarInfoDetailController: UITableViewController {
             let detail = SportscarAuthController()
             detail.car = car
             self.navigationController?.pushViewController(detail, animated: true)
+        }
+    }
+    
+    func confirmDelete() {
+        hideConfirmToast()
+        // TODO: send request to the server
+    }
+    /**
+     hide the confirm toast
+     */
+    func hideConfirmToast() {
+        if let t = toast {
+            hideConfirmToast(t)
         }
     }
 }
@@ -222,6 +240,4 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
             make.bottom.equalTo(superview)
         }
     }
-    
-    
 }

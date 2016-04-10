@@ -46,6 +46,8 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     var locSearch: BMKGeoCodeSearch?
     var annotation: BMKPointAnnotation!
     
+    var requesting = false
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -197,24 +199,12 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
                 make.width.equalTo(superview).multipliedBy(0.776)
                 make.top.equalTo(mapView!).offset(22)
         }
-//        locDesContainer.backgroundColor = UIColor.whiteColor()
-//        locDesContainer.layer.cornerRadius = 4
-//        locDesContainer.layer.shadowColor = UIColor.blackColor().CGColor
-//        locDesContainer.layer.shadowOpacity = 0.5
-//        locDesContainer.layer.shadowOffset = CGSizeMake(1, 1.5)
-//        board?.addSubview(locDesContainer)
-//        locDesContainer.snp_makeConstraints { (make) -> Void in
-//            make.centerX.equalTo(superview)
-//            make.height.equalTo(50)
-//            make.width.equalTo(superview).multipliedBy(0.776)
-//            make.top.equalTo(mapView!).offset(22)
-//        }
-        let locDesIcon = UIImageView(image: UIImage(named: "news_comment_icon"))
-        locDesContainer.addSubview(locDesIcon)
-        locDesIcon.snp_makeConstraints { (make) -> Void in
-            make.size.equalTo(20)
-            make.left.equalTo(locDesContainer).offset(20)
-            make.centerY.equalTo(locDesContainer)
+        let locDesIcon = locDesContainer.addSubview(UIImageView)
+            .config(UIImage(named: "news_comment_icon"))
+            .layout { (make) in
+                make.size.equalTo(20)
+                make.left.equalTo(locDesContainer).offset(20)
+                make.centerY.equalTo(locDesContainer)
         }
         //
         locationDesInput = UITextField()
@@ -260,19 +250,23 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     }
     
     func navRightBtnPressed() {
+        if requesting {
+            return
+        }
+        requesting = true
         // Check the validate of the data
         // 发布这条状态
         if selectedImage == nil {
-            showToast(LS("您的动态还差一张图片"))
+            showToast(LS("您的动态还差一张图片"), onSelf: true)
             return
         }
         guard let content = statusContentInput?.text where content != "" else {
-            showToast(LS("请输入动态详情"))
+            showToast(LS("请输入动态详情"), onSelf: true)
             return
         }
         let car_id = sportCarList?.selectedCar?.ssidString
         guard let lat: Double? = userLocation?.location.coordinate.latitude else {
-            showToast(LS("无法获取当前位置"))
+            showToast(LS("无法获取当前位置"), onSelf: true)
             return
         }
         guard let lon: Double? = userLocation?.location.coordinate.longitude else {
@@ -289,18 +283,20 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
             self.home?.followStatusCtrl.loadLatestData()
             self.hideToast(toast)
-            self.showToast(LS("发布成功！"))
+            self.showToast(LS("发布成功！"), onSelf: true)
             self.pp_hideProgressView()
             self.navLeftBtnPressed()
+            self.requesting = false
             }, onError: { (code) -> () in
                 print(code)
                 self.hideToast(toast)
-                self.showToast(LS("发布失败，请检查网络设置"))
+                self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
                 self.pp_hideProgressView()
             }) { (progress) -> () in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.pp_updateProgress(progress)
                 })
+                self.requesting = false
         }
     }
     
@@ -369,7 +365,7 @@ extension StatusReleaseController {
         option.reverseGeoPoint = userLocation.location.coordinate
         let res = locSearch!.reverseGeoCode(option)
         if !res {
-            self.showToast(LS("无法获取当前位置信息"))
+            self.showToast(LS("无法获取当前位置信息"), onSelf: true)
         }
     }
     
@@ -383,7 +379,7 @@ extension StatusReleaseController {
         if error == BMK_SEARCH_NO_ERROR {
             locationDesInput!.text = result.address
         } else {
-            self.showToast(LS("无法获取当前位置信息"))
+            self.showToast(LS("无法获取当前位置信息"), onSelf: true)
         }
     }
     

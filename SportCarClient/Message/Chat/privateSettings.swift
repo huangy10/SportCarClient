@@ -281,7 +281,7 @@ extension PrivateChatSettingController {
             self.navigationController?.pushViewController(detail, animated: true)
         case 3:
             if indexPath.row == 0 {
-                toast = showConfirmToast(LS("确定要清除聊天信息吗？"), target: self, confirmSelector: #selector(PrivateChatSettingController.clearChatContent), cancelSelector: #selector(PrivateChatSettingController.hideToast as (PrivateChatSettingController) -> () -> ()))
+                toast = showConfirmToast(LS("清除聊天信息"), message: LS("确定要清除聊天信息吗？"), target: self, confirmSelector: #selector(PrivateChatSettingController.clearChatContent), cancelSelector: #selector(PrivateChatSettingController.hideToast as (PrivateChatSettingController) -> () -> ()))
             } else if indexPath.row == 1 {
                 let report = ReportBlacklistViewController(user: targetUser, parent: self)
                 self.presentViewController(report, animated: false, completion: nil)

@@ -123,12 +123,14 @@ extension NewsController {
     }
     
     func leftBarBtn() -> UIBarButtonItem? {
-        let homeBtn = UIButton()
-        homeBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
-        homeBtn.addTarget(self, action: #selector(NewsController.backToHomePressed), forControlEvents: .TouchUpInside)
-        homeBtn.frame = CGRect(x: 0, y: 0, width: 15, height: 13.5)
-        let leftBtnItem = UIBarButtonItem(customView: homeBtn)
-        return leftBtnItem
+//        let homeBtn = UIButton()
+//        homeBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
+//        homeBtn.addTarget(self, action: #selector(NewsController.backToHomePressed), forControlEvents: .TouchUpInside)
+//        homeBtn.frame = CGRect(x: 0, y: 0, width: 15, height: 13.5)
+//        let leftBtnItem = UIBarButtonItem(customView: homeBtn)
+        let homeBtn = BackToHomeBtn()
+        homeBtn.addTarget(self, action: #selector(backToHomePressed), forControlEvents: .TouchUpInside)
+        return homeBtn.wrapToBarBtn()
     }
     
     func backToHomePressed() {

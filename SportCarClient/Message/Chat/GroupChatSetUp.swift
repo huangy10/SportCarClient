@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import Alamofire
 
 
 protocol GroupChatSetupDelegate: class {
@@ -19,8 +20,6 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
     
     weak var delegate: GroupChatSetupDelegate?
     
-    var pp_progressView: UIProgressView?
-    
     var users: [User] = []
     
     var logoImage: UIImage?
@@ -28,6 +27,8 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
     
     var logo: UIButton!
     var nameInput: UITextField!
+    
+    var requesting = false
     
     override func createSubviews() {
         navSettings()
@@ -62,7 +63,7 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
         nameInput.delegate = self
         inputFields.append(nameInput)
         nameInput.textColor = UIColor.blackColor()
-        nameInput.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        nameInput.font = UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)
         nameInput.textAlignment = .Center
         nameInput.placeholder = LS("请输入群聊名称")
         superview.addSubview(nameInput)
@@ -103,6 +104,7 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
     }
     
     func navRightBtnPressed() {
+        if requesting { return }
         nameInput.resignFirstResponder()
         // Check the data
         guard let clubName = nameInput.text where clubName.length > 0 else {
@@ -117,6 +119,7 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
         // send creation request
         let requester = ChatRequester.requester
         self.pp_showProgressView()
+        requesting = true
         requester.createNewClub(clubName, clubLogo: logoImage!, members: userIDs, description: "Description", onSuccess: { (json) -> () in
             // Notice: here we create the club instance after receiving response from server for simplicity
             let newClub: Club = try! MainManager.sharedManager.getOrCreate(json!)
@@ -124,11 +127,13 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
             kingfisherCache.storeImage(self.logoImage!, forKey: newClub.logoURL!.absoluteString)
             self.delegate?.groupChatSetupControllerDidSuccessCreatingClub(newClub)
             self.pp_hideProgressView()
+            self.requesting = false
             }, onProgress: { (progress) in
                 self.pp_updateProgress(progress)
             }) { (code) -> () in
                 self.showToast(LS("创建群聊失败"))
                 self.pp_hideProgressView()
+                self.requesting = false
                 print(code)
         }
     }

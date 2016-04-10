@@ -53,6 +53,7 @@ class NotificationController: UITableViewController {
             cell.informLbL.text = LS("赞了你的动态")
             cell.cover.kf_setImageWithURL(SFURL(notification.image!)!)
             cell.messageBodyLbl.text = nil
+            cell.readDot.hidden = notification.read
             return cell
             
         case "status_comment":
@@ -64,6 +65,7 @@ class NotificationController: UITableViewController {
             cell.informLbL.text = LS("评论了你的动态")
             cell.messageBodyLbl.text = notification.messageBody
             cell.cover.kf_setImageWithURL(notification.imageURL!)
+            cell.readDot.hidden = notification.read
             return cell
             
         case "status_comment_replied":
@@ -74,6 +76,7 @@ class NotificationController: UITableViewController {
             cell.informLbL.text = LS("回复了你")
             cell.messageBodyLbl.text = notification.messageBody
             cell.cover.kf_setImageWithURL(notification.imageURL!)
+            cell.readDot.hidden = notification.read
             return cell
         
         case "relation_follow":
@@ -82,6 +85,7 @@ class NotificationController: UITableViewController {
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("关注了你")
+            cell.readDot.hidden = notification.read
             return cell
         
         case "status_inform":
@@ -91,6 +95,7 @@ class NotificationController: UITableViewController {
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("提到了你")
             cell.cover.kf_setImageWithURL(SFURL(notification.image!)!)
+            cell.readDot.hidden = notification.read
             cell.messageBodyLbl.text = nil
             return cell
         
@@ -106,6 +111,7 @@ class NotificationController: UITableViewController {
             cell.name2LbL.text = act.name
             cell.inform2Lbl.text = ""
             cell.showBtns = false
+            cell.readDot.hidden = notification.read
             return cell
         
         case "act_invited":
@@ -135,6 +141,7 @@ class NotificationController: UITableViewController {
                         self?.showToast(LS("无法连接到服务器"))
                 })
             }
+            cell.readDot.hidden = notification.read
             return cell
             
         case "act_denied":
@@ -147,7 +154,7 @@ class NotificationController: UITableViewController {
             cell.name2LbL.text = act.name
             cell.inform2Lbl.text = LS("被发起者拒绝了")
             cell.showBtns = false
-
+            cell.readDot.hidden = notification.read
             return cell
             
         case "act_invitation_agreed":
@@ -159,6 +166,7 @@ class NotificationController: UITableViewController {
             cell.name2LbL.text = ""
             cell.inform2Lbl.text = ""
             cell.showBtns = false
+            cell.readDot.hidden = notification.read
             return cell
             
         default:

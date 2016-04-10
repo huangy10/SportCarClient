@@ -81,7 +81,7 @@ class User: BaseModel {
             district = data["district"].stringValue
             gender = data["gender"].stringValue
             phoneNum = data["phoneNum"].stringValue
-            starSign = data["starSign"].stringValue
+            starSign = data["star_sign"].stringValue
             age = data["age"].int32Value
             signature = data["signature"].stringValue
             if let f = data["followed"].bool {

@@ -39,7 +39,7 @@ class StatusDeleteController: PresentTemplateViewController {
     }
     
     func deleteBtnPressed() {
-        toast = showConfirmToast(LS("确认删除这条状态吗？"), target: self, confirmSelector: #selector(StatusDeleteController.deleteConfirmed), cancelSelector: #selector(StatusDeleteController.deleteCancelled), onSelf: true)
+        toast = showConfirmToast(LS("删除动态"), message: LS("确认删除这条动态吗？"), target: self, confirmSelector: #selector(StatusDeleteController.deleteConfirmed), cancelSelector: #selector(StatusDeleteController.deleteCancelled), onSelf: true)
     }
     
     func deleteConfirmed() {

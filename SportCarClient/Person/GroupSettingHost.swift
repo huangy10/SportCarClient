@@ -69,8 +69,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             return
         }
         let detail = ActivityReleasePresentableController()
-        detail.clubLimitID = targetClub.ssid
-        detail.clubLimit = targetClub.name!
+        detail.clubLimit = targetClub
         detail.presentFrom(self)
     }
     
@@ -96,6 +95,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             case 2:
                 // 群主打开本群活动改成俱乐部认证状态
                 let cell = tableView.dequeueReusableCellWithIdentifier("auth_status", forIndexPath: indexPath) as! GroupChatSettingHostClubAuthCell
+                cell.selectionStyle = .None
                 cell.staticLbl.text = LS("俱乐部认证")
                 cell.authed = targetClub.identified
                 return cell
@@ -196,7 +196,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         case 3:
             switch indexPath.row {
             case 1:
-                toast = showConfirmToast(LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(clearChatContent), cancelSelector: #selector(hideToast as ()->()))
+                toast = showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(clearChatContent), cancelSelector: #selector(hideToast as ()->()))
             case 2:
                 let report = ReportBlacklistViewController(user: nil, parent: self)
                 self.presentViewController(report, animated: false, completion: nil)

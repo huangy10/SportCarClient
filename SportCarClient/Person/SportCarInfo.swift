@@ -47,6 +47,7 @@ class SportCarInfoCell: UICollectionViewCell{
     
     func createSubviews() {
         let superview = self.contentView
+        superview.backgroundColor = UIColor.whiteColor()
         //
         carCover = UIImageView()
         carCover.contentMode = .ScaleAspectFill

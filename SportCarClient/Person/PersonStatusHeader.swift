@@ -26,6 +26,7 @@ class PersonStatusHeader: UICollectionReusableView {
     }
     
     func createSubviews() {
+        self.backgroundColor = UIColor.whiteColor()
         titleLbl = UILabel()
         titleLbl.textColor = UIColor.blackColor()
         titleLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold)

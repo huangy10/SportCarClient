@@ -174,7 +174,7 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
     }
     
     func quitBtnPressed() {
-        toast = showConfirmToast(LS("是否确认退出?"), target: self, confirmSelector: #selector(quitConfirmed), cancelSelector: #selector(hideToast as ()->()))
+        toast = showConfirmToast(LS("退出登录"), message: LS("是否确认退出?"), target: self, confirmSelector: #selector(quitConfirmed), cancelSelector: #selector(hideToast as ()->()), onSelf: false)
     }
     
     func quitConfirmed() {

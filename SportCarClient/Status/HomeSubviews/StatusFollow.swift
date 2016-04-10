@@ -25,7 +25,7 @@ class StatusFollowController: StatusBasicController {
     }
     
     override func loadLatestData() {
-        let dateThreshold = (status.first?.createdAt ?? NSDate()).dateByAddingTimeInterval(1)
+        let dateThreshold = status.first?.createdAt ?? NSDate()
         let requester = StatusRequester.SRRequester
         requester.getLatestStatusList(dateThreshold, queryType: "follow", onSuccess: { (let data) -> () in
             self.myRefreshControl?.endRefreshing()

@@ -107,7 +107,6 @@ class ChatRequester: AccountRequester {
     }
     
     func updateChat(onMessageCome: (JSON)->(), onError: (code: String?)->()) {
-        print("updateMessage")
         let urlStr = ChatURLMaker.sharedMaker.updateChat()
         let mutableRequest = NSMutableURLRequest(URL: NSURL(string: urlStr)!)
         mutableRequest.timeoutInterval = 3600

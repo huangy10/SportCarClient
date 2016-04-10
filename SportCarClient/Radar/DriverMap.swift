@@ -27,6 +27,8 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
     var mapFilter: RadarFilterController!
     var mapNav: BlackBarNavigationController!
     var mapFilterView: UIView!
+    
+    var tapper: UITapGestureRecognizer!
     ///
     
     weak var locationUpdatingRequest: Request?
@@ -70,6 +72,9 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         map.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(self.view)
         }
+        tapper = UITapGestureRecognizer(target: self, action: #selector(mapTapped))
+        tapper.enabled = false
+        map.addGestureRecognizer(tapper)
         //
         userList = UITableView(frame: CGRectZero, style: .Plain)
         userList.separatorStyle = .None
@@ -167,7 +172,7 @@ extension RadarDriverMapController {
                 var cell = mapView.dequeueReusableAnnotationViewWithIdentifier("user") as? UserAnnotationView
                 
                 if cell == nil {
-                    cell = UserAnnotationView(annotation: userAnno, reuseIdentifier: "use")
+                    cell = UserAnnotationView(annotation: userAnno, reuseIdentifier: "user")
                 } else {
                     cell?.annotation = userAnno
                 }
@@ -180,9 +185,14 @@ extension RadarDriverMapController {
     }
     
     func mapView(mapView: BMKMapView!, didSelectAnnotationView view: BMKAnnotationView!) {
+        print("did select")
         if let user = view.annotation as? UserAnnotation {
             radarHome?.navigationController?.pushViewController(user.user.showDetailController(), animated: true)
         }
+    }
+    
+    func mapTapped() {
+        showUserBtnPressed()
     }
 }
 
@@ -206,7 +216,7 @@ extension RadarDriverMapController {
         let loc2 = CLLocation(latitude: mapBounds.center.latitude + mapBounds.span.latitudeDelta, longitude: mapBounds.center.longitude + mapBounds.span.longitudeDelta)
         let distance = loc1.distanceFromLocation(loc2)
         
-        locationUpdatingRequest = requester.getRadarData(scanCenter, filterDistance: distance, onSuccess: { (json) -> () in
+        locationUpdatingRequest = requester.getRadarData(userLocation!.location.coordinate, scanCenter: scanCenter, filterDistance: distance, onSuccess: { (json) -> () in
             // 当前正在显示的用户
             for data in json!.arrayValue {
                 // 创建用户对象
@@ -218,6 +228,7 @@ extension RadarDriverMapController {
                 } else {
                     let anno = UserAnnotation()
                     anno.user = user
+                    anno.title = " "
                     let loc = data["loc"]
                     anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
                     self.userAnnos[userID] = anno
@@ -265,6 +276,7 @@ extension RadarDriverMapController {
     
     func showUserBtnPressed() {
         if showUserListBtn.tag == 0 {
+            // show the list
             userList.snp_remakeConstraints { (make) -> Void in
                 make.right.equalTo(self.view)
                 make.left.equalTo(self.view)
@@ -274,8 +286,12 @@ extension RadarDriverMapController {
             SpringAnimation.spring(0.6, animations: { () -> Void in
                 self.view.layoutIfNeeded()
             })
+            if mapFilter.expanded {
+                toggleMapFilter()
+            }
             userList.reloadData()
             showUserListBtn.tag = 1
+            tapper.enabled = true
         }else {
             userList.snp_remakeConstraints { (make) -> Void in
                 make.right.equalTo(self.view)
@@ -287,6 +303,7 @@ extension RadarDriverMapController {
                 self.view.layoutIfNeeded()
             })
             showUserListBtn.tag = 0
+            tapper.enabled = false
         }
         
     }
@@ -301,6 +318,7 @@ extension RadarDriverMapController {
         }
         
         if mapFilter.expanded {
+            // hide the list
             mapFilterView.snp_remakeConstraints(closure: { (make) -> Void in
                 make.bottom.equalTo(showUserListBtn)
                 make.right.equalTo(showUserListBtn.snp_left).offset(-13)
@@ -312,6 +330,7 @@ extension RadarDriverMapController {
                 self.mapFilter.view.toRound(20)
             }
         }else {
+            // dispaly the list
             mapFilterView.snp_remakeConstraints(closure: { (make) -> Void in
                 make.bottom.equalTo(showUserListBtn)
                 make.right.equalTo(showUserListBtn.snp_left).offset(-13)

@@ -46,7 +46,7 @@ class SportCar: BaseModel{
             torque = data["torque"].stringValue
         }
         identified = data["identified"].boolValue
-        signature = data["signature"].stringValue
+        signature = data["signature"].string
         return self
     }
     

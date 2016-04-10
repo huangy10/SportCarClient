@@ -54,11 +54,14 @@ class ActivityHomeController: UIViewController {
     func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         // 导航栏左侧按钮
-        let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
-        navLeftBtn.frame = CGRectMake(0, 0, 15, 13.5)
-        navLeftBtn.addTarget(self, action: #selector(ActivityHomeController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
+//        let navLeftBtn = UIButton()
+//        navLeftBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
+//        navLeftBtn.frame = CGRectMake(0, 0, 15, 13.5)
+//        navLeftBtn.addTarget(self, action: #selector(ActivityHomeController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+//        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
+        let navLeftBtn = BackToHomeBtn()
+        navLeftBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        navigationItem.leftBarButtonItem = navLeftBtn.wrapToBarBtn()
         // 导航栏右侧按钮
         let navRightBtn = UIButton()
         navRightBtn.setImage(UIImage(named: "status_add_btn_white"), forState: .Normal)

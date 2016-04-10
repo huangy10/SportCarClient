@@ -17,17 +17,17 @@ class ActivityReleaseMapCell: UITableViewCell {
     var locInput: UITextField!
     var mapAnno: BMKPointAnnotation!
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    var trailingHeight: CGFloat = 0
+    
+    init (trailingHeight: CGFloat) {
+        super.init(style: .Default, reuseIdentifier: MapCell.reuseIdentifier)
+        self.trailingHeight = trailingHeight
+        self.selectionStyle = .None
         createSubviews()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        map.viewWillDisappear()
     }
     
     func createSubviews() {
@@ -38,12 +38,11 @@ class ActivityReleaseMapCell: UITableViewCell {
         superview.addSubview(map)
         map.viewWillAppear()
         map.snp_makeConstraints { (make) -> Void in
-            make.edges.equalTo(self)
+            make.edges.equalTo(self.contentView).inset(UIEdgeInsetsMake(0, 0, -trailingHeight, 0))
         }
         //
         let locInputContainer = UIView()
         locInputContainer.backgroundColor = UIColor.whiteColor()
-        locInputContainer.layer.cornerRadius = 4
         locInputContainer.layer.shadowColor = UIColor.blackColor().CGColor
         locInputContainer.layer.shadowOpacity = 0.5
         locInputContainer.layer.shadowOffset = CGSizeMake(1, 1.5)

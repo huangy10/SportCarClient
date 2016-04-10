@@ -71,6 +71,13 @@ class NotificationBaseCell: UITableViewCell {
             make.left.equalTo(nickNameLbl)
             make.top.equalTo(nickNameLbl.snp_bottom).offset(5)
         }
+        
+        readDot = superview.addSubview(UIView).config(kHighlightedRedTextColor)
+            .toRound(5).layout({ (make) in
+                make.centerX.equalTo(superview.snp_right).offset(-15)
+                make.centerY.equalTo(avatarBtn.snp_top)
+                make.size.equalTo(10)
+            })
     }
 }
 
@@ -90,7 +97,7 @@ class NotificationCellWithCoverThumbnail: NotificationBaseCell {
         let superview = self.contentView
         
         cover = UIImageView()
-        super.addSubview(cover)
+        superview.addSubview(cover)
         cover.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(avatarBtn)
@@ -107,6 +114,8 @@ class NotificationCellWithCoverThumbnail: NotificationBaseCell {
             make.right.equalTo(cover)
             make.top.equalTo(avatarBtn.snp_bottom).offset(15)
         }
+        
+        superview.bringSubviewToFront(readDot)
     }
 }
 

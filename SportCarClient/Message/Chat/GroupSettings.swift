@@ -282,7 +282,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             detail.delegate = self
             self.navigationController?.pushViewController(detail, animated: true)
         } else if indexPath.section == 3 && indexPath.row == 1 {
-            showConfirmToast(LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(GroupChatSettingController.clearChatContent), cancelSelector: #selector(GroupChatSettingController.hideToast as (GroupChatSettingController) -> () -> ()))
+            showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(GroupChatSettingController.clearChatContent), cancelSelector: #selector(GroupChatSettingController.hideToast as (GroupChatSettingController) -> () -> ()))
         } else if indexPath.section == 3 && indexPath.row == 2 {
             // 举报
             let report = ReportBlacklistViewController(user: nil, parent: self)
@@ -374,7 +374,7 @@ extension GroupChatSettingController {
     }
     
     func deleteAndQuitBtnPressed() {
-        toast = showConfirmToast(LS("确认删除并退出？"), target: self, confirmSelector: #selector(GroupChatSettingController.deleteAndQuitConfirm), cancelSelector: #selector(GroupChatSettingController.hideToast as (GroupChatSettingController) -> () -> ()))
+        toast = showConfirmToast(LS("退出"), message: LS("确认删除并退出？"), target: self, confirmSelector: #selector(GroupChatSettingController.deleteAndQuitConfirm), cancelSelector: #selector(GroupChatSettingController.hideToast as (GroupChatSettingController) -> () -> ()))
     }
     
     func deleteAndQuitConfirm() {

@@ -10,6 +10,11 @@ import UIKit
 
 class UserAnnotation: BMKPointAnnotation {
     var user: User!
+    
+    override init() {
+        super.init()
+        self.title = " "
+    }
 }
 
 class UserAnnotationView: BMKAnnotationView {
@@ -27,6 +32,7 @@ class UserAnnotationView: BMKAnnotationView {
     
     override init!(annotation: BMKAnnotation!, reuseIdentifier: String!) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        self.bounds = CGRectMake(0, 0, 65, 65)
         avatar = self.addSubview(UIButton.self)
             .config(self, selector: #selector(avatarPressed))
             .setFrame(CGRectMake(0, 0, 65, 65))
@@ -35,7 +41,6 @@ class UserAnnotationView: BMKAnnotationView {
             .config(nil)
             .setFrame(CGRectMake(40, 40, 25, 25))
             .toRound()
-        self.clipsToBounds = false
         self.addShadow()
     }
     
@@ -75,6 +80,8 @@ class HostUserOnRadarAnnotationView: BMKAnnotationView {
         updator?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
         updator?.frameInterval = 1
         updator?.paused = true
+        
+        self.userInteractionEnabled = false
     }
     
     deinit {

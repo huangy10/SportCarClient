@@ -189,7 +189,6 @@ extension HomeController {
         board.layer.transform = CATransform3DIdentity
         board.setImage(screenShot, forState: .Normal)
         self.navigationController?.popViewControllerAnimated(false)
-        radar = nil
         showSideBar(true)
     }
     
@@ -199,6 +198,7 @@ extension HomeController {
         case 0:
             if person == nil {
                 person = PersonBasicController(user: MainManager.sharedManager.hostUser!)
+                person?.isRoot = true
                 person?.homeDelegate = self
             }
             self.navigationController?.pushViewController(person!, animated: true)

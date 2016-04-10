@@ -134,7 +134,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
         needNavigation()
     }
     func needNavigation() {
-        toast = self.showConfirmToast(LS("跳转到地图导航?"), target: self, confirmSelector: #selector(PersonOtherController.openMapToNavigate), cancelSelector: #selector(PersonOtherController.hideToast as (PersonOtherController) -> () -> ()))
+        toast = self.showConfirmToast(LS("导航"), message: LS("跳转到地图导航?"), target: self, confirmSelector: #selector(PersonOtherController.openMapToNavigate), cancelSelector: #selector(PersonOtherController.hideToast as (PersonOtherController) -> () -> ()))
     }
     
     func hideToast() {

@@ -23,6 +23,8 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     var userLocation: BMKUserLocation?
     var userAnno: BMKPointAnnotation!
     
+    var isRoot: Bool = false
+    
     deinit {
         print("deinit person basic controller")
     }
@@ -127,8 +129,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     
     func createSubviews() {
         let superview = self.view
-        collectionView?.backgroundColor = UIColor.whiteColor()
-        collectionView?.contentInset = UIEdgeInsetsMake(5, 5, 5, 5)
+        collectionView?.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         //
         let screenWidth = superview.frame.width
         let authCarListHeight: CGFloat = 62
@@ -178,10 +179,19 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     
     func navSettings() {
         navigationItem.title = LS("我")
-        
-        let backBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "home_back"), contentMode: .ScaleAspectFit)
-            .setFrame(CGRectMake(0, 0, 15, 15))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
+        if isRoot {
+            let backBtn = BackToHomeBtn()
+            backBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
+            self.navigationItem.leftBarButtonItem = backBtn.wrapToBarBtn()
+        } else {
+            let backBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "account_header_back_btn"), contentMode: .ScaleAspectFit)
+                .setFrame(CGRectMake(0, 0, 15, 15))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
+            
+        }
+//        let backBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "home_back"), contentMode: .ScaleAspectFit)
+//            .setFrame(CGRectMake(0, 0, 15, 15))
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
         
         let setting = UIButton().config(self, selector: #selector(navRightBtnPressed))
             .setFrame(CGRectMake(0, 0, 44, 44))
@@ -297,6 +307,13 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         }
     }
     
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+        if data.selectedCar == nil || section == 1 {
+            return UIEdgeInsetsMake(5, 5, 5, 5)
+        }
+        return UIEdgeInsetsZero
+    }
+    
     override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
 
         let header = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: PersonStatusHeader.reuseIdentifier, forIndexPath: indexPath) as! PersonStatusHeader
@@ -321,7 +338,7 @@ extension PersonBasicController {
         userAnno.coordinate = userLocation.location.coordinate
         self.userLocation = userLocation
         let userLocInScreen = header.map.convertCoordinate(userLocation.location.coordinate, toPointToView: header.map)
-        let userLocWithOffset = CGPointMake(userLocInScreen.x + header.frame.width / 4, userLocInScreen.y + header.frame.height / 2)
+        let userLocWithOffset = CGPointMake(userLocInScreen.x + header.frame.width / 4, userLocInScreen.y - header.frame.height / 3)
         let newCoordinate = header.map.convertPoint(userLocWithOffset, toCoordinateFromView: header.map)
         let region = BMKCoordinateRegionMakeWithDistance(newCoordinate, 3000, 5000)
 
@@ -340,7 +357,7 @@ extension PersonBasicController {
     func didSelectSportCar(own: SportCar?) {
         data.selectedCar = own
         // 当car是nil时，代表显示所有的动态，直接
-        collectionView?.reloadData()
+        self.collectionView?.reloadData()
     }
 
     func needAddSportCar() {

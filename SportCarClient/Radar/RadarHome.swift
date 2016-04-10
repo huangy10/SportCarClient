@@ -57,13 +57,9 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     }
     
     func navSettings() {
-        //
-        let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
-        navLeftBtn.frame = CGRectMake(0, 0, 15, 13.5)
-        navLeftBtn.addTarget(self, action: #selector(RadarHomeController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
-        //
+        let navLeftBtn = BackToHomeBtn()
+        navLeftBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        navigationItem.leftBarButtonItem = navLeftBtn.wrapToBarBtn()
         navRightBtn = UIButton()
         navRightBtn.tag = 0
         navRightIcon = UIImageView(image: UIImage(named: "status_add_btn_white"))
@@ -223,15 +219,13 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     func createReleaseBoard() {
         var superview = self.view
         
-        releaseBoard = UIView()
-        releaseBoard.backgroundColor = UIColor.whiteColor()
-        superview.addSubview(releaseBoard)
-        releaseBoard.snp_makeConstraints { (make) -> Void in
-            make.bottom.equalTo(superview.snp_top)
-            make.right.equalTo(superview)
-            make.width.equalTo(125)
-            make.height.equalTo(150)
-        }
+        releaseBoard = superview.addSubview(UIView).config(UIColor.whiteColor())
+            .addShadow().layout({ (make) in
+                make.bottom.equalTo(superview.snp_top)
+                make.right.equalTo(superview)
+                make.width.equalTo(125)
+                make.height.equalTo(150)
+            })
         superview = releaseBoard
         let releaseStatus = UIButton()
         releaseStatus.tag = 0

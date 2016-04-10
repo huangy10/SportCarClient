@@ -29,64 +29,52 @@ class ActivityReleasePresentableController: ActivityReleaseController {
     }
     
     override func navRightBtnPressed() {
-        //        self.navigationController?.popViewControllerAnimated(true)
-        self.inputFields.each { (view) -> () in
+        self.inputFields.each { (view) in
             view?.resignFirstResponder()
         }
-        // Check integrity of the data to be sent
-        guard let actName = board.actNameInput.text where actName != "" else{
-            self.showToast(LS("请填写活动名称"))
+        // check integrity of the data
+        guard let actName = nameInput.text where actName.length > 0 else {
+            showToast(LS("请填写活动名称"), onSelf: true)
             return
         }
-        
-        guard let actDes = board.actDesInput.text where board.actDesEditStart else {
-            self.showToast(LS("请填写活动描述"))
+        guard let actDes = desInput.text where actDes.length > 0 else {
+            showToast(LS("请填写活动描述"), onSelf: true)
             return
         }
-        
-        guard let posterImage = self.poster else{
-            self.showToast(LS("请选择活动海报"))
+        guard let posterImage = poster else {
+            showToast(LS("请选择活动海报"), onSelf: true)
             return
         }
-        
-        if userLocation == nil{
-            self.showToast(LS("无法获取当前位置"))
+        guard let loc = userLocation else {
+            showToast(LS("无法获取当前位置"), onSelf: true)
             return
         }
-        
-        if startAtDate == nil {
-            self.showToast(LS("请选择活动开始时间"))
+        guard let startAtDate = startAt, let endAtDate = endAt else {
+            showToast(LS("请设置活动时间"), onSelf: true)
             return
         }
-        
-        if endAtDate == nil {
-            self.showToast(LS("请选择活动截止时间"))
-            return
+        let clubLimitID = clubLimit?.ssidString
+        var selectedUserIDs: [String]? = nil
+        if selectedUser.count > 0 {
+            selectedUserIDs = selectedUser.map { $0.ssidString }
         }
-        
-        var informUser: [String]? = nil
-        if board.informOfUsers.count > 0 {
-            informUser = board.informOfUsers.map({ (user) -> String in
-                return user.ssidString
-            })
-        }
-        
-        // make the request
-        let requester = ActivityRequester.requester
-        self.pp_showProgressView()
-        let clubLimitIDString: String? = clubLimitID == nil ? nil : "\(clubLimitID!)"
-        requester.createNewActivity(actName, des: actDes, informUser: informUser, maxAttend: attendNum, startAt: startAtDate!, endAt: endAtDate!, clubLimit: clubLimitIDString, poster: posterImage, lat: userLocation!.latitude, lon: userLocation!.longitude, loc_des: locDescriptin ?? "", onSuccess: { (json) -> () in
-            // TODO: send a global notification to make corresponding activity list update
+        let toast = showStaticToast(LS("发布中..."))
+        pp_showProgressView()
+        ActivityRequester.requester.createNewActivity(actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, clubLimit: clubLimitID, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", onSuccess: { (json) in
+            self.presenter?.dismissViewControllerAnimated(true, completion: nil)
+            if let mine = self.actHomeController?.mine {
+                mine.refreshControl.beginRefreshing()
+                mine.getLatestActData()
+            }
+            self.hideToast(toast)
             self.pp_hideProgressView()
-                self.presenter?.dismissViewControllerAnimated(true, completion: nil)
-            
-            }, onProgress: { (progress) -> () in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.pp_updateProgress(progress)
-                })
-            }) { (code) -> () in
-                self.pp_hideProgressView()
-                print(code)
+            self.showToast(LS("发布成功!"))
+            }, onProgress: { (progress) in
+                self.pp_updateProgress(progress)
+        }) { (code) in
+            self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
+            self.pp_hideProgressView()
+            print(code)
         }
     }
     

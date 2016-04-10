@@ -9,6 +9,8 @@
 import UIKit
 
 
+private var associateObjectHandle: UInt8 = 0
+
 protocol ProgressProtocol: class {
     func pp_createProgressView()
     
@@ -24,6 +26,16 @@ protocol ProgressProtocol: class {
 }
 
 extension ProgressProtocol where Self: UIViewController {
+    
+    var pp_progressView: UIProgressView? {
+        set {
+            objc_setAssociatedObject(self, &associateObjectHandle, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+        
+        get {
+            return objc_getAssociatedObject(self, &associateObjectHandle) as? UIProgressView
+        }
+    }
     
     func pp_createProgressView() {
         let progress = UIProgressView()

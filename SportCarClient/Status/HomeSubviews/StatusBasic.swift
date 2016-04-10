@@ -9,6 +9,8 @@
 import UIKit
 import SnapKit
 import SwiftyJSON
+import Alamofire
+import Dollar
 
 
 class StatusBasicController: UITableViewController {
@@ -21,6 +23,8 @@ class StatusBasicController: UITableViewController {
     var myRefreshControl: UIRefreshControl?
     
     weak var homeController: StatusHomeController?
+    
+    weak var requestOnFly: Request?
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -122,6 +126,7 @@ extension StatusBasicController {
             let newStatus: Status = try! MainManager.sharedManager.getOrCreate(statusJSON)
             self.status.append(newStatus)
         }
+        status = $.uniq(status, by: { $0.ssid })
         statusDataSort()
         return statusJSONData.count
     }

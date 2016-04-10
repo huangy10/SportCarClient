@@ -174,6 +174,28 @@ extension UITextField {
     }
 }
 
+extension UITextView {
+    @nonobjc func config(
+        fontSize: CGFloat               = 14,
+        fontWeight: CGFloat             = UIFontWeightUltraLight,
+        textColor: UIColor              = UIColor.blackColor(),
+        textAlignment: NSTextAlignment  = .Left,
+        text: String?                   = nil
+        ) -> UITextView {
+        self.font = UIFont.systemFontOfSize(fontSize, weight: fontWeight)
+        self.textColor = textColor
+        self.textAlignment = textAlignment
+        self.text = text
+        return self
+    }
+    
+    @nonobjc func addToInputable(inputable: InputableViewController) -> UITextView {
+        self.delegate = inputable
+        inputable.inputFields.append(self)
+        return self
+    }
+}
+
 extension UIImageView {
     @nonobjc func config(
         image: UIImage? = nil,

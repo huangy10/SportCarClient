@@ -9,7 +9,11 @@
 import UIKit
 
 
-class SportCarAuthHeader: PrivateChatSettingsHeader {
+class SportCarAuthHeader: SSCommonHeader {
+    
+    override class var reuseIdentifier: String {
+        return "sport_car_auth_header"
+    }
     
     var authBtn: UIButton!
     var authed: Bool = false {
@@ -34,7 +38,7 @@ class SportCarAuthHeader: PrivateChatSettingsHeader {
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(titleLbl)
             make.height.equalTo(superview)
-            make.width.equalTo(80)
+            make.width.equalTo(60)
         }
     }
     
