@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Dollar
 
 
 class ActivityHomeMineListController: UICollectionViewController {
@@ -85,6 +86,9 @@ class ActivityHomeMineListController: UICollectionViewController {
                 self.data.insert(act, atIndex: i)
                 i += 1
             }
+            if json!.arrayValue.count > 0 {
+                self.data = $.uniq(self.data, by: { $0.ssid })
+            }
             self.loading = false
             self.collectionView?.reloadData()
             self.refreshControl?.endRefreshing()
@@ -107,6 +111,9 @@ class ActivityHomeMineListController: UICollectionViewController {
             for data in json!.arrayValue {
                 let act: Activity = try! MainManager.sharedManager.getOrCreate(data)
                 self.data.append(act)
+            }
+            if json!.arrayValue.count > 0 {
+                self.data = $.uniq(self.data, by: { $0.ssid })
             }
             self.loading = false
             self.collectionView?.reloadData()

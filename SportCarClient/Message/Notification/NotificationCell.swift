@@ -198,6 +198,7 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         doneLbl = UILabel()
         doneLbl.font = UIFont.systemFontOfSize(14)
         doneLbl.textColor = UIColor.blackColor()
+        doneLbl.textAlignment = .Right
         superview.addSubview(doneLbl)
         doneLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(denyBtn)

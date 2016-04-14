@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import Dollar
 
 class StatusHotController: UICollectionViewController {
     var status: [Status] = []
@@ -87,6 +88,7 @@ class StatusHotController: UICollectionViewController {
             let newStatus = try! MainManager.sharedManager.getOrCreate(statusJSON) as Status
             self.status.append(newStatus)
         }
+        status = $.uniq(status, by: { $0.ssid })
         statusDataSort()
         return statusJSONData.count
     }

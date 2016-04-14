@@ -16,6 +16,7 @@ import AlecrimCoreData
 
 extension Notification {
 
+    @NSManaged var checked: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var createdAt: NSDate?
     @NSManaged var flag: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var image: String?
@@ -33,6 +34,7 @@ extension Notification {
 
 extension Notification {
 
+    static let checked = AlecrimCoreData.NullableAttribute<Bool>("checked")
     static let createdAt = AlecrimCoreData.NullableAttribute<NSDate>("createdAt")
     static let flag = AlecrimCoreData.NullableAttribute<Bool>("flag")
     static let image = AlecrimCoreData.NullableAttribute<String>("image")
@@ -50,6 +52,7 @@ extension Notification {
 
 extension AlecrimCoreData.AttributeType where Self.ValueType: Notification {
 
+    var checked: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("checked", self) }
     var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
     var flag: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("flag", self) }
     var image: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("image", self) }

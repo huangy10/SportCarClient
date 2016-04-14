@@ -96,7 +96,7 @@ class User: BaseModel {
             statusNum = data["status_num"].int32Value
             
             let carJSON = data["avatar_car"]
-            if carJSON.isExists() {
+            if carJSON.exists() {
                 avatarCar = carJSON.rawString()
                 _avatarCarModel = try manager.getOrCreate(carJSON) as SportCar
             } else {
@@ -105,7 +105,7 @@ class User: BaseModel {
             }
             
             let clubJSON = data["avatar_club"]
-            if clubJSON.isExists() {
+            if clubJSON.exists() {
                 avatarClub = clubJSON.rawString()
                 _avatarClubModel = try manager.getOrCreate(clubJSON) as Club
             } else {

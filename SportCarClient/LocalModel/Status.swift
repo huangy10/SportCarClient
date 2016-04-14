@@ -77,7 +77,7 @@ class Status: BaseModel {
         }
         
         let carJSON = data["car"]
-        if carJSON.isExists() {
+        if carJSON.exists() {
             carInfo = carJSON.rawString()
             _car = try manager.getOrCreate(carJSON) as SportCar
             carID = _car!.ssid

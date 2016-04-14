@@ -31,7 +31,7 @@ class ClubBriefInfoController: UITableViewController {
         let requester = ChatRequester.requester
         requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
             var clubJson: JSON
-            if json!["id"].isExists() {
+            if json!["id"].exists() {
                 try! self.targetClub.loadDataFromJSON(json!)
                 clubJson = json!
                 let barBtnItem = UIBarButtonItem(title: LS("申请加入"), style: .Plain, target: self, action: #selector(ClubBriefInfoController.navRightBtnPressed))

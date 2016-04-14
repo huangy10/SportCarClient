@@ -1,7 +1,7 @@
 PODS:
-  - Alamofire (3.2.1)
+  - Alamofire (3.3.1)
   - AlecrimCoreData (4.1.1)
-  - BaiduMapKit (2.10.0)
+  - BaiduMapKit (2.10.2)
   - Cent (5.0.0):
     - Dollar (~> 5.0.0)
   - Dollar (5.0.0)
@@ -10,7 +10,7 @@ PODS:
   - Spring (1.0.3)
   - SwiftDate (2.0.2)
   - SwiftyJSON (2.3.2)
-  - SwiftyTimer (1.3.1)
+  - SwiftyTimer (1.4.0)
 
 DEPENDENCIES:
   - Alamofire (~> 3.0)
@@ -37,13 +37,13 @@ CHECKOUT OPTIONS:
     :commit: 18d5c7b74489de8044e34767f856d1e574f0820e
     :git: https://github.com/MengTo/Spring.git
   SwiftyJSON:
-    :commit: 42bdb102d2624b143c07850ebdc1537d5b6579b6
+    :commit: 2a5b70f06001316d4fb54501edc70b4084705da0
     :git: https://github.com/SwiftyJSON/SwiftyJSON.git
 
 SPEC CHECKSUMS:
-  Alamofire: f11d8624a05f5d39e0c99309b3e600a3ba64298a
+  Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
   AlecrimCoreData: 1888f0ea2bc7d28ded9a967d863027c9446b9069
-  BaiduMapKit: 5df028c6b455d29e68e89694adbcf9d37a4bcc99
+  BaiduMapKit: b1706a062597c70ec62a0cca93212cba1d3017e1
   Cent: 4bfbe6037d911c0491425ae1ff8057404050fbb2
   Dollar: 310893dd6b3799b9b155e3deb61a0492987e4d03
   Kingfisher: 9e37d2a78a082dc123bfe8a16de65de85518daae
@@ -51,6 +51,6 @@ SPEC CHECKSUMS:
   Spring: 3f02b5dc3308572ef177b3cad0fa7bbc4b0706f7
   SwiftDate: b4f4d0962afe48365ad2800c9850a6626deb9359
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
-  SwiftyTimer: 50ad01c66721479709b41042e422ee852c185b13
+  SwiftyTimer: db4458cfaf67fc71e16ad6e4637c60b86f76a649
 
 COCOAPODS: 0.39.0

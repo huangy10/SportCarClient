@@ -74,7 +74,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     
     override func getPersonInfoPanel() -> PersonHeaderMine {
         let panel = PersonHeaderOther()
-        totalHeaderHeight = 821 / 750 * self.view.frame.width
+        totalHeaderHeight = 920 / 750 * self.view.frame.width
         panel.followBtn.addTarget(self, action: #selector(PersonOtherController.followBtnPressed(_:)), forControlEvents: .TouchUpInside)
         panel.chatBtn.addTarget(self, action: #selector(PersonOtherController.chatBtnPressed), forControlEvents: .TouchUpInside)
         panel.locBtn.addTarget(self, action: #selector(PersonOtherController.locateBtnPressed), forControlEvents: .TouchUpInside)
@@ -114,7 +114,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     }
     
     func chatBtnPressed() {
-        if let room = self.navigationController?.viewControllers.fetch(-3) as? ChatRoomController where room.targetUser == self.data.user{
+        if self.navigationController!.viewControllers.count > 3, let room = self.navigationController?.viewControllers.fetch(-3) as? ChatRoomController where room.targetUser == self.data.user{
             self.navigationController?.popViewControllerAnimated(true)
             return
         }

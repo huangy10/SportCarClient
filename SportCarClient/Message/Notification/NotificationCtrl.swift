@@ -123,8 +123,9 @@ class NotificationController: UITableViewController {
             cell.informLbL.text = LS("邀请你参加")
             cell.name2LbL.text = act.name
             cell.inform2Lbl.text = ""
-            cell.showBtns = true
-            cell.closeOperation = notification.flag
+            print(notification.checked)
+            cell.closeOperation = notification.checked
+            cell.doneLbl.text = notification.flag ? LS("已确认") : LS("已拒绝")
             cell.onAgreeBtnPressed = { [weak self] _ in
                 let requester = ActivityRequester.requester
                 requester.activityOperation(act.ssidString, targetUserID: "", opType: "invite_accepted", onSuccess: { (json) -> () in
@@ -185,11 +186,12 @@ class NotificationController: UITableViewController {
             let messageBody = notification.messageBody ?? ""
             return 90 + messageBody.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightLight), boundingSize: CGSizeMake(NotificationCellWithCoverThumbnail.messageBodyLblMaxWidth, CGFloat.max)).height
         case "act_invited":
-            if notification.flag {
-                return 75
-            } else {
-                return 93.5
-            }
+            return 93.5
+//            if notification.checked {
+//                return 75
+//            } else {
+//                return 93.5
+//            }
         default:
             return 90
         }

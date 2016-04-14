@@ -123,6 +123,7 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
         requester.createNewClub(clubName, clubLogo: logoImage!, members: userIDs, description: "Description", onSuccess: { (json) -> () in
             // Notice: here we create the club instance after receiving response from server for simplicity
             let newClub: Club = try! MainManager.sharedManager.getOrCreate(json!)
+            try! MainManager.sharedManager.save()
             let kingfisherCache = KingfisherManager.sharedManager.cache
             kingfisherCache.storeImage(self.logoImage!, forKey: newClub.logoURL!.absoluteString)
             self.delegate?.groupChatSetupControllerDidSuccessCreatingClub(newClub)

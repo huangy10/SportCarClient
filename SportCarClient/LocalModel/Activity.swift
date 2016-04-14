@@ -73,7 +73,7 @@ class Activity: BaseModel {
         name = data["name"].stringValue
         poster = data["poster"].stringValue
         liked = data["liked"].boolValue
-        if data["applied"].isExists() {
+        if data["applied"].exists() {
             applied = data["applied"].boolValue
         }
         if let liked = data["liked"].bool {

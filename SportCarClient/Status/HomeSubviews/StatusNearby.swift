@@ -103,4 +103,25 @@ class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate,
             locDes = "\(location!.latitude), \(location!.longitude)"
         }
     }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let s = self.status[indexPath.row]
+        let cell =  tableView.cellForRowAtIndexPath(indexPath)
+        let pos = cell!.frame.origin.y - tableView.contentOffset.y + 10
+        let detail = StatusDetailController(status: s, background: getScreenShot(), initPos: pos, initHeight: cell!.frame.height)
+        detail.list = tableView
+        detail.indexPath = indexPath
+        self.homeController?.navigationController?.pushViewController(detail, animated: false)
+    }
+    
+    func getScreenShot() -> UIImage{
+        UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, true, UIScreen.mainScreen().scale)
+        let context = UIGraphicsGetCurrentContext()!
+        CGContextTranslateCTM(context, 0, -self.tableView.contentOffset.y)
+        self.view.layer.renderInContext(context)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image
+    }
 }

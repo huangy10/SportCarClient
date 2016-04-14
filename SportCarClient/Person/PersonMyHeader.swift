@@ -61,7 +61,8 @@ class PersonHeaderMine: UIView {
             make.bottom.equalTo(superview)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.height.equalTo(225)
+//            make.height.equalTo(225)
+            make.top.equalTo(superview)
         }
         backMask.setNeedsDisplay()
         //

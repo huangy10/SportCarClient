@@ -218,10 +218,9 @@ class ActivityRequester: AccountRequester {
             let location = ["lat": lat, "lon": lon, "description": loc_des]
             form.appendBodyPart(data: try! JSON(location).rawData(), name: "location")
             // Optional
-            if informUser != nil {
-                let jsonList: String = JSON(informUser!).stringValue
-                form.appendBodyPart(data: jsonList.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "inform_of")
-            }
+            let atUserData = try! JSON(informUser ?? []).rawData()
+            form.appendBodyPart(data: atUserData, name: "inform_of")
+        
             if clubLimit != nil {
                 form.appendBodyPart(data: clubLimit!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: "club_limit")
             }

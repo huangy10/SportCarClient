@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Xcode 7.0">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15F18b" minimumToolsVersion="Xcode 7.0">
     <entity name="Activity" representedClassName=".Activity" parentEntity="BaseModel" syncable="YES">
         <attribute name="actDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="applied" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -68,6 +68,7 @@
         <attribute name="valueAverage" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="Notification" representedClassName=".Notification" parentEntity="BaseModel" syncable="YES">
+        <attribute name="checked" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="flag" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
@@ -140,7 +141,7 @@
         <element name="BaseModel" positionX="358" positionY="48" width="128" height="73"/>
         <element name="ChatRecord" positionX="-54" positionY="-9" width="128" height="358"/>
         <element name="Club" positionX="198" positionY="18" width="128" height="345"/>
-        <element name="Notification" positionX="63" positionY="-351" width="128" height="180"/>
+        <element name="Notification" positionX="63" positionY="-351" width="128" height="195"/>
         <element name="SportCar" positionX="349" positionY="189" width="128" height="240"/>
         <element name="Status" positionX="-36" positionY="0" width="128" height="283"/>
         <element name="User" positionX="196" positionY="510" width="128" height="375"/>

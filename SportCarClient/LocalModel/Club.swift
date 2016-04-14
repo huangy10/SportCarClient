@@ -70,35 +70,35 @@ class Club: BaseModel {
         _founderUser = try! manager.getOrCreate(founderJSON) as User
         mine = _founderUser?.ssid == manager.hostUserID
         let actJSON = data["recent_act"]
-        if actJSON.isExists() {
+        if actJSON.exists() {
             self.recentActivity = try manager.getOrCreate(actJSON) as Activity
         }
         let attendedJSON = data["attended"]
-        if attendedJSON.isExists() {
+        if attendedJSON.exists() {
             attended = attendedJSON.boolValue
         }
         let memberNumJSON = data["members_num"]
-        if memberNumJSON.isExists() {
+        if memberNumJSON.exists() {
             memberNum = memberNumJSON.int32Value
         }
         let showMembersJSON = data["show_members_to_public"]
-        if showMembersJSON.isExists() {
+        if showMembersJSON.exists() {
             showMembers = showMembersJSON.boolValue
         }
         let onlyHostInviteJSON = data["only_host_can_invite"]
-        if onlyHostInviteJSON.isExists() {
+        if onlyHostInviteJSON.exists() {
             onlyHostCanInvite = onlyHostInviteJSON.boolValue
         }
         let showNickNameJSON = data["show_nick_name"]
-        if showNickNameJSON.isExists() {
+        if showNickNameJSON.exists() {
             showNickName = showNickNameJSON.boolValue
         }
         let noDisturbingJSON = data["no_disturbing"]
-        if noDisturbingJSON.isExists() {
+        if noDisturbingJSON.exists() {
             noDisturbing = noDisturbingJSON.boolValue
         }
         let alwaysOnTopJSON = data["always_on_top"]
-        if alwaysOnTopJSON.isExists() {
+        if alwaysOnTopJSON.exists() {
             alwayOnTop = alwaysOnTopJSON.boolValue
         }
         // TODO: nickname
@@ -109,23 +109,23 @@ class Club: BaseModel {
     
     func updateClubSettings(data: JSON) -> Self {
         let showMembersJSON = data["show_members_to_public"]
-        if showMembersJSON.isExists() {
+        if showMembersJSON.exists() {
             showMembers = showMembersJSON.boolValue
         }
         let onlyHostInviteJSON = data["only_host_can_invite"]
-        if onlyHostInviteJSON.isExists() {
+        if onlyHostInviteJSON.exists() {
             onlyHostCanInvite = onlyHostInviteJSON.boolValue
         }
         let showNickNameJSON = data["show_nick_name"]
-        if showNickNameJSON.isExists() {
+        if showNickNameJSON.exists() {
             showNickName = showNickNameJSON.boolValue
         }
         let noDisturbingJSON = data["no_disturbing"]
-        if noDisturbingJSON.isExists() {
+        if noDisturbingJSON.exists() {
             noDisturbing = noDisturbingJSON.boolValue
         }
         let alwaysOnTopJSON = data["always_on_top"]
-        if alwaysOnTopJSON.isExists() {
+        if alwaysOnTopJSON.exists() {
             alwayOnTop = alwaysOnTopJSON.boolValue
         }
         return self
@@ -146,7 +146,7 @@ class Club: BaseModel {
     
     class func reorganizeJSON(json: JSON) -> JSON{
         var temp = json["club"]
-        if temp.isExists() {
+        if temp.exists() {
             for (key, value) in json {
                 if key == "club" {
                     continue

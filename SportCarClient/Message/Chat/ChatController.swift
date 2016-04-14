@@ -306,7 +306,11 @@ extension ChatRoomController {
             break
         case .ClubItem(let club):
             newChat.targetID = club.ssid
-            newChat.targetClub = club.toContext(ChatModelManger.sharedManager.getOperationContext()) as? Club
+            if let club = club.toContext(ChatModelManger.sharedManager.getOperationContext()) as? Club {
+                newChat.targetClub = club
+            } else {
+                assertionFailure()
+            }
             newChat.chatType = "group"
             break
         }

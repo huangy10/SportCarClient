@@ -35,21 +35,22 @@ class Notification: BaseModel {
         }
         read = data["read"].boolValue
         flag = data["flag"].boolValue
+        checked = data["checked"].boolValue
         let userJSON = data["related_user"]
-        if userJSON.isExists() {
+        if userJSON.exists() {
             user = try manager.getOrCreate(userJSON, detailLevel: 0) as User
         }
         let clubJSON = data["related_club"]
-        if clubJSON.isExists() {
+        if clubJSON.exists() {
             _obj = try manager.getOrCreate(data) as Club
         }
         let newsJSON = data["related_news"]
-        if newsJSON.isExists() {
+        if newsJSON.exists() {
             let news = try News().loadDataFromJSON(newsJSON)
             image = news.cover
             
             let commentJSON = data["related_news_comment"]
-            if commentJSON.isExists() {
+            if commentJSON.exists() {
                 let comment = try NewsComment(news: news).loadDataFromJSON(commentJSON)
                 messageBody = comment.content
                 user = comment.user
@@ -59,7 +60,7 @@ class Notification: BaseModel {
             }
         }
         let statusJSON = data["related_status"]
-        if statusJSON.isExists() {
+        if statusJSON.exists() {
             let status = try manager.getOrCreate(statusJSON) as Status
             messageBody = status.content
             image = status.image
@@ -68,7 +69,7 @@ class Notification: BaseModel {
                 user = status.user
             }
             let commentJSON = data["related_status_comment"]
-            if commentJSON.isExists() {
+            if commentJSON.exists() {
                 let comment = try StatusComment(status: status).loadDataFromJSON(commentJSON)
                 _objInMem = comment
                 messageBody = comment.content
@@ -78,7 +79,7 @@ class Notification: BaseModel {
             }
         }
         let activityJSON = data["related_act"]
-        if activityJSON.isExists() {
+        if activityJSON.exists() {
             let act = try manager.getOrCreate(activityJSON) as Activity
             messageBody = act.actDescription
             image = act.poster
@@ -86,7 +87,7 @@ class Notification: BaseModel {
                 user = act.user
             }
             let commentJSON = data["related_act_comment"]
-            if commentJSON.isExists() {
+            if commentJSON.exists() {
                 let comment = try ActivityComment(act: act).loadDataFromJSON(commentJSON)
                 _objInMem = comment
                 user = comment.user
