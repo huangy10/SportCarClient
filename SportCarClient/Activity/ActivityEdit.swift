@@ -19,8 +19,8 @@ class ActivityEditController: ActivityReleaseController {
     override func viewWillAppear(animated: Bool) {
         geoSearch?.delegate = self
         mapView.viewWillAppear()
-        let region = BMKCoordinateRegionMakeWithDistance(self.userLocation!, 3, 5)
-        mapView.setRegion(region, animated: true)
+        mapView.zoomLevel = 16
+        mapView.setCenterCoordinate(userLocation!, animated: true)
     }
     
     override func viewWillDisappear(animated: Bool) {

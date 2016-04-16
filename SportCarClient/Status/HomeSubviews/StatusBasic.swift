@@ -43,6 +43,7 @@ class StatusBasicController: UITableViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusBasicController.onStatusDelete(_:)), name: kStatusDidDeletedNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUserBlacklisted(_:)), name: kUserBlacklistedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUserBlacklisted(_:)), name: kUserUnBlacklistedNotification, object: nil)
         
         tableView.registerClass(StatusCell.self, forCellReuseIdentifier: StatusCell.reuseIdentifier)
         myRefreshControl = UIRefreshControl()
@@ -144,11 +145,19 @@ extension StatusBasicController {
     }
     
     func onUserBlacklisted(notification: NSNotification) {
-        if let userID = notification.userInfo?[kUserSSIDKey] as? String {
-            status = status.filter({$0.ssidString != userID})
-            tableView.reloadData()
-        } else {
-            assertionFailure()
+        let name  = notification.name
+        if let user = notification.userInfo?[kUserKey] as? User {
+            if name == kUserBlacklistedNotification {
+                status = status.filter({$0.user!.ssid != user.ssid})
+                tableView.reloadData()
+            }
+        } else if let users = notification.userInfo?[kUserListKey] as? [User] {
+            if name == kUserBlacklistedNotification {
+                let blIDs = users.map { $0.ssid }
+                status = status.filter { !blIDs.contains($0.ssid) }
+                tableView.reloadData()
+            }
         }
+        
     }
 }

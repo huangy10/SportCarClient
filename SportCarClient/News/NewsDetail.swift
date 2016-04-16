@@ -268,6 +268,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         commentTableView?.dataSource = self
         commentTableView?.separatorStyle = .None
         commentTableView?.registerClass(NewsDetailCommentCell.self, forCellReuseIdentifier: NewsDetailCommentCell.reuseIdentifier)
+        commentTableView.registerClass(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty_cell")
         board?.addSubview(commentTableView!)
         commentTableView?.snp_makeConstraints(closure: { (make) -> Void in
             make.top.equalTo(sepLine2.snp_bottom).offset(27)
@@ -572,6 +573,7 @@ extension NewsDetailController{
         newComment.responseTo = responseToComment
         newComment.sent = false
         newComment.user = MainManager.sharedManager.hostUser
+        newComment.createdAt = NSDate()
         // 将这个新建的commnet添加在列表的头部
         comments.insert(newComment, atIndex: 0)
         //
@@ -746,19 +748,47 @@ extension NewsDetailController {
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if comments.count == 0 {
+            return 100
+        }
         return NewsDetailCommentCell.heightForComment(comments[indexPath.row].content!)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if comments.count == 0 {
+            return 1
+        }
         return comments.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if comments.count == 0 {
+            let cell = tableView.dequeueReusableCellWithIdentifier("empty_cell", forIndexPath: indexPath) as! SSEmptyListHintCell
+            cell.titleLbl.text = LS("还没有评论")
+            return cell
+        }
         let cell = tableView.dequeueReusableCellWithIdentifier(NewsDetailCommentCell.reuseIdentifier, forIndexPath: indexPath) as! NewsDetailCommentCell
         cell.comment = comments[indexPath.row]
         cell.replyBtn?.tag = indexPath.row
         cell.delegate = self
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if comments.count == 0 {
+            return
+        }
+        let comment = comments[indexPath.row]
+        if comment.user.isHost {
+            return
+        } else {
+            responseToRow = indexPath.row
+            let responseToName = comment.user.nickName!
+            responseToPrefixStr = LS("回复 ") + responseToName + ": "
+            commentPanel?.contentInput?.text = responseToPrefixStr
+            atUser.removeAll()
+            commentPanel?.contentInput?.becomeFirstResponder()
+        }
     }
 }
 
@@ -801,14 +831,31 @@ extension NewsDetailController {
             return
         }
         let curOffsetY = scrollView.contentOffset.y
-        if curOffsetY <= 0 {
-            newsCover?.snp_updateConstraints(closure: { (make) -> Void in
-                make.top.equalTo(board!).offset(curOffsetY / 2)
+        let superview = self.view
+        if curOffsetY >= 0 {
+            newsCover?.snp_remakeConstraints(closure: { (make) -> Void in
+                make.right.equalTo(superview)
+                make.left.equalTo(superview)
+                make.top.equalTo(board)
+                make.height.equalTo(newsCover.snp_width).multipliedBy(0.573)
             })
-        }else{
-            
+        }else if curOffsetY < 0 {
+            let basicHeight = superview.frame.width * 0.573
+            let scaleFactor = (-curOffsetY) / basicHeight + 1
+            newsCover?.snp_remakeConstraints(closure: { (make) -> Void in
+                make.top.equalTo(superview)
+                make.centerX.equalTo(superview)
+                make.width.equalTo(superview).multipliedBy(scaleFactor)
+                make.height.equalTo(newsCover.snp_width).multipliedBy(0.573)
+            })
         }
         self.view.layoutIfNeeded()
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        if scrollView.contentOffset.y + scrollView.frame.height > scrollView.contentSize.height - 1 {
+            loadMoreCommentData()
+        }
     }
 }
 

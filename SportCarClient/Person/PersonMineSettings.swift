@@ -141,8 +141,9 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
             let detail = PersonMineSettingsInvitationController()
             self.navigationController?.pushViewController(detail, animated: true)
         case 4:
-            let detail = ClearCacheController(parent: self)
-            self.presentViewController(detail, animated: false, completion: nil)
+            toast = showConfirmToast(LS("清除缓存"), message: LS("确认清除全部缓存?"), target: self, confirmSelector: #selector(clearCacheConfirmed), cancelSelector: #selector(hideToast as ()->()), onSelf: false)
+//            let detail = ClearCacheController(parent: self)
+//            self.presentViewController(detail, animated: false, completion: nil)
             break
         case 6:
             let detail = SuggestionController(parent: self)
@@ -162,7 +163,14 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
     }
     
     func didSelectUser(users: [User]) {
-        // TODO
+        guard users.count > 0 else {
+            return
+        }
+        AccountRequester.sharedRequester.unblacklistUsers(users, onSuccess: { (json) in
+            NSNotificationCenter.defaultCenter().postNotificationName(kUserUnBlacklistedNotification, object: nil, userInfo: [kUserListKey: users])
+            }) { (code) in
+                self.showToast(LS("移除黑名单失败，请检查您的网络设置"))
+        }
     }
     
     func dataSourceDidFinishUpdating(notif: Notification) {
@@ -187,6 +195,11 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
         if toast != nil {
             hideToast(toast!)
         }
+    }
+    
+    func clearCacheConfirmed() {
+        PersonMineSettingsDataSource.sharedDataSource.clearCacheFolder()
+        hideToast()
     }
 }
 

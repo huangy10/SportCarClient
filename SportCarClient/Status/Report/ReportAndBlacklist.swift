@@ -117,7 +117,7 @@ class ReportBlacklistViewController: PresentTemplateViewController {
     
     func reportItemPressed(sender: UIButton) {
         // TODO: 将举报内容发送给服务器
-        showToast(LS("举报内容发送成功"))
+        showToast(LS("举报内容发送成功"), onSelf: true)
         hideAnimated()
     }
     
@@ -129,15 +129,19 @@ class ReportBlacklistViewController: PresentTemplateViewController {
     override func hideAnimated(completion: (() -> ())? = nil) {
         if dirty {
             // 提交拉黑请求
+            let orignalState = user?.blacklisted
             user?.blacklisted = blacklist
             AccountRequester.sharedRequester.blacklistUser(user!, blacklist: blacklist, onSuccess: { (json) in
-                print("blacklist done")
+                if self.blacklist {
+                    NSNotificationCenter.defaultCenter().postNotificationName(kUserBlacklistedNotification, object: nil, userInfo: [kUserKey: self.user!])
+                } else {
+                    NSNotificationCenter.defaultCenter().postNotificationName(kUserUnBlacklistedNotification, object: nil, userInfo: [kUserKey: self.user!])
+                }
                 }, onError: { (code) in
                     AppManager.sharedAppManager.showToast(LS("操作失败，请检查您的网络设置"))
+                    // reset it to the orignal state
+                    self.user?.blacklisted = orignalState!
             })
-//            if blacklist {
-//                NSNotificationCenter.defaultCenter().postNotificationName(kUserBlacklistedNotification, object: nil, userInfo: [kUserSSIDKey: user!.ssidString])
-//            }
         }
         super.hideAnimated()
     }

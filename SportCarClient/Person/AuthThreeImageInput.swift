@@ -19,7 +19,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
     var imageBtn2: UIButton!
     var imageBtn3: UIButton!
     
-    var quitBtn: UIButton!
+//    var quitBtn: UIButton!
     
     var activeBtn: UIButton?
     var selectedImages: [UIImage?] = [nil, nil, nil]
@@ -90,14 +90,14 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         }
         imageBtn3.addTarget(self, action: #selector(AuthThreeImagesController.imageInputBtnPressed(_:)), forControlEvents: .TouchUpInside)
         //
-        quitBtn = UIButton()
-        quitBtn.setImage(UIImage(named: "auth_not_now_btn"), forState: .Normal)
-        container.addSubview(quitBtn)
-        quitBtn.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(container)
-            make.top.equalTo(imageBtn3.snp_bottom).offset(35)
-            make.size.equalTo(CGSizeMake(150, 50))
-        }
+//        quitBtn = UIButton()
+//        quitBtn.setImage(UIImage(named: "auth_not_now_btn"), forState: .Normal)
+//        container.addSubview(quitBtn)
+//        quitBtn.snp_makeConstraints { (make) -> Void in
+//            make.centerX.equalTo(container)
+//            make.top.equalTo(imageBtn3.snp_bottom).offset(35)
+//            make.size.equalTo(CGSizeMake(150, 50))
+//        }
         return container
     }
     

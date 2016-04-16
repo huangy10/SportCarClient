@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		59709BA10C676D5E26BB2779 /* Pods_SportCarClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */; };
+		BF11F6AE1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */; };
+		BF11F6B01CC0A11F0092A7E9 /* EmptyListHintCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */; };
 		BF139E6E1C4E6E8E0022F4FC /* FFSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF139E6D1C4E6E8E0022F4FC /* FFSelect.swift */; };
 		BF1D93561C52776F00FD9997 /* DetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1D93551C52776F00FD9997 /* DetailCommentCell.swift */; };
 		BF1D93581C52783000FD9997 /* StatusDetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1D93571C52783000FD9997 /* StatusDetailCommentCell.swift */; };
@@ -237,6 +239,8 @@
 /* Begin PBXFileReference section */
 		0FBECD0994E751F3F3D75AE4 /* Pods-SportCarClient.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportCarClient.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SportCarClient/Pods-SportCarClient.adhoc.xcconfig"; sourceTree = "<group>"; };
 		9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SportCarClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GlobalNotifiicationSettings.swift; path = BaseTemplate/GlobalNotifiicationSettings.swift; sourceTree = "<group>"; };
+		BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmptyListHintCell.swift; path = BaseTemplate/Views/EmptyListHintCell.swift; sourceTree = "<group>"; };
 		BF139E6D1C4E6E8E0022F4FC /* FFSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FFSelect.swift; path = UserSelect/FFSelect.swift; sourceTree = "<group>"; };
 		BF1D93551C52776F00FD9997 /* DetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetailCommentCell.swift; path = BaseTemplate/Views/DetailCommentCell.swift; sourceTree = "<group>"; };
 		BF1D93571C52783000FD9997 /* StatusDetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusDetailCommentCell.swift; path = Status/Detail/StatusDetailCommentCell.swift; sourceTree = "<group>"; };
@@ -499,6 +503,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		BF11F6AC1CBFD7EC0092A7E9 /* Globals */ = {
+			isa = PBXGroup;
+			children = (
+				BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */,
+				BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */,
+			);
+			name = Globals;
+			sourceTree = "<group>";
+		};
 		BF139E661C4DE0650022F4FC /* Map */ = {
 			isa = PBXGroup;
 			children = (
@@ -718,6 +731,7 @@
 				BF6308A41C19AF600087A4F0 /* ProfileInformation.swift */,
 				BF2959911C1DC9870071385D /* SportCarSelect.swift */,
 				BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */,
+				BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -869,9 +883,9 @@
 		BFAC52281C1C849000107F71 /* BaseTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				BF11F6AC1CBFD7EC0092A7E9 /* Globals */,
 				BF8EC2D41CBA2DD100003735 /* refresh */,
 				BF313B7A1CA39DA200545DB7 /* factory */,
-				BF5FF0EC1C15B4860050F5FE /* GlobalVariables.swift */,
 				BF1D93541C52775900FD9997 /* Views */,
 				BFA2C7671C40F96400202EF0 /* Tools */,
 				BFB39CC91C1E9E6800FB6B5D /* SportCarBrandSelect */,
@@ -1736,6 +1750,7 @@
 				BF60D7BA1C9C1DAF00D25E6B /* ProgressProtocl.swift in Sources */,
 				BFADDF6F1C82E3F200893435 /* RadarClubFilter.swift in Sources */,
 				BFAC52271C1C5F9500107F71 /* AuthCodeBtnView.swift in Sources */,
+				BF11F6B01CC0A11F0092A7E9 /* EmptyListHintCell.swift in Sources */,
 				BFC032801C72EEEB00ECA69A /* ActivityDetail.swift in Sources */,
 				BF9664001C89449F0096D131 /* ClubAuth.swift in Sources */,
 				BF630EE11CABF6DD00EFD37E /* SinglePropertyModifer.swift in Sources */,
@@ -1811,6 +1826,7 @@
 				BFCB96441C206169004F77E8 /* SideBar.swift in Sources */,
 				BF8D0DC31C424E710070B921 /* ViewControllerExtensions.swift in Sources */,
 				BFBC526E1C52944200EE7D34 /* MessageController.swift in Sources */,
+				BF11F6AE1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift in Sources */,
 				BF2F7E8E1C62F39A00E3A3A2 /* NotificationCtrl.swift in Sources */,
 				BFE967431CA6296F0097C42C /* SSModelError.swift in Sources */,
 				BF8EC2D61CBA2DE300003735 /* Refresh.swift in Sources */,

@@ -23,7 +23,7 @@ public extension UIImageView {
         }
     }
     
-    public func setupForImageViewer(highQualityImageUrl: NSURL? = nil, backgroundColor: UIColor = UIColor.whiteColor()) {
+    public func setupForImageViewer(highQualityImageUrl: NSURL? = nil, backgroundColor: UIColor = UIColor.whiteColor(), fadeToHide: Bool = false) {
         userInteractionEnabled = true
         if gestureRecognizers != nil {
             for g in gestureRecognizers! {
@@ -34,12 +34,12 @@ public extension UIImageView {
                 }
             }
         }
-        let gestureRecognizer = ImageViewerTapGestureRecognizer(target: self, action: #selector(UIImageView.didTap(_:)), highQualityImageUrl: highQualityImageUrl, backgroundColor: backgroundColor)
+        let gestureRecognizer = ImageViewerTapGestureRecognizer(target: self, action: #selector(UIImageView.didTap(_:)), highQualityImageUrl: highQualityImageUrl, backgroundColor: backgroundColor, fadeToHide: fadeToHide)
         addGestureRecognizer(gestureRecognizer)
     }
     
     internal func didTap(recognizer: ImageViewerTapGestureRecognizer) {        
-        let imageViewer = ImageViewer(senderView: self, highQualityImageUrl: recognizer.highQualityImageUrl, backgroundColor: recognizer.backgroundColor)
+        let imageViewer = ImageViewer(senderView: self, highQualityImageUrl: recognizer.highQualityImageUrl, backgroundColor: recognizer.backgroundColor, fadeToHide: recognizer.fadeToHide)
         imageViewer.presentFromRootViewController()
     }
 }
@@ -47,10 +47,12 @@ public extension UIImageView {
 class ImageViewerTapGestureRecognizer: UITapGestureRecognizer {
     var highQualityImageUrl: NSURL?
     var backgroundColor: UIColor!
+    var fadeToHide: Bool = false
     
-    init(target: AnyObject, action: Selector, highQualityImageUrl: NSURL?, backgroundColor: UIColor) {
+    init(target: AnyObject, action: Selector, highQualityImageUrl: NSURL?, backgroundColor: UIColor, fadeToHide: Bool = false) {
         self.highQualityImageUrl = highQualityImageUrl
         self.backgroundColor = backgroundColor
+        self.fadeToHide = fadeToHide
         super.init(target: target, action: action)
     }
 }

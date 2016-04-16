@@ -30,6 +30,7 @@ class SSCommonHeader: UITableViewHeaderFooterView {
     }
     
     func createSubviews() {
+        self.contentView.backgroundColor = UIColor.RGB(239, 239, 244)
         titleLbl = self.contentView.addSubview(UILabel)
             .config(14, fontWeight: UIFontWeightSemibold)
             .layout({ (make) in

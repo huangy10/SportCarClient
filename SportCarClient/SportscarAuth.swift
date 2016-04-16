@@ -250,7 +250,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
     func hideDistrictPicker() {
         districtBtn.enabled = true
         tapper?.enabled = false
-        districtPickerContainer.snp_makeConstraints { (make) -> Void in
+        districtPickerContainer.snp_remakeConstraints { (make) -> Void in
             make.right.equalTo(self.view)
             make.left.equalTo(self.view)
             make.top.equalTo(self.view.snp_bottom)

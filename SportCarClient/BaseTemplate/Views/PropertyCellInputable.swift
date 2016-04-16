@@ -13,6 +13,12 @@ class SSPropertyInputableCell: SSPropertyBaseCell {
     var contentInput: UITextField!
     internal var wrapper: UIScrollView!
     
+    var inputable: Bool = true {
+        didSet {
+            wrapper.userInteractionEnabled = inputable
+        }
+    }
+    
     override class var reuseIdentifier: String {
         return "inputable_cell"
     }
@@ -27,6 +33,7 @@ class SSPropertyInputableCell: SSPropertyBaseCell {
             make.height.equalTo(superview)
             make.left.equalTo(staticLbl.snp_right).offset(30)
         })
+        wrapper.scrollEnabled = false
         contentInput = wrapper.addSubview(UITextField)
             .config(textAlignment: .Right)
             .layout({ (make) in

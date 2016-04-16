@@ -27,6 +27,7 @@ class ImageViewer: UIViewController {
     
     var isAnimating = false
     var isLoaded = false
+    var fadeToHide = false
     
     let closeButton = UIButton()
     let windowBounds = UIScreen.mainScreen().bounds
@@ -34,9 +35,10 @@ class ImageViewer: UIViewController {
     var maskView = UIView()
     
     // MARK: - Lifecycle methods
-    init(senderView: UIImageView,highQualityImageUrl: NSURL?, backgroundColor: UIColor) {
+    init(senderView: UIImageView,highQualityImageUrl: NSURL?, backgroundColor: UIColor, fadeToHide: Bool = false) {
         self.senderView = senderView
         self.highQualityImageUrl = highQualityImageUrl
+        self.fadeToHide = fadeToHide
         
         rootViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
         maskView.backgroundColor = backgroundColor
@@ -301,10 +303,16 @@ class ImageViewer: UIViewController {
             })
             
             UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.6, options: [UIViewAnimationOptions.BeginFromCurrentState, UIViewAnimationOptions.CurveEaseInOut], animations: {() in
-                self.imageView.frame = self.originalFrameRelativeToScreen
-                self.imageView.layer.cornerRadius = self.originalCornerRadius
-                self.rootViewController.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
-                self.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
+                if !self.fadeToHide {
+                    self.imageView.frame = self.originalFrameRelativeToScreen
+                    self.imageView.layer.cornerRadius = self.originalCornerRadius
+                    self.rootViewController.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
+                    self.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
+                } else {
+                    self.imageView.layer.opacity = 0.0
+                    self.senderView.alpha = 1.0
+                }
+                
                 self.maskView.alpha = 0.0
 //                UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.None)
                 }, completion: {(finished) in

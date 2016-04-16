@@ -79,6 +79,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             make.edges.equalTo(superview)
         }
         tableView.registerClass(ActivityCommentCell.self, forCellReuseIdentifier: ActivityCommentCell.reuseIdentifier)
+        tableView.registerClass(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty_cell")
         
         infoView = ActivityDetailHeaderView(act: act)
         infoView.parentController = self
@@ -152,6 +153,8 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
                 setNavRightBtn()
                 ActivityRequester.requester.closeActivty(act.ssidString, onSuccess: { (json) in
                     self.parentCollectionView?.reloadData()
+                    // push a notification to tell other related component to update the status
+                    NSNotificationCenter.defaultCenter().postNotificationName(kActivityManualEndedNotification, object: nil, userInfo: [kActivityKey: self.act])
                     }, onError: { (code) in
                         print(code)
                 })
@@ -196,6 +199,9 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
+            if comments.count == 0 {
+                return 1
+            }
             return comments.count
         } else {
             return 1
@@ -204,6 +210,10 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 0 {
+            if comments.count == 0 {
+                // empty info cell
+                return 100
+            }
             return ActivityCommentCell.heightForComment(comments[indexPath.row].content!)
         } else {
             return 250
@@ -212,6 +222,11 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
+            if comments.count == 0 {
+                let cell = tableView.dequeueReusableCellWithIdentifier("empty_cell", forIndexPath: indexPath) as! SSEmptyListHintCell
+                cell.titleLbl.text = LS("还没有评论")
+                return cell
+            }
             let cell = tableView.dequeueReusableCellWithIdentifier(ActivityCommentCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityCommentCell
             cell.comment = comments[indexPath.row]
             cell.replyBtn?.tag = indexPath.row
@@ -224,6 +239,23 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
                 mapCell.setMapCenter(center)
             }
             return mapCell
+        }
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if comments.count == 0 {
+            return
+        }
+        let comment = comments[indexPath.row]
+        if comment.user.isHost {
+            return
+        } else {
+            responseToRow = indexPath.row
+            let responseToName = comment.user.nickName!
+            responseToPrefixStr = LS("回复 ") + responseToName + ": "
+            commentPanel?.contentInput?.text = responseToPrefixStr
+            atUser.removeAll()
+            commentPanel?.contentInput?.becomeFirstResponder()
         }
     }
     
@@ -301,7 +333,11 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         
         tableView.beginUpdates()
         comments.insert(newComment, atIndex: 0)
-        tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Top)
+        if comments.count > 1 {
+            tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Top)
+        } else {
+            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+        }
         tableView.endUpdates()
         commentPanel.contentInput?.text = ""
         commentPanel.snp_updateConstraints { (make) in

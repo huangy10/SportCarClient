@@ -167,7 +167,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         informOfListCountLbl?.text = "0/9"
         board?.addSubview(informOfListCountLbl!)
         informOfListCountLbl?.snp_makeConstraints(closure: { (make) -> Void in
-            make.bottom.equalTo(informOfListView!)
+            make.centerY.equalTo(informOfListView!)
             make.right.equalTo(superview).offset(-15)
             make.height.equalTo(17)
         })
@@ -202,7 +202,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         let locDesIcon = locDesContainer.addSubview(UIImageView)
             .config(UIImage(named: "news_comment_icon"))
             .layout { (make) in
-                make.size.equalTo(20)
+                make.size.equalTo(15)
                 make.left.equalTo(locDesContainer).offset(20)
                 make.centerY.equalTo(locDesContainer)
         }
@@ -283,7 +283,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
             self.home?.followStatusCtrl.loadLatestData()
             self.hideToast(toast)
-            self.showToast(LS("发布成功！"), onSelf: true)
+            self.showToast(LS("发布成功！"))
             self.pp_hideProgressView()
             self.navLeftBtnPressed()
             self.requesting = false
@@ -427,6 +427,7 @@ extension StatusReleaseController {
             statusContentInput?.text = ""
             statusContentInput?.textColor = UIColor.blackColor()
             firstEditting = false
+            statusContentInput?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)
         }
     }
     

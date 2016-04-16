@@ -77,6 +77,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         let superview = self.view
         
         tableView = UITableView(frame: CGRectZero, style: .Grouped)
+        tableView.backgroundColor = UIColor.whiteColor()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .None
@@ -247,7 +248,12 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             }
             self.hideToast(toast)
             self.pp_hideProgressView()
-            self.showToast(LS("发布成功!"))
+            if let presenter = self.presentingViewController {
+                presenter.showToast(LS("发布成功"))
+            } else {
+                self.showToast(LS("发布成功!"))
+            }
+            
             }, onProgress: { (progress) in
                 dispatch_async(dispatch_get_main_queue(), { 
                     self.pp_updateProgress(progress)

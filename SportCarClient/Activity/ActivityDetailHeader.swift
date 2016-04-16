@@ -67,6 +67,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         backMaskView.centerHegiht = 28
         backMaskView.ratio = -0.15
         backMaskView.backgroundColor = UIColor.clearColor()
+        backMaskView.userInteractionEnabled = false
         superview.addSubview(backMaskView)
         backMaskView.snp_makeConstraints { (make) in
             make.edges.equalTo(cover)
@@ -250,7 +251,9 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     }
     
     func loadDataAndUpdateUI() -> CGFloat {
-        cover.kf_setImageWithURL(act.posterURL!)
+        cover.kf_setImageWithURL(act.posterURL!, placeholderImage: nil, optionsInfo: nil) { (image, error, cacheType, imageURL) in
+            self.cover.setupForImageViewer(backgroundColor: UIColor.blackColor(), fadeToHide: true)
+        }
         editBtn.hidden = !act.user!.isHost
         actNameLbl.text = act.name
         desLbl.text = act.actDescription

@@ -47,7 +47,6 @@ class MapCell: UITableViewCell {
         //
         let locDesContainer = UIButton()
         locDesContainer.backgroundColor = UIColor.whiteColor()
-        locDesContainer.layer.cornerRadius = 4
         locDesContainer.layer.shadowColor = UIColor.blackColor().CGColor
         locDesContainer.layer.shadowOpacity = 0.5
         locDesContainer.layer.shadowOffset = CGSizeMake(1, 1.5)

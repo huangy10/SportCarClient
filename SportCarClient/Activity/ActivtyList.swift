@@ -28,8 +28,13 @@ class ActivityHomeMineListController: UICollectionViewController {
         self.init(collectionViewLayout: layout)
     }
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onActivityManuallyEnded(_:)), name: kActivityManualEndedNotification, object: nil)
         //
         collectionView?.alwaysBounceVertical = true
         collectionView?.contentInset = UIEdgeInsetsMake(10, 12.5, 10, 12.5)
@@ -120,6 +125,17 @@ class ActivityHomeMineListController: UICollectionViewController {
             }) { (code) -> () in
                 print(code)
                 self.loading = false
+        }
+    }
+    
+    func onActivityManuallyEnded(notification: NSNotification) {
+        let name = notification.name
+        if name == kActivityManualEndedNotification {
+            if let act = notification.userInfo?[kActivityKey] as? Activity,
+                let targetIndex = data.findIndex({ $0.ssid == act.ssid}) {
+                // reload the specific cell
+                collectionView?.reloadItemsAtIndexPaths([NSIndexPath(forRow: targetIndex, inSection: 0)])
+            }
         }
     }
 }

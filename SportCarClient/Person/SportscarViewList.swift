@@ -10,7 +10,7 @@
 
 import UIKit
 import SnapKit
-
+import Spring
 
 protocol SportCarViewListDelegate: class {
     /**
@@ -37,6 +37,8 @@ class SportsCarViewListController: UICollectionViewController, UICollectionViewD
     
     var showAddBtn: Bool = true
     
+    weak var allStatusCell: SportCarViewListTextCell?
+    
     convenience init() {
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsetsMake(0, 9, 0, 9)
@@ -47,6 +49,15 @@ class SportsCarViewListController: UICollectionViewController, UICollectionViewD
         collectionView?.backgroundColor = UIColor(white: 0.945, alpha: 1)
         collectionView?.registerClass(SportCarViewListTextCell.self, forCellWithReuseIdentifier: SportCarViewListTextCell.reuseIdentifier)
         collectionView?.registerClass(SportCarViewListAddBtnCell.self, forCellWithReuseIdentifier: SportCarViewListAddBtnCell.reuseIdentifier)
+        collectionView?.registerClass(SportCarViewListTextCell.self, forCellWithReuseIdentifier: "all_status")
+    }
+    
+    func selectAllStatus(pulse: Bool) {
+        collectionView?.setContentOffset(CGPointMake(0, 0), animated: true)
+        allStatusCell?.setCellSelected(true)
+        if pulse {
+            allStatusCell?.pulse()
+        }
     }
     
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -58,15 +69,21 @@ class SportsCarViewListController: UICollectionViewController, UICollectionViewD
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        if indexPath.row < cars.count + 1 {
+        if indexPath.row == 0 {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("all_status", forIndexPath: indexPath) as! SportCarViewListTextCell
+            cell.titleLbl.text = LS("动态")
+            allStatusCell = cell
+            if selectedCar == nil {
+                cell.setCellSelected(true)
+            }else {
+                cell.setCellSelected(false)
+            }
+            return cell
+        } else if indexPath.row < cars.count + 1 {
+            
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(SportCarViewListTextCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarViewListTextCell
             if indexPath.row == 0{
                 cell.titleLbl.text = LS("动态")
-                if selectedCar == nil {
-                    cell.setCellSelected(true)
-                }else {
-                    cell.setCellSelected(false)
-                }
             }else {
                 let car = cars[indexPath.row - 1]
                 cell.titleLbl.text = car.name
@@ -118,6 +135,7 @@ class SportCarViewListTextCell: UICollectionViewCell {
     var titleLbl: UILabel!
     var selectedBg: UIView!
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         createSubviews()
@@ -152,6 +170,13 @@ class SportCarViewListTextCell: UICollectionViewCell {
     func setCellSelected(flag: Bool) {
         selectedBg.hidden = !flag
         titleLbl.textColor = flag ? UIColor.blackColor() : UIColor(white: 0.72, alpha: 1)
+    }
+    
+    func pulse() {
+        selectedBg.transform = CGAffineTransformMakeScale(0.8, 0.8)
+        SpringAnimation.spring(0.3) { 
+            self.selectedBg.transform = CGAffineTransformIdentity
+        }
     }
 }
 

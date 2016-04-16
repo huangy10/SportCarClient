@@ -181,6 +181,19 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
 //            _prePage = pageCount.currentPage
 //        }
     }
+    
+    func onActivityManuallyEnded(notification: NSNotification) {
+        let name = notification.name
+        if name == kActivityManualEndedNotification {
+            if let act = notification.userInfo?[kActivityKey] as? Activity {
+                let originLen = acts.count
+                acts = acts.filter({$0.ssid != act.ssid})
+                if acts.count < originLen {
+                    actsBoard.reloadData()
+                }
+            }
+        }
+    }
 }
 
 // MARK: - About map

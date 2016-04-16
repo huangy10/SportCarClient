@@ -15,7 +15,6 @@ import Dollar
 
 class Activity: BaseModel {
     
-    
     override class var idField: String {
         return "actID"
     }
@@ -60,6 +59,17 @@ class Activity: BaseModel {
     var finished: Bool {
         return endAt!.compare(NSDate()) == .OrderedAscending
     }
+    
+    private var _clubLimit: Club?
+    var clubLimit: Club? {
+        if _clubLimit != nil {
+            return _clubLimit
+        } else if let clubLimitStr = clubLimitStr{
+            let clubJSON = JSON.parse(clubLimitStr)
+            _clubLimit = try! manager.getOrCreate(clubJSON) as Club
+        }
+        return nil
+    }
 
     override func loadDataFromJSON(data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Activity {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
@@ -88,6 +98,11 @@ class Activity: BaseModel {
         let userJSON = data["user"]
         user = try manager.getOrCreate(userJSON) as User
         mine =  user?.ssid == manager.hostUserID
+        let clubJSON = data["club_limit"]
+        if clubJSON.exists() {
+            _clubLimit = try manager.getOrCreate(clubJSON) as Club
+            clubLimitStr = String(data: try clubJSON.rawData(), encoding: NSUTF8StringEncoding)
+        }
         if detailLevel >= 1 {
             let applicantsJSON = data["apply_list"].arrayValue
             if applicantsJSON.count > 0 {

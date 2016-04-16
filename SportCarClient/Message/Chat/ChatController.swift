@@ -294,9 +294,6 @@ extension ChatRoomController {
     func confirmSendChatMessage(text: String? = nil, image: UIImage? = nil, audio: NSURL? = nil, messageType: String="text") {
         let newChat: ChatRecord = try! ChatModelManger.sharedManager.createNew()
         newChat.initForPost(messageType, textContent: text, image: image, audio: audio)
-//        newChat.image = image
-//        newChat.audio = audio
-//        let newChat = ChatRecord.objects.postNewChatRecord(messageType, textContent: text, image: image, audio: audio, relatedID: nil)
         switch chatRecords!._item! {
         case .UserItem(let user):
             newChat.targetID = user.ssid

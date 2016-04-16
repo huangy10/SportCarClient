@@ -173,7 +173,7 @@ extension UIViewController {
             make.width.equalTo(250)
             make.height.equalTo(size.height)
         }
-        SpringAnimation.spring(0.3) { 
+        SpringAnimation.spring(0.5) {
             container.layoutIfNeeded()
             bgView.layer.opacity = 1
         }

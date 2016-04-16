@@ -260,7 +260,19 @@ extension AccountRequester {
         request.HTTPBody = try! params.rawData()
         return manager.request(request)
             .responseJSON(completionHandler: { (response) in
-            self.resultValueHandler(response.result, dataFieldName: "state", onSuccess: onSuccess, onError: onError)
+            self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
+        })
+    }
+    
+    func unblacklistUsers(users: [User], onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+        let urlStr = urlMaker.blacklistUpdate()
+        let userIDs = users.map({ $0.ssidString })
+        let request = NSMutableURLRequest(URL: NSURL(string: urlStr)!)
+        request.HTTPMethod = "POST"
+        let params = ["op_type":"remove", "users": userIDs] as JSON
+        request.HTTPBody = try! params.rawData()
+        return manager.request(request).responseJSON(completionHandler: { (response) in
+            self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
         })
     }
 }

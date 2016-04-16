@@ -8,11 +8,11 @@
 
 import UIKit
 
-let kSportsCarInfoDetailStaticLabelString1 = [LS("品牌型号"), LS("跑车全称"), LS("跑车签名")]
+let kSportsCarInfoDetailStaticLabelString1 = [LS("品牌型号"), LS("跑车签名")]
 let kSportsCarInfoDetailStaticLabelString2 = [LS("价格"), LS("发动机"), LS("变速箱"), LS("最高车速"), LS("百公里加速")]
 
 
-class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate {
+class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, SinglePropertyModifierDelegate {
     
     var car: SportCar!
     
@@ -95,8 +95,9 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 && indexPath.row == 2 {
             let cell = tableView.ss_reuseablePropertyCell(SSPropertyInputableCell.self, forIndexPath: indexPath)
-            cell.staticLbl.text = LS("跑车签名")
-            cell.extraSettings(self, text: car.signature, placeholder: LS("请输入跑车签名"))
+            cell.staticLbl.text = LS("爱车签名")
+            cell.extraSettings(self, text: car.signature, placeholder: LS("请输入爱车签名"))
+            cell.inputable = false
             return cell
         }
         let cell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
@@ -107,8 +108,6 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate {
             case 0:
                 cell.infoLbl.text = car.name
             case 1:
-                cell.infoLbl.text = car.name
-            case 2:
                 cell.infoLbl.text = car.signature
             default:
                 assertionFailure()
@@ -138,9 +137,14 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate {
         return cell
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row == 1 && indexPath.section == 0 {
+            SinglePropertyModifierController(propertyName: LS("爱车签名"), delegate: self, forcusedIndexPath: indexPath).pushFromViewController(self)
+        }
+    }
+    
     func carAuthBtnPressed() {
         if car.identified {
-            // TODO: 显示toast您的爱车已经认证
             self.showToast(LS("您的爱车已认证"))
         }else {
             let detail = SportscarAuthController()
@@ -160,6 +164,16 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate {
         if let t = toast {
             hideConfirmToast(t)
         }
+    }
+    
+    func singlePropertyModifierDidCancelled() {
+        // 
+    }
+    
+    func singlePropertyModifierDidModify(newValue: String?, forIndexPath indexPath: NSIndexPath) {
+        // TODO: update single property to server
+        car.signature = newValue
+        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
     }
 }
 

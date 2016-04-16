@@ -13,6 +13,18 @@ import Alamofire
 import SwiftyJSON
 
 
+class StatusDetailController2: InputableViewController, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol {
+    var status: Status!
+    var comments: [Status]!
+    var loadAnimated: Bool = true
+    
+    var tableView: UITableView!
+    
+    var statusContainer: UIView!
+    
+}
+
+
 class StatusDetailController: InputableViewController, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol {
     
     var list: UITableView?
@@ -142,7 +154,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
                 make.left.equalTo(self.view)
                 make.right.equalTo(self.view)
                 make.top.equalTo(board!)
-                make.height.equalTo(board!)
+                make.height.equalTo(StatusCell.heightForStatus(status!) + 20)
             })
         }
         createStatusBoard()
@@ -227,13 +239,13 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         let superview = self.view
         //
         let sepLine = UIView()
-        sepLine.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        sepLine.backgroundColor = UIColor(white: 0.945, alpha: 1)
         board?.addSubview(sepLine)
         if loadAnimated {
             sepLine.snp_makeConstraints { (make) -> Void in
                 make.right.equalTo(superview).offset(-15)
                 make.left.equalTo(superview).offset(15)
-                make.top.equalTo(board!).offset(initialHight)
+                make.top.equalTo(board!).offset(initialHight + 20)
                 make.height.equalTo(0.5)
             }
         }else {
@@ -271,6 +283,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
             make.height.equalTo(64)
         })
         commentList?.registerClass(StatusDetailCommentCell.self, forCellReuseIdentifier: StatusDetailCommentCell.reuseIdentifier)
+        commentList?.registerClass(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty_cell")
         //
         
         commentPanel = CommentBarView()
@@ -442,7 +455,7 @@ extension StatusDetailController {
         //
         contentLbl = UILabel()
         contentLbl?.textColor = UIColor.blackColor()
-        contentLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        contentLbl?.font = UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)
         contentLbl?.numberOfLines = 0
         superview.addSubview(contentLbl!)
         contentLbl?.snp_makeConstraints(closure: { (make) -> Void in
@@ -473,7 +486,7 @@ extension StatusDetailController {
         //
         commentNumLbL = UILabel()
         commentNumLbL?.textColor = UIColor(white: 0.72, alpha: 1)
-        commentNumLbL?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        commentNumLbL?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         commentNumLbL?.textAlignment = .Right
         superview.addSubview(commentNumLbL!)
         commentNumLbL?.snp_makeConstraints(closure: { (make) -> Void in
@@ -492,7 +505,7 @@ extension StatusDetailController {
         //
         likeNumLbl = UILabel()
         likeNumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-        likeNumLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        likeNumLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         likeNumLbl?.textAlignment = .Right
         superview.addSubview(likeNumLbl!)
         likeNumLbl?.snp_makeConstraints(closure: { (make) -> Void in
@@ -511,8 +524,9 @@ extension StatusDetailController {
     }
     
     func statusHostAvatarPressed() {
-        let detail = PersonOtherController(user: status!.user!)
-        self.navigationController?.pushViewController(detail, animated: true)
+//        let detail = PersonOtherController(user: status!.user!)
+//        self.navigationController?.pushViewController(detail, animated: true)
+        navigationController?.pushViewController(status!.user!.showDetailController(), animated: true)
     }
     
     func loadDataAndUpdateUI() {
@@ -641,10 +655,18 @@ extension StatusDetailController {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if comments.count == 0 {
+            return 1
+        }
         return comments.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if comments.count == 0 {
+            let cell = tableView.dequeueReusableCellWithIdentifier("empty_cell", forIndexPath: indexPath) as! SSEmptyListHintCell
+            cell.titleLbl.text = LS("还没有评论")
+            return cell
+        }
         let cell = tableView.dequeueReusableCellWithIdentifier(DetailCommentCell.reuseIdentifier, forIndexPath: indexPath) as! StatusDetailCommentCell
         cell.comment = comments[indexPath.row]
         cell.replyBtn?.tag = indexPath.row
@@ -653,6 +675,9 @@ extension StatusDetailController {
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if comments.count == 0 {
+            return
+        }
         let comment = comments[indexPath.row]
         if comment.user.isHost {
             return
@@ -671,6 +696,9 @@ extension StatusDetailController {
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if comments.count == 0 {
+            return 100
+        }
         return StatusDetailCommentCell.heightForComment(comments[indexPath.row].content!)
     }
     
@@ -681,6 +709,11 @@ extension StatusDetailController {
     }
     
     func avatarPressed(cell: DetailCommentCell) {
+        if let cell = cell as? StatusDetailCommentCell {
+            if let user = cell.comment?.user {
+                navigationController?.pushViewController(user.showDetailController(), animated: true)
+            }
+        }
     }
     
     /**
@@ -760,12 +793,20 @@ extension StatusDetailController {
             }) { (code) -> () in
                 print(code)
         }
-        
-        commentList?.reloadData()
+
+        commentList?.beginUpdates()
+        if comments.count > 1 {
+            commentList?.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Top)
+        } else {
+            commentList?.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+        }
+        commentList?.endUpdates()
+    
         commentPanel?.contentInput?.text = ""
         commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(commentPanel!.barheight)
         })
+        
         autoSetBoardContentSize(true)
     }
     

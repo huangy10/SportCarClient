@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Dollar
 
 protocol BlackListViewDelegate: class {
     func didSelectUser(users: [User])
@@ -28,9 +28,16 @@ class BlackListViewController: UserSelectController {
     
     var loading = false
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getMoreUserData()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUserBlackListStatusChanged(_:)), name: kUserUnBlacklistedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUserBlackListStatusChanged(_:)), name: kUserBlacklistedNotification, object: nil)
     }
     //
     override func navSettings() {
@@ -85,6 +92,23 @@ class BlackListViewController: UserSelectController {
     
     override func userSelectionDidChange() {
         
+    }
+    
+    func onUserBlackListStatusChanged(notif: NSNotification) {
+        guard let user = notif.userInfo?[kUserKey] as? User else {
+            return
+        }
+        let name = notif.name
+        if name == kUserBlacklistedNotification {
+            if blUsers.findIndex({$0.ssid == user.ssid}) != nil {
+                return
+            } else {
+                blUsers.insert(user, atIndex: 0);
+            }
+        } else {
+            blUsers = $.remove(blUsers, callback: {$0.ssid == user.ssid})
+        }
+        self.userTableView?.reloadData()
     }
     
 }

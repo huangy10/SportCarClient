@@ -59,7 +59,9 @@ class PersonDataSource {
         
         for statusJSON in data {
             let status = try! MainManager.sharedManager.getOrCreate(statusJSON) as Status
-            targetStatusList.append(status)
+            if targetStatusList.filter({ $0.ssid == status.ssid }).count == 0 {
+                targetStatusList.append(status)
+            }
         }
     }
     

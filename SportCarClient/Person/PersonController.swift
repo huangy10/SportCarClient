@@ -77,6 +77,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             // 默认选择第一辆认证的车辆
             self.carsViewList.selectedCar = self.data.cars.first()
             self.carsViewList.collectionView?.reloadData()
+            self.collectionView?.reloadData()
             }) { (code) -> () in
                 print(code)
         }
@@ -100,6 +101,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         header.map.delegate = self
         header.map.viewWillAppear()
         header.loadDataAndUpdateUI()
+        collectionView?.reloadData()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -355,6 +357,12 @@ extension PersonBasicController {
 extension PersonBasicController {
     
     func didSelectSportCar(own: SportCar?) {
+        if data.selectedCar == nil && own == nil {
+            // 
+            carsViewList.selectAllStatus(true)
+        } else if own == nil {
+            carsViewList.selectAllStatus(false)
+        }
         data.selectedCar = own
         // 当car是nil时，代表显示所有的动态，直接
         self.collectionView?.reloadData()

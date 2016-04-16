@@ -205,7 +205,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         // 
         commentNumLbL = UILabel()
         commentNumLbL?.textColor = UIColor(white: 0.72, alpha: 1)
-        commentNumLbL?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        commentNumLbL?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         commentNumLbL?.textAlignment = .Right
         superview.addSubview(commentNumLbL!)
         commentNumLbL?.snp_makeConstraints(closure: { (make) -> Void in
@@ -224,7 +224,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         //
         likeNumLbl = UILabel()
         likeNumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-        likeNumLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        likeNumLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         likeNumLbl?.textAlignment = .Right
         superview.addSubview(likeNumLbl!)
         likeNumLbl?.snp_makeConstraints(closure: { (make) -> Void in

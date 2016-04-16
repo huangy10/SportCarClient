@@ -67,9 +67,10 @@ class CommentBarView: UIView {
         })
         //
         let shareBtnIcon = UIImageView(image: UIImage(named: "news_share"))
+        shareBtnIcon.contentMode = .ScaleAspectFit
         shareBtn?.addSubview(shareBtnIcon)
         shareBtnIcon.snp_makeConstraints { (make) -> Void in
-            make.size.equalTo(CGSize(width: 17, height: 15))
+            make.size.equalTo(15)
             make.center.equalTo(shareBtn!)
         }
         //

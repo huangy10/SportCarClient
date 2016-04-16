@@ -56,6 +56,7 @@ class PersonHeaderMine: UIView {
         backMask.backgroundColor = UIColor.clearColor()
         backMask.centerHegiht = 175
         backMask.ratio = 0.2
+        backMask.addShadow(offset: CGSizeMake(0, -3), opacity: 0.2)
         superview.addSubview(backMask)
         backMask.snp_makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview)

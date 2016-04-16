@@ -50,7 +50,7 @@ class SportCarSelectListController: UICollectionViewController{
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cars.count + 1
+        return cars.count
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
