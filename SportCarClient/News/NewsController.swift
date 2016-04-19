@@ -18,6 +18,8 @@ class NewsController: UITableViewController {
     /// 展示的资讯的内容
     var news: [News] = []
     
+    var homeBtn: BackToHomeBtn!
+    
     deinit {
         print("deinit news controller")
     }
@@ -48,8 +50,9 @@ class NewsController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.tableView.reloadData()
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        tableView.reloadData()
+        homeBtn.unreadStatusChanged()
     }
 }
 
@@ -128,7 +131,7 @@ extension NewsController {
 //        homeBtn.addTarget(self, action: #selector(NewsController.backToHomePressed), forControlEvents: .TouchUpInside)
 //        homeBtn.frame = CGRect(x: 0, y: 0, width: 15, height: 13.5)
 //        let leftBtnItem = UIBarButtonItem(customView: homeBtn)
-        let homeBtn = BackToHomeBtn()
+        homeBtn = BackToHomeBtn()
         homeBtn.addTarget(self, action: #selector(backToHomePressed), forControlEvents: .TouchUpInside)
         return homeBtn.wrapToBarBtn()
     }

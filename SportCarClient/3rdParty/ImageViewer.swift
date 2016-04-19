@@ -311,6 +311,8 @@ class ImageViewer: UIViewController {
                 } else {
                     self.imageView.layer.opacity = 0.0
                     self.senderView.alpha = 1.0
+                    self.rootViewController.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
+                    self.view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0)
                 }
                 
                 self.maskView.alpha = 0.0

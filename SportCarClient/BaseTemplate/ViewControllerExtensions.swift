@@ -149,7 +149,7 @@ extension UIViewController {
                 make.top.equalTo(messageLbl.snp_bottom).offset(15)
         }
         toast.addSubview(UIButton)
-            .config(self, selector: cancelSelector, title: LS("取消"), titleColor: UIColor(white: 0.72, alpha: 1))
+            .config(target, selector: cancelSelector, title: LS("取消"), titleColor: UIColor(white: 0.72, alpha: 1))
             .layout { (make) in
                 make.centerY.equalTo(confirmBtn)
                 make.size.equalTo(CGSizeMake(74, 43))
@@ -177,6 +177,7 @@ extension UIViewController {
             container.layoutIfNeeded()
             bgView.layer.opacity = 1
         }
+        container.tag = 1
         return container
     }
     
@@ -211,10 +212,27 @@ extension UIViewController {
     }
     
     func hideToast(toast: UIView) {
-        UIView.animateWithDuration(0.5, delay: 0, options: [], animations: { () -> Void in
-            toast.layer.opacity = 0
-            }) { (_) -> Void in
-                toast.removeFromSuperview()
+        if toast.tag == 0 {
+            UIView.animateWithDuration(0.5, delay: 0, options: [], animations: { () -> Void in
+                toast.layer.opacity = 0
+                }) { (_) -> Void in
+                    toast.removeFromSuperview()
+            }
+        } else {
+            let bg = toast.subviews[0]
+            let t = toast.subviews[1]
+            t.snp_remakeConstraints(closure: { (make) in
+                make.centerX.equalTo(toast.superview!)
+                make.top.equalTo(toast.superview!.snp_bottom).offset(30)
+                make.width.equalTo(250)
+                make.height.equalTo(150)
+            })
+            UIView.animateWithDuration(0.3, animations: {
+                bg.layer.opacity = 0
+                toast.superview?.layoutIfNeeded()
+                }, completion: { (_) in
+                    toast.removeFromSuperview()
+            })
         }
     }
     
@@ -292,11 +310,12 @@ extension UIViewController {
     }
     
     func hideConfirmToast(toast: UIView) {
-        SpringAnimation.springWithCompletion(0.5, animations: { () -> Void in
-            toast.layer.opacity = 0
-            }) { (_) -> Void in
-                toast.removeFromSuperview()
-        }
+        hideToast(toast)
+//        SpringAnimation.springWithCompletion(0.5, animations: { () -> Void in
+//            toast.layer.opacity = 0
+//            }) { (_) -> Void in
+//                toast.removeFromSuperview()
+//        }
     }
     
 }

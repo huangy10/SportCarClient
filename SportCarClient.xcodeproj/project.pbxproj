@@ -206,6 +206,56 @@
 		BFE9676C1CA92AD40097C42C /* GroupMemberSelecter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE9676B1CA92AD40097C42C /* GroupMemberSelecter.swift */; };
 		BFEFB5E31C5E4C8600841BF4 /* chatAccessoryBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEFB5E21C5E4C8600841BF4 /* chatAccessoryBoard.swift */; };
 		BFF5EEF91CA428E700F64301 /* ClubRank.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5EEF81CA428E700F64301 /* ClubRank.swift */; };
+		BFF715001CC289C30028F87F /* 合成 1_00000.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714CE1CC289C30028F87F /* 合成 1_00000.png */; };
+		BFF715011CC289C30028F87F /* 合成 1_00001.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714CF1CC289C30028F87F /* 合成 1_00001.png */; };
+		BFF715021CC289C30028F87F /* 合成 1_00002.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714D01CC289C30028F87F /* 合成 1_00002.png */; };
+		BFF715031CC289C30028F87F /* 合成 1_00003.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714D11CC289C30028F87F /* 合成 1_00003.png */; };
+		BFF715041CC289C30028F87F /* 合成 1_00004.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714D21CC289C30028F87F /* 合成 1_00004.png */; };
+		BFF715051CC289C30028F87F /* 合成 1_00005.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714D31CC289C30028F87F /* 合成 1_00005.png */; };
+		BFF715061CC289C30028F87F /* 合成 1_00006.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714D41CC289C30028F87F /* 合成 1_00006.png */; };
+		BFF715071CC289C30028F87F /* 合成 1_00007.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714D51CC289C30028F87F /* 合成 1_00007.png */; };
+		BFF715081CC289C30028F87F /* 合成 1_00008.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714D61CC289C30028F87F /* 合成 1_00008.png */; };
+		BFF715091CC289C30028F87F /* 合成 1_00009.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714D71CC289C30028F87F /* 合成 1_00009.png */; };
+		BFF7150A1CC289C30028F87F /* 合成 1_00010.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714D81CC289C30028F87F /* 合成 1_00010.png */; };
+		BFF7150B1CC289C30028F87F /* 合成 1_00011.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714D91CC289C30028F87F /* 合成 1_00011.png */; };
+		BFF7150C1CC289C30028F87F /* 合成 1_00012.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714DA1CC289C30028F87F /* 合成 1_00012.png */; };
+		BFF7150D1CC289C30028F87F /* 合成 1_00013.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714DB1CC289C30028F87F /* 合成 1_00013.png */; };
+		BFF7150E1CC289C30028F87F /* 合成 1_00014.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714DC1CC289C30028F87F /* 合成 1_00014.png */; };
+		BFF7150F1CC289C30028F87F /* 合成 1_00015.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714DD1CC289C30028F87F /* 合成 1_00015.png */; };
+		BFF715101CC289C30028F87F /* 合成 1_00016.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714DE1CC289C30028F87F /* 合成 1_00016.png */; };
+		BFF715111CC289C30028F87F /* 合成 1_00017.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714DF1CC289C30028F87F /* 合成 1_00017.png */; };
+		BFF715121CC289C30028F87F /* 合成 1_00018.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714E01CC289C30028F87F /* 合成 1_00018.png */; };
+		BFF715131CC289C30028F87F /* 合成 1_00019.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714E11CC289C30028F87F /* 合成 1_00019.png */; };
+		BFF715141CC289C30028F87F /* 合成 1_00020.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714E21CC289C30028F87F /* 合成 1_00020.png */; };
+		BFF715151CC289C30028F87F /* 合成 1_00021.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714E31CC289C30028F87F /* 合成 1_00021.png */; };
+		BFF715161CC289C30028F87F /* 合成 1_00022.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714E41CC289C30028F87F /* 合成 1_00022.png */; };
+		BFF715171CC289C30028F87F /* 合成 1_00023.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714E51CC289C30028F87F /* 合成 1_00023.png */; };
+		BFF715181CC289C30028F87F /* 合成 1_00024.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714E61CC289C30028F87F /* 合成 1_00024.png */; };
+		BFF715191CC289C30028F87F /* 合成 1_00025.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714E71CC289C30028F87F /* 合成 1_00025.png */; };
+		BFF7151A1CC289C30028F87F /* 合成 1_00026.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714E81CC289C30028F87F /* 合成 1_00026.png */; };
+		BFF7151B1CC289C30028F87F /* 合成 1_00027.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714E91CC289C30028F87F /* 合成 1_00027.png */; };
+		BFF7151C1CC289C30028F87F /* 合成 1_00028.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714EA1CC289C30028F87F /* 合成 1_00028.png */; };
+		BFF7151D1CC289C30028F87F /* 合成 1_00029.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714EB1CC289C30028F87F /* 合成 1_00029.png */; };
+		BFF7151E1CC289C30028F87F /* 合成 1_00030.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714EC1CC289C30028F87F /* 合成 1_00030.png */; };
+		BFF7151F1CC289C30028F87F /* 合成 1_00031.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714ED1CC289C30028F87F /* 合成 1_00031.png */; };
+		BFF715201CC289C30028F87F /* 合成 1_00032.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714EE1CC289C30028F87F /* 合成 1_00032.png */; };
+		BFF715211CC289C30028F87F /* 合成 1_00033.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714EF1CC289C30028F87F /* 合成 1_00033.png */; };
+		BFF715221CC289C30028F87F /* 合成 1_00034.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714F01CC289C30028F87F /* 合成 1_00034.png */; };
+		BFF715231CC289C30028F87F /* 合成 1_00035.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714F11CC289C30028F87F /* 合成 1_00035.png */; };
+		BFF715241CC289C30028F87F /* 合成 1_00036.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714F21CC289C30028F87F /* 合成 1_00036.png */; };
+		BFF715251CC289C30028F87F /* 合成 1_00037.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714F31CC289C30028F87F /* 合成 1_00037.png */; };
+		BFF715261CC289C30028F87F /* 合成 1_00038.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714F41CC289C30028F87F /* 合成 1_00038.png */; };
+		BFF715271CC289C30028F87F /* 合成 1_00039.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714F51CC289C30028F87F /* 合成 1_00039.png */; };
+		BFF715281CC289C30028F87F /* 合成 1_00040.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714F61CC289C30028F87F /* 合成 1_00040.png */; };
+		BFF715291CC289C30028F87F /* 合成 1_00041.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714F71CC289C30028F87F /* 合成 1_00041.png */; };
+		BFF7152A1CC289C30028F87F /* 合成 1_00042.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714F81CC289C30028F87F /* 合成 1_00042.png */; };
+		BFF7152B1CC289C30028F87F /* 合成 1_00043.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714F91CC289C30028F87F /* 合成 1_00043.png */; };
+		BFF7152C1CC289C30028F87F /* 合成 1_00044.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714FA1CC289C30028F87F /* 合成 1_00044.png */; };
+		BFF7152D1CC289C30028F87F /* 合成 1_00045.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714FB1CC289C30028F87F /* 合成 1_00045.png */; };
+		BFF7152E1CC289C30028F87F /* 合成 1_00046.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714FC1CC289C30028F87F /* 合成 1_00046.png */; };
+		BFF7152F1CC289C30028F87F /* 合成 1_00047.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714FD1CC289C30028F87F /* 合成 1_00047.png */; };
+		BFF715301CC289C30028F87F /* 合成 1_00048.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714FE1CC289C30028F87F /* 合成 1_00048.png */; };
+		BFF715311CC289C30028F87F /* 合成 1_00049.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714FF1CC289C30028F87F /* 合成 1_00049.png */; };
 		BFFA15451C9D271E00E985DF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15441C9D271E00E985DF /* Location.swift */; };
 		BFFA15471C9D2B1700E985DF /* RequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15461C9D2B1700E985DF /* RequestProtocol.swift */; };
 		BFFA51161C05D9910019E5EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA51151C05D9910019E5EF /* AppDelegate.swift */; };
@@ -438,6 +488,56 @@
 		BFE9676B1CA92AD40097C42C /* GroupMemberSelecter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GroupMemberSelecter.swift; path = Message/Chat/GroupMemberSelecter.swift; sourceTree = "<group>"; };
 		BFEFB5E21C5E4C8600841BF4 /* chatAccessoryBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = chatAccessoryBoard.swift; path = Message/Chat/chatAccessoryBoard.swift; sourceTree = "<group>"; };
 		BFF5EEF81CA428E700F64301 /* ClubRank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubRank.swift; path = Radar/ClubRank.swift; sourceTree = "<group>"; };
+		BFF714CE1CC289C30028F87F /* 合成 1_00000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00000.png"; sourceTree = "<group>"; };
+		BFF714CF1CC289C30028F87F /* 合成 1_00001.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00001.png"; sourceTree = "<group>"; };
+		BFF714D01CC289C30028F87F /* 合成 1_00002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00002.png"; sourceTree = "<group>"; };
+		BFF714D11CC289C30028F87F /* 合成 1_00003.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00003.png"; sourceTree = "<group>"; };
+		BFF714D21CC289C30028F87F /* 合成 1_00004.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00004.png"; sourceTree = "<group>"; };
+		BFF714D31CC289C30028F87F /* 合成 1_00005.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00005.png"; sourceTree = "<group>"; };
+		BFF714D41CC289C30028F87F /* 合成 1_00006.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00006.png"; sourceTree = "<group>"; };
+		BFF714D51CC289C30028F87F /* 合成 1_00007.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00007.png"; sourceTree = "<group>"; };
+		BFF714D61CC289C30028F87F /* 合成 1_00008.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00008.png"; sourceTree = "<group>"; };
+		BFF714D71CC289C30028F87F /* 合成 1_00009.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00009.png"; sourceTree = "<group>"; };
+		BFF714D81CC289C30028F87F /* 合成 1_00010.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00010.png"; sourceTree = "<group>"; };
+		BFF714D91CC289C30028F87F /* 合成 1_00011.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00011.png"; sourceTree = "<group>"; };
+		BFF714DA1CC289C30028F87F /* 合成 1_00012.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00012.png"; sourceTree = "<group>"; };
+		BFF714DB1CC289C30028F87F /* 合成 1_00013.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00013.png"; sourceTree = "<group>"; };
+		BFF714DC1CC289C30028F87F /* 合成 1_00014.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00014.png"; sourceTree = "<group>"; };
+		BFF714DD1CC289C30028F87F /* 合成 1_00015.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00015.png"; sourceTree = "<group>"; };
+		BFF714DE1CC289C30028F87F /* 合成 1_00016.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00016.png"; sourceTree = "<group>"; };
+		BFF714DF1CC289C30028F87F /* 合成 1_00017.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00017.png"; sourceTree = "<group>"; };
+		BFF714E01CC289C30028F87F /* 合成 1_00018.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00018.png"; sourceTree = "<group>"; };
+		BFF714E11CC289C30028F87F /* 合成 1_00019.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00019.png"; sourceTree = "<group>"; };
+		BFF714E21CC289C30028F87F /* 合成 1_00020.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00020.png"; sourceTree = "<group>"; };
+		BFF714E31CC289C30028F87F /* 合成 1_00021.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00021.png"; sourceTree = "<group>"; };
+		BFF714E41CC289C30028F87F /* 合成 1_00022.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00022.png"; sourceTree = "<group>"; };
+		BFF714E51CC289C30028F87F /* 合成 1_00023.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00023.png"; sourceTree = "<group>"; };
+		BFF714E61CC289C30028F87F /* 合成 1_00024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00024.png"; sourceTree = "<group>"; };
+		BFF714E71CC289C30028F87F /* 合成 1_00025.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00025.png"; sourceTree = "<group>"; };
+		BFF714E81CC289C30028F87F /* 合成 1_00026.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00026.png"; sourceTree = "<group>"; };
+		BFF714E91CC289C30028F87F /* 合成 1_00027.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00027.png"; sourceTree = "<group>"; };
+		BFF714EA1CC289C30028F87F /* 合成 1_00028.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00028.png"; sourceTree = "<group>"; };
+		BFF714EB1CC289C30028F87F /* 合成 1_00029.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00029.png"; sourceTree = "<group>"; };
+		BFF714EC1CC289C30028F87F /* 合成 1_00030.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00030.png"; sourceTree = "<group>"; };
+		BFF714ED1CC289C30028F87F /* 合成 1_00031.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00031.png"; sourceTree = "<group>"; };
+		BFF714EE1CC289C30028F87F /* 合成 1_00032.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00032.png"; sourceTree = "<group>"; };
+		BFF714EF1CC289C30028F87F /* 合成 1_00033.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00033.png"; sourceTree = "<group>"; };
+		BFF714F01CC289C30028F87F /* 合成 1_00034.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00034.png"; sourceTree = "<group>"; };
+		BFF714F11CC289C30028F87F /* 合成 1_00035.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00035.png"; sourceTree = "<group>"; };
+		BFF714F21CC289C30028F87F /* 合成 1_00036.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00036.png"; sourceTree = "<group>"; };
+		BFF714F31CC289C30028F87F /* 合成 1_00037.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00037.png"; sourceTree = "<group>"; };
+		BFF714F41CC289C30028F87F /* 合成 1_00038.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00038.png"; sourceTree = "<group>"; };
+		BFF714F51CC289C30028F87F /* 合成 1_00039.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00039.png"; sourceTree = "<group>"; };
+		BFF714F61CC289C30028F87F /* 合成 1_00040.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00040.png"; sourceTree = "<group>"; };
+		BFF714F71CC289C30028F87F /* 合成 1_00041.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00041.png"; sourceTree = "<group>"; };
+		BFF714F81CC289C30028F87F /* 合成 1_00042.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00042.png"; sourceTree = "<group>"; };
+		BFF714F91CC289C30028F87F /* 合成 1_00043.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00043.png"; sourceTree = "<group>"; };
+		BFF714FA1CC289C30028F87F /* 合成 1_00044.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00044.png"; sourceTree = "<group>"; };
+		BFF714FB1CC289C30028F87F /* 合成 1_00045.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00045.png"; sourceTree = "<group>"; };
+		BFF714FC1CC289C30028F87F /* 合成 1_00046.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00046.png"; sourceTree = "<group>"; };
+		BFF714FD1CC289C30028F87F /* 合成 1_00047.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00047.png"; sourceTree = "<group>"; };
+		BFF714FE1CC289C30028F87F /* 合成 1_00048.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00048.png"; sourceTree = "<group>"; };
+		BFF714FF1CC289C30028F87F /* 合成 1_00049.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00049.png"; sourceTree = "<group>"; };
 		BFFA15441C9D271E00E985DF /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Location.swift; path = Map/Location.swift; sourceTree = "<group>"; };
 		BFFA15461C9D2B1700E985DF /* RequestProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestProtocol.swift; path = BaseTemplate/RequestProtocol.swift; sourceTree = "<group>"; };
 		BFFA51121C05D9910019E5EF /* SportCarClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SportCarClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1404,6 +1504,72 @@
 			name = rank;
 			sourceTree = "<group>";
 		};
+		BFF714CC1CC289B00028F87F /* data */ = {
+			isa = PBXGroup;
+			children = (
+				BFF714CD1CC289C30028F87F /* voice_animation */,
+			);
+			name = data;
+			sourceTree = "<group>";
+		};
+		BFF714CD1CC289C30028F87F /* voice_animation */ = {
+			isa = PBXGroup;
+			children = (
+				BFF714CE1CC289C30028F87F /* 合成 1_00000.png */,
+				BFF714CF1CC289C30028F87F /* 合成 1_00001.png */,
+				BFF714D01CC289C30028F87F /* 合成 1_00002.png */,
+				BFF714D11CC289C30028F87F /* 合成 1_00003.png */,
+				BFF714D21CC289C30028F87F /* 合成 1_00004.png */,
+				BFF714D31CC289C30028F87F /* 合成 1_00005.png */,
+				BFF714D41CC289C30028F87F /* 合成 1_00006.png */,
+				BFF714D51CC289C30028F87F /* 合成 1_00007.png */,
+				BFF714D61CC289C30028F87F /* 合成 1_00008.png */,
+				BFF714D71CC289C30028F87F /* 合成 1_00009.png */,
+				BFF714D81CC289C30028F87F /* 合成 1_00010.png */,
+				BFF714D91CC289C30028F87F /* 合成 1_00011.png */,
+				BFF714DA1CC289C30028F87F /* 合成 1_00012.png */,
+				BFF714DB1CC289C30028F87F /* 合成 1_00013.png */,
+				BFF714DC1CC289C30028F87F /* 合成 1_00014.png */,
+				BFF714DD1CC289C30028F87F /* 合成 1_00015.png */,
+				BFF714DE1CC289C30028F87F /* 合成 1_00016.png */,
+				BFF714DF1CC289C30028F87F /* 合成 1_00017.png */,
+				BFF714E01CC289C30028F87F /* 合成 1_00018.png */,
+				BFF714E11CC289C30028F87F /* 合成 1_00019.png */,
+				BFF714E21CC289C30028F87F /* 合成 1_00020.png */,
+				BFF714E31CC289C30028F87F /* 合成 1_00021.png */,
+				BFF714E41CC289C30028F87F /* 合成 1_00022.png */,
+				BFF714E51CC289C30028F87F /* 合成 1_00023.png */,
+				BFF714E61CC289C30028F87F /* 合成 1_00024.png */,
+				BFF714E71CC289C30028F87F /* 合成 1_00025.png */,
+				BFF714E81CC289C30028F87F /* 合成 1_00026.png */,
+				BFF714E91CC289C30028F87F /* 合成 1_00027.png */,
+				BFF714EA1CC289C30028F87F /* 合成 1_00028.png */,
+				BFF714EB1CC289C30028F87F /* 合成 1_00029.png */,
+				BFF714EC1CC289C30028F87F /* 合成 1_00030.png */,
+				BFF714ED1CC289C30028F87F /* 合成 1_00031.png */,
+				BFF714EE1CC289C30028F87F /* 合成 1_00032.png */,
+				BFF714EF1CC289C30028F87F /* 合成 1_00033.png */,
+				BFF714F01CC289C30028F87F /* 合成 1_00034.png */,
+				BFF714F11CC289C30028F87F /* 合成 1_00035.png */,
+				BFF714F21CC289C30028F87F /* 合成 1_00036.png */,
+				BFF714F31CC289C30028F87F /* 合成 1_00037.png */,
+				BFF714F41CC289C30028F87F /* 合成 1_00038.png */,
+				BFF714F51CC289C30028F87F /* 合成 1_00039.png */,
+				BFF714F61CC289C30028F87F /* 合成 1_00040.png */,
+				BFF714F71CC289C30028F87F /* 合成 1_00041.png */,
+				BFF714F81CC289C30028F87F /* 合成 1_00042.png */,
+				BFF714F91CC289C30028F87F /* 合成 1_00043.png */,
+				BFF714FA1CC289C30028F87F /* 合成 1_00044.png */,
+				BFF714FB1CC289C30028F87F /* 合成 1_00045.png */,
+				BFF714FC1CC289C30028F87F /* 合成 1_00046.png */,
+				BFF714FD1CC289C30028F87F /* 合成 1_00047.png */,
+				BFF714FE1CC289C30028F87F /* 合成 1_00048.png */,
+				BFF714FF1CC289C30028F87F /* 合成 1_00049.png */,
+			);
+			name = voice_animation;
+			path = data/voice_animation;
+			sourceTree = "<group>";
+		};
 		BFFA51091C05D9910019E5EF = {
 			isa = PBXGroup;
 			children = (
@@ -1431,6 +1597,7 @@
 		BFFA51141C05D9910019E5EF /* SportCarClient */ = {
 			isa = PBXGroup;
 			children = (
+				BFF714CC1CC289B00028F87F /* data */,
 				BFE967441CA6CFF20097C42C /* Network */,
 				BFE966AF1CA57AD70097C42C /* Model */,
 				BF8D42F11C745DA3009AD4BA /* Radar */,
@@ -1635,14 +1802,64 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFF715091CC289C30028F87F /* 合成 1_00009.png in Resources */,
+				BFF715261CC289C30028F87F /* 合成 1_00038.png in Resources */,
+				BFF715071CC289C30028F87F /* 合成 1_00007.png in Resources */,
+				BFF7150C1CC289C30028F87F /* 合成 1_00012.png in Resources */,
+				BFF715061CC289C30028F87F /* 合成 1_00006.png in Resources */,
+				BFF715031CC289C30028F87F /* 合成 1_00003.png in Resources */,
+				BFF7151F1CC289C30028F87F /* 合成 1_00031.png in Resources */,
+				BFF715101CC289C30028F87F /* 合成 1_00016.png in Resources */,
+				BFF715011CC289C30028F87F /* 合成 1_00001.png in Resources */,
+				BFF715001CC289C30028F87F /* 合成 1_00000.png in Resources */,
+				BFF715121CC289C30028F87F /* 合成 1_00018.png in Resources */,
+				BFF7150D1CC289C30028F87F /* 合成 1_00013.png in Resources */,
+				BFF715151CC289C30028F87F /* 合成 1_00021.png in Resources */,
 				BF32EEB01C08B22F0098FEC1 /* Podfile in Resources */,
+				BFF7151D1CC289C30028F87F /* 合成 1_00029.png in Resources */,
 				BFB39CCB1C1EA20200FB6B5D /* sportcar.plist in Resources */,
+				BFF715241CC289C30028F87F /* 合成 1_00036.png in Resources */,
 				BF63089D1C1970AB0087A4F0 /* Localizable.strings in Resources */,
+				BFF715021CC289C30028F87F /* 合成 1_00002.png in Resources */,
+				BFF7151A1CC289C30028F87F /* 合成 1_00026.png in Resources */,
+				BFF7152F1CC289C30028F87F /* 合成 1_00047.png in Resources */,
 				BFDFF2771C8BC36200055C1C /* ChineseSubdivisions.plist in Resources */,
+				BFF715271CC289C30028F87F /* 合成 1_00039.png in Resources */,
+				BFF7151C1CC289C30028F87F /* 合成 1_00028.png in Resources */,
+				BFF715081CC289C30028F87F /* 合成 1_00008.png in Resources */,
+				BFF715211CC289C30028F87F /* 合成 1_00033.png in Resources */,
+				BFF715221CC289C30028F87F /* 合成 1_00034.png in Resources */,
+				BFF715161CC289C30028F87F /* 合成 1_00022.png in Resources */,
+				BFF715311CC289C30028F87F /* 合成 1_00049.png in Resources */,
+				BFF7150A1CC289C30028F87F /* 合成 1_00010.png in Resources */,
 				BFBE19231C952FB3005114A0 /* custom_config_黑夜 in Resources */,
+				BFF7150E1CC289C30028F87F /* 合成 1_00014.png in Resources */,
 				BF63089F1C1972050087A4F0 /* agreement.rtf in Resources */,
+				BFF7150B1CC289C30028F87F /* 合成 1_00011.png in Resources */,
+				BFF7152D1CC289C30028F87F /* 合成 1_00045.png in Resources */,
+				BFF715051CC289C30028F87F /* 合成 1_00005.png in Resources */,
+				BFF715041CC289C30028F87F /* 合成 1_00004.png in Resources */,
+				BFF7152E1CC289C30028F87F /* 合成 1_00046.png in Resources */,
+				BFF715131CC289C30028F87F /* 合成 1_00019.png in Resources */,
 				BFE598561CB40AA700001F99 /* Assets.xcassets in Resources */,
+				BFF7152B1CC289C30028F87F /* 合成 1_00043.png in Resources */,
+				BFF715231CC289C30028F87F /* 合成 1_00035.png in Resources */,
+				BFF715111CC289C30028F87F /* 合成 1_00017.png in Resources */,
 				BF3BD5EA1C28E89000499674 /* Settings.bundle in Resources */,
+				BFF715251CC289C30028F87F /* 合成 1_00037.png in Resources */,
+				BFF715291CC289C30028F87F /* 合成 1_00041.png in Resources */,
+				BFF7150F1CC289C30028F87F /* 合成 1_00015.png in Resources */,
+				BFF715191CC289C30028F87F /* 合成 1_00025.png in Resources */,
+				BFF715171CC289C30028F87F /* 合成 1_00023.png in Resources */,
+				BFF715181CC289C30028F87F /* 合成 1_00024.png in Resources */,
+				BFF7151E1CC289C30028F87F /* 合成 1_00030.png in Resources */,
+				BFF715301CC289C30028F87F /* 合成 1_00048.png in Resources */,
+				BFF715201CC289C30028F87F /* 合成 1_00032.png in Resources */,
+				BFF7151B1CC289C30028F87F /* 合成 1_00027.png in Resources */,
+				BFF7152C1CC289C30028F87F /* 合成 1_00044.png in Resources */,
+				BFF715141CC289C30028F87F /* 合成 1_00020.png in Resources */,
+				BFF715281CC289C30028F87F /* 合成 1_00040.png in Resources */,
+				BFF7152A1CC289C30028F87F /* 合成 1_00042.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

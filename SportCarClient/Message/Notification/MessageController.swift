@@ -9,6 +9,16 @@
 import UIKit
 import SnapKit
 
+extension UILabel {
+    func setUnreadNum(num: Int) {
+        if num <= 99 {
+            text = "\(num)"
+        } else {
+            text = "99+"
+        }
+        hidden = num == 0
+    }
+}
 
 class MessageController: UIViewController {
     
@@ -17,7 +27,9 @@ class MessageController: UIViewController {
     var board: UIScrollView!
     
     var titleNotifBtn: UIButton!
+    var notifUnreadLbl: UILabel!
     var titleChatBtn: UIButton!
+    var chatUnreadLbl: UILabel!
     var titleBtnIcon: UIImageView!
     
     var chatList: ChatListController!
@@ -25,10 +37,15 @@ class MessageController: UIViewController {
     
     private var _curTag = 0
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
         createSubviews()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUnreadNumChanged(_:)), name: kUnreadNumberDidChangeNotification, object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -39,6 +56,8 @@ class MessageController: UIViewController {
         } else {
             chatList.viewWillAppear(animated)
         }
+        notifUnreadLbl.setUnreadNum(NotificationDataSource.sharedDataSource.unreadNum)
+        chatUnreadLbl.setUnreadNum(ChatRecordDataSource.sharedDataSource.totalUnreadNum)
     }
     
     func createSubviews() {
@@ -111,6 +130,13 @@ class MessageController: UIViewController {
             make.centerY.equalTo(container)
             make.right.equalTo(container.snp_centerX).offset(-8)
         }
+        notifUnreadLbl = container.addSubview(UILabel).config(9, textColor: UIColor.whiteColor(), textAlignment: .Center).config(kHighlightedRedTextColor).layout({ (make) in
+            make.left.equalTo(titleNotifBtn)
+            make.top.equalTo(titleNotifBtn)
+            make.size.equalTo(18)
+        })
+        notifUnreadLbl.layer.cornerRadius = 9
+        notifUnreadLbl.clipsToBounds = true
         titleNotifBtn.tag = 0
         titleNotifBtn.addTarget(self, action: #selector(MessageController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         //
@@ -127,6 +153,16 @@ class MessageController: UIViewController {
         }
         titleChatBtn.tag = 1
         titleChatBtn.addTarget(self, action: #selector(MessageController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        chatUnreadLbl = container.addSubview(UILabel)
+            .config(9, textColor: UIColor.whiteColor(), textAlignment: .Center)
+            .config(kHighlightedRedTextColor)
+            .layout({ (make) in
+            make.right.equalTo(titleChatBtn)
+            make.top.equalTo(titleChatBtn)
+            make.size.equalTo(18)
+        })
+        chatUnreadLbl.layer.cornerRadius = 9
+        chatUnreadLbl.clipsToBounds = true
         //
         titleBtnIcon = UIImageView(image: UIImage(named: "account_header_button"))
         container.addSubview(titleBtnIcon)
@@ -177,6 +213,14 @@ class MessageController: UIViewController {
                 }, completion: nil)
         }
         _curTag = sender.tag
+    }
+    
+    func onUnreadNumChanged(notification: NSNotification) {
+        let name = notification.name
+        if name == kUnreadNumberDidChangeNotification {
+            notifUnreadLbl.setUnreadNum(NotificationDataSource.sharedDataSource.unreadNum)
+            chatUnreadLbl.setUnreadNum(ChatRecordDataSource.sharedDataSource.totalUnreadNum)
+        }
     }
     
 }

@@ -23,6 +23,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     var releaseBoard: UIView!
     var navRightBtn: UIButton!
     var navRightIcon: UIImageView!
+    var navLeftBtn: BackToHomeBtn!
     
     var curTag: Int = 0
     
@@ -45,6 +46,8 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         } else {
             club.viewWillAppear(animated)
         }
+        
+        navLeftBtn.unreadStatusChanged()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -57,7 +60,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     }
     
     func navSettings() {
-        let navLeftBtn = BackToHomeBtn()
+        navLeftBtn = BackToHomeBtn()
         navLeftBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
         navigationItem.leftBarButtonItem = navLeftBtn.wrapToBarBtn()
         navRightBtn = UIButton()

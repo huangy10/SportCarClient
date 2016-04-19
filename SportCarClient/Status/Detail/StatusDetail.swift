@@ -12,17 +12,17 @@ import Spring
 import Alamofire
 import SwiftyJSON
 
-
-class StatusDetailController2: InputableViewController, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol {
-    var status: Status!
-    var comments: [Status]!
-    var loadAnimated: Bool = true
-    
-    var tableView: UITableView!
-    
-    var statusContainer: UIView!
-    
-}
+//
+//class StatusDetailController2: InputableViewController, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol {
+//    var status: Status!
+//    var comments: [Status]!
+//    var loadAnimated: Bool = true
+//    
+//    var tableView: UITableView!
+//    
+//    var statusContainer: UIView!
+//    
+//}
 
 
 class StatusDetailController: InputableViewController, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol {
@@ -162,6 +162,16 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         loadDataAndUpdateUI()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusDetailController.changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusDetailController.changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        
+        // load the detail data
+        StatusRequester.SRRequester.getStatusDetail(status!.ssidString, onSuccess: { (json) in
+            if let data = json {
+                try! self.status?.loadDataFromJSON(data, detailLevel: 0, forceMainThread: false)
+                self.loadDataAndUpdateUI()
+            }
+            }) { (code) in
+                print(code)
+        }
     }
     
     override func viewDidAppear(animated: Bool) {

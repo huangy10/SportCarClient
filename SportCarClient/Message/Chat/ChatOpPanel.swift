@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import Dollar
+
 
 let kMaxChatWordCount = 140
-
 
 enum ChatOpPanelInputMode {
     case Text
@@ -43,6 +44,11 @@ class ChatOpPanelController: UIViewController {
     var voiceInputBtn: UIButton?
     var recording: Bool = false
     var recorder: ChatAudioRecorder?
+    
+    var voiceAnimationView: UIImageView!
+    var timeCountLbl: UILabel!
+    var startRecordDate: NSDate?
+    var timer: NSTimer?
     
     var accessoryBtn: UIButton?
     
@@ -129,6 +135,26 @@ class ChatOpPanelController: UIViewController {
         voiceInputBtn?.addTarget(self, action: #selector(ChatOpPanelController.startRecording), forControlEvents: .TouchDown)
         voiceInputBtn?.addTarget(self, action: #selector(ChatOpPanelController.cancelRecording), forControlEvents: .TouchDragExit)
         voiceInputBtn?.addTarget(self, action: #selector(ChatOpPanelController.finishRecording), forControlEvents: .TouchUpInside)
+        
+        // 
+        voiceAnimationView = UIImageView()
+        voiceAnimationView.animationImages = $.map(0..<50, transform: { UIImage(named: String(format: "合成 1_%.5d", $0))! })
+        superview.addSubview(voiceAnimationView)
+        voiceAnimationView.startAnimating()
+        voiceAnimationView.userInteractionEnabled = false
+        voiceAnimationView.backgroundColor = UIColor.redColor()
+        voiceAnimationView.snp_makeConstraints { (make) in
+            make.centerX.equalTo(superview).offset(-20)
+            make.bottom.equalTo(superview.snp_top)
+            make.size.equalTo(CGSizeMake(150, 50))
+        }
+        voiceAnimationView.hidden = true
+        
+        timeCountLbl = superview.addSubview(UILabel).config(14, textColor: kHighlightedRedTextColor, text: "0.0").layout({ (make) in
+            make.bottom.equalTo(voiceAnimationView).offset(-2)
+            make.left.equalTo(voiceAnimationView.snp_right).offset(10)
+        })
+        timeCountLbl.hidden = true
     }
 }
 
@@ -142,12 +168,24 @@ extension ChatOpPanelController {
             recorder = ChatAudioRecorder(delegate: (delegate as! ChatRoomController))
         }
         recorder?.startRecording(nil)
+        voiceAnimationView.hidden = false
+        timeCountLbl.hidden = false
+        startRecordDate = NSDate()
+        timer = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: true)
     }
     
     func cancelRecording() {
         recording = false
         voiceInputBtn?.backgroundColor = UIColor.whiteColor()
         recorder?.finishRecording(false)
+        voiceAnimationView.hidden = true
+        timeCountLbl.hidden = true
+        timer?.invalidate()
+    }
+    
+    func timerUpdate() {
+        let duration = NSDate().timeIntervalSinceDate(startRecordDate!)
+        timeCountLbl.text = String(format: "%1.1fs", duration)
     }
     
     func finishRecording() {
@@ -157,6 +195,9 @@ extension ChatOpPanelController {
         recording = false
         voiceInputBtn?.backgroundColor = UIColor.whiteColor()
         recorder?.finishRecording(true)
+        voiceAnimationView.hidden = true
+        timeCountLbl.hidden = true
+        timer?.invalidate()
     }
     
     /**

@@ -18,7 +18,7 @@ enum ChatRoomType {
 
 class ChatRoomController: InputableViewController, UITableViewDataSource, UITableViewDelegate, ChatOpPanelDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChatAudioRecordDelegate, ChatCellDelegate {
     
-    var chatList: ChatListController?
+    weak var chatList: ChatListController?
     
     var roomType: ChatRoomType = .Private
     var targetUser: User? {
@@ -153,6 +153,8 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(ChatRoomController.loadChatHistory as (ChatRoomController) -> () -> ()), forControlEvents: .ValueChanged)
         talkBoard?.addSubview(refresh)
+        
+        self.view.bringSubviewToFront(opPanelView!)
     }
     
     func navSettings() {
@@ -241,6 +243,10 @@ extension ChatRoomController {
                 print(code)
         }
     }
+    
+    func sync() {
+        // TODO: implements me
+    }
 }
 
 
@@ -323,10 +329,14 @@ extension ChatRoomController {
             newChat.audioReady = true
         }
         //
-        talkBoard?.reloadData()
+        talkBoard?.beginUpdates()
+//        talkBoard?.reloadData()
+        talkBoard?.insertRowsAtIndexPaths([NSIndexPath(forRow: chatRecords!.count-1, inSection: 0)], withRowAnimation: .Fade)
+        talkBoard?.endUpdates()
         let targetPath = NSIndexPath(forRow: self.chatRecords!.count - 1, inSection: 0)
         talkBoard?.scrollToRowAtIndexPath(targetPath, atScrollPosition: .Top, animated: false)
         self.chatOpPanelController?.contentInput?.text = ""
+        
         ChatRequester.requester.postNewChatRecord(newChat.chatType!, messageType: messageType, targetID: newChat.targetIDString, image: image, audio: audio, textContent: text, onSuccess: { (json) -> () in
             let newID = json!["chatID"].int32Value
             newChat.confirmSent(newID, image: json!["image"].string, audio: json!["audio"].string)

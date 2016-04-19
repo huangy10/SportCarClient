@@ -27,6 +27,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
     var followStatusCtrl = StatusFollowController()
     var hotStatusCtrl = StatusHotController()
     //
+    var navLeftBtn: BackToHomeBtn!
     var board: UIScrollView!
     
     var titleNearbyBtn: UIButton!
@@ -51,6 +52,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         let controllers = [nearByStatusCtrl, followStatusCtrl, hotStatusCtrl]
         controllers[_curTag].viewWillAppear(animated)
+        navLeftBtn.unreadStatusChanged()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -92,12 +94,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
     internal func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         // 导航栏左侧按钮
-//        let navLeftBtn = UIButton()
-//        navLeftBtn.setImage(UIImage(named: "home_back"), forState: .Normal)
-//        navLeftBtn.frame = CGRectMake(0, 0, 15, 13.5)
-//        navLeftBtn.addTarget(self, action: #selector(StatusHomeController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
-//        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
-        let navLeftBtn = BackToHomeBtn()
+        navLeftBtn = BackToHomeBtn()
         navLeftBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = navLeftBtn.wrapToBarBtn()
         // 导航栏右侧按钮

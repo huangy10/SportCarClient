@@ -26,6 +26,8 @@ class ActivityHomeController: UIViewController {
     var titleBtnIcon: UIImageView!
     var curTag: Int = 1
     
+    var navLeftBtn: BackToHomeBtn!
+    
     deinit {
         print("deinit activity home controller")
     }
@@ -49,6 +51,7 @@ class ActivityHomeController: UIViewController {
         if curTag == 0 {
             nearBy.viewWillDisappear(animated)
         }
+        navLeftBtn.unreadStatusChanged()
     }
     
     func navSettings() {
@@ -59,7 +62,7 @@ class ActivityHomeController: UIViewController {
 //        navLeftBtn.frame = CGRectMake(0, 0, 15, 13.5)
 //        navLeftBtn.addTarget(self, action: #selector(ActivityHomeController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
 //        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
-        let navLeftBtn = BackToHomeBtn()
+        navLeftBtn = BackToHomeBtn()
         navLeftBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
         navigationItem.leftBarButtonItem = navLeftBtn.wrapToBarBtn()
         // 导航栏右侧按钮

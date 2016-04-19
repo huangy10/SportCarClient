@@ -25,6 +25,8 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     
     var isRoot: Bool = false
     
+    var homeBtn: BackToHomeBtn!
+    
     deinit {
         print("deinit person basic controller")
     }
@@ -102,6 +104,10 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         header.map.viewWillAppear()
         header.loadDataAndUpdateUI()
         collectionView?.reloadData()
+        
+        if isRoot {
+            homeBtn.unreadStatusChanged()
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -182,9 +188,9 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     func navSettings() {
         navigationItem.title = LS("我")
         if isRoot {
-            let backBtn = BackToHomeBtn()
-            backBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
-            self.navigationItem.leftBarButtonItem = backBtn.wrapToBarBtn()
+            homeBtn = BackToHomeBtn()
+            homeBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
+            self.navigationItem.leftBarButtonItem = homeBtn.wrapToBarBtn()
         } else {
             let backBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "account_header_back_btn"), contentMode: .ScaleAspectFit)
                 .setFrame(CGRectMake(0, 0, 15, 15))

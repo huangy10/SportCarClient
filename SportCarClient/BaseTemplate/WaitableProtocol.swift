@@ -67,6 +67,7 @@ extension WaitableProtocol where Self: UIViewController {
             self.wp_waitingContainer?.layer.opacity = 0
             }) { (_) in
                 self.wp_waitingContainer?.removeFromSuperview()
+                self.wp_waitingContainer = nil
         }
     }
     

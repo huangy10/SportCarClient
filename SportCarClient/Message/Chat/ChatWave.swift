@@ -79,7 +79,7 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate {
         //
         remainingTimeLbl = UILabel()
         remainingTimeLbl?.font = UIFont.systemFontOfSize(10, weight: UIFontWeightRegular)
-        remainingTimeLbl?.textColor = UIColor(white: 0.488, alpha: 1)
+        remainingTimeLbl?.textColor = UIColor.whiteColor()
         superview.addSubview(remainingTimeLbl!)
         remainingTimeLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.centerY.equalTo(superview)

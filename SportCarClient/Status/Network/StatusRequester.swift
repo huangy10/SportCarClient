@@ -24,6 +24,10 @@ internal class StatusURLMaker: AccountURLMaker {
         return website + "/status/post"
     }
     
+    func getStatusDetail(statusID: String) -> String {
+        return website + "/status/\(statusID)"
+    }
+    
     func getStatusComments(statusID: String) -> String {
         return website + "/status/\(statusID)/comments"
     }
@@ -156,6 +160,13 @@ class StatusRequester: AccountRequester {
                     break
                 }
             }
+    }
+    
+    func getStatusDetail(statusID: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) {
+        let url =  StatusURLMaker.sharedMaker.getStatusDetail(statusID)
+        manager.request(.GET, url).responseJSON { (response) in
+            self.resultValueHandler(response.result, dataFieldName: "data", onSuccess: onSuccess, onError: onError)
+        }
     }
     
     /**
