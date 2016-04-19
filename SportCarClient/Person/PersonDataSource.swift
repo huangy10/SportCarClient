@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import Dollar
 
 class PersonDataSource {
     // 目标用户
@@ -62,6 +63,12 @@ class PersonDataSource {
             if targetStatusList.filter({ $0.ssid == status.ssid }).count == 0 {
                 targetStatusList.append(status)
             }
+        }
+        // Remove the redundant elements
+        if car == nil {
+            statusList = $.uniq(targetStatusList) { $0.ssid }
+        } else {
+            statusList = $.uniq(targetStatusList) { $0.ssid }
         }
     }
     

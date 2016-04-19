@@ -229,7 +229,7 @@ extension ChatOpPanelController {
             // 显示出音频输入按钮
             voiceInputBtn?.hidden = false
             // 更改toggle按钮图标
-            inputToggleBtn?.setImage(UIImage(named: "chat_voice_input_btn"), forState: .Normal)
+            inputToggleBtn?.setImage(UIImage(named: "chat_text_input_btn"), forState: .Normal)
             // 取消contentInput的可能focused状态
             contentInput?.resignFirstResponder()
             // 完成状态转换后告知代理
@@ -240,7 +240,7 @@ extension ChatOpPanelController {
             delegate?.opPanelWillSwitchInputMode(self)
             voiceInputBtn?.hidden = true
             contentInput?.becomeFirstResponder()
-            inputToggleBtn?.setImage(UIImage(named: "chat_text_input_btn"), forState: .Normal)
+            inputToggleBtn?.setImage(UIImage(named: "chat_voice_input_btn"), forState: .Normal)
             break
         }
     }

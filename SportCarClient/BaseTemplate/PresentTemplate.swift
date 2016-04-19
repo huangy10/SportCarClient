@@ -75,13 +75,17 @@ class PresentTemplateViewController: InputableViewController {
         container.layer.opacity = 0
         //
         cancelBtn = UIButton()
-        cancelBtn.setImage(UIImage(named: "news_comment_cancel_btn"), forState: .Normal)
         cancelBtn.addTarget(self, action: #selector(PresentTemplateViewController.cancelBtnPressed), forControlEvents: .TouchUpInside)
         superview.addSubview(cancelBtn)
         cancelBtn.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
-            make.top.equalTo(container).offset(90)
-            make.size.equalTo(21)
+            make.top.equalTo(container).offset(80)
+            make.size.equalTo(44)
+        }
+        cancelBtn.addSubview(UIImageView).config(UIImage(named: "news_comment_cancel_btn"))
+            .layout { (make) in
+                make.center.equalTo(cancelBtn)
+                make.size.equalTo(21)
         }
         //
         sepLine = UIView()
@@ -89,7 +93,7 @@ class PresentTemplateViewController: InputableViewController {
         sepLine.backgroundColor = UIColor.whiteColor()
         sepLine.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(cancelBtn)
-            make.top.equalTo(cancelBtn.snp_bottom).offset(50)
+            make.top.equalTo(cancelBtn.snp_bottom).offset(30)
             make.width.equalTo(220)
             make.height.equalTo(0.5)
         }

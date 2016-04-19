@@ -45,18 +45,16 @@ class PersonHeaderMine: UIView {
     
     func createSubviews() {
         let superview = self
-        map = BMKMapView()
-        map.backgroundColor = UIColor.blackColor()
-        superview.addSubview(map)
-        map.snp_makeConstraints { (make) -> Void in
-            make.edges.equalTo(superview).inset(UIEdgeInsetsMake(-300, 0, 0, 0))
-        }
+        map = superview.addSubview(BMKMapView).config(UIColor.blackColor())
+            .layout({ (make) in
+                make.edges.equalTo(superview).inset(UIEdgeInsetsMake(-300, 0, 0, 0))
+            })
         //
         backMask = BackMaskView()
         backMask.backgroundColor = UIColor.clearColor()
         backMask.centerHegiht = 175
         backMask.ratio = 0.2
-        backMask.addShadow(offset: CGSizeMake(0, -3), opacity: 0.2)
+        backMask.addShadow(offset: CGSizeMake(0, -3), opacity: 0.1)
         superview.addSubview(backMask)
         backMask.snp_makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview)

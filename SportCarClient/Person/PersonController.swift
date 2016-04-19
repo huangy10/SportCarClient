@@ -138,6 +138,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     func createSubviews() {
         let superview = self.view
         collectionView?.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
+        collectionView?.alwaysBounceVertical = true
         //
         let screenWidth = superview.frame.width
         let authCarListHeight: CGFloat = 62
