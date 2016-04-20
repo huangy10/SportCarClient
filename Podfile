@@ -14,4 +14,5 @@ target 'SportCarClient' do
     pod 'Dollar'
     pod 'Cent'
     pod 'SwiftyTimer'
+    pod 'XMPPFramework'
 end

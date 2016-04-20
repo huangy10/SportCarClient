@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '9BB3E2CBA25258176D67217B'
+               BlueprintIdentifier = '57157B92E07EB8AB2568B4D9'
                BlueprintName = 'AlecrimCoreData'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'AlecrimCoreData.framework'>

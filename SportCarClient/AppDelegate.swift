@@ -9,12 +9,15 @@
 import UIKit
 import CoreData
 import Kingfisher
+import XMPPFramework
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, XMPPRosterDelegate, XMPPStreamDelegate {
 
     var window: UIWindow?
     var mapManager: BMKMapManager?
+    
+    var xmppStream: XMPPStream!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -41,6 +44,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate {
         let cache = KingfisherManager.sharedManager.cache
         // Set max disk cache to 50 mb. Default is no limit.
         cache.maxDiskCacheSize = 50 * 1024 * 1024
+    }
+    
+    func xmppSettings() {
+        MessageManager.defaultManager.setupStream()
     }
 
     func applicationWillResignActive(application: UIApplication) {

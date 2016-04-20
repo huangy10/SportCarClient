@@ -27,11 +27,11 @@ let kTextInputFont = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
 
 // Network
 //let kHostName = "localhost"
-let kHostName = "111.206.219.158"
+let kHostName = "paochefan.com"
 let kPortName = "80"
 let kChatPortName = "8888"
 let kProtocalName = "http"
-
+let kXMPPDomain = "paochefan.com"
 //
 let kMaxPhotoSelect: Int = 9    // 最大可以选择的照片的数量
 

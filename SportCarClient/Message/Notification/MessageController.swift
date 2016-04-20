@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import XMPPFramework
 
 extension UILabel {
     func setUnreadNum(num: Int) {

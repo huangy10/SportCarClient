@@ -232,6 +232,8 @@ extension HomeController {
             self.navigationController?.pushViewController(status!, animated: true)
             break
         case 5:
+            MessageManager.defaultManager.setupStream()
+            MessageManager.defaultManager.connect()
             ChatRecordDataSource.sharedDataSource.start()
             if message == nil {
                 message = MessageController()

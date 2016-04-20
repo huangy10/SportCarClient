@@ -121,6 +121,11 @@ class MainManager {
         _hostUser = user
         _hostUserID = user.ssid
         try! MainManager.sharedManager.save()
+        // TODO: 将下面的XMPP设置移动到AppManager
+//        let res = MessageManager.defaultManager.connect()
+//        if !res {
+//            print("xmpp: connect fail")
+//        }
     }
     
     func logout() {

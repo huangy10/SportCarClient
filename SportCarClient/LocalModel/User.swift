@@ -10,12 +10,16 @@ import Foundation
 import CoreData
 import CoreData
 import SwiftyJSON
-
+import XMPPFramework
 
 class User: BaseModel {
     
     override class var idField: String {
         return "userID"
+    }
+    
+    var xmppID: XMPPJID {
+        return XMPPJID.jidWithString(ssidString + "@" + kXMPPDomain)
     }
     
     var avatarURL: NSURL? {
@@ -153,4 +157,23 @@ extension User {
         }
     }
     
+}
+
+// MARK: message element interface 
+extension User: MessageElementInterface {
+    func getSSID() -> Int32 {
+        return ssid
+    }
+    
+    func getSSIDString() -> String {
+        return ssidString
+    }
+    
+    func getCover() -> NSURL {
+         return avatarURL!
+    }
+    
+    func getName() -> String {
+        return nickName!
+    }
 }

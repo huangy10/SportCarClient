@@ -87,6 +87,8 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-SportCarClient/Alamofire.framework"
   install_framework "Pods-SportCarClient/AlecrimCoreData.framework"
   install_framework "Pods-SportCarClient/Cent.framework"
+  install_framework "Pods-SportCarClient/CocoaAsyncSocket.framework"
+  install_framework "Pods-SportCarClient/CocoaLumberjack.framework"
   install_framework "Pods-SportCarClient/Dollar.framework"
   install_framework "Pods-SportCarClient/Kingfisher.framework"
   install_framework "Pods-SportCarClient/SnapKit.framework"
@@ -94,11 +96,14 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-SportCarClient/SwiftDate.framework"
   install_framework "Pods-SportCarClient/SwiftyJSON.framework"
   install_framework "Pods-SportCarClient/SwiftyTimer.framework"
+  install_framework "Pods-SportCarClient/XMPPFramework.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-SportCarClient/Alamofire.framework"
   install_framework "Pods-SportCarClient/AlecrimCoreData.framework"
   install_framework "Pods-SportCarClient/Cent.framework"
+  install_framework "Pods-SportCarClient/CocoaAsyncSocket.framework"
+  install_framework "Pods-SportCarClient/CocoaLumberjack.framework"
   install_framework "Pods-SportCarClient/Dollar.framework"
   install_framework "Pods-SportCarClient/Kingfisher.framework"
   install_framework "Pods-SportCarClient/SnapKit.framework"
@@ -106,11 +111,14 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-SportCarClient/SwiftDate.framework"
   install_framework "Pods-SportCarClient/SwiftyJSON.framework"
   install_framework "Pods-SportCarClient/SwiftyTimer.framework"
+  install_framework "Pods-SportCarClient/XMPPFramework.framework"
 fi
 if [[ "$CONFIGURATION" == "adhoc" ]]; then
   install_framework "Pods-SportCarClient/Alamofire.framework"
   install_framework "Pods-SportCarClient/AlecrimCoreData.framework"
   install_framework "Pods-SportCarClient/Cent.framework"
+  install_framework "Pods-SportCarClient/CocoaAsyncSocket.framework"
+  install_framework "Pods-SportCarClient/CocoaLumberjack.framework"
   install_framework "Pods-SportCarClient/Dollar.framework"
   install_framework "Pods-SportCarClient/Kingfisher.framework"
   install_framework "Pods-SportCarClient/SnapKit.framework"
@@ -118,4 +126,5 @@ if [[ "$CONFIGURATION" == "adhoc" ]]; then
   install_framework "Pods-SportCarClient/SwiftDate.framework"
   install_framework "Pods-SportCarClient/SwiftyJSON.framework"
   install_framework "Pods-SportCarClient/SwiftyTimer.framework"
+  install_framework "Pods-SportCarClient/XMPPFramework.framework"
 fi

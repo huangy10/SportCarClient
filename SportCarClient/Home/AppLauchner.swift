@@ -103,6 +103,10 @@ class AppManager: UIViewController {
         NSNotificationCenter.defaultCenter().postNotificationName(kAppManagerNotificationLogout, object: nil)
     }
     
+    func login() {
+        // TODO: 将登陆功能放到这里来
+    }
+    
     // push notifications
     
     func registerForPushNotifications(application: UIApplication) {

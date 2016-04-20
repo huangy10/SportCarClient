@@ -102,8 +102,6 @@ class NotificationController: UITableViewController {
         case "act_applied":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
             let act: Activity = try! notification.getRelatedObj()!
-            print(notification)
-            print(notification.user)
             cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
