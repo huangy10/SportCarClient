@@ -26,7 +26,7 @@ let kBarTitleFont = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
 let kTextInputFont = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
 
 // Network
-//let kHostName = "localhost"
+//let kHostName = "166.111.17.100"
 let kHostName = "paochefan.com"
 let kPortName = "80"
 let kChatPortName = "8888"

@@ -98,7 +98,6 @@ class ActivityHomeMineListController: UICollectionViewController {
             self.collectionView?.reloadData()
             self.refreshControl?.endRefreshing()
             }) { (code) -> () in
-                print(code)
                 self.loading = false
                 self.refreshControl?.endRefreshing()
         }
@@ -123,7 +122,6 @@ class ActivityHomeMineListController: UICollectionViewController {
             self.loading = false
             self.collectionView?.reloadData()
             }) { (code) -> () in
-                print(code)
                 self.loading = false
         }
     }

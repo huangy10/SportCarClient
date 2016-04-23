@@ -33,7 +33,6 @@ class BaseModel: NSManagedObject {
         if let host = MainManager.sharedManager.hostUserID {
             hostSSID = host
         } else {
-            print("Data access with out a host user")
             hostSSID = 0
         }
         return self
@@ -43,7 +42,6 @@ class BaseModel: NSManagedObject {
         if let host = MainManager.sharedManager.hostUserID {
             hostSSID = host
         } else {
-            print("Data access with out a host user")
             hostSSID = 0
         }
         return self

@@ -46,7 +46,6 @@ class AvatarClubSelectController: AvatarItemSelectController {
             }
             self.tableView.reloadData()
             }) { (code) -> () in
-                print(code)
         }
     }
     

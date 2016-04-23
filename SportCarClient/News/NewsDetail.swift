@@ -587,7 +587,6 @@ extension NewsDetailController{
             newComment.ssid = newCommentID
             newComment.sent = true
             }) { (code) -> () in
-                print(code)
         }
         // 重载数据
         commentTableView?.reloadData()
@@ -690,7 +689,6 @@ extension NewsDetailController {
      */
     func loadMoreCommentData() {
         if requestingCommentData {
-            print("重复的网络请求---资讯详情页面")
             return
         }
         let requester = NewsRequester.newsRequester
@@ -797,9 +795,6 @@ extension NewsDetailController {
     /**
      开始载入news.content制定的URL中的网页内容
      */
-    func tapTest() {
-        print("tapped")
-    }
     func startLoadWebContent() {
         guard let url = news.contentURL else{
             return
@@ -922,5 +917,25 @@ extension NewsDetailController {
         })
         self.view.layoutIfNeeded()
     }
+    
+    // MARK: - Share
+    func titleForShare() -> String {
+        return news.title
+    }
+    
+    func descriptionForShare() -> String {
+        return news.content
+    }
+    
+    func thumbnailForShare() -> UIImage {
+        let image = newsCover.image!
+        let thumbnail = RBSquareImageTo(image, size: CGSizeMake(100, 100))
+        return thumbnail
+    }
+    
+    func linkForShare() -> String {
+        return news.contentURL!.absoluteString
+    }
+
 }
 

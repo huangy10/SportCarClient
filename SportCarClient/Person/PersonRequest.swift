@@ -127,8 +127,7 @@ class PersonRequester: AccountRequester{
                         self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
                     })
                     break
-                case .Failure(let error):
-                    print(error)
+                case .Failure:
                     onError(code: "0000")
                     break
                 }
@@ -161,8 +160,7 @@ class PersonRequester: AccountRequester{
                         self.resultValueHandler(response.result, dataFieldName: "avatar", onSuccess: onSuccess, onError: onError)
                     })
                     break
-                case .Failure(let error):
-                    print(error)
+                case .Failure:
                     onError(code: "0000")
                     break
                 }

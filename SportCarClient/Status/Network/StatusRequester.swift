@@ -152,8 +152,7 @@ class StatusRequester: AccountRequester {
                         self.resultValueHandler(response.result, dataFieldName: "statusID", onSuccess: onSuccess, onError: onError)
                     })
                     break
-                case .Failure(let error):
-                    print(error)
+                case .Failure( _):
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         onError(code: "0000")
                     })
@@ -221,8 +220,7 @@ class StatusRequester: AccountRequester {
                                     })
                                 }
                                 break
-                            case .Failure(let err):
-                                print(err)
+                            case .Failure(_):
                                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                     onError(code: "0000")
                                 })
@@ -230,8 +228,7 @@ class StatusRequester: AccountRequester {
                             }
                         })
                         break
-                    case .Failure(let error):
-                        print(error)
+                    case .Failure( _):
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             onError(code: "0000")
                         })

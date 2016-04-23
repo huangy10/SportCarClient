@@ -174,7 +174,6 @@ extension NewsController {
             self.refreshControl?.endRefreshing()
             self.tableView.reloadData()
             }) { (code) -> () in
-                print(code)
                 self.refreshControl?.endRefreshing()
         }
     }
@@ -200,7 +199,6 @@ extension NewsController {
                 self.tableView.reloadData()
             }
             }) { (code) -> () in
-                print(code)
         }
     }
     

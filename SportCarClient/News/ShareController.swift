@@ -12,6 +12,15 @@ import Spring
 
 protocol ShareControllorDelegate: class {
     func shareControllerFinished()
+    
+    func titleForShare() -> String
+    
+    func descriptionForShare() -> String
+    
+    func thumbnailForShare() -> UIImage
+    
+    func linkForShare() -> String
+
 }
 
 // TODO: 将这个类改成PresentTemplateViewController的子类
@@ -30,6 +39,7 @@ class ShareController: UIViewController {
     var shareQQ: UIButton!
     var shareWechatFriend: UIButton!
     
+    var _tencentOAuth = TencentOAuth.init(appId: "1105301166", andDelegate: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -173,6 +183,82 @@ class ShareController: UIViewController {
     }
     
     func shareBtnPressed(sender: UIButton) {
-        
+        switch sender.tag {
+        case 0:
+            if !WXApi.isWXAppInstalled() {
+                showToast(LS("请先安装微信客户端"), onSelf: true)
+                return
+            }
+            if let delegate = delegate {
+                let message = WXMediaMessage()
+                message.title = delegate.titleForShare()
+                message.description = delegate.descriptionForShare()
+                message.setThumbImage(delegate.thumbnailForShare())
+                let web = WXWebpageObject()
+                web.webpageUrl = delegate.linkForShare()
+                message.mediaObject = web
+                let req = SendMessageToWXReq()
+                req.bText = false
+                req.scene = Int32(WXSceneSession.rawValue)
+                req.message = message
+                if !WXApi.sendReq(req) {
+                    showToast(LS("分享失败"), onSelf: true)
+                }
+            }
+        case 1:
+            if !WXApi.isWXAppInstalled() {
+                showToast(LS("请先安装微信客户端"), onSelf: true)
+                return
+            }
+            if let delegate = delegate {
+                let message = WXMediaMessage()
+                message.title = delegate.titleForShare()
+                message.description = delegate.descriptionForShare()
+                message.setThumbImage(delegate.thumbnailForShare())
+                let web = WXWebpageObject()
+                web.webpageUrl = delegate.linkForShare()
+                message.mediaObject = web
+                let req = SendMessageToWXReq()
+                req.bText = false
+                req.scene = Int32(WXSceneTimeline.rawValue)
+                req.message = message
+                if !WXApi.sendReq(req) {
+                    showToast(LS("分享失败"), onSelf: true)
+                }
+            }
+        case 2:
+            if !WeiboSDK.isWeiboAppInstalled() {
+                showToast(LS("请先安装新浪微博客户端"), onSelf: true)
+                return
+            }
+            if let delegate = delegate {
+                let message = WBMessageObject()
+                message.text = delegate.titleForShare()
+                let ext = WBWebpageObject()
+                ext.objectID = "sportcar_client"
+                ext.webpageUrl = delegate.linkForShare()
+                ext.title = delegate.titleForShare()
+                ext.thumbnailData = UIImagePNGRepresentation(delegate.thumbnailForShare())
+                ext.description = delegate.descriptionForShare()
+                message.mediaObject = ext
+                
+                let req = WBSendMessageToWeiboRequest()
+                req.message = message
+                WeiboSDK.sendRequest(req)
+            }
+        case 3:
+            if !QQApiInterface.isQQInstalled() {
+                showToast(LS("请先安装QQ客户端"), onSelf: true)
+                return
+            }
+            if let delegate = delegate {
+                let message = QQApiNewsObject(URL: NSURL(string: delegate.linkForShare()), title: delegate.titleForShare(), description: delegate.descriptionForShare(), previewImageData: UIImagePNGRepresentation(delegate.thumbnailForShare())!, targetContentType: QQApiURLTargetTypeNews)
+                let req = SendMessageToQQReq(content: message)
+                QQApiInterface.sendReq(req)
+            }
+        default:
+            assertionFailure()
+        }
+
     }
 }

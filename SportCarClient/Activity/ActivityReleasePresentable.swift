@@ -75,7 +75,6 @@ class ActivityReleasePresentableController: ActivityReleaseController {
         }) { (code) in
             self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
             self.pp_hideProgressView()
-            print(code)
         }
     }
     

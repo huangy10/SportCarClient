@@ -42,7 +42,6 @@ class RadarClubFilterController: UITableViewController {
             }
             self.tableView.reloadData()
             }) { (code) -> () in
-                print(code)
         }
     }
     

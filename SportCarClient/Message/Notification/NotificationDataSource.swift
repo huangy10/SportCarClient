@@ -88,7 +88,6 @@ class NotificationDataSource: NSObject {
                 self.updateNotification()
             })
             }) { (code) -> () in
-                print(code)
                 var delayTime: dispatch_time_t = DISPATCH_TIME_NOW
                 delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC) * 3)
                 dispatch_after(delayTime, self.privateQueue, { () -> Void in
@@ -102,7 +101,6 @@ class NotificationDataSource: NSObject {
         requester.getNotifications(threshold, limit: 10, opType: "more", onSuccess: { (json) -> () in
             self.loadNotificationListFromJSON(json!.arrayValue)
             }) { (code) -> () in
-                print(code)
         }
     }
     

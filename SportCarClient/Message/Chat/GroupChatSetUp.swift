@@ -135,7 +135,7 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
                 self.showToast(LS("创建群聊失败"))
                 self.pp_hideProgressView()
                 self.requesting = false
-                print(code)
+                
         }
     }
     

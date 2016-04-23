@@ -185,7 +185,6 @@ extension RadarDriverMapController {
     }
     
     func mapView(mapView: BMKMapView!, didSelectAnnotationView view: BMKAnnotationView!) {
-        print("did select")
         if let user = view.annotation as? UserAnnotation {
             radarHome?.navigationController?.pushViewController(user.user.showDetailController(), animated: true)
         }
@@ -237,7 +236,6 @@ extension RadarDriverMapController {
             }
             self.locationUpdatingRequest = nil
             }) { (code) -> () in
-                print(code)
                 self.locationUpdatingRequest = nil
         }
     }

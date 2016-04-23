@@ -103,8 +103,7 @@ class SportCarSelectListController: UICollectionViewController{
                 self.cars.append(car)
             }
             self.collectionView?.reloadData()
-            }) { (let code) -> () in
-                print(code)
+            }) { (code) -> () in
         }
     }
     

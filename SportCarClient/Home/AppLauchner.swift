@@ -41,9 +41,9 @@ class AppManager: UIViewController {
         UIApplication.sharedApplication().applicationIconBadgeNumber = unreadNum
         // sync to the backend
         ChatRequester.requester.clearNotificationUnreadNum({ (json) in
-            print("success")
+//            print("success")
             }) { (code) in
-                print("fail")
+//                print("fail")
         }
     }
     
@@ -81,9 +81,9 @@ class AppManager: UIViewController {
      */
     func logout() {
         AccountRequester.sharedRequester.logout({ (json) -> (Void) in
-            print("logout")
+//            print("logout")
             }) { (code) -> (Void) in
-                print("logout fails")
+//                print("logout fails")
         }
         // 在三个modelmanager上面注销用户
         MainManager.sharedManager.logout()
@@ -116,6 +116,7 @@ class AppManager: UIViewController {
     
     func loadHistoricalNotifications(launchOptions: [NSObject: AnyObject]?) {
         if let notification = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [String: AnyObject] {
+            
             print(notification)
         }
     }

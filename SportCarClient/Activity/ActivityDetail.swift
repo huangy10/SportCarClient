@@ -156,7 +156,6 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
                     // push a notification to tell other related component to update the status
                     NSNotificationCenter.defaultCenter().postNotificationName(kActivityManualEndedNotification, object: nil, userInfo: [kActivityKey: self.act])
                     }, onError: { (code) in
-                        print(code)
                 })
             }
         } else {
@@ -171,7 +170,6 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             setNavRightBtn()
             ActivityRequester.requester.postToApplyActivty(act.ssidString, onSuccess: { (json) in
                 }, onError: { (code) in
-                    print(code)
                     self.showToast(LS("报名失败"))
             })
         }
@@ -189,7 +187,6 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
                 assertionFailure()
             }
             }) { (code) in
-                print(code)
         }
     }
     
@@ -315,7 +312,6 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             }
             }) { (code) in
                 self.showToast(LS("无法获取活动评论内容"))
-                print(code)
         }
     }
     

@@ -24,7 +24,7 @@ class ActivityAppliedController: ActivityHomeMineListController {
             }
             self.collectionView?.reloadData()
             }) { (code) -> () in
-                print(code)
+                
         }
     }
     
@@ -45,7 +45,6 @@ class ActivityAppliedController: ActivityHomeMineListController {
             self.collectionView?.reloadData()
             }) { (code) -> () in
                 self.refreshControl?.endRefreshing()
-                print(code)
         }
     }
 }

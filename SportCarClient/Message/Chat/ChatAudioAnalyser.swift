@@ -60,7 +60,6 @@ class AudioWaveDrawEngine: NSObject {
         let audioFileURLRef: CFURLRef = self.audioFileURL
         err = ExtAudioFileOpenURL(audioFileURLRef, &extAFRef)
         if err != noErr {
-            print(audioFileURL)
             assertionFailure("Can not Read Audio File")
         }
         // 提取音频文件的format信息
@@ -74,7 +73,6 @@ class AudioWaveDrawEngine: NSObject {
         // 读取音频文件的格式
         err = ExtAudioFileGetProperty(extAFRef, kExtAudioFileProperty_FileDataFormat, &infoSize, &fileFormat)
         if err != noErr {
-            print(err)
             assertionFailure("")
         }
         //
@@ -84,7 +82,6 @@ class AudioWaveDrawEngine: NSObject {
         var writable: DarwinBoolean = false
         err = ExtAudioFileGetPropertyInfo(extAFRef, kExtAudioFileProperty_FileLengthFrames, &infoSize, &writable)
         if err != noErr {
-            print(err)
             assertionFailure()
         }
         //

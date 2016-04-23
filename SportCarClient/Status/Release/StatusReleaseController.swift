@@ -288,7 +288,6 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             self.navLeftBtnPressed()
             self.requesting = false
             }, onError: { (code) -> () in
-                print(code)
                 self.hideToast(toast)
                 self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
                 self.pp_hideProgressView()

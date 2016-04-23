@@ -135,7 +135,6 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
         for row: Int in selectedImageRow {
             if let asset = fetchResult![row] as? PHAsset {
                 photosManager.requestImageForAsset(asset, targetSize: outputImageSize, contentMode: contentMode, options: requestOption, resultHandler: { (image, info) -> Void in
-                    print(info)
                     outputImage.append(image!)
                 })
             }

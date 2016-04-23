@@ -121,7 +121,6 @@ class NotificationController: UITableViewController {
             cell.informLbL.text = LS("邀请你参加")
             cell.name2LbL.text = act.name
             cell.inform2Lbl.text = ""
-            print(notification.checked)
             cell.closeOperation = notification.checked
             cell.doneLbl.text = notification.flag ? LS("已确认") : LS("已拒绝")
             cell.onAgreeBtnPressed = { [weak self] _ in

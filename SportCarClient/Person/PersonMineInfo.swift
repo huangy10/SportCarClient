@@ -207,7 +207,6 @@ extension PersonMineInfoController {
                     self.user.nickName = newValue
                     self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                     }, onError: { (code) -> () in
-                        print(code)
                 })
                 break
             default:
@@ -223,7 +222,6 @@ extension PersonMineInfoController {
 //                    self.user.job = newValue
 //                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                     }, onError: { (code) -> () in
-                        print(code)
                 })
                 break
             case 2:
@@ -233,7 +231,6 @@ extension PersonMineInfoController {
 //                    self.user.district = newValue
 //                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                     }, onError: { (code) -> () in
-                        print(code)
                 })
             case 3:
                 self.user.signature = newValue
@@ -242,7 +239,6 @@ extension PersonMineInfoController {
 //                    self.user.signature = newValue
 //                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                     }, onError: { (code) -> () in
-                        print(code)
                 })
             default:
                 break
@@ -271,7 +267,6 @@ extension PersonMineInfoController {
             self.user.avatar = json!.stringValue
             self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
             }) { (code) -> () in
-                print(code)
         }
     }
     

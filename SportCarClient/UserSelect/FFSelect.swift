@@ -213,7 +213,7 @@ class FFSelectController: UserSelectController {
                     }
                 }
                 }, onError: { (code) -> () in
-                    print(code)
+                    
             })
             break
         case .Follow:
@@ -232,7 +232,7 @@ class FFSelectController: UserSelectController {
                     }
                 }
                 }, onError: { (code) -> () in
-                    print(code)
+                    
             })
         }
     }

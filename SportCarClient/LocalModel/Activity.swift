@@ -28,8 +28,7 @@ class Activity: BaseModel {
         } else if _location == nil {
             do {
                 _location = try LocationModel().fromJSONString(loc!, detailLevel: 0)
-            } catch (let err) {
-                print(err)
+            } catch {
                 assertionFailure()
             }
         }

@@ -20,7 +20,6 @@ class StatusFollowController: StatusBasicController {
                 self.tableView.reloadData()
             }
             }) { (code) -> () in
-                print(code)
         }
     }
     
@@ -33,7 +32,6 @@ class StatusFollowController: StatusBasicController {
                 self.tableView.reloadData()
             }
             }) { (code) -> () in
-                print(code)
         }
     }
     

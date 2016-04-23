@@ -158,8 +158,7 @@ class NewsRequester: AccountRequester {
                                 })
                             }
                             break
-                        case .Failure(let err):
-                            print(err)
+                        case .Failure:
                             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 onError(code: "0000")
                             })
@@ -167,8 +166,7 @@ class NewsRequester: AccountRequester {
                         }
                     })
                     break
-                case .Failure(let error):
-                    print(error)
+                case .Failure:
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         onError(code: "0000")
                     })

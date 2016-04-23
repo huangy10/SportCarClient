@@ -311,7 +311,7 @@ extension MakeCommentController {
     }
     
     func textViewDidEndEditing(textView: UITextView) {
-        print("haha")
+        
     }
     
 }

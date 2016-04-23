@@ -240,7 +240,6 @@ extension ChatRoomController {
                 datasource.parseHistoryFromServer(json!)
             })
             }) { (code) -> () in
-                print(code)
         }
     }
     
@@ -348,7 +347,7 @@ extension ChatRoomController {
             let identifier = getIdentifierForChatRoom(self)
             ChatRecordDataSource.sharedDataSource.chatRecords.bringKeyToFront(identifier)
             }) { (code) -> () in
-                print(code)
+                
         }
         
     }

@@ -41,7 +41,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             let requester = ChatRequester.requester
             requester.updateClubSettings(targetClub, onSuccess: { (json) -> () in
                 }, onError: { (code) -> () in
-                    print(code)
+                    
             })
         }
         if newLogo != nil {
@@ -55,7 +55,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
                     cache.storeImage(self.newLogo!, forKey: logoURL.absoluteString)
                 }
                 }, onError: { (code) -> () in
-                    print(code)
+                    
             })
         }
         self.navigationController?.popViewControllerAnimated(true)
@@ -285,7 +285,6 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             success = true
             dispatch_semaphore_signal(waiter)
             }) { (code) -> () in
-                print(code)
                 dispatch_semaphore_signal(waiter)
         }
         dispatch_semaphore_wait(waiter, DISPATCH_TIME_FOREVER)

@@ -232,8 +232,8 @@ extension SideBarController {
 
             
         }
-        print(ChatRecordDataSource.sharedDataSource.totalUnreadNum)
-        print(NotificationDataSource.sharedDataSource.unreadNum)
+//        print(ChatRecordDataSource.sharedDataSource.totalUnreadNum)
+//        print(NotificationDataSource.sharedDataSource.unreadNum)
         let unreadNum = ChatRecordDataSource.sharedDataSource.totalUnreadNum + NotificationDataSource.sharedDataSource.unreadNum
         if unreadNum > 0 {
             unreadMessagesLbl.hidden = false

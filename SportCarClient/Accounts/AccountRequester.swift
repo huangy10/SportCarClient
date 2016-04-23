@@ -102,8 +102,7 @@ class AccountRequester {
                     dispatch_async(dispatch_get_main_queue(), onError)
                 }
                 break
-            case .Failure(let error):
-                print("\(error)")
+            case .Failure(_):
                 dispatch_async(dispatch_get_main_queue(), onError)
                 break
             }
@@ -165,8 +164,7 @@ class AccountRequester {
                                 dispatch_async(dispatch_get_main_queue(), { onError(code: json["code"].string) })
                             }
                             break
-                        case .Failure(let error):
-                            print("\(error)")
+                        case .Failure(_):
                             dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
                                 onError(code: "0000")
                             })
@@ -175,8 +173,7 @@ class AccountRequester {
                         }
                     })
                     break
-                case .Failure(let error):
-                    print("\(error)")
+                case .Failure(_):
                     dispatch_async(dispatch_get_main_queue(), { ()->(Void) in
                         onError(code: "0000")
                     })
@@ -191,8 +188,7 @@ extension AccountRequester {
     
     func resultValueHandler(value: Alamofire.Result<AnyObject, NSError>, dataFieldName: String, onSuccess: (JSON?)->(), onError: (code: String?)->()?) {
         switch value {
-        case .Failure(let error):
-            print(error)
+        case .Failure(_):
             onError(code: "0000")
             break
         case .Success(let value):

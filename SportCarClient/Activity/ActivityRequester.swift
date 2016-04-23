@@ -152,8 +152,7 @@ class ActivityRequester: AccountRequester {
                                 })
                             }
                             break
-                        case .Failure(let err):
-                            print(err)
+                        case .Failure(_):
                             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 onError(code: "0000")
                             })
@@ -161,8 +160,7 @@ class ActivityRequester: AccountRequester {
                         }
                     })
                     break
-                case .Failure(let error):
-                    print(error)
+                case .Failure:
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         onError(code: "0000")
                     })
@@ -234,8 +232,7 @@ class ActivityRequester: AccountRequester {
                     upload.responseJSON(completionHandler: { (response) in
                         self.resultValueHandler(response.result, dataFieldName: "id", onSuccess: onSuccess, onError: onError)
                     })
-                case .Failure(let error):
-                    print(error)
+                case .Failure(_):
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         onError(code: "0000")
                     })

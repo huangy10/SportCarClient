@@ -88,7 +88,7 @@ class HomeController: UIViewController, HomeDelegate {
             // 令侧边栏更新数据
             self.reloadData()
             }) { (code) -> ()? in
-                print("\(code)")
+                print(code)
         }
     }
     
@@ -144,7 +144,6 @@ extension HomeController {
      显示边栏
      */
     func showSideBar(animated:Bool) {
-        
         sideBarCtl.reloadUserData()
         let screenWidth = view.frame.width
         var move = CATransform3DTranslate(CATransform3DIdentity, 0.876 * screenWidth, 0, 0)
@@ -232,8 +231,6 @@ extension HomeController {
             self.navigationController?.pushViewController(status!, animated: true)
             break
         case 5:
-            MessageManager.defaultManager.setupStream()
-            MessageManager.defaultManager.connect()
             ChatRecordDataSource.sharedDataSource.start()
             if message == nil {
                 message = MessageController()

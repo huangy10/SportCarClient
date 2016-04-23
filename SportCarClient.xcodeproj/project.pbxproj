@@ -11,6 +11,7 @@
 		BF11F6AE1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */; };
 		BF11F6B01CC0A11F0092A7E9 /* EmptyListHintCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */; };
 		BF139E6E1C4E6E8E0022F4FC /* FFSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF139E6D1C4E6E8E0022F4FC /* FFSelect.swift */; };
+		BF1AB8351CCB205700959096 /* MessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1AB8341CCB205700959096 /* MessageManager.swift */; };
 		BF1D93561C52776F00FD9997 /* DetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1D93551C52776F00FD9997 /* DetailCommentCell.swift */; };
 		BF1D93581C52783000FD9997 /* StatusDetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1D93571C52783000FD9997 /* StatusDetailCommentCell.swift */; };
 		BF1EC23F1C49414F0016F425 /* UserSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1EC23E1C49414F0016F425 /* UserSelect.swift */; };
@@ -64,10 +65,6 @@
 		BF630EE11CABF6DD00EFD37E /* SinglePropertyModifer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF630EE01CABF6DD00EFD37E /* SinglePropertyModifer.swift */; };
 		BF67816C1C15AA77001C89AE /* AccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816B1C15AA77001C89AE /* AccountController.swift */; };
 		BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816F1C15AB10001C89AE /* LoginRegister.swift */; };
-		BF777E9F1CC66F7F00A456FA /* MessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF777E9E1CC66F7F00A456FA /* MessageManager.swift */; };
-		BF777EA11CC6790B00A456FA /* MessageDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF777EA01CC6790B00A456FA /* MessageDataManager.swift */; };
-		BF777EA31CC67C5700A456FA /* MessageElementInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF777EA21CC67C5700A456FA /* MessageElementInterface.swift */; };
-		BF777EA61CC67FE400A456FA /* ChatTestTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF777EA51CC67FE400A456FA /* ChatTestTableViewController.swift */; };
 		BF77F3191C85357D00B09D9A /* ReportAndBlacklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF77F3181C85357D00B09D9A /* ReportAndBlacklist.swift */; };
 		BF8495C31CA50C0C003B1B2D /* StatusNearby.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8495C21CA50C0C003B1B2D /* StatusNearby.swift */; };
 		BF8D0DC31C424E710070B921 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D0DC21C424E710070B921 /* ViewControllerExtensions.swift */; };
@@ -154,6 +151,10 @@
 		BFC36BB21C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */; };
 		BFC36BB41C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */; };
 		BFC36BB61C6C854800DC6FE2 /* BlackListViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB51C6C854800DC6FE2 /* BlackListViewer.swift */; };
+		BFC8F1491CC8A5B200ABE31F /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC8F1411CC8A5B200ABE31F /* TencentOpenAPI.framework */; };
+		BFC8F14A1CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BFC8F1421CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle */; };
+		BFC8F14B1CC8A5B200ABE31F /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC8F1441CC8A5B200ABE31F /* libWeChatSDK.a */; };
+		BFC8F14C1CC8A5B200ABE31F /* read_me.txt in Resources */ = {isa = PBXBuildFile; fileRef = BFC8F1451CC8A5B200ABE31F /* read_me.txt */; };
 		BFCA900A1C4FC64300B05E74 /* StatusHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCA90091C4FC64300B05E74 /* StatusHome.swift */; };
 		BFCA900C1C4FC74B00B05E74 /* StatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCA900B1C4FC74B00B05E74 /* StatusCell.swift */; };
 		BFCA900F1C50A09100B05E74 /* StatusBasic.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCA900E1C50A09100B05E74 /* StatusBasic.swift */; };
@@ -296,6 +297,7 @@
 		BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GlobalNotifiicationSettings.swift; path = BaseTemplate/GlobalNotifiicationSettings.swift; sourceTree = "<group>"; };
 		BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmptyListHintCell.swift; path = BaseTemplate/Views/EmptyListHintCell.swift; sourceTree = "<group>"; };
 		BF139E6D1C4E6E8E0022F4FC /* FFSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FFSelect.swift; path = UserSelect/FFSelect.swift; sourceTree = "<group>"; };
+		BF1AB8341CCB205700959096 /* MessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageManager.swift; path = Message/SharedDataSource/MessageManager.swift; sourceTree = "<group>"; };
 		BF1D93551C52776F00FD9997 /* DetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetailCommentCell.swift; path = BaseTemplate/Views/DetailCommentCell.swift; sourceTree = "<group>"; };
 		BF1D93571C52783000FD9997 /* StatusDetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusDetailCommentCell.swift; path = Status/Detail/StatusDetailCommentCell.swift; sourceTree = "<group>"; };
 		BF1EC23E1C49414F0016F425 /* UserSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserSelect.swift; path = UserSelect/UserSelect.swift; sourceTree = "<group>"; };
@@ -349,10 +351,6 @@
 		BF630EE01CABF6DD00EFD37E /* SinglePropertyModifer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SinglePropertyModifer.swift; path = BaseTemplate/Views/SinglePropertyModifer.swift; sourceTree = "<group>"; };
 		BF67816B1C15AA77001C89AE /* AccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountController.swift; path = Accounts/AccountController.swift; sourceTree = "<group>"; };
 		BF67816F1C15AB10001C89AE /* LoginRegister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginRegister.swift; path = Accounts/LoginRegister.swift; sourceTree = "<group>"; };
-		BF777E9E1CC66F7F00A456FA /* MessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageManager.swift; path = Mess/MessageManager.swift; sourceTree = "<group>"; };
-		BF777EA01CC6790B00A456FA /* MessageDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageDataManager.swift; path = Mess/MessageDataManager.swift; sourceTree = "<group>"; };
-		BF777EA21CC67C5700A456FA /* MessageElementInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageElementInterface.swift; path = Mess/MessageElementInterface.swift; sourceTree = "<group>"; };
-		BF777EA51CC67FE400A456FA /* ChatTestTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatTestTableViewController.swift; path = Mess/ChatTestTableViewController.swift; sourceTree = "<group>"; };
 		BF77F3181C85357D00B09D9A /* ReportAndBlacklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportAndBlacklist.swift; path = Status/Report/ReportAndBlacklist.swift; sourceTree = "<group>"; };
 		BF8495C21CA50C0C003B1B2D /* StatusNearby.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusNearby.swift; path = Status/HomeSubviews/StatusNearby.swift; sourceTree = "<group>"; };
 		BF8D0DC21C424E710070B921 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewControllerExtensions.swift; path = BaseTemplate/ViewControllerExtensions.swift; sourceTree = "<group>"; };
@@ -440,6 +438,13 @@
 		BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsNewMessageNotification.swift; path = Person/PersonMineSettingsNewMessageNotification.swift; sourceTree = "<group>"; };
 		BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsLocationVisiblity.swift; path = Person/PersonMineSettingsLocationVisiblity.swift; sourceTree = "<group>"; };
 		BFC36BB51C6C854800DC6FE2 /* BlackListViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlackListViewer.swift; path = Person/BlackListViewer.swift; sourceTree = "<group>"; };
+		BFC8F1411CC8A5B200ABE31F /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
+		BFC8F1421CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TencentOpenApi_IOS_Bundle.bundle; sourceTree = "<group>"; };
+		BFC8F1441CC8A5B200ABE31F /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		BFC8F1451CC8A5B200ABE31F /* read_me.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = read_me.txt; sourceTree = "<group>"; };
+		BFC8F1461CC8A5B200ABE31F /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
+		BFC8F1471CC8A5B200ABE31F /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		BFC8F1481CC8A5B200ABE31F /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		BFCA90091C4FC64300B05E74 /* StatusHome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusHome.swift; path = Status/StatusHome.swift; sourceTree = "<group>"; };
 		BFCA900B1C4FC74B00B05E74 /* StatusCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusCell.swift; path = Status/StatusCell.swift; sourceTree = "<group>"; };
 		BFCA900E1C50A09100B05E74 /* StatusBasic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusBasic.swift; path = Status/HomeSubviews/StatusBasic.swift; sourceTree = "<group>"; };
@@ -573,6 +578,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				59709BA10C676D5E26BB2779 /* Pods_SportCarClient.framework in Frameworks */,
+				BFC8F1491CC8A5B200ABE31F /* TencentOpenAPI.framework in Frameworks */,
+				BFC8F14B1CC8A5B200ABE31F /* libWeChatSDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -629,6 +636,14 @@
 				BFFA15441C9D271E00E985DF /* Location.swift */,
 			);
 			name = Map;
+			sourceTree = "<group>";
+		};
+		BF1AB8331CCB202B00959096 /* SharedDataSource */ = {
+			isa = PBXGroup;
+			children = (
+				BF1AB8341CCB205700959096 /* MessageManager.swift */,
+			);
+			name = SharedDataSource;
 			sourceTree = "<group>";
 		};
 		BF1D93541C52775900FD9997 /* Views */ = {
@@ -853,25 +868,6 @@
 			name = Network;
 			sourceTree = "<group>";
 		};
-		BF777E9D1CC66C3B00A456FA /* Mess */ = {
-			isa = PBXGroup;
-			children = (
-				BF777EA41CC67FC100A456FA /* test table */,
-				BF777E9E1CC66F7F00A456FA /* MessageManager.swift */,
-				BF777EA01CC6790B00A456FA /* MessageDataManager.swift */,
-				BF777EA21CC67C5700A456FA /* MessageElementInterface.swift */,
-			);
-			name = Mess;
-			sourceTree = "<group>";
-		};
-		BF777EA41CC67FC100A456FA /* test table */ = {
-			isa = PBXGroup;
-			children = (
-				BF777EA51CC67FE400A456FA /* ChatTestTableViewController.swift */,
-			);
-			name = "test table";
-			sourceTree = "<group>";
-		};
 		BF77F3171C85354500B09D9A /* Report */ = {
 			isa = PBXGroup;
 			children = (
@@ -1073,6 +1069,7 @@
 		BFBC526C1C5293CF00EE7D34 /* Message */ = {
 			isa = PBXGroup;
 			children = (
+				BF1AB8331CCB202B00959096 /* SharedDataSource */,
 				BF2F7E8C1C62F37E00E3A3A2 /* Notification */,
 				BF23368C1C56526B00F0AE41 /* Network */,
 				BFBC526F1C52944C00EE7D34 /* Chat */,
@@ -1274,6 +1271,36 @@
 				BF5E7EE51C85EA3D004B8305 /* Suggestions.swift */,
 			);
 			name = Settings;
+			sourceTree = "<group>";
+		};
+		BFC8F13F1CC8A58600ABE31F /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				BFC8F1401CC8A5B200ABE31F /* QQ */,
+				BFC8F1431CC8A5B200ABE31F /* Wechat */,
+			);
+			name = Share;
+			sourceTree = "<group>";
+		};
+		BFC8F1401CC8A5B200ABE31F /* QQ */ = {
+			isa = PBXGroup;
+			children = (
+				BFC8F1411CC8A5B200ABE31F /* TencentOpenAPI.framework */,
+				BFC8F1421CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle */,
+			);
+			path = QQ;
+			sourceTree = "<group>";
+		};
+		BFC8F1431CC8A5B200ABE31F /* Wechat */ = {
+			isa = PBXGroup;
+			children = (
+				BFC8F1441CC8A5B200ABE31F /* libWeChatSDK.a */,
+				BFC8F1451CC8A5B200ABE31F /* read_me.txt */,
+				BFC8F1461CC8A5B200ABE31F /* WechatAuthSDK.h */,
+				BFC8F1471CC8A5B200ABE31F /* WXApi.h */,
+				BFC8F1481CC8A5B200ABE31F /* WXApiObject.h */,
+			);
+			path = Wechat;
 			sourceTree = "<group>";
 		};
 		BFCA900D1C50A07400B05E74 /* HomeSubViews */ = {
@@ -1624,7 +1651,7 @@
 		BFFA51141C05D9910019E5EF /* SportCarClient */ = {
 			isa = PBXGroup;
 			children = (
-				BF777E9D1CC66C3B00A456FA /* Mess */,
+				BFC8F13F1CC8A58600ABE31F /* Share */,
 				BFF714CC1CC289B00028F87F /* data */,
 				BFE967441CA6CFF20097C42C /* Network */,
 				BFE966AF1CA57AD70097C42C /* Model */,
@@ -1864,8 +1891,10 @@
 				BFF7150E1CC289C30028F87F /* 合成 1_00014.png in Resources */,
 				BF63089F1C1972050087A4F0 /* agreement.rtf in Resources */,
 				BFF7150B1CC289C30028F87F /* 合成 1_00011.png in Resources */,
+				BFC8F14C1CC8A5B200ABE31F /* read_me.txt in Resources */,
 				BFF7152D1CC289C30028F87F /* 合成 1_00045.png in Resources */,
 				BFF715051CC289C30028F87F /* 合成 1_00005.png in Resources */,
+				BFC8F14A1CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
 				BFF715041CC289C30028F87F /* 合成 1_00004.png in Resources */,
 				BFF7152E1CC289C30028F87F /* 合成 1_00046.png in Resources */,
 				BFF715131CC289C30028F87F /* 合成 1_00019.png in Resources */,
@@ -2002,7 +2031,6 @@
 				BFC36BA51C6AE5F500DC6FE2 /* SportCarInfo.swift in Sources */,
 				BF54DD7A1C303D5100F635C0 /* NewsRequester.swift in Sources */,
 				BFF5EEF91CA428E700F64301 /* ClubRank.swift in Sources */,
-				BF777EA61CC67FE400A456FA /* ChatTestTableViewController.swift in Sources */,
 				BFE967331CA588C20097C42C /* ActivityComment.swift in Sources */,
 				BFE967221CA584A20097C42C /* ChatRecord.generated.swift in Sources */,
 				BFFBA80D1C6595CF00991642 /* privateSettings.swift in Sources */,
@@ -2048,7 +2076,7 @@
 				BF1D93561C52776F00FD9997 /* DetailCommentCell.swift in Sources */,
 				BFC0325F1C6EE92600ECA69A /* UIImageEffects.swift in Sources */,
 				BF6308A51C19AF600087A4F0 /* ProfileInformation.swift in Sources */,
-				BF777E9F1CC66F7F00A456FA /* MessageManager.swift in Sources */,
+				BF1AB8351CCB205700959096 /* MessageManager.swift in Sources */,
 				BF54DD771C2EBDE800F635C0 /* NewsCell.swift in Sources */,
 				BF9B54AB1C7F5F740006D673 /* DriveMapUserCell.swift in Sources */,
 				BFC36BA71C6B0F7400DC6FE2 /* PersonStatusHeader.swift in Sources */,
@@ -2130,7 +2158,6 @@
 				BF9B54AF1C7FFDB20006D673 /* RadarHomePopover.swift in Sources */,
 				BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */,
 				BFBE19251C953286005114A0 /* UserPin.swift in Sources */,
-				BF777EA11CC6790B00A456FA /* MessageDataManager.swift in Sources */,
 				BFA2C76B1C412B1500202EF0 /* CommentPanel.swift in Sources */,
 				BFFBA8131C65E5B900991642 /* PrivateSettingsCell.swift in Sources */,
 				BF27E6CD1C38457F0074771D /* MakeCommentPanel.swift in Sources */,
@@ -2161,7 +2188,6 @@
 				BFCB963C1C1FFD2D004F77E8 /* SportCarSelectDetail.swift in Sources */,
 				BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */,
 				BFC032841C734C8300ECA69A /* ActivityCommentPanel.swift in Sources */,
-				BF777EA31CC67C5700A456FA /* MessageElementInterface.swift in Sources */,
 				BF8FE9A31C86C22400008170 /* ImageViewer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2243,8 +2269,16 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SportCarClient/QQ",
+				);
 				INFOPLIST_FILE = SportCarClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SportCarClient/Wechat",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -2365,8 +2399,16 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SportCarClient/QQ",
+				);
 				INFOPLIST_FILE = SportCarClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SportCarClient/Wechat",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -2382,8 +2424,16 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SportCarClient/QQ",
+				);
 				INFOPLIST_FILE = SportCarClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SportCarClient/Wechat",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

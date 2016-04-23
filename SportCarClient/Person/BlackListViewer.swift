@@ -79,7 +79,6 @@ class BlackListViewController: UserSelectController {
             self.loading = false
             self.userTableView?.reloadData()
             }) { (code) -> () in
-                print(code)
                 self.loading = false
         }
     }

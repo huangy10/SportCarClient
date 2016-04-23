@@ -60,8 +60,7 @@ class SportCarRequester: AccountRequester {
                     })
                 }
                 break
-            case .Failure(let error):
-                print("\(error)")
+            case .Failure(_):
                 break
             }
         }
@@ -126,8 +125,7 @@ class SportCarRequester: AccountRequester {
                         self.resultValueHandler(response.result, dataFieldName: "", onSuccess: onSuccess, onError: onError)
                     })
                     break
-                case .Failure(let error):
-                    print(error)
+                case .Failure(_):
                     onError(code: "0000")
                     break
                 }

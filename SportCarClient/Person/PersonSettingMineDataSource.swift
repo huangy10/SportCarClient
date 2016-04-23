@@ -67,9 +67,8 @@ class PersonMineSettingsDataSource {
         ]
         let requester = PersonRequester.requester
         requester.syncPersonMineSettings(uploadParam, onSuccess: { (data) -> () in
-            print("setting data uploaded")
+//            print("setting data uploaded")
             }) { (code) -> () in
-               print(code)
         }
     }
     

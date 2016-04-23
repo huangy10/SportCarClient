@@ -62,7 +62,6 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
             self.seeHisStatus = data!["see_his_status"].boolValue
             self.tableView.reloadData()
             }) { (code) -> () in
-                print(code)
         }
     }
     

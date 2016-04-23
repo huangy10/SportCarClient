@@ -12,7 +12,7 @@ import Kingfisher
 import XMPPFramework
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, XMPPRosterDelegate, XMPPStreamDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, XMPPRosterDelegate, XMPPStreamDelegate, WXApiDelegate, WeiboSDKDelegate {
 
     var window: UIWindow?
     var mapManager: BMKMapManager?
@@ -26,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, XMPPR
         let ret = mapManager?.start("WFZ49PN014ukXD2S4Guqxja2", generalDelegate: self)
         assert(ret!)
         customizeMap()
+        shareSetup()
         let home = AppManager.sharedAppManager     				
         let wrapper = BlackBarNavigationController(rootViewController: home)
         window?.rootViewController = wrapper
@@ -46,8 +47,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, XMPPR
         cache.maxDiskCacheSize = 50 * 1024 * 1024
     }
     
-    func xmppSettings() {
-        MessageManager.defaultManager.setupStream()
+    func shareSetup() {
+        WXApi.registerApp("wx9dbf7503327ee98c")
+        WeiboSDK.registerApp("2005077014")
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -84,8 +86,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, XMPPR
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         // handle real time notification
-        print(userInfo)
-        print(application.applicationIconBadgeNumber)
     }
     
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
@@ -177,6 +177,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, XMPPR
     func onGetPermissionState(iError: Int32) {
         print(iError)
     }
+    
+    
+    // MARK: - Delegate for Share
+    
+    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+        let urlStr = url.absoluteString
+        if urlStr.hasPrefix("wx") {
+            return WXApi.handleOpenURL(url, delegate: self);
+        } else if urlStr.hasSuffix("wb") {
+            return WeiboSDK.handleOpenURL(url, delegate: self)
+        } else {
+            return false
+        }
+    }
+    
+    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        let urlStr = url.absoluteString
+        if urlStr.hasPrefix("wx") {
+            return WXApi.handleOpenURL(url, delegate: self);
+        } else if urlStr.hasSuffix("wb") {
+            return WeiboSDK.handleOpenURL(url, delegate: self)
+        } else if urlStr.hasSuffix("mqq"){
+            return TencentOAuth.HandleOpenURL(url)
+        } else {
+            return false
+        }
+    }
+    
+    // MARK: Wechat
+    
+    func onReq(req: BaseReq!) {
+        
+    }
+    
+    func onResp(resp: BaseResp!) {
+        
+    }
+    
+    // MARK: Sina Weibo
+    
+    func didReceiveWeiboRequest(request: WBBaseRequest!) {
+        
+    }
+    
+    func didReceiveWeiboResponse(response: WBBaseResponse!) {
+        
+    }
+
 
 }
 

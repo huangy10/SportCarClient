@@ -237,7 +237,6 @@ extension ActivityNearByController {
                     self.activityFocusedChanged()
                 }
                 }, onError: { (code) -> () in
-                    print(code)
             })
         }
         userAnno?.coordinate = userLocation.location.coordinate

@@ -31,7 +31,7 @@ class Notification: BaseModel {
         messageBody = data["message_body"].stringValue
         messageType = data["message_type"].stringValue
         if messageType == "status_inform" {
-            print(data)
+//            print(data)
         }
         read = data["read"].boolValue
         flag = data["flag"].boolValue

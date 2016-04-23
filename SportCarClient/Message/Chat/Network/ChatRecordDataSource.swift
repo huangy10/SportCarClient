@@ -218,7 +218,6 @@ class ChatRecordDataSource {
                 self.getUnreadInformation()
             })
             }) { (code) -> () in
-                print(code)
         }
     }
     
@@ -258,7 +257,6 @@ class ChatRecordDataSource {
             }
             self.listCtrl?.needUpdate()
             }) { (code) -> () in
-                print(code)
         }
     }
     
@@ -286,7 +284,6 @@ class ChatRecordDataSource {
                 }
             })
             }) { (code) -> () in
-                print(code)
         }
     }
     

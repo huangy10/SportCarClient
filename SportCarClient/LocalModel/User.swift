@@ -159,21 +159,3 @@ extension User {
     
 }
 
-// MARK: message element interface 
-extension User: MessageElementInterface {
-    func getSSID() -> Int32 {
-        return ssid
-    }
-    
-    func getSSIDString() -> String {
-        return ssidString
-    }
-    
-    func getCover() -> NSURL {
-         return avatarURL!
-    }
-    
-    func getName() -> String {
-        return nickName!
-    }
-}

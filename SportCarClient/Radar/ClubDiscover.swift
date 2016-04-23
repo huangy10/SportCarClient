@@ -48,7 +48,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             self.bubbles.startUpdate()
             self.bubbles.updator?.paused = true
             }) { (code) -> () in
-                print(code)
+                
         }
     }
     
@@ -304,7 +304,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             self.bubbles.startUpdate()
             self.clubList.reloadData()
             }) { (code) -> () in
-                print(code)
+                
         }
     }
 }

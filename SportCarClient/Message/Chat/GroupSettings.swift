@@ -59,7 +59,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             self.inlineUserSelect?.collectionView?.reloadData()
             
             }) { (code) -> () in
-                print(code)
+                
         }
     }
     
@@ -95,7 +95,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             requester.updateClubSettings(targetClub, onSuccess: { (json) -> () in
                 // Do nothing when succeed since modification has already taken effects
                 }, onError: { (code) -> () in
-                    print(code)
+                    
             })
         }
         self.navigationController?.popViewControllerAnimated(true)
@@ -338,7 +338,6 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 if code == "no permission" {
                     self.showToast(LS("您没有权限进行此项操作"))
                 }
-                print(code)
         }
     }
     

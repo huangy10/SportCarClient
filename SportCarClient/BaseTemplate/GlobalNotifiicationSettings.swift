@@ -29,4 +29,6 @@ let kActivityManualEndedNotification = "act_manual_ended"
 let kActivityKey = "activitiyObj"
 let kActivitySSIDKey = "activity_ssid"
 
-let kMessageNewPresenceNotification = "new_presence"
+let kMessageNewOnlineNotification = "message_online"
+let kMessageNewOfflineNotification = "message_offline"
+let kMessageNewMessageNotification = "message_new"

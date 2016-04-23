@@ -47,9 +47,8 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
                     })
                 }
             })
-        }catch let error{
+        } catch {
             // fail to record
-            print(error)
             delegate.audioFailToRecord("")
         }
     }
@@ -71,8 +70,7 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
             audioRecorder.delegate = self
             audioRecorder.record()
             startTime = NSDate()
-        }catch let error {
-            print(error)
+        } catch {
             finishRecording(false)
         }
     }
@@ -94,8 +92,7 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
             let fileManager = NSFileManager.defaultManager()
             do{
                 try fileManager.removeItemAtURL(audioURL)
-            }catch let error {
-                print(error)
+            }catch {
             }
             delegate?.audioDidCancelRecording()
         }

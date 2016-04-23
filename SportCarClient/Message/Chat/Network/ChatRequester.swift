@@ -126,8 +126,7 @@ class ChatRequester: AccountRequester {
 //                    delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC) * 3)
                 }
                 break
-            case .Failure(let err):
-                print(err)
+            case .Failure(_):
                 dispatch_async(self.privateQueue, { () -> Void in
                     onError(code: "0000")
                 })
@@ -223,8 +222,7 @@ class ChatRequester: AccountRequester {
                         self.resultValueHandler(response.result, dataFieldName: "message", onSuccess: onSuccess, onError: onError)
                     })
                     break
-                case .Failure(let error):
-                    print(error)
+                case .Failure:
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         onError(code: "0000")
                     })
@@ -305,8 +303,7 @@ class ChatRequester: AccountRequester {
                         self.resultValueHandler(response.result, dataFieldName: "club", onSuccess: onSuccess, onError: onError)
                     })
                     break
-                case .Failure(let error):
-                    print(error)
+                case .Failure:
                     onError(code: "0000")
                     break
                 }
@@ -332,8 +329,7 @@ class ChatRequester: AccountRequester {
                     })
                 }
                 break
-            case .Failure(let err) :
-                print(err)
+            case .Failure:
                 dispatch_async(self.privateQueue, { () -> Void in
                     onError(code: "0000")
                 })
@@ -404,8 +400,7 @@ class ChatRequester: AccountRequester {
                     request.responseJSON(completionHandler: { (response) -> Void in
                         self.resultValueHandler(response.result, dataFieldName: "logo", onSuccess: onSuccess, onError: onError)
                     })
-                case .Failure(let error):
-                    print(error)
+                case .Failure:
                     onError(code: "0000")
                 }
         }

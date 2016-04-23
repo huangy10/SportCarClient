@@ -170,7 +170,6 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
                 self.loadDataAndUpdateUI()
             }
             }) { (code) in
-                print(code)
         }
     }
     
@@ -771,7 +770,6 @@ extension StatusDetailController {
             
             self.wp_stopWaiting()
             }) { (code) -> () in
-                print(code)
                 self.wp_stopWaiting()
                 self.showToast(LS("无法访问服务器"))
         }
@@ -801,7 +799,6 @@ extension StatusDetailController {
             self.status?.commentNum += 1
             self.loadDataAndUpdateUI()
             }) { (code) -> () in
-                print(code)
         }
 
         commentList?.beginUpdates()

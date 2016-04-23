@@ -44,7 +44,6 @@ class StatusHotController: UICollectionViewController {
                 self.collectionView?.reloadData()
             }
             }) { (code) -> () in
-                print(code)
         }
     }
     
@@ -57,7 +56,6 @@ class StatusHotController: UICollectionViewController {
             self.myRefreshControl?.endRefreshing()
             }) { (code) -> () in
                 self.myRefreshControl?.endRefreshing()
-                print(code)
         }
     }
     

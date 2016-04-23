@@ -109,7 +109,6 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
                     board.followBtnTmpImage.hidden = false
             })
             }) { (code) -> () in
-                print(code)
         }
     }
     
@@ -184,7 +183,6 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
                 let region = BMKCoordinateRegionMakeWithDistance(self.userLoc!.location, 3000, 5000)
                 self.header.map.setRegion(region, animated: true)
                 }) { (code) -> () in
-                    print(code)
             }
         }
     }

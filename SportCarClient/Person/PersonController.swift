@@ -81,7 +81,6 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             self.carsViewList.collectionView?.reloadData()
             self.collectionView?.reloadData()
             }) { (code) -> () in
-                print(code)
         }
         // 第三个响应：开始获取的动态列表，每次获取十个
         let statusRequester = StatusRequester.SRRequester
@@ -90,7 +89,6 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             self.jsonDataHandler(json!, container: &self.data.statusList)
             self.collectionView?.reloadData()
             }) { (code) -> () in
-                print(code)
         }
     }
     
@@ -474,7 +472,6 @@ extension PersonBasicController {
                 self.jsonDataHandler(json!, container: &(self.data.statusDict[selectedCarID]!))
                 self.collectionView?.reloadData()
                 }, onError: { (code) -> () in
-                    print(code)
             })
         }else {
             let targetStatusList = data.statusList
@@ -487,7 +484,6 @@ extension PersonBasicController {
                 self.jsonDataHandler(json!, container: &(self.data.statusList))
                 self.collectionView?.reloadData()
                 }, onError: { (code) -> () in
-                    print(code)
             })
         }
     }

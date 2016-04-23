@@ -58,7 +58,6 @@ class Club: BaseModel {
         data = Club.reorganizeJSON(data)
         name = data["club_name"].stringValue
         if name == "" {
-            print(data)
             assertionFailure()
         }
         logo = data["club_logo"].stringValue
@@ -160,21 +159,3 @@ class Club: BaseModel {
     }
 }
 
-extension Club: MessageElementInterface {
-    
-    func getSSID() -> Int32 {
-        return ssid
-    }
-    
-    func getSSIDString() -> String {
-        return ssidString
-    }
-    
-    func getCover() -> NSURL {
-        return logoURL!
-    }
-    
-    func getName() -> String {
-        return name!
-    }
-}
