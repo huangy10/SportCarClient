@@ -16,10 +16,11 @@ class NotificationModelManager: MainManager {
     private static let _sharedNotificationModelManager = NotificationModelManager()
     
     override var workQueue: dispatch_queue_t {
-        if _workQueue == nil {
-            _workQueue = dispatch_queue_create("notification_update", DISPATCH_QUEUE_SERIAL)
-        }
-        return _workQueue!
+        return ChatModelManger.sharedManager.workQueue
+//        if _workQueue == nil {
+//            _workQueue = dispatch_queue_create("notification_update", DISPATCH_QUEUE_SERIAL)
+//        }
+//        return _workQueue!
     }
     
     override class var sharedManager: MainManager {

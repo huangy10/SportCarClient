@@ -61,6 +61,14 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
             make.edges.equalTo(superview)
         }
         //
+        pageCount = UIPageControl()
+        pageCount.numberOfPages = 1
+        superview.addSubview(pageCount)
+        pageCount.snp_makeConstraints { (make) -> Void in
+            make.bottom.equalTo(superview).offset(5)
+            make.centerX.equalTo(superview)
+        }
+        //
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSizeMake(170, 200)
         layout.scrollDirection = .Horizontal
@@ -77,14 +85,6 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.height.equalTo(220)
-        }
-        //
-        pageCount = UIPageControl()
-        pageCount.numberOfPages = 1
-        superview.addSubview(pageCount)
-        pageCount.snp_makeConstraints { (make) -> Void in
-            make.bottom.equalTo(superview).offset(5)
-            make.centerX.equalTo(superview)
         }
     }
     

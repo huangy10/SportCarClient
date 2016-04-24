@@ -137,7 +137,7 @@ extension NewsController {
     }
     
     func backToHomePressed() {
-        self.homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false))
+        self.homeDelegate?.backToHome(nil)
     }
 }
 

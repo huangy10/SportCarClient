@@ -51,10 +51,9 @@ class AppManager: UIViewController {
      启动App，这个函数负责检查登录状态
      */
     func launch() {
-        if let hostUser = MainManager.sharedManager.resumeLoginStatus().hostUser {
+        if let _ = MainManager.sharedManager.resumeLoginStatus().hostUser {
             // 当获取到了非nil的hostUser时，直接进入Home界面
-            let ctl = HomeController()
-            ctl.hostUser = hostUser
+            let ctl = HomeController2()
             self.navigationController?.pushViewController(ctl, animated: false)
             return
         }
@@ -64,11 +63,10 @@ class AppManager: UIViewController {
     }
     
     func guideToContent() {
-        if let hostUser = MainManager.sharedManager.hostUser {
-            let ctl = HomeController()
+        if let _ = MainManager.sharedManager.hostUser {
+            let ctl = HomeController2()
             NotificationDataSource.sharedDataSource.start()
             ChatRecordDataSource.sharedDataSource.start()
-            ctl.hostUser = hostUser
             self.navigationController?.pushViewController(ctl, animated: false)
             self.dismissViewControllerAnimated(true, completion: nil)
         }else {

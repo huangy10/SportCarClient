@@ -14,6 +14,9 @@ let kMineSettingsStaticLabelString = [LS("新消息通知"), LS("黑名单"), LS
 
 
 class PersonMineSettings: UITableViewController, BlackListViewDelegate {
+    
+    weak var homeDelegate: HomeDelegate?
+    
     /// 定位可见性
     var locationVisible: String! {
         return kPersonMineSettingsLocationVisibleMapping[PersonMineSettingsDataSource.sharedDataSource.locationVisible!]
@@ -73,7 +76,11 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        if let delegate = homeDelegate {
+            delegate.backToHome(nil)
+        } else {
+            self.navigationController?.popViewControllerAnimated(true)
+        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

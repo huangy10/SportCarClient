@@ -159,7 +159,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
     
     func navLeftBtnPressed() {
 //        self.navigationController?.popViewControllerAnimated(true)
-        homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false)) 
+        homeDelegate?.backToHome(nil)
     }
     
     func navRightBtnPressed() {

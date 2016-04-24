@@ -13,6 +13,10 @@ import SnapKit
 class ChatListCell: UITableViewCell {
     
     static let reuseIdentifier = "chat_list_cell"
+    
+    var data: RosterModelInterface!
+    
+    @available(*, deprecated=2)
     var listItem: ChatRecordListItem? {
         didSet {
             if listItem == nil {
@@ -39,6 +43,7 @@ class ChatListCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
+        self.selectionStyle = .None
     }
 
     required init?(coder aDecoder: NSCoder) {

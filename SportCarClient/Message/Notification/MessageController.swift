@@ -180,7 +180,7 @@ class MessageController: UIViewController {
     
     func navLeftBtnPressed() {
 //        self.navigationController?.popViewControllerAnimated(true)
-        homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false))
+        homeDelegate?.backToHome(nil)
     }
     
     func titleBtnPressed(sender: UIButton) {

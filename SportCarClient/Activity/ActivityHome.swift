@@ -152,7 +152,7 @@ class ActivityHomeController: UIViewController {
     }
     
     func navLeftBtnPressed() {
-        homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false))
+        homeDelegate?.backToHome(nil)
     }
     
     func navRightBtnPressed() {

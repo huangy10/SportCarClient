@@ -63,6 +63,14 @@
 		BF630EDD1CABDBF900EFD37E /* PropertyBaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF630EDC1CABDBF900EFD37E /* PropertyBaseCell.swift */; };
 		BF630EDF1CABE46C00EFD37E /* AvatarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF630EDE1CABE46C00EFD37E /* AvatarCell.swift */; };
 		BF630EE11CABF6DD00EFD37E /* SinglePropertyModifer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF630EE01CABF6DD00EFD37E /* SinglePropertyModifer.swift */; };
+		BF662A081CCB25CC00B3D84D /* ChatParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF662A071CCB25CC00B3D84D /* ChatParser.swift */; };
+		BF662A0A1CCB25DA00B3D84D /* NotificationParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF662A091CCB25DA00B3D84D /* NotificationParser.swift */; };
+		BF662A0C1CCB2F4C00B3D84D /* BaseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF662A0B1CCB2F4C00B3D84D /* BaseParser.swift */; };
+		BF662A0F1CCB626800B3D84D /* RosterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF662A0E1CCB626800B3D84D /* RosterManager.swift */; };
+		BF662A111CCB629500B3D84D /* RosterModelInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF662A101CCB629500B3D84D /* RosterModelInterface.swift */; };
+		BF662A131CCB664C00B3D84D /* RosterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF662A121CCB664C00B3D84D /* RosterController.swift */; };
+		BF662A151CCBA39500B3D84D /* Entrance.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF662A141CCBA39500B3D84D /* Entrance.swift */; };
+		BF662A171CCBA3C600B3D84D /* SideBar2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF662A161CCBA3C600B3D84D /* SideBar2.swift */; };
 		BF67816C1C15AA77001C89AE /* AccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816B1C15AA77001C89AE /* AccountController.swift */; };
 		BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816F1C15AB10001C89AE /* LoginRegister.swift */; };
 		BF77F3191C85357D00B09D9A /* ReportAndBlacklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF77F3181C85357D00B09D9A /* ReportAndBlacklist.swift */; };
@@ -349,6 +357,14 @@
 		BF630EDC1CABDBF900EFD37E /* PropertyBaseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyBaseCell.swift; path = BaseTemplate/Views/PropertyBaseCell.swift; sourceTree = "<group>"; };
 		BF630EDE1CABE46C00EFD37E /* AvatarCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AvatarCell.swift; path = BaseTemplate/Views/AvatarCell.swift; sourceTree = "<group>"; };
 		BF630EE01CABF6DD00EFD37E /* SinglePropertyModifer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SinglePropertyModifer.swift; path = BaseTemplate/Views/SinglePropertyModifer.swift; sourceTree = "<group>"; };
+		BF662A071CCB25CC00B3D84D /* ChatParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatParser.swift; path = Message/SharedDataSource/ChatParser.swift; sourceTree = "<group>"; };
+		BF662A091CCB25DA00B3D84D /* NotificationParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationParser.swift; path = Message/SharedDataSource/NotificationParser.swift; sourceTree = "<group>"; };
+		BF662A0B1CCB2F4C00B3D84D /* BaseParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseParser.swift; path = Message/SharedDataSource/BaseParser.swift; sourceTree = "<group>"; };
+		BF662A0E1CCB626800B3D84D /* RosterManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RosterManager.swift; path = Message/SharedDataSource/RosterManager.swift; sourceTree = "<group>"; };
+		BF662A101CCB629500B3D84D /* RosterModelInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RosterModelInterface.swift; path = Message/SharedDataSource/RosterModelInterface.swift; sourceTree = "<group>"; };
+		BF662A121CCB664C00B3D84D /* RosterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RosterController.swift; path = Message/Views/RosterController.swift; sourceTree = "<group>"; };
+		BF662A141CCBA39500B3D84D /* Entrance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Entrance.swift; path = Home/Entrance.swift; sourceTree = "<group>"; };
+		BF662A161CCBA3C600B3D84D /* SideBar2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideBar2.swift; path = Home/SideBar2.swift; sourceTree = "<group>"; };
 		BF67816B1C15AA77001C89AE /* AccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountController.swift; path = Accounts/AccountController.swift; sourceTree = "<group>"; };
 		BF67816F1C15AB10001C89AE /* LoginRegister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginRegister.swift; path = Accounts/LoginRegister.swift; sourceTree = "<group>"; };
 		BF77F3181C85357D00B09D9A /* ReportAndBlacklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportAndBlacklist.swift; path = Status/Report/ReportAndBlacklist.swift; sourceTree = "<group>"; };
@@ -641,6 +657,8 @@
 		BF1AB8331CCB202B00959096 /* SharedDataSource */ = {
 			isa = PBXGroup;
 			children = (
+				BF662A0D1CCB624400B3D84D /* Roster */,
+				BF662A061CCB25BB00B3D84D /* Parsers */,
 				BF1AB8341CCB205700959096 /* MessageManager.swift */,
 			);
 			name = SharedDataSource;
@@ -866,6 +884,26 @@
 				BFCB96391C1FB0AE004F77E8 /* SportCarRequester.swift */,
 			);
 			name = Network;
+			sourceTree = "<group>";
+		};
+		BF662A061CCB25BB00B3D84D /* Parsers */ = {
+			isa = PBXGroup;
+			children = (
+				BF662A071CCB25CC00B3D84D /* ChatParser.swift */,
+				BF662A091CCB25DA00B3D84D /* NotificationParser.swift */,
+				BF662A0B1CCB2F4C00B3D84D /* BaseParser.swift */,
+			);
+			name = Parsers;
+			sourceTree = "<group>";
+		};
+		BF662A0D1CCB624400B3D84D /* Roster */ = {
+			isa = PBXGroup;
+			children = (
+				BF662A0E1CCB626800B3D84D /* RosterManager.swift */,
+				BF662A101CCB629500B3D84D /* RosterModelInterface.swift */,
+				BF662A121CCB664C00B3D84D /* RosterController.swift */,
+			);
+			name = Roster;
 			sourceTree = "<group>";
 		};
 		BF77F3171C85354500B09D9A /* Report */ = {
@@ -1329,6 +1367,8 @@
 				BFCB963F1C205DF1004F77E8 /* Home.swift */,
 				BFCB96431C206169004F77E8 /* SideBar.swift */,
 				BF9404961C2818C3001ABB1E /* AppLauchner.swift */,
+				BF662A141CCBA39500B3D84D /* Entrance.swift */,
+				BF662A161CCBA3C600B3D84D /* SideBar2.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -1994,6 +2034,7 @@
 				BF5107111C60CB65008DC14F /* ChatList.swift in Sources */,
 				BFE967311CA588580097C42C /* BaseInMemModel.swift in Sources */,
 				BFE967601CA6EE080097C42C /* ChatModelManager.swift in Sources */,
+				BF662A171CCBA3C600B3D84D /* SideBar2.swift in Sources */,
 				BFC0326F1C6F3A1100ECA69A /* ActivityHomeCell.swift in Sources */,
 				BFC032531C6DD14000ECA69A /* AuthThreeImageInput.swift in Sources */,
 				BFA64F001C946AB900BA460F /* StatusHot.swift in Sources */,
@@ -2004,6 +2045,7 @@
 				BFBC52791C53902500EE7D34 /* ChatOpPanel.swift in Sources */,
 				BF2336941C57353C00F0AE41 /* ChatWave.swift in Sources */,
 				BF9847341C76311D006DDE3C /* ActivityReleaseMapCell.swift in Sources */,
+				BF662A151CCBA39500B3D84D /* Entrance.swift in Sources */,
 				BFDFF27E1C8BF73E00055C1C /* ClubBubbles.swift in Sources */,
 				BFE967101CA584870097C42C /* ChatRecord.swift in Sources */,
 				BF9404971C2818C3001ABB1E /* AppLauchner.swift in Sources */,
@@ -2051,6 +2093,7 @@
 				BF9B54AD1C7F70980006D673 /* RadarHome.swift in Sources */,
 				BF6308AC1C19B7D20087A4F0 /* AccountRequester.swift in Sources */,
 				BFCA900A1C4FC64300B05E74 /* StatusHome.swift in Sources */,
+				BF662A081CCB25CC00B3D84D /* ChatParser.swift in Sources */,
 				BFADDF6D1C82D39D00893435 /* RadarFilterController.swift in Sources */,
 				BFCB96361C1F0551004F77E8 /* BlackBarNavigationController.swift in Sources */,
 				BFAA0CA91C46009F00AB5C3C /* StatusRequester.swift in Sources */,
@@ -2123,6 +2166,8 @@
 				BFAA0CAC1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift in Sources */,
 				BF5E7EE81C85EC45004B8305 /* SportscarAuth.swift in Sources */,
 				BFC36BAA1C6B27B000DC6FE2 /* PersonRequest.swift in Sources */,
+				BF662A111CCB629500B3D84D /* RosterModelInterface.swift in Sources */,
+				BF662A131CCB664C00B3D84D /* RosterController.swift in Sources */,
 				BF1EC23F1C49414F0016F425 /* UserSelect.swift in Sources */,
 				BFDFF27B1C8BF6EA00055C1C /* ClubDiscover.swift in Sources */,
 				BFCA900F1C50A09100B05E74 /* StatusBasic.swift in Sources */,
@@ -2176,6 +2221,7 @@
 				BFCA90141C50D6CB00B05E74 /* StatusDetail.swift in Sources */,
 				BFC032511C6DCD6200ECA69A /* AuthBasic.swift in Sources */,
 				BF9663FE1C8889220096D131 /* GroupSettingHost.swift in Sources */,
+				BF662A0A1CCB25DA00B3D84D /* NotificationParser.swift in Sources */,
 				BF8495C31CA50C0C003B1B2D /* StatusNearby.swift in Sources */,
 				BF6308981C1965AF0087A4F0 /* Agreement.swift in Sources */,
 				BFC032911C7451AD00ECA69A /* ActivityRelease.swift in Sources */,
@@ -2183,8 +2229,10 @@
 				BFA29E441C7768930008A408 /* CustomDatePicker.swift in Sources */,
 				BFDFF2791C8BC3A300055C1C /* CityElementSelect.swift in Sources */,
 				BF5E7EE21C85D559004B8305 /* StatusDelete.swift in Sources */,
+				BF662A0F1CCB626800B3D84D /* RosterManager.swift in Sources */,
 				BFE967261CA584A20097C42C /* User.generated.swift in Sources */,
 				BF8D42FF1C748CB8009AD4BA /* ActivityApplied.swift in Sources */,
+				BF662A0C1CCB2F4C00B3D84D /* BaseParser.swift in Sources */,
 				BFCB963C1C1FFD2D004F77E8 /* SportCarSelectDetail.swift in Sources */,
 				BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */,
 				BFC032841C734C8300ECA69A /* ActivityCommentPanel.swift in Sources */,

@@ -17,6 +17,18 @@ class ChatRecord: BaseModel {
         return "chatID"
     }
     
+    var chatID: String {
+        if chatType! == "private" {
+            if senderUser!.isHost {
+                return "p" + targetUser!.ssidString
+            } else {
+                return "p" + senderUser!.ssidString
+            }
+        } else {
+            return "g" + targetClub!.ssidString
+        }
+    }
+    
     var cachedWaveData: [Float]?
     var displayTimeMark: Bool = false
     

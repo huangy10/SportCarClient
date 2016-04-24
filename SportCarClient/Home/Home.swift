@@ -21,7 +21,7 @@ protocol HomeDelegate: class {
      
      - parameter onComplete: 完成后将会执行这一个closure
      */
-    func backToHome(onComplete: (()->())?, screenShot: UIImage)
+    func backToHome(onComplete: (()->())?)
     
     /**
      切换各个功能模块
@@ -184,9 +184,9 @@ extension HomeController {
 // MARK: - Sidebar的代理
 extension HomeController {
     
-    func backToHome(onComplete: (()->())?, screenShot: UIImage) {
+    func backToHome(onComplete: (()->())?) {
         board.layer.transform = CATransform3DIdentity
-        board.setImage(screenShot, forState: .Normal)
+//        board.setImage(screenShot, forState: .Normal)
         self.navigationController?.popViewControllerAnimated(false)
         showSideBar(true)
     }

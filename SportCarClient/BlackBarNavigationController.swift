@@ -38,4 +38,9 @@ class BlackBarNavigationController: UINavigationController {
     deinit {
         print("deinit blackbarnavigationController")
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        print("hahaha:\(self.viewControllers[0])")
+    }
 }

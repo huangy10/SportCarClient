@@ -118,7 +118,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     
     func navLeftBtnPressed() {
         if homeDelegate != nil {
-            homeDelegate?.backToHome(nil, screenShot: self.getScreenShotBlurred(false))
+            homeDelegate?.backToHome(nil)
         }else {
             self.navigationController?.popViewControllerAnimated(true)
         }

@@ -29,6 +29,6 @@ let kActivityManualEndedNotification = "act_manual_ended"
 let kActivityKey = "activitiyObj"
 let kActivitySSIDKey = "activity_ssid"
 
-let kMessageNewOnlineNotification = "message_online"
-let kMessageNewOfflineNotification = "message_offline"
-let kMessageNewMessageNotification = "message_new"
+// MARK: Chat
+let kMessageNewChatMergedNotification = "new_chat_merged"
+let kMessageChatListKey = "chats"
