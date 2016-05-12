@@ -10,7 +10,7 @@ import UIKit
 
 
 class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupDelegate {
-    var data: MyOrderedDict<String, RosterModelInterface> {
+    var data: MyOrderedDict<String, RosterItem> {
         return RosterManager.defaultManager.data
     }
     
@@ -22,6 +22,13 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
         tableView.registerClass(ChatListCell.self, forCellReuseIdentifier: ChatListCell.reuseIdentifier)
         tableView.rowHeight = 75
         tableView.separatorStyle = .None
+        
+        RosterManager.defaultManager.rosterList = tableView
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
     /**
      上级的MessageController的导航栏右侧按钮按下之后调用这个来调出用户选择页面
@@ -59,7 +66,13 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        // TODO: Implement me
+        let detail = ChatRoomController()
+        guard let access = data.valueForIndex(indexPath.row) else {
+            assertionFailure()
+            return
+        }
+        detail.rosterItem = access
+        messageController.navigationController?.pushViewController(detail, animated: true)
     }
     
     // MARK: User select delegate
@@ -70,7 +83,7 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
         }else if users.count == 1 {
             // 当选中的是一个人是，直接打开对话框
             let room = ChatRoomController()
-//            room.chatList = self
+            room.chatCreated = false
             room.targetUser = users.first
             messageController.navigationController?.pushViewController(room, animated: true)
             
@@ -91,8 +104,8 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
         // 群聊创建成功，打开聊天窗口
         self.navigationController?.popViewControllerAnimated(true)
         let chatRoom = ChatRoomController()
-//        chatRoom.chatList = self
         chatRoom.targetClub = newClub
+        chatRoom.chatCreated = false
         messageController.navigationController?.pushViewController(chatRoom, animated: true)
     }
 }

@@ -22,10 +22,14 @@ class MyOrderedDict<Key: Hashable, Value> {
     
     subscript(key: Key) -> Value? {
         get {
+            if let index = key as? Int {
+                return self.valueForIndex(index)
+            }
             return _dict[key]
         }
         
         set {
+            
             if newValue == nil {
                 _dict.removeValueForKey(key)
                 _keys.remove(key)

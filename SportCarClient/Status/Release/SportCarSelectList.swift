@@ -93,11 +93,9 @@ class SportCarSelectListController: UICollectionViewController{
      从服务器获取认证跑车信息
      */
     func getSportCarData() {
-        let requester = SportCarRequester.sharedSCRequester
-        requester.getAuthedCarsList(MainManager.sharedManager.hostUserIDString!, onSuccess: { (let data) -> () in
+        AccountRequester2.sharedInstance.getAuthedCarsList(MainManager.sharedManager.hostUserIDString!, onSuccess: { (let data) -> () in
             for carOwnerShipJSON in data!.arrayValue {
                 let carJSON = carOwnerShipJSON["car"]
-                // TODO: json
                 let car: SportCar = try! MainManager.sharedManager.getOrCreate(carJSON)
                 car.mine = true
                 self.cars.append(car)

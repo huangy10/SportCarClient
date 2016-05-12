@@ -33,6 +33,17 @@ class NewsComment: BaseInMemModel {
         return self
     }
     
+//    class override func fromJSONString(string: String, detailLevel: Int) throws -> NewsComment {
+//        if let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+//            let json = JSON(data: data)
+//            let news = try MainManager.sharedManager.getOrCreate(json["news"]) as News
+//            let obj = try NewsComment(news: news).loadDataFromJSON(json)
+//            return obj
+//        } else {
+//            throw SSModelError.InvalidJSONString
+//        }
+//    }
+//    
     override func loadDataFromJSON(data: JSON) throws -> NewsComment {
         try super.loadDataFromJSON(data)
         ssid = data["commentID"].int32Value
@@ -41,7 +52,10 @@ class NewsComment: BaseInMemModel {
         let userJSON = data["user"]
         let user: User = try MainManager.sharedManager.getOrCreate(userJSON)
         self.user = user
-        // TODO: response to 
+        let responseToJson = data["response_to"]
+        if responseToJson.exists() {
+            responseTo = try! NewsComment(news: self.news).loadDataFromJSON(responseToJson)
+        }
         return self
     }
     

@@ -17,7 +17,9 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
      列表长度有限，则直接采用UIScrollView
     */
     /// 目标用户
-    var targetUser: User!
+    var rosterItem: RosterItem!
+//    var targetUser: User!
+    var chater: Chater!
     var seeHisStatus: Bool = true
     var allowSeeStatus: Bool = true
     // 是否发生了修改
@@ -31,9 +33,22 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     
     var toast: UIView?
     
+    @available(*, deprecated=1)
     init(targetUser: User) {
         super.init(style: .Plain)
-        self.targetUser = targetUser
+//        self.targetUser = targetUser
+    }
+    
+    init(rosterItem: RosterItem) {
+        super.init(style: .Plain)
+        self.rosterItem = rosterItem
+        switch rosterItem.data! {
+        case .USER(let chater):
+            self.chater = chater
+            break
+        default:
+            assertionFailure()
+        }
     }
     
     override init(style: UITableViewStyle) {
@@ -55,18 +70,18 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
         tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
         // 从网络获取配置数据
-        let requester = ChatRequester.requester
-        requester.getUserRelationSettings(targetUser.ssidString, onSuccess: { (data) -> () in
-            self.targetUser.remarkName = data!["remark_name"].string
-            self.allowSeeStatus = data!["allow_see_status"].boolValue
-            self.seeHisStatus = data!["see_his_status"].boolValue
-            self.tableView.reloadData()
-            }) { (code) -> () in
-        }
+//        let requester = ChatRequester.requester
+//        requester.getUserRelationSettings(chater.ssidString, onSuccess: { (data) -> () in
+//            self.chater.nickName = data!["remark_name"].string
+//            self.allowSeeStatus = data!["allow_see_status"].boolValue
+//            self.seeHisStatus = data!["see_his_status"].boolValue
+//            self.tableView.reloadData()
+//            }) { (code) -> () in
+//        }
     }
     
     func navSettings() {
-        self.navigationItem.title = targetUser.nickName
+        self.navigationItem.title = chater.nickName
         let leftBtn = UIButton()
         leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         leftBtn.frame = CGRectMake(0, 0, 9, 15)
@@ -81,18 +96,26 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     }
     
     func navRightBtnPressed() {
-        let report = ReportBlacklistViewController(user: targetUser, parent: self)
+        let report = ReportBlacklistViewController(userID: chater.ssid, parent: self)
         self.presentViewController(report, animated: false, completion: nil)
     }
     
     func navLeftBtnPressed() {
         self.navigationController?.popViewControllerAnimated(true)
-        let requester = ChatRequester.requester
-        requester.postUpdateUserRelationSettings(targetUser.ssidString, remark_name: targetUser.remarkName!, allowSeeStatus: allowSeeStatus, seeHisStatus: seeHisStatus, onSuccess: { (_) -> () in
-            
-            }) { (code) -> () in
-                
+        if dirty {
+            ChatRequester2.sharedInstance.postUpdateUserRelationSettings(rosterItem.ssidString, remark_name: chater.nickName, alwaysOnTop: false, noDisturbing: false, onSuccess: { (_) in
+                // do nothing
+                self.showToast(LS("修改成功"))
+                }) { (code) in
+                    self.showToast("聊天设置更新失败")
+            }
         }
+//        let requester = ChatRequester.requester
+//        requester.postUpdateUserRelationSettings(chater.ssidString, remark_name: chater.nickName!, allowSeeStatus: allowSeeStatus, seeHisStatus: seeHisStatus, onSuccess: { (_) -> () in
+//            
+//            }) { (code) -> () in
+//                
+//        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -138,7 +161,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
             cell.selectionStyle = .None
-            cell.avatarImage.kf_setImageWithURL(targetUser.avatarURL!)
+            cell.avatarImage.kf_setImageWithURL(chater.avatarURL!)
             return cell
         case 1:
             if indexPath.row < 1 {
@@ -147,7 +170,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                 cell.staticLbl.text = LS("备注")
                 cell.boolSelect.hidden = true
                 if indexPath.row == 0 {
-                    cell.infoLbl.text = targetUser.remarkName ?? targetUser.nickName
+                    cell.infoLbl.text = chater.nickName
                 }
                 return cell
             }else {
@@ -241,7 +264,11 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     
     func startGroupChatPressed() {
         userSelectPurpose = "group_chat"
-        let selector = FFSelectController(maxSelectNum: 100, preSelectedUsers: [targetUser])
+        guard let user = chater.toUser() else {
+            assertionFailure()
+            return
+        }
+        let selector = FFSelectController(maxSelectNum: 100, preSelectedUsers: [user])
         let nav = BlackBarNavigationController(rootViewController: selector)
         selector.delegate = self
         self.presentViewController(nav, animated: true, completion: nil)
@@ -267,7 +294,11 @@ extension PrivateChatSettingController {
         switch indexPath.section {
         case 0:
             // 点击头像进入个人详情
-            let detail = PersonOtherController(user: self.targetUser)
+            guard let user = chater.toUser() else {
+                assertionFailure()
+                return
+            }
+            let detail = PersonOtherController(user: user)
             self.navigationController?.pushViewController(detail, animated: true)
             break
         case 1:
@@ -276,13 +307,13 @@ extension PrivateChatSettingController {
             detail.focusedIndexPath = indexPath
             detail.delegate = self
             detail.propertyName = LS("修改备注")
-            detail.initValue = targetUser.remarkName ?? targetUser.nickName
+            detail.initValue = chater.nickName
             self.navigationController?.pushViewController(detail, animated: true)
         case 3:
             if indexPath.row == 0 {
                 toast = showConfirmToast(LS("清除聊天信息"), message: LS("确定要清除聊天信息吗？"), target: self, confirmSelector: #selector(PrivateChatSettingController.clearChatContent), cancelSelector: #selector(PrivateChatSettingController.hideToast as (PrivateChatSettingController) -> () -> ()))
             } else if indexPath.row == 1 {
-                let report = ReportBlacklistViewController(user: targetUser, parent: self)
+                let report = ReportBlacklistViewController(userID: chater.ssid, parent: self)
                 self.presentViewController(report, animated: false, completion: nil)
             }
             break
@@ -297,7 +328,7 @@ extension PrivateChatSettingController {
         switch indexPath.section {
         case 1:
             if indexPath.row == 0 {
-                targetUser.remarkName = newValue
+                chater.nickName = newValue
             }
             break
         default:
@@ -329,8 +360,8 @@ extension PrivateChatSettingController {
         var users = users
         self.dismissViewControllerAnimated(true, completion: nil)
         if userSelectPurpose == "group_chat" {
-            if users.findIndex({ $0.ssid == self.targetUser.ssid}) == nil {
-                users.insert(self.targetUser, atIndex: 0)
+            if users.findIndex({ $0.ssid == self.chater.ssid}) == nil, let user = self.chater.toUser() {
+                users.insert(user, atIndex: 0)
             }
             if users.count <= 1 {
                 assertionFailure()
@@ -350,14 +381,12 @@ extension PrivateChatSettingController {
     }
     
     /**
-     情况聊天内容
+     清空聊天内容
      */
     func clearChatContent() {
-        let hostID = MainManager.sharedManager.hostUserIDString
-        let targetID = targetUser.ssidString
-        let identifier = getIdentifierForIdPair(hostID!, targetID)
-        ChatRecordDataSource.sharedDataSource.clearChatContentForIdentifier(identifier)
+        // 
         hideToast()
+        MessageManager.defaultManager.clearChatHistory(rosterItem)
     }
 
     /**

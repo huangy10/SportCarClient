@@ -25,6 +25,8 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     
     var toast: UIView?
     
+    var inlineUsersCell: UITableViewCell!
+    
     init(targetClub: Club) {
         super.init(style: .Plain)
         self.targetClub = targetClub
@@ -45,7 +47,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select")
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "quit")
         
-        let requester = ChatRequester.requester
+        let requester = ClubRequester.sharedInstance
         requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
             try! self.targetClub.loadDataFromJSON(json!, detailLevel: 0)
             self.targetClub.members.removeAll()
@@ -61,6 +63,22 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             }) { (code) -> () in
                 
         }
+        createInlineUserSelect()
+    }
+    
+    func createInlineUserSelect() {
+        let cell = UITableViewCell(style: .Default, reuseIdentifier: "inline_user_select")
+        cell.selectionStyle = .None
+        inlineUserSelect = InlineUserSelectController()
+        inlineUserSelect?.delegate = self
+        cell.contentView.addSubview(inlineUserSelect!.view)
+        inlineUserSelect?.view.snp_makeConstraints(closure: { (make) in
+            make.edges.equalTo(cell.contentView)
+        })
+        inlineUserSelect?.relatedClub = targetClub
+        inlineUserSelect?.parentController = self
+        inlineUserSelect?.showAddBtn = !targetClub.onlyHostCanInvite
+        inlineUsersCell = cell
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -91,7 +109,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     func navLeftBtnPressed() {
         // push modification to the server
         if dirty {
-            let requester = ChatRequester.requester
+            let requester = ClubRequester.sharedInstance
             requester.updateClubSettings(targetClub, onSuccess: { (json) -> () in
                 // Do nothing when succeed since modification has already taken effects
                 }, onError: { (code) -> () in
@@ -114,7 +132,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         case 2:
             return 2
         default:
-            return 4
+            return 3
         }
     }
     
@@ -143,14 +161,17 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             if indexPath.row < 5 {
                 return 50
             }else {
-                let userNum = targetClub.members.count
-                let height: CGFloat = 110 * CGFloat(userNum / 4 + 1)
+                let userNum = targetClub.members.count + (inlineUserSelect!.showAddBtn ? 1 : 0)
+                if userNum == 0 {
+                    return 110
+                }
+                let height: CGFloat = 110 * CGFloat((userNum - 1) / 4 + 1)
                 return height
             }
         case 2:
             return 50
         case 3:
-            if indexPath.row < 3 {
+            if indexPath.row < 2 {
                 return 50
             }else {
                 return 128
@@ -205,22 +226,24 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 }
                 return cell
             }else {
-                let cell = tableView.dequeueReusableCellWithIdentifier("inline_user_select", forIndexPath: indexPath)
-                cell.selectionStyle = .None
-                if inlineUserSelect == nil {
-                    inlineUserSelect = InlineUserSelectController()
-                    inlineUserSelect?.delegate = self
-                    cell.contentView.addSubview(inlineUserSelect!.view)
-                    inlineUserSelect?.view.snp_makeConstraints(closure: { (make) -> Void in
-                        make.edges.equalTo(cell.contentView)
-                    })
-                    inlineUserSelect?.relatedClub = targetClub
-                    inlineUserSelect?.parentController = self
-                }
-                inlineUserSelect?.users = Array(targetClub.members)
-                inlineUserSelect?.showAddBtn = !targetClub.onlyHostCanInvite
                 inlineUserSelect?.collectionView?.reloadData()
-                return cell
+                return inlineUsersCell
+//                let cell = tableView.dequeueReusableCellWithIdentifier("inline_user_select", forIndexPath: indexPath)
+//                cell.selectionStyle = .None
+//                if inlineUserSelect == nil {
+//                    inlineUserSelect = InlineUserSelectController()
+//                    inlineUserSelect?.delegate = self
+//                    cell.contentView.addSubview(inlineUserSelect!.view)
+//                    inlineUserSelect?.view.snp_makeConstraints(closure: { (make) -> Void in
+//                        make.edges.equalTo(cell.contentView)
+//                    })
+//                    inlineUserSelect?.relatedClub = targetClub
+//                    inlineUserSelect?.parentController = self
+//                }
+//                inlineUserSelect?.users = Array(targetClub.members)
+//                inlineUserSelect?.showAddBtn = !targetClub.onlyHostCanInvite
+//                inlineUserSelect?.collectionView?.reloadData()
+//                return cell
             }
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
@@ -247,9 +270,9 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             }
             return cell
         default:
-            if indexPath.row < 3 {
+            if indexPath.row < 2 {
                 let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-                cell.staticLbl.text = [LS("查找聊天内容"), LS("清空聊天内容"), LS("举报")][indexPath.row]
+                cell.staticLbl.text = [LS("清空聊天内容"), LS("举报")][indexPath.row]
                 cell.infoLbl.text = ""
                 cell.boolSelect.hidden = true
                 return cell
@@ -285,7 +308,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(GroupChatSettingController.clearChatContent), cancelSelector: #selector(GroupChatSettingController.hideToast as (GroupChatSettingController) -> () -> ()))
         } else if indexPath.section == 3 && indexPath.row == 2 {
             // 举报
-            let report = ReportBlacklistViewController(user: nil, parent: self)
+            let report = ReportBlacklistViewController(userID: targetClub.ssid, reportType: "club", parent: self)
             self.presentViewController(report, animated: false, completion: nil)
         } else if indexPath.section == 1 && indexPath.row == 2 {
             if let act = targetClub.recentActivity {
@@ -318,6 +341,10 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         self.presentViewController(wrapper, animated: true, completion: nil)
     }
     
+    func inlineUserSelectShouldDeleteUser(user: User) {
+        // do nothing
+    }
+    
     func userSelectCancelled() {
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -329,11 +356,14 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         let userIDs = users.map({return $0.ssidString})
         let originIDs = Array(targetClub.members).map({return $0.ssidString})
         let targets = userIDs.filter({!originIDs.contains($0)})
-        let requester = ChatRequester.requester
+        let requester = ClubRequester.sharedInstance
         requester.updateClubMembers(targetClub.ssidString, members: targets, opType: "add", onSuccess: { (json) -> () in
             // TODO: 放到请求外面
             self.targetClub.members.appendContentsOf(users)
-            self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 5, inSection: 1)], withRowAnimation: .Automatic)
+            self.targetClub.memberNum = Int32(self.targetClub.members.count)
+            self.inlineUserSelect?.users = self.targetClub.members
+            self.tableView.reloadData()
+            NSNotificationCenter.defaultCenter().postNotificationName(kMessageClubMemberChangeNotification, object: self, userInfo: [kMessageClubKey: self.targetClub])
             }) { (code) -> () in
                 if code == "no permission" {
                     self.showToast(LS("您没有权限进行此项操作"))
@@ -342,8 +372,6 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     }
     
     func clearChatContent() {
-        let identifier = targetClub.ssidString
-        ChatRecordDataSource.sharedDataSource.clearChatContentForIdentifier(identifier)
         hideToast()
     }
     
@@ -377,10 +405,11 @@ extension GroupChatSettingController {
     }
     
     func deleteAndQuitConfirm() {
+        // TOOD: re-implement this
         hideToast()
         let waiter = dispatch_semaphore_create(0)
         var success = false
-        ChatRequester.requester.clubQuit(targetClub.ssidString, newHostID: "", onSuccess: { (json) -> () in
+        ClubRequester.sharedInstance.clubQuit(targetClub.ssidString, newHostID: "", onSuccess: { (json) -> () in
             success = true
             dispatch_semaphore_signal(waiter)
             }) { (code) -> () in
@@ -388,11 +417,11 @@ extension GroupChatSettingController {
         }
         dispatch_semaphore_wait(waiter, DISPATCH_TIME_FOREVER)
         if success {
-            ChatRecordDataSource.sharedDataSource.deleteClub(targetClub)
+//            ChatRecordDataSource.sharedDataSource.deleteClub(targetClub)
             self.navigationController?.popViewControllerAnimated(true)
             self.navigationController?.popViewControllerAnimated(true)
         } else {
-            showToast(LS("删除失败"))
+            showToast(LS("删除失败"), onSelf: true)
         }
     }
 }

@@ -14,7 +14,7 @@ class StatusFollowController: StatusBasicController {
     override func loadMoreData() {
         // 获取关注对象的状态（自己的状态也会返回）
         let dateThreshold = (status.last?.createdAt ?? NSDate())
-        let requester = StatusRequester.SRRequester
+        let requester = StatusRequester.sharedInstance
         requester.getMoreStatusList(dateThreshold, queryType: "follow", onSuccess: { (let data) -> () in
             if self.jsonDataHandler(data!) > 0{
                 self.tableView.reloadData()
@@ -25,7 +25,7 @@ class StatusFollowController: StatusBasicController {
     
     override func loadLatestData() {
         let dateThreshold = status.first?.createdAt ?? NSDate()
-        let requester = StatusRequester.SRRequester
+        let requester = StatusRequester.sharedInstance
         requester.getLatestStatusList(dateThreshold, queryType: "follow", onSuccess: { (let data) -> () in
             self.myRefreshControl?.endRefreshing()
             if self.jsonDataHandler(data!) > 0 {

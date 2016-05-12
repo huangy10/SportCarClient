@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import AlecrimCoreData
 
 
 class Chater: BaseInMemModel {
@@ -29,7 +30,7 @@ class Chater: BaseInMemModel {
     var nickName: String!
     
     override func loadDataFromJSON(data: JSON) throws -> Self {
-        try super.loadDataFromJSON(data)
+//        try super.loadDataFromJSON(data)
         ssid = data[User.idField].int32Value
         nickName = data["nick_name"].stringValue
         avatar = data["avatar"].stringValue
@@ -44,21 +45,45 @@ class Chater: BaseInMemModel {
         ]
     }
     
-    override func fromJSONString(string: String, detailLevel: Int) throws -> Self {
-        // TODO: finish this
-//        let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
-//        let json = JSON(data: data)
-//        try self.loadDataFromJSON(json) as Chater
+    override func fromJSONString(string: String, detailLevel: Int) throws -> Chater {
+        let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        let json = JSON(data: data)
+        try self.loadDataFromJSON(json)
         return self
     }
     
+    private var _user: User?
     func toUser() -> User? {
-        if let manager = chat?.manager {
-            let user: User = try! manager.getOrCreate(try! toJSONObject(0), detailLevel: 0)
+        if let user = _user {
             return user
+        }
+        if let manager = chat?.manager {
+            _user = try! manager.getOrCreate(try! toJSONObject(0), detailLevel: 0) as User
+            return _user
         } else {
-            assertionFailure()
-            return nil
+            if NSThread.isMainThread() {
+                _user = try! MainManager.sharedManager.getOrCreate(try! toJSONObject(0), detailLevel: 0) as User
+                return _user
+            } else {
+                _user = try! ChatModelManger.sharedManager.getOrCreate(try! toJSONObject(0), detailLevel: 0) as User
+                return _user
+            }
+        }
+    }
+    
+    func relatedUser() -> User? {
+        var context: DataContext! = nil
+        if self.chat != nil {
+            context = self.chat?.manager.getOperationContext()
+        } else if NSThread.isMainThread() {
+            context = MainManager.sharedManager.getOperationContext()
+        } else {
+            context = ChatModelManger.sharedManager.getOperationContext()
+        }
+        if let targetUser = context.users.first({$0.ssid == self.ssid}) {
+            return targetUser
+        } else {
+            return self.toUser()
         }
     }
 }

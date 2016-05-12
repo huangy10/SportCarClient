@@ -34,7 +34,7 @@ class RadarClubFilterController: UITableViewController {
     }
     
     func getClubList() {
-        let requester = ChatRequester.requester
+        let requester = ClubRequester.sharedInstance
         requester.getClubList({ (json) -> () in
             for data in json!.arrayValue {
                 let club: Club = try! MainManager.sharedManager.getOrCreate(data["club"])

@@ -16,11 +16,6 @@ import UIKit
 //    func inlineUserSelectShouldDeleteUser(user: User)
 //}
 
-extension InlineUserSelectDelegate {
-    func inlineUserSelectShouldDeleteUser(user: User) {}
-}
-
-
 class InlineUserSelectDeletable: InlineUserSelectController {
     
     var showCellDeleteBtn: Bool = false

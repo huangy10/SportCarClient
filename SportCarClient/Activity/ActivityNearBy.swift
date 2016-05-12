@@ -11,7 +11,7 @@ import UIKit
 
 class ActivityNearByController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate {
     
-    weak var home: ActivityHomeController!
+    weak var home: RadarHomeController!
     
     var acts: [Activity] = []
     
@@ -24,6 +24,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
     var actsBoard: UICollectionView!
     var pageCount: UIPageControl!
     var _prePage: Int = 0
+    var showReload: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +38,11 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         map.delegate = self
-        userLocation = nil
+        if showReload {
+            userLocation = nil
+        } else {
+            showReload = true
+        }
         locationService.delegate = self
         locationService.startUserLocationService()
         map.viewWillAppear()
@@ -115,7 +120,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let act = acts[indexPath.row]
         let detail = ActivityDetailController(act: act)
-        
+        showReload = false
         home.navigationController?.pushViewController(detail, animated: true)
     }
     
@@ -225,7 +230,7 @@ extension ActivityNearByController {
             let region = BMKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 3000, 5000)
             map.setRegion(region, animated: true)
             map.setCenterCoordinate(userLocation.location.coordinate, animated: true)
-            ActivityRequester.requester.getNearByActivities(userLocation.location, queryDistance: 1000, skip: 0, limit: 10, onSuccess: { (json) -> () in
+            ActivityRequester.sharedInstance.getNearByActivities(userLocation.location, queryDistance: 1000, skip: 0, limit: 10, onSuccess: { (json) -> () in
                 self.acts.removeAll()
                 for data in json!.arrayValue {
                     let act: Activity = try! MainManager.sharedManager.getOrCreate(data)

@@ -29,7 +29,12 @@ class BaseModel: NSManagedObject {
         if forceMainThread && !NSThread.isMainThread() {
             assertionFailure()
         }
-        assert(ssid > 0, "Model can not be initalized without a id")
+        if ssid == 0 {
+            ssid = data[self.dynamicType.idField].int32Value
+            print(self.dynamicType.idField)
+            assert(ssid > 0, "Model can not be initalized without a id")
+        }
+        
         if let host = MainManager.sharedManager.hostUserID {
             hostSSID = host
         } else {

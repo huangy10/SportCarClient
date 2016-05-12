@@ -60,7 +60,7 @@ class ActivityReleasePresentableController: ActivityReleaseController {
         }
         let toast = showStaticToast(LS("发布中..."))
         pp_showProgressView()
-        ActivityRequester.requester.createNewActivity(actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, clubLimit: clubLimitID, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", onSuccess: { (json) in
+        ActivityRequester.sharedInstance.createNewActivity(actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, clubLimit: clubLimitID, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", onSuccess: { (json) in
             self.presenter?.dismissViewControllerAnimated(true, completion: {
                 self.presenter?.showToast(LS("发布成功"))
             })

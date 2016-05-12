@@ -46,6 +46,10 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
         mapCell.map.viewWillAppear()
+        
+        infoView.loadDataAndUpdateUI()
+        print(infoView.frame)
+        tableView.setContentOffset(CGPointMake(0, -infoView.preferedHeight), animated: false)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -90,7 +94,6 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             make.right.equalTo(superview)
             make.height.equalTo(infoView.preferedHeight)
         }
-        infoView.loadDataAndUpdateUI()
         
         commentPanel = ActivityCommentPanel()
         inputFields.append(commentPanel.contentInput)
@@ -111,7 +114,8 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         mapCell = MapCell(trailingHeight: 100)
         mapCell.locBtn.addTarget(self, action: #selector(ActivityDetailController.needNavigation), forControlEvents: .TouchUpInside)
         mapCell.locLbl.text = LS("导航至 ") + (act.location?.descr ?? LS("未知地点"))
-        mapCell.locDesIcon.image = UIImage(named: "person_guide_to")
+        mapCell.locDesIcon.image = UIImage(named: "location_mark_black")
+        mapCell.locDesIcon.transform = CGAffineTransformMakeScale(0.8, 0.8)
     }
     
     private func navSettings() {
@@ -151,7 +155,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             if !act.finished {
                 act.endAt = NSDate()
                 setNavRightBtn()
-                ActivityRequester.requester.closeActivty(act.ssidString, onSuccess: { (json) in
+                ActivityRequester.sharedInstance.closeActivty(act.ssidString, onSuccess: { (json) in
                     self.parentCollectionView?.reloadData()
                     // push a notification to tell other related component to update the status
                     NSNotificationCenter.defaultCenter().postNotificationName(kActivityManualEndedNotification, object: nil, userInfo: [kActivityKey: self.act])
@@ -168,7 +172,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             act.hostApply()
             infoView.loadDataAndUpdateUI()
             setNavRightBtn()
-            ActivityRequester.requester.postToApplyActivty(act.ssidString, onSuccess: { (json) in
+            ActivityRequester.sharedInstance.postToApplyActivty(act.ssidString, onSuccess: { (json) in
                 }, onError: { (code) in
                     self.showToast(LS("报名失败"))
             })
@@ -176,7 +180,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     }
     
     func likeBtnPressed() {
-        ActivityRequester.requester.activityOperation(act.ssidString, targetUserID: "", opType: "like", onSuccess: { (json) in
+        ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: "", opType: "like", onSuccess: { (json) in
             if let data = json {
                 let liked = data["liked"].boolValue
                 let likeNum = data["like_num"].int32Value
@@ -272,7 +276,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
      Fetch the latest information about the act
      */
     func loadActInfo() {
-        ActivityRequester.requester.getActivityDetail(act.ssidString, onSuccess: { (json) in
+        ActivityRequester.sharedInstance.getActivityDetail(act.ssidString, onSuccess: { (json) in
             if let data = json {
                 try! self.act.loadDataFromJSON(data, detailLevel: 1)
                 self.infoView.act = self.act
@@ -281,9 +285,12 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
                     self.setNavRightBtn()
                     self.infoView.loadDataAndUpdateUI() // the preferedHeight udpated
                     self.commentPanel.setLikedAnimated(self.act.liked, flag: false)
-                    UIView.animateWithDuration(0.3, animations: { 
-                        self.tableView.contentInset = UIEdgeInsetsMake(self.infoView.preferedHeight, 0, self.commentPanel.barheight, 0)
-                    })
+                    self.tableView.contentOffset = CGPointMake(0, -self.infoView.preferedHeight)
+                    self.tableView.contentInset = UIEdgeInsetsMake(self.infoView.preferedHeight, 0, self.commentPanel.barheight, 0)
+//                    UIView.animateWithDuration(0.3, animations: {
+//                        self.tableView.contentInset = UIEdgeInsetsMake(self.infoView.preferedHeight, 0, self.commentPanel.barheight, 0)
+//                        self.tableView.contentOffset = CGPointMake(0, -self.infoView.preferedHeight)
+//                    })
                 })
                 
             } else {
@@ -296,7 +303,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     func loadMoreComments() {
         let dateThreshold = comments.last()?.createdAt ?? NSDate()
-        ActivityRequester.requester.getActivityComments(act.ssidString, dateThreshold: dateThreshold, limit: 20, onSuccess: { (json) in
+        ActivityRequester.sharedInstance.getActivityComments(act.ssidString, dateThreshold: dateThreshold, limit: 20, onSuccess: { (json) in
             if let datas = json?.arrayValue {
                 for data in datas {
                     let comment = try! ActivityComment(act: self.act)
@@ -339,7 +346,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         commentPanel.snp_updateConstraints { (make) in
             make.height.equalTo(commentPanel.barheight)
         }
-        ActivityRequester.requester.sendActivityComment(act.ssidString, content: content, image: nil, responseTo: responseToComment?.ssidString, informOf: nil, onSuccess: { (json) in
+        ActivityRequester.sharedInstance.sendActivityComment(act.ssidString, content: content, responseTo: responseToComment?.ssidString, informOf: nil, onSuccess: { (json) in
             if let data = json {
                 let newCommentID = data["id"].int32Value
                 newComment.confirmSent(newCommentID)
@@ -393,7 +400,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         let userIDs = users.map { $0.ssidString }
         let userIDData = try! JSON(userIDs).rawData()
         let userJSONString = String(data: userIDData, encoding: NSUTF8StringEncoding)
-        ActivityRequester.requester.activityOperation(act.ssidString, targetUserID: userJSONString!, opType: "invite", onSuccess: { (json) in
+        ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: userJSONString!, opType: "invite", onSuccess: { (json) in
             self.showToast(LS("邀请已发送"))
             }) { (code) in
                 self.showToast(LS("邀请发送失败"))
@@ -657,7 +664,6 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
 //            }
 //            requester.postToApplyActivty(act.ssidString, onSuccess: { (json) -> () in
 //                // 当前用户加入
-//                // TODO: 把下面的修改放在网络请求前面OA
 //                self.act.hostApply()
 //                self.actInfoBoard.loadDataAndUpdateUI()
 //                self.navRightItem?.title = LS("已报名")

@@ -40,8 +40,18 @@ class ActivityComment: BaseInMemModel {
         }
     }
     
+    class override func fromJSONString(string: String, detailLevel: Int) throws -> ActivityComment {
+        if let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+            let json = JSON(data: data)
+            let act = try MainManager.sharedManager.getOrCreate(json["activity"]) as Activity
+            let obj = try ActivityComment(act: act).loadDataFromJSON(json)
+            return obj
+        } else {
+            throw SSModelError.InvalidJSONString
+        }
+    }
+    
     override func toJSONObject(detailLevel: Int) throws -> JSON {
-        // TODO: response to
         var json = [
             "commentID": ssidString,
             "content": content,
@@ -49,6 +59,9 @@ class ActivityComment: BaseInMemModel {
         ] as JSON
         json["user"] = try user.toJSONObject(0)
         json["activity"] = try act.toJSONObject(0)
+        if let responseTo = responseTo {
+            json["response_to"] = try responseTo.toJSONObject(detailLevel)
+        }
         return json
     }
     
@@ -60,7 +73,10 @@ class ActivityComment: BaseInMemModel {
         let userJSON = data["user"]
         let user: User = try act.manager.getOrCreate(userJSON)
         self.user = user
-        // TODO: response to
+        let responseToJson = data["response_to"]
+        if responseToJson.exists() {
+            responseTo = try! ActivityComment(act: self.act).loadDataFromJSON(responseToJson)
+        }
         return self
     }
     

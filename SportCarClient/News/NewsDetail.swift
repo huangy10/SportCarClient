@@ -536,7 +536,7 @@ extension NewsDetailController{
             return
         }
         likeRequesting = true
-        let requester = NewsRequester.newsRequester
+        let requester = NewsRequester.sharedInstance
         requester.likeNews(news!.ssidString, onSuccess: { (json) -> () in
             
             let liked = json!["like_state"].boolValue
@@ -577,8 +577,8 @@ extension NewsDetailController{
         // 将这个新建的commnet添加在列表的头部
         comments.insert(newComment, atIndex: 0)
         //
-        let requester = NewsRequester.newsRequester
-        requester.postCommentToNews(news.ssidString, content: commentString, image: nil, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (data) -> () in
+        let requester = NewsRequester.sharedInstance
+        requester.postCommentToNews(news.ssidString, content: commentString, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (data) -> () in
             // data里面的只有一个id
             if data == nil {
                 assertionFailure()
@@ -691,7 +691,7 @@ extension NewsDetailController {
         if requestingCommentData {
             return
         }
-        let requester = NewsRequester.newsRequester
+        let requester = NewsRequester.sharedInstance
         var dateThreshold = NSDate()
         if let lastComment = comments.last {
             dateThreshold  = lastComment.createdAt ?? dateThreshold

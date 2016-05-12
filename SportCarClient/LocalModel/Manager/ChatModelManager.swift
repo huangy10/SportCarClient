@@ -10,6 +10,7 @@ import Foundation
 import AlecrimCoreData
 import CoreData
 import SwiftyJSON
+import Dollar
 
 class ChatModelManger: MainManager {
     private static let _sharedClubModelManager = ChatModelManger()
@@ -39,7 +40,7 @@ class ChatModelManger: MainManager {
         return MainManager.sharedManager.hostUserIDString
     }
     
-    override class var sharedManager: MainManager {
+    override class var sharedManager: ChatModelManger {
         return _sharedClubModelManager
     }
     
@@ -54,9 +55,56 @@ class ChatModelManger: MainManager {
         return chatContext
     }
     
+    /**
+     返回的chats按照createdAt升序
+     */
+    func loadCachedChats(rosterID: Int32, skips: Int, limit: Int) -> [ChatRecord] {
+        do {
+            // make sure all the changes has been saved, or the skips below will not work properly
+            try self.save()
+        } catch {
+            return []
+        }
+        let context = self.getOperationContext()
+        let chats: [ChatRecord] = context.chatRecords.filter({
+            $0.hostSSID == self.hostUserID! &&
+            $0.rosterID == rosterID
+        }).orderByDescending({$0.createdAt})
+            .skip(skips)
+            .take(limit)
+            .toArray()
+            .reverse()
+        chats.each { $0.manager = self }
+        return chats
+    }
+    /**
+     返回的notifs按照createdAt降序排列
+     */
+    func loadCachedNotifications(skips: Int, limit: Int) -> [Notification] {
+        do {
+            try self.save()
+        } catch {
+            return []
+        }
+        let context = self.getOperationContext()
+        print(context.notifications.count())
+        let notifs: [Notification] = context.notifications.filter({
+            $0.hostSSID == self.hostUserID!
+        }).orderByDescending({$0.createdAt})
+            .skip(skips)
+            .take(limit)
+            .toArray()
+        notifs.each { $0.manager = self }
+        return notifs
+    }
+    
     override func save() throws {
-        dispatch_async(workQueue) { () -> Void in
-            try! super.save()
+        if NSThread.isMainThread() {
+            dispatch_async(workQueue) { () -> Void in
+                try! self.chatContext.save()
+            }
+        } else {
+            try self.chatContext.save()
         }
     }
 }

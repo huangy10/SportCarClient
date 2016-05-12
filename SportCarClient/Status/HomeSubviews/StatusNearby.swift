@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Alamofire
 
 class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate {
     
@@ -22,6 +22,9 @@ class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate,
     }
     
     var refreshView: SSPullToRefresh!
+    weak var request: Request?
+    
+    var initFetched: Bool = false
     
     deinit {
         refreshView.scrollView = nil
@@ -68,8 +71,10 @@ class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate,
             refreshView.endRefreshing()
             return
         }
-        
-        StatusRequester.SRRequester.getNearByStatus(NSDate(), opType: "more", lat: location.latitude, lon: location.longitude, distance: 15000, onSuccess: { (json) in
+        if let req = request {
+            req.cancel()
+        }
+        request = StatusRequester.sharedInstance.getNearByStatus(NSDate(), opType: "more", lat: location.latitude, lon: location.longitude, distance: 15000, onSuccess: { (json) in
             self.fetchLocDescription(location)
             self.refreshView.endRefreshing()
             self.status.removeAll()
@@ -85,6 +90,13 @@ class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate,
         location = userLocation.location.coordinate
         if locDes == nil {
             fetchLocDescription(location!)
+        }
+        if self.status.count == 0 && !self.initFetched {
+            initFetched = true
+            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC))
+            dispatch_after(delay, dispatch_get_main_queue(), { 
+                self.refreshView.startRefreshing()
+            })
         }
     }
     

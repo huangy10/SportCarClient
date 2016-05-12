@@ -12,6 +12,8 @@ import Kingfisher
 
 protocol InlineUserSelectDelegate: class {
     func inlineUserSelectNeedAddMembers()
+    
+    func inlineUserSelectShouldDeleteUser(user: User)
 }
 
 class InlineUserSelectController: UICollectionViewController {

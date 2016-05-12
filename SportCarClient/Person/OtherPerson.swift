@@ -60,7 +60,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     }
     
     override func navRightBtnPressed() {
-        let report = ReportBlacklistViewController(user: data.user, parent: self)
+        let report = ReportBlacklistViewController(userID: data.user.ssid, parent: self)
         self.presentViewController(report, animated: false, completion: nil)
     }
     
@@ -91,7 +91,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     }
     
     func followBtnPressed(sender: UIButton) {
-        let requester = PersonRequester.requester
+        let requester = AccountRequester2.sharedInstance
         requester.follow(self.data.user.ssidString, onSuccess: { (json) -> () in
             let board = self.header as! PersonHeaderOther
             
@@ -109,6 +109,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
                     board.followBtnTmpImage.hidden = false
             })
             }) { (code) -> () in
+                print(code)
         }
     }
     
@@ -117,11 +118,9 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
             self.navigationController?.popViewControllerAnimated(true)
             return
         }
-
-        ChatRecordDataSource.sharedDataSource.start()
         let room = ChatRoomController()
-        ChatRecordDataSource.sharedDataSource.curRoom = room
         room.targetUser = data.user
+        room.chatCreated = false
         self.navigationController?.pushViewController(room, animated: true)
     }
     
@@ -177,7 +176,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
             header.map.setRegion(region, animated: true)
             userLoc = backOffLocation
         } else {
-            rp_currentRequest = RadarRequester.requester.trackUser(data.user.ssidString, onSuccess: { (json) -> () in
+            rp_currentRequest = RadarRequester.sharedInstance.trackUser(data.user.ssidString, onSuccess: { (json) -> () in
                 self.userLoc = Location(latitude: json!["lat"].doubleValue, longitude: json!["lon"].doubleValue, description: json!["description"].stringValue)
                 self.userAnno.coordinate = self.userLoc!.location
                 let region = BMKCoordinateRegionMakeWithDistance(self.userLoc!.location, 3000, 5000)

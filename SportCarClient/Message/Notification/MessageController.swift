@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import XMPPFramework
 
 extension UILabel {
     func setUnreadNum(num: Int) {
@@ -33,7 +32,7 @@ class MessageController: UIViewController {
     var chatUnreadLbl: UILabel!
     var titleBtnIcon: UIImageView!
     
-    var chatList: ChatListController!
+    var chatList: RosterController!
     var notificationList: NotificationController!
     
     private var _curTag = 0
@@ -57,8 +56,8 @@ class MessageController: UIViewController {
         } else {
             chatList.viewWillAppear(animated)
         }
-        notifUnreadLbl.setUnreadNum(NotificationDataSource.sharedDataSource.unreadNum)
-        chatUnreadLbl.setUnreadNum(ChatRecordDataSource.sharedDataSource.totalUnreadNum)
+        notifUnreadLbl.setUnreadNum(MessageManager.defaultManager.unreadNotifNum)
+        chatUnreadLbl.setUnreadNum(MessageManager.defaultManager.unreadChatNum)
     }
     
     func createSubviews() {
@@ -76,7 +75,7 @@ class MessageController: UIViewController {
             make.edges.equalTo(superview)
         }
         
-        chatList = ChatListController()
+        chatList = RosterController()
         board.addSubview(chatList.view)
         chatList.messageController = self
         chatList.view.snp_makeConstraints { (make) -> Void in
@@ -85,7 +84,7 @@ class MessageController: UIViewController {
             make.bottom.equalTo(superview)
             make.width.equalTo(screenWidth)
         }
-        ChatRecordDataSource.sharedDataSource.listCtrl = chatList
+//        ChatRecordDataSource.sharedDataSource.listCtrl = chatList
         
         notificationList = NotificationController()
         board.addSubview(notificationList.view)
@@ -219,8 +218,11 @@ class MessageController: UIViewController {
     func onUnreadNumChanged(notification: NSNotification) {
         let name = notification.name
         if name == kUnreadNumberDidChangeNotification {
-            notifUnreadLbl.setUnreadNum(NotificationDataSource.sharedDataSource.unreadNum)
-            chatUnreadLbl.setUnreadNum(ChatRecordDataSource.sharedDataSource.totalUnreadNum)
+            dispatch_async(dispatch_get_main_queue(), { 
+                self.notifUnreadLbl.setUnreadNum(MessageManager.defaultManager.unreadNotifNum)
+                self.chatUnreadLbl.setUnreadNum(MessageManager.defaultManager.unreadChatNum)
+            })
+            
         }
     }
     

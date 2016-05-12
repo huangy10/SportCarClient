@@ -118,7 +118,6 @@ extension TableType {
         
         fetchRequest.predicate = self.predicate
         fetchRequest.sortDescriptors = self.sortDescriptors
-        
         return fetchRequest
     }
     

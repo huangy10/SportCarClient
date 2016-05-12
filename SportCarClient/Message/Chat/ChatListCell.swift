@@ -14,23 +14,18 @@ class ChatListCell: UITableViewCell {
     
     static let reuseIdentifier = "chat_list_cell"
     
-    var data: RosterModelInterface!
-    
-    @available(*, deprecated=2)
-    var listItem: ChatRecordListItem? {
+    var data: RosterItem! {
         didSet {
-            if listItem == nil {
-                return
-            }
-            switch listItem! {
-            case .ClubItem(let club):
-                avatarBtn.kf_setImageWithURL(club.logoURL!, forState: .Normal)
-                nickNameLbl.text = club.name! + "(\(club.memberNum))"
-                break
-            case .UserItem(let user):
+            recentTalkLbl.text = data.recentChatDes
+            recentTalkTimeLbl.text = dateDisplay(data.updatedAt!)
+            setUnreadNumber(Int(data.unreadNum))
+            switch data.data! {
+            case .USER(let user):
                 avatarBtn.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
                 nickNameLbl.text = user.nickName
-                break
+            case .CLUB(let club):
+                avatarBtn.kf_setImageWithURL(club.logoURL!, forState: .Normal)
+                nickNameLbl.text = club.name! + "(\(club.memberNum))"
             }
         }
     }

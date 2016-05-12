@@ -51,7 +51,6 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     }
     
     func navRightBtnPressed() {
-        // TODO: 删除该跑车
         toast = showConfirmToast(
             LS("删除"), message: LS("确认删除爱车?"),
             target: self,
@@ -59,7 +58,6 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
             cancelSelector: #selector(hideConfirmToast as ()->()),
             onSelf: false
         )
-//        self.navigationController?.popViewControllerAnimated(true)
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

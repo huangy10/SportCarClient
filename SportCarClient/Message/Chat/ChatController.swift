@@ -18,31 +18,45 @@ enum ChatRoomType {
 
 class ChatRoomController: InputableViewController, UITableViewDataSource, UITableViewDelegate, ChatOpPanelDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChatAudioRecordDelegate, ChatCellDelegate {
     
-    weak var chatList: ChatListController?
-    
-    var roomType: ChatRoomType = .Private
-    var targetUser: User? {
+    // 从chatlist之外的地方进入聊天时，设置这个属性为false
+    var chatCreated = true
+    var rosterItem: RosterItem! {
         didSet {
-            roomType = .Private
+            if rosterItem == nil {
+                targetUser = nil
+                targetClub = nil
+                return
+            }
+            chatCreated = true
+            switch rosterItem!.data! {
+            case .USER(let chater):
+                targetUser = chater.relatedUser()
+                targetClub = nil
+            case .CLUB(let club):
+                targetClub = club
+                targetUser = nil
+            }
         }
     }
-    var targetClub: Club? {
-        didSet {
-            roomType = .Club
-        }
-    }
     
+    var targetUser: User?
+    var targetClub: Club?
+    
+    @available(*, deprecated=1)
     var distinct_identifier: String!
     
-    var chatRecords: ChatRecordList?
+    var chats: [ChatRecord] = []
     
     var navTitle: String? {
-        if targetUser != nil {
-            return targetUser?.nickName
-        }else if targetClub != nil{
-            return "\(targetClub!.name!)(\(targetClub!.memberNum))"
+        if !chatCreated {
+            return targetUser?.nickName ?? targetClub?.name
         }
-        return nil
+        switch rosterItem.data! {
+        case .USER(let chater):
+            return chater.nickName
+        case .CLUB(let  club):
+            return club.name
+        }
     }
     
     var navRightBtnImageURLStr: String? {
@@ -52,6 +66,10 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
             return targetClub?.logo
         }
         return nil
+    }
+    
+    var viewingHistory: Bool {
+        return talkBoard!.contentOffset.y <= talkBoard!.contentSize.height - talkBoard!.frame.height - 60
     }
     
     var talkBoard: UITableView?
@@ -75,28 +93,28 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         navSettings()
         super.viewDidLoad()
         // bind datasource
-        self.distinct_identifier = getIdentifierForChatRoom(self)
-        if let records = ChatRecordDataSource.sharedDataSource.chatRecords[distinct_identifier] {
-            chatRecords = records
-        }else {
-            chatRecords = ChatRecordList()
-            ChatRecordDataSource.sharedDataSource.chatRecords[distinct_identifier] = chatRecords!
-            switch roomType {
-            case .Private:
-                chatRecords?._item = ChatRecordListItem.UserItem(targetUser!)
-                // send a place holder to hold this chat
-                confirmSendChatMessage(nil, image: nil, audio: nil, messageType: "placeholder")
-                break
-            case .Club:
-                chatRecords?._item = ChatRecordListItem.ClubItem(targetClub!)
-                break
-            }
-        }
-        // request history
-        if chatRecords?.count < 5 {
-            loadChatHistory(5 - chatRecords!.count)
-        }
-        chatRecords?.unread = 0
+//        self.distinct_identifier = getIdentifierForChatRoom(self)
+//        if let records = ChatRecordDataSource.sharedDataSource.chatRecords[distinct_identifier] {
+//            chatRecords = records
+//        }else {
+//            chatRecords = ChatRecordList()
+//            ChatRecordDataSource.sharedDataSource.chatRecords[distinct_identifier] = chatRecords!
+//            switch roomType {
+//            case .Private:
+//                chatRecords?._item = ChatRecordListItem.UserItem(targetUser!)
+//                // send a place holder to hold this chat
+//                confirmSendChatMessage(nil, image: nil, audio: nil, messageType: "placeholder")
+//                break
+//            case .Club:
+//                chatRecords?._item = ChatRecordListItem.ClubItem(targetClub!)
+//                break
+//            }
+//        }
+//        // request history
+//        if chatRecords?.count < 5 {
+//            loadChatHistory(5 - chatRecords!.count)
+//        }
+//        chatRecords?.unread = 0
         //
         ChatCell.registerCellForTableView(talkBoard!)
         talkBoard?.registerClass(UITableViewCell.self, forCellReuseIdentifier: "invisible_cell")
@@ -107,18 +125,24 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        ChatRecordDataSource.sharedDataSource.curRoom = self
+//        ChatRecordDataSource.sharedDataSource.curRoom = self
+        MessageManager.defaultManager.enterRoom(self)
         // 重新载入club的信息
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = navTitle
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        MessageManager.defaultManager.leaveRoom()
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        if chatRecords?.unread > 0 && firstShowFlag {
-            self.talkBoard?.reloadData()
-        }
-        firstShowFlag = true
+//        if chatRecords?.unread > 0 && firstShowFlag {
+//            self.talkBoard?.reloadData()
+//        }
+//        firstShowFlag = true
     }
     
     override func createSubviews() {
@@ -177,28 +201,43 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     }
     
     func navLeftBtnPressed() {
-        ChatRecordDataSource.sharedDataSource.curRoom = nil
-        chatList?.needUpdate()
+//        ChatRecordDataSource.sharedDataSource.curRoom = nil
+//        chatList?.needUpdate()
         self.navigationController?.popViewControllerAnimated(true)
     }
     
     func navRightBtnPressed() {
-        // 调出个人信息
-        switch roomType {
-        case .Private:
-            let detail = PrivateChatSettingController(targetUser: self.targetUser!)
-            self.navigationController?.pushViewController(detail, animated: true)
-            break
-        case .Club:
-            if targetClub!.founderUser!.isHost {
-                let detail = GroupChatSettingHostController(targetClub: targetClub!)
+        if let rosterItem = rosterItem {
+            switch rosterItem.data! {
+            case .USER(_):
+                let detail = PrivateChatSettingController(rosterItem: rosterItem)
                 self.navigationController?.pushViewController(detail, animated: true)
-                break
+            case .CLUB(_):
+                if targetClub!.founderUser!.isHost {
+                    let detail = GroupChatSettingHostController(targetClub: targetClub!)
+                    self.navigationController?.pushViewController(detail, animated: true)
+                } else {
+                    let detail = GroupChatSettingController(targetClub: targetClub!)
+                    self.navigationController?.pushViewController(detail, animated: true)
+                }
             }
-            let detail = GroupChatSettingController(targetClub: self.targetClub!)
-            self.navigationController?.pushViewController(detail, animated: true)
-            break
         }
+        // 调出个人信息
+//        switch roomType {
+//        case .Private:
+//            let detail = PrivateChatSettingController(targetUser: self.targetUser!)
+//            self.navigationController?.pushViewController(detail, animated: true)
+//            break
+//        case .Club:
+//            if targetClub!.founderUser!.isHost {
+//                let detail = GroupChatSettingHostController(targetClub: targetClub!)
+//                self.navigationController?.pushViewController(detail, animated: true)
+//                break
+//            }
+//            let detail = GroupChatSettingController(targetClub: self.targetClub!)
+//            self.navigationController?.pushViewController(detail, animated: true)
+//            break
+//        }
     }
     
     func needsUpdate() {
@@ -217,34 +256,25 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
 extension ChatRoomController {
     
     func loadChatHistory() {
-        loadChatHistory(10)
+        loadChatHistoryMannually(false)
     }
     
-    func loadChatHistory(limit: Int) {
-        let requester = ChatRequester.requester
-        var chatType: String
-        var targetID: String
-        switch chatRecords!._item! {
-        case .UserItem(let user) :
-            chatType = "private"
-            targetID = user.ssidString
-        case .ClubItem(let club) :
-            chatType = "group"
-            targetID = club.ssidString
-        }
-        let dateThreshold = chatRecords?.first()?.createdAt ?? NSDate()
-        requester.getChatHistory(targetID, chatType: chatType, dateThreshold: dateThreshold, limit: limit, onSuccess: { (json) -> () in
+    func loadChatHistoryMannually(autoScrollToBottom: Bool = false) {
+        MessageManager.defaultManager.loadHistory(self) { (chats) in
+            if let chats = chats {
+                self.chats.insertContentsOf(chats, at: 0)
+                self.talkBoard?.beginUpdates()
+                let indexes = (0..<chats.count).map { NSIndexPath(forRow: $0, inSection: 0)}
+                self.talkBoard?.insertRowsAtIndexPaths(indexes, withRowAnimation: .Automatic)
+                self.talkBoard?.reloadData()
+                self.talkBoard?.endUpdates()
+                if autoScrollToBottom {
+                    self.talkBoard?.scrollToRowAtIndexPath(NSIndexPath(forRow: self.chats.count - 1, inSection: 0)
+                        , atScrollPosition: .Top, animated: false)
+                }
+            }
             self.refresh.endRefreshing()
-            dispatch_async(requester.privateQueue, { () -> Void in
-                let datasource = ChatRecordDataSource.sharedDataSource
-                datasource.parseHistoryFromServer(json!)
-            })
-            }) { (code) -> () in
         }
-    }
-    
-    func sync() {
-        // TODO: implements me
     }
 }
 
@@ -256,23 +286,27 @@ extension ChatRoomController {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chatRecords!.count
+        return chats.count
+//        return chatRecords!.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let record = chatRecords![indexPath.row]
+//        let record = chatRecords![indexPath.row]
+        let record = chats[indexPath.row]
+        record.read = true
         record.read = true
         let messageType = record.messageType!
-        if messageType == "placeholder" {
-            return tableView.dequeueReusableCellWithIdentifier("invisible_cell", forIndexPath: indexPath)
-        }
+//        if messageType == "placeholder" {
+//            return tableView.dequeueReusableCellWithIdentifier("invisible_cell", forIndexPath: indexPath)
+//        }
         let cell = tableView.dequeueReusableCellWithIdentifier(messageType, forIndexPath: indexPath) as! ChatCell
         cell.delegate = self
         let displayTimeMark: Bool = {
             if indexPath.row == 0 {
                 return true
             }else{
-                let formerRecord = chatRecords![indexPath.row - 1]
+//                let formerRecord = chatRecords![indexPath.row - 1]
+                let formerRecord = chats[indexPath.row - 1]
                 let timedelta = record.createdAt!.timeIntervalSinceDate(formerRecord.createdAt!)
                 return timedelta > 600
             }
@@ -286,10 +320,11 @@ extension ChatRoomController {
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let record = chatRecords![indexPath.row]
-        if record.messageType == "placeholder" {
-            return 0
-        }
+//        let record = chatRecords![indexPath.row]
+        let record = chats[indexPath.row]
+//        if record.messageType == "placeholder" {
+//            return 0
+//        }
         return ChatCell.getContentHeightForChatRecord(record)
     }
 }
@@ -297,28 +332,49 @@ extension ChatRoomController {
 extension ChatRoomController {
     
     func confirmSendChatMessage(text: String? = nil, image: UIImage? = nil, audio: NSURL? = nil, messageType: String="text") {
+        
+        if !self.chatCreated {
+            self.showToast(LS("无法连接到服务器"))
+        }
         let newChat: ChatRecord = try! ChatModelManger.sharedManager.createNew()
         newChat.initForPost(messageType, textContent: text, image: image, audio: audio)
-        switch chatRecords!._item! {
-        case .UserItem(let user):
-            newChat.targetID = user.ssid
+        newChat.rosterID = rosterItem.ssid
+        switch rosterItem.data! {
+        case .USER(_):
+            newChat.targetID = targetUser!.ssid
             
-            newChat.targetUser = user
-            newChat.chatType = "private"
-            break
-        case .ClubItem(let club):
-            newChat.targetID = club.ssid
-            if let club = club.toContext(ChatModelManger.sharedManager.getOperationContext()) as? Club {
+            newChat.targetUser = targetUser!
+            newChat.chatType = "user"
+        case .CLUB(_):
+            newChat.targetID = targetClub!.ssid
+            if let club = targetClub!.toContext(ChatModelManger.sharedManager.getOperationContext()) as? Club {
                 newChat.targetClub = club
             } else {
                 assertionFailure()
             }
-            newChat.chatType = "group"
-            break
+            newChat.chatType = "club"
         }
-        let dataSource = ChatRecordDataSource.sharedDataSource
-        let identifier = getIdentiferForChatRecord(newChat)
-        dataSource.chatRecords[identifier]?.append(newChat)
+//        switch chatRecords!._item! {
+//        case .UserItem(let user):
+//            newChat.targetID = user.ssid
+//            
+//            newChat.targetUser = user
+//            newChat.chatType = "private"
+//            break
+//        case .ClubItem(let club):
+//            newChat.targetID = club.ssid
+//            if let club = club.toContext(ChatModelManger.sharedManager.getOperationContext()) as? Club {
+//                newChat.targetClub = club
+//            } else {
+//                assertionFailure()
+//            }
+//            newChat.chatType = "group"
+//            break
+//        }
+//        let dataSource = ChatRecordDataSource.sharedDataSource
+//        let identifier = getIdentiferForChatRecord(newChat)
+//        dataSource.chatRecords[identifier]?.append(newChat)
+        chats.append(newChat)
         //
         if messageType == "audio" {
             let analyzer = AudioWaveDrawEngine(audioFileURL: audio!, preferredSampleNum: 30, onFinished: { (engine) -> () in
@@ -330,13 +386,15 @@ extension ChatRoomController {
         //
         talkBoard?.beginUpdates()
 //        talkBoard?.reloadData()
-        talkBoard?.insertRowsAtIndexPaths([NSIndexPath(forRow: chatRecords!.count-1, inSection: 0)], withRowAnimation: .Fade)
+//        talkBoard?.insertRowsAtIndexPaths([NSIndexPath(forRow: chatRecords!.count-1, inSection: 0)], withRowAnimation: .Fade)
+//        talkBoard?.endUpdates()
+//        let targetPath = NSIndexPath(forRow: self.chatRecords!.count - 1, inSection: 0)
+        talkBoard?.insertRowsAtIndexPaths([NSIndexPath(forRow: chats.count-1, inSection: 0)], withRowAnimation: .Fade)
         talkBoard?.endUpdates()
-        let targetPath = NSIndexPath(forRow: self.chatRecords!.count - 1, inSection: 0)
+        let targetPath = NSIndexPath(forRow: self.chats.count - 1, inSection: 0)
         talkBoard?.scrollToRowAtIndexPath(targetPath, atScrollPosition: .Top, animated: false)
         self.chatOpPanelController?.contentInput?.text = ""
-        
-        ChatRequester.requester.postNewChatRecord(newChat.chatType!, messageType: messageType, targetID: newChat.targetIDString, image: image, audio: audio, textContent: text, onSuccess: { (json) -> () in
+        ChatRequester2.sharedInstance.postNewChatRecord(newChat.chatType!, messageType: messageType, targetID: newChat.targetIDString, image: image, audio: audio, textContent: text, onSuccess: { (json) -> () in
             let newID = json!["chatID"].int32Value
             newChat.confirmSent(newID, image: json!["image"].string, audio: json!["audio"].string)
             if messageType == "image" {
@@ -344,10 +402,12 @@ extension ChatRoomController {
                 let cache = KingfisherManager.sharedManager.cache
                 cache.storeImage(image!, forKey: imageURL.absoluteString)
             }
-            let identifier = getIdentifierForChatRoom(self)
-            ChatRecordDataSource.sharedDataSource.chatRecords.bringKeyToFront(identifier)
+            self.rosterItem.recentChatDes = newChat.summary
+            MessageManager.defaultManager.newMessageSent(newChat)
+//            let identifier = getIdentifierForChatRoom(self)
+//            ChatRecordDataSource.sharedDataSource.chatRecords.bringKeyToFront(identifier)
             }) { (code) -> () in
-                
+                print(code)
         }
         
     }
@@ -413,6 +473,9 @@ extension ChatRoomController {
         if text == "\n" {
             let commentText = textView.text
             if commentText.length > 0 {
+                opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
+                    make.height.equalTo(45)
+                })
                 confirmSendChatMessage(commentText, image: nil)
             }
             return false
@@ -466,7 +529,8 @@ extension ChatRoomController {
             make.bottom.equalTo(self.view).offset(-keyboardFrame.height)
         })
         self.view.layoutIfNeeded()
-        let allChatRecordCount = chatRecords!.count
+//        let allChatRecordCount = chatRecords!.count
+        let allChatRecordCount = chats.count
         if allChatRecordCount > 0 {
             let targetPath = NSIndexPath(forRow: allChatRecordCount - 1, inSection: 0)
             talkBoard?.scrollToRowAtIndexPath(targetPath, atScrollPosition: .Top, animated: true)

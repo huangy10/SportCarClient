@@ -117,26 +117,51 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
         }
         let userIDs = users.map { $0.ssidString }
         // send creation request
-        let requester = ChatRequester.requester
         self.pp_showProgressView()
         requesting = true
-        requester.createNewClub(clubName, clubLogo: logoImage!, members: userIDs, description: "Description", onSuccess: { (json) -> () in
-            // Notice: here we create the club instance after receiving response from server for simplicity
-            let newClub: Club = try! MainManager.sharedManager.getOrCreate(json!)
-            try! MainManager.sharedManager.save()
+        ClubRequester.sharedInstance.createNewClub(clubName, clubLogo: logoImage!, members: userIDs, description: "Description", onSuccess: { (json) in
+            var club: Club! = nil
+            let waiter: dispatch_semaphore_t = dispatch_semaphore_create(0)
+            dispatch_async(ChatModelManger.sharedManager.workQueue, {
+                club = try! ChatModelManger.sharedManager.getOrCreate(json!) as Club
+                let rosterItem = RosterManager.defaultManager.getOrCreateNewRoster(json!["roster"])
+                try! ChatModelManger.sharedManager.save()
+                club.rosterItem = rosterItem
+                dispatch_semaphore_signal(waiter)
+            })
+            let waitUntil = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC))
+            // only wait for one second
+            dispatch_semaphore_wait(waiter, waitUntil)
+            club = MainManager.sharedManager.objectWithSSID(club.ssid) as Club?
+            club.rosterItem?.loadData()
             let kingfisherCache = KingfisherManager.sharedManager.cache
-            kingfisherCache.storeImage(self.logoImage!, forKey: newClub.logoURL!.absoluteString)
-            self.delegate?.groupChatSetupControllerDidSuccessCreatingClub(newClub)
+            kingfisherCache.storeImage(self.logoImage!, forKey: club!.logoURL!.absoluteString)
+            self.delegate?.groupChatSetupControllerDidSuccessCreatingClub(club!)
             self.pp_hideProgressView()
             self.requesting = false
             }, onProgress: { (progress) in
                 self.pp_updateProgress(progress)
-            }) { (code) -> () in
+            }) { (code) in
                 self.showToast(LS("创建群聊失败"))
                 self.pp_hideProgressView()
                 self.requesting = false
-                
         }
+//        requester.createNewClub(clubName, clubLogo: logoImage!, members: userIDs, description: "Description", onSuccess: { (json) -> () in
+//            // Notice: here we create the club instance after receiving response from server for simplicity
+//            let newClub: Club = try! MainManager.sharedManager.getOrCreate(json!)
+//            try! MainManager.sharedManager.save()
+//            let kingfisherCache = KingfisherManager.sharedManager.cache
+//            kingfisherCache.storeImage(self.logoImage!, forKey: newClub.logoURL!.absoluteString)
+//            self.delegate?.groupChatSetupControllerDidSuccessCreatingClub(newClub)
+//            self.pp_hideProgressView()
+//            self.requesting = false
+//            }, onProgress: { (progress) in
+//                self.pp_updateProgress(progress)
+//            }) { (code) -> () in
+//                self.showToast(LS("创建群聊失败"))
+//                self.pp_hideProgressView()
+//                self.requesting = false
+//        }
     }
     
     func logoBtnPressed() {

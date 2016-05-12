@@ -29,7 +29,24 @@ class ChatRecord: BaseModel {
         }
     }
     
-    var cachedWaveData: [Float]?
+    private var _cachedWaveData: [Float]?
+    var cachedWaveData: [Float]? {
+        get {
+            print(self.audioCaches)
+            if _cachedWaveData == nil {
+                if let cache = self.audioCaches {
+                    let data = JSON(data: cache.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!).arrayValue
+                    _cachedWaveData = data.map { $0.floatValue }
+                } else {
+                    _cachedWaveData = nil
+                }
+            }
+            return _cachedWaveData
+        }
+        set {
+            _cachedWaveData = newValue
+        }
+    }
     var displayTimeMark: Bool = false
     
     private var _senderUser: Chater? {
@@ -90,7 +107,6 @@ class ChatRecord: BaseModel {
             return _targetClub
         }
         set {
-            // TODO: set the related club at the same time
             _targetClub = newValue
             relatedClub = try! _targetClub?.toJSONString(0)
         }
@@ -112,9 +128,11 @@ class ChatRecord: BaseModel {
     }
 
     override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> ChatRecord {
+        try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
+        rosterID = data["roster"]["ssid"].int32Value
         createdAt = DateSTR(data["created_at"].stringValue)
         chatType = data["chat_type"].stringValue
-        textContent = data["text_content"].string
+        textContent = data["text"].stringValue
         let userJSON = data["sender"]
         sender = userJSON.rawString()
         _senderUser = try Chater().loadDataFromJSON(userJSON)
@@ -124,20 +142,24 @@ class ChatRecord: BaseModel {
         imageWidth = data["image_width"].int32Value
         imageHeight = data["image_height"].int32Value
         audio = data["audio"].stringValue
-        targetID = data["target_id"].int32Value
-        if targetID <= 0 {
-            throw SSModelError.IntegrityError
-        }
+        audioLength = data["audio_length"].doubleValue
+        audioCaches = data["audio_wave_data"].stringValue
+//        targetID = data["target_id"].int32Value
+//        if targetID <= 0 {
+//            throw SSModelError.IntegrityError
+//        }
         messageType = data["message_type"].stringValue
         read = data["read"].boolValue
-        if chatType == "private" {
+        if chatType == "user" {
             let userJSON = data["target_user"]
             relatedUser =  String(data: try! userJSON.rawData(), encoding: NSUTF8StringEncoding)
             _targetUser = try manager.getOrCreate(userJSON) as User
-        } else if chatType == "group" {
+            targetID = _targetUser!.ssid
+        } else if chatType == "club" {
             let clubJSON = data["target_club"]
             relatedClub = String(data: try! clubJSON.rawData(), encoding: NSUTF8StringEncoding)
             _targetClub = try! manager.getOrCreate(clubJSON) as Club
+            targetID = _targetClub!.ssid
         } else {
             throw SSModelError.InvalidJSON
         }
@@ -149,7 +171,6 @@ class ChatRecord: BaseModel {
         self.textContent = textContent
         self.mine = true
         self.createdAt = NSDate()
-        self.audioLocal = audio?.absoluteString
         contentImage = image
         imageWidth = Int32(image?.size.width ?? 0)
         imageHeight = Int32(image?.size.height ?? 0)
@@ -160,7 +181,7 @@ class ChatRecord: BaseModel {
         ssid = newID
         self.image = image
         self.audio = audio
-        // TODO: sent
+        self.sent = true
         return self
     }
 }

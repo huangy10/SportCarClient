@@ -60,7 +60,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         locationService = BMKLocationService()
         
         // 发出网络请求
-        let requester = PersonRequester.requester
+        let requester = AccountRequester2.sharedInstance
         
         // 这个请求是保证当前用户的数据是最新的，而hostuser中的数据可以暂时先直接拿来展示
         requester.getProfileDataFor(data.user.ssidString, onSuccess: { (json) -> () in
@@ -68,11 +68,11 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             try! hostUser.loadDataFromJSON(json!, detailLevel: 1)
             self.header.user = hostUser
             self.header.loadDataAndUpdateUI()
-            }) { (code) -> ()? in
+            }) { (code) -> () in
                 print(code)
         }
         // 获取认证车辆的列表
-        requester.getAuthedCars(data.user.ssidString, onSuccess: { (json) -> () in
+        requester.getAuthedCarsList(data.user.ssidString, onSuccess: { (json) -> () in
             self.data.handleAuthedCarsJSONResponse(json!, user: self.data.user)
             self.data.selectedCar = self.data.cars.first()
             self.carsViewList.cars = self.data.cars
@@ -83,12 +83,12 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             }) { (code) -> () in
         }
         // 第三个响应：开始获取的动态列表，每次获取十个
-        let statusRequester = StatusRequester.SRRequester
-        statusRequester.getStatusListSimplified(data.user.ssidString, carID: nil, dateThreshold: NSDate(), limit: 10, onSuccess: { (json) -> () in
+        AccountRequester2.sharedInstance.getStatusListSimplified(data.user.ssidString, carID: nil, dateThreshold: NSDate(), limit: 10, onSuccess: { (json) -> () in
             //
             self.jsonDataHandler(json!, container: &self.data.statusList)
             self.collectionView?.reloadData()
             }) { (code) -> () in
+                print(code)
         }
     }
     
@@ -142,7 +142,6 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         let authCarListHeight: CGFloat = 62
         header = getPersonInfoPanel()
         collectionView?.addSubview(header)
-        // TODO: 这里手动添加了status bar的高度值
         header.frame = CGRectMake(0, -totalHeaderHeight, screenWidth, totalHeaderHeight - authCarListHeight)
         header.user = data.user
         //
@@ -405,9 +404,11 @@ extension PersonBasicController {
         }
 
         let toast = showStaticToast(LS("获取跑车数据中..."))
-        let requester = SportCarRequester.sharedSCRequester
-        requester.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
+        SportCarRequester.sharedInstance.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
             self.hideToast(toast)
+            guard let data = data else {
+                return
+            }
             let carImgURL = SF(data["image_url"].stringValue)
             let headers = [LS("具体型号"), LS("跑车签名"), LS("价格"), LS("发动机"), LS("扭矩"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
             let contents = [carType, nil, data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
@@ -467,7 +468,7 @@ extension PersonBasicController {
             if targetStatusList!.count > 0 {
                 dateThreshold = targetStatusList!.last()!.createdAt!
             }
-            let statusRequester = StatusRequester.SRRequester
+            let statusRequester = AccountRequester2.sharedInstance
             statusRequester.getStatusListSimplified(data.user.ssidString, carID: selectedCarID, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
                 self.jsonDataHandler(json!, container: &(self.data.statusDict[selectedCarID]!))
                 self.collectionView?.reloadData()
@@ -479,7 +480,7 @@ extension PersonBasicController {
             if targetStatusList.count > 0 {
                 dateThreshold = targetStatusList.last()!.createdAt!
             }
-            let statusRequester = StatusRequester.SRRequester
+            let statusRequester = AccountRequester2.sharedInstance
             statusRequester.getStatusListSimplified(data.user.ssidString, carID: nil, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
                 self.jsonDataHandler(json!, container: &(self.data.statusList))
                 self.collectionView?.reloadData()

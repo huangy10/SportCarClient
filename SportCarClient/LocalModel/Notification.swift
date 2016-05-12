@@ -30,9 +30,9 @@ class Notification: BaseModel {
         createdAt = DateSTR(data["created_at"].stringValue)
         messageBody = data["message_body"].stringValue
         messageType = data["message_type"].stringValue
-        if messageType == "status_inform" {
-//            print(data)
-        }
+//        if messageType == "status_inform" {
+////            print(data)
+//        }
         read = data["read"].boolValue
         flag = data["flag"].boolValue
         checked = data["checked"].boolValue
@@ -42,7 +42,7 @@ class Notification: BaseModel {
         }
         let clubJSON = data["related_club"]
         if clubJSON.exists() {
-            _obj = try manager.getOrCreate(data) as Club
+            _obj = try manager.getOrCreate(clubJSON) as Club
         }
         let newsJSON = data["related_news"]
         if newsJSON.exists() {
@@ -123,14 +123,10 @@ class Notification: BaseModel {
             return nil
         }
         if _objInMem == nil {
+            print(T)
             try _objInMem = T.fromJSONString(relatedObj!, detailLevel: 0)
         }
         return _objInMem as? T
     }
-    
-    class func loadHistoricalList(limit: Int) -> [Notification] {
-        let context = NotificationModelManager.sharedManager.getOperationContext()
-        let notifs = context.notifications.filter({$0.hostSSID == NotificationModelManager.sharedManager.hostUserID!}).orderByDescending({$0.createdAt}).take(limit).toArray()
-        return notifs
-    }
+
 }

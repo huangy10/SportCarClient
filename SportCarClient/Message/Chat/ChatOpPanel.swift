@@ -101,23 +101,15 @@ class ChatOpPanelController: UIViewController {
             make.left.equalTo(inputToggleBtn!.snp_right).offset(10)
             make.top.equalTo(superview).offset(edgeInset)
         }
-        
-        let contentInputIcon = UIImageView(image: UIImage(named: "news_comment_icon"))
-        contentInputContainer.addSubview(contentInputIcon)
-        contentInputIcon.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(contentInputContainer).offset(contentHeight / 2)
-            make.bottom.equalTo(contentInputContainer).offset(-edgeInset)
-            make.size.equalTo(20)
-        }
         //
         contentInput = UITextView()
-        contentInput?.textColor = UIColor(white: 0.72, alpha: 1)
+        contentInput?.textColor = UIColor.blackColor()
         contentInput?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         contentInputContainer.addSubview(contentInput!)
         contentInput?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(contentInputContainer).offset(-contentHeight / 2)
             make.height.equalTo(contentInputContainer)
-            make.left.equalTo(contentInputIcon.snp_right).offset(10)
+            make.left.equalTo(contentInputContainer).offset(contentHeight / 2)
             make.centerY.equalTo(contentInputContainer)
         })
         //

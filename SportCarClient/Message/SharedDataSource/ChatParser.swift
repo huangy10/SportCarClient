@@ -10,11 +10,16 @@ import Foundation
 import SwiftyJSON
 
 
-class ChatParser: BaseParser {
+class ChatParser {
     
-    override func parse(data: JSON) throws -> ChatRecord {
+    func parse(data: JSON) throws -> (ChatRecord, RosterItem?) {
         let newRecrod = try ChatModelManger.sharedManager.getOrCreate(data) as ChatRecord
-        return newRecrod
+        let roster = data["roster"]
+        if roster.exists() {
+            let rosterItem = RosterManager.defaultManager.getOrCreateNewRoster(roster, autoBringToFront: true)
+            return (newRecrod, rosterItem)
+        }
+        return (newRecrod, nil)
     }
     
 }

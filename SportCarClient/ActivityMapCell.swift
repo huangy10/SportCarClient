@@ -47,9 +47,7 @@ class MapCell: UITableViewCell {
         //
         let locDesContainer = UIButton()
         locDesContainer.backgroundColor = UIColor.whiteColor()
-        locDesContainer.layer.shadowColor = UIColor.blackColor().CGColor
-        locDesContainer.layer.shadowOpacity = 0.5
-        locDesContainer.layer.shadowOffset = CGSizeMake(1, 1.5)
+        locDesContainer.addShadow()
         self.contentView.addSubview(locDesContainer)
         locDesContainer.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(self.contentView)
@@ -61,6 +59,7 @@ class MapCell: UITableViewCell {
         //
         locDesIcon = UIImageView(image: UIImage(named: "news_comment_icon"))
         locDesContainer.addSubview(locDesIcon)
+        locDesIcon.contentMode = .ScaleAspectFit
         locDesIcon.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(20)
             make.left.equalTo(locDesContainer).offset(15)
@@ -72,7 +71,7 @@ class MapCell: UITableViewCell {
         locLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         locDesContainer.addSubview(locLbl)
         locLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(locDesIcon.snp_right).offset(17 )
+            make.left.equalTo(locDesIcon.snp_right).offset(17)
             make.height.equalTo(locDesIcon)
             make.centerY.equalTo(locDesContainer)
             make.right.equalTo(locDesContainer).offset(-15)
@@ -80,6 +79,7 @@ class MapCell: UITableViewCell {
         //
         let marker = UIImageView(image: UIImage(named: "map_default_marker"))
         self.contentView.addSubview(marker)
+        marker.contentMode = .ScaleAspectFit
         marker.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(map) //.offset(CGPointMake(0, -trailingHeight/2))
             make.size.equalTo(CGSizeMake(38, 74))

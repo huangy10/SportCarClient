@@ -33,7 +33,7 @@ class AvatarClubSelectController: AvatarItemSelectController {
     override func viewDidLoad() {
         super.viewDidLoad()
         createSubviews()
-        let requester = ChatRequester.requester
+        let requester = ClubRequester.sharedInstance
         requester.getClubListAuthed({ (json) -> () in
             var i = 0
             for data in json!.arrayValue {

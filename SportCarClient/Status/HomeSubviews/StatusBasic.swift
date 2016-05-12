@@ -30,6 +30,11 @@ class StatusBasicController: UITableViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+    
     func loadMoreData() {
         assertionFailure("Not Implemented")
     }
@@ -133,7 +138,6 @@ extension StatusBasicController {
     }
     
     func onStatusDelete(notification: NSNotification) {
-        // TODO: check id type
         if let statusID = notification.userInfo![kStatusDidDeletedStatusIDKey] as? String{
             if let index = status.findIndex({$0.ssidString == statusID}) {
                 status.removeAtIndex(index)

@@ -33,7 +33,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             return
         }
         self.pp_showProgressView()
-        ChatRequester.requester.clubAuth(
+        ClubRequester.sharedInstance.clubAuth(
             club.ssidString,
             district: district,
             description: desc,

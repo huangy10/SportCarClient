@@ -14,6 +14,5 @@ target 'SportCarClient' do
     pod 'Dollar'
     pod 'Cent'
     pod 'SwiftyTimer'
-    pod 'XMPPFramework'
     pod "WeiboSDK", :git => "https://github.com/sinaweibosdk/weibo_ios_sdk.git"
 end

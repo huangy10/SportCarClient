@@ -159,7 +159,7 @@ extension NewsController {
             loadMoreNewsBelow()
             return
         }
-        let requester = NewsRequester.newsRequester
+        let requester = NewsRequester.sharedInstance
         requester.getLatestNewsList(firstNews.createdAt!, onSuccess: { (json) -> () in
             guard let data = json else{
                 self.refreshControl?.endRefreshing()
@@ -174,6 +174,7 @@ extension NewsController {
             self.refreshControl?.endRefreshing()
             self.tableView.reloadData()
             }) { (code) -> () in
+                self.showToast(LS("刷新失败"))
                 self.refreshControl?.endRefreshing()
         }
     }
@@ -183,7 +184,7 @@ extension NewsController {
      */
     func loadMoreNewsBelow() {
         let lastNewsDate = news.last()?.createdAt ?? NSDate()
-        NewsRequester.newsRequester.getMoreNewsList(lastNewsDate, onSuccess: { (json) -> () in
+        NewsRequester.sharedInstance.getMoreNewsList(lastNewsDate, onSuccess: { (json) -> () in
             guard let data = json else{
                 self.refreshControl?.endRefreshing()
                 return

@@ -77,7 +77,7 @@ class ActivityHomeMineListController: UICollectionViewController {
             return
         }
         loading = true
-        let requester = ActivityRequester.requester
+        let requester = ActivityRequester.sharedInstance
         let dateThreshold = data.first()?.createdAt ?? NSDate()
         requester.getMineActivityList(dateThreshold, op_type: "latest", limit: 10, onSuccess: { (json) -> () in
             var i = 0
@@ -108,12 +108,12 @@ class ActivityHomeMineListController: UICollectionViewController {
             return 
         }
         loading = true
-        let requester = ActivityRequester.requester
+        let requester = ActivityRequester.sharedInstance
         let dateThreshold = data.last()?.createdAt ?? NSDate()
 
         requester.getMineActivityList(dateThreshold, op_type: "more", limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
-                let act: Activity = try! MainManager.sharedManager.getOrCreate(data)
+                let act: Activity = try! MainManager.sharedManager.getOrCreate(data, overwrite: true)
                 self.data.append(act)
             }
             if json!.arrayValue.count > 0 {

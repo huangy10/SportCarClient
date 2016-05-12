@@ -39,7 +39,7 @@ class StatusHotController: UICollectionViewController {
     // MARK: Data Fetching
     func loadMoreStatusData(limit: Int = 12) {
         let threshold = status.last()?.createdAt ?? NSDate()
-        StatusRequester.SRRequester.getMoreStatusList(threshold, queryType: "hot", onSuccess: { (json) -> () in
+        StatusRequester.sharedInstance.getMoreStatusList(threshold, queryType: "hot", onSuccess: { (json) -> () in
             if self.jsonDataHandler(json!) > 0 {
                 self.collectionView?.reloadData()
             }
@@ -49,7 +49,7 @@ class StatusHotController: UICollectionViewController {
     
     func loadLatestStatusData() {
         let threshold = status.first()?.createdAt ?? NSDate()
-        StatusRequester.SRRequester.getLatestStatusList(threshold, queryType: "hot", onSuccess: { (json) -> () in
+        StatusRequester.sharedInstance.getLatestStatusList(threshold, queryType: "hot", onSuccess: { (json) -> () in
             if self.jsonDataHandler(json!) > 0 {
                 self.collectionView?.reloadData()
             }

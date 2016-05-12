@@ -10,16 +10,11 @@ import Foundation
 import CoreData
 import CoreData
 import SwiftyJSON
-import XMPPFramework
 
 class User: BaseModel {
     
     override class var idField: String {
-        return "userID"
-    }
-    
-    var xmppID: XMPPJID {
-        return XMPPJID.jidWithString(ssidString + "@" + kXMPPDomain)
+        return "ssid"
     }
     
     var avatarURL: NSURL? {
@@ -76,11 +71,25 @@ class User: BaseModel {
         }
         return _chater!
     }
+    
+    private var _rosterItem: RosterItem?
+    var rosterItem: RosterItem? {
+        if let roster = _rosterItem {
+            return roster
+        } else if let hostID = self.manager.hostUserID {
+            let context = manager.getOperationContext()
+            _rosterItem = context.rosterItems.filter({$0.hostSSID == hostID}).filter({$0.entityType == "user"}).filter({$0.relatedID == self.ssid}).first()
+            return _rosterItem
+        } else {
+            return nil
+        }
+    }
 
     override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> Self {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         nickName = data["nick_name"].stringValue
         avatar = data["avatar"].stringValue
+        recentStatusDes = data["recent_status"].stringValue
         if detailLevel >= 1 {
             district = data["district"].stringValue
             gender = data["gender"].stringValue

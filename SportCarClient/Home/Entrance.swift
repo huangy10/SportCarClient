@@ -23,7 +23,6 @@ class HomeController2: UIViewController, HomeDelegate {
     var message: MessageController?
     var act: ActivityHomeController?
     var radar: RadarHomeController?
-    var settings: PersonMineSettings?
     var wrappedControllers: [Int: BlackBarNavigationController] = [:]
     // MARK: views
     
@@ -32,14 +31,19 @@ class HomeController2: UIViewController, HomeDelegate {
     var nameLbl: UILabel!
     var sideBtns: [UIButton] = []
     var sepLine: UIView!
-    var settingsBtn: UIButton!
+    var adviceBtn: UIButton!
     var marker: UIView!
+    var unreadLbl: UILabel!
     
     var invokeBtn: UIButton!
     var curControllerIndex: Int = 0
     
     private var initFrame: CGRect!
     private var hideFrame: CGRect!
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +52,8 @@ class HomeController2: UIViewController, HomeDelegate {
         
         initFrame = CGRectMake(view.bounds.width, 0, view.bounds.width, view.bounds.height)
         hideFrame = CGRectMake(-view.bounds.width, 0, view.bounds.width, view.bounds.height)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUnreadNumberChange(_:)), name: kUnreadNumberDidChangeNotification, object: nil)
     }
 
     func createSidebar() {
@@ -68,14 +74,14 @@ class HomeController2: UIViewController, HomeDelegate {
             }).addShadow(offset: CGSizeMake(2, 0))
         
         avatarBtn = sideBar.addSubview(UIButton)
-            .config(self, selector: #selector(sideBarBtnPressed(_:)))
+            .config(self, selector: #selector(avatarPressed))
             .toRoundButton(25)
             .layout({ (make) in
                 make.left.equalTo(sideBar).offset(20)
                 make.top.equalTo(superview).offset(50)
                 make.size.equalTo(50)
             })
-        avatarBtn.enabled = false
+//        avatarBtn.enabled = false
         avatarBtn.kf_setImageWithURL(hostUser.avatarURL!, forState: .Normal)
         
         nameLbl = sideBar.addSubview(UILabel)
@@ -127,29 +133,45 @@ class HomeController2: UIViewController, HomeDelegate {
                 make.top.equalTo(formerView.snp_bottom).offset(20)
         }
         
-        settingsBtn = sideBar.addSubview(UIButton)
-            .config(self, selector: #selector(sideBarBtnPressed(_:)))
+        adviceBtn = sideBar.addSubview(UIButton)
+            .config(self, selector: #selector(adviceBtnPressed))
             .layout { (make) in
-                make.left.equalTo(superview).offset(20)
+                make.left.equalTo(superview)
                 make.height.equalTo(50)
                 make.width.equalTo(sideBar).dividedBy(2)
                 make.top.equalTo(sepLine).offset(20)
         }
-        settingsBtn.tag = 7
+        adviceBtn.tag = 7
         
-        settingsBtn.addSubview(UILabel)
-            .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0.72, alpha: 1), text: LS("设置"))
+        adviceBtn.addSubview(UILabel)
+            .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0.72, alpha: 1), text: LS("意见反馈"))
             .layout { (make) in
-                make.centerY.equalTo(settingsBtn)
-                make.left.equalTo(settingsBtn).offset(20)
+                make.centerY.equalTo(adviceBtn)
+                make.left.equalTo(adviceBtn).offset(20)
         }
-        
         
         marker = sideBar.addSubview(UIView).config(UIColor(white: 0.145, alpha: 1))
             .layout({ (make) in
                 make.edges.equalTo(sideBtns[0])
             })
         sideBar.sendSubviewToBack(marker)
+        
+        unreadLbl = sideBar.addSubview(UILabel)
+            .config(9, textColor: UIColor.whiteColor(), textAlignment: .Center)
+            .config(kHighlightedRedTextColor)
+            .layout({ (make) in
+                let messageBtn = self.sideBtns[4]
+                make.right.equalTo(messageBtn).offset(-50)
+                make.centerY.equalTo(messageBtn)
+                make.size.equalTo(18)
+            })
+        unreadLbl.layer.cornerRadius = 9
+        unreadLbl.clipsToBounds = true
+        unreadLbl.hidden = true
+    }
+    
+    func avatarPressed() {
+        
     }
     
     func sideBarBtnPressed(sender: UIButton) {
@@ -187,7 +209,7 @@ class HomeController2: UIViewController, HomeDelegate {
         sepLine.snp_updateConstraints { (make) in
             make.left.equalTo(superview).offset(-self.view.bounds.width)
         }
-        settingsBtn.snp_updateConstraints { (make) in
+        adviceBtn.snp_updateConstraints { (make) in
             make.left.equalTo(superview).offset(-self.view.bounds.width)
         }
         UIView.animateWithDuration(0.3) {
@@ -203,10 +225,14 @@ class HomeController2: UIViewController, HomeDelegate {
     }
     
     func showSidebar() {
+        
+        avatarBtn.kf_setImageWithURL(hostUser.avatarURL!, forState: .Normal)
+        nameLbl.text = hostUser.nickName
+        
         var temp: [UIView] = []
         temp.appendContentsOf(sideBtns as [UIView])
         temp.append(sepLine)
-        temp.append(settingsBtn)
+        temp.append(adviceBtn)
         let superview = view
         sideBar.snp_remakeConstraints { (make) in
             make.top.equalTo(superview)
@@ -251,6 +277,11 @@ class HomeController2: UIViewController, HomeDelegate {
     func backToHome(onComplete: (() -> ())?) {
         invokeBtn.hidden = false
         showSidebar()
+    }
+    
+    func adviceBtnPressed() {
+        let detail = SuggestionController(parent: self)
+        presentViewController(detail, animated: false, completion: nil)
     }
     
     func switchController(from: Int, to: Int) {
@@ -312,7 +343,6 @@ class HomeController2: UIViewController, HomeDelegate {
                 wrappedControllers[index] = status!.toNavWrapper()
             }
         case 4:
-            ChatRecordDataSource.sharedDataSource.start()
             if message == nil {
                 message = MessageController()
                 message?.homeDelegate = self
@@ -326,16 +356,29 @@ class HomeController2: UIViewController, HomeDelegate {
                 wrappedControllers[index] = person!.toNavWrapper()
             }
         default:
-            if settings == nil {
-                settings = PersonMineSettings()
-                settings?.homeDelegate = self
-                wrappedControllers[index] = settings!.toNavWrapper()
-            }
+            break
         }
         return wrappedControllers[index]!
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
+    }
+    
+    // MARK: - Unread number display
+    
+    func onUnreadNumberChange(notification: Notification) {
+        dispatch_async(dispatch_get_main_queue()) { 
+            self.setUnreadNum(MessageManager.defaultManager.unreadNum)
+        }
+    }
+    
+    func setUnreadNum(num: Int) {
+        if num == 0 {
+            unreadLbl.hidden = true
+        } else {
+            unreadLbl.text = "\(num)"
+            unreadLbl.hidden = false
+        }
     }
 }

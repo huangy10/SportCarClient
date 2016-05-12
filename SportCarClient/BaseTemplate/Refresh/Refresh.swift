@@ -16,15 +16,17 @@ class SSPullToRefresh: UIView {
     
     var action: (()->())?
     var hideDelay: NSTimeInterval = 0
-    
+    var refreshing: Bool = false
     deinit {
         removeScrollViewObserving()
     }
     
     private var state: State = .Inital {
         didSet {
+            refreshing = false
             switch state {
             case .Loading:
+                refreshing = true
                 pullingLbl.layer.opacity = 0
                 confirmingLabl.layer.opacity = 0
                 actIndicator.hidden = false

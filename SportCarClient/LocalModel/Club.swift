@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 import SwiftyJSON
 import AlecrimCoreData
+import Dollar
 
 class Club: BaseModel {
     
@@ -38,26 +39,37 @@ class Club: BaseModel {
         return _founderUser
     }
     
+    private var _rosterItem: RosterItem?
+    var rosterItem: RosterItem? {
+        get {
+            if let roster = _rosterItem {
+                return roster
+            } else if let hostID = self.manager.hostUserID {
+                let context = manager.getOperationContext()
+                _rosterItem = context.rosterItems
+                    .filter({ $0.hostSSID == hostID })
+                    .filter({ $0.relatedID == self.ssid })
+                    .filter({ $0.entityType == "club"})
+                    .first()
+                return _rosterItem
+            } else {
+                return nil
+            }
+        }
+        set {
+            _rosterItem = newValue
+        }
+    }
+    
     var recentActivity: Activity? = nil
 
     override func loadDataFromJSON(data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Self {
         var data = data
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
-        // TODO: 统一数据的样式
-//        if data["club"].isExists() {
-//            // Club Joining的样式，重整json的结构
-//            var clubJSON = data["club"]
-//            for (key, value) in clubJSON {
-//                if key == "club" {
-//                    continue
-//                }
-//                clubJSON[key] = value
-//            }
-//            data = clubJSON
-//        }
         data = Club.reorganizeJSON(data)
         name = data["club_name"].stringValue
         if name == "" {
+            print(data)
             assertionFailure()
         }
         logo = data["club_logo"].stringValue
@@ -100,9 +112,7 @@ class Club: BaseModel {
         if alwaysOnTopJSON.exists() {
             alwayOnTop = alwaysOnTopJSON.boolValue
         }
-        // TODO: nickname
-        // TODO: values
-        // TODO: members
+        self.value = data["value_total"].int32Value
         return self
     }
     
@@ -133,13 +143,13 @@ class Club: BaseModel {
     override func toJSONObject(detailLevel: Int) throws -> JSON {
         var json = [
             Club.idField: ssidString,
-            "logo": logo!,
+            "club_logo": logo!,
             "description": clubDescription!,
             "identified": identified,
             "city": city!,
-            "name": name!,
+            "club_name": name!,
         ] as JSON
-        json["host"] = try _founderUser!.toJSONObject(0)
+        json["host"] = try founderUser!.toJSONObject(0)
         return json
     }
     
@@ -156,6 +166,14 @@ class Club: BaseModel {
         } else {
             return json
         }
+    }
+    
+    func addMember(user: User) {
+        self.members.append(user)
+    }
+    
+    func removeMember(user: User) {
+        members = $.remove(members, callback: { $0.ssid == user.ssid })
     }
 }
 

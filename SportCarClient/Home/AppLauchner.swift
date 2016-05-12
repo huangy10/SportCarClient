@@ -15,16 +15,7 @@ class AppManager: UIViewController {
     
     /// 全局的instance对象
     static let sharedAppManager = AppManager()
-    var deviceTokenString: String? {
-        didSet {
-            // TODO: 将这个token上传给服务器
-            if MainManager.sharedManager.hostUser == nil {
-                
-            } else {
-                
-            }
-        }
-    }
+    var deviceTokenString: String? = "Unauthorized_Device"
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -33,18 +24,18 @@ class AppManager: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         launch()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(unreadChange(_:)), name: kNotificationUnreadClearNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(unreadChange(_:)), name: kUnreadNumberDidChangeNotification, object: nil)
     }
     
     func unreadChange(notification: NSNotification) {
-        let unreadNum = ChatRecordDataSource.sharedDataSource.totalUnreadNum
+        let unreadNum = MessageManager.defaultManager.unreadNum
         UIApplication.sharedApplication().applicationIconBadgeNumber = unreadNum
         // sync to the backend
-        ChatRequester.requester.clearNotificationUnreadNum({ (json) in
-//            print("success")
-            }) { (code) in
-//                print("fail")
-        }
+//        ChatRequester.requester.clearNotificationUnreadNum({ (json) in
+////            print("success")
+//            }) { (code) in
+////                print("fail")
+//        }
     }
     
     /**
@@ -65,8 +56,7 @@ class AppManager: UIViewController {
     func guideToContent() {
         if let _ = MainManager.sharedManager.hostUser {
             let ctl = HomeController2()
-            NotificationDataSource.sharedDataSource.start()
-            ChatRecordDataSource.sharedDataSource.start()
+//            NotificationDataSource.sharedDataSource.start()
             self.navigationController?.pushViewController(ctl, animated: false)
             self.dismissViewControllerAnimated(true, completion: nil)
         }else {
@@ -78,7 +68,7 @@ class AppManager: UIViewController {
      推出当前所有的展示内容回到登陆页面
      */
     func logout() {
-        AccountRequester.sharedRequester.logout({ (json) -> (Void) in
+        AccountRequester2.sharedInstance.logout({ (json) -> (Void) in
 //            print("logout")
             }) { (code) -> (Void) in
 //                print("logout fails")
@@ -86,13 +76,13 @@ class AppManager: UIViewController {
         // 在三个modelmanager上面注销用户
         MainManager.sharedManager.logout()
         ChatModelManger.sharedManager.logout()
-        NotificationModelManager.sharedManager.logout()
         // 停止聊天更新
-        ChatRecordDataSource.sharedDataSource.pause()
-        ChatRecordDataSource.sharedDataSource.flushAll()
+        MessageManager.defaultManager.disconnect()
+//        ChatRecordDataSource.sharedDataSource.pause()
+//        ChatRecordDataSource.sharedDataSource.flushAll()
         //
-        NotificationDataSource.sharedDataSource.pause()
-        NotificationDataSource.sharedDataSource.flushAll()
+//        NotificationDataSource.sharedDataSource.pause()
+//        NotificationDataSource.sharedDataSource.flushAll()
         
         let ctrl = AccountController()
         let nav = BlackBarNavigationController(rootViewController: ctrl)

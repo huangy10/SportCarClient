@@ -19,7 +19,6 @@ extension ChatRecord {
     @NSManaged var audio: String?
     @NSManaged var audioCaches: String?
     @NSManaged var audioLength: Double // cannot mark as optional because Objective-C compatibility issues
-    @NSManaged var audioLocal: String?
     @NSManaged var audioReady: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var chatType: String?
     @NSManaged var createdAt: NSDate?
@@ -33,8 +32,9 @@ extension ChatRecord {
     @NSManaged var read: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var relatedClub: String?
     @NSManaged var relatedUser: String?
+    @NSManaged var rosterID: Int32 // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var sender: String?
-    @NSManaged var sent: String?
+    @NSManaged var sent: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var targetID: Int32 // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var textContent: String?
 
@@ -47,7 +47,6 @@ extension ChatRecord {
     static let audio = AlecrimCoreData.NullableAttribute<String>("audio")
     static let audioCaches = AlecrimCoreData.NullableAttribute<String>("audioCaches")
     static let audioLength = AlecrimCoreData.NullableAttribute<Double>("audioLength")
-    static let audioLocal = AlecrimCoreData.NullableAttribute<String>("audioLocal")
     static let audioReady = AlecrimCoreData.NullableAttribute<Bool>("audioReady")
     static let chatType = AlecrimCoreData.NullableAttribute<String>("chatType")
     static let createdAt = AlecrimCoreData.NullableAttribute<NSDate>("createdAt")
@@ -61,8 +60,9 @@ extension ChatRecord {
     static let read = AlecrimCoreData.NullableAttribute<Bool>("read")
     static let relatedClub = AlecrimCoreData.NullableAttribute<String>("relatedClub")
     static let relatedUser = AlecrimCoreData.NullableAttribute<String>("relatedUser")
+    static let rosterID = AlecrimCoreData.NullableAttribute<Int32>("rosterID")
     static let sender = AlecrimCoreData.NullableAttribute<String>("sender")
-    static let sent = AlecrimCoreData.NullableAttribute<String>("sent")
+    static let sent = AlecrimCoreData.NullableAttribute<Bool>("sent")
     static let targetID = AlecrimCoreData.NullableAttribute<Int32>("targetID")
     static let textContent = AlecrimCoreData.NullableAttribute<String>("textContent")
 
@@ -75,7 +75,6 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: ChatRecord {
     var audio: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("audio", self) }
     var audioCaches: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("audioCaches", self) }
     var audioLength: AlecrimCoreData.NullableAttribute<Double> { return AlecrimCoreData.NullableAttribute<Double>("audioLength", self) }
-    var audioLocal: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("audioLocal", self) }
     var audioReady: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("audioReady", self) }
     var chatType: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("chatType", self) }
     var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
@@ -89,8 +88,9 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: ChatRecord {
     var read: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("read", self) }
     var relatedClub: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("relatedClub", self) }
     var relatedUser: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("relatedUser", self) }
+    var rosterID: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("rosterID", self) }
     var sender: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("sender", self) }
-    var sent: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("sent", self) }
+    var sent: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("sent", self) }
     var targetID: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("targetID", self) }
     var textContent: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("textContent", self) }
 

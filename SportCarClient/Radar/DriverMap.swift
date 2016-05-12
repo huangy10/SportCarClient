@@ -207,7 +207,7 @@ extension RadarDriverMapController {
             return
         }
         
-        let requester = RadarRequester.requester
+        let requester = RadarRequester.sharedInstance
         let mapBounds = map.region
         let scanCenter = mapBounds.center
         

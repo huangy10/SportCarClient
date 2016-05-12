@@ -26,18 +26,13 @@ let kBarTitleFont = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
 let kTextInputFont = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
 
 // Network
-//let kHostName = "166.111.17.100"
-let kHostName = "paochefan.com"
-let kPortName = "80"
+let kHostName = "101.5.65.177"
+//let kHostName = "paochefan.com"
+let kPortName = "8000"
 let kChatPortName = "8888"
 let kProtocalName = "http"
-let kXMPPDomain = "paochefan.com"
 //
 let kMaxPhotoSelect: Int = 9    // 最大可以选择的照片的数量
-
-
-//
-let kEarchPerimeter: Double = 40075   // 地球周长（KM）
 
 // Macro
 func LS(str: String, comment: String="") -> String{

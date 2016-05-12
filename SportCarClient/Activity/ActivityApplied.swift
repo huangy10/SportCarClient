@@ -12,7 +12,7 @@ import Dollar
 class ActivityAppliedController: ActivityHomeMineListController {
     
     override func getMoreActData() {
-        let requester = ActivityRequester.requester
+        let requester = ActivityRequester.sharedInstance
         let dateThreshold = data.last()?.applyAt ?? NSDate()
         requester.getActivityApplied(dateThreshold, op_type: "more", limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
@@ -30,7 +30,7 @@ class ActivityAppliedController: ActivityHomeMineListController {
     
     override func getLatestActData() {
         let dateThreshold = data.last()?.applyAt ?? NSDate()
-        ActivityRequester.requester.getActivityApplied(dateThreshold, op_type: "latest", limit: 10, onSuccess: { (json) -> () in
+        ActivityRequester.sharedInstance.getActivityApplied(dateThreshold, op_type: "latest", limit: 10, onSuccess: { (json) -> () in
             self.refreshControl?.endRefreshing()
             var new = [Activity]()
             for data in json!.arrayValue {

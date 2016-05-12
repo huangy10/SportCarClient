@@ -48,7 +48,7 @@ class BackToHomeBtn: UIButton {
     }
     
     func unreadStatusChanged() {
-        let unreadNum = ChatRecordDataSource.sharedDataSource.totalUnreadNum + NotificationDataSource.sharedDataSource.unreadNum
+        let unreadNum = MessageManager.defaultManager.unreadNum
         dispatch_async(dispatch_get_main_queue()) { 
             self.messageMark.hidden = unreadNum == 0
         }

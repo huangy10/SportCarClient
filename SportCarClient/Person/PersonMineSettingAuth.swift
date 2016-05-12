@@ -33,7 +33,7 @@ class PersonMineSettingsAuthController: AuthThreeImagesController, ProgressProto
             uploadImages.append(x!)
         }
         pp_showProgressView()
-        PersonRequester.requester.postCorporationUserApplication(uploadImages, onSuccess: { (data) -> () in
+        AccountRequester2.sharedInstance.postCorporationUserApplication(uploadImages, onSuccess: { (data) -> () in
             self.pp_hideProgressView()
             self.showToast(LS("认证请求已发送"))
             }, onProgress: { (let progress) in

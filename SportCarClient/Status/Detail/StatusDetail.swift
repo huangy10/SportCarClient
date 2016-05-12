@@ -164,7 +164,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusDetailController.changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
         
         // load the detail data
-        StatusRequester.SRRequester.getStatusDetail(status!.ssidString, onSuccess: { (json) in
+        StatusRequester.sharedInstance.getStatusDetail(status!.ssidString, onSuccess: { (json) in
             if let data = json {
                 try! self.status?.loadDataFromJSON(data, detailLevel: 0, forceMainThread: false)
                 self.loadDataAndUpdateUI()
@@ -231,7 +231,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
             self.presentViewController(delete, animated: false, completion: nil)
         }else {
             // 否则弹出举报
-            let report = ReportBlacklistViewController(user: status?.user, parent: self)
+            let report = ReportBlacklistViewController(userID: status!.ssid, reportType: "status", parent: self)
             self.presentViewController(report, animated: false, completion: nil)
         }
     }
@@ -632,7 +632,7 @@ extension StatusDetailController {
             return
         }
         requestingCommentData = true
-        let requester = StatusRequester.SRRequester
+        let requester = StatusRequester.sharedInstance
         let dateThreshold = comments.last()?.createdAt ?? NSDate()
         requester.getMoreStatusComment(dateThreshold, statusID: status!.ssidString, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
@@ -749,16 +749,7 @@ extension StatusDetailController {
 extension StatusDetailController {
     
     func likeBtnPressed() {
-        let requester = StatusRequester.SRRequester
-//        if status!.liked {
-//            status!.likeNum -= 1
-//        } else {
-//            status!.likeNum += 1
-//        }
-//        status?.liked = !status!.liked
-//        self.commentPanel?.setLikedAnimated(status!.liked)
-//        self.likeNumLbl?.text = "\(self.status!.likeNum)"
-//        self.likeIcon?.image = status!.liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
+        let requester = StatusRequester.sharedInstance
         wp_startWaiting()
         requestOnFly = requester.likeStatus(status!.ssidString, onSuccess: { (json) -> () in
             self.status?.likeNum = json!["like_num"].int32Value
@@ -767,7 +758,6 @@ extension StatusDetailController {
             self.commentPanel?.setLikedAnimated(liked)
             self.likeNumLbl?.text = "\(self.status!.likeNum)"
             self.likeIcon?.image = liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
-            
             self.wp_stopWaiting()
             }) { (code) -> () in
                 self.wp_stopWaiting()
@@ -788,8 +778,8 @@ extension StatusDetailController {
         }
         let newComment = StatusComment(status: status!).initForPost(commentString, responseTo: responseToComment)
         comments.insert(newComment, atIndex: 0)
-        let requester = StatusRequester.SRRequester
-        requester.postCommentToStatus(self.status!.ssidString, content: commentString, image: nil, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (data) -> () in
+        let requester = StatusRequester.sharedInstance
+        requester.postCommentToStatus(self.status!.ssidString, content: commentString, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (data) -> () in
             // data里面的只有一个id
             if data == nil {
                 assertionFailure()

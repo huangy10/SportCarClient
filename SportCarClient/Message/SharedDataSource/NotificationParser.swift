@@ -13,7 +13,7 @@ import SwiftyJSON
 class NotificationParser: BaseParser {
     
     override func parse(data: JSON) throws -> Notification {
-        let notification = try NotificationModelManager.sharedManager.getOrCreate(data) as Notification
+        let notification = try ChatModelManger.sharedManager.getOrCreate(data) as Notification
         return notification
     }
     

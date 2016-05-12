@@ -13,24 +13,16 @@ let kReportTitles = [LS("色情低俗"), LS("广告骚扰"), LS("政治敏感"),
 
 
 class ReportBlacklistViewController: PresentTemplateViewController {
-    
-    var user: User?
-    
-    private var displayStage: Int = 0
+    var userID: Int32 = 0
+    var reportType: String // status or user or club
     
     private var container1: UIView!
     private var container2: UIView!
-    // 第一版面
-    private var reportBtn: UIButton!
-    private var blacklistLbl: UILabel!
-    private var blacklistBtn: UISwitch!
-    var blacklist: Bool = false
-    var dirty: Bool = false
-    // 第二版面
     
-    init (user: User?, parent: UIViewController) {
+    init (userID: Int32, reportType: String = "user", parent: UIViewController) {
+        self.userID = userID
+        self.reportType = reportType
         super.init(parent: parent)
-        self.user = user
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -48,42 +40,12 @@ class ReportBlacklistViewController: PresentTemplateViewController {
             make.top.equalTo(sepLine.snp_bottom)
             make.bottom.equalTo(superview)
         }
-        //
-        reportBtn = UIButton()
-        reportBtn.setTitle(LS("举报"), forState: .Normal)
-        reportBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        reportBtn.titleLabel?.font = UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)
-        container1.addSubview(reportBtn)
-        reportBtn.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(container1)
-            make.top.equalTo(container1).offset(45)
-            make.size.equalTo(CGSizeMake(40, 25))
-        }
-        reportBtn.addTarget(self, action: #selector(ReportBlacklistViewController.reportBtnPressed), forControlEvents: .TouchUpInside)
-        if user != nil {
-            blacklistLbl = container1.addSubview(UILabel.self)
-                .config(17, textColor: UIColor.whiteColor(), textAlignment: .Center, text: LS("屏蔽"))
-                .layout({ (make) in
-                    make.centerX.equalTo(container1)
-                    make.top.equalTo(reportBtn.snp_bottom).offset(45)
-                })
-            blacklistBtn = container1.addSubview(UISwitch.self)
-                .config(self, selector: #selector(blacklistPressed))
-                .layout({ (make) in
-                    make.centerX.equalTo(container1)
-                    make.top.equalTo(blacklistLbl.snp_bottom).offset(3)
-                    make.size.equalTo(CGSizeMake(51, 31))
-                })
-            blacklistBtn.on = user!.blacklisted
-        }
         // 创建第二版面
         container2 = UIView()
         container.addSubview(container2)
         container2.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(container1)
         }
-        container2.layer.opacity = 0
-        container2.hidden = true
         //
         var headerView = sepLine
         var index = 0
@@ -119,30 +81,5 @@ class ReportBlacklistViewController: PresentTemplateViewController {
         // TODO: 将举报内容发送给服务器
         showToast(LS("举报内容发送成功"), onSelf: true)
         hideAnimated()
-    }
-    
-    func blacklistPressed() {
-        blacklist = blacklistBtn.on
-        dirty = true
-    }
-    
-    override func hideAnimated(completion: (() -> ())? = nil) {
-        if dirty {
-            // 提交拉黑请求
-            let orignalState = user?.blacklisted
-            user?.blacklisted = blacklist
-            AccountRequester.sharedRequester.blacklistUser(user!, blacklist: blacklist, onSuccess: { (json) in
-                if self.blacklist {
-                    NSNotificationCenter.defaultCenter().postNotificationName(kUserBlacklistedNotification, object: nil, userInfo: [kUserKey: self.user!])
-                } else {
-                    NSNotificationCenter.defaultCenter().postNotificationName(kUserUnBlacklistedNotification, object: nil, userInfo: [kUserKey: self.user!])
-                }
-                }, onError: { (code) in
-                    AppManager.sharedAppManager.showToast(LS("操作失败，请检查您的网络设置"))
-                    // reset it to the orignal state
-                    self.user?.blacklisted = orignalState!
-            })
-        }
-        super.hideAnimated()
     }
 }

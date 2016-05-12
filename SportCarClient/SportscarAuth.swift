@@ -38,9 +38,8 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
             self.showToast(LS("请完整提供要求的信息"))
             return
         }
-        let requester = SportCarRequester.sharedSCRequester
         pp_showProgressView()
-        requester.authenticateSportscar(car.ssidString, driveLicense: selectedImages[0]!, photo: selectedImages[2]!, idCard: selectedImages[1]!, licenseNum: districtLabel.text! + carLicenseNum, onSuccess: { (json) -> () in
+        SportCarRequester.sharedInstance.authenticateSportscar(car.ssidString, driveLicense: selectedImages[0]!, photo: selectedImages[2]!, idCard: selectedImages[1]!, licenseNum: districtLabel.text! + carLicenseNum, onSuccess: { (json) -> () in
             self.pp_hideProgressView()
             self.showToast(LS("认证申请已经成功发送"))
             }, onProgress: { (progress) -> () in

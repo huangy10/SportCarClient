@@ -111,7 +111,7 @@ extension UIViewController {
     }
     
     func showConfirmToast(title: String, message: String, target: AnyObject, confirmSelector: Selector, cancelSelector: Selector, onSelf: Bool = true) -> UIView {
-        let superview = onSelf ? self.view : UIApplication.sharedApplication().keyWindow!.rootViewController!.view
+        let superview = onSelf ? self.navigationController?.view ?? self.view : UIApplication.sharedApplication().keyWindow!.rootViewController!.view
         let container = superview.addSubview(UIView).config(UIColor.clearColor())
             .layout { (make) in
                 make.edges.equalTo(superview)

@@ -23,8 +23,6 @@ protocol ShareControllorDelegate: class {
 
 }
 
-// TODO: 将这个类改成PresentTemplateViewController的子类
-
 class ShareController: UIViewController {
     weak var delegate: ShareControllorDelegate?
     // 背景图

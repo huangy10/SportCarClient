@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15F18b" minimumToolsVersion="Xcode 7.0">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15F31a" minimumToolsVersion="Xcode 7.0">
     <entity name="Activity" representedClassName=".Activity" parentEntity="BaseModel" syncable="YES">
         <attribute name="actDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="applied" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -27,7 +27,6 @@
         <attribute name="audio" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="audioCaches" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="audioLength" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="audioLocal" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="audioReady" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="chatType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
@@ -41,8 +40,9 @@
         <attribute name="read" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="relatedClub" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="relatedUser" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="rosterID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="sender" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="sent" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sent" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="targetID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="textContent" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -79,6 +79,17 @@
         <attribute name="relatedID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="relatedObj" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="notifications" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="RosterItem" representedClassName=".RosterItem" parentEntity="BaseModel" syncable="YES">
+        <attribute name="alwaysOnTop" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="entityData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="entityType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noDisturbing" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="recentChatDes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="relatedID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="unreadNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <entity name="SportCar" representedClassName=".SportCar" parentEntity="BaseModel" syncable="YES">
         <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
@@ -140,9 +151,10 @@
     <elements>
         <element name="Activity" positionX="-63" positionY="-18" width="128" height="300"/>
         <element name="BaseModel" positionX="358" positionY="48" width="128" height="73"/>
-        <element name="ChatRecord" positionX="-54" positionY="-9" width="128" height="358"/>
+        <element name="ChatRecord" positionX="-54" positionY="-9" width="128" height="360"/>
         <element name="Club" positionX="198" positionY="18" width="128" height="345"/>
         <element name="Notification" positionX="63" positionY="-351" width="128" height="195"/>
+        <element name="RosterItem" positionX="144" positionY="-198" width="128" height="180"/>
         <element name="SportCar" positionX="349" positionY="189" width="128" height="240"/>
         <element name="Status" positionX="-36" positionY="0" width="128" height="283"/>
         <element name="User" positionX="196" positionY="510" width="128" height="375"/>

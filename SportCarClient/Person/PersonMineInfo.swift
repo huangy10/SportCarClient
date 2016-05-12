@@ -11,7 +11,7 @@ import SnapKit
 import Kingfisher
 
 
-class PersonMineInfoController: UITableViewController, ImageInputSelectorDelegate, AvatarCarSelectDelegate, AvatarClubSelectDelegate, CityElementSelectDelegate, SinglePropertyModifierDelegate {
+class PersonMineInfoController: UITableViewController, ImageInputSelectorDelegate, AvatarCarSelectDelegate, AvatarClubSelectDelegate, CityElementSelectDelegate, SinglePropertyModifierDelegate, ProgressProtocol {
     
     var user: User = MainManager.sharedManager.hostUser!
     
@@ -196,7 +196,7 @@ extension PersonMineInfoController {
     }
     
     func singlePropertyModifierDidModify(newValue: String?, forIndexPath indexPath: NSIndexPath) {
-        let requester = PersonRequester.requester
+        let requester = AccountRequester2.sharedInstance
         switch indexPath.section {
         case 0:
             break
@@ -207,6 +207,7 @@ extension PersonMineInfoController {
                     self.user.nickName = newValue
                     self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                     }, onError: { (code) -> () in
+                        self.showToast(LS("修改昵称失败"))
                 })
                 break
             default:
@@ -247,6 +248,9 @@ extension PersonMineInfoController {
         default:
             break
         }
+        do {
+         try MainManager.sharedManager.save()
+        } catch {}
     }
     
     func singlePropertyModifierDidCancelled() {
@@ -260,13 +264,20 @@ extension PersonMineInfoController {
     func imageInputSelectorDidSelectImage(image: UIImage) {
         self.dismissViewControllerAnimated(false, completion: nil)
         // 开始上传头像
-        let requester = PersonRequester.requester
+        self.pp_showProgressView()
+        let requester = AccountRequester2.sharedInstance
         requester.profileModifyUploadAvatar(image, onSuccess: { (json) -> () in
             let avatarURL = SFURL(json!.stringValue)!
             KingfisherManager.sharedManager.cache.storeImage(image, forKey: avatarURL.absoluteString)
             self.user.avatar = json!.stringValue
             self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
-            }) { (code) -> () in
+            self.showToast(LS("头像上传成功"))
+            self.pp_hideProgressView()
+        }, onProgress: { (let progress) in
+            self.pp_updateProgress(progress)
+        }) { (code) -> () in
+            self.showToast(LS("头像上传失败"))
+            self.pp_hideProgressView()
         }
     }
     
@@ -276,7 +287,7 @@ extension PersonMineInfoController {
     
     func avatarCarSelectDidFinish(selectedCar: SportCar) {
         // 将修改的内容提交到服务器
-        let requester = PersonRequester.requester
+        let requester = AccountRequester2.sharedInstance
         requester.profileModifiy(["avatar_car": selectedCar.ssidString], onSuccess: { (data) -> () in
             // 
             let targetUser = self.user
@@ -292,7 +303,7 @@ extension PersonMineInfoController {
     }
     
     func avatarClubSelectDidFinish(selectedClub: Club) {
-        let requester = PersonRequester.requester
+        let requester = AccountRequester2.sharedInstance
         requester.profileModifiy(["avatar_club": selectedClub.ssidString], onSuccess: { (data) -> () in
             //
             let targetUser = self.user

@@ -22,6 +22,22 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select_deletable")
     }
     
+    override func createInlineUserSelect() {
+        let cell = UITableViewCell(style: .Default, reuseIdentifier: "inline_user_select")
+        cell.selectionStyle = .None
+        inlineUserSelect = InlineUserSelectDeletable()
+        inlineUserSelect?.delegate = self
+        cell.contentView.addSubview(inlineUserSelect!.view)
+        inlineUserSelect?.view.snp_makeConstraints(closure: { (make) in
+            make.edges.equalTo(cell.contentView)
+        })
+        inlineUserSelect?.relatedClub = targetClub
+        inlineUserSelect?.parentController = self
+        inlineUserSelect?.showAddBtn = true
+        inlineUserSelect?.showDeleteBtn = true
+        inlineUsersCell = cell
+    }
+    
     override func navSettings() {
         // Override this method to enable "release activity" button
         self.navigationItem.title = targetClub.name
@@ -36,16 +52,15 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
     }
     
     override func navLeftBtnPressed() {
-        // TODO: 将修改结果提交给服务器
         if dirty {
-            let requester = ChatRequester.requester
+            let requester = ClubRequester.sharedInstance
             requester.updateClubSettings(targetClub, onSuccess: { (json) -> () in
                 }, onError: { (code) -> () in
                     
             })
         }
         if newLogo != nil {
-            let requester = ChatRequester.requester
+            let requester = ClubRequester.sharedInstance
             requester.updateClubLogo(targetClub, newLogo: newLogo!, onSuccess: { (json) -> () in
                 if let newLogoURL = json?.string where self.newLogo != nil {
                     self.targetClub.logo = newLogoURL
@@ -62,8 +77,6 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
     }
     
     override func navRightBtnPressed() {
-        // TODO: pop up activity-release window
-        //
         if !targetClub.identified {
             showToast(LS("请先认证您的俱乐部"))
             return
@@ -115,23 +128,27 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
                 return cell
             case 8:
                 // user inlineUserSelectDeletable
-                let cell = tableView.dequeueReusableCellWithIdentifier("inline_user_select_deletable", forIndexPath: indexPath)
-                cell.selectionStyle = .None
-                if inlineUserSelect == nil {
-                    let select = InlineUserSelectDeletable()
-                    cell.contentView.addSubview(select.view)
-                    select.view.snp_makeConstraints(closure: { (make) -> Void in
-                        make.edges.equalTo(cell.contentView)
-                    })
-                    select.relatedClub = targetClub
-                    select.delegate = self
-                    inlineUserSelect = select
-                    inlineUserSelect?.parentController = self
-                }
-                inlineUserSelect?.users = Array(targetClub.members)
-                inlineUserSelect?.showAddBtn = true
-                inlineUserSelect?.showDeleteBtn = true
-                return cell
+                inlineUserSelect?.collectionView?.reloadData()
+                return inlineUsersCell
+//                let cell = tableView.dequeueReusableCellWithIdentifier("inline_user_select_deletable", forIndexPath: indexPath)
+//                cell.selectionStyle = .None
+//                if inlineUserSelect == nil {
+//                    let select = InlineUserSelectDeletable()
+//                    cell.contentView.addSubview(select.view)
+//                    select.view.snp_makeConstraints(closure: { (make) -> Void in
+//                        make.edges.equalTo(cell.contentView)
+//                    })
+//                    select.relatedClub = targetClub
+//                    select.delegate = self
+//                    inlineUserSelect = select
+//                    inlineUserSelect?.parentController = self
+//                } else {
+//                    inlineUserSelect?.collectionView?.reloadData()
+//                }
+//                inlineUserSelect?.users = Array(targetClub.members)
+//                inlineUserSelect?.showAddBtn = true
+//                inlineUserSelect?.showDeleteBtn = true
+//                return cell
             default:
                 return super.tableView(tableView, cellForRowAtIndexPath: indexPath)
             }
@@ -146,7 +163,10 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
                 return 50
             }else {
                 let userNum = targetClub.members.count + 2
-                let height: CGFloat = 110 * CGFloat(userNum / 4 + 1)
+                if userNum == 0 {
+                    return 110
+                }
+                let height: CGFloat = 110 * CGFloat((userNum - 1) / 4 + 1)
                 return height
             }
         }
@@ -198,7 +218,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             case 1:
                 toast = showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(clearChatContent), cancelSelector: #selector(hideToast as ()->()))
             case 2:
-                let report = ReportBlacklistViewController(user: nil, parent: self)
+                let report = ReportBlacklistViewController(userID: targetClub.ssid, reportType: "club", parent: self)
                 self.presentViewController(report, animated: false, completion: nil)
             default:
                 break
@@ -259,8 +279,18 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         // Do nothing
     }
     
-    func inlineUserSelectShouldDeleteUser(user: User) {
+    override func inlineUserSelectShouldDeleteUser(user: User) {
         // TODO finish this
+        ClubRequester.sharedInstance.updateClubMembers(self.targetClub.ssidString, members: [user.ssidString], opType: "delete", onSuccess: { (_) in
+            self.targetClub.removeMember(user)
+            self.targetClub.memberNum -= 1
+            self.inlineUserSelect?.users = self.targetClub.members
+            self.tableView.reloadData()
+            NSNotificationCenter.defaultCenter().postNotificationName(kMessageClubMemberChangeNotification, object: self, userInfo: [kMessageClubKey: self.targetClub])
+            self.showToast(LS("删除成功"))
+            }) { (code) in
+                self.showToast(LS("删除失败"))
+        }
     }
     
     override func inlineUserSelectNeedAddMembers() {
@@ -281,7 +311,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
     func groupMemberSelectControllerDidSelectUser(user: User) {
         let waiter = dispatch_semaphore_create(0)
         var success = false
-        ChatRequester.requester.clubQuit(targetClub.ssidString, newHostID: user.ssidString, onSuccess: { (json) -> () in
+        ClubRequester.sharedInstance.clubQuit(targetClub.ssidString, newHostID: user.ssidString, onSuccess: { (json) -> () in
             success = true
             dispatch_semaphore_signal(waiter)
             }) { (code) -> () in
@@ -291,7 +321,9 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         if success {
             targetClub.attended = false
             targetClub.mine = true
-            ChatRecordDataSource.sharedDataSource.deleteClub(targetClub)
+            
+            // TODO: 删除用户
+//            ChatRecordDataSource.sharedDataSource.deleteClub(targetClub)
             let nav = self.navigationController
             nav?.popViewControllerAnimated(true)
             nav?.popViewControllerAnimated(true)

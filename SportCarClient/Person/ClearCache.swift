@@ -39,8 +39,7 @@ class ClearCacheController: PresentTemplateViewController {
     }
     
     func clearBtnPressed() {
-        // TODO: 贸然清除缓存可能导致数据完整性问题，这里暂且先注释掉
-//        PersonMineSettingsDataSource.sharedDataSource.clearCacheFolder()
+        PersonMineSettingsDataSource.sharedDataSource.clearCacheFolder()
         cacheSizeInfoLabl.text = LS("缓存已清除")
     }
 }

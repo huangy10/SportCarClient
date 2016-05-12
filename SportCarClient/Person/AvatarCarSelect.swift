@@ -31,9 +31,9 @@ class AvatarCarSelectController: AvatarItemSelectController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //
-        let requester = PersonRequester.requester
+        let requester = AccountRequester2.sharedInstance
         toast = showStaticToast(LS("载入中...请稍后"))
-        requester.getAuthedCars(user.ssidString, onSuccess: { (json) -> () in
+        requester.getAuthedCarsList(user.ssidString, onSuccess: { (json) in
             let data = json!.arrayValue
             var i = 0
             if data.count > 0 {
@@ -52,7 +52,7 @@ class AvatarCarSelectController: AvatarItemSelectController {
             if self.toast != nil {
                 self.hideToast(self.toast!)
             }
-            }) { (code) -> () in
+            }) { (code) in
                 assert(NSThread.isMainThread())
                 self.showNoCars()
                 if self.toast != nil {

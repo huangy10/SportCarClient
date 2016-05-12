@@ -36,8 +36,10 @@ class StatusComment: BaseInMemModel {
         let userJSON = data["user"]
         let user: User = try status.manager.getOrCreate(userJSON) as User
         self.user = user
-        // TODO: response to
-        
+        let responseToJson = data["response_to"]
+        if responseToJson.exists() {
+            responseTo = try! StatusComment(status: self.status).loadDataFromJSON(responseToJson)
+        }
         return self
     }
     
@@ -64,16 +66,30 @@ class StatusComment: BaseInMemModel {
         ] as JSON
         json["user"] = try! user.toJSONObject(0)
         json["status"] = try! status.toJSONObject(0)
+        if let responseTo = responseTo {
+            json["response_to"] = try responseTo.toJSONObject(detailLevel)
+        }
         return json
     }
-//    override func fromJSONString(string: String, detailLevel: Int) throws -> Self{
-//        if let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-//            let json = JSON(data: data)
+    override func fromJSONString(string: String, detailLevel: Int) throws -> StatusComment {
+        if let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+            let json = JSON(data: data)
 //            ssid = json["statusID"].int32Value
-//            try loadDataFromJSON(json)
-//            return self
-//        } else {
-//            throw SSModelError.InvalidJSONString
-//        }
-//    }
+            try self.loadDataFromJSON(json)
+            return self
+        } else {
+            throw SSModelError.InvalidJSONString
+        }
+    }
+    
+    class override func fromJSONString(string: String, detailLevel: Int) throws -> StatusComment {
+        if let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+            let json = JSON(data: data)
+            let status = try MainManager.sharedManager.getOrCreate(json["status"]) as Status
+            let obj = try StatusComment(status: status).loadDataFromJSON(json)
+            return obj
+        } else {
+            throw SSModelError.InvalidJSONString
+        }
+    }
 }

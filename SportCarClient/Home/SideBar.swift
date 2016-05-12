@@ -234,7 +234,7 @@ extension SideBarController {
         }
 //        print(ChatRecordDataSource.sharedDataSource.totalUnreadNum)
 //        print(NotificationDataSource.sharedDataSource.unreadNum)
-        let unreadNum = ChatRecordDataSource.sharedDataSource.totalUnreadNum + NotificationDataSource.sharedDataSource.unreadNum
+        let unreadNum = MessageManager.defaultManager.unreadNum
         if unreadNum > 0 {
             unreadMessagesLbl.hidden = false
             unreadMessagesLbl.text = "\(unreadNum)"
@@ -244,7 +244,7 @@ extension SideBarController {
     }
     
     func unreadMessageNumDidChange() {
-        let unreadNum = ChatRecordDataSource.sharedDataSource.totalUnreadNum + NotificationDataSource.sharedDataSource.unreadNum
+        let unreadNum = MessageManager.defaultManager.unreadNum
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
             if unreadNum > 0 {
                 self.unreadMessagesLbl.hidden = false

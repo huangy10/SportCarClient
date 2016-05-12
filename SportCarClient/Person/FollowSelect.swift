@@ -63,13 +63,12 @@ class FollowSelectController: UserSelectController {
     
     func getMoreUserData() {
         let threshold: NSDate = followsDateThreshold ?? NSDate()
-        let requester = AccountRequester.sharedRequester
+        let requester = AccountRequester2.sharedInstance
         requester.getFollowList(targetUser!.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
             
             if let fansJSONData = data?.arrayValue {
                 for json in fansJSONData {
-                    let user: User = try! MainManager.sharedManager.getOrCreate(json)
-                    user.recentStatusDes = json["recent_status_des"].string
+                    let user: User = try! MainManager.sharedManager.getOrCreate(json["user"])
                     self.follows.append(user)
                     self.followsDateThreshold = DateSTR(json["created_at"].stringValue)
                 }

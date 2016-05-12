@@ -55,6 +55,8 @@ class MainManager {
         return "\(hostUserID!)"
     }
     
+    var jwtToken: String!
+    
     init () {
         mainContext = DataContext()
     }
@@ -68,22 +70,29 @@ class MainManager {
         return mainContext
     }
     
-    func getOrCreate<T where T : BaseModel>(data: JSON, detailLevel: Int = 0, ctx: DataContext? = nil) throws -> T {
+    func getOrCreate<T where T : BaseModel>(data: JSON, detailLevel: Int = 0, ctx: DataContext? = nil, overwrite: Bool = true) throws -> T {
         let context = ctx ?? getOperationContext()
         let table = AlecrimCoreData.Table<T>(dataContext: context)
         let id = data[T.idField].int32Value
         if T.isKindOfClass(User.self) && id == hostUserID {
             let obj = hostUser!
+            if !overwrite {
+                return obj as! T
+            }
             return try obj.loadDataFromJSON(data, detailLevel: detailLevel) as! T
         }
-//        print(id, T.description())
+        var created: Bool = false
         let obj = table.first({$0.ssid == id && $0.hostSSID == hostUserID}) ?? {
             let obj = table.createEntity()
             obj.ssid = id
+            obj.manager = self
+            created = true
             return obj
         }()
         obj.manager = self
-        try obj.loadDataFromJSON(data, detailLevel: detailLevel)
+        if overwrite || created {
+            try obj.loadDataFromJSON(data, detailLevel: detailLevel)
+        }
         return obj
     }
     
@@ -95,6 +104,7 @@ class MainManager {
             try newObj.loadInitialFromJSON(initial!)
         }
         newObj.manager = self
+        newObj.hostSSID = MainManager.sharedManager.hostUserID!
         return newObj
     }
     
@@ -105,6 +115,7 @@ class MainManager {
         let context = ctx ?? getOperationContext()
         let table = AlecrimCoreData.Table<T>(dataContext: context)
         let obj = table.first({ $0.ssid == ssid && $0.hostSSID == hostUserID})
+        obj?.manager = self
         return obj
     }
     
@@ -113,33 +124,38 @@ class MainManager {
         try mainContext.save()
     }
     
-    func login(user: User) {
+    func login(user: User, jwtToken: String) {
         if _hostUser != nil || user.managedObjectContext != getOperationContext() {
             assertionFailure()
         }
         NSUserDefaults.standardUserDefaults().setObject(user.ssidString, forKey: "host_user_id")
+        NSUserDefaults.standardUserDefaults().setObject(jwtToken, forKey: "\(user.ssidString)_jwt_token")
         _hostUser = user
         _hostUserID = user.ssid
+        self.jwtToken = jwtToken
         try! MainManager.sharedManager.save()
-        // TODO: 将下面的XMPP设置移动到AppManager
-//        let res = MessageManager.defaultManager.connect()
-//        if !res {
-//            print("xmpp: connect fail")
-//        }
+        
+        // Initialize the message system
+        MessageManager.defaultManager.connect()
     }
     
     func logout() {
         NSUserDefaults.standardUserDefaults().removeObjectForKey("host_user_id")
         _hostUser = nil
         _hostUserID = nil
+        MessageManager.defaultManager.disconnect()
     }
     
     func resumeLoginStatus() -> MainManager {
         if let userIDString = NSUserDefaults.standardUserDefaults().stringForKey("host_user_id") {
+            guard let jwtToken = NSUserDefaults.standardUserDefaults().stringForKey("\(userIDString)_jwt_token") else {
+                return self
+            }
+            self.jwtToken = jwtToken
             let userID = Int32(userIDString)
             if let user: User = AlecrimCoreData.Table<User>(dataContext: getOperationContext()).first({$0.ssid  == userID }) {
                 user.manager = self
-                login(user)
+                login(user, jwtToken: jwtToken)
             }
         }
         return self

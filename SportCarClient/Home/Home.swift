@@ -75,9 +75,7 @@ class HomeController: UIViewController, HomeDelegate {
         radar?.homeDelegate = self
         self.navigationController?.pushViewController(radar!, animated: false)
         
-        ChatRecordDataSource.sharedDataSource.start()
-        
-        let requester = AccountRequester.sharedRequester
+        let requester = AccountRequester2.sharedInstance
         requester.getProfileDataFor(self.hostUser!.ssidString, onSuccess: { (data) -> () in
             // 获取到了数据之后更新
             guard data != nil else{
@@ -87,7 +85,7 @@ class HomeController: UIViewController, HomeDelegate {
             try! self.hostUser?.loadDataFromJSON(data!, detailLevel: 1)
             // 令侧边栏更新数据
             self.reloadData()
-            }) { (code) -> ()? in
+            }) { (code) -> () in
                 print(code)
         }
     }
@@ -231,7 +229,6 @@ extension HomeController {
             self.navigationController?.pushViewController(status!, animated: true)
             break
         case 5:
-            ChatRecordDataSource.sharedDataSource.start()
             if message == nil {
                 message = MessageController()
                 message?.homeDelegate = self

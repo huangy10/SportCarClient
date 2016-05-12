@@ -28,7 +28,7 @@ class ClubBriefInfoController: UITableViewController {
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select")
         tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
         // Request data for the club
-        let requester = ChatRequester.requester
+        let requester = ClubRequester.sharedInstance
         requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
             var clubJson: JSON
             if json!["id"].exists() {
@@ -70,7 +70,22 @@ class ClubBriefInfoController: UITableViewController {
     }
     
     func navRightBtnPressed() {
-        // TODO: 申请加入
+        ClubRequester.sharedInstance.applyForAClub(targetClub.ssidString, onSuccess: { (json) in
+            self.showToast(LS("申请已发送"))
+            }) { (code) in
+                guard let code = code else {
+                    self.showToast(LS("申请发送失败"))
+                    return
+                }
+                switch code {
+                case "already join":
+                    self.showToast(LS("已经是这个俱乐部的成员"))
+                case "already applied":
+                    self.showToast(LS("已申请过这个俱乐部"))
+                default:
+                    self.showToast(LS("申请发送失败"))
+                }
+        }
     }
     
     func navLeftBtnPressed() {

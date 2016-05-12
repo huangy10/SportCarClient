@@ -62,9 +62,8 @@ class Status: BaseModel {
         content = data["content"].stringValue
         createdAt = DateSTR(data["created_at"].stringValue)
         image = data["images"].stringValue.split(";").first()
-        // TODO:
         loc = data["location"].rawString()
-        _location = try LocationModel().fromJSONString(loc!, detailLevel: 0)
+        _location = try LocationModel().loadDataFromJSON(data["location"])
         if let likeNum = data["like_num"].int32 {
             self.likeNum = likeNum
         }
@@ -100,6 +99,7 @@ class Status: BaseModel {
             "created_at": STRDate(createdAt!),
         ] as JSON
         json["location"] = try location!.toJSONObject(0)
+        json["user"] = try user!.toJSONObject(0)
         return json
     }
 

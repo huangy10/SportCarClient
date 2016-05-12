@@ -62,12 +62,11 @@ class FansSelectController: UserSelectController {
     
     func getMoreUserData() {
         let threshold: NSDate = fansDateThreshold ?? NSDate()
-        let requester = AccountRequester.sharedRequester
+        let requester = AccountRequester2.sharedInstance
         requester.getFansList(targetUser!.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
             if let fansJSONData = data?.arrayValue {
                 for json in fansJSONData {
-                    let user: User = try! MainManager.sharedManager.getOrCreate(json)
-                    user.recentStatusDes = json["recent_status_des"].string
+                    let user: User = try! MainManager.sharedManager.getOrCreate(json["user"])
                     self.fans.append(user)
                     self.fansDateThreshold = DateSTR(json["created_at"].stringValue)
                 }

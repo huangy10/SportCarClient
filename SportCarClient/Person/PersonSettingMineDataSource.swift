@@ -65,10 +65,11 @@ class PersonMineSettingsDataSource {
             "accept_invitation": acceptInvitation,
             "show_on_map": showOnMap ? "y" : "n"
         ]
-        let requester = PersonRequester.requester
+        let requester = SettingsRequester.sharedInstance
         requester.syncPersonMineSettings(uploadParam, onSuccess: { (data) -> () in
-//            print("setting data uploaded")
+            print("setting data uploaded")
             }) { (code) -> () in
+                print("sync error")
         }
     }
     
@@ -77,7 +78,7 @@ class PersonMineSettingsDataSource {
      */
     func update() {
         getCacheFolderSize()
-        let requester = PersonRequester.requester
+        let requester = SettingsRequester.sharedInstance
         requester.updatePersonMineSettings({ (json) -> () in
             if let data = json {
                 self.locationVisible = data["location_visible_to"].stringValue
@@ -143,17 +144,20 @@ class PersonMineSettingsDataSource {
         }
     }
     
-    func clearCacheFolder() {
+    func clearCacheFolder() -> Bool {
         let fileManger = NSFileManager.defaultManager()
         let cacheFolderPath = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)[0]
         let cacheFolderURL = NSURL(fileURLWithPath: cacheFolderPath)
         let enumerator = fileManger.enumeratorAtPath(cacheFolderPath)!
         do {
-        while let file: String = enumerator.nextObject() as? String {
-            try fileManger.removeItemAtURL(cacheFolderURL.URLByAppendingPathComponent(file))
-        }
+            while let file: String = enumerator.nextObject() as? String {
+                try fileManger.removeItemAtURL(cacheFolderURL.URLByAppendingPathComponent(file))
+            }
+            self.cacheSize = 0
+            self.cacheSizeDes = ""
+            return true
         } catch _ {
-            
+            return false
         }
     }
 }

@@ -29,7 +29,7 @@ class LoginRegisterController: InputableViewController {
     var titleLoginBtn: UIButton?
     var titleRegisterBtn: UIButton?
     
-    let requester = AccountRequester.sharedRequester
+    let requester = AccountRequester2.sharedInstance
     
     // 一些需要干预状态的按钮
     var authCodeBtn: AuthCodeBtnView?
@@ -447,7 +447,7 @@ class LoginRegisterController: InputableViewController {
         self.requester.postToLogin(username, password: password, onSuccess: { (json) -> (Void) in
             self.loginBtn?.enabled = true
             let user: User = try! MainManager.sharedManager.getOrCreate(json!)
-            MainManager.sharedManager.login(user)
+            MainManager.sharedManager.login(user, jwtToken: json!["jwt_token"].stringValue)
             let app = AppManager.sharedAppManager
             app.guideToContent()
             }) { (code) -> (Void) in
@@ -477,7 +477,6 @@ class LoginRegisterController: InputableViewController {
     }
     
     func registerPressed() {
-        // TODO: 完成注册接口
         // 检查所有的空是否都填写了
         guard let phone = registerPhoneInput?.text else{
             showToast(LS("请输入手机号"), onSelf: true)
@@ -494,7 +493,7 @@ class LoginRegisterController: InputableViewController {
     
         self.requester.postToRegister(phone, passwd: passwd, authCode: authCode, onSuccess: { (json) -> (Void) in
             let user: User = try! MainManager.sharedManager.getOrCreate(json!)
-            MainManager.sharedManager.login(user)
+            MainManager.sharedManager.login(user, jwtToken: json!["jwt_token"].stringValue)
             self.registerConfirm()
             }) { (code) -> (Void) in
                 switch code! {
@@ -543,8 +542,6 @@ class LoginRegisterController: InputableViewController {
     
     // MARK: 网络回调
     func registerConfirm(){
-        // TODO: 首先应当在CoreData中创建本用户条目，以及设置NSUserDefault中的内容
-        
         let nextStep = ProfileInfoController()
         self.navigationController?.pushViewController(nextStep, animated: true)
     }

@@ -10,10 +10,10 @@
 
 import UIKit
 
-let kMineSettingsStaticLabelString = [LS("新消息通知"), LS("黑名单"), LS("定位可见"), LS("邀请加入群组"), LS("清除缓存"), LS("评价我们"), LS("意见反馈"), LS("用户协议"), LS("企业认证")]
+let kMineSettingsStaticLabelString = [LS("新消息通知"), LS("定位可见"), LS("邀请加入群组"), LS("清除缓存"), LS("评价我们"), LS("意见反馈"), LS("用户协议"), LS("企业认证")]
 
 
-class PersonMineSettings: UITableViewController, BlackListViewDelegate {
+class PersonMineSettings: UITableViewController {
     
     weak var homeDelegate: HomeDelegate?
     
@@ -76,6 +76,7 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
     }
     
     func navLeftBtnPressed() {
+        PersonMineSettingsDataSource.sharedDataSource.sync()
         if let delegate = homeDelegate {
             delegate.backToHome(nil)
         } else {
@@ -100,11 +101,11 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
             let cell =  tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
             cell.staticLbl.text = kMineSettingsStaticLabelString[indexPath.row]
             switch indexPath.row {
-            case 2:
+            case 1:
                 return cell.setData(kMineSettingsStaticLabelString[indexPath.row], propertyValue: locationVisible)
-            case 3:
+            case 2:
                 return cell.setData(kMineSettingsStaticLabelString[indexPath.row], propertyValue: acceptInvitation)
-            case 4:
+            case 3:
                 return cell.setData(kMineSettingsStaticLabelString[indexPath.row], propertyValue: cacheSizeRepre)
             default:
                 return cell.setData(kMineSettingsStaticLabelString[indexPath.row], propertyValue: nil)
@@ -136,47 +137,31 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
             self.navigationController?.pushViewController(detail, animated: true)
             break
         case 1:
-            let detail = BlackListViewController()
-            detail.delegate = self
-            self.navigationController?.pushViewController(detail, animated: true)
-            break
-        case 2:
             let detail = PersonMineSettingsLocationVisiblityController()
             self.navigationController?.pushViewController(detail, animated: true)
             break
-        case 3:
+        case 2:
             let detail = PersonMineSettingsInvitationController()
             self.navigationController?.pushViewController(detail, animated: true)
-        case 4:
+        case 3:
             toast = showConfirmToast(LS("清除缓存"), message: LS("确认清除全部缓存?"), target: self, confirmSelector: #selector(clearCacheConfirmed), cancelSelector: #selector(hideToast as ()->()), onSelf: false)
 //            let detail = ClearCacheController(parent: self)
 //            self.presentViewController(detail, animated: false, completion: nil)
             break
-        case 6:
+        case 5:
             let detail = SuggestionController(parent: self)
             self.presentViewController(detail, animated: false, completion: nil)
             break
-        case 7:
+        case 6:
             let detail = AgreementController()
             self.navigationController?.pushViewController(detail, animated: true)
             break
-        case 8:
+        case 7:
             let detail = PersonMineSettingsAuthController()
             self.navigationController?.pushViewController(detail, animated: true)
             break
         default:
             break
-        }
-    }
-    
-    func didSelectUser(users: [User]) {
-        guard users.count > 0 else {
-            return
-        }
-        AccountRequester.sharedRequester.unblacklistUsers(users, onSuccess: { (json) in
-            NSNotificationCenter.defaultCenter().postNotificationName(kUserUnBlacklistedNotification, object: nil, userInfo: [kUserListKey: users])
-            }) { (code) in
-                self.showToast(LS("移除黑名单失败，请检查您的网络设置"))
         }
     }
     
@@ -205,8 +190,12 @@ class PersonMineSettings: UITableViewController, BlackListViewDelegate {
     }
     
     func clearCacheConfirmed() {
-        PersonMineSettingsDataSource.sharedDataSource.clearCacheFolder()
         hideToast()
+        if !PersonMineSettingsDataSource.sharedDataSource.clearCacheFolder() {
+            self.showToast(LS("清除缓存时出现错误"))
+        }
+//        tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 3, inSection: 0)], withRowAnimation: .Automatic)
+        tableView.reloadData()
     }
 }
 

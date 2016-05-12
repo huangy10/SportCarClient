@@ -99,13 +99,13 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate {
     }
     
     func playBtnPressed() {
-        guard let audioURL = chatRecord?.audioLocal else {
+        guard let audioURL = chatRecord?.audio else {
             return
         }
         let player = UniversalAudioPlayer.sharedPlayer
         if playBtn?.tag == 0 {
             playBtn?.setImage(UIImage(named: "chat_voice_pause"), forState: .Normal)
-            player.play(NSURL(string: audioURL)!, newDelegate: self)
+            player.play(SFURL(audioURL)!, newDelegate: self)
             playBtn?.tag = 1
         }else{
             if player.isPlayingURLStr(audioURL){
@@ -154,7 +154,7 @@ extension ChatWaveView {
     }
     
     func getIdentifier() -> String {
-        return chatRecord!.audioLocal!
+        return chatRecord!.audio!
     }
     
     func failToPlay() {

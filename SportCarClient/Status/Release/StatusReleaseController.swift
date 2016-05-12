@@ -265,25 +265,25 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             return
         }
         let car_id = sportCarList?.selectedCar?.ssidString
-        guard let lat: Double? = userLocation?.location.coordinate.latitude else {
+        guard let lat: Double = userLocation?.location.coordinate.latitude else {
             showToast(LS("无法获取当前位置"), onSelf: true)
             return
         }
-        guard let lon: Double? = userLocation?.location.coordinate.longitude else {
+        guard let lon: Double = userLocation?.location.coordinate.longitude else {
             return
         }
-        let loc_description = locationDesInput?.text == "" ? "未知未知" : locationDesInput!.text
-        let requester = StatusRequester.SRRequester
+        let loc_description = locationDesInput?.text == "" ? "未知地点" : locationDesInput!.text
+        let requester = StatusRequester.sharedInstance
         let toast = self.showStaticToast(LS("发布中..."))
         let informUserIds = informOfUsers.map { (user) -> String in
             return user.ssidString
         }
         pp_showProgressView()
-        requester.postNewStatus(content, images: [selectedImage!], car_id: car_id, lat: lat, lon: lon, loc_description: loc_description, informOf: informUserIds, onSuccess: { (json) -> () in
+        requester.postNewStatus(content, image: selectedImage!, car_id: car_id, lat: lat, lon: lon, loc_description: loc_description!, informOf: informUserIds, onSuccess: { (json) -> () in
             self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
             self.home?.followStatusCtrl.loadLatestData()
             self.hideToast(toast)
-            self.showToast(LS("发布成功！"))
+            self.showToast(LS("发布成功！"), onSelf: true)
             self.pp_hideProgressView()
             self.navLeftBtnPressed()
             self.requesting = false

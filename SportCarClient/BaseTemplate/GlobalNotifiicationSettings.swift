@@ -32,3 +32,6 @@ let kActivitySSIDKey = "activity_ssid"
 // MARK: Chat
 let kMessageNewChatMergedNotification = "new_chat_merged"
 let kMessageChatListKey = "chats"
+let kMessageChatResetNotification = "chat_message_reset"
+let kMessageClubMemberChangeNotification = "club_member_change"
+let kMessageClubKey = "club"

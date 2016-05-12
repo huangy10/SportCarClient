@@ -195,15 +195,14 @@ class FFSelectController: UserSelectController {
      */
     func getMoreUserData() {
         let threshold: NSDate
-        let requester = AccountRequester.sharedRequester
+        let requester = AccountRequester2.sharedInstance
         switch navTitlestate {
         case .Fans:
             threshold = fansDateThreshold ?? NSDate()
             requester.getFansList(targetUser.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
                 if let fansJSONData = data?.arrayValue {
                     for json in fansJSONData {
-                        let user: User = try! MainManager.sharedManager.getOrCreate(json)
-                        user.recentStatusDes = json["recent_status_des"].string
+                        let user: User = try! MainManager.sharedManager.getOrCreate(json["user"])
                         self.fans.append(user)
                         self.fansDateThreshold = DateSTR(json["created_at"].stringValue)
                     }
@@ -221,8 +220,7 @@ class FFSelectController: UserSelectController {
             requester.getFollowList(targetUser.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
                 if let followJSONData = data?.arrayValue {
                     for json in followJSONData {
-                        let user: User = try! MainManager.sharedManager.getOrCreate(json)
-                        user.recentStatusDes = json["recent_status_des"].string
+                        let user: User = try! MainManager.sharedManager.getOrCreate(json["user"])
                         self.follows.append(user)
                         self.followDateThreshold = DateSTR(json["created_at"].stringValue)
                     }

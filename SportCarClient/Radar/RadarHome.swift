@@ -14,11 +14,14 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     
     var driver: RadarDriverMapController!
     var club: ClubDiscoverController!
+    var act: ActivityNearByController!
+    var controllers: [UIViewController] = []
     
     var board: UIScrollView!
     var titleBtnIcon: UIImageView!
     var titleDriverBtn: UIButton!
     var titleClubBtn: UIButton!
+    var titleActBtn: UIButton!
     
     var releaseBoard: UIView!
     var navRightBtn: UIButton!
@@ -40,23 +43,14 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        
-        if navRightBtn.tag == 0 {
-            driver.viewWillAppear(animated)
-        } else {
-            club.viewWillAppear(animated)
-        }
-        
+        controllers[curTag].viewWillAppear(animated)
+        board.setContentOffset(CGPointMake(CGFloat(self.curTag) * board.frame.width,  0), animated: false)
         navLeftBtn.unreadStatusChanged()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        if navRightBtn.tag == 0 {
-            driver.viewWillDisappear(animated)
-        } else {
-            club.viewWillDisappear(animated)
-        }
+        controllers[curTag].viewWillDisappear(animated)
     }
     
     func navSettings() {
@@ -77,34 +71,60 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         let container = UIView()
         container.frame = CGRectMake(0, 0, containerWidth, barHeight)
         container.backgroundColor = UIColor.clearColor()
-        //
-        titleDriverBtn = UIButton()
-        titleDriverBtn.tag = 0
-        titleDriverBtn.setTitle(LS("车主"), forState: .Normal)
-        titleDriverBtn.setTitleColor(kBarBgColor, forState: .Normal)
-        titleDriverBtn.titleLabel?.font = kBarTextFont
-        titleDriverBtn.addTarget(self, action: #selector(RadarHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
-        container.addSubview(titleDriverBtn)
-        titleDriverBtn.snp_makeConstraints { (make) -> Void in
-            make.height.equalTo(30)
-            make.width.equalTo(80)
-            make.right.equalTo(container.snp_centerX).offset(-8)
-            make.centerY.equalTo(container)
-        }
-        //
-        titleClubBtn = UIButton()
+        
+        titleClubBtn = container.addSubview(UIButton)
+            .config(self, selector: #selector(navTitleBtnPressed(_:)), titleSize: 14, titleWeight: UIFontWeightLight, titleColor: UIColor.whiteColor(), title: LS("俱乐部"))
+            .layout({ (make) in
+                make.size.equalTo(CGSizeMake(80, 30))
+                make.center.equalTo(container)
+            })
         titleClubBtn.tag = 1
-        titleClubBtn.setTitle(LS("俱乐部"), forState: .Normal)
-        titleClubBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        titleClubBtn.titleLabel?.font = kBarTextFont
-        titleClubBtn.addTarget(self, action: #selector(RadarHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
-        container.addSubview(titleClubBtn)
-        titleClubBtn.snp_makeConstraints { (make) -> Void in
-            make.height.equalTo(30)
-            make.width.equalTo(80)
-            make.left.equalTo(container.snp_centerX).offset(8)
-            make.centerY.equalTo(container)
-        }
+        
+        titleDriverBtn = container.addSubview(UIButton)
+            .config(self, selector: #selector(navTitleBtnPressed(_:)), titleSize: 14, titleWeight: UIFontWeightLight, titleColor: kBarBgColor, title: LS("车主"))
+            .layout({ (make) in
+                make.centerY.equalTo(container)
+                make.right.equalTo(titleClubBtn.snp_left).offset(-9)
+                make.size.equalTo(CGSizeMake(80, 30))
+            })
+        titleDriverBtn.tag = 0
+        
+        titleActBtn = container.addSubview(UIButton)
+            .config(self, selector: #selector(navTitleBtnPressed(_:)), titleSize: 14, titleWeight: UIFontWeightLight, titleColor: UIColor.whiteColor(), title: LS("活动"))
+            .layout({ (make) in
+                make.centerY.equalTo(container)
+                make.left.equalTo(titleClubBtn.snp_right)
+                make.size.equalTo(CGSizeMake(80, 30))
+            })
+        titleActBtn.tag = 2
+//        //
+//        titleDriverBtn = UIButton()
+//        titleDriverBtn.tag = 0
+//        titleDriverBtn.setTitle(LS("车主"), forState: .Normal)
+//        titleDriverBtn.setTitleColor(kBarBgColor, forState: .Normal)
+//        titleDriverBtn.titleLabel?.font = kBarTextFont
+//        titleDriverBtn.addTarget(self, action: #selector(RadarHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+//        container.addSubview(titleDriverBtn)
+//        titleDriverBtn.snp_makeConstraints { (make) -> Void in
+//            make.height.equalTo(30)
+//            make.width.equalTo(80)
+//            make.right.equalTo(container.snp_centerX).offset(-8)
+//            make.centerY.equalTo(container)
+//        }
+//        //
+//        titleClubBtn = UIButton()
+//        titleClubBtn.tag = 1
+//        titleClubBtn.setTitle(LS("俱乐部"), forState: .Normal)
+//        titleClubBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+//        titleClubBtn.titleLabel?.font = kBarTextFont
+//        titleClubBtn.addTarget(self, action: #selector(RadarHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+//        container.addSubview(titleClubBtn)
+//        titleClubBtn.snp_makeConstraints { (make) -> Void in
+//            make.height.equalTo(30)
+//            make.width.equalTo(80)
+//            make.left.equalTo(container.snp_centerX).offset(8)
+//            make.centerY.equalTo(container)
+//        }
         //
         titleBtnIcon = UIImageView(image: UIImage(named: "account_header_button"))
         container.addSubview(titleBtnIcon)
@@ -156,30 +176,42 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         if sender.tag == curTag {
             return
         }
+        controllers[sender.tag].viewWillAppear(true)
+        controllers[curTag].viewWillDisappear(true)
         
-        if sender.tag == 0 {
-            board.setContentOffset(CGPointZero, animated: true)
-            titleDriverBtn.setTitleColor(kBarBgColor, forState: .Normal)
-            titleClubBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            titleBtnIcon.snp_remakeConstraints(closure: { (make) -> Void in
-                make.edges.equalTo(titleDriverBtn)
-            })
-            driver.viewWillAppear(true)
-            club.viewWillDisappear(true)
-        }else {
-            board.setContentOffset(CGPointMake(self.view.frame.width, 0), animated: true)
-            titleDriverBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            titleClubBtn.setTitleColor(kBarBgColor, forState: .Normal)
-            titleBtnIcon.snp_remakeConstraints(closure: { (make) -> Void in
-                make.edges.equalTo(titleClubBtn)
-            })
-            driver.viewWillDisappear(true)
-            club.viewWillAppear(true)
+        let btns = [titleDriverBtn, titleClubBtn, titleActBtn]
+        let targetBtn = btns[sender.tag]
+        let sourceBtn = btns[curTag]
+        targetBtn.setTitleColor(kBarBgColor, forState: .Normal)
+        sourceBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        titleBtnIcon.snp_remakeConstraints { (make) in
+            make.edges.equalTo(targetBtn)
         }
-        curTag = sender.tag
+        
+//        if sender.tag == 0 {
+//            board.setContentOffset(CGPointZero, animated: true)
+//            titleDriverBtn.setTitleColor(kBarBgColor, forState: .Normal)
+//            titleClubBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+//            titleBtnIcon.snp_remakeConstraints(closure: { (make) -> Void in
+//                make.edges.equalTo(titleDriverBtn)
+//            })
+//            driver.viewWillAppear(true)
+//            club.viewWillDisappear(true)
+//        }else {
+//            board.setContentOffset(CGPointMake(self.view.frame.width, 0), animated: true)
+//            titleDriverBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+//            titleClubBtn.setTitleColor(kBarBgColor, forState: .Normal)
+//            titleBtnIcon.snp_remakeConstraints(closure: { (make) -> Void in
+//                make.edges.equalTo(titleClubBtn)
+//            })
+//            driver.viewWillDisappear(true)
+//            club.viewWillAppear(true)
+//        }
         UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
             self.titleBtnIcon.superview?.layoutIfNeeded()
             }, completion: nil)
+        board.setContentOffset(CGPointMake(self.view.frame.width * CGFloat(sender.tag), 0), animated: true)
+        curTag = sender.tag
     }
     
     func createSubviews(){
@@ -215,6 +247,17 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             make.bottom.equalTo(superview)
             make.width.equalTo(width)
         }
+        
+        act = ActivityNearByController()
+        act.home = self
+        board.addSubview(act.view)
+        act.view.snp_makeConstraints { (make) in
+            make.size.equalTo(superview)
+            make.top.equalTo(superview)
+            make.left.equalTo(board).offset(width * 2)
+        }
+        
+        controllers = [driver, club, act]
         
         createReleaseBoard()
     }
@@ -319,8 +362,6 @@ extension RadarHomeController {
         case 0:
             let release = StatusReleaseController()
             release.pp_presentWithWrapperFromController(self)
-//            let wrapper = BlackBarNavigationController(rootViewController: release)
-//            self.presentViewController(wrapper, animated: true, completion: nil)
         case 1:
             let selector = FFSelectController()
             selector.delegate = self
@@ -357,8 +398,8 @@ extension RadarHomeController {
         // 群聊创建成功，打开聊天窗口
         self.navigationController?.popViewControllerAnimated(true)
         // Ensure that the datasource is started
-        ChatRecordDataSource.sharedDataSource.start()
         let chatRoom = ChatRoomController()
+        chatRoom.chatCreated = false
         chatRoom.targetClub = newClub
         self.navigationController?.pushViewController(chatRoom, animated: true)
 

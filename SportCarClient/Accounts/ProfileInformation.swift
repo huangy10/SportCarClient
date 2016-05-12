@@ -78,7 +78,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
             showToast(LS("请选择头像"))
             return
         }
-        let requester = AccountRequester.sharedRequester
+        let requester = AccountRequester2.sharedInstance
         pp_showProgressView()
         requester.postToSetProfile(nickName, gender: gender, birthDate: birthDate, avatar: avatar, onSuccess: { (_) -> () in
             self.pp_hideProgressView()
@@ -92,10 +92,10 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
                 self.nextBtn?.enabled = true
                 switch code! {
                 case "0000":
-                    self.showToast(LS("网络连接失败"))
+                    self.showToast(LS("网络连接失败"), onSelf: true)
                     break
                 default:
-                    self.showToast(LS("未知错误"))
+                    self.showToast(LS("未知错误"), onSelf: true)
                     break
                 }
         }

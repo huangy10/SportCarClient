@@ -150,8 +150,7 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandSelect
     func nextBtnPressed() {
         contentInput?.resignFirstResponder()
         let signature: String = contentInput?.text ?? ""
-        let requester = SportCarRequester.sharedSCRequester
-        requester.postToFollow(signature, carId: carId!, onSuccess: { (json) -> () in
+        SportCarRequester.sharedInstance.postToFollow(signature, carId: carId!, onSuccess: { (json) -> () in
             // add this car to current users
             let car: SportCar = try! MainManager.sharedManager.getOrCreate(SportCar.reorgnaizeJSON(json!))
             if MainManager.sharedManager.hostUser != nil {
@@ -162,7 +161,11 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandSelect
             }
             self.delegate?.sportCarSelectDeatilDidAddCar(car)
             }) { (code) -> () in
-                self.showToast(LS("服务器发生了内部错误"))
+                if code == "No permission" {
+                    self.showToast(LS("请先认证您的第一辆爱车"))
+                } else {
+                    self.showToast(LS("服务器发生了内部错误"))
+                }
         }
     }
     
@@ -243,8 +246,10 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandSelect
         if manufacturer == nil || carType == nil {
             return
         }
-        let requester = SportCarRequester.sharedSCRequester
-        requester.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
+        SportCarRequester.sharedInstance.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
+            guard let data = data else {
+                return
+            }
             let carImgURL = SF(data["image_url"].stringValue)
             self.carDisplayURL = NSURL(string: carImgURL ?? "")
             self.carId = data["carID"].stringValue
