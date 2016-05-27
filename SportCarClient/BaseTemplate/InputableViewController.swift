@@ -12,6 +12,7 @@ import UIKit
 class InputableViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     var tapper: UITapGestureRecognizer?
     var inputFields: [UIView?] = []
+    var delayTask: dispatch_block_t?
     
     override func viewDidLoad() {
         super.viewDidLoad()

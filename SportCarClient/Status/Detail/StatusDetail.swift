@@ -25,7 +25,7 @@ import SwiftyJSON
 //}
 
 
-class StatusDetailController: InputableViewController, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol {
+class StatusDetailController: InputableViewController, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol, LoadingProtocol {
     
     var list: UITableView?
     var indexPath: NSIndexPath?
@@ -751,6 +751,7 @@ extension StatusDetailController {
     func likeBtnPressed() {
         let requester = StatusRequester.sharedInstance
         wp_startWaiting()
+        lp_start()
         requestOnFly = requester.likeStatus(status!.ssidString, onSuccess: { (json) -> () in
             self.status?.likeNum = json!["like_num"].int32Value
             let liked = json!["like_state"].boolValue
@@ -759,7 +760,9 @@ extension StatusDetailController {
             self.likeNumLbl?.text = "\(self.status!.likeNum)"
             self.likeIcon?.image = liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
             self.wp_stopWaiting()
+            self.lp_stop()
             }) { (code) -> () in
+                self.lp_stop()
                 self.wp_stopWaiting()
                 self.showToast(LS("无法访问服务器"))
         }
@@ -872,3 +875,4 @@ extension StatusDetailController {
     }
     
 }
+

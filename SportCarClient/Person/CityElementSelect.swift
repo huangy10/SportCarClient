@@ -11,6 +11,7 @@ import UIKit
 
 protocol CityElementSelectDelegate: class {
     func cityElementSelectDidSelect(dataSource: CityElementSelectDataSource)
+    func cityElementSelectDidCancel()
 }
 
 
@@ -54,6 +55,7 @@ class CityElementSelectController: UITableViewController {
     var selectedElement: String?
     var dataSource: CityElementSelectDataSource!
     var data: [String] = []
+    var showAllContry: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +72,8 @@ class CityElementSelectController: UITableViewController {
             assertionFailure()
         }
         tableView.registerClass(SportCarBrandSelectCell.self, forCellReuseIdentifier: SportCarBrandSelectCell.reuseIdentifier)
+        
+        assert(showAllContry || maxLevel > 0)
     }
     
     func navSettings() {
@@ -82,7 +86,7 @@ class CityElementSelectController: UITableViewController {
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        delegate?.cityElementSelectDidCancel()
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -90,19 +94,30 @@ class CityElementSelectController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if showAllContry {
+            return data.count + 1
+        }
         return data.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(SportCarBrandSelectCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarBrandSelectCell
-        cell.nameLbl?.text = data[indexPath.row]
+        if indexPath.row == 0  {
+            cell.nameLbl?.text = LS("全国")
+        } else {
+            cell.nameLbl?.text = data[indexPath.row - 1]
+        }
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch level {
         case 0:
-            dataSource.selectedProv = data[indexPath.row]
+            if indexPath.row > 0 {
+                dataSource.selectedProv = data[indexPath.row - 1]
+            } else {
+                dataSource.selectedProv = "全国"
+            }
         case 1:
             dataSource.selectedCity = data[indexPath.row]
         case 2:
@@ -111,8 +126,6 @@ class CityElementSelectController: UITableViewController {
             break
         }
         if level == maxLevel {
-            let root = delegate as! UIViewController
-            self.navigationController?.popToViewController(root, animated: true)
             delegate?.cityElementSelectDidSelect(dataSource)
             return
         }

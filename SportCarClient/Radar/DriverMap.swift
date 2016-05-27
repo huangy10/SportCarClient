@@ -98,7 +98,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         self.view.bringSubviewToFront(userList)
         //
         showUserListBtn = self.view.addSubview(UIButton.self)
-            .config(kBarBgColor)
+            .config(UIColor.whiteColor())
             .config(self, selector: #selector(showUserBtnPressed))
             .toRound(20)
             .addShadow().layout({ (make) in

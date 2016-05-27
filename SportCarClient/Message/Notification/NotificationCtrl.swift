@@ -131,7 +131,10 @@ class NotificationController: UITableViewController {
             cell.onAgreeBtnPressed = { [weak self] _ in
                 let requester = ActivityRequester.sharedInstance
                 requester.activityOperation(act.ssidString, targetUserID: "", opType: "invite_accepted", onSuccess: { (json) -> () in
+                    notification.flag = true
+                    notification.checked = true
                     cell.closeOperation = true
+                    cell.doneLbl.text = LS("已确认")
                     }, onError: { (code) -> () in
                         self?.showToast(LS("无法连接到服务器"))
                 })
@@ -139,7 +142,10 @@ class NotificationController: UITableViewController {
             cell.onDenyBtnPressed = { [weak self] _ in
                 let requester = ActivityRequester.sharedInstance
                 requester.activityOperation(act.ssidString, targetUserID: "", opType: "invite_accepted", onSuccess: { (json) -> () in
+                    notification.flag = false
+                    notification.checked = true
                     cell.closeOperation = true
+                    cell.doneLbl.text = LS("已拒绝")
                     }, onError: { (code) -> () in
                         self?.showToast(LS("无法连接到服务器"))
                 })
@@ -183,7 +189,6 @@ class NotificationController: UITableViewController {
             cell.readDot.hidden = notification.read
             cell.closeOperation = notification.checked
             cell.doneLbl.text = notification.flag ? LS("已确认") : LS("已拒绝")
-            // TODO: add btn handlers
             cell.onAgreeBtnPressed = { [weak self] _ in
                 guard let sSelf = self else {
                     return
@@ -195,6 +200,9 @@ class NotificationController: UITableViewController {
                 ClubRequester.sharedInstance.clubOperation(
                     relatedClub.ssidString, targetUserID: user.ssidString, opType: "club_apply_agree", onSuccess: { (json) in
                         cell.closeOperation = true
+                        cell.doneLbl.text = LS("已确认")
+                        notification.checked = true
+                        notification.flag = true
                     }, onError: { (code) in
                         sSelf.showToast(LS("无法连接到服务器"))
                 })
@@ -210,6 +218,9 @@ class NotificationController: UITableViewController {
                 ClubRequester.sharedInstance.clubOperation(
                     relatedClub.ssidString, targetUserID: user.ssidString, opType: "club_apply_deny", onSuccess: { (json) in
                         cell.closeOperation = true
+                        cell.doneLbl.text = LS("已拒绝")
+                        notification.checked = true
+                        notification.flag = false
                     }, onError: { (code) in
                         sSelf.showToast(LS("无法连接到服务器"))
                 })
@@ -255,7 +266,7 @@ class NotificationController: UITableViewController {
             let messageBody = notification.messageBody ?? ""
             return 90 + messageBody.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightLight), boundingSize: CGSizeMake(NotificationCellWithCoverThumbnail.messageBodyLblMaxWidth, CGFloat.max)).height
         case "act_invited":
-            return 93.5
+            return 100
 //            if notification.checked {
 //                return 75
 //            } else {

@@ -98,8 +98,6 @@ class ImageViewer: UIViewController {
         originalFrame.size = senderView.frame.size
         originalCornerRadius = senderView.layer.cornerRadius
         originalFrameRelativeToScreen = originalFrame
-        
-//        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: UIStatusBarAnimation.Slide)
     }
     
     func configureImageView() {
@@ -316,7 +314,6 @@ class ImageViewer: UIViewController {
                 }
                 
                 self.maskView.alpha = 0.0
-//                UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.None)
                 }, completion: {(finished) in
                     self.willMoveToParentViewController(nil)
                     self.view.removeFromSuperview()

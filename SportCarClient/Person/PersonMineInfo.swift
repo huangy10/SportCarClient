@@ -191,8 +191,13 @@ class PersonMineInfoController: UITableViewController, ImageInputSelectorDelegat
 extension PersonMineInfoController {
     
     func cityElementSelectDidSelect(dataSource: CityElementSelectDataSource) {
+        self.navigationController?.popToViewController(self, animated: true)
         let district = dataSource.selectedCity! + dataSource.selectedDistrict!
         self.singlePropertyModifierDidModify(district, forIndexPath: NSIndexPath(forRow: 2, inSection: 2))
+    }
+    
+    func cityElementSelectDidCancel() {
+        self.navigationController?.popToViewController(self, animated: true)
     }
     
     func singlePropertyModifierDidModify(newValue: String?, forIndexPath indexPath: NSIndexPath) {

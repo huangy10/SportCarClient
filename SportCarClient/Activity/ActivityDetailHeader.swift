@@ -304,7 +304,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     }
     
     // MARK: CollectionView
-    
+
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }

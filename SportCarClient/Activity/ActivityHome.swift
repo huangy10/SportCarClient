@@ -22,8 +22,8 @@ class ActivityHomeController: UIViewController {
     
     var board: UIScrollView!
 //    var titleNearByBtn: UIButton!
-    var titleMineBtn: UIButton!
-    var titleAppliedBtn: UIButton!
+    var titleMineLbl: UILabel!
+    var titleAppliedLbl: UILabel!
     var titleBtnIcon: UIImageView!
     var curTag: Int = 0
     
@@ -60,7 +60,7 @@ class ActivityHomeController: UIViewController {
         // 导航栏右侧按钮
         let navRightBtn = UIButton()
         navRightBtn.setImage(UIImage(named: "status_add_btn_white"), forState: .Normal)
-        navRightBtn.frame = CGRectMake(0, 0, 21, 21)
+        navRightBtn.frame = CGRectMake(0, 0, 18, 18)
         navRightBtn.addTarget(self, action: #selector(ActivityHomeController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navRightBtn)
         // 导航栏内容
@@ -69,23 +69,35 @@ class ActivityHomeController: UIViewController {
         let container = UIView(frame: CGRectMake(0, 0, containerWidth, barHeight))
         container.backgroundColor = UIColor.clearColor()
         
-        titleMineBtn = container.addSubview(UIButton)
-            .config(self, selector: #selector(navTitleBtnPressed(_:)), titleSize: 14, titleWeight: UIFontWeightLight, titleColor: kBarBgColor, title: LS("已发布"))
+        let titleMineBtn = container.addSubview(UIButton)
+            .config(self, selector: #selector(navTitleBtnPressed(_:)))
             .layout({ (make) in
-                make.right.equalTo(container.snp_centerX).offset(-8)
+                make.right.equalTo(container.snp_centerX)
                 make.centerY.equalTo(container)
-                make.size.equalTo(CGSizeMake(80, 30))
+                make.size.equalTo(CGSizeMake(70, 30))
             })
         titleMineBtn.tag = 0
-        
-        titleAppliedBtn = container.addSubview(UIButton)
-            .config(self, selector: #selector(navTitleBtnPressed(_:)), titleSize: 14, titleWeight: UIFontWeightLight, titleColor: UIColor.whiteColor(), title: LS("已报名"))
+        titleMineLbl = titleMineBtn.addSubview(UILabel)
+            .config(14, textColor: kTextBlack, textAlignment: .Center, text: LS("已发布"))
             .layout({ (make) in
-                make.left.equalTo(container.snp_centerX).offset(8)
+                make.center.equalTo(titleMineBtn)
+                make.size.equalTo(LS(" 已发布 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+            })
+        
+        let titleAppliedBtn = container.addSubview(UIButton)
+            .config(self, selector: #selector(navTitleBtnPressed(_:)))
+            .layout({ (make) in
+                make.left.equalTo(container.snp_centerX)
                 make.centerY.equalTo(container)
-                make.size.equalTo(CGSizeMake(80, 30))
+                make.size.equalTo(CGSizeMake(70, 30))
             })
         titleAppliedBtn.tag = 1
+        titleAppliedLbl = titleAppliedBtn.addSubview(UILabel)
+            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("已报名"))
+            .layout({ (make) in
+                make.center.equalTo(titleAppliedBtn)
+                make.size.equalTo(LS(" 已报名 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+            })
 //        //
 //        titleMineBtn = UIButton()
 //        titleMineBtn.tag = 1
@@ -126,10 +138,13 @@ class ActivityHomeController: UIViewController {
 //            make.size.equalTo(CGSizeMake(80, 30))
 //        }
         //
-        titleBtnIcon = UIImageView(image: UIImage(named: "account_header_button"))
+        titleBtnIcon = UIImageView(image: UIImage(named: "nav_title_btn_icon"))
         container.addSubview(titleBtnIcon)
         titleBtnIcon.snp_makeConstraints { (make) -> Void in
-            make.edges.equalTo(titleMineBtn)
+            make.bottom.equalTo(container)
+            make.left.equalTo(titleMineLbl)
+            make.right.equalTo(titleMineLbl)
+            make.height.equalTo(2.5)
         }
         container.sendSubviewToBack(titleBtnIcon)
         //
@@ -143,13 +158,17 @@ class ActivityHomeController: UIViewController {
         controllers[sender.tag].viewWillAppear(true)
         controllers[curTag].viewWillDisappear(true)
         
-        let btns = [titleMineBtn, titleAppliedBtn]
-        let targetBtn = btns[sender.tag]
-        let sourceBtn = btns[curTag]
-        targetBtn.setTitleColor(kBarBgColor, forState: .Normal)
-        sourceBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        let lbls = [titleMineLbl, titleAppliedLbl]
+        let targetLbl = lbls[sender.tag]
+        let sourceLbl = lbls[curTag]
+        targetLbl.textColor = kTextBlack
+        sourceLbl.textColor = kTextGray
+        
         titleBtnIcon.snp_remakeConstraints { (make) -> Void in
-            make.edges.equalTo(targetBtn)
+            make.bottom.equalTo(titleBtnIcon.superview!)
+            make.left.equalTo(targetLbl)
+            make.right.equalTo(targetLbl)
+            make.height.equalTo(2.5)
         }
         UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
             self.titleBtnIcon.superview?.layoutIfNeeded()

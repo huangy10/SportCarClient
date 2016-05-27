@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		59709BA10C676D5E26BB2779 /* Pods_SportCarClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */; };
+		BF11C7041CF32A8A00CCD184 /* LoadingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11C7031CF32A8A00CCD184 /* LoadingProtocol.swift */; };
 		BF11F6AE1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */; };
 		BF11F6B01CC0A11F0092A7E9 /* EmptyListHintCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */; };
 		BF139E6E1C4E6E8E0022F4FC /* FFSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF139E6D1C4E6E8E0022F4FC /* FFSelect.swift */; };
@@ -161,6 +162,8 @@
 		BFC36BAF1C6C5E1D00DC6FE2 /* PersonMineSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BAE1C6C5E1D00DC6FE2 /* PersonMineSettings.swift */; };
 		BFC36BB21C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */; };
 		BFC36BB41C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */; };
+		BFC4F14E1CE6C2CE004D7BD0 /* LocationSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC4F14D1CE6C2CE004D7BD0 /* LocationSearch.swift */; };
+		BFC4F1511CE6F1A7004D7BD0 /* LocationSelectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC4F1501CE6F1A7004D7BD0 /* LocationSelectCell.swift */; };
 		BFC8F1491CC8A5B200ABE31F /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC8F1411CC8A5B200ABE31F /* TencentOpenAPI.framework */; };
 		BFC8F14A1CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BFC8F1421CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle */; };
 		BFC8F14B1CC8A5B200ABE31F /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC8F1441CC8A5B200ABE31F /* libWeChatSDK.a */; };
@@ -302,6 +305,7 @@
 /* Begin PBXFileReference section */
 		0FBECD0994E751F3F3D75AE4 /* Pods-SportCarClient.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportCarClient.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SportCarClient/Pods-SportCarClient.adhoc.xcconfig"; sourceTree = "<group>"; };
 		9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SportCarClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF11C7031CF32A8A00CCD184 /* LoadingProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingProtocol.swift; path = BaseTemplate/LoadingProtocol.swift; sourceTree = "<group>"; };
 		BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GlobalNotifiicationSettings.swift; path = BaseTemplate/GlobalNotifiicationSettings.swift; sourceTree = "<group>"; };
 		BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmptyListHintCell.swift; path = BaseTemplate/Views/EmptyListHintCell.swift; sourceTree = "<group>"; };
 		BF139E6D1C4E6E8E0022F4FC /* FFSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FFSelect.swift; path = UserSelect/FFSelect.swift; sourceTree = "<group>"; };
@@ -456,6 +460,8 @@
 		BFC36BAE1C6C5E1D00DC6FE2 /* PersonMineSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettings.swift; path = Person/PersonMineSettings.swift; sourceTree = "<group>"; };
 		BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsNewMessageNotification.swift; path = Person/PersonMineSettingsNewMessageNotification.swift; sourceTree = "<group>"; };
 		BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsLocationVisiblity.swift; path = Person/PersonMineSettingsLocationVisiblity.swift; sourceTree = "<group>"; };
+		BFC4F14D1CE6C2CE004D7BD0 /* LocationSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationSearch.swift; path = Map/LocationSearch.swift; sourceTree = "<group>"; };
+		BFC4F1501CE6F1A7004D7BD0 /* LocationSelectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationSelectCell.swift; path = Map/LocationSelectCell.swift; sourceTree = "<group>"; };
 		BFC8F1411CC8A5B200ABE31F /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
 		BFC8F1421CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TencentOpenApi_IOS_Bundle.bundle; sourceTree = "<group>"; };
 		BFC8F1441CC8A5B200ABE31F /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
@@ -650,6 +656,7 @@
 				BFBE19201C9521FF005114A0 /* LocSelectPin.swift */,
 				BFBE19241C953286005114A0 /* UserPin.swift */,
 				BFFA15441C9D271E00E985DF /* Location.swift */,
+				BFC4F14F1CE6F176004D7BD0 /* LocationSelect */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -946,6 +953,7 @@
 				BFFA15461C9D2B1700E985DF /* RequestProtocol.swift */,
 				BF2BB97B1C9D995100049337 /* PresntableProtocol.swift */,
 				BF8EC2D21CB9277C00003735 /* WaitableProtocol.swift */,
+				BF11C7031CF32A8A00CCD184 /* LoadingProtocol.swift */,
 			);
 			name = Puglins;
 			sourceTree = "<group>";
@@ -1309,6 +1317,15 @@
 				BF5E7EE51C85EA3D004B8305 /* Suggestions.swift */,
 			);
 			name = Settings;
+			sourceTree = "<group>";
+		};
+		BFC4F14F1CE6F176004D7BD0 /* LocationSelect */ = {
+			isa = PBXGroup;
+			children = (
+				BFC4F14D1CE6C2CE004D7BD0 /* LocationSearch.swift */,
+				BFC4F1501CE6F1A7004D7BD0 /* LocationSelectCell.swift */,
+			);
+			name = LocationSelect;
 			sourceTree = "<group>";
 		};
 		BFC8F13F1CC8A58600ABE31F /* Share */ = {
@@ -1852,7 +1869,7 @@
 				TargetAttributes = {
 					BFFA51111C05D9910019E5EF = {
 						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = 3334M5LUHH;
+						DevelopmentTeam = 2LEMXT4M9M;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -2080,6 +2097,7 @@
 				BFDFF2871C8CB11000055C1C /* ClubFilter.swift in Sources */,
 				BFB39CCD1C1EA45500FB6B5D /* SportCarBrandSelecter.swift in Sources */,
 				BF51070D1C609B45008DC14F /* ChatAudioRecorder.swift in Sources */,
+				BF11C7041CF32A8A00CCD184 /* LoadingProtocol.swift in Sources */,
 				BF23368B1C563F4200F0AE41 /* ChatAudioPlayer.swift in Sources */,
 				BF5E7EEB1C860804004B8305 /* PersonOtherInfo.swift in Sources */,
 				BFC032641C6EF55400ECA69A /* AvatarCarSelect.swift in Sources */,
@@ -2171,6 +2189,7 @@
 				BF662A131CCB664C00B3D84D /* RosterController.swift in Sources */,
 				BF1EC23F1C49414F0016F425 /* UserSelect.swift in Sources */,
 				BFDFF27B1C8BF6EA00055C1C /* ClubDiscover.swift in Sources */,
+				BFC4F1511CE6F1A7004D7BD0 /* LocationSelectCell.swift in Sources */,
 				BFCA900F1C50A09100B05E74 /* StatusBasic.swift in Sources */,
 				BF313B7C1CA3D62A00545DB7 /* UIFactory.swift in Sources */,
 				BFC0326C1C6F39EA00ECA69A /* ActivityHome.swift in Sources */,
@@ -2236,6 +2255,7 @@
 				BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */,
 				BFC032841C734C8300ECA69A /* ActivityCommentPanel.swift in Sources */,
 				BF8FE9A31C86C22400008170 /* ImageViewer.swift in Sources */,
+				BFC4F14E1CE6C2CE004D7BD0 /* LocationSearch.swift in Sources */,
 				BFB857D71CD9983600610349 /* SettingsRequester.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2316,7 +2336,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Ranchuang Capital Management Co., Ltd. (2LEMXT4M9M)";
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SportCarClient/QQ",
@@ -2329,7 +2350,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f16e679d-8d49-401a-89d7-46a78b66396d";
+				PROVISIONING_PROFILE = "d61d31a9-c089-4057-b128-2bae7e8da5db";
 				SWIFT_OBJC_BRIDGING_HEADER = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h";
 			};
 			name = adhoc;
@@ -2447,6 +2468,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SportCarClient/QQ",
@@ -2459,7 +2481,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f16e679d-8d49-401a-89d7-46a78b66396d";
+				PROVISIONING_PROFILE = "d61d31a9-c089-4057-b128-2bae7e8da5db";
 				SWIFT_OBJC_BRIDGING_HEADER = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h";
 			};
 			name = Debug;
@@ -2472,6 +2494,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SportCarClient/QQ",
@@ -2484,7 +2507,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f16e679d-8d49-401a-89d7-46a78b66396d";
+				PROVISIONING_PROFILE = "d61d31a9-c089-4057-b128-2bae7e8da5db";
 				SWIFT_OBJC_BRIDGING_HEADER = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h";
 			};
 			name = Release;

@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import AlecrimCoreData
 
 class RosterManager {
     static let defaultManager = RosterManager()
@@ -153,8 +154,20 @@ class RosterManager {
         }
     }
     
-    func loadCachedRosterItems() {
-        
+    func deleteAndQuitClub(club: Club) {
+        let wait = dispatch_semaphore_create(0)
+        dispatch_async(queue) {
+            let context = ChatModelManger.sharedManager.getOperationContext()
+            do {
+                try context.rosterItems.filter({ $0.ssid == MainManager.sharedManager.hostUserID! })
+                    .filter({ $0.entityType == "club" && $0.relatedID == club.ssid })
+                    .delete()
+            } catch {}
+            dispatch_semaphore_signal(wait)
+        }
+        dispatch_semaphore_wait(wait, DISPATCH_TIME_FOREVER)
+        let mapKey = "club:\(club.ssid)"
+        self.data[mapKey] = nil
     }
     
     @objc func onClubMemberChange(notification: NSNotification) {

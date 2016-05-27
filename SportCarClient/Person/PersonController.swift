@@ -26,6 +26,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     var isRoot: Bool = false
     
     var homeBtn: BackToHomeBtn!
+    var delayTask: dispatch_block_t?
     
     deinit {
         print("deinit person basic controller")
@@ -44,10 +45,6 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
     }
     
     override func viewDidLoad() {
@@ -135,7 +132,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     
     func createSubviews() {
         let superview = self.view
-        collectionView?.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
+        collectionView?.backgroundColor = kGeneralTableViewBGColor
         collectionView?.alwaysBounceVertical = true
         //
         let screenWidth = superview.frame.width
@@ -491,6 +488,7 @@ extension PersonBasicController {
     
     func onStatusDelete(notification: NSNotification) {
         // TODO: implement this
+        // For now, just ignore this todo
     }
     
     func fanslistPressed() {

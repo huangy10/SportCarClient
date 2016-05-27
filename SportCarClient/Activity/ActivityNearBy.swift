@@ -26,6 +26,11 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
     var _prePage: Int = 0
     var showReload: Bool = true
     
+//    var cityFilter: UIButton!
+//    var cityFilterLbl: UILabel!
+//    
+//    var cityFilterType: String = "全国"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         createSubviews()

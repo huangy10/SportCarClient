@@ -35,3 +35,8 @@ let kMessageChatListKey = "chats"
 let kMessageChatResetNotification = "chat_message_reset"
 let kMessageClubMemberChangeNotification = "club_member_change"
 let kMessageClubKey = "club"
+
+
+// MARK: Account
+ ///  当从服务器返回了1402错误时，意味着当前使用jwttoken已经失效了，强制用户下线，这1402错误由MessageManager来负责看管
+let kAccontNolongerLogin = "no_longer_login"

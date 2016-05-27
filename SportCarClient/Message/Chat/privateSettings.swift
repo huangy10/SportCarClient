@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import SwiftyJSON
 
-let kPrivateChatSettingSectionTitles = ["", LS("信息"), LS("隐私"), LS("聊天")]
+let kPrivateChatSettingSectionTitles = ["", LS("信息"), LS("聊天")]
 
 class PrivateChatSettingController: UITableViewController, FFSelectDelegate, PersonMineSinglePropertyModifierDelegate, GroupChatSetupDelegate {
     /*
@@ -119,7 +119,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 4
+        return 3
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -129,8 +129,6 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         case 1:
             return 2
         case 2:
-            return 2
-        case 3:
             return 3
         default:
             return 0
@@ -198,21 +196,21 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                 }
                 return cell
             }
-        case 2:
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-            cell.selectionStyle = .None
-            cell.staticLbl.text = [LS("不让他看我的动态"), LS("不看他的动态")][indexPath.row]
-            cell.detailTextLabel?.text = ""
-            cell.boolSelect.hidden = false
-            cell.boolSelect.tag = indexPath.row
-            if indexPath.row == 0 {
-                cell.boolSelect.setOn(!allowSeeStatus, animated: false)
-                cell.boolSelect.addTarget(self, action: #selector(PrivateChatSettingController.allowSeeStatusSwitchPressed(_:)), forControlEvents: .ValueChanged)
-            }else{
-                cell.boolSelect.setOn(!seeHisStatus, animated: false)
-                cell.boolSelect.addTarget(self, action: #selector(PrivateChatSettingController.seeHisStatusSwitchPressed(_:)), forControlEvents: .ValueChanged)
-            }
-            return cell
+//        case 2:
+//            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
+//            cell.selectionStyle = .None
+//            cell.staticLbl.text = [LS("不让他看我的动态"), LS("不看他的动态")][indexPath.row]
+//            cell.detailTextLabel?.text = ""
+//            cell.boolSelect.hidden = false
+//            cell.boolSelect.tag = indexPath.row
+//            if indexPath.row == 0 {
+//                cell.boolSelect.setOn(!allowSeeStatus, animated: false)
+//                cell.boolSelect.addTarget(self, action: #selector(PrivateChatSettingController.allowSeeStatusSwitchPressed(_:)), forControlEvents: .ValueChanged)
+//            }else{
+//                cell.boolSelect.setOn(!seeHisStatus, animated: false)
+//                cell.boolSelect.addTarget(self, action: #selector(PrivateChatSettingController.seeHisStatusSwitchPressed(_:)), forControlEvents: .ValueChanged)
+//            }
+//            return cell
         default:
             if indexPath.row < 2 {
                 let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
@@ -227,6 +225,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                 if startChat == nil {
                     startChat = UIButton()
                     startChat?.setImage(UIImage(named: "chat_setting_start_chat"), forState: .Normal)
+                    startChat?.addTarget(self, action: #selector(startChatBtnPressed), forControlEvents: .TouchUpInside)
                     cell.contentView.addSubview(startChat!)
                     startChat?.snp_makeConstraints(closure: { (make) -> Void in
                         make.centerX.equalTo(cell.contentView)
@@ -400,5 +399,9 @@ extension PrivateChatSettingController {
         if toast != nil {
             hideToast(toast!)
         }
+    }
+    
+    func startChatBtnPressed() {
+        self.navigationController?.popViewControllerAnimated(true)
     }
 }

@@ -35,7 +35,7 @@ class PersonMineSinglePropertyModifierController: InputableViewController {
         contentInput.delegate = self
         contentInput.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         contentInput.textColor = UIColor.blackColor()
-        contentInput.placeholder = initValue
+        contentInput.text = initValue
         superview.addSubview(contentInput)
         contentInput.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(15)

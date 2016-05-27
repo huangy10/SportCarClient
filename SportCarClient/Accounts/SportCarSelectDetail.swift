@@ -153,7 +153,7 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandSelect
         SportCarRequester.sharedInstance.postToFollow(signature, carId: carId!, onSuccess: { (json) -> () in
             // add this car to current users
             let car: SportCar = try! MainManager.sharedManager.getOrCreate(SportCar.reorgnaizeJSON(json!))
-            if MainManager.sharedManager.hostUser != nil {
+            if AppManager.sharedAppManager.state != AppManagerState.LoginRegister {
                 self.navigationController?.popViewControllerAnimated(true)
             } else {
                 let app = AppManager.sharedAppManager

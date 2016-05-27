@@ -36,6 +36,7 @@ class ActivityCell: UICollectionViewCell {
     func createSubviews() {
         self.contentView.backgroundColor = UIColor.clearColor()
         container = self.contentView.addSubview(UIView.self).config(UIColor.whiteColor())
+            .addShadow()
             .layout({ (make) in
                 make.edges.equalTo(self.contentView)
             })

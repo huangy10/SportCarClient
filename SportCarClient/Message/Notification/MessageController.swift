@@ -26,9 +26,9 @@ class MessageController: UIViewController {
     
     var board: UIScrollView!
     
-    var titleNotifBtn: UIButton!
+    var titleNotifLbl: UILabel!
     var notifUnreadLbl: UILabel!
-    var titleChatBtn: UIButton!
+    var titleChatLbl: UILabel!
     var chatUnreadLbl: UILabel!
     var titleBtnIcon: UIImageView!
     
@@ -108,7 +108,7 @@ class MessageController: UIViewController {
         
         let navRightBtn = UIButton()
         navRightBtn.setImage(UIImage(named: "status_add_btn_white"), forState: .Normal)
-        navRightBtn.frame = CGRectMake(0, 0, 21, 21)
+        navRightBtn.frame = CGRectMake(0, 0, 18, 18)
         navRightBtn.addTarget(self, action: #selector(MessageController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navRightBtn)
     }
@@ -119,17 +119,20 @@ class MessageController: UIViewController {
         let containerWidth = self.view.frame.width * 0.6
         container.frame = CGRectMake(0, 0, containerWidth, barHeight)
         //
-        titleNotifBtn = UIButton()
-        titleNotifBtn.setTitle(LS("通知"), forState: .Normal)
-        titleNotifBtn.setTitleColor(kBarBgColor, forState: .Normal)
-        titleNotifBtn.titleLabel?.font = kBarTextFont
+        let titleNotifBtn = UIButton()
         container.addSubview(titleNotifBtn)
         titleNotifBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(30)
-            make.width.equalTo(80)
+            make.width.equalTo(70)
             make.centerY.equalTo(container)
-            make.right.equalTo(container.snp_centerX).offset(-8)
+            make.right.equalTo(container.snp_centerX)
         }
+        titleNotifLbl = titleNotifBtn.addSubview(UILabel)
+            .config(14, textColor: kTextBlack, textAlignment: .Center, text: LS("通知"))
+            .layout({ (make) in
+                make.center.equalTo(titleNotifBtn)
+                make.size.equalTo(LS(" 通知 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+            })
         notifUnreadLbl = container.addSubview(UILabel).config(9, textColor: UIColor.whiteColor(), textAlignment: .Center).config(kHighlightedRedTextColor).layout({ (make) in
             make.left.equalTo(titleNotifBtn)
             make.top.equalTo(titleNotifBtn)
@@ -140,19 +143,22 @@ class MessageController: UIViewController {
         titleNotifBtn.tag = 0
         titleNotifBtn.addTarget(self, action: #selector(MessageController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         //
-        titleChatBtn = UIButton()
-        titleChatBtn.setTitle(LS("聊天"), forState: .Normal)
-        titleChatBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        titleChatBtn.titleLabel?.font = kBarTextFont
+        let titleChatBtn = UIButton()
         container.addSubview(titleChatBtn)
         titleChatBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(30)
-            make.width.equalTo(80)
+            make.width.equalTo(70)
             make.centerY.equalTo(container)
-            make.left.equalTo(container.snp_centerX).offset(8)
+            make.left.equalTo(container.snp_centerX)
         }
         titleChatBtn.tag = 1
         titleChatBtn.addTarget(self, action: #selector(MessageController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        titleChatLbl = titleChatBtn.addSubview(UILabel)
+            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("聊天"))
+            .layout({ (make) in
+                make.center.equalTo(titleChatBtn)
+                make.size.equalTo(LS(" 聊天 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+            })
         chatUnreadLbl = container.addSubview(UILabel)
             .config(9, textColor: UIColor.whiteColor(), textAlignment: .Center)
             .config(kHighlightedRedTextColor)
@@ -164,11 +170,14 @@ class MessageController: UIViewController {
         chatUnreadLbl.layer.cornerRadius = 9
         chatUnreadLbl.clipsToBounds = true
         //
-        titleBtnIcon = UIImageView(image: UIImage(named: "account_header_button"))
+        titleBtnIcon = UIImageView(image: UIImage(named: "nav_title_btn_icon"))
         container.addSubview(titleBtnIcon)
         container.sendSubviewToBack(titleBtnIcon)
         titleBtnIcon.snp_makeConstraints { (make) -> Void in
-            make.edges.equalTo(titleNotifBtn)
+            make.bottom.equalTo(container)
+            make.left.equalTo(titleNotifLbl)
+            make.right.equalTo(titleNotifLbl)
+            make.height.equalTo(2.5)
         }
         return container
     }
@@ -192,10 +201,13 @@ class MessageController: UIViewController {
             notificationList.viewWillDisappear(true)
             board.setContentOffset(CGPointMake(board.frame.width, 0), animated: true)
             titleBtnIcon.snp_remakeConstraints(closure: { (make) -> Void in
-                make.edges.equalTo(titleChatBtn)
+                make.bottom.equalTo(titleBtnIcon.superview!)
+                make.left.equalTo(titleChatLbl)
+                make.right.equalTo(titleChatLbl)
+                make.height.equalTo(2.5)
             })
-            titleChatBtn.setTitleColor(kBarBgColor, forState: .Normal)
-            titleNotifBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            titleChatLbl.textColor = kTextBlack
+            titleNotifLbl.textColor = kTextGray
             UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
                 self.titleBtnIcon.superview!.layoutIfNeeded()
                 }, completion: nil)
@@ -204,10 +216,13 @@ class MessageController: UIViewController {
             notificationList.viewWillAppear(true)
             board.setContentOffset(CGPoint.zero, animated: true)
             titleBtnIcon.snp_remakeConstraints(closure: { (make) -> Void in
-                make.edges.equalTo(titleNotifBtn)
+                make.bottom.equalTo(titleBtnIcon.superview!)
+                make.left.equalTo(titleNotifLbl)
+                make.right.equalTo(titleNotifLbl)
+                make.height.equalTo(2.5)
             })
-            titleNotifBtn.setTitleColor(kBarBgColor, forState: .Normal)
-            titleChatBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            titleChatLbl.textColor = kTextGray
+            titleNotifLbl.textColor = kTextBlack
             UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
                 self.titleBtnIcon.superview!.layoutIfNeeded()
                 }, completion: nil)

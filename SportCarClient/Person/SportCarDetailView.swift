@@ -153,7 +153,11 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     
     func confirmDelete() {
         hideConfirmToast()
-        // TODO: send request to the server
+        SportCarRequester.sharedInstance.deleteCar(car.ssidString, onSuccess: { (json) in
+            self.showToast(LS("删除成功"))
+            }) { (code) in
+                self.showToast(LS("删除失败"))
+        }
     }
     /**
      hide the confirm toast
@@ -169,9 +173,13 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     }
     
     func singlePropertyModifierDidModify(newValue: String?, forIndexPath indexPath: NSIndexPath) {
-        // TODO: update single property to server
-        car.signature = newValue
-        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        SportCarRequester.sharedInstance.updateCarSignature(car.ssidString, signature: newValue ?? "", onSuccess: { (json) in
+            self.showToast(LS("修改成功"))
+            self.car.signature = newValue
+            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            }) { (code) in
+                self.showToast(LS("修改失败"))
+        }
     }
 }
 

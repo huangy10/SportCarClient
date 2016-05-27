@@ -333,8 +333,9 @@ extension ChatRoomController {
     
     func confirmSendChatMessage(text: String? = nil, image: UIImage? = nil, audio: NSURL? = nil, messageType: String="text") {
         
-        if !self.chatCreated {
+        guard self.chatCreated else {
             self.showToast(LS("无法连接到服务器"))
+            return
         }
         let newChat: ChatRecord = try! ChatModelManger.sharedManager.createNew()
         newChat.initForPost(messageType, textContent: text, image: image, audio: audio)

@@ -57,7 +57,7 @@ class NewsRequester: BasicRequester {
     }
     
     func postCommentToNews(newsID: String, content: String?, responseTo: String?, informOf: [String]?, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
-        assert(content == nil)
+        assert(content != nil)
         var param: [String: AnyObject] = ["content": content!]
         if let responseTo = responseTo {
             param["response_to"] = responseTo

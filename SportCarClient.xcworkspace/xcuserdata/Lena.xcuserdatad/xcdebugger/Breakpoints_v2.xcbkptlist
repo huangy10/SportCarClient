@@ -9,13 +9,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SportCarClient/Status/HomeSubviews/StatusNearby.swift"
-            timestampString = "484728920.240352"
+            filePath = "SportCarClient/Status/Release/StatusReleaseController.swift"
+            timestampString = "485960896.54222"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
-            landmarkName = "loadLatestData()"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
+            landmarkName = "navRightBtnPressed()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,94 +25,76 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SportCarClient/Status/HomeSubviews/StatusNearby.swift"
-            timestampString = "484728920.240352"
+            filePath = "SportCarClient/Activity/ActivityDetailHeader.swift"
+            timestampString = "485970074.22115"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "75"
-            endingLineNumber = "75"
-            landmarkName = "loadLatestData()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SportCarClient/Status/HomeSubviews/StatusNearby.swift"
-            timestampString = "484728920.240352"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
-            landmarkName = "loadLatestData()"
-            landmarkType = "5">
+            startingLineNumber = "13"
+            endingLineNumber = "13"
+            landmarkName = "ActivityDetailHeaderView"
+            landmarkType = "3">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "SportCarClient.StatusNearbyController.loadLatestData () -&gt; ()"
+                  symbolName = "SportCarClient.ActivityDetailHeaderView.act.getter : Swift.ImplicitlyUnwrappedOptional&lt;SportCarClient.Activity&gt;"
                   moduleName = "SportCarClient"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Lena/Project/IOS/SportFan/SportCarClient/SportCarClient/Status/HomeSubviews/StatusNearby.swift"
-                  timestampString = "484728795.529803"
+                  urlString = "file:///Users/Lena/Project/IOS/SportFan/SportCarClient/SportCarClient/Activity/ActivityDetailHeader.swift"
+                  timestampString = "485970074.913993"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "75"
-                  endingLineNumber = "75"
-                  offsetFromSymbolStart = "216">
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "35">
                </Location>
                <Location
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "SportCarClient.StatusNearbyController.(loadLatestData () -&gt; ()).(closure #1)"
+                  symbolName = "SportCarClient.ActivityDetailHeaderView.act.setter : Swift.ImplicitlyUnwrappedOptional&lt;SportCarClient.Activity&gt;"
                   moduleName = "SportCarClient"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Lena/Project/IOS/SportFan/SportCarClient/SportCarClient/Status/HomeSubviews/StatusNearby.swift"
-                  timestampString = "484728795.529958"
+                  urlString = "file:///Users/Lena/Project/IOS/SportFan/SportCarClient/SportCarClient/Activity/ActivityDetailHeader.swift"
+                  timestampString = "485970074.914174"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "76"
-                  endingLineNumber = "76"
-                  offsetFromSymbolStart = "108">
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "65">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SportCarClient.ActivityDetailHeaderView.init (act : SportCarClient.Activity) -&gt; SportCarClient.ActivityDetailHeaderView"
+                  moduleName = "SportCarClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Lena/Project/IOS/SportFan/SportCarClient/SportCarClient/Activity/ActivityDetailHeader.swift"
+                  timestampString = "485970074.914268"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "31">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SportCarClient.ActivityDetailHeaderView.init (coder : __ObjC.NSCoder) -&gt; Swift.Optional&lt;SportCarClient.ActivityDetailHeaderView&gt;"
+                  moduleName = "SportCarClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Lena/Project/IOS/SportFan/SportCarClient/SportCarClient/Activity/ActivityDetailHeader.swift"
+                  timestampString = "485970074.914368"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "34">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SportCarClient/Activity/ActivityDetail.swift"
-            timestampString = "484728984.947021"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "viewWillAppear(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SportCarClient/Activity/ActivityNearBy.swift"
-            timestampString = "484729885.6908"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
-            landmarkName = "didUpdateBMKUserLocation(_:)"
-            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

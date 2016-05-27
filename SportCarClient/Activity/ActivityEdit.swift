@@ -41,6 +41,8 @@ class ActivityEditController: ActivityReleaseController {
             self.poster = image
         }
         userLocation = act.location?.coordinate
+        mapCell.locDisplay.text = act.location?.descr
+        desInput.textColor = UIColor.blackColor()
         self.tableView.reloadData()
     }
 

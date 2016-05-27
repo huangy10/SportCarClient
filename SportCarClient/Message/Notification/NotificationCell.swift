@@ -38,6 +38,7 @@ class NotificationBaseCell: UITableViewCell {
         avatarBtn = UIButton()
         avatarBtn.layer.cornerRadius = 22.5
         avatarBtn.clipsToBounds = true
+        avatarBtn.userInteractionEnabled = false
         superview.addSubview(avatarBtn)
         avatarBtn.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(superview).offset(15)
@@ -56,7 +57,7 @@ class NotificationBaseCell: UITableViewCell {
         //
         informLbL = UILabel()
         informLbL.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        informLbL.textColor = UIColor(white: 0.72, alpha: 1)
+        informLbL.textColor = kNotificationHintColor
         superview.addSubview(informLbL)
         informLbL.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(nickNameLbl.snp_right).offset(10)
@@ -65,7 +66,7 @@ class NotificationBaseCell: UITableViewCell {
         //
         dateLbl = UILabel()
         dateLbl.font = UIFont.systemFontOfSize(10, weight: UIFontWeightUltraLight)
-        dateLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        dateLbl.textColor = kNotificationHintColor
         superview.addSubview(dateLbl)
         dateLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(nickNameLbl)
@@ -107,7 +108,7 @@ class NotificationCellWithCoverThumbnail: NotificationBaseCell {
         
         messageBodyLbl = UILabel()
         messageBodyLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
-        messageBodyLbl.textColor = UIColor(white: 0.47, alpha: 1)
+        messageBodyLbl.textColor = kNotificationHintColor
         superview.addSubview(messageBodyLbl)
         messageBodyLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(avatarBtn)
@@ -164,7 +165,7 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         //
         inform2Lbl = UILabel()
         inform2Lbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        inform2Lbl.textColor = UIColor(white: 0.72, alpha: 1)
+        inform2Lbl.textColor = kNotificationHintColor
         superview.addSubview(inform2Lbl)
         inform2Lbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(name2LbL.snp_right).offset(10)

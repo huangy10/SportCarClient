@@ -19,9 +19,10 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     
     var board: UIScrollView!
     var titleBtnIcon: UIImageView!
-    var titleDriverBtn: UIButton!
-    var titleClubBtn: UIButton!
-    var titleActBtn: UIButton!
+    
+    var titleDriverLbl: UILabel!
+    var titleClubLbl: UILabel!
+    var titleActLbl: UILabel!
     
     var releaseBoard: UIView!
     var navRightBtn: UIButton!
@@ -61,8 +62,8 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         navRightBtn.tag = 0
         navRightIcon = UIImageView(image: UIImage(named: "status_add_btn_white"))
         navRightBtn.addSubview(navRightIcon)
-        navRightIcon.frame = CGRectMake(0, 0, 21, 21)
-        navRightBtn.frame = CGRectMake(0, 0, 21, 21)
+        navRightIcon.frame = CGRectMake(0, 0, 18, 18)
+        navRightBtn.frame = CGRectMake(0, 0, 18, 18)
         navRightBtn.addTarget(self, action: #selector(RadarHomeController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navRightBtn)
         //
@@ -72,64 +73,58 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         container.frame = CGRectMake(0, 0, containerWidth, barHeight)
         container.backgroundColor = UIColor.clearColor()
         
-        titleClubBtn = container.addSubview(UIButton)
-            .config(self, selector: #selector(navTitleBtnPressed(_:)), titleSize: 14, titleWeight: UIFontWeightLight, titleColor: UIColor.whiteColor(), title: LS("俱乐部"))
+        let titleClubBtn = container.addSubview(UIButton)
+            .config(self, selector: #selector(navTitleBtnPressed(_:)))
             .layout({ (make) in
-                make.size.equalTo(CGSizeMake(80, 30))
+                make.size.equalTo(CGSizeMake(70, 30))
                 make.center.equalTo(container)
             })
         titleClubBtn.tag = 1
+        let defaultFont = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        titleClubLbl = titleClubBtn.addSubview(UILabel)
+            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("俱乐部"))
+            .layout({ (make) in
+                make.center.equalTo(titleClubBtn)
+                make.size.equalTo(LS(" 俱乐部 ").sizeWithFont(defaultFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+            })
         
-        titleDriverBtn = container.addSubview(UIButton)
-            .config(self, selector: #selector(navTitleBtnPressed(_:)), titleSize: 14, titleWeight: UIFontWeightLight, titleColor: kBarBgColor, title: LS("车主"))
+        let titleDriverBtn = container.addSubview(UIButton)
+            .config(self, selector: #selector(navTitleBtnPressed(_:)))
             .layout({ (make) in
                 make.centerY.equalTo(container)
-                make.right.equalTo(titleClubBtn.snp_left).offset(-9)
-                make.size.equalTo(CGSizeMake(80, 30))
+                make.right.equalTo(titleClubBtn.snp_left)
+                make.size.equalTo(CGSizeMake(70, 30))
             })
         titleDriverBtn.tag = 0
+        titleDriverLbl = titleDriverBtn.addSubview(UILabel)
+            .config(14, textColor: kTextBlack, textAlignment: .Center, text: LS("车主"))
+            .layout({ (make) in
+                make.center.equalTo(titleDriverBtn)
+                make.size.equalTo(LS(" 车主 ").sizeWithFont(defaultFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+            })
         
-        titleActBtn = container.addSubview(UIButton)
-            .config(self, selector: #selector(navTitleBtnPressed(_:)), titleSize: 14, titleWeight: UIFontWeightLight, titleColor: UIColor.whiteColor(), title: LS("活动"))
+        let titleActBtn = container.addSubview(UIButton)
+            .config(self, selector: #selector(navTitleBtnPressed(_:)))
             .layout({ (make) in
                 make.centerY.equalTo(container)
                 make.left.equalTo(titleClubBtn.snp_right)
-                make.size.equalTo(CGSizeMake(80, 30))
+                make.size.equalTo(CGSizeMake(70, 30))
             })
         titleActBtn.tag = 2
-//        //
-//        titleDriverBtn = UIButton()
-//        titleDriverBtn.tag = 0
-//        titleDriverBtn.setTitle(LS("车主"), forState: .Normal)
-//        titleDriverBtn.setTitleColor(kBarBgColor, forState: .Normal)
-//        titleDriverBtn.titleLabel?.font = kBarTextFont
-//        titleDriverBtn.addTarget(self, action: #selector(RadarHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
-//        container.addSubview(titleDriverBtn)
-//        titleDriverBtn.snp_makeConstraints { (make) -> Void in
-//            make.height.equalTo(30)
-//            make.width.equalTo(80)
-//            make.right.equalTo(container.snp_centerX).offset(-8)
-//            make.centerY.equalTo(container)
-//        }
-//        //
-//        titleClubBtn = UIButton()
-//        titleClubBtn.tag = 1
-//        titleClubBtn.setTitle(LS("俱乐部"), forState: .Normal)
-//        titleClubBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-//        titleClubBtn.titleLabel?.font = kBarTextFont
-//        titleClubBtn.addTarget(self, action: #selector(RadarHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
-//        container.addSubview(titleClubBtn)
-//        titleClubBtn.snp_makeConstraints { (make) -> Void in
-//            make.height.equalTo(30)
-//            make.width.equalTo(80)
-//            make.left.equalTo(container.snp_centerX).offset(8)
-//            make.centerY.equalTo(container)
-//        }
+        titleActLbl = titleActBtn.addSubview(UILabel)
+            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("活动"))
+            .layout({ (make) in
+                make.center.equalTo(titleActBtn)
+                make.size.equalTo(LS(" 活动 ").sizeWithFont(defaultFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+            })
         //
-        titleBtnIcon = UIImageView(image: UIImage(named: "account_header_button"))
+        titleBtnIcon = UIImageView(image: UIImage(named: "nav_title_btn_icon"))
         container.addSubview(titleBtnIcon)
         titleBtnIcon.snp_makeConstraints { (make) -> Void in
-            make.edges.equalTo(titleDriverBtn)
+            make.bottom.equalTo(container)
+            make.left.equalTo(titleDriverLbl).offset(-3)
+            make.right.equalTo(titleDriverLbl).offset(3)
+            make.height.equalTo(2.5)
         }
         container.sendSubviewToBack(titleBtnIcon)
         //
@@ -149,7 +144,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         let trans: CATransform3D
         if navRightBtn.tag == 1 {
             releaseBoard.snp_remakeConstraints { (make) -> Void in
-                make.bottom.equalTo(superview.snp_top)
+                make.bottom.equalTo(superview.snp_top).offset(-10)
                 make.right.equalTo(superview)
                 make.width.equalTo(125)
                 make.height.equalTo(150)
@@ -179,13 +174,16 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         controllers[sender.tag].viewWillAppear(true)
         controllers[curTag].viewWillDisappear(true)
         
-        let btns = [titleDriverBtn, titleClubBtn, titleActBtn]
-        let targetBtn = btns[sender.tag]
-        let sourceBtn = btns[curTag]
-        targetBtn.setTitleColor(kBarBgColor, forState: .Normal)
-        sourceBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        let btns = [titleDriverLbl, titleClubLbl, titleActLbl]
+        let targetLbl = btns[sender.tag]
+        let sourceLbl = btns[curTag]
+        targetLbl.textColor = kTextBlack
+        sourceLbl.textColor = kTextGray
         titleBtnIcon.snp_remakeConstraints { (make) in
-            make.edges.equalTo(targetBtn)
+            make.bottom.equalTo(titleBtnIcon.superview!)
+            make.left.equalTo(targetLbl).offset(-3)
+            make.right.equalTo(targetLbl).offset(3)
+            make.height.equalTo(2.5)
         }
         
 //        if sender.tag == 0 {
@@ -267,7 +265,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         
         releaseBoard = superview.addSubview(UIView).config(UIColor.whiteColor())
             .addShadow().layout({ (make) in
-                make.bottom.equalTo(superview.snp_top)
+                make.bottom.equalTo(superview.snp_top).offset(-10)
                 make.right.equalTo(superview)
                 make.width.equalTo(125)
                 make.height.equalTo(150)

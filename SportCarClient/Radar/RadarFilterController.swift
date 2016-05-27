@@ -33,7 +33,7 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
         tableView.registerClass(RadarFilterCell.self, forCellReuseIdentifier: "cell")
         tableView.rowHeight = 40
         tableView.scrollEnabled = false
-        tableView.backgroundColor = kBarBgColor
+        tableView.backgroundColor = UIColor.whiteColor()
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -112,7 +112,7 @@ class RadarFilterCell: UITableViewCell {
         //
         titleLbl = UILabel()
         titleLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        titleLbl.textColor = UIColor(white: 0.945, alpha: 1)
+        titleLbl.textColor = UIColor(white: 0, alpha: 0.87)
         superview.addSubview(titleLbl)
         titleLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(10)
@@ -145,11 +145,11 @@ class RadarFilterHeader: UITableViewHeaderFooterView {
     
     func createSubviews() {
         let superview = self.contentView
-        superview.backgroundColor = kBarBgColor
+        superview.backgroundColor = UIColor.whiteColor()
         //
         titleLbl = UILabel()
         titleLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        titleLbl.textColor = UIColor(white: 0.945, alpha: 1)
+        titleLbl.textColor = UIColor(white: 0, alpha: 0.87)
         superview.addSubview(titleLbl)
         titleLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(20)
@@ -171,7 +171,7 @@ class RadarFilterHeader: UITableViewHeaderFooterView {
 //        }
         //
         let sepLine = UIView()
-        sepLine.backgroundColor = UIColor(white: 0.27, alpha: 1)
+        sepLine.backgroundColor = UIColor(white: 0, alpha: 0.12)
         superview.addSubview(sepLine)
         sepLine.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(10)

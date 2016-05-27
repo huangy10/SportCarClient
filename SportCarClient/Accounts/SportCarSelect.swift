@@ -9,12 +9,15 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import Alamofire
 
 class SportCarSelectController: InputableViewController, SportCarBrandSelecterControllerDelegate {
     
     var sportCarDisplay: UIImageView?
     var brandSelectBtn: UIButton?
     var signatureInput: UITextField?
+    
+    var reqOnfly: Request?
     
     // MARK: Navigation设置
     func navigationBarSettings() {
@@ -149,6 +152,9 @@ class SportCarSelectController: InputableViewController, SportCarBrandSelecterCo
     }
     
     func selectSportCarBrandPressed() {
+        if let req = reqOnfly {
+            req.cancel()
+        }
         let select = SportCarBrandSelecterController()
         select.delegate = self
         let nav = BlackBarNavigationController(rootViewController: select)
@@ -163,7 +169,7 @@ class SportCarSelectController: InputableViewController, SportCarBrandSelecterCo
         }
         brandSelectBtn?.setTitle(LS("获取跑车资料中..."), forState: .Normal)
         brandSelectBtn?.enabled = false
-        SportCarRequester.sharedInstance.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
+        reqOnfly = SportCarRequester.sharedInstance.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
             guard let data = data else {
                 return
             }

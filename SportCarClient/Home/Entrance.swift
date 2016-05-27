@@ -64,13 +64,14 @@ class HomeController2: UIViewController, HomeDelegate {
         invokeBtn = superview.addSubview(UIButton).config(self, selector: #selector(hideSidebar)).layout({ (make) in
             make.edges.equalTo(superview)
         }).config(UIColor(white: 0, alpha: 0.2))
+        invokeBtn.layer.hidden = true
         
         sideBar = superview.addSubview(UIView)
             .config(UIColor.RGB(23, 19, 19)).layout({ (make) in
-            make.top.equalTo(superview)
-            make.left.equalTo(superview)
-            make.bottom.equalTo(superview)
-            make.width.equalTo(superview).multipliedBy(0.667)
+                make.top.equalTo(superview)
+                make.right.equalTo(superview.snp_left).offset(-10)
+                make.bottom.equalTo(superview)
+                make.width.equalTo(superview).multipliedBy(0.667)
             }).addShadow(offset: CGSizeMake(2, 0))
         
         avatarBtn = sideBar.addSubview(UIButton)
@@ -100,7 +101,7 @@ class HomeController2: UIViewController, HomeDelegate {
             let container = sideBar.addSubview(UIButton)
                 .config(self, selector: #selector(sideBarBtnPressed(_:)))
                 .layout({ (make) in
-                make.left.equalTo(superview).offset(0)
+                make.left.equalTo(superview).offset(-self.view.bounds.width)
                 make.width.equalTo(sideBar)
                 make.height.equalTo(50)
                 make.top.equalTo(formerView.snp_bottom).offset(topOffset)
@@ -125,9 +126,9 @@ class HomeController2: UIViewController, HomeDelegate {
         }
         
         sepLine = sideBar.addSubview(UIView)
-            .config(UIColor(white: 0.6, alpha: 1))
+            .config(UIColor(white: 0.38, alpha: 1))
             .layout { (make) in
-                make.left.equalTo(superview).offset(20)
+                make.left.equalTo(superview).offset(-self.view.bounds.width)
                 make.width.equalTo(sideBar).multipliedBy(0.6)
                 make.height.equalTo(0.5)
                 make.top.equalTo(formerView.snp_bottom).offset(20)
@@ -136,7 +137,7 @@ class HomeController2: UIViewController, HomeDelegate {
         adviceBtn = sideBar.addSubview(UIButton)
             .config(self, selector: #selector(adviceBtnPressed))
             .layout { (make) in
-                make.left.equalTo(superview)
+                make.left.equalTo(superview).offset(-self.view.bounds.width)
                 make.height.equalTo(50)
                 make.width.equalTo(sideBar).dividedBy(2)
                 make.top.equalTo(sepLine).offset(20)
@@ -144,7 +145,7 @@ class HomeController2: UIViewController, HomeDelegate {
         adviceBtn.tag = 7
         
         adviceBtn.addSubview(UILabel)
-            .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0.72, alpha: 1), text: LS("意见反馈"))
+            .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0.38, alpha: 1), text: LS("意见反馈"))
             .layout { (make) in
                 make.centerY.equalTo(adviceBtn)
                 make.left.equalTo(adviceBtn).offset(20)
@@ -360,10 +361,7 @@ class HomeController2: UIViewController, HomeDelegate {
         }
         return wrappedControllers[index]!
     }
-    
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
-    }
+
     
     // MARK: - Unread number display
     

@@ -8,23 +8,45 @@
 
 import UIKit
 
-
+// Due to historical reason, the name contians "black"
 class BlackBarNavigationController: UINavigationController {
+    
+    // whether the navigation bar is black or not. false for default
+    var blackNavTitle: Bool = false
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.navigationBar.tintColor = kBarBgColor
-        self.navigationBar.translucent = false
-        self.navigationBar.barStyle = UIBarStyle.Black
-        self.navigationBar.titleTextAttributes = [NSFontAttributeName: kBarTitleFont]
-        self.navigationBar.setBackgroundImage(UIImage(), forBarPosition: .Any, barMetrics: .Default)
-        self.navigationBar.shadowImage = UIImage()
-        self.navigationBar.backgroundColor = kBarBgColor
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if blackNavTitle {
+            self.navigationBar.tintColor = kBarBgColor
+            self.navigationBar.translucent = false
+            self.navigationBar.barStyle = UIBarStyle.Black
+            self.navigationBar.titleTextAttributes = [NSFontAttributeName: kBarTitleFont]
+            self.navigationBar.setBackgroundImage(UIImage(), forBarPosition: .Any, barMetrics: .Default)
+            self.navigationBar.shadowImage = UIImage()
+            self.navigationBar.backgroundColor = kBarBgColor
+        } else {
+            self.navigationBar.tintColor = UIColor(white: 0.996, alpha: 0)
+            self.navigationBar.translucent = false
+            self.navigationBar.barStyle = UIBarStyle.Default
+            self.navigationBar.titleTextAttributes = [NSFontAttributeName: kBarTitleFont]
+            self.navigationBar.setBackgroundImage(UIImage(), forBarPosition: .Any, barMetrics: .Default)
+            self.navigationBar.shadowImage = UIImage()
+            self.navigationBar.backgroundColor = kBarBgColor
+            self.navigationBar.addShadow(0, color: UIColor.blackColor(), opacity: 0.12, offset: CGSizeMake(0, 1))
+        }
+    }
+    
+    convenience init(rootViewController: UIViewController, blackNavTitle: Bool) {
+        self.init(rootViewController: rootViewController)
+        self.blackNavTitle = blackNavTitle
     }
     
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
-        
     }
     
     override init(navigationBarClass: AnyClass?, toolbarClass: AnyClass?) {

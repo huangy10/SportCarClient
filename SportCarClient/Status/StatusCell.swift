@@ -59,12 +59,13 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
     
     internal func createSubviews() {
         let superview = UIView()
-        self.contentView.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
+        self.contentView.backgroundColor = kGeneralTableViewBGColor
         self.contentView.addSubview(superview)
         superview.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(self.contentView).inset(UIEdgeInsetsMake(5, 10, 5, 10))
         }
         superview.backgroundColor = UIColor.whiteColor()
+        superview.addShadow()
         superContainer = superview
         /*
          header 区域的子空间创建

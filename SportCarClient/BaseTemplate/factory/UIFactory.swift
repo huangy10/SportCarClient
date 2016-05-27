@@ -72,8 +72,8 @@ extension UIView {
     @nonobjc func addShadow(
         blur: CGFloat = 2,
         color: UIColor = UIColor.blackColor(),
-        opacity: Float = 0.2,
-        offset: CGSize = CGSizeMake(0, 2)
+        opacity: Float = 0.12,
+        offset: CGSize = CGSizeMake(0, 1)
         ) -> Self {
         self.layer.shadowColor = color.CGColor
         self.layer.shadowOffset = offset

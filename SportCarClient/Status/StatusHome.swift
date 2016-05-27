@@ -30,9 +30,9 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
     var navLeftBtn: BackToHomeBtn!
     var board: UIScrollView!
     
-    var titleNearbyBtn: UIButton!
-    var titleFollowBtn: UIButton!
-    var titleHotBtn: UIButton!
+    var titleNearbyLbl: UILabel!
+    var titleFollowLbl: UILabel!
+    var titleHotLbl: UILabel!
     var titleIcon: UIImageView!
     
     private var _curTag = 1
@@ -100,7 +100,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         // 导航栏右侧按钮
         let navRightBtn = UIButton()
         navRightBtn.setImage(UIImage(named: "status_add_btn_white"), forState: .Normal)
-        navRightBtn.frame = CGRectMake(0, 0, 21, 21)
+        navRightBtn.frame = CGRectMake(0, 0, 18, 18)
         navRightBtn.addTarget(self, action: #selector(StatusHomeController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navRightBtn)
         // 导航栏内容
@@ -109,49 +109,61 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         let container = UIView(frame: CGRectMake(0, 0, containerWidth, barHeight))
         container.backgroundColor = UIColor.clearColor()
         
-        titleFollowBtn = UIButton()
+        let titleFollowBtn = UIButton()
         titleFollowBtn.tag = 1
-        titleFollowBtn.setTitle(LS("关注"), forState: .Normal)
-        titleFollowBtn.setTitleColor(kBarBgColor, forState: .Normal)
-        titleFollowBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         titleFollowBtn.addTarget(self, action: #selector(StatusHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(titleFollowBtn)
         titleFollowBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(30)
-            make.width.equalTo(80)
+            make.width.equalTo(70)
             make.center.equalTo(container)
         }
+        titleFollowLbl = titleFollowBtn.addSubview(UILabel)
+            .config(14, textColor: kTextBlack, textAlignment: .Center, text: LS("关注"))
+            .layout({ (make) in
+                make.center.equalTo(titleFollowBtn)
+                make.size.equalTo(LS(" 关注 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+            })
         
-        titleNearbyBtn = UIButton()
+        let titleNearbyBtn = UIButton()
         titleNearbyBtn.tag = 0
-        titleNearbyBtn.setTitle(LS("附近"), forState: .Normal)
-        titleNearbyBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        titleNearbyBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         titleNearbyBtn.addTarget(self, action: #selector(StatusHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(titleNearbyBtn)
         titleNearbyBtn.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(container)
-            make.right.equalTo(titleFollowBtn.snp_left).offset(-9)
-            make.size.equalTo(CGSizeMake(80, 30))
+            make.right.equalTo(titleFollowBtn.snp_left)
+            make.size.equalTo(CGSizeMake(70, 30))
         }
+        titleNearbyLbl = titleNearbyBtn.addSubview(UILabel)
+            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("附近"))
+            .layout({ (make) in
+                make.center.equalTo(titleNearbyBtn)
+                make.size.equalTo(LS(" 附近 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+            })
         
-        titleHotBtn = UIButton()
+        let titleHotBtn = UIButton()
         titleHotBtn.tag = 2
-        titleHotBtn.setTitle(LS("热门"), forState: .Normal)
-        titleHotBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        titleHotBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        titleHotBtn.addTarget(self, action: #selector(StatusHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        titleHotBtn.addTarget(self, action: #selector(navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         container.addSubview(titleHotBtn)
         titleHotBtn.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(titleFollowBtn.snp_right).offset(9)
+            make.left.equalTo(titleFollowBtn.snp_right)
             make.centerY.equalTo(container)
-            make.size.equalTo(CGSizeMake(80, 30))
+            make.size.equalTo(CGSizeMake(70, 30))
         }
+        titleHotLbl = titleHotBtn.addSubview(UILabel)
+            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("热门"))
+            .layout({ (make) in
+                make.center.equalTo(titleHotBtn)
+                make.size.equalTo(LS(" 热门 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+            })
         
-        titleIcon = UIImageView(image: UIImage(named: "account_header_button"))
+        titleIcon = UIImageView(image: UIImage(named: "nav_title_btn_icon"))
         container.addSubview(titleIcon)
         titleIcon.snp_makeConstraints { (make) -> Void in
-            make.edges.equalTo(titleFollowBtn)
+            make.left.equalTo(titleFollowLbl)
+            make.right.equalTo(titleFollowLbl)
+            make.bottom.equalTo(container)
+            make.height.equalTo(2.5)
         }
         container.sendSubviewToBack(titleIcon)
         self.navigationItem.titleView = container
@@ -173,16 +185,19 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
             // current button is pressed, do nothing
             return
         }
-        let btns = [titleNearbyBtn, titleFollowBtn, titleHotBtn]
+        let lbls = [titleNearbyLbl, titleFollowLbl, titleHotLbl]
         let controllers = [nearByStatusCtrl, followStatusCtrl, hotStatusCtrl]
         controllers[_curTag].viewWillDisappear(true)
         controllers[sender.tag].viewWillAppear(true)
-        let targetBtn = btns[sender.tag]
-        let sourceBtn = btns[_curTag]
-        targetBtn.setTitleColor(kBarBgColor, forState: .Normal)
-        sourceBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        let targetLbl = lbls[sender.tag]
+        let sourceLbl = lbls[_curTag]
+        targetLbl.textColor = kTextBlack
+        sourceLbl.textColor = kTextGray
         titleIcon.snp_remakeConstraints { (make) -> Void in
-            make.edges.equalTo(targetBtn)
+            make.bottom.equalTo(titleIcon.superview!)
+            make.left.equalTo(targetLbl)
+            make.right.equalTo(targetLbl)
+            make.height.equalTo(2.5)
         }
         UIView.animateWithDuration(0.2) { () -> Void in
             self.titleIcon.superview?.layoutIfNeeded()

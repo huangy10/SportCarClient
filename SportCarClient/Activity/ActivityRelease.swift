@@ -10,7 +10,7 @@ import UIKit
 import Dollar
 
 
-class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, BMKMapViewDelegate, BMKGeoCodeSearchDelegate, BMKLocationServiceDelegate, ProgressProtocol, CustomDatePickerDelegate, AvatarClubSelectDelegate, ImageInputSelectorDelegate, FFSelectDelegate {
+class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, BMKMapViewDelegate, BMKGeoCodeSearchDelegate, BMKLocationServiceDelegate, ProgressProtocol, CustomDatePickerDelegate, AvatarClubSelectDelegate, ImageInputSelectorDelegate, FFSelectDelegate, LocationSelectDelegate {
     weak var actHomeController: ActivityHomeController?
     
 //    var pp_progressView: UIProgressView?
@@ -27,9 +27,6 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     var mapCell: ActivityReleaseMapCell!
     var mapView: BMKMapView {
         return mapCell.map
-    }
-    var locInput: UITextField {
-        return mapCell.locInput
     }
     var maxAttendCell: SSPropertyInputableCell!
     
@@ -60,7 +57,9 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         locationService.delegate = self
         mapView.delegate = self
         geoSearch.delegate = self
-        locationService.startUserLocationService()
+        if self.userLocation == nil {
+            locationService.startUserLocationService()
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -167,8 +166,14 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         //
         mapCell = ActivityReleaseMapCell(trailingHeight: 100)
         mapCell.map.delegate = self
-        mapCell.locInput.addToInputable(self)
-        mapCell.locInput.tag = 1    // 加上tag用来区分上面编辑最大参与人数的textfield
+        mapCell.onInvokeLocationSelect = { [weak self] in
+            guard let sSelf = self else {
+                return
+            }
+            let locationSelect = LocationSelectController(currentLocation: self?.userLocation, des: self?.mapCell.locDisplay.text)
+            locationSelect.delegate = sSelf
+            sSelf.presentViewController(locationSelect.toNavWrapper(), animated: true, completion: nil)
+        }
         
         maxAttendCell = SSPropertyInputableCell(style: .Default, reuseIdentifier: "inputable")
         maxAttendCell.contentInput.addToInputable(self)
@@ -441,23 +446,23 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         mapView.setCenterCoordinate(self.userLocation!, animated: true)
         mapView.zoomLevel = 16
         mapView.delegate = self
-//        getLocationDescription(self.userLocation!)
+        getLocationDescription(self.userLocation!)
     }
-    
-    func mapView(mapView: BMKMapView!, regionDidChangeAnimated animated: Bool) {
-        if !animated {
-            let visibleRegion = mapView.region
-            userLocation = visibleRegion.center
-            tableView.scrollEnabled = true
-        }
-        getLocationDescription(userLocation!)
-    }
-    
-    func mapView(mapView: BMKMapView!, regionWillChangeAnimated animated: Bool) {
-        if !animated {
-            tableView.scrollEnabled = false
-        }
-    }
+//    
+//    func mapView(mapView: BMKMapView!, regionDidChangeAnimated animated: Bool) {
+//        if !animated {
+//            let visibleRegion = mapView.region
+//            userLocation = visibleRegion.center
+//            tableView.scrollEnabled = true
+//        }
+//        getLocationDescription(userLocation!)
+//    }
+//    
+//    func mapView(mapView: BMKMapView!, regionWillChangeAnimated animated: Bool) {
+//        if !animated {
+//            tableView.scrollEnabled = false
+//        }
+//    }
     
     func getLocationDescription(location: CLLocationCoordinate2D) {
         let option = BMKReverseGeoCodeOption()
@@ -471,7 +476,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     func onGetReverseGeoCodeResult(searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
         if error == BMK_SEARCH_NO_ERROR {
             locDescription = result.address
-            locInput.text = result.address
+            mapCell.locDisplay.text = result.address
         } else {
             self.showToast(LS("无法获取位置信息"), onSelf: true)
         }
@@ -525,6 +530,22 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             textView.text = text[0..<40]
         }
         desWordCountLbl.text = "\(min(text.length, 40))/40"
+    }
+    
+    // MARK: - Location Select Delegate
+    
+    func locationSelectDidCancel() {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func locationSelectDidSelect(location: Location) {
+        dismissViewControllerAnimated(true, completion: nil)
+        self.userLocation = location.location
+        self.locDescription = location.description
+        mapCell.locDisplay.text = location.description
+        mapView.setCenterCoordinate(location.location, animated: true)
+        
+//        self.tableView.reloadData()
     }
 }
 

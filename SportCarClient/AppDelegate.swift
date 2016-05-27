@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
         customizeMap()
         shareSetup()
         let home = AppManager.sharedAppManager     				
-        let wrapper = BlackBarNavigationController(rootViewController: home)
+        let wrapper = BlackBarNavigationController(rootViewController: home, blackNavTitle: true)
         window?.rootViewController = wrapper
         window?.makeKeyAndVisible()
         home.registerForPushNotifications(application)

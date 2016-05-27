@@ -80,19 +80,19 @@ class SSPullToRefresh: UIView {
     }
     
     func createSubviews() {
-        pullingLbl = self.addSubview(UILabel).config(textColor: UIColor.whiteColor(), textAlignment: .Center)
+        pullingLbl = self.addSubview(UILabel).config(textColor: kTextBlack, textAlignment: .Center)
             .layout({ (make) in
                 make.center.equalTo(self)
             })
         
-        confirmingLabl = self.addSubview(UILabel).config(textColor: UIColor.whiteColor(), textAlignment: .Center)
+        confirmingLabl = self.addSubview(UILabel).config(textColor: kTextBlack, textAlignment: .Center)
             .layout({ (make) in
                 make.center.equalTo(self)
             })
         confirmingLabl.text = LS("放开切换到当前地点")
         confirmingLabl.layer.opacity = 0
         
-        actIndicator = UIActivityIndicatorView(activityIndicatorStyle: .White)
+        actIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         self.addSubview(actIndicator)
         actIndicator.layout({ (make) in
             make.center.equalTo(self)

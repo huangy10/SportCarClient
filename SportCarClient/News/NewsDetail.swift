@@ -13,7 +13,7 @@ import Spring
 import Dollar
 import SwiftyJSON
 
-class NewsDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource, UIWebViewDelegate, MakeCommentControllerDelegate, DetailCommentCellDelegate, ShareControllorDelegate {
+class NewsDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource, UIWebViewDelegate, MakeCommentControllerDelegate, DetailCommentCellDelegate, ShareControllorDelegate, LoadingProtocol {
     /// 这个详情页面需要展示的相关资讯
     var news: News!
     /// 评论列表
@@ -537,17 +537,21 @@ extension NewsDetailController{
         }
         likeRequesting = true
         let requester = NewsRequester.sharedInstance
+        lp_start()
         requester.likeNews(news!.ssidString, onSuccess: { (json) -> () in
-            
+            self.lp_stop()
             let liked = json!["like_state"].boolValue
             
             self.news.liked = liked
             self.news.likeNum = json!["like_num"].int32Value
             self.commentPanel.setLikedAnimated(liked)
             self.likeIcon.image = liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
+            self.likeNumLbl.text = "\(self.news.likeNum)"
             self.likeRequesting = false
             }) { (code) -> () in
                 self.likeRequesting = false
+                self.lp_stop()
+                self.showToast(LS("Access Error: \(code)"))
         }
     }
     
@@ -574,8 +578,6 @@ extension NewsDetailController{
         newComment.sent = false
         newComment.user = MainManager.sharedManager.hostUser
         newComment.createdAt = NSDate()
-        // 将这个新建的commnet添加在列表的头部
-        comments.insert(newComment, atIndex: 0)
         //
         let requester = NewsRequester.sharedInstance
         requester.postCommentToNews(news.ssidString, content: commentString, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (data) -> () in
@@ -589,7 +591,11 @@ extension NewsDetailController{
             }) { (code) -> () in
         }
         // 重载数据
-        commentTableView?.reloadData()
+        commentTableView.beginUpdates()
+        // 将这个新建的commnet添加在列表的头部
+        comments.insert(newComment, atIndex: 0)
+        commentTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+        commentTableView.endUpdates()
         commentPanel?.contentInput?.text = ""
         reArrangeCommentTableFrame()
         commentPanel?.snp_updateConstraints(closure: { (make) -> Void in

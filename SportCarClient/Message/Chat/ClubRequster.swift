@@ -52,11 +52,16 @@ class ClubRequester: BasicRequester {
             onSuccess: onSuccess, onError: onError)
     }
     
-    func discoverClub(queryType: String, skip: Int, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func discoverClub(queryType: String, cityLimit: String, extraParam: [String: AnyObject]? = nil, skip: Int, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+        var param: [String: AnyObject] = extraParam ?? [:]
+        param["query_type"] = queryType
+        param["skip"] = skip
+        param["limit"] = limit
+        param["city_limit"] = cityLimit
         return get(
             urlForName("discover"),
             responseDataField: "data",
-            parameters: ["query_type": queryType, "skip": skip, "limit": limit],
+            parameters: param,
             onSuccess: onSuccess, onError: onError)
     }
     

@@ -19,20 +19,25 @@ typealias SSProgressCallback = (progress: Float) -> Void
 let kBarBgColor = UIColor(red: 0.09, green: 0.075, blue: 0.075, alpha: 1)
 let kHighlightedRedTextColor = UIColor(red: 1, green: 0.267, blue: 0.274, alpha: 1)
 let kPlaceholderTextColor = UIColor(white: 0.72, alpha: 1)
+let kTextBlack = UIColor(white: 0, alpha: 0.87)
+let kTextGray = UIColor(white: 0, alpha: 0.54)
+let kGeneralTableViewBGColor = UIColor(white: 0.96, alpha: 1)
+let kNotificationHintColor = UIColor(white: 0.42, alpha: 1)
 
 // Fonts
-let kBarTextFont = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
+let kBarTextFont = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
 let kBarTitleFont = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
 let kTextInputFont = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
 
 // Network
-let kHostName = "101.5.65.177"
+let kHostName = "localhost"
 //let kHostName = "paochefan.com"
 let kPortName = "8000"
 let kChatPortName = "8888"
 let kProtocalName = "http"
 //
 let kMaxPhotoSelect: Int = 9    // 最大可以选择的照片的数量
+let kLoadingAppearDelay: Int64 = 300
 
 // Macro
 func LS(str: String, comment: String="") -> String{

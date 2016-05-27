@@ -62,9 +62,9 @@ class ChatOpPanelController: UIViewController {
     internal func createSubviews() {
         let superview = self.view
         superview.backgroundColor = UIColor(white: 0.92, alpha: 1)
-        superview.layer.shadowColor = UIColor.blackColor().CGColor
-        superview.layer.shadowOffset = CGSizeMake(0, -1)
-        superview.layer.shadowOpacity = 0.2
+//        superview.layer.shadowColor = UIColor.blackColor().CGColor
+//        superview.layer.shadowOffset = CGSizeMake(0, -1)
+//        superview.layer.shadowOpacity = 0.2
         
         let contentHeight: CGFloat = 34
         let edgeInset: CGFloat = 5

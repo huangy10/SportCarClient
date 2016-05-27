@@ -11,7 +11,9 @@ import SnapKit
 
 let kGroupChatSettingSectionTitles = ["", "信息", "通知", "聊天"]
 
-class GroupChatSettingController: UITableViewController, PersonMineSinglePropertyModifierDelegate, InlineUserSelectDelegate, FFSelectDelegate {
+class GroupChatSettingController: UITableViewController, PersonMineSinglePropertyModifierDelegate, InlineUserSelectDelegate, FFSelectDelegate, LoadingProtocol {
+    
+    var delayTask: dispatch_block_t?
     
     var targetClub: Club!
     // 是否设置发生了更改
@@ -22,6 +24,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     
     var inlineUserSelect: InlineUserSelectController?
     var deleteQuitBtn: UIButton?
+    var startChatBtn: UIButton?
     
     var toast: UIView?
     
@@ -55,6 +58,10 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 // 添加成员
                 let user: User = try! MainManager.sharedManager.getOrCreate(data)
                 self.targetClub.members.append(user)
+            }
+            let actJson = json!["recent_act"]
+            if actJson.exists() {
+                self.targetClub.recentActivity = try! MainManager.sharedManager.getOrCreate(actJson) as Activity
             }
             self.tableView.reloadData()
             self.inlineUserSelect?.users = self.targetClub.members
@@ -280,15 +287,32 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 let cell = tableView.dequeueReusableCellWithIdentifier("quit", forIndexPath: indexPath)
                 cell.selectionStyle = .None
                 if deleteQuitBtn == nil {
-                    deleteQuitBtn = UIButton()
-                    deleteQuitBtn?.setImage(UIImage(named: "delete_and_quit_btn"), forState: .Normal)
-                    deleteQuitBtn?.addTarget(self, action: #selector(GroupChatSettingController.deleteAndQuitBtnPressed), forControlEvents: .TouchUpInside)
-                    cell.contentView.addSubview(deleteQuitBtn!)
-                    deleteQuitBtn?.snp_makeConstraints(closure: { (make) -> Void in
-                        make.centerX.equalTo(cell.contentView)
-                        make.top.equalTo(cell.contentView).offset(15)
-                        make.size.equalTo(CGSizeMake(150, 50))
-                    })
+//                    deleteQuitBtn = UIButton()
+//                    deleteQuitBtn?.setImage(UIImage(named: "delete_and_quit_btn"), forState: .Normal)
+//                    deleteQuitBtn?.addTarget(self, action: #selector(GroupChatSettingController.deleteAndQuitBtnPressed), forControlEvents: .TouchUpInside)
+//                    cell.contentView.addSubview(deleteQuitBtn!)
+//                    deleteQuitBtn?.snp_makeConstraints(closure: { (make) -> Void in
+//                        make.centerX.equalTo(cell.contentView)
+//                        make.top.equalTo(cell.contentView).offset(15)
+//                        make.size.equalTo(CGSizeMake(150, 50))
+//                    })
+                    deleteQuitBtn = cell.contentView.addSubview(UIButton)
+                        .config(self, selector: #selector(deleteAndQuitBtnPressed), title: LS("删除并退出"), titleColor: kHighlightedRedTextColor, titleSize: 15)
+                        .layout({ (make) in
+                            make.centerX.equalTo(cell.contentView)
+                            make.top.equalTo(cell.contentView).offset(15)
+                            make.size.equalTo(CGSizeMake(150, 50))
+                        })
+                    
+                }
+                if startChatBtn == nil {
+                    startChatBtn = cell.contentView.addSubview(UIButton)
+                        .config(self, selector: #selector(startChatBtnPressed), title: LS("进入聊天"), titleColor: kHighlightedRedTextColor, titleSize: 15)
+                        .layout({ (make) in
+                            make.centerX.equalTo(cell.contentView)
+                            make.top.equalTo(deleteQuitBtn!.snp_bottom)
+                            make.size.equalTo(deleteQuitBtn!)
+                        })
                 }
                 return cell
             }
@@ -349,6 +373,11 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    /**
+     邀请用户加入群聊
+     
+     - parameter users: 被邀请的用户list
+     */
     func userSelected(users: [User]) {
         // send request to the server
         dismissViewControllerAnimated(true, completion: nil)
@@ -357,14 +386,19 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         let originIDs = Array(targetClub.members).map({return $0.ssidString})
         let targets = userIDs.filter({!originIDs.contains($0)})
         let requester = ClubRequester.sharedInstance
+        self.lp_start()
         requester.updateClubMembers(targetClub.ssidString, members: targets, opType: "add", onSuccess: { (json) -> () in
             // TODO: 放到请求外面
             self.targetClub.members.appendContentsOf(users)
             self.targetClub.memberNum = Int32(self.targetClub.members.count)
             self.inlineUserSelect?.users = self.targetClub.members
             self.tableView.reloadData()
-            NSNotificationCenter.defaultCenter().postNotificationName(kMessageClubMemberChangeNotification, object: self, userInfo: [kMessageClubKey: self.targetClub])
+            NSNotificationCenter.defaultCenter().postNotificationName(kMessageClubMemberChangeNotification, object: self, userInfo:
+                [kMessageClubKey: self.targetClub])
+            self.showToast(LS("邀请成功"))
+            self.lp_stop()
             }) { (code) -> () in
+                self.lp_stop()
                 if code == "no permission" {
                     self.showToast(LS("您没有权限进行此项操作"))
                 }
@@ -422,6 +456,21 @@ extension GroupChatSettingController {
             self.navigationController?.popViewControllerAnimated(true)
         } else {
             showToast(LS("删除失败"), onSelf: true)
+        }
+    }
+    
+    func startChatBtnPressed() {
+        guard let controllers = self.navigationController?.viewControllers else {
+            return
+        }
+        let controller = controllers[controllers.count - 2]
+        if controller.isKindOfClass(ChatRoomController.self){
+            navigationController?.popViewControllerAnimated(true)
+        } else if let temp = controller as? RadarHomeController {
+            let chatRoom = ChatRoomController()
+            chatRoom.targetClub = targetClub
+            chatRoom.chatCreated = false
+            temp.navigationController?.pushViewController(chatRoom, animated: true)
         }
     }
 }

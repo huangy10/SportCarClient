@@ -39,7 +39,7 @@ class ActivityHomeMineListController: UICollectionViewController {
         collectionView?.alwaysBounceVertical = true
         collectionView?.contentInset = UIEdgeInsetsMake(10, 12.5, 10, 12.5)
         collectionView?.registerClass(ActivityCell.self, forCellWithReuseIdentifier: ActivityCell.reuseIdentifier)
-        collectionView?.backgroundColor = UIColor.RGB(39, 39, 39)
+        collectionView?.backgroundColor = kGeneralTableViewBGColor
         refreshControl = collectionView?.addSubview(UIRefreshControl.self)
             .config(self, selector: #selector(getLatestActData))
         getMoreActData()

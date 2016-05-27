@@ -52,9 +52,9 @@ class FFSelectController: UserSelectController {
     
     var maxSelectUserNum: Int
     
-    var titleFansBtn: UIButton?
-    var titleFollowBtn: UIButton?
-    var titleBtnIcon: UIImageView?
+    var titleFansLbl: UILabel!
+    var titleFollowLbl: UILabel!
+    var titleBtnIcon: UIImageView!
     var navRightBtn: UIButton?
     
     convenience init(maxSelectNum: Int, preSelectedUsers: [User] = [], preSelect: Bool = true, forced: Bool = true) {
@@ -93,39 +93,48 @@ class FFSelectController: UserSelectController {
         let containerWidth = screenWidth * 0.5
         let container = UIView(frame: CGRectMake(0, 0, containerWidth, barHeight))
         // 创建粉丝按钮
-        titleFansBtn = UIButton()
-        titleFansBtn?.tag = 0
-        titleFansBtn?.setTitleColor(kBarBgColor, forState: .Normal)
-        titleFansBtn?.setTitle(LS("粉丝"), forState: .Normal)
-        titleFansBtn?.titleLabel?.font = kBarTextFont
-        container.addSubview(titleFansBtn!)
-        titleFansBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        let titleFansBtn = UIButton()
+        titleFansBtn.tag = 0
+        container.addSubview(titleFansBtn)
+        titleFansBtn.snp_makeConstraints(closure: { (make) -> Void in
             make.height.equalTo(30)
-            make.width.equalTo(80)
+            make.width.equalTo(70)
             make.centerY.equalTo(container)
-            make.right.equalTo(container.snp_centerX).offset(-9)
+            make.right.equalTo(container.snp_centerX)
         })
-        titleFansBtn?.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        titleFansBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        titleFansLbl = titleFansBtn.addSubview(UILabel)
+            .config(14, textColor: kTextBlack, textAlignment: .Center, text: LS("粉丝"))
+            .layout({ (make) in
+                make.center.equalTo(titleFansBtn)
+                make.size.equalTo(LS(" 粉丝 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+            })
         // 创建关注按钮
-        titleFollowBtn = UIButton()
-        titleFollowBtn?.tag = 1
-        titleFollowBtn?.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        titleFollowBtn?.setTitle(LS("关注"), forState: .Normal)
-        titleFollowBtn?.titleLabel?.font = kBarTextFont
-        container.addSubview(titleFollowBtn!)
-        titleFollowBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        let titleFollowBtn = UIButton()
+        titleFollowBtn.tag = 1
+        container.addSubview(titleFollowBtn)
+        titleFollowBtn.snp_makeConstraints(closure: { (make) -> Void in
             make.height.equalTo(30)
-            make.width.equalTo(80)
+            make.width.equalTo(70)
             make.centerY.equalTo(container)
-            make.left.equalTo(container.snp_centerX).offset(9)
+            make.left.equalTo(container.snp_centerX)
         })
-        titleFollowBtn?.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        titleFollowBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        titleFollowLbl = titleFollowBtn.addSubview(UILabel)
+            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("关注"))
+            .layout({ (make) in
+                make.center.equalTo(titleFollowBtn)
+                make.size.equalTo(LS(" 关注 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+            })
         // 创建可以平移的白色按钮形状
-        titleBtnIcon = UIImageView(image: UIImage(named: "account_header_button"))
+        titleBtnIcon = UIImageView(image: UIImage(named: "nav_title_btn_icon"))
         container.addSubview(titleBtnIcon!)
         container.sendSubviewToBack(titleBtnIcon!)
         titleBtnIcon?.snp_makeConstraints(closure: { (make) -> Void in
-            make.edges.equalTo(titleFansBtn!)
+            make.bottom.equalTo(container)
+            make.left.equalTo(titleFansLbl)
+            make.right.equalTo(titleFansLbl)
+            make.height.equalTo(2.5)
         })
         self.navigationItem.titleView = container
         
@@ -153,12 +162,15 @@ class FFSelectController: UserSelectController {
                 return
             }
             titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
-                make.edges.equalTo(sender)
+                make.bottom.equalTo(titleBtnIcon!.superview!)
+                make.left.equalTo(titleFansLbl)
+                make.right.equalTo(titleFansLbl)
+                make.height.equalTo(2.5)
             })
+            titleFansLbl.textColor = kTextBlack
+            titleFollowLbl.textColor = kTextGray
             UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
                 sender.superview?.layoutIfNeeded()
-                self.titleFansBtn?.setTitleColor(kBarBgColor, forState: .Normal)
-                self.titleFollowBtn?.setTitleColor(UIColor.whiteColor(), forState: .Normal)
                 }, completion: nil)
             navTitlestate = .Fans
             self.userTableView?.reloadData()
@@ -167,12 +179,15 @@ class FFSelectController: UserSelectController {
                 return
             }
             titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
-                make.edges.equalTo(sender)
+                make.bottom.equalTo(titleBtnIcon!.superview!)
+                make.left.equalTo(titleFollowLbl)
+                make.right.equalTo(titleFollowLbl)
+                make.height.equalTo(2.5)
             })
+            titleFansLbl.textColor = kTextGray
+            titleFollowLbl.textColor = kTextBlack
             UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
                 sender.superview?.layoutIfNeeded()
-                self.titleFansBtn?.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-                self.titleFollowBtn?.setTitleColor(kBarBgColor, forState: .Normal)
                 }, completion: nil)
             navTitlestate = .Follow
             if follows.count == 0 {

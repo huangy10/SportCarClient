@@ -57,7 +57,7 @@ class StatusBasicController: UITableViewController {
         myRefreshControl?.addTarget(self, action: #selector(StatusBasicController.loadLatestData), forControlEvents: .ValueChanged)
         
         tableView.separatorStyle = .None
-        tableView.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
+        tableView.backgroundColor = kGeneralTableViewBGColor
         loadMoreData()
     }
     

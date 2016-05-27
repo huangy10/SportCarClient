@@ -12,7 +12,7 @@ import SwiftyJSON
 import Alamofire
 
 
-class PersonOtherController: PersonBasicController, RequestProtocol {
+class PersonOtherController: PersonBasicController, RequestProtocol, LoadingProtocol {
     
     // backOffLocation
     var backOffLocation: Location?
@@ -92,7 +92,9 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     
     func followBtnPressed(sender: UIButton) {
         let requester = AccountRequester2.sharedInstance
+        lp_start()
         requester.follow(self.data.user.ssidString, onSuccess: { (json) -> () in
+            self.lp_stop()
             let board = self.header as! PersonHeaderOther
             
             if json!.boolValue {
@@ -109,7 +111,8 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
                     board.followBtnTmpImage.hidden = false
             })
             }) { (code) -> () in
-                print(code)
+                self.lp_stop()
+                self.showToast("Access Error: \(code)")
         }
     }
     

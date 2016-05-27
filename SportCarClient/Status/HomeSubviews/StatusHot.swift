@@ -29,7 +29,7 @@ class StatusHotController: UICollectionViewController {
         collectionView?.alwaysBounceVertical = true
         collectionView?.contentInset = UIEdgeInsetsMake(5, 5, 5, 5)
         collectionView?.registerClass(StatusHotCell.self, forCellWithReuseIdentifier: "cell")
-        collectionView?.backgroundColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
+        collectionView?.backgroundColor = kGeneralTableViewBGColor
         myRefreshControl = UIRefreshControl()
         myRefreshControl?.addTarget(self, action: #selector(loadLatestStatusData), forControlEvents: .ValueChanged)
         collectionView?.addSubview(myRefreshControl!)

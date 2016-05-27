@@ -238,7 +238,12 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
     }
     
     func cityElementSelectDidSelect(dataSource: CityElementSelectDataSource) {
+        self.navigationController?.popToViewController(self, animated: true)
         districtLbl.text = dataSource.selectedCity
+    }
+    
+    func cityElementSelectDidCancel() {
+        self.navigationController?.popToViewController(self, animated: true)
     }
     
     func didModify(newValue: String?, indexPath: NSIndexPath) {

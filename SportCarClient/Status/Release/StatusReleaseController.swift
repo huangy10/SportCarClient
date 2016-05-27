@@ -13,7 +13,7 @@ import Cent
 import Dollar
 
 
-class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate, ImageInputSelectorDelegate, ProgressProtocol, PresentableProtocol {
+class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate, ImageInputSelectorDelegate, ProgressProtocol, PresentableProtocol, LocationSelectDelegate {
     /*
     ================================================================================================ 子控件
     */
@@ -40,9 +40,9 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     var sportCarList: SportCarSelectListController?
     /// 地图控件
     var mapView: BMKMapView!
-    var locationDesInput: UITextField?
+    var locInput: UITextField!
     var locationService: BMKLocationService?
-    var userLocation: BMKUserLocation?
+    var userLocation: CLLocationCoordinate2D?
     var locSearch: BMKGeoCodeSearch?
     var annotation: BMKPointAnnotation!
     
@@ -77,7 +77,9 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         mapView.viewWillAppear()
         mapView.delegate = self
         locSearch?.delegate = self
-        locationService?.startUserLocationService()
+        if self.userLocation == nil {
+            locationService?.startUserLocationService()
+        }
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -118,14 +120,14 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         statusContentInput?.text = LS("有什么想说的呢...")
         statusContentInput?.delegate = self
         inputFields.append(statusContentInput)
-        statusContentInput?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        statusContentInput?.font = UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)
         statusContentInput?.textColor = UIColor(white: 0.72, alpha: 1)
         board?.addSubview(statusContentInput!)
         statusContentInput?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.right.equalTo(superview).offset(-15)
             make.top.equalTo(addImageBtn.snp_bottom).offset(15)
-            make.height.equalTo(150)
+            make.height.equalTo(120)
         })
         // 状态内容的字数统计
         statusContentWordCountLbl = UILabel()
@@ -207,17 +209,15 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
                 make.centerY.equalTo(locDesContainer)
         }
         //
-        locationDesInput = UITextField()
-        self.inputFields.append(locationDesInput)
-        locationDesInput?.delegate = self
-        locDesContainer.addSubview(locationDesInput!)
-        locationDesInput?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(locDesIcon.snp_right).offset(25)
-            make.height.equalTo(locDesIcon)
-            make.centerY.equalTo(locDesContainer)
-            make.right.equalTo(locDesContainer).offset(-20)
-        })
-        //
+        locInput = locDesContainer.addSubview(UITextField).config(14)
+            .layout({ (make) in
+                make.left.equalTo(locDesIcon.snp_right).offset(25)
+                make.height.equalTo(locDesIcon)
+                make.centerY.equalTo(locDesContainer)
+                make.right.equalTo(locDesContainer).offset(-20)
+            })
+        locInput.delegate = self
+        self.inputFields.append(locInput)
         autoSetBoardContentSize()
     }
     
@@ -265,14 +265,14 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             return
         }
         let car_id = sportCarList?.selectedCar?.ssidString
-        guard let lat: Double = userLocation?.location.coordinate.latitude else {
+        guard let lat: Double = userLocation?.latitude else {
             showToast(LS("无法获取当前位置"), onSelf: true)
             return
         }
-        guard let lon: Double = userLocation?.location.coordinate.longitude else {
+        guard let lon: Double = userLocation?.longitude else {
             return
         }
-        let loc_description = locationDesInput?.text == "" ? "未知地点" : locationDesInput!.text
+        let loc_description = locInput!.text == "" ? "未知地点" : locInput!.text
         let requester = StatusRequester.sharedInstance
         let toast = self.showStaticToast(LS("发布中..."))
         let informUserIds = informOfUsers.map { (user) -> String in
@@ -288,6 +288,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             self.navLeftBtnPressed()
             self.requesting = false
             }, onError: { (code) -> () in
+                self.requesting = false
                 self.hideToast(toast)
                 self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
                 self.pp_hideProgressView()
@@ -295,7 +296,6 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.pp_updateProgress(progress)
                 })
-                self.requesting = false
         }
     }
     
@@ -351,9 +351,9 @@ extension StatusReleaseController {
     
     func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
         locationService?.stopUserLocationService()
-        self.userLocation = userLocation
+        locationService?.delegate = nil
         // 只需要获取当前的数据
-        self.userLocation = userLocation
+        self.userLocation = userLocation.location.coordinate
         annotation = BMKPointAnnotation()
         annotation.coordinate = userLocation.location.coordinate
         mapView.addAnnotation(annotation)
@@ -376,10 +376,27 @@ extension StatusReleaseController {
     
     func onGetReverseGeoCodeResult(searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
         if error == BMK_SEARCH_NO_ERROR {
-            locationDesInput!.text = result.address
+            locInput!.text = result.address
         } else {
             self.showToast(LS("无法获取当前位置信息"), onSelf: true)
         }
+    }
+    
+    func locationSelectBtnPressed() {
+        let locationSelect = LocationSelectController(currentLocation: self.userLocation, des: self.locInput.text)
+        locationSelect.delegate = self
+        self.presentViewController(locationSelect.toNavWrapper(), animated: true, completion: nil)
+    }
+    
+    func locationSelectDidCancel() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func locationSelectDidSelect(location: Location) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        self.userLocation = location.location
+        locInput.text = location.description
+        mapView.setCenterCoordinate(location.location, animated: true)
     }
     
 }
@@ -433,7 +450,7 @@ extension StatusReleaseController {
     func changeLayoutWhenKeyboardAppears(notif: NSNotification) {
         let userInfo = notif.userInfo!
         let keyboardFrame = userInfo[UIKeyboardFrameBeginUserInfoKey]!.CGRectValue
-        if !locationDesInput!.editing {
+        if !locInput!.editing {
             if statusContentInput!.frame.origin.y < keyboardFrame.height {
                 return
             }

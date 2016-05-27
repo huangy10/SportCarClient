@@ -12,7 +12,7 @@ import Cent
 import MapKit
 import Dollar
 
-class ActivityDetailController: InputableViewController, UITableViewDataSource, UITableViewDelegate, FFSelectDelegate, DetailCommentCellDelegate {
+class ActivityDetailController: InputableViewController, UITableViewDataSource, UITableViewDelegate, FFSelectDelegate, DetailCommentCellDelegate, LoadingProtocol {
     
     var act: Activity!
     var comments: [ActivityComment] = []
@@ -46,9 +46,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
         mapCell.map.viewWillAppear()
-        
         infoView.loadDataAndUpdateUI()
-        print(infoView.frame)
         tableView.setContentOffset(CGPointMake(0, -infoView.preferedHeight), animated: false)
     }
     
@@ -155,11 +153,16 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             if !act.finished {
                 act.endAt = NSDate()
                 setNavRightBtn()
+                lp_start()
                 ActivityRequester.sharedInstance.closeActivty(act.ssidString, onSuccess: { (json) in
+                    self.lp_stop()
                     self.parentCollectionView?.reloadData()
                     // push a notification to tell other related component to update the status
                     NSNotificationCenter.defaultCenter().postNotificationName(kActivityManualEndedNotification, object: nil, userInfo: [kActivityKey: self.act])
+                    self.showToast(LS("活动已关闭报名"))
                     }, onError: { (code) in
+                        self.showToast(LS("Access Error: \(code)"))
+                        self.lp_stop()
                 })
             }
         } else {
@@ -172,15 +175,21 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             act.hostApply()
             infoView.loadDataAndUpdateUI()
             setNavRightBtn()
+            self.lp_start()
             ActivityRequester.sharedInstance.postToApplyActivty(act.ssidString, onSuccess: { (json) in
+                self.showToast(LS("报名成功"))
+                self.lp_stop()
                 }, onError: { (code) in
                     self.showToast(LS("报名失败"))
+                    self.lp_stop()
             })
         }
     }
     
     func likeBtnPressed() {
+        lp_start()
         ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: "", opType: "like", onSuccess: { (json) in
+            self.lp_stop()
             if let data = json {
                 let liked = data["liked"].boolValue
                 let likeNum = data["like_num"].int32Value
@@ -191,6 +200,8 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
                 assertionFailure()
             }
             }) { (code) in
+                self.lp_stop()
+                self.showToast("Access Error: \(code)")
         }
     }
     
@@ -395,15 +406,23 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    /**
+     邀请其他用户参加活动
+     
+     - parameter users: 被邀请的用户的list
+     */
     func userSelected(users: [User]) {
         self.dismissViewControllerAnimated(true, completion: nil)
         let userIDs = users.map { $0.ssidString }
         let userIDData = try! JSON(userIDs).rawData()
         let userJSONString = String(data: userIDData, encoding: NSUTF8StringEncoding)
+        self.lp_start()
         ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: userJSONString!, opType: "invite", onSuccess: { (json) in
             self.showToast(LS("邀请已发送"))
+            self.lp_stop()
             }) { (code) in
                 self.showToast(LS("邀请发送失败"))
+                self.lp_stop()
         }
     }
     
@@ -501,6 +520,8 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         })
         self.view.layoutIfNeeded()
     }
+    
+    // MARK: loading
 }
 //
 //class ActivityDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource, InlineUserSelectDelegate, FFSelectDelegate, DetailCommentCellDelegate {

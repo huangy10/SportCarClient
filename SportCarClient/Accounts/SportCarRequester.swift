@@ -18,7 +18,9 @@ class SportCarRequester: BasicRequester {
     private let _urlMap: [String: String] = [
         "query_car": "querybyname",
         "follow": "<carID>/follow",
-        "auth": "auth"
+        "auth": "auth",
+        "delete": "<carID>/delete",
+        "signature": "<carID>/signature"
     ]
     
     override var urlMap: [String : String] {
@@ -64,6 +66,16 @@ class SportCarRequester: BasicRequester {
                onProgress: onProgress,
                onError: onError
         )
+    }
+    
+    func deleteCar(carID: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+        return post(urlForName("delete", param: ["carID": carID]), onSuccess: onSuccess, onError: onError)
+    }
+    
+    func updateCarSignature(carID: String, signature: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+        return post(urlForName("signature", param: ["carID": carID]),
+                    parameters: ["signature": signature],
+                    onSuccess: onSuccess, onError: onError)
     }
 }
 //

@@ -279,8 +279,14 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         // Do nothing
     }
     
+    
+    /**
+     删除用户，注意一次只能删除一个用户
+     
+     - parameter user: 被删除的一个用户
+     */
     override func inlineUserSelectShouldDeleteUser(user: User) {
-        // TODO finish this
+        self.lp_start()
         ClubRequester.sharedInstance.updateClubMembers(self.targetClub.ssidString, members: [user.ssidString], opType: "delete", onSuccess: { (_) in
             self.targetClub.removeMember(user)
             self.targetClub.memberNum -= 1
@@ -288,8 +294,10 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             self.tableView.reloadData()
             NSNotificationCenter.defaultCenter().postNotificationName(kMessageClubMemberChangeNotification, object: self, userInfo: [kMessageClubKey: self.targetClub])
             self.showToast(LS("删除成功"))
+            self.lp_stop()
             }) { (code) in
                 self.showToast(LS("删除失败"))
+                self.lp_stop()
         }
     }
     
@@ -308,6 +316,9 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         select.presentFrom(self)
     }
     
+    /**
+     退出群了以后选择新的接替的新群主后会调用这个函数
+     */
     func groupMemberSelectControllerDidSelectUser(user: User) {
         let waiter = dispatch_semaphore_create(0)
         var success = false
@@ -321,9 +332,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         if success {
             targetClub.attended = false
             targetClub.mine = true
-            
-            // TODO: 删除用户
-//            ChatRecordDataSource.sharedDataSource.deleteClub(targetClub)
+            MessageManager.defaultManager.deleteAndQuit(targetClub)
             let nav = self.navigationController
             nav?.popViewControllerAnimated(true)
             nav?.popViewControllerAnimated(true)
