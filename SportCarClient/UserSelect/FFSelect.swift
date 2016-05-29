@@ -227,7 +227,7 @@ class FFSelectController: UserSelectController {
                     }
                 }
                 }, onError: { (code) -> () in
-                    
+                    self.showToast(LS("获取数据失败"))
             })
             break
         case .Follow:
@@ -245,7 +245,7 @@ class FFSelectController: UserSelectController {
                     }
                 }
                 }, onError: { (code) -> () in
-                    
+                    self.showToast(LS("获取数据失败"))
             })
         }
     }
@@ -268,5 +268,16 @@ class FFSelectController: UserSelectController {
             return false
         }
         return true
+    }
+    
+    override func searchUserUsingSearchText() {
+        // clear old search result
+        fans.removeAll()
+        follows.removeAll()
+        userTableView?.reloadData()
+        fansDateThreshold = NSDate()
+        followDateThreshold = NSDate()
+        // get new data
+        getMoreUserData()
     }
 }

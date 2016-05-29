@@ -31,7 +31,7 @@ class AppManager: UIViewController {
         super.viewDidLoad()
         launch()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(unreadChange(_:)), name: kUnreadNumberDidChangeNotification, object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUserForceOffline(_:)), name: kAccontNolongerLogin, object: nil)
     }
     
     func unreadChange(notification: NSNotification) {
@@ -77,12 +77,14 @@ class AppManager: UIViewController {
     /**
      推出当前所有的展示内容回到登陆页面
      */
-    func logout() {
+    func logout(forced: Bool = false) {
         state = .LoginRegister
-        AccountRequester2.sharedInstance.logout({ (json) -> (Void) in
-//            print("logout")
-            }) { (code) -> (Void) in
-//                print("logout fails")
+        if !forced {
+            AccountRequester2.sharedInstance.logout({ (json) -> (Void) in
+                print("logout")
+                }) { (code) -> (Void) in
+                    print("logout fails")
+            }
         }
         // 在三个modelmanager上面注销用户
         MainManager.sharedManager.logout()
@@ -97,7 +99,11 @@ class AppManager: UIViewController {
         
         let ctrl = AccountController()
         let nav = BlackBarNavigationController(rootViewController: ctrl, blackNavTitle: true)
-        self.presentViewController(nav, animated: true, completion: nil)
+        self.presentViewController(nav, animated: true, completion: {
+            if forced {
+                ctrl.showToast(LS("您的账号在其他设备上登陆了"))
+            }
+        })
         self.navigationController?.popToRootViewControllerAnimated(false)
         NSNotificationCenter.defaultCenter().postNotificationName(kAppManagerNotificationLogout, object: nil)
     }
@@ -124,7 +130,10 @@ class AppManager: UIViewController {
     /**
      强制用户下线重新登录
      */
-    func onUserFocusOffline() {
-        
+    func onUserForceOffline(notif: NSNotification) {
+        // logout the user
+        dispatch_async(dispatch_get_main_queue()) { 
+            self.logout(true)
+        }
     }
 }

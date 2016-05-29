@@ -27,8 +27,8 @@ class BackToHomeBtn: UIButton {
     
     func createSubview() {
         setImage(UIImage(named: "home_back"), forState: .Normal)
-        bounds = CGRectMake(0, 0, 15, 15)
-        imageView?.contentMode = .ScaleAspectFit
+        bounds = CGRectMake(0, 0, 15, 13.5)
+//        imageView?.contentMode = .ScaleAspectFit
         clipsToBounds = false
         
         messageMark = self.addSubview(UIView).config(kHighlightedRedTextColor)

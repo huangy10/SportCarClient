@@ -234,14 +234,24 @@ extension UserSelectController {
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        searchText = searchBar.text
-        searchUserUsingSearchText()
+        if searchText != searchBar.text {
+            searchText = searchBar.text
+            searchUserUsingSearchText()
+        }
     }
     
     func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
         self.tapper?.enabled = true
         return true
     }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        if self.searchText != searchText {
+            self.searchText = searchText
+            searchUserUsingSearchText()
+        }
+    }
+    
 }
 
 // MARK: - Collection Delegate functions

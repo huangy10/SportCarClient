@@ -58,7 +58,10 @@ class FollowSelectController: UserSelectController {
     }
     
     override func searchUserUsingSearchText() {
-        
+        follows.removeAll()
+        userTableView?.reloadData()
+        followsDateThreshold = NSDate()
+        getMoreUserData()
     }
     
     func getMoreUserData() {

@@ -129,10 +129,6 @@ class MessageManager {
                 self.request = nil
                 dispatch_async(self.queue) { self.listen() }
             }, onError: { (code) in
-                if code == "1402" {
-                    //
-                    NSNotificationCenter.defaultCenter().postNotificationName(kAccontNolongerLogin, object: self)
-                }
                 print(code)
                 if let code = code {
                     self.errorHanlde(code)

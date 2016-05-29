@@ -117,7 +117,7 @@ class StatusRequester: BasicRequester {
     
     func deleteStatus(statusID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
         return post(
-            urlForName("opertaion", param: ["statusID": statusID]),
+            urlForName("operation", param: ["statusID": statusID]),
             parameters: ["op_type": "delete"],
             onSuccess: onSuccess, onError: onError
         )

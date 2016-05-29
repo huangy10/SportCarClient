@@ -139,7 +139,7 @@ class User: BaseModel {
     }
     // MARK: 一下是User自己的Utility函数
     var isHost: Bool {
-        return ssid == manager.hostUserID
+        return ssid == MainManager.sharedManager.hostUserID!
     }
     
     class func reorganizeJSON(json: JSON) -> JSON {

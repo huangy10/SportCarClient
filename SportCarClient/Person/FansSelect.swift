@@ -57,7 +57,10 @@ class FansSelectController: UserSelectController {
     }
     
     override func searchUserUsingSearchText() {
-        
+        fans.removeAll()
+        userTableView?.reloadData()
+        fansDateThreshold = NSDate()
+        getMoreUserData()
     }
     
     func getMoreUserData() {

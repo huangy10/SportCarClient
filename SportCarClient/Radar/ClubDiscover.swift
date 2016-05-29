@@ -39,6 +39,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
 
         let requester = ClubRequester.sharedInstance
         requester.discoverClub("nearby", cityLimit: "全国", skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
+            print(json!)
             for data in json!.arrayValue {
                 let club: Club = try! MainManager.sharedManager.getOrCreate(data)
                 self.clubs.append(club)
@@ -46,7 +47,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             self.clubs = $.uniq(self.clubs, by: { $0.ssid })
             self.clubList.reloadData()
             }) { (code) -> () in
-                
+                print(code)
         }
     }
     
@@ -128,6 +129,9 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ClubDiscoverCell
         cell.club = clubs[indexPath.row]
+        print(cell.club.memberNum)
+        print(cell.club.city)
+        print(cell.club.clubDescription)
         cell.loadDataAndUpdateUI()
         return cell
     }
@@ -196,13 +200,14 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         let opType = ["nearby", "value", "average", "members", "beauty", "recent"][clubFilter.selectedRow]
         ClubRequester.sharedInstance.discoverClub(opType, cityLimit: self.cityFilterType, skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
+    
                 let club: Club = try! MainManager.sharedManager.getOrCreate(data)
                 self.clubs.append(club)
             }
             self.clubs = $.uniq(self.clubs, by: { $0.ssid })
             self.clubList.reloadData()
         }) { (code) -> () in
-            
+            print(code)
         }
     }
     

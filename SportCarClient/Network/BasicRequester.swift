@@ -15,7 +15,8 @@ class BasicRequester {
     var manager: Alamofire.Manager {
         let m = Alamofire.Manager.sharedInstance
         var onceToken: dispatch_once_t = 0
-        dispatch_once(&onceToken) { 
+        dispatch_once(&onceToken) {
+            
             m.delegate.taskWillPerformHTTPRedirectionWithCompletion = {
                 (session: NSURLSession, task: NSURLSessionTask, response: NSHTTPURLResponse,
                 newRequest: NSURLRequest, completionHandler: NSURLRequest? -> Void) in
@@ -93,6 +94,9 @@ class BasicRequester {
                 onSuccess(json: result)
             } else {
                 let code = json["code"].string ?? json["message"].string
+                if code == "1402" {
+                    NSNotificationCenter.defaultCenter().postNotificationName(kAccontNolongerLogin, object: nil)
+                }
                 onError(code: code)
             }
         }
