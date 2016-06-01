@@ -73,8 +73,15 @@ class ActivityReleasePresentableController: ActivityReleaseController {
             }, onProgress: { (progress) in
                 self.pp_updateProgress(progress)
         }) { (code) in
-            self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
-            self.pp_hideProgressView()
+            dispatch_async(dispatch_get_main_queue(), {
+                self.hideToast(toast)
+                self.pp_hideProgressView()
+                if code == "no permission" {
+                    self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
+                } else {
+                    self.showToast(LS("请先认证一辆车再发布活动"), onSelf: true)
+                }
+            })
         }
     }
     

@@ -114,12 +114,12 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 make.right.equalTo(container).offset(-15)
         }
         nameInput = wrapper.addSubview(UITextField)
-            .config(14, placeholder: LS("为活动取一个名字...")).layout({ (make) in
+            .config(17, placeholder: LS("为活动取一个名字...")).layout({ (make) in
                 make.left.equalTo(static1)
                 make.top.equalTo(static1.snp_bottom).offset(14)
             }).addToInputable(self)
         desInput = container.addSubview(UITextView)
-            .config(14, textColor: UIColor(white: 0.72, alpha: 1), text: LS("活动描述..."))
+            .config(16, textColor: UIColor(white: 0.72, alpha: 1), text: LS("活动描述..."))
             .layout({ (make) in
                 make.left.equalTo(imagePickerBtn)
                 make.right.equalTo(container).offset(-15)
@@ -266,8 +266,12 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             }) { (code) in
                 dispatch_async(dispatch_get_main_queue(), {
                     self.hideToast(toast)
-                    self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
                     self.pp_hideProgressView()
+                    if code == "no permission" {
+                        self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
+                    } else {
+                        self.showToast(LS("请先认证一辆车再发布活动"), onSelf: true)
+                    }
                 })
         }
     }

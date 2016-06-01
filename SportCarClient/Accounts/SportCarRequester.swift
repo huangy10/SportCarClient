@@ -61,7 +61,7 @@ class SportCarRequester: BasicRequester {
     
     func authenticateSportscar(carID: String, driveLicense: UIImage, photo: UIImage, idCard: UIImage, licenseNum: String, onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()) {
         upload(urlForName("auth"),
-               parameters: ["car_id": carID, "driver_license": driveLicense, "photo": photo, "id_card": idCard, "license": licenseNum],
+               parameters: ["car_id": carID, "drive_license": driveLicense, "photo": photo, "id_card": idCard, "license": licenseNum],
                onSuccess: onSuccess,
                onProgress: onProgress,
                onError: onError

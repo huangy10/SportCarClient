@@ -18,7 +18,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol, LoadingProt
     var backOffLocation: Location?
     var userLoc: Location?
     
-    var toast: UIView?
+    weak var toast: UIView?
     var rp_currentRequest: Request?
     
     override func viewWillAppear(animated: Bool) {

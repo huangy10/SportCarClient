@@ -22,7 +22,7 @@ class SportCarSelectParamCell: UITableViewCell {
     
     var content: UILabel?
     var header: UILabel?
-    var icon: UIImageView!
+//    var icon: UIImageView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -42,13 +42,13 @@ class SportCarSelectParamCell: UITableViewCell {
         self.contentView.addSubview(content!)
         
         header = UILabel()
-        header?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
+        header?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
         header?.textColor = UIColor(white: 0.72, alpha: 1)
         header?.textAlignment = .Left
         self.contentView.addSubview(header!)
         
-        icon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
-        self.contentView.addSubview(icon)
+//        icon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
+//        self.contentView.addSubview(icon)
         
         let superview = self.contentView
         // 添加约束
@@ -66,11 +66,11 @@ class SportCarSelectParamCell: UITableViewCell {
             make.width.equalTo(self.contentView).multipliedBy(0.4)
         })
         //
-        icon.snp_makeConstraints { (make) -> Void in
-            make.centerY.equalTo(content!)
-            make.right.equalTo(self.contentView).offset(-15)
-            make.size.equalTo(CGSize(width: 9, height: 15))
-        }
+//        icon.snp_makeConstraints { (make) -> Void in
+//            make.centerY.equalTo(content!)
+//            make.right.equalTo(self.contentView).offset(-15)
+//            make.size.equalTo(CGSize(width: 9, height: 15))
+//        }
     }
 }
 
@@ -80,7 +80,7 @@ class SportCarSelectParamEditableCell: SportCarSelectParamCell {
     override func createSubviews() {
         super.createSubviews()
         contentInput = UITextField()
-        contentInput.font = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
+        contentInput.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
         contentInput.textColor = UIColor.blackColor()
         contentInput.textAlignment = .Right
         self.contentView.addSubview(contentInput)

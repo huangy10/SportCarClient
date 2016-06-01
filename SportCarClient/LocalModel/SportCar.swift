@@ -32,21 +32,24 @@ class SportCar: BaseModel{
     }
 
     override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool) throws -> Self {
-        try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
-        image = data["image"].stringValue
-        logo = data["logo"].stringValue
-
-        name = data["name"].stringValue
-        if detailLevel >= 1 {
-            price = data["price"].stringValue
-            engine = data["engine"].stringValue
-            body = data["body"].stringValue
-            maxSpeed = data["speed"].stringValue
-            zeroTo60 = data["acce"].stringValue
-            torque = data["torque"].stringValue
+        var json = data
+        if data["car"].exists() {
+            json = SportCar.reorgnaizeJSON(data)
         }
-        identified = data["identified"].boolValue
-        signature = data["signature"].string
+        try super.loadDataFromJSON(json, detailLevel: detailLevel, forceMainThread: forceMainThread)
+        image = json["image"].stringValue
+        logo = json["logo"].stringValue
+        name = json["name"].stringValue
+        if detailLevel >= 1 {
+            price = json["price"].stringValue
+            engine = json["engine"].stringValue
+            body = json["body"].stringValue
+            maxSpeed = json["speed"].stringValue
+            zeroTo60 = json["acce"].stringValue
+            torque = json["torque"].stringValue
+        }
+        identified = json["identified"].boolValue
+        signature = json["signature"].string
         return self
     }
     

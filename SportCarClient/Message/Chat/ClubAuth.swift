@@ -69,6 +69,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
         let container = UIView()
         let image1 = UIImageView(image: UIImage(named: "privilege_show_avatar_logo"))
         container.addSubview(image1)
+        image1.contentMode = .ScaleAspectFit
         image1.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(container.snp_centerX).offset(-40)
             make.size.equalTo(37)
@@ -86,6 +87,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             make.top.equalTo(image1.snp_bottom).offset(11)
         }
         let image2 = UIImageView(image: UIImage(named: "privilege_allow_start_activity"))
+        image2.contentMode = .ScaleAspectFit
         container.addSubview(image2)
         image2.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(container.snp_centerX).offset(40)

@@ -328,9 +328,9 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             detail.focusedIndexPath = indexPath
             detail.delegate = self
             self.navigationController?.pushViewController(detail, animated: true)
+        } else if indexPath.section == 3 && indexPath.row == 0 {
+            toast = showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(GroupChatSettingController.clearChatContent), cancelSelector: #selector(GroupChatSettingController.hideToast as (GroupChatSettingController) -> () -> ()))
         } else if indexPath.section == 3 && indexPath.row == 1 {
-            showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(GroupChatSettingController.clearChatContent), cancelSelector: #selector(GroupChatSettingController.hideToast as (GroupChatSettingController) -> () -> ()))
-        } else if indexPath.section == 3 && indexPath.row == 2 {
             // 举报
             let report = ReportBlacklistViewController(userID: targetClub.ssid, reportType: "club", parent: self)
             self.presentViewController(report, animated: false, completion: nil)
@@ -451,9 +451,14 @@ extension GroupChatSettingController {
         }
         dispatch_semaphore_wait(waiter, DISPATCH_TIME_FOREVER)
         if success {
-//            ChatRecordDataSource.sharedDataSource.deleteClub(targetClub)
-            self.navigationController?.popViewControllerAnimated(true)
-            self.navigationController?.popViewControllerAnimated(true)
+            MessageManager.defaultManager.deleteAndQuit(targetClub)
+            let nav = self.navigationController!
+            let n = nav.viewControllers.count
+            if let _ = nav.viewControllers[n-1] as? ChatRoomController {
+                self.navigationController?.popToViewController(nav.viewControllers[n-2], animated: true)
+            } else {
+                self.navigationController?.popViewControllerAnimated(true)
+            }
         } else {
             showToast(LS("删除失败"), onSelf: true)
         }

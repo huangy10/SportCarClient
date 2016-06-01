@@ -1,3 +1,4 @@
+
 //
 //  GlobalNotifiicationSettings.swift
 //  SportCarClient
@@ -35,6 +36,7 @@ let kMessageChatListKey = "chats"
 let kMessageChatResetNotification = "chat_message_reset"
 let kMessageClubMemberChangeNotification = "club_member_change"
 let kMessageClubKey = "club"
+let kMessageClubDelete = "club_delete"
 
 
 // MARK: Account

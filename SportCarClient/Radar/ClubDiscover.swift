@@ -53,6 +53,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        clubList.reloadData()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -217,11 +218,11 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         if !clubFilter.dirty {
             return
         }
+        self.clubs.removeAll()
         sendRequest()
     }
     
     func cityFilterPressed() {
-//        self.dismissViewControllerAnimated(true, completion: nil)
         let select = CityElementSelectController()
         select.maxLevel = 0
         select.showAllContry = true

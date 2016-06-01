@@ -78,11 +78,9 @@ class CityElementSelectController: UITableViewController {
     
     func navSettings() {
         self.navigationItem.title = LS("活跃地区")
-        let backBtn = UIButton()
-        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        backBtn.addTarget(self, action: #selector(CityElementSelectController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
-        backBtn.frame = CGRect(x: 0, y: 0, width: 10.2, height: 18)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
+        let backBtn = UIBarButtonItem(title: LS("取消"), style: .Done, target: self, action: #selector(navLeftBtnPressed))
+        backBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        navigationItem.leftBarButtonItem = backBtn
     }
     
     func navLeftBtnPressed() {
@@ -102,10 +100,14 @@ class CityElementSelectController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(SportCarBrandSelectCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarBrandSelectCell
-        if indexPath.row == 0  {
-            cell.nameLbl?.text = LS("全国")
+        if showAllContry {
+            if indexPath.row == 0  {
+                cell.nameLbl?.text = LS("全国")
+            } else {
+                cell.nameLbl?.text = data[indexPath.row - 1]
+            }
         } else {
-            cell.nameLbl?.text = data[indexPath.row - 1]
+            cell.nameLbl?.text = data[indexPath.row]
         }
         return cell
     }
@@ -113,10 +115,14 @@ class CityElementSelectController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch level {
         case 0:
-            if indexPath.row > 0 {
-                dataSource.selectedProv = data[indexPath.row - 1]
+            if showAllContry {
+                if indexPath.row > 0 {
+                    dataSource.selectedProv = data[indexPath.row - 1]
+                } else {
+                    dataSource.selectedProv = "全国"
+                }
             } else {
-                dataSource.selectedProv = "全国"
+                dataSource.selectedProv = data[indexPath.row]
             }
         case 1:
             dataSource.selectedCity = data[indexPath.row]

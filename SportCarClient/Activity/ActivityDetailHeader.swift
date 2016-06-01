@@ -337,9 +337,13 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     }
     
     func editBtnPressed() {
-        let detail = ActivityEditController()
-        detail.act = act
-        parentController?.navigationController?.pushViewController(detail, animated: true)
+        if act.finished {
+            parentController?.showToast(LS("活动已结束，不能编辑"))
+        } else {
+            let detail = ActivityEditController()
+            detail.act = act
+            parentController?.navigationController?.pushViewController(detail, animated: true)
+        }
     }
     
     func hostAvatarPressed() {

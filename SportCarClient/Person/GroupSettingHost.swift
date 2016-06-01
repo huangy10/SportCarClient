@@ -215,9 +215,9 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             break
         case 3:
             switch indexPath.row {
-            case 1:
+            case 0:
                 toast = showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(clearChatContent), cancelSelector: #selector(hideToast as ()->()))
-            case 2:
+            case 1:
                 let report = ReportBlacklistViewController(userID: targetClub.ssid, reportType: "club", parent: self)
                 self.presentViewController(report, animated: false, completion: nil)
             default:
@@ -334,8 +334,13 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
             targetClub.mine = true
             MessageManager.defaultManager.deleteAndQuit(targetClub)
             let nav = self.navigationController
-            nav?.popViewControllerAnimated(true)
-            nav?.popViewControllerAnimated(true)
+            let n = nav!.viewControllers.count
+            if let _ = nav?.viewControllers[n-1] as? ChatRoomController {
+                nav?.pushViewController(nav!.viewControllers[n-2], animated: true)
+            } else {
+                nav?.popViewControllerAnimated(true)
+            }
+            
         } else {
             showToast(LS("删除失败"))
         }

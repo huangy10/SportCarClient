@@ -287,6 +287,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             self.pp_hideProgressView()
             self.navLeftBtnPressed()
             self.requesting = false
+
             }, onError: { (code) -> () in
                 self.requesting = false
                 self.hideToast(toast)
@@ -443,7 +444,7 @@ extension StatusReleaseController {
             statusContentInput?.text = ""
             statusContentInput?.textColor = UIColor.blackColor()
             firstEditting = false
-            statusContentInput?.font = UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)
+            statusContentInput?.font = UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)
         }
     }
     

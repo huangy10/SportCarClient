@@ -8,7 +8,7 @@
 
 import UIKit
 
-let kSportsCarInfoDetailStaticLabelString1 = [LS("品牌型号"), LS("跑车签名")]
+let kSportsCarInfoDetailStaticLabelString1 = [LS("品牌型号"), LS("爱车签名")]
 let kSportsCarInfoDetailStaticLabelString2 = [LS("价格"), LS("发动机"), LS("变速箱"), LS("最高车速"), LS("百公里加速")]
 
 
@@ -91,11 +91,11 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 && indexPath.row == 2 {
+        if indexPath.section == 0 && indexPath.row == 1 {
             let cell = tableView.ss_reuseablePropertyCell(SSPropertyInputableCell.self, forIndexPath: indexPath)
             cell.staticLbl.text = LS("爱车签名")
             cell.extraSettings(self, text: car.signature, placeholder: LS("请输入爱车签名"))
-            cell.inputable = false
+//            cell.inputable = false
             return cell
         }
         let cell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
@@ -136,9 +136,9 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 1 && indexPath.section == 0 {
-            SinglePropertyModifierController(propertyName: LS("爱车签名"), delegate: self, forcusedIndexPath: indexPath).pushFromViewController(self)
-        }
+//        if indexPath.row == 1 && indexPath.section == 0 {
+//            SinglePropertyModifierController(propertyName: LS("爱车签名"), delegate: self, forcusedIndexPath: indexPath).pushFromViewController(self)
+//        }
     }
     
     func carAuthBtnPressed() {
@@ -179,6 +179,17 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
             self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
             }) { (code) in
                 self.showToast(LS("修改失败"))
+        }
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        let newValue = textField.text
+        SportCarRequester.sharedInstance.updateCarSignature(car.ssidString, signature: newValue ?? "", onSuccess: { (json) in
+            self.showToast(LS("修改成功"))
+            self.car.signature = newValue
+            self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: .Automatic)
+        }) { (code) in
+            self.showToast(LS("修改失败"))
         }
     }
 }

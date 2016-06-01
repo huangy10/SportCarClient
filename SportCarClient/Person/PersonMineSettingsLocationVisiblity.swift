@@ -77,7 +77,7 @@ class PersonMineSettingsLocationVisiblityController: UITableViewController {
             if indexPath.row == 0 {
                 cell.useAsMark = false
                 cell.boolSelect.hidden = false
-                cell.boolSelect.on = showOnMap
+                cell.boolSelect.on = !showOnMap
                 cell.boolSelect.addTarget(self, action: #selector(PersonMineSettingsLocationVisiblityController.switchBtnPressed(_:)), forControlEvents: .ValueChanged)
             }else{
                 cell.useAsMark = true
