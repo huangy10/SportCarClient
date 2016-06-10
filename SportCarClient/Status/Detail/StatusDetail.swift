@@ -11,6 +11,7 @@ import SnapKit
 import Spring
 import Alamofire
 import SwiftyJSON
+import Dollar
 
 //
 //class StatusDetailController2: InputableViewController, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol {
@@ -253,7 +254,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         let superview = self.view
         //
         let sepLine = UIView()
-        sepLine.backgroundColor = UIColor(white: 0.945, alpha: 1)
+        sepLine.backgroundColor = UIColor(white: 0.8, alpha: 1)
         board?.addSubview(sepLine)
         if loadAnimated {
             sepLine.snp_makeConstraints { (make) -> Void in
@@ -489,7 +490,7 @@ extension StatusDetailController {
         }
         //
         locationLbL = UILabel()
-        locationLbL?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        locationLbL?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         locationLbL?.textColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(locationLbL!)
         locationLbL?.snp_makeConstraints(closure: { (make) -> Void in
@@ -505,7 +506,7 @@ extension StatusDetailController {
         superview.addSubview(commentNumLbL!)
         commentNumLbL?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
-            make.top.equalTo(locationLbL!.snp_bottom).offset(10)
+            make.top.equalTo(locationLbL!)
             make.height.equalTo(17)
         })
         //
@@ -644,6 +645,7 @@ extension StatusDetailController {
                 let newComment = try! StatusComment(status: self.status!).loadDataFromJSON(data)
                 self.comments.append(newComment)
             }
+            self.comments = $.uniq(self.comments, by: { $0.ssid })
             self.reorgnizeComments()
             self.commentList?.reloadData()
             self.autoSetBoardContentSize(true)
@@ -787,6 +789,7 @@ extension StatusDetailController {
         let newComment = StatusComment(status: status!).initForPost(commentString, responseTo: responseToComment)
         comments.insert(newComment, atIndex: 0)
         let requester = StatusRequester.sharedInstance
+        self.lp_start()
         requester.postCommentToStatus(self.status!.ssidString, content: commentString, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (data) -> () in
             // data里面的只有一个id
             if data == nil {
@@ -796,7 +799,11 @@ extension StatusDetailController {
             newComment.confirmSent(newCommentID)
             self.status?.commentNum += 1
             self.loadDataAndUpdateUI()
+            self.lp_stop()
+            self.showToast(LS("评论成功"))
             }) { (code) -> () in
+                self.lp_stop()
+                self.showToast(LS("评论失败"))
         }
 
         commentList?.beginUpdates()

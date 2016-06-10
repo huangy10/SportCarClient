@@ -357,6 +357,8 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         commentPanel.snp_updateConstraints { (make) in
             make.height.equalTo(commentPanel.barheight)
         }
+        
+        lp_start()
         ActivityRequester.sharedInstance.sendActivityComment(act.ssidString, content: content, responseTo: responseToComment?.ssidString, informOf: nil, onSuccess: { (json) in
             if let data = json {
                 let newCommentID = data["id"].int32Value
@@ -368,8 +370,11 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             } else {
                 assertionFailure()
             }
+            self.lp_stop()
+            self.showToast(LS("评论成功"))
             }) { (code) in
-                
+                self.showToast(LS("评论失败"))
+                self.lp_stop()
         }
     }
     

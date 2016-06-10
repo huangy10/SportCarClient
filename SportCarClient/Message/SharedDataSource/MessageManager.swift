@@ -252,7 +252,7 @@ class MessageManager {
             return
         }
         
-        func load() {
+        func load(onFinish: (Void -> Void)? = nil) {
             dispatch_async(queue) {
                 let chats = ChatModelManger.sharedManager.loadCachedChats(room.rosterItem.ssid, skips: 0, limit: 20)
                 room.chats.appendContentsOf(chats)
@@ -271,6 +271,10 @@ class MessageManager {
                 self._curRoom = room
                 // update listening status
                 self.listen()
+                
+                if let handler = onFinish {
+                    handler()
+                }
             }
         }
         
@@ -307,14 +311,19 @@ class MessageManager {
                     // do nothing when error occurs
             })
         } else {
-            load()
-            // 如果没有从本地数据库里面查找到数据，那么尝试获取历史
-            if room.chats.count == 0 && !room.chatCreated{
-                dispatch_async(dispatch_get_main_queue(), { 
-                    room.refresh.beginRefreshing()
-                    room.loadChatHistoryMannually(true)
-                })
-            }
+            load({
+                // 如果没有从本地数据库里面查找到数据，那么尝试获取历史
+                if room.chats.count == 0 {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        room.refresh.beginRefreshing()
+                        room.loadChatHistoryMannually(false)
+                    })
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), { 
+                        room.talkBoard?.reloadData()
+                    })
+                }
+            })
         }
     }
     

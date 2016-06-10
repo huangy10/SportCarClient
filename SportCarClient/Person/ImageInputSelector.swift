@@ -8,6 +8,7 @@
 
 import UIKit
 
+@available(*, deprecated=1)
 protocol ImageInputSelectorDelegate: class {
     func imageInputSelectorDidSelectImage(image: UIImage)
     
@@ -15,6 +16,7 @@ protocol ImageInputSelectorDelegate: class {
 }
 
 
+@available(*, deprecated=1)
 class ImageInputSelectorController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     weak var delegate: ImageInputSelectorDelegate?
     

@@ -16,7 +16,7 @@ protocol GroupChatSetupDelegate: class {
 }
 
 
-class GroupChatSetupController: InputableViewController, ImageInputSelectorDelegate, ProgressProtocol {
+class GroupChatSetupController: InputableViewController, ProgressProtocol, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     weak var delegate: GroupChatSetupDelegate?
     
@@ -165,20 +165,47 @@ class GroupChatSetupController: InputableViewController, ImageInputSelectorDeleg
     }
     
     func logoBtnPressed() {
-        let selector = ImageInputSelectorController()
-        selector.delegate = self
-        selector.bgImage = self.getScreenShotBlurred(false)
-        self.presentViewController(selector, animated: false, completion: nil)
+        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .ActionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .Default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.Camera
+            guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = sourceType
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = true
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .Default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+            guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = sourceType
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = true
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .Cancel, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
 }
 
 extension GroupChatSetupController {
     
-    func imageInputSelectorDidCancel() {
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func imageInputSelectorDidSelectImage(image: UIImage) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         self.dismissViewControllerAnimated(true, completion: nil)
         logoImage = image
         logo.setImage(logoImage!, forState: .Normal)

@@ -82,7 +82,7 @@ class StatusRequester: BasicRequester {
         upload(
             urlForName("new_status"),
             parameters: param,
-            responseDataField: "statusID",
+            responseDataField: "data",
             onSuccess: onSuccess,
             onProgress: onProgress,
             onError: onError

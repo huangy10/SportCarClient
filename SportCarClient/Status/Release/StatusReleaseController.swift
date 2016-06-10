@@ -11,9 +11,10 @@ import SnapKit
 import CoreLocation
 import Cent
 import Dollar
+import Kingfisher
 
 
-class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate, ImageInputSelectorDelegate, ProgressProtocol, PresentableProtocol, LocationSelectDelegate {
+class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate, ProgressProtocol, PresentableProtocol, LocationSelectDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     /*
     ================================================================================================ 子控件
     */
@@ -260,10 +261,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             showToast(LS("您的动态还差一张图片"), onSelf: true)
             return
         }
-        guard let content = statusContentInput?.text where content != "" else {
-            showToast(LS("请输入动态详情"), onSelf: true)
-            return
-        }
+        let content = firstEditting ? "" : statusContentInput?.text ?? ""
         let car_id = sportCarList?.selectedCar?.ssidString
         guard let lat: Double = userLocation?.latitude else {
             showToast(LS("无法获取当前位置"), onSelf: true)
@@ -281,13 +279,25 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         pp_showProgressView()
         requester.postNewStatus(content, image: selectedImage!, car_id: car_id, lat: lat, lon: lon, loc_description: loc_description!, informOf: informUserIds, onSuccess: { (json) -> () in
             self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-            self.home?.followStatusCtrl.loadLatestData()
+//            self.home?.followStatusCtrl.loadLatestData()
             self.hideToast(toast)
-            self.showToast(LS("发布成功！"), onSelf: true)
             self.pp_hideProgressView()
             self.navLeftBtnPressed()
             self.requesting = false
-
+            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC))
+            dispatch_after(delay, dispatch_get_main_queue(), {
+                AppManager.sharedAppManager.showToast(LS("动态发布成功"))
+                self.home?.followStatusCtrl.loadLatestData()
+            })
+            
+            // send notificaiton to inform the presence of new status
+            let status = try! MainManager.sharedManager.getOrCreate(json!) as Status
+            // 将图片存入缓存：注意Key应当是包含了域名等部分的完整URL
+            KingfisherManager.sharedManager.cache.storeImage(self.selectedImage!, forKey: SF(status.image!)!)
+            /*
+             注意这里发布Notification，主要是为了让『我的』页面中的动态列表及时进行更新，而『动态』中的列表不会接收这个Notification。
+             */
+            NSNotificationCenter.defaultCenter().postNotificationName(kStatusNewNotification, object: nil, userInfo: [kStatusKey: ""])
             }, onError: { (code) -> () in
                 self.requesting = false
                 self.hideToast(toast)
@@ -310,20 +320,47 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
 extension StatusReleaseController {
     
     func addImageBtnPressed() {
-        let detail = ImageInputSelectorController()
-        detail.delegate = self
-        detail.bgImage = self.getScreenShotBlurred(false)
-        self.presentViewController(detail, animated: false, completion: nil)
+        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .ActionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .Default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.Camera
+            guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = sourceType
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = true
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .Default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+            guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = sourceType
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = true
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .Cancel, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
-    func imageInputSelectorDidCancel() {
-        self.dismissViewControllerAnimated(false, completion: nil)
-    }
-    
-    func imageInputSelectorDidSelectImage(image: UIImage) {
-        self.dismissViewControllerAnimated(false, completion: nil)
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        self.dismissViewControllerAnimated(true, completion: nil)
         selectedImage = image
         addImageBtn?.setImage(image, forState: .Normal)
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 

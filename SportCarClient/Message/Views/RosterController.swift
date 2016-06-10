@@ -72,6 +72,7 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
             return
         }
         detail.rosterItem = access
+        detail.chatCreated = true
         messageController.navigationController?.pushViewController(detail, animated: true)
     }
     

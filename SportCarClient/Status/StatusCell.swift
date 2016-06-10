@@ -195,7 +195,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         }
         //
         locationLbL = UILabel()
-        locationLbL?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        locationLbL?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         locationLbL?.textColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(locationLbL!)
         locationLbL?.snp_makeConstraints(closure: { (make) -> Void in
@@ -211,7 +211,8 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         superview.addSubview(commentNumLbL!)
         commentNumLbL?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
-            make.top.equalTo(locationLbL!.snp_bottom).offset(10)
+//            make.top.equalTo(locationLbL!.snp_bottom).offset(10)
+            make.bottom.equalTo(locationLbL!)
             make.height.equalTo(17)
         })
         //
@@ -258,7 +259,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         // 1080 + 40 - 200 - 114
         let imageInfo = data.image!
         let otherImageHeight: CGFloat = imageInfo.split(";").count > 1 ? 100 : 0
-        return 530 + textRect.height + otherImageHeight
+        return 510 + textRect.height + otherImageHeight
     }
     
     func loadDataAndUpdateUI() {

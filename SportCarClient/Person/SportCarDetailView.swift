@@ -155,6 +155,8 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         hideConfirmToast()
         SportCarRequester.sharedInstance.deleteCar(car.ssidString, onSuccess: { (json) in
             self.showToast(LS("删除成功"))
+            NSNotificationCenter.defaultCenter().postNotificationName(kCarDeletedNotification, object: nil, userInfo: [kSportcarKey: self.car])
+            self.navigationController?.popViewControllerAnimated(true)
             }) { (code) in
                 self.showToast(LS("删除失败"))
         }

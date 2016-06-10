@@ -54,12 +54,12 @@ class ActivityCell: UICollectionViewCell {
                 make.left.equalTo(container).offset(12)
                 make.right.equalTo(container).offset(-12)
             })
-        let sepLine = container.addSubview(UIView.self).config(UIColor.blackColor())
+        let sepLine = container.addSubview(UIView.self).config(UIColor(white: 0.72, alpha: 1))
             .layout { (make) in
                 make.left.equalTo(actNameLbl)
                 make.top.equalTo(actNameLbl.snp_bottom).offset(6)
                 make.width.equalTo(26)
-                make.height.equalTo(2)
+                make.height.equalTo(1)
         }
         actStartDateLbl = container.addSubview(UILabel.self)
             .config(12, textColor: UIColor(white: 0.72, alpha: 1))

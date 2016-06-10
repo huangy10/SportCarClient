@@ -66,7 +66,6 @@ class PersonHeaderMine: UIView {
         backMask.setNeedsDisplay()
         //
         avatarBtn = UIButton()
-        avatarBtn.backgroundColor = UIColor(white: 0.72, alpha: 1)
         avatarBtn.layer.cornerRadius = 62.5
         avatarBtn.clipsToBounds = true
         superview.addSubview(avatarBtn)

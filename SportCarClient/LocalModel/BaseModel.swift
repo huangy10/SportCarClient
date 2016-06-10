@@ -101,5 +101,13 @@ class BaseModel: NSManagedObject {
         }
         return ctx.objectWithID(self.objectID) as? BaseModel
     }
+    
+    override func isEqual(object: AnyObject?) -> Bool {
+        if let baseModel = object as? BaseModel {
+            return baseModel.ssid == self.ssid
+        } else {
+            return false
+        }
+    }
 }
 

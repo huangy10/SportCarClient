@@ -82,7 +82,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         titleClubBtn.tag = 1
         let defaultFont = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         titleClubLbl = titleClubBtn.addSubview(UILabel)
-            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("俱乐部"))
+            .config(15, textColor: kTextGray, textAlignment: .Center, text: LS("俱乐部"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleClubBtn)
                 make.size.equalTo(LS(" 俱乐部 ").sizeWithFont(defaultFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
@@ -97,7 +97,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             })
         titleDriverBtn.tag = 0
         titleDriverLbl = titleDriverBtn.addSubview(UILabel)
-            .config(14, textColor: kTextBlack, textAlignment: .Center, text: LS("车主"))
+            .config(15, textColor: kTextBlack, textAlignment: .Center, text: LS("车主"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleDriverBtn)
                 make.size.equalTo(LS(" 车主 ").sizeWithFont(defaultFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
@@ -112,7 +112,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             })
         titleActBtn.tag = 2
         titleActLbl = titleActBtn.addSubview(UILabel)
-            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("活动"))
+            .config(15, textColor: kTextGray, textAlignment: .Center, text: LS("活动"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleActBtn)
                 make.size.equalTo(LS(" 活动 ").sizeWithFont(defaultFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))

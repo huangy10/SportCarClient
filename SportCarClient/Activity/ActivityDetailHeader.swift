@@ -134,7 +134,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
                 make.right.equalTo(likeNumLbl.snp_left).offset(-4)
                 make.size.equalTo(15)
             })
-        let sepLine = superview.addSubview(UIView.self).config(UIColor(white: 0.945, alpha: 1))
+        let sepLine = superview.addSubview(UIView.self).config(UIColor(white: 0.8, alpha: 1))
             .layout { (make) in
                 make.left.equalTo(superview).offset(15)
                 make.right.equalTo(superview).offset(-15)
@@ -234,7 +234,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
                 make.width.equalTo(0.5)
         }
         
-        let sepLine2 = superview.addSubview(UIView.self).config(UIColor(white: 0.945, alpha: 1))
+        let sepLine2 = superview.addSubview(UIView.self).config(UIColor(white: 0.8, alpha: 1))
             .layout { (make) in
                 make.left.equalTo(superview).offset(15)
                 make.right.equalTo(superview).offset(-15)
@@ -251,6 +251,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     }
     
     func loadDataAndUpdateUI() -> CGFloat {
+        print(act.timeDes)
         cover.kf_setImageWithURL(act.posterURL!, placeholderImage: nil, optionsInfo: nil) { (image, error, cacheType, imageURL) in
             self.cover.setupForImageViewer(backgroundColor: UIColor.blackColor(), fadeToHide: true)
         }

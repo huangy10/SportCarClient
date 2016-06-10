@@ -119,7 +119,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
     
     func imageInputBtnPressed(sender: UIButton) {
         activeBtn = sender
-        let alert = UIAlertController(title: NSLocalizedString("设置头像", comment: ""), message: nil, preferredStyle: .ActionSheet)
+        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .ActionSheet)
         alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .Default, handler: { (action) -> Void in
             let sourceType = UIImagePickerControllerSourceType.Camera
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {

@@ -128,7 +128,7 @@ class MessageController: UIViewController {
             make.right.equalTo(container.snp_centerX)
         }
         titleNotifLbl = titleNotifBtn.addSubview(UILabel)
-            .config(14, textColor: kTextBlack, textAlignment: .Center, text: LS("通知"))
+            .config(15, textColor: kTextBlack, textAlignment: .Center, text: LS("通知"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleNotifBtn)
                 make.size.equalTo(LS(" 通知 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
@@ -154,7 +154,7 @@ class MessageController: UIViewController {
         titleChatBtn.tag = 1
         titleChatBtn.addTarget(self, action: #selector(MessageController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         titleChatLbl = titleChatBtn.addSubview(UILabel)
-            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("聊天"))
+            .config(15, textColor: kTextGray, textAlignment: .Center, text: LS("聊天"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleChatBtn)
                 make.size.equalTo(LS(" 聊天 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))

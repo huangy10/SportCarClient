@@ -93,6 +93,15 @@ class HomeController2: UIViewController, HomeDelegate {
             })
         nameLbl.text = hostUser.nickName
         
+        sideBar.addSubview(UIButton)
+            .config(self, selector: #selector(avatarPressed))
+            .layout({ (make) in
+                make.bottom.equalTo(avatarBtn)
+                make.left.equalTo(avatarBtn)
+                make.top.equalTo(avatarBtn)
+                make.right.equalTo(nameLbl)
+            })
+        
         var formerView: UIView! = avatarBtn
         let titles = [LS("发现"), LS("活动"), LS("资讯"), LS("动态"), LS("消息"), LS("我的")]
         let icons = ["side_discover", "side_act", "side_news", "side_status", "side_message", "side_mine"]
@@ -156,6 +165,14 @@ class HomeController2: UIViewController, HomeDelegate {
                 make.edges.equalTo(sideBtns[0])
             })
         sideBar.sendSubviewToBack(marker)
+        marker.addSubview(UIView).config(kHighlightRed)
+            .addShadow(4, color: kHighlightRed, opacity: 0.4, offset: CGSizeMake(1, 0))
+            .layout { (make) in
+                make.left.equalTo(marker)
+                make.top.equalTo(marker)
+                make.bottom.equalTo(marker)
+                make.width.equalTo(3)
+        }
         
         unreadLbl = sideBar.addSubview(UILabel)
             .config(9, textColor: UIColor.whiteColor(), textAlignment: .Center)
@@ -172,7 +189,7 @@ class HomeController2: UIViewController, HomeDelegate {
     }
     
     func avatarPressed() {
-        
+        sideBarBtnPressed(sideBtns.last()!)
     }
     
     func sideBarBtnPressed(sender: UIButton) {

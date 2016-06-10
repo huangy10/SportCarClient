@@ -308,7 +308,7 @@ extension PrivateChatSettingController {
             detail.propertyName = LS("修改备注")
             detail.initValue = chater.nickName
             self.navigationController?.pushViewController(detail, animated: true)
-        case 3:
+        case 2:
             if indexPath.row == 0 {
                 toast = showConfirmToast(LS("清除聊天信息"), message: LS("确定要清除聊天信息吗？"), target: self, confirmSelector: #selector(PrivateChatSettingController.clearChatContent), cancelSelector: #selector(PrivateChatSettingController.hideToast as (PrivateChatSettingController) -> () -> ()))
             } else if indexPath.row == 1 {
@@ -375,6 +375,7 @@ extension PrivateChatSettingController {
     func groupChatSetupControllerDidSuccessCreatingClub(newClub: Club) {
         self.navigationController?.popViewControllerAnimated(true)
         let chatRoom = ChatRoomController()
+        chatRoom.chatCreated = false
         chatRoom.targetClub = newClub
         self.navigationController?.pushViewController(chatRoom, animated: true)
     }

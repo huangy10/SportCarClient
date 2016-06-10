@@ -10,7 +10,7 @@ import UIKit
 import Dollar
 
 
-class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, BMKMapViewDelegate, BMKGeoCodeSearchDelegate, BMKLocationServiceDelegate, ProgressProtocol, CustomDatePickerDelegate, AvatarClubSelectDelegate, ImageInputSelectorDelegate, FFSelectDelegate, LocationSelectDelegate {
+class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, BMKMapViewDelegate, BMKGeoCodeSearchDelegate, BMKLocationServiceDelegate, ProgressProtocol, CustomDatePickerDelegate, AvatarClubSelectDelegate, FFSelectDelegate, LocationSelectDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     weak var actHomeController: ActivityHomeController?
     
 //    var pp_progressView: UIProgressView?
@@ -277,10 +277,37 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     }
     
     func needPickPoster() {
-        let picker = ImageInputSelectorController()
-        picker.bgImage = getScreenShotBlurred(false)
-        picker.delegate = self
-        self.presentViewController(picker, animated: false, completion: nil)
+        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .ActionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .Default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.Camera
+            guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = sourceType
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = true
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .Default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+            guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = sourceType
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = true
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .Cancel, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     func needAtSomeone() {
@@ -396,13 +423,13 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     
     // MARK: image select
     
-    func imageInputSelectorDidSelectImage(image: UIImage) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         dismissViewControllerAnimated(false, completion: nil)
         poster = image
         imagePickerBtn.setImage(image, forState: .Normal)
     }
     
-    func imageInputSelectorDidCancel() {
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(false, completion: nil)
     }
     

@@ -48,7 +48,7 @@ class StatusDeleteController: PresentTemplateViewController {
         let waitSignal = dispatch_semaphore_create(0)
         requester.deleteStatus(status.ssidString, onSuccess: { (json) -> () in
             // 删除成功以后发送一个notification
-            NSNotificationCenter.defaultCenter().postNotificationName(kStatusDidDeletedNotification, object: nil, userInfo: [kStatusDidDeletedStatusIDKey: self.status.ssidString])
+            NSNotificationCenter.defaultCenter().postNotificationName(kStatusDidDeletedNotification, object: nil, userInfo: [kStatusDidDeletedStatusIDKey: self.status.ssidString, kStatusKey: self.status])
             dispatch_semaphore_signal(waitSignal)
             }) { (code) -> () in
                 dispatch_semaphore_signal(waitSignal)

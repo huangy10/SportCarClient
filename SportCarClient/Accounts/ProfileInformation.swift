@@ -65,12 +65,12 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
             showToast(LS("请填写昵称"))
             return
         }
-        guard let gender = genderInput?.titleLabel?.text else{
+        guard let gender = genderInput?.titleLabel?.text where gender != "" else{
             showToast(LS("请选择性别"))
             return
         }
 
-        guard let birthDate = birthDateInput?.titleLabel?.text else{
+        guard let birthDate = birthDateInput?.titleLabel?.text where birthDate != "" else{
             showToast(LS("请选择生日"))
             return
         }

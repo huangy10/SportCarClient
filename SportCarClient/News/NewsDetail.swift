@@ -188,7 +188,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     func createNewsContentViews() {
         let superview = self.view
         let sepLine = UIView()
-        sepLine.backgroundColor = UIColor(white: 0.945, alpha: 1)
+        sepLine.backgroundColor = UIColor(white: 0.8, alpha: 1)
         board?.addSubview(sepLine)
         sepLine.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(newsTitle!)

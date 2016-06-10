@@ -104,7 +104,7 @@ class FFSelectController: UserSelectController {
         })
         titleFansBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         titleFansLbl = titleFansBtn.addSubview(UILabel)
-            .config(14, textColor: kTextBlack, textAlignment: .Center, text: LS("粉丝"))
+            .config(15, textColor: kTextBlack, textAlignment: .Center, text: LS("粉丝"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleFansBtn)
                 make.size.equalTo(LS(" 粉丝 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
@@ -121,7 +121,7 @@ class FFSelectController: UserSelectController {
         })
         titleFollowBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
         titleFollowLbl = titleFollowBtn.addSubview(UILabel)
-            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("关注"))
+            .config(15, textColor: kTextGray, textAlignment: .Center, text: LS("关注"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleFollowBtn)
                 make.size.equalTo(LS(" 关注 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))

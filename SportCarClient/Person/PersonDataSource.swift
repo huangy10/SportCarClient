@@ -78,4 +78,28 @@ class PersonDataSource {
             statusDict[car.ssidString] = []
         }
     }
+    
+    func deleteCar(car: SportCar) {
+        self.cars = $.remove(self.cars, callback: { $0.ssid == car.ssid })
+        statusDict.removeValueForKey(car.ssidString)
+    }
+    
+    func newStatus(status: Status) {
+        statusList.insert(status, atIndex: 0)
+        if let car = status.car {
+            if var list = self.statusDict[car.ssidString] {
+                list.insert(status, atIndex: 0)
+            } else {
+                self.statusDict[car.ssidString] = [status]
+            }
+        }
+    }
+    
+    func deleteStatus(status: Status) {
+        //
+        statusList.remove(status)
+        if let car = status.car, var list = statusDict[car.ssidString] {
+            list.remove(status)
+        }
+    }
 }

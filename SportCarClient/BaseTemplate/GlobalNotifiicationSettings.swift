@@ -19,6 +19,8 @@ let kNotificationUnreadClearNotification = "unread_notif_clear"
 
 let kStatusDidDeletedNotification = "status_did_deleted_notification"
 let kStatusDidDeletedStatusIDKey = "statusID"
+let kStatusNewNotification = "status_new_notification"
+let kStatusKey = "status_key"
 
 let kUserBlacklistedNotification = "user_blacklisted"
 let kUserSSIDKey = "userID"
@@ -42,3 +44,9 @@ let kMessageClubDelete = "club_delete"
 // MARK: Account
  ///  当从服务器返回了1402错误时，意味着当前使用jwttoken已经失效了，强制用户下线，这1402错误由MessageManager来负责看管
 let kAccontNolongerLogin = "no_longer_login"
+
+
+// MARK: Car
+
+let kCarDeletedNotification = "car_deleted"
+let kSportcarKey = "sportcar_key"

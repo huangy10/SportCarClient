@@ -511,7 +511,7 @@ class LoginRegisterController: InputableViewController {
     
     func forgetBtnPressed() {
         let ctrl = ResetPasswordController()
-        let nav = BlackBarNavigationController(rootViewController: ctrl)
+        let nav = BlackBarNavigationController(rootViewController: ctrl, blackNavTitle: true)
         self.presentViewController(nav, animated: true, completion: nil)
         //
 //        self.navigationController?.pushViewController(ctrl, animated: true)

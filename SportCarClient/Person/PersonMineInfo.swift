@@ -11,7 +11,7 @@ import SnapKit
 import Kingfisher
 
 
-class PersonMineInfoController: UITableViewController, ImageInputSelectorDelegate, AvatarCarSelectDelegate, AvatarClubSelectDelegate, CityElementSelectDelegate, SinglePropertyModifierDelegate, ProgressProtocol {
+class PersonMineInfoController: UITableViewController, AvatarCarSelectDelegate, AvatarClubSelectDelegate, CityElementSelectDelegate, SinglePropertyModifierDelegate, ProgressProtocol, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     var user: User = MainManager.sharedManager.hostUser!
     
@@ -130,10 +130,7 @@ class PersonMineInfoController: UITableViewController, ImageInputSelectorDelegat
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch indexPath.section {
         case 0:
-            let detail = ImageInputSelectorController()
-            detail.bgImage = self.getScreenShotBlurred(false)
-            detail.delegate = self
-            self.presentViewController(detail, animated: false, completion: nil)
+            setAvatarPressed()
             break
         case 1:
             switch indexPath.row{
@@ -262,11 +259,12 @@ extension PersonMineInfoController {
         // DO NOTHING
     }
     
-    func imageInputSelectorDidCancel() {
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         self.dismissViewControllerAnimated(false, completion: nil)
     }
     
-    func imageInputSelectorDidSelectImage(image: UIImage) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         self.dismissViewControllerAnimated(false, completion: nil)
         // 开始上传头像
         self.pp_showProgressView()
@@ -317,6 +315,40 @@ extension PersonMineInfoController {
             }) { (code) -> () in
                 
         }
+    }
+    
+    func setAvatarPressed() {
+        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .ActionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .Default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.Camera
+            guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = sourceType
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = true
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .Default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+            guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = sourceType
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = true
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .Cancel, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
 }
 

@@ -12,7 +12,7 @@ import UIKit
 import Kingfisher
 
 
-class GroupChatSettingHostController: GroupChatSettingController, ImageInputSelectorDelegate, GroupMemberSelectDelegate {
+class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSelectDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     var newLogo: UIImage?
     
@@ -177,10 +177,7 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         switch indexPath.section {
         case 0:
             // 点击第一个section修改logo
-            let picker = ImageInputSelectorController()
-            picker.bgImage = self.getScreenShotBlurred(false)
-            picker.delegate = self
-            self.presentViewController(picker, animated: false, completion: nil)
+            setLogoPressed()
             break
         case 1:
             let modifier = PersonMineSinglePropertyModifierController()
@@ -239,12 +236,46 @@ class GroupChatSettingHostController: GroupChatSettingController, ImageInputSele
         }
     }
     
-    // MARK: - 图像选择的代理
-    func imageInputSelectorDidCancel() {
-        self.dismissViewControllerAnimated(false, completion: nil)
+    func setLogoPressed() {
+        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .ActionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .Default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.Camera
+            guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = sourceType
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = true
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .Default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+            guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
+                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = sourceType
+            imagePicker.delegate = self
+            imagePicker.allowsEditing = true
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .Cancel, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
-    func imageInputSelectorDidSelectImage(image: UIImage) {
+    // MARK: - 图像选择的代理
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         // 选择了新的logo
         self.dismissViewControllerAnimated(false, completion: nil)
         newLogo = image

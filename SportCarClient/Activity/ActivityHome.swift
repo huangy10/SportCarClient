@@ -78,7 +78,7 @@ class ActivityHomeController: UIViewController {
             })
         titleMineBtn.tag = 0
         titleMineLbl = titleMineBtn.addSubview(UILabel)
-            .config(14, textColor: kTextBlack, textAlignment: .Center, text: LS("已发布"))
+            .config(15, textColor: kTextBlack, textAlignment: .Center, text: LS("已发布"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleMineBtn)
                 make.size.equalTo(LS(" 已发布 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
@@ -93,7 +93,7 @@ class ActivityHomeController: UIViewController {
             })
         titleAppliedBtn.tag = 1
         titleAppliedLbl = titleAppliedBtn.addSubview(UILabel)
-            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("已报名"))
+            .config(15, textColor: kTextGray, textAlignment: .Center, text: LS("已报名"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleAppliedBtn)
                 make.size.equalTo(LS(" 已报名 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))

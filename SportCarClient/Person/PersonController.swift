@@ -30,6 +30,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     
     deinit {
         print("deinit person basic controller")
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     init(user: User) {
@@ -50,6 +51,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonBasicController.onStatusDelete(_:)), name: kStatusDidDeletedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onSportCarDeleted(_:)), name: kCarDeletedNotification, object: nil)
         
         createSubviews()
         navSettings()
@@ -127,6 +129,11 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         header.fanslistBtn.addTarget(self, action: #selector(PersonBasicController.fanslistPressed), forControlEvents: .TouchUpInside)
         header.followlistBtn.addTarget(self, action: #selector(PersonBasicController.followlistPressed), forControlEvents: .TouchUpInside)
         header.statuslistBtn.addTarget(self, action: #selector(PersonBasicController.statuslistPressed), forControlEvents: .TouchUpInside)
+        
+        
+        // 我们希望为『我的』页面加上对kStatusNewNotification的监听，而不希望『他人』也监听这个，故在这里加上
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onStatusNew(_:)), name: kStatusNewNotification, object: nil)
+        
         return header
     }
     
@@ -178,6 +185,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         collectionView?.registerClass(PersonStatusListCell.self, forCellWithReuseIdentifier: PersonStatusListCell.reuseIdentifier)
         collectionView?.registerClass(SportCarInfoCell.self, forCellWithReuseIdentifier: SportCarInfoCell.reuseIdentifier)
         collectionView?.registerClass(PersonStatusHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: PersonStatusHeader.reuseIdentifier)
+        collectionView?.registerClass(PersonAddStatusCell.self, forCellWithReuseIdentifier: PersonAddStatusCell.reuseIdentifier)
     }
     
     func navSettings() {
@@ -231,7 +239,11 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if data.selectedCar == nil {
-            return data.statusList.count
+            if data.user.isHost {
+                return data.statusList.count + 1
+            } else {
+                return data.statusList.count
+            }
         }else {
             if section == 0 {
                 return 1
@@ -243,12 +255,27 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         if data.selectedCar == nil {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(PersonStatusListCell.reuseIdentifier, forIndexPath: indexPath) as! PersonStatusListCell
-            let status = data.statusList[indexPath.row]
-            let statusImages = status.image
-            let statusCover = statusImages?.split(";").first()
-            cell.cover.kf_setImageWithURL(SFURL(statusCover!)!)
-            return cell
+            if data.user.isHost {
+                // 是当前用户，显示添加动态按钮
+                if indexPath.row == 0 {
+                    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(PersonAddStatusCell.reuseIdentifier, forIndexPath: indexPath) as! PersonAddStatusCell
+                    return cell
+                } else {
+                    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(PersonStatusListCell.reuseIdentifier, forIndexPath: indexPath) as! PersonStatusListCell
+                    let status = data.statusList[indexPath.row - 1]
+                    let statusImages = status.image
+                    let statusCover = statusImages?.split(";").first()
+                    cell.cover.kf_setImageWithURL(SFURL(statusCover!)!)
+                    return cell
+                }
+            } else {
+                let cell = collectionView.dequeueReusableCellWithReuseIdentifier(PersonStatusListCell.reuseIdentifier, forIndexPath: indexPath) as! PersonStatusListCell
+                let status = data.statusList[indexPath.row]
+                let statusImages = status.image
+                let statusCover = statusImages?.split(";").first()
+                cell.cover.kf_setImageWithURL(SFURL(statusCover!)!)
+                return cell
+            }
         }else {
             if indexPath.section == 0 {
                 let cell = collectionView.dequeueReusableCellWithReuseIdentifier(SportCarInfoCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarInfoCell
@@ -270,10 +297,22 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        var status: Status!
         // 找出选中的status
-        var status: Status
         if data.selectedCar == nil {
-            status = data.statusList[indexPath.row]
+            if data.user.isHost {
+                if indexPath.row == 0 {
+                    // show the status release view
+                    let release = StatusReleaseController()
+                    release.presenter = self
+                    self.presentViewController(release.toNavWrapper(), animated: true, completion: nil)
+                    return
+                } else {
+                    status = data.statusList[indexPath.row - 1]
+                }
+            } else {
+                status = data.statusList[indexPath.row]
+            }
         }else {
             if indexPath.section == 0 {
                 return
@@ -429,6 +468,7 @@ extension PersonBasicController {
         carsViewList.cars = data.cars
         carsViewList.selectedCar = car
         carsViewList.collectionView?.reloadData()
+        self.collectionView?.reloadData()
     }
 }
 
@@ -489,6 +529,38 @@ extension PersonBasicController {
     func onStatusDelete(notification: NSNotification) {
         // TODO: implement this
         // For now, just ignore this todo
+        if let status = notification.userInfo?[kStatusKey] as? Status {
+            data.deleteStatus(status)
+            dispatch_async(dispatch_get_main_queue(), { 
+                self.collectionView?.reloadData()
+            })
+        }
+        
+    }
+    
+    func onStatusNew(notification: NSNotification) {
+        guard let status = notification.userInfo?[kStatusKey] as? Status else {
+            return
+        }
+        
+        data.newStatus(status)
+        dispatch_async(dispatch_get_main_queue()) { 
+            self.collectionView?.reloadData()
+        }
+    }
+    
+    func onSportCarDeleted(notification: NSNotification) {
+        if notification.name == kCarDeletedNotification {
+            if let car = notification.userInfo?[kSportcarKey] as? SportCar{
+                data.deleteCar(car)
+                data.selectedCar = nil
+                self.carsViewList.cars = data.cars
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.collectionView?.reloadData()
+                    self.carsViewList.collectionView?.reloadData()
+                })
+            }
+        }
     }
     
     func fanslistPressed() {
@@ -507,6 +579,29 @@ extension PersonBasicController {
         carsViewList.selectedCar = nil
         carsViewList.collectionView?.reloadData()
         didSelectSportCar(nil)
+    }
+}
+
+class PersonAddStatusCell: UICollectionViewCell {
+    static let reuseIdentifier = "person_add_status_cell"
+    
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        createSubviews()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func createSubviews() {
+        self.contentView.clipsToBounds = true
+        self.contentView.addSubview(UIImageView)
+            .config(UIImage(named: "release_status_in_person"), contentMode: .ScaleAspectFill)
+            .layout { (make) in
+                make.edges.equalTo(self.contentView)
+        }
     }
 }
 

@@ -111,6 +111,7 @@ class Activity: BaseModel {
                 }
             }
         }
+        assert(poster != nil && name != nil && actDescription != nil && startAt != nil && endAt != nil)
         return self
     }
     
@@ -119,8 +120,8 @@ class Activity: BaseModel {
             Activity.idField: ssidString,
             "description": actDescription!,
             "created_at": STRDate(createdAt!),
-            "startAt": STRDate(startAt!),
-            "endAt": STRDate(endAt!),
+            "start_at": STRDate(startAt!),
+            "end_at": STRDate(endAt!),
             "max_attend": "\(maxAttend)",
             "poster": poster!,
             "name": name!,

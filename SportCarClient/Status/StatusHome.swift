@@ -119,7 +119,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
             make.center.equalTo(container)
         }
         titleFollowLbl = titleFollowBtn.addSubview(UILabel)
-            .config(14, textColor: kTextBlack, textAlignment: .Center, text: LS("关注"))
+            .config(15, textColor: kTextBlack, textAlignment: .Center, text: LS("关注"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleFollowBtn)
                 make.size.equalTo(LS(" 关注 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
@@ -135,7 +135,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
             make.size.equalTo(CGSizeMake(70, 30))
         }
         titleNearbyLbl = titleNearbyBtn.addSubview(UILabel)
-            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("附近"))
+            .config(15, textColor: kTextGray, textAlignment: .Center, text: LS("附近"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleNearbyBtn)
                 make.size.equalTo(LS(" 附近 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
@@ -151,7 +151,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
             make.size.equalTo(CGSizeMake(70, 30))
         }
         titleHotLbl = titleHotBtn.addSubview(UILabel)
-            .config(14, textColor: kTextGray, textAlignment: .Center, text: LS("热门"))
+            .config(15, textColor: kTextGray, textAlignment: .Center, text: LS("热门"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleHotBtn)
                 make.size.equalTo(LS(" 热门 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))

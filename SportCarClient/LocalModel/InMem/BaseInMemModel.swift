@@ -71,4 +71,6 @@ class BaseInMemModel: NSObject {
     class func fromJSONString(string: String, detailLevel: Int) throws -> Self {
         throw SSModelError.NotImplemented
     }
+    
+    
 }

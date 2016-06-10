@@ -23,6 +23,7 @@ let kTextBlack = UIColor(white: 0, alpha: 0.87)
 let kTextGray = UIColor(white: 0, alpha: 0.54)
 let kGeneralTableViewBGColor = UIColor(white: 0.96, alpha: 1)
 let kNotificationHintColor = UIColor(white: 0.42, alpha: 1)
+let kHighlightRed = UIColor.RGB(255, 21, 21)
 
 // Fonts
 let kBarTextFont = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
