@@ -64,7 +64,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>1.1</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>baidumap</string>
@@ -79,7 +79,6 @@
 		<string>sinaweibosso</string>
 		<string>weibosdk</string>
 		<string>weibosdk2.5</string>
-
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -89,7 +88,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Location will be used only for good, we promise!</string>
+	<string>定位用于查看附近的车主并提供自己的位置，基于地点发布动态和活动以达到更好用户社交的目的。</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

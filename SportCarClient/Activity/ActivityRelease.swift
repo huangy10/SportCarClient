@@ -101,7 +101,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 make.size.equalTo(100)
             })
         let static1 = container.addSubview(UILabel)
-            .config(fontWeight: UIFontWeightSemibold, text: LS("取一个名字"))
+            .config(fontWeight: UIFontWeightUltraLight, text: LS("取一个名字"))
             .layout { (make) in
                 make.left.equalTo(imagePickerBtn.snp_right).offset(18)
                 make.top.equalTo(imagePickerBtn)
@@ -114,7 +114,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 make.right.equalTo(container).offset(-15)
         }
         nameInput = wrapper.addSubview(UITextField)
-            .config(17, placeholder: LS("为活动取一个名字...")).layout({ (make) in
+            .config(17, placeholder: LS("为活动取一个名字..."), fontWeight: UIFontWeightSemibold).layout({ (make) in
                 make.left.equalTo(static1)
                 make.top.equalTo(static1.snp_bottom).offset(14)
             }).addToInputable(self)

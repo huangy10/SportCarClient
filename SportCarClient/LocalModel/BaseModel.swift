@@ -7,6 +7,10 @@ import CoreData
 import SwiftyJSON
 import AlecrimCoreData
 
+func ==<T: BaseModel>(obj1: T, obj2: T) -> Bool {
+    return obj1.ssid == obj2.ssid
+}
+
 class BaseModel: NSManagedObject {
     
     class var idField: String {
@@ -100,14 +104,6 @@ class BaseModel: NSManagedObject {
             return self
         }
         return ctx.objectWithID(self.objectID) as? BaseModel
-    }
-    
-    override func isEqual(object: AnyObject?) -> Bool {
-        if let baseModel = object as? BaseModel {
-            return baseModel.ssid == self.ssid
-        } else {
-            return false
-        }
     }
 }
 
