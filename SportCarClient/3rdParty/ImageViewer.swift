@@ -10,7 +10,9 @@ import UIKit
 import Kingfisher
 //import Haneke
 
-class ImageViewer: UIViewController {
+class ImageViewer: UIViewController, LoadingProtocol {
+    
+    var delayTask: dispatch_block_t?
     // MARK: - Properties
     let kMinMaskViewAlpha: CGFloat = 0.3
     let kMaxImageScale: CGFloat = 2.5
@@ -255,7 +257,7 @@ class ImageViewer: UIViewController {
         }
         dismissViewController()
     }
-    
+
     // MARK: - Misc.
     func centerScrollViewContents() {
         let boundsSize = rootViewController.view.bounds.size

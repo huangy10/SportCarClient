@@ -130,9 +130,6 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ClubDiscoverCell
         cell.club = clubs[indexPath.row]
-        print(cell.club.memberNum)
-        print(cell.club.city)
-        print(cell.club.clubDescription)
         cell.loadDataAndUpdateUI()
         return cell
     }
@@ -182,6 +179,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             UIView.animateWithDuration(0.3) { () -> Void in
                 self.clubFilter.view.toRound(20)
                 self.view.layoutIfNeeded()
+                self.clubFilter.marker.transform = CGAffineTransformIdentity
             }
         }else {
             clubFilterView.snp_remakeConstraints(closure: { (make) -> Void in
@@ -192,6 +190,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             UIView.animateWithDuration(0.3) { () -> Void in
                 self.clubFilter.view.toRound(5)
                 self.view.layoutIfNeeded()
+                self.clubFilter.marker.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
             }
         }
         clubFilter.expanded = !clubFilter.expanded

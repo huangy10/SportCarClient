@@ -10,11 +10,11 @@ import UIKit
 import Dollar
 
 
-class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, BMKMapViewDelegate, BMKGeoCodeSearchDelegate, BMKLocationServiceDelegate, ProgressProtocol, CustomDatePickerDelegate, AvatarClubSelectDelegate, FFSelectDelegate, LocationSelectDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class ActivityReleaseController: InputableViewController, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, BMKMapViewDelegate, BMKGeoCodeSearchDelegate, BMKLocationServiceDelegate, ProgressProtocol, CustomDatePickerDelegate, FFSelectDelegate, LocationSelectDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     weak var actHomeController: ActivityHomeController?
     
 //    var pp_progressView: UIProgressView?
-    
+
     var imagePickerBtn: UIButton!
     var nameInput: UITextField!
     var desInput: UITextView!
@@ -23,7 +23,6 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     
     var tableView: UITableView!
     var inlineMiniUserSelectView: UICollectionView!
-    var userSelectedCount: UILabel!
     var mapCell: ActivityReleaseMapCell!
     var mapView: BMKMapView {
         return mapCell.map
@@ -33,7 +32,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     var poster: UIImage?
     var startAt: NSDate?
     var endAt: NSDate?
-    var clubLimit: Club?
+    var authedUserOnly: Bool = false
     var maxAttend: Int = 10
     var selectedUser: [User] = []
     
@@ -43,6 +42,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     var locDescription: String?
     
     var didBeginEditActDes: Bool = false
+    weak var presenter: UIViewController? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +57,9 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         locationService.delegate = self
         mapView.delegate = self
         geoSearch.delegate = self
+        
+        assert(presenter != nil)
+        
         if self.userLocation == nil {
             locationService.startUserLocationService()
         }
@@ -89,6 +92,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         SSPropertyCell.registerTableView(tableView)
         SSPropertyInputableCell.registerTableView(tableView)
         SSCommonHeader.registerTableView(tableView)
+        SSPropertySwitcherCell.registerTableView(tableView)
         
         let container = tableView.addSubview(UIView)
             .setFrame(CGRectMake(0, -275, superview.frame.width, 275))
@@ -150,18 +154,11 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         container.addSubview(inlineMiniUserSelectView)
         inlineMiniUserSelectView.snp_makeConstraints { (make) in
             make.left.equalTo(atBtn.snp_right)
-            make.right.equalTo(container)
+            make.right.equalTo(container).offset(-15)
             make.top.equalTo(desInput.snp_bottom)
             make.bottom.equalTo(container)
         }
         inlineMiniUserSelectView.registerClass(InlineUserSelectMiniCell.self, forCellWithReuseIdentifier: InlineUserSelectMiniCell.reuseIdentifier)
-        
-        userSelectedCount = container.addSubview(UILabel)
-            .config(12, textAlignment: .Right, text: "0/\(kMaxSelectUserNum)", textColor: UIColor(white: 0.72, alpha: 1))
-            .layout({ (make) in
-                make.right.equalTo(container).offset(-15)
-                make.bottom.equalTo(container).offset(-5)
-            })
         
         //
         mapCell = ActivityReleaseMapCell(trailingHeight: 100)
@@ -210,10 +207,12 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+//        self.navigationController?.popViewControllerAnimated(true)
+        presenter?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func navRightBtnPressed() {
+        
         self.inputFields.each { (view) in
             view?.resignFirstResponder()
         }
@@ -238,42 +237,95 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             showToast(LS("请设置活动时间"), onSelf: true)
             return
         }
-        let clubLimitID = clubLimit?.ssidString
         var selectedUserIDs: [String]? = nil
         if selectedUser.count > 0 {
             selectedUserIDs = selectedUser.map { $0.ssidString }
         }
         let toast = showStaticToast(LS("发布中..."))
         pp_showProgressView()
-        ActivityRequester.sharedInstance.createNewActivity(actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, clubLimit: clubLimitID, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", onSuccess: { (json) in
-            self.navigationController?.popViewControllerAnimated(true)
+        ActivityRequester.sharedInstance.createNewActivity(actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, authedUserOnly: authedUserOnly, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", onSuccess: { (json) in
+            self.presenter?.dismissViewControllerAnimated(true, completion: {
+                self.presenter?.showToast(LS("发布成功"))
+            })
             if let mine = self.actHomeController?.mine {
                 mine.refreshControl.beginRefreshing()
                 mine.getLatestActData()
             }
             self.hideToast(toast)
             self.pp_hideProgressView()
-            if let presenter = self.presentingViewController {
-                presenter.showToast(LS("发布成功"))
-            } else {
-                self.showToast(LS("发布成功!"))
-            }
-            
             }, onProgress: { (progress) in
-                dispatch_async(dispatch_get_main_queue(), { 
-                    self.pp_updateProgress(progress)
-                })
-            }) { (code) in
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.hideToast(toast)
-                    self.pp_hideProgressView()
-                    if code == "no permission" {
-                        self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
-                    } else {
-                        self.showToast(LS("请先认证一辆车再发布活动"), onSelf: true)
-                    }
-                })
+                self.pp_updateProgress(progress)
+        }) { (code) in
+            dispatch_async(dispatch_get_main_queue(), {
+                self.hideToast(toast)
+                self.pp_hideProgressView()
+                if code == "no permission" {
+                    self.showToast(LS("请先认证一辆车再发布活动"), onSelf: true)
+                } else {
+                    self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
+                }
+            })
         }
+//        self.inputFields.each { (view) in
+//            view?.resignFirstResponder()
+//        }
+//        // check integrity of the data
+//        guard let actName = nameInput.text where actName.length > 0 else {
+//            showToast(LS("请填写活动名称"), onSelf: true)
+//            return
+//        }
+//        guard let actDes = desInput.text where actDes.length > 0 else {
+//            showToast(LS("请填写活动描述"), onSelf: true)
+//            return
+//        }
+//        guard let posterImage = poster else {
+//            showToast(LS("请选择活动海报"), onSelf: true)
+//            return
+//        }
+//        guard let loc = userLocation else {
+//            showToast(LS("无法获取当前位置"), onSelf: true)
+//            return
+//        }
+//        guard let startAtDate = startAt, let endAtDate = endAt else {
+//            showToast(LS("请设置活动时间"), onSelf: true)
+//            return
+//        }
+//        let clubLimitID = clubLimit?.ssidString
+//        var selectedUserIDs: [String]? = nil
+//        if selectedUser.count > 0 {
+//            selectedUserIDs = selectedUser.map { $0.ssidString }
+//        }
+//        let toast = showStaticToast(LS("发布中..."))
+//        pp_showProgressView()
+//        ActivityRequester.sharedInstance.createNewActivity(actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, clubLimit: clubLimitID, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", onSuccess: { (json) in
+//            self.navigationController?.popViewControllerAnimated(true)
+//            if let mine = self.actHomeController?.mine {
+//                mine.refreshControl.beginRefreshing()
+//                mine.getLatestActData()
+//            }
+//            self.hideToast(toast)
+//            self.pp_hideProgressView()
+//            if let presenter = self.presentingViewController {
+//                presenter.showToast(LS("发布成功"))
+//            } else {
+//                self.showToast(LS("发布成功!"))
+//            }
+//            
+//            }, onProgress: { (progress) in
+//                dispatch_async(dispatch_get_main_queue(), { 
+//                    self.pp_updateProgress(progress)
+//                })
+//            }) { (code) in
+//                dispatch_async(dispatch_get_main_queue(), {
+//                    self.hideToast(toast)
+//                    self.pp_hideProgressView()
+//                    if code == "no permission" {
+//                        self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
+//                    } else {
+//                        self.showToast(LS("请先认证一辆车再发布活动"), onSelf: true)
+//                    }
+//                })
+//        }
     }
     
     func needPickPoster() {
@@ -311,7 +363,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     }
     
     func needAtSomeone() {
-        let select = FFSelectController(maxSelectNum: kMaxSelectUserNum, preSelectedUsers: selectedUser, preSelect: true, forced: false)
+        let select = FFSelectController(maxSelectNum: 0, preSelectedUsers: selectedUser, preSelect: true, forced: false)
         select.delegate = self
         self.presentViewController(select.toNavWrapper(), animated: true, completion: nil)
     }
@@ -358,8 +410,8 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 let cell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
                 return cell.setData(LS("截止时间"), propertyValue: endAt?.stringDisplay() ?? LS("请选择结束时间"))
             default:
-                let cell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
-                return cell.setData(LS("参加成员"), propertyValue: clubLimit?.name ?? LS("全部"))
+                let cell = tableView.ss_reuseablePropertyCell(SSPropertySwitcherCell.self, forIndexPath: indexPath)
+                return cell.setData(LS("只限认证用户参加"), propertyValue: false, bindObj: self, bindPropertyName: "authedUserOnly")
             }
         } else {
             return mapCell
@@ -376,12 +428,12 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             datePicker.tag = 1
             self.tapper?.enabled = true
             datePicker.show()
-        case 3:
-            let detail = AvatarClubSelectController()
-            detail.delegate = self
-            detail.preSelectID = clubLimit?.ssid
-            detail.noIntialSelect = true
-            self.navigationController?.pushViewController(detail, animated: true)
+//        case 3:
+//            let detail = AvatarClubSelectController()
+//            detail.delegate = self
+//            detail.preSelectID = clubLimit?.ssid
+//            detail.noIntialSelect = true
+//            self.navigationController?.pushViewController(detail, animated: true)
         default:
             break
         }
@@ -417,7 +469,6 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     func userSelected(users: [User]) {
         self.dismissViewControllerAnimated(true, completion: nil)
         selectedUser = users
-        userSelectedCount.text = "\(users.count)/\(kMaxSelectUserNum)"
         inlineMiniUserSelectView.reloadData()
     }
     
@@ -433,18 +484,16 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         dismissViewControllerAnimated(false, completion: nil)
     }
     
-    // MARK: Avatar club select
-    
-    func avatarClubSelectDidFinish(selectedClub: Club) {
-        clubLimit = selectedClub
-        tableView.beginUpdates()
-        tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 3, inSection: 0)], withRowAnimation: .Automatic)
-        tableView.endUpdates()
-    }
-    
-    func avatarClubSelectDidCancel() {
-        // do nothing
-    }
+//    func avatarClubSelectDidFinish(selectedClub: Club) {
+//        clubLimit = selectedClub
+//        tableView.beginUpdates()
+//        tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 3, inSection: 0)], withRowAnimation: .Automatic)
+//        tableView.endUpdates()
+//    }
+//    
+//    func avatarClubSelectDidCancel() {
+//        // do nothing
+//    }
     
     // MARK: date picker
     
@@ -577,6 +626,11 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         mapView.setCenterCoordinate(location.location, animated: true)
         
 //        self.tableView.reloadData()
+    }
+    
+    func presentFrom(controller: UIViewController) {
+        presenter = controller
+        controller.presentViewController(self.toNavWrapper(), animated: true, completion: nil)
     }
 }
 

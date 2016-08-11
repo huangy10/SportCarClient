@@ -38,6 +38,7 @@ class News: BaseInMemModel {
     var shareNum: Int32 = 0
     var title: String!
     var liked: Bool = false
+    var isVideo: Bool = false
     
     override func fromJSONString(string: String, detailLevel: Int) throws -> News {
         let json = JSON(data: string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
@@ -57,6 +58,7 @@ class News: BaseInMemModel {
         content = data["content"].stringValue
         recentLikeName = data["recent_like_user_id"].stringValue
         liked = data["liked"].boolValue
+        isVideo = data["is_video"].boolValue
         return self
     }
     

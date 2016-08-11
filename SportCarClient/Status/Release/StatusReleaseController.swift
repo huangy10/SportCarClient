@@ -65,7 +65,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     override func viewDidLoad() {
         super.viewDidLoad()
         locationService = BMKLocationService()
-        locationService?.allowsBackgroundLocationUpdates = true
+//        locationService?.allowsBackgroundLocationUpdates = true
         locSearch = BMKGeoCodeSearch()
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusReleaseController.changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
@@ -297,7 +297,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             /*
              注意这里发布Notification，主要是为了让『我的』页面中的动态列表及时进行更新，而『动态』中的列表不会接收这个Notification。
              */
-            NSNotificationCenter.defaultCenter().postNotificationName(kStatusNewNotification, object: nil, userInfo: [kStatusKey: ""])
+            NSNotificationCenter.defaultCenter().postNotificationName(kStatusNewNotification, object: nil, userInfo: [kStatusKey: status])
             }, onError: { (code) -> () in
                 self.requesting = false
                 self.hideToast(toast)

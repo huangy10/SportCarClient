@@ -43,7 +43,7 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
             recordingSession.requestRecordPermission({ (allowed: Bool) -> Void in
                 if !allowed {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.delegate?.audioFailToRecord("Fail to get permisssio")
+                        self.delegate?.audioFailToRecord("Fail to get permisssion")
                     })
                 }
             })
@@ -54,6 +54,8 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
     }
     
     func startRecording(filename: String?) {
+        UniversalAudioPlayer.sharedPlayer.stop()
+        
         let cacheFilename = filename ?? (NSUUID().UUIDString + ".m4a")
         let cacheFilePath = (getCachedAudioDirectory() as AnyObject).stringByAppendingPathComponent(cacheFilename)
         let cacheFileURL = NSURL(fileURLWithPath: cacheFilePath)
@@ -78,7 +80,9 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
     func finishRecording(success: Bool) {
         audioRecorder.stop()
         audioRecorder = nil
-        
+        do {
+            try recordingSession.setActive(false)
+        } catch {}
         if success {
             let now = NSDate()
             let interval = now.timeIntervalSinceDate(startTime)

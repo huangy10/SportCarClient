@@ -79,7 +79,7 @@ class FansSelectController: UserSelectController {
                 }
             }
             }) { (code) -> () in
-                
+                self.showToast(LS("获取数据失败"))
         }
     }
     

@@ -32,6 +32,10 @@ class PersonOtherController: PersonBasicController, RequestProtocol, LoadingProt
         trackTargetUserLocation()
     }
     
+    override func configureNotficationObserveBehavior() {
+        // do nothing
+    }
+    
     override func viewWillDisappear(animated: Bool) {
         // Override this to disable self.locating
         rp_cancelRequest()
@@ -60,8 +64,10 @@ class PersonOtherController: PersonBasicController, RequestProtocol, LoadingProt
     }
     
     override func navRightBtnPressed() {
-        let report = ReportBlacklistViewController(userID: data.user.ssid, parent: self)
-        self.presentViewController(report, animated: false, completion: nil)
+//        let report = ReportBlacklistViewController(userID: data.user.ssid, parent: self)
+//        self.presentViewController(report, animated: false, completion: nil)
+        let block = BlockUserController(user: data.user)
+        block.presentFromRootViewController()
     }
     
     override func navLeftBtnPressed() {

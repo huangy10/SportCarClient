@@ -105,11 +105,13 @@ class MessageManager {
         // send request to the server
         request = ChatRequester2.sharedInstance.listen(
             queue, unread: self.unreadNum, curFocusedChat: _curRoom?.rosterItem.ssid ?? 0, onSuccess: { (json) in
-            // 128 是和服务器约定的信息缓存队列的长度
+                // 128 是和服务器约定的信息缓存队列的长度
                 if json == nil {
                     return
                 }
                 if json!.arrayValue.count >= 128 {
+                    // 此处的含义为，当一次性接收到的消息的数量超过了128，则认为我们已经漏掉了
+                    // 部分消息（128为服务器消息缓存队列的长度），
                     self.reset()
                 }
                 do {
@@ -167,7 +169,6 @@ class MessageManager {
 //                    rosterItem.recentChatDes = chat.summary
 //                    RosterManager.defaultManager.addNewRosterItem(rosterItem)
 //                }
-                
                 if let curRoom = _curRoom {
                     if curRoom.rosterItem.takeChatRecord(chat) {
                         curRoom.chats.append(chat)

@@ -29,7 +29,7 @@ class RadarClubFilterController: UITableViewController {
         tableView.registerClass(RadarClubFilterHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.registerClass(RadarFilterCell.self, forCellReuseIdentifier: "cell")
         tableView.rowHeight = 42
-        tableView.backgroundColor = kBarBgColor
+        tableView.backgroundColor = UIColor.whiteColor()
         self.getClubList()
     }
     
@@ -57,6 +57,7 @@ class RadarClubFilterController: UITableViewController {
         let club = clubs[indexPath.row]
         if club.ssid != selectdClubID {
             selectdClubID = club.ssid
+            selectdClub = club.name
             delegate?.radarClubFilterDidChange(self)
         }
     }
@@ -84,7 +85,7 @@ class RadarClubFilterHeader: RadarFilterHeader {
     
     override func createSubviews() {
         let superview = self.contentView
-        superview.backgroundColor = kBarBgColor
+        superview.backgroundColor = UIColor.whiteColor()
         //
         marker = UIImageView(image: UIImage(named: "account_header_back_btn"))
         superview.addSubview(marker)
@@ -96,13 +97,13 @@ class RadarClubFilterHeader: RadarFilterHeader {
         //
         titleLbl = UILabel()
         titleLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        titleLbl.textColor = UIColor(white: 0.945, alpha: 1)
+        titleLbl.textColor = UIColor(white: 0, alpha: 0.87)
         superview.addSubview(titleLbl)
         titleLbl.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(superview)
         }
         let sepLine = UIView()
-        sepLine.backgroundColor = UIColor(white: 0.27, alpha: 1)
+        sepLine.backgroundColor = UIColor(white: 0, alpha: 0.12)
         superview.addSubview(sepLine)
         sepLine.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(10)

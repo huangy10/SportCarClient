@@ -136,6 +136,14 @@ class ClubRequester: BasicRequester {
         )
     }
     
+    func getClubMembers(clubID: String, skip: Int, limit: Int, searchText: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+        return get(
+            urlForName("update_members", param: ["clubID": clubID]),
+            parameters: ["limit": limit, "skip": skip, "filter": searchText],
+            responseDataField: "members", onSuccess: onSuccess, onError: onError
+        )
+    }
+    
     // club quit
     func clubQuit(clubID: String, newHostID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request{
         return post(

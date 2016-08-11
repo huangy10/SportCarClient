@@ -94,8 +94,8 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         if indexPath.section == 0 && indexPath.row == 1 {
             let cell = tableView.ss_reuseablePropertyCell(SSPropertyInputableCell.self, forIndexPath: indexPath)
             cell.staticLbl.text = LS("爱车签名")
+            cell.hideArrowIcon()
             cell.extraSettings(self, text: car.signature, placeholder: LS("请输入爱车签名"))
-//            cell.inputable = false
             return cell
         }
         let cell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)

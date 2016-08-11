@@ -18,10 +18,12 @@ class ClubBriefInfoController: UITableViewController {
     var targetClub: Club!
     
     var inlineUserSelect: InlineUserSelectController?
+    var inlineUserSelectCell: UITableViewCell?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
+        configureInlineUserSelect()
         tableView.separatorStyle = .None
         SSPropertyCell.registerTableView(tableView)
         SSAvatarCell.registerTableView(tableView)
@@ -57,6 +59,20 @@ class ClubBriefInfoController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    func configureInlineUserSelect() {
+        let cell = UITableViewCell(style: .Default, reuseIdentifier: "inline_user_select")
+        cell.selectionStyle = .None
+        inlineUserSelect = InlineUserSelectController()
+        cell.contentView.addSubview(inlineUserSelect!.view)
+        inlineUserSelect?.view.snp_makeConstraints(closure: { (make) in
+            make.edges.equalTo(cell.contentView)
+        })
+        inlineUserSelect?.relatedClub = targetClub
+        inlineUserSelect?.parentController = self
+        inlineUserSelect?.showAddBtn = false
+        inlineUserSelectCell = cell
     }
     
     func navSettings() {
@@ -120,22 +136,22 @@ class ClubBriefInfoController: UITableViewController {
             return tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
                 .setData(LS("本群简介"), propertyValue: targetClub.clubDescription ?? LS("正在获取数据..."), editable: false)
         default:
-            let cell = tableView.dequeueReusableCellWithIdentifier("inline_user_select", forIndexPath: indexPath)
-            cell.selectionStyle = .None
-            if inlineUserSelect == nil {
-                inlineUserSelect = InlineUserSelectController()
-                inlineUserSelect?.users = Array(targetClub.members)
-                inlineUserSelect?.showAddBtn = false
-                inlineUserSelect?.showDeleteBtn = false
-                inlineUserSelect?.parentController = self
-                cell.contentView.addSubview(inlineUserSelect!.view)
-                inlineUserSelect?.view.snp_makeConstraints(closure: { (make) -> Void in
-                    make.edges.equalTo(cell.contentView).inset(UIEdgeInsetsMake(20, 0, 0, 0))
-                })
-            }
+//            let cell = tableView.dequeueReusableCellWithIdentifier("inline_user_select", forIndexPath: indexPath)
+//            cell.selectionStyle = .None
+//            if inlineUserSelect == nil {
+//                inlineUserSelect = InlineUserSelectController()
+//                inlineUserSelect?.users = Array(targetClub.members)
+//                inlineUserSelect?.showAddBtn = false
+//                inlineUserSelect?.showDeleteBtn = false
+//                inlineUserSelect?.parentController = self
+//                cell.contentView.addSubview(inlineUserSelect!.view)
+//                inlineUserSelect?.view.snp_makeConstraints(closure: { (make) -> Void in
+//                    make.edges.equalTo(cell.contentView).inset(UIEdgeInsetsMake(20, 0, 0, 0))
+//                })
+//            }
             inlineUserSelect?.users = Array(targetClub.members)
             inlineUserSelect?.collectionView?.reloadData()
-            return cell
+            return inlineUserSelectCell!
         }
     }
     

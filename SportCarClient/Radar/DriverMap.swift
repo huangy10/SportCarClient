@@ -33,8 +33,14 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
     
     weak var locationUpdatingRequest: Request?
     
+    // Added by Woody Huang 2016.07.10
+    var lastUpdate: NSDate = NSDate()
+    var showOnMap: Bool = false
+    weak var toast: UIView?
+    
     deinit {
         timer?.invalidate()
+        NSNotificationCenter.defaultCenter().removeObserver(self)
         print("deinit driver map")
     }
     
@@ -43,9 +49,23 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         createSubviews()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUserBlocked(_:)), name: kAccountBlacklistChange, object: nil)
+        
         locationService = BMKLocationService()
         locationService.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationService.allowsBackgroundLocationUpdates = true
+//        locationService.allowsBackgroundLocationUpdates = true
+    }
+    
+    func confirmShowOnMap() {
+        showOnMap = true
+        timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(RadarDriverMapController.getLocationData), userInfo: nil, repeats: true)
+        hideToast()
+    }
+    
+    func hideToast() {
+        if let toast = toast {
+            hideToast(toast)
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -53,7 +73,21 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         map.viewWillAppear()
         map.delegate = self
         locationService.delegate = self
-        timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(RadarDriverMapController.getLocationData), userInfo: nil, repeats: true)
+        if showOnMap {
+            let now = NSDate()
+            let timeDelta = now.timeIntervalSinceDate(self.lastUpdate)
+            if timeDelta > kMaxRadarKeptTime {
+                userLocation = nil
+                map.removeAnnotations(map.annotations)
+                userAnnos.removeAll()
+                if showUserListBtn.tag == 1 {
+                    userList.reloadData()
+                }
+            }
+            timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(RadarDriverMapController.getLocationData), userInfo: nil, repeats: true)
+        } else {
+            toast = showConfirmToast(LS("跑车雷达"), message: LS("这里会将您的实时位置共享给周围用户，确认继续？"), target: self, confirmSelector: #selector(confirmShowOnMap), cancelSelector: #selector(hideToast as ()->()))
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -63,6 +97,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         locationService.delegate = nil
         timer?.invalidate()
         locationUpdatingRequest?.cancel()
+        hideToast()
     }
     
     func createSubviews() {
@@ -215,7 +250,11 @@ extension RadarDriverMapController {
         let loc2 = CLLocation(latitude: mapBounds.center.latitude + mapBounds.span.latitudeDelta, longitude: mapBounds.center.longitude + mapBounds.span.longitudeDelta)
         let distance = loc1.distanceFromLocation(loc2)
         
-        locationUpdatingRequest = requester.getRadarData(userLocation!.location.coordinate, scanCenter: scanCenter, filterDistance: distance, onSuccess: { (json) -> () in
+        let filterType = mapFilter.getFitlerTypeString()
+        let filterParam = mapFilter.getFilterParam()
+        
+        
+        locationUpdatingRequest = requester.getRadarDataWithFilter(userLocation!.location.coordinate, scanCenter: scanCenter, filterDistance: distance, filterType: filterType, filterParam: filterParam, onSuccess: { (json) in
             // 当前正在显示的用户
             for data in json!.arrayValue {
                 // 创建用户对象
@@ -235,8 +274,65 @@ extension RadarDriverMapController {
                 }
             }
             self.locationUpdatingRequest = nil
-            }) { (code) -> () in
+            self.lastUpdate = NSDate()
+            if self.showUserListBtn.tag == 1 {
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.userList.reloadData()
+                })
+            }
+            }, onError: { (code) in
                 self.locationUpdatingRequest = nil
+        })
+
+//        
+//        locationUpdatingRequest = requester.getRadarData(userLocation!.location.coordinate, scanCenter: scanCenter, filterDistance: distance, onSuccess: { (json) -> () in
+//            // 当前正在显示的用户
+//            for data in json!.arrayValue {
+//                // 创建用户对象
+//                let user: User = try! MainManager.sharedManager.getOrCreate(data)
+//                let userID = user.ssidString
+//                if let anno = self.userAnnos[userID] {
+//                    let loc = data["loc"]
+//                    anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
+//                } else {
+//                    let anno = UserAnnotation()
+//                    anno.user = user
+//                    anno.title = " "
+//                    let loc = data["loc"]
+//                    anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
+//                    self.userAnnos[userID] = anno
+//                    self.map.addAnnotation(anno)
+//                }
+//            }
+//            self.locationUpdatingRequest = nil
+//            self.lastUpdate = NSDate()
+//            if self.showUserListBtn.tag == 1 {
+//                dispatch_async(dispatch_get_main_queue(), { 
+//                    self.userList.reloadData()
+//                })
+//            }
+//            }) { (code) -> () in
+//                self.locationUpdatingRequest = nil
+//        }
+    }
+    
+    func onUserBlocked(notification: NSNotification) {
+//        guard let user = notification.userInfo?[kUserKey] as? User else {
+//            assertionFailure()
+//            return
+//        }
+        let user = notification.userInfo![kUserKey] as! User
+        let blockStatus = notification.userInfo![kAccountBlackStatusKey] as! String
+        if blockStatus == kAccountBlackStatusBlocked {
+            if let anno = userAnnos[user.ssidString] {
+                userAnnos[user.ssidString] = nil
+                map.removeAnnotation(anno)
+                if showUserListBtn.tag == 1 {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.userList.reloadData()
+                    })
+                }
+            }
         }
     }
 }
@@ -326,6 +422,7 @@ extension RadarDriverMapController {
             UIView.animateWithDuration(0.3) { () -> Void in
                 self.view.layoutIfNeeded()
                 self.mapFilter.view.toRound(20)
+                self.mapFilter.marker.transform = CGAffineTransformIdentity
             }
         }else {
             // dispaly the list
@@ -339,6 +436,7 @@ extension RadarDriverMapController {
             UIView.animateWithDuration(0.3) { () -> Void in
                 self.view.layoutIfNeeded()
                 self.mapFilter.view.toRound(5)
+                self.mapFilter.marker.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
             }
         }
         mapFilter.expanded = !mapFilter.expanded

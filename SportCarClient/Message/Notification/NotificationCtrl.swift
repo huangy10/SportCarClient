@@ -53,6 +53,8 @@ class NotificationController: UITableViewController {
             // 给状态点赞了
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellWithCoverThumbnail.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellWithCoverThumbnail
             cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
+            cell.navigationController = messageHome?.navigationController
+            cell.notification = notification
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
             cell.informLbL.text = LS("赞了你的动态")
@@ -64,6 +66,8 @@ class NotificationController: UITableViewController {
         case "status_comment":
             // One of your status is commented
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellWithCoverThumbnail.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellWithCoverThumbnail
+            cell.navigationController = messageHome?.navigationController
+            cell.notification = notification
             cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
@@ -86,6 +90,8 @@ class NotificationController: UITableViewController {
         
         case "relation_follow":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationBaseCell.reuseIdentifier(), forIndexPath: indexPath) as! NotificationBaseCell
+            cell.navigationController = messageHome?.navigationController
+            cell.notification = notification
             cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
@@ -95,6 +101,8 @@ class NotificationController: UITableViewController {
         
         case "status_inform":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellWithCoverThumbnail.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellWithCoverThumbnail
+            cell.navigationController = messageHome?.navigationController
+            cell.notification = notification
             cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
@@ -107,6 +115,8 @@ class NotificationController: UITableViewController {
         case "act_applied":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
             let act: Activity = try! notification.getRelatedObj()!
+            cell.navigationController = messageHome?.navigationController
+            cell.notification = notification
             cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
@@ -120,6 +130,8 @@ class NotificationController: UITableViewController {
         case "act_invited":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
             let act: Activity = try! notification.getRelatedObj()!
+            cell.navigationController = messageHome?.navigationController
+            cell.notification = notification
             cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user!.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
@@ -155,6 +167,8 @@ class NotificationController: UITableViewController {
             
         case "act_denied":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
+            cell.navigationController = messageHome?.navigationController
+            cell.notification = notification
             let act: Activity = try! notification.getRelatedObj()!
             cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = ""
@@ -168,6 +182,8 @@ class NotificationController: UITableViewController {
             
         case "act_invitation_agreed":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
+            cell.navigationController = messageHome?.navigationController
+            cell.notification = notification
             cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user?.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
@@ -179,6 +195,8 @@ class NotificationController: UITableViewController {
             return cell
         case "club_apply":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
+            cell.navigationController = messageHome?.navigationController
+            cell.notification = notification
             cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
             cell.nickNameLbl.text = notification.user?.nickName
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
@@ -230,6 +248,8 @@ class NotificationController: UITableViewController {
         case "club_apply_agreed":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
             let relatedClub: Club = try! notification.getRelatedObj()!
+            cell.navigationController = messageHome?.navigationController
+            cell.notification = notification
             cell.avatarBtn.kf_setImageWithURL(relatedClub.logoURL!, forState: .Normal)
             cell.nickNameLbl.text = relatedClub.name
             cell.dateLbl.text = dateDisplay(notification.createdAt!)
@@ -241,6 +261,8 @@ class NotificationController: UITableViewController {
         case "club_apply_denied":
             let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
             let relatedClub: Club = try! notification.getRelatedObj()!
+            cell.navigationController = messageHome?.navigationController
+            cell.notification = notification
             cell.avatarBtn.kf_setImageWithURL(relatedClub.logoURL!, forState: .Normal)
             cell.nickNameLbl.text = relatedClub.name
             cell.dateLbl.text = dateDisplay(notification.createdAt!)

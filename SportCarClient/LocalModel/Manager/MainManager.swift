@@ -137,6 +137,7 @@ class MainManager {
         
         // Initialize the message system
         MessageManager.defaultManager.connect()
+        PermissionCheck.sharedInstance.sync()
     }
     
     func logout() {

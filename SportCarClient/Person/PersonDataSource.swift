@@ -89,6 +89,7 @@ class PersonDataSource {
         if let car = status.car {
             if var list = self.statusDict[car.ssidString] {
                 list.insert(status, atIndex: 0)
+                statusDict[car.ssidString] = list
             } else {
                 self.statusDict[car.ssidString] = [status]
             }

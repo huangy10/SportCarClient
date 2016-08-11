@@ -92,29 +92,6 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     override func viewDidLoad() {
         navSettings()
         super.viewDidLoad()
-        // bind datasource
-//        self.distinct_identifier = getIdentifierForChatRoom(self)
-//        if let records = ChatRecordDataSource.sharedDataSource.chatRecords[distinct_identifier] {
-//            chatRecords = records
-//        }else {
-//            chatRecords = ChatRecordList()
-//            ChatRecordDataSource.sharedDataSource.chatRecords[distinct_identifier] = chatRecords!
-//            switch roomType {
-//            case .Private:
-//                chatRecords?._item = ChatRecordListItem.UserItem(targetUser!)
-//                // send a place holder to hold this chat
-//                confirmSendChatMessage(nil, image: nil, audio: nil, messageType: "placeholder")
-//                break
-//            case .Club:
-//                chatRecords?._item = ChatRecordListItem.ClubItem(targetClub!)
-//                break
-//            }
-//        }
-//        // request history
-//        if chatRecords?.count < 5 {
-//            loadChatHistory(5 - chatRecords!.count)
-//        }
-//        chatRecords?.unread = 0
         //
         ChatCell.registerCellForTableView(talkBoard!)
         talkBoard?.registerClass(UITableViewCell.self, forCellReuseIdentifier: "invisible_cell")
@@ -135,6 +112,8 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         MessageManager.defaultManager.leaveRoom()
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(kMessageStopAllVoicePlayNotification, object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -168,6 +147,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         superview.addSubview(talkBoard!)
         talkBoard?.dataSource = self
         talkBoard?.delegate = self
+        talkBoard?.contentInset = UIEdgeInsetsMake(0, 0, 15, 0)
         talkBoard?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -291,14 +271,9 @@ extension ChatRoomController {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        let record = chatRecords![indexPath.row]
         let record = chats[indexPath.row]
         record.read = true
-        record.read = true
         let messageType = record.messageType!
-//        if messageType == "placeholder" {
-//            return tableView.dequeueReusableCellWithIdentifier("invisible_cell", forIndexPath: indexPath)
-//        }
         let cell = tableView.dequeueReusableCellWithIdentifier(messageType, forIndexPath: indexPath) as! ChatCell
         cell.delegate = self
         let displayTimeMark: Bool = {
@@ -402,6 +377,9 @@ extension ChatRoomController {
                 let imageURL = SFURL(newChat.image!)!
                 let cache = KingfisherManager.sharedManager.cache
                 cache.storeImage(image!, forKey: imageURL.absoluteString)
+            } else if messageType == "audio" {
+                newChat.audioCaches = json!["audio_wave_data"].stringValue
+                newChat.audioLength = json!["audio_length"].doubleValue
             }
             self.rosterItem.recentChatDes = newChat.summary
             MessageManager.defaultManager.newMessageSent(newChat)

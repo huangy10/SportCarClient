@@ -425,7 +425,6 @@ extension StatusDetailController {
         avatarCarNameLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(headerContainer!).offset(-15)
             make.centerY.equalTo(headerContainer!)
-            make.height.equalTo(17)
         })
         //
         avatarCarLogoIcon = UIImageView()
@@ -492,11 +491,13 @@ extension StatusDetailController {
         locationLbL = UILabel()
         locationLbL?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         locationLbL?.textColor = UIColor(white: 0.72, alpha: 1)
+        locationLbL?.numberOfLines = 0
+        locationLbL?.lineBreakMode = .ByWordWrapping
         superview.addSubview(locationLbL!)
         locationLbL?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(locationIcon.snp_right).offset(10)
             make.top.equalTo(locationIcon)
-            make.height.equalTo(17)
+            make.width.equalTo(superview).multipliedBy(0.6)
         })
         //
         commentNumLbL = UILabel()

@@ -100,7 +100,7 @@ class User: BaseModel {
             if let f = data["followed"].bool {
                 followed = f
             }
-            if let b = data["blacklisted"].bool {
+            if let b = data["blacklist"].bool {
                 blacklisted = b
             }
             

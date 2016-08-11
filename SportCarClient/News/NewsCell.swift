@@ -74,7 +74,7 @@ class NewsCell: UITableViewCell {
             make.height.equalTo(15)
             make.width.lessThanOrEqualTo(30)
         })
-        shareIcon = UIImageView(image: UIImage(named: "news_share"))
+        shareIcon = UIImageView(image: UIImage(named: "news_share_white"))
         superview.addSubview(shareIcon!)
         shareIcon?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(shareNumLbl!.snp_left).offset(-3)

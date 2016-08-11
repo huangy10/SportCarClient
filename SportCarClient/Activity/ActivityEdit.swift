@@ -71,7 +71,6 @@ class ActivityEditController: ActivityReleaseController {
             showToast(LS("请设置活动时间"), onSelf: true)
             return
         }
-        let clubLimitID = clubLimit?.ssidString
         var selectedUserIDs: [String]? = nil
         if selectedUser.count > 0 {
             selectedUserIDs = selectedUser.map { $0.ssidString }
@@ -79,7 +78,7 @@ class ActivityEditController: ActivityReleaseController {
         let toast = showStaticToast(LS("发布中..."))
         pp_showProgressView()
         ActivityRequester.sharedInstance.activityEdit(
-            self.act.ssidString, name: actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, clubLimit: clubLimitID, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", onSuccess: { (json) in
+            self.act.ssidString, name: actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, authedUserOnly: authedUserOnly, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", onSuccess: { (json) in
                 self.navigationController?.popViewControllerAnimated(true)
                 if let mine = self.actHomeController?.mine {
                     mine.refreshControl.beginRefreshing()

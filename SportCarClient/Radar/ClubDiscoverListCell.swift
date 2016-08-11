@@ -29,6 +29,6 @@ class ClubDiscoverCell: DriverMapUserCell {
         avatar.kf_setImageWithURL(club.logoURL!)
         nameLbl.text = club.name! + "(\(club.memberNum))"
         distanceLbl.text = (club.city ?? "") + " " + (club.clubDescription ?? "")
-        valueLbl.text = LS("总价") + "\(club.value)"
+        valueLbl.text = LS("价值") + "\(club.value/10000)万"
     }
 }

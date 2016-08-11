@@ -21,6 +21,10 @@ class NotificationBaseCell: UITableViewCell {
     
     var readDot: UIView!
     
+    var onAvatarPressed: (()->())?
+    var notification: Notification!
+    weak var navigationController: UINavigationController?
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
@@ -38,7 +42,8 @@ class NotificationBaseCell: UITableViewCell {
         avatarBtn = UIButton()
         avatarBtn.layer.cornerRadius = 22.5
         avatarBtn.clipsToBounds = true
-        avatarBtn.userInteractionEnabled = false
+        avatarBtn.addTarget(self, action: #selector(avatarPressed), forControlEvents: .TouchUpInside)
+//        avatarBtn.userInteractionEnabled = false
         superview.addSubview(avatarBtn)
         avatarBtn.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(superview).offset(15)
@@ -79,6 +84,20 @@ class NotificationBaseCell: UITableViewCell {
                 make.centerY.equalTo(avatarBtn.snp_top)
                 make.size.equalTo(10)
             })
+    }
+    
+    func avatarPressed() {
+        if let user = notification.user, nav = navigationController {
+            if user.isHost {
+                let detail = PersonBasicController(user: user)
+                nav.pushViewController(detail, animated: true)
+            } else {
+                let detail = PersonOtherController(user: user)
+                nav.pushViewController(detail, animated: true)
+            }
+        } else {
+            assertionFailure()
+        }
     }
 }
 

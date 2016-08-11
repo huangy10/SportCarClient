@@ -36,6 +36,8 @@ let kHostName = "paochefan.com"
 let kPortName = "80"
 let kChatPortName = "8888"
 let kProtocalName = "http"
+// 在跑车雷达中，当前显示用户最长维持的时间，即如果在这个时间内（秒）没有获取新的数据，则下次打开发现页面是，会清空原来的结果
+let kMaxRadarKeptTime: NSTimeInterval = 600
 //
 let kMaxPhotoSelect: Int = 9    // 最大可以选择的照片的数量
 let kLoadingAppearDelay: Int64 = 300

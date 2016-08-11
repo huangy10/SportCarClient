@@ -87,6 +87,7 @@ class ActivityReleaseMapCell: UITableViewCell {
 //        }
         //
         let marker = UIImageView(image: UIImage(named: "map_default_marker"))
+        marker.contentMode = .ScaleAspectFit
         superview.addSubview(marker)
         marker.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(map)

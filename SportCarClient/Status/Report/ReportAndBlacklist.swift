@@ -9,10 +9,11 @@
 import UIKit
 import SnapKit
 
-let kReportTitles = [LS("色情低俗"), LS("广告骚扰"), LS("政治敏感"), LS("谣言"), LS("违法(暴力恐怖、违禁品等)"), LS("侵权举报(诽谤、抄袭、毛用...)")]
+let kReportTitles = [LS("色情低俗"), LS("广告骚扰"), LS("政治敏感"), LS("谣言"), LS("违法(暴力恐怖、违禁品等)"), LS("侵权举报(诽谤、抄袭、冒用...)")]
 
 
 class ReportBlacklistViewController: PresentTemplateViewController {
+    
     var userID: Int32 = 0
     var reportType: String // status or user or club
     

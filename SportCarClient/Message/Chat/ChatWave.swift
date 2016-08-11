@@ -8,7 +8,10 @@
 
 import UIKit
 
-class ChatWaveView: UIView, UniversalAudioPlayerDelegate {
+class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationControllerDelegate {
+    
+    weak var delegate: ChatCellDelegate?
+    
     var chatRecord: ChatRecord? {
         didSet {
 
@@ -22,6 +25,7 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate {
             waveMask?.frame = CGRectMake(0, 0, 167, 30)
             waveMask?.chat = chatRecord
             waveMask?.backgroundColor = UIColor(white: 1, alpha: 0)
+            
             processView?.maskView = waveMask
 //            processView?.addSubview(mask)
 //            waveMask = ChatWaveMaskView(chatRecord: chatRecord!)
@@ -33,13 +37,32 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate {
     }
     
     var playBtn: UIButton?
+    
+    var isPlaying: Bool {
+        get {
+            return playBtn!.tag == 1
+        }
+        
+        set {
+            playBtn?.tag = newValue ? 1 : 0
+        }
+    }
+    
     var remainingTimeLbl: UILabel?
     var processView: WideProcessView?
     var waveMask: ChatWaveMaskView?
     
+    var longPressGestureRecognizer: UILongPressGestureRecognizer!
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         createSubviews()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onStopAllVoicePlay(_:)), name: kMessageStopAllVoicePlayNotification, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -70,12 +93,9 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate {
             make.centerY.equalTo(superview)
             make.width.equalTo(167)
         })
-        //
-//        waveMask = ChatWaveMaskView()
-//        waveMask?.frame = CGRectMake(0, 0, 167, 30)
-//        processView?.addSubview(waveMask!)
-//        processView?.maskView = waveMask
-//        processView?.layer.mask = waveMask?.layer
+        longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onChatBubbleLongPressed(_:)))
+        self.addGestureRecognizer(longPressGestureRecognizer)
+        
         //
         remainingTimeLbl = UILabel()
         remainingTimeLbl?.font = UIFont.systemFontOfSize(10, weight: UIFontWeightRegular)
@@ -103,12 +123,15 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate {
             return
         }
         let player = UniversalAudioPlayer.sharedPlayer
+        
+        // TODO: use isPlaying property instead of operating on `tag` directly
+        
         if playBtn?.tag == 0 {
             playBtn?.setImage(UIImage(named: "chat_voice_pause"), forState: .Normal)
             player.play(SFURL(audioURL)!, newDelegate: self)
             playBtn?.tag = 1
         }else{
-            if player.isPlayingURLStr(audioURL){
+            if player.isPlayingURLStr(SFURL(audioURL)!.absoluteString){
                 player.stop()
                 remainingTimeLbl?.text = getRemainingTimeString(0)
             }
@@ -123,6 +146,91 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate {
             contentRect = CGRectUnion(contentRect, view.frame)
         }
         return contentRect.width
+    }
+    
+    func onChatBubbleLongPressed(gesture: UILongPressGestureRecognizer) {
+        switch gesture.state {
+        case .Began:
+            showAudioPlayerOutputTypeSelector()
+        default:
+            break
+        }
+    }
+    
+    func showAudioPlayerOutputTypeSelector() {
+        NSNotificationCenter.defaultCenter().postNotificationName(kMessageStopAllVoicePlayNotification, object: nil)
+        let ctrl = getPopoverContronllerForOutputSelection()
+        ctrl.modalPresentationStyle = .Popover
+        let popover = ctrl.popoverPresentationController
+        popover?.sourceView = self
+        popover?.sourceRect = self.bounds
+        popover?.permittedArrowDirections = [.Down, .Up]
+        popover?.delegate = self
+        popover?.backgroundColor = UIColor.blackColor()
+        let presenter = delegate as? UIViewController
+        presenter?.presentViewController(ctrl, animated: true, completion: nil)
+    }
+    
+    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.None
+    }
+    
+    func getPopoverContronllerForOutputSelection() -> UIViewController {
+        let controller = UIViewController()
+        controller.preferredContentSize = CGSizeMake(100, 44)
+        let player = UniversalAudioPlayer.sharedPlayer
+        if player.isOnSpeaker() {
+            let btn = controller.view.addSubview(UIButton)
+                .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("听筒播放"), titleColor: UIColor.whiteColor(), titleSize: 14, titleWeight: UIFontWeightRegular)
+                .layout({ (make) in
+                    make.edges.equalTo(controller.view)
+                })
+            btn.tag = 0
+        } else {
+            let btn = controller.view.addSubview(UIButton)
+                .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("扬声器播放"), titleColor: UIColor.whiteColor(), titleSize: 14, titleWeight: UIFontWeightRegular)
+                .layout({ (make) in
+                    make.edges.equalTo(controller.view)
+                })
+            btn.tag = 1
+        }
+        return controller
+    }
+    
+    func onAudioPlayerOutputTypeSwitchBtnPressed(sender: UIButton) {
+        let player = UniversalAudioPlayer.sharedPlayer
+        let controller = delegate as? UIViewController
+        if sender.tag == 1 {
+            do {
+                try player.setPlayFromSpeaker()
+            } catch {
+                controller?.showToast(LS("无法从听筒播放"))
+                controller?.dismissViewControllerAnimated(true, completion: nil)
+                return
+            }
+        } else {
+            do {
+                try player.setToUseDefaultOutputType()
+            } catch {
+                controller?.showToast(LS("无法从扬声器播放"))
+                controller?.dismissViewControllerAnimated(true, completion: nil)
+                return
+            }
+        }
+        controller?.dismissViewControllerAnimated(true, completion: nil)
+        playBtnPressed()
+    }
+    
+    func onStopAllVoicePlay(notification: NSNotification) {
+        dispatch_async(dispatch_get_main_queue()) { 
+            self.stopPlayerAnyway()
+        }
+    }
+    
+    func stopPlayerAnyway() {
+        if isPlaying {
+            playBtnPressed()
+        }
     }
 }
 

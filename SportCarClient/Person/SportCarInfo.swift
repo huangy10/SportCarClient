@@ -31,7 +31,7 @@ class SportCarInfoCell: UICollectionViewCell{
     var carParamBoard: UIView!
     var carPrice: UILabel!
     var carEngine: UILabel!
-    var carTrans: UILabel!
+    var carTorque: UILabel!
     var carBody: UILabel!
     var carSpeed: UILabel!
     var carAcce: UILabel!
@@ -103,7 +103,7 @@ class SportCarInfoCell: UICollectionViewCell{
 //        }
         //
         carSignatureLbl = superview.addSubview(UILabel.self)
-            .config(14, textColor: UIColor(white: 0.72, alpha: 1), multiLine: true)
+            .config(14, textColor: UIColor(white: 0, alpha: 0.58), multiLine: true)
             .layout({ (make) in
                 make.left.equalTo(superview).offset(20)
                 make.top.equalTo(carNameLbl.snp_bottom).offset(20)
@@ -160,16 +160,16 @@ class SportCarInfoCell: UICollectionViewCell{
         }
         //
         let staticTransLbl = getCarParamStaticLabel()
-        staticTransLbl.text = LS("变速箱")
+        staticTransLbl.text = LS("扭矩")
         carParamBoard.addSubview(staticTransLbl)
         staticTransLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(carParamBoard).offset(20)
             make.top.equalTo(sepLine2).offset(20)
         }
         //
-        carTrans = getCarParamContentLbl()
-        carParamBoard.addSubview(carTrans)
-        carTrans.snp_makeConstraints { (make) -> Void in
+        carTorque = getCarParamContentLbl()
+        carParamBoard.addSubview(carTorque)
+        carTorque.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(staticTransLbl)
             make.top.equalTo(staticTransLbl.snp_bottom)
         }
@@ -247,7 +247,7 @@ class SportCarInfoCell: UICollectionViewCell{
         // 跑车性能指标设置
         carPrice.text = car.price
         carEngine.text = car.engine
-        carTrans.text = car.torque
+        carTorque.text = car.torque
         carBody.text = car.body
         carSpeed.text = car.maxSpeed
         carAcce.text = car.zeroTo60

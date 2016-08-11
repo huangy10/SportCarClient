@@ -51,7 +51,9 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "quit")
         
         let requester = ClubRequester.sharedInstance
+        lp_start()
         requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
+            self.lp_stop()
             try! self.targetClub.loadDataFromJSON(json!, detailLevel: 0)
             self.targetClub.members.removeAll()
             for data in json!["club"]["members"].arrayValue {
@@ -68,7 +70,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             self.inlineUserSelect?.collectionView?.reloadData()
             
             }) { (code) -> () in
-                
+                self.lp_stop()
         }
         createInlineUserSelect()
     }
@@ -443,11 +445,14 @@ extension GroupChatSettingController {
         hideToast()
         let waiter = dispatch_semaphore_create(0)
         var success = false
+        lp_start()
         ClubRequester.sharedInstance.clubQuit(targetClub.ssidString, newHostID: "", onSuccess: { (json) -> () in
             success = true
+            self.lp_stop()
             dispatch_semaphore_signal(waiter)
             }) { (code) -> () in
-            dispatch_semaphore_signal(waiter)
+                self.lp_stop()
+                dispatch_semaphore_signal(waiter)
         }
         dispatch_semaphore_wait(waiter, DISPATCH_TIME_FOREVER)
         if success {

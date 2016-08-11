@@ -457,12 +457,12 @@ class LoginRegisterController: InputableViewController {
                 if let errorCode = code {
                     switch errorCode {
                     case "0000":
-                        errorMessage = "网络连接不畅或者服务器内部发生了错误"
+                        errorMessage = "网络错误"
                         break
-                    case "1000":
-                        errorMessage = "该手机号码尚未注册或者手机号码格式错误"
+                    case "1000", "Invalid username":
+                        errorMessage = "该手机号码尚未注册"
                         break
-                    case "1001":
+                    case "1001", "Password Incorrect":
                         errorMessage = "密码错误"
                     default:
                         errorMessage = "未知错误"

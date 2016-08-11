@@ -34,19 +34,24 @@ class SSPropertySwitcherCell: SSPropertyBaseCell {
             // Not binded
             assertionFailure()
         }
-        bindObj?.setBool(sender.on, forKey: bindPropertyName!)
+        if let obj = bindObj as? NSObject, keypath = bindPropertyName {
+            obj.setValue(sender.on, forKeyPath: keypath)
+        }
+//        bindObj?.setBool(sender.on, forKey: bindPropertyName!)
     }
     
     func setData(
         propertyName: String,
         propertyValue: Bool,
-        bindObj: AnyObject,
+        bindObj: AnyObject?,
         bindPropertyName: String,
         showArrow: Bool = false
         ) -> Self {
         staticLbl.text = propertyName
         switcher.on = propertyValue
         arrowIcon.hidden = !showArrow
+        self.bindObj = bindObj
+        self.bindPropertyName = bindPropertyName
         return self
     }
 }

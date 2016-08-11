@@ -106,6 +106,7 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
         self.navigationController?.popViewControllerAnimated(true)
         let chatRoom = ChatRoomController()
         chatRoom.targetClub = newClub
+        
         chatRoom.chatCreated = false
         messageController.navigationController?.pushViewController(chatRoom, animated: true)
     }

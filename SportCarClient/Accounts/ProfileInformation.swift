@@ -15,6 +15,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
     var pp_progressView: UIProgressView?
     
     var avatarBtn: UIButton?
+    var selectedAvatarImage: UIImage?
     var nickNameInput: UITextField?
     var genderInput: UIButton?          // 这两个控件虽然冠以Input之名，但实际是Button。因这里不需要用户直接输入，而是以此按钮呼出Pick view
     var birthDateInput: UIButton?
@@ -74,7 +75,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
             showToast(LS("请选择生日"))
             return
         }
-        guard let avatar = avatarBtn?.backgroundImageForState(.Normal) else{
+        guard let avatar = selectedAvatarImage else{
             showToast(LS("请选择头像"))
             return
         }
@@ -109,7 +110,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         superview.backgroundColor = UIColor.whiteColor()
         //
         avatarBtn = UIButton()
-        avatarBtn?.setBackgroundImage(UIImage(named: "account_profile_avatar_btn"), forState: .Normal)
+        avatarBtn?.setImage(UIImage(named: "account_profile_avatar_btn"), forState: .Normal)
         avatarBtn?.layer.cornerRadius = 45
         avatarBtn?.clipsToBounds = true
         superview.addSubview(avatarBtn!)
@@ -410,7 +411,8 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
     
     // MARK: ImagePicker的代理
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        avatarBtn?.setBackgroundImage(image, forState: .Normal)
+        avatarBtn?.setImage(image, forState: .Normal)
+        selectedAvatarImage = image
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 }

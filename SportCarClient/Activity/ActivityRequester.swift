@@ -107,7 +107,7 @@ class ActivityRequester: BasicRequester {
         informUser: [String]?,
         maxAttend: Int,
         startAt: NSDate, endAt: NSDate,
-        clubLimit: String?,
+        authedUserOnly: Bool,
         poster: UIImage,
         lat: Double, lon: Double, loc_des: String,
         onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()
@@ -119,13 +119,11 @@ class ActivityRequester: BasicRequester {
             "start_at": STRDate(startAt),
             "end_at": STRDate(endAt),
             "poster": poster,
-            "location": ["lat": lat, "lon": lon, "description": loc_des]
+            "location": ["lat": lat, "lon": lon, "description": loc_des],
+            "authed_user_only": authedUserOnly
         ]
         if let informUser = informUser {
             param["inform_of"] = informUser
-        }
-        if let clubLimit = clubLimit {
-            param["club_limit"] = clubLimit
         }
         upload(urlForName("new"), parameters: param,
                responseDataField: "id",
@@ -139,7 +137,7 @@ class ActivityRequester: BasicRequester {
         informUser: [String]?,
         maxAttend: Int,
         startAt: NSDate, endAt: NSDate,
-        clubLimit: String?,
+        authedUserOnly: Bool,
         poster: UIImage,
         lat: Double, lon: Double, loc_des: String,
         onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()
@@ -151,13 +149,11 @@ class ActivityRequester: BasicRequester {
             "start_at": STRDate(startAt),
             "end_at": STRDate(endAt),
             "poster": poster,
-            "location": ["lat": lat, "lon": lon, "description": loc_des]
+            "location": ["lat": lat, "lon": lon, "description": loc_des],
+            "authed_user_only": authedUserOnly
         ]
         if let informUser = informUser {
             param["inform_of"] = informUser
-        }
-        if let clubLimit = clubLimit {
-            param["club_limit"] = clubLimit
         }
         upload(
             urlForName("edit", param: ["actID": actID]),

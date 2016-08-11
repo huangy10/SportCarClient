@@ -50,12 +50,10 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonBasicController.onStatusDelete(_:)), name: kStatusDidDeletedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onSportCarDeleted(_:)), name: kCarDeletedNotification, object: nil)
         
         createSubviews()
         navSettings()
-        
+        configureNotficationObserveBehavior()
         locationService = BMKLocationService()
         
         // 发出网络请求
@@ -89,6 +87,11 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             }) { (code) -> () in
                 print(code)
         }
+    }
+    
+    func configureNotficationObserveBehavior() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonBasicController.onStatusDelete(_:)), name: kStatusDidDeletedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onSportCarDeleted(_:)), name: kCarDeletedNotification, object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {

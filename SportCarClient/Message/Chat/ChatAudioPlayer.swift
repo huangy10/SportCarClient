@@ -8,6 +8,7 @@
 
 import Foundation
 import AVFoundation
+import Dollar
 
 let kUniversalAudioPlayerStopNotification = "universal_audio_player_stop"
 
@@ -62,6 +63,7 @@ class UniversalAudioPlayer: NSObject, AVAudioPlayerDelegate {
             player?.stop()
             
             player = try AVAudioPlayer(data: soundData)
+            
             player?.delegate = self
             playProccessListener = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(UniversalAudioPlayer.audioPlayerProcessUpdate), userInfo: nil, repeats: true)
             delegate?.willStartPlaying()
@@ -105,5 +107,29 @@ class UniversalAudioPlayer: NSObject, AVAudioPlayerDelegate {
             return
         }
         delegate?.playProcessUpdate(player!.currentTime / player!.duration)
+    }
+    
+    func configAudioSession() {
+        
+    }
+    
+    func isOnSpeaker() -> Bool {
+        let session = AVAudioSession.sharedInstance()
+        let outputs = session.currentRoute.outputs
+        let result = $.find(outputs, callback: { $0.portType == AVAudioSessionPortBuiltInSpeaker})
+        return result != nil
+    }
+    
+    func setPlayFromSpeaker() throws {
+        let session = AVAudioSession.sharedInstance()
+        try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
+        try session.overrideOutputAudioPort(.Speaker)
+    }
+    
+    func setToUseDefaultOutputType() throws {
+        let session = AVAudioSession.sharedInstance()
+        try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
+        try session.overrideOutputAudioPort(.None)
+        print(session.currentRoute)
     }
 }

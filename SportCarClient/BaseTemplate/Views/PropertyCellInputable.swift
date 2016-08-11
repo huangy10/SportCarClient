@@ -57,4 +57,24 @@ class SSPropertyInputableCell: SSPropertyBaseCell {
         contentInput.text = text
         contentInput.placeholder = placeholder
     }
+    
+    func hideArrowIcon() {
+        if arrowIcon.hidden {
+            return
+        }
+        arrowIcon.hidden = true
+        wrapper.snp_remakeConstraints(closure: { (make) in
+            make.centerY.equalTo(staticLbl)
+            make.right.equalTo(arrowIcon)
+            make.height.equalTo(self.contentView)
+            make.left.equalTo(staticLbl.snp_right).offset(30)
+        })
+        contentInput.snp_remakeConstraints { (make) in
+            make.centerY.equalTo(staticLbl)
+            make.right.equalTo(arrowIcon)
+            make.height.equalTo(self.contentView)
+            make.left.equalTo(staticLbl.snp_right).offset(30)
+        }
+        self.contentView.layoutIfNeeded()
+    }
 }

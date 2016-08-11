@@ -46,17 +46,18 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         leftBtn.frame = CGRectMake(0, 0, 9, 15)
         leftBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
-        let barBtnItem = UIBarButtonItem(title: LS("发布活动"), style: .Plain, target: self, action: #selector(navRightBtnPressed))
-        barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
-        self.navigationItem.rightBarButtonItem = barBtnItem
+//        let barBtnItem = UIBarButtonItem(title: LS("发布活动"), style: .Plain, target: self, action: #selector(navRightBtnPressed))
+//        barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+//        self.navigationItem.rightBarButtonItem = barBtnItem
     }
     
     override func navLeftBtnPressed() {
         if dirty {
             let requester = ClubRequester.sharedInstance
             requester.updateClubSettings(targetClub, onSuccess: { (json) -> () in
+                print("success")
                 }, onError: { (code) -> () in
-                    
+                    print("failure")
             })
         }
         if newLogo != nil {
@@ -76,15 +77,18 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         self.navigationController?.popViewControllerAnimated(true)
     }
     
-    override func navRightBtnPressed() {
-        if !targetClub.identified {
-            showToast(LS("请先认证您的俱乐部"))
-            return
-        }
-        let detail = ActivityReleasePresentableController()
-        detail.clubLimit = targetClub
-        detail.presentFrom(self)
-    }
+//    override func navRightBtnPressed() {
+//        if !targetClub.identified {
+//            showToast(LS("请先认证您的俱乐部"))
+//            return
+//        }
+//        if !PermissionCheck.sharedInstance.releaseActivity {
+//            showToast(LS("请先认证一辆车辆"), onSelf: true)
+//            return
+//        }
+//        let detail = ActivityReleaseController()
+//        detail.presentFrom(self)
+//    }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {

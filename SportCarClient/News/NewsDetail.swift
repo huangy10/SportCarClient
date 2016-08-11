@@ -13,6 +13,8 @@ import Spring
 import Dollar
 import SwiftyJSON
 
+private var newsContext = 0
+
 class NewsDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource, UIWebViewDelegate, MakeCommentControllerDelegate, DetailCommentCellDelegate, ShareControllorDelegate, LoadingProtocol {
     /// 这个详情页面需要展示的相关资讯
     var news: News!
@@ -70,6 +72,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     deinit {
         print("deinit news detail")
         NSNotificationCenter.defaultCenter().removeObserver(self)
+        newsDetailPanelView.removeObserver(self, forKeyPath: "scrollView.contentSize", context: &newsContext)
     }
     
     override func viewDidLoad() {
@@ -198,6 +201,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         }
         sepLine.layer.opacity = 0
         newsDetailPanelView = UIWebView()
+        newsDetailPanelView.addObserver(self, forKeyPath: "scrollView.contentSize", options: .New, context: &newsContext)
         newsDetailPanelView?.delegate = self
         newsDetailPanelView?.paginationMode = .Unpaginated
         board?.addSubview(newsDetailPanelView!)
@@ -360,7 +364,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             make.height.equalTo(15)
             make.width.lessThanOrEqualTo(30)
         })
-        shareIcon = UIImageView(image: UIImage(named: "news_share"))
+        shareIcon = UIImageView(image: UIImage(named: "news_share_white"))
         superview.addSubview(shareIcon)
         shareIcon.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(shareNumLbl.snp_left).offset(-3)
@@ -459,7 +463,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         //
         let shareBtn = UIButton().config(
             self, selector: #selector(shareBtnPressed),
-            image: UIImage(named: "news_share_white"))
+            image: UIImage(named: "news_share"))
             .setFrame(CGRectMake(0, 0, 24, 21))
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareBtn)
         //
@@ -591,16 +595,22 @@ extension NewsDetailController{
             }) { (code) -> () in
         }
         // 重载数据
+        
         commentTableView.beginUpdates()
         // 将这个新建的commnet添加在列表的头部
         comments.insert(newComment, atIndex: 0)
-        commentTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+        if comments.count == 1 {
+            commentTableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+        } else {
+            commentTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+        }
         commentTableView.endUpdates()
         commentPanel?.contentInput?.text = ""
         reArrangeCommentTableFrame()
         commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(commentPanel!.barheight)
         })
+        commentPanel.superview?.layoutIfNeeded()
     }
     
     
@@ -650,6 +660,7 @@ extension NewsDetailController {
      */
     private func reArrangeCommentTableFrame() {
         let tableContentSize = commentTableView?.contentSize
+        print(tableContentSize?.height)
         commentTableView?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(tableContentSize!.height)
         })
@@ -678,8 +689,12 @@ extension NewsDetailController {
         newsTitle.text = news.title
         likeNumLbl.text = "\(news.likeNum)"
         commentNumLbl.text = "\(news.commentNum)"
-        let request = NSURLRequest(URL: news.contentURL!)
-        newsDetailPanelView?.loadRequest(request)
+        if news.isVideo {
+            newsDetailPanelView.loadHTMLString(news.content, baseURL: nil)
+        } else {
+            let request = NSURLRequest(URL: news.contentURL!)
+            newsDetailPanelView?.loadRequest(request)
+        }
         loadMoreCommentData()
         if news!.liked {
             likeIcon.image = UIImage(named: "news_like_liked")
@@ -709,12 +724,13 @@ extension NewsDetailController {
                 self.comments.append(newComment)
             }
             //
-            self.reorganizComments()
-            self.commentTableView?.reloadData()
-            self.commentTableLoading?.stopAnimating()
-        
+            if json!.arrayValue.count > 0 {
+                self.reorganizComments()
+                self.commentTableView?.reloadData()
+                self.commentTableLoading?.stopAnimating()
+                self.reArrangeCommentTableFrame()
+            }
             self.requestingCommentData = false
-            self.reArrangeCommentTableFrame()
             }) { (code) -> () in
                 print(code)
                 self.requestingCommentData = false
@@ -816,12 +832,19 @@ extension NewsDetailController {
     
     func webViewDidFinishLoad(webView: UIWebView) {
         newsDetailLoading?.stopAnimating()
-        reArrageWebViewFrames()
+//        reArrageWebViewFrames()
     }
     
     func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
         if error != nil {
-            showToast(LS("无法获取资讯详情"))
+            // TODO: 错误处理，目前遇到redirect的情况的话，运作错误，暂时取消报错
+//            showToast(LS("无法获取资讯详情"))
+        }
+    }
+    
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if keyPath == "scrollView.contentSize" {
+            reArrageWebViewFrames()
         }
     }
 }

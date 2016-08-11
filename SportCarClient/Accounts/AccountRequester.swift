@@ -31,7 +31,8 @@ class AccountRequester2: BasicRequester {
         "modify": "modify",
         "get_blacklist": "blacklist",
         "operation": "<userID>/operation",
-        "status": "<userID>/status"
+        "status": "<userID>/status",
+        "permission": "permission"
     ]
     
     override var urlMap: [String : String] {
@@ -135,25 +136,35 @@ class AccountRequester2: BasicRequester {
         )
     }
     
-    @available(*, deprecated=1)
-    func blacklistUser(user: User, blacklist: Bool, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
-        let request = NSMutableURLRequest(URL: NSURL(string: urlForName("blacklist"))!)
-        request.HTTPMethod = "POST"
-        let params = ["op_type": blacklist ? "add" : "remove", "users": [user.ssidString]] as JSON
-        request.HTTPBody = try! params.rawData()
-        return post(request, onSuccess: onSuccess, onError: onError)
+    func block(user: User, flag: Bool, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+        return post(
+            urlForName("operation", param: ["userID": user.ssidString]),
+            parameters: ["op_type": "blacklist", "block": flag],
+            responseDataField: "blacklist",
+            onSuccess: onSuccess,
+            onError: onError
+        )
     }
     
-    @available(*, deprecated=1)
-    func unblacklistUsers(users: [User], onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
-        let urlStr = urlForName("blacklist")
-        let userIDs = users.map({ $0.ssidString })
-        let request = NSMutableURLRequest(URL: NSURL(string: urlStr)!)
-        request.HTTPMethod = "POST"
-        let params = ["op_type":"remove", "users": userIDs] as JSON
-        request.HTTPBody = try! params.rawData()
-        return post(request, onSuccess: onSuccess, onError: onError)
-    }
+//    @available(*, deprecated=1)
+//    func blacklistUser(user: User, blacklist: Bool, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+//        let request = NSMutableURLRequest(URL: NSURL(string: urlForName("blacklist"))!)
+//        request.HTTPMethod = "POST"
+//        let params = ["op_type": blacklist ? "add" : "remove", "users": [user.ssidString]] as JSON
+//        request.HTTPBody = try! params.rawData()
+//        return post(request, onSuccess: onSuccess, onError: onError)
+//    }
+//    
+//    @available(*, deprecated=1)
+//    func unblacklistUsers(users: [User], onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+//        let urlStr = urlForName("blacklist")
+//        let userIDs = users.map({ $0.ssidString })
+//        let request = NSMutableURLRequest(URL: NSURL(string: urlStr)!)
+//        request.HTTPMethod = "POST"
+//        let params = ["op_type":"remove", "users": userIDs] as JSON
+//        request.HTTPBody = try! params.rawData()
+//        return post(request, onSuccess: onSuccess, onError: onError)
+//    }
     
     // MARK: Request from old SportCarRequester
     
@@ -176,6 +187,16 @@ class AccountRequester2: BasicRequester {
                    parameters: ["date_threshold": STRDate(dateThreshold), "op_type": "more", "limit": limit],
                    responseDataField: "users",
                    onSuccess: onSuccess, onError: onError)
+    }
+
+    func getBlacklist(skip: Int, limit: Int, searchText: String="", onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+        return get(
+            urlForName("get_blacklist"),
+            parameters: ["skip": skip, "limit": limit, "search_text": searchText],
+            responseDataField: "data",
+            onSuccess: onSuccess,
+            onError: onError
+        )
     }
     
     /**
@@ -233,6 +254,17 @@ class AccountRequester2: BasicRequester {
                    parameters: params,
                    responseDataField: "data",
                    onSuccess: onSuccess, onError: onError)
+    }
+    
+    // MARK: Permission Check
+    
+    func syncPermission(onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+        return get(
+            urlForName("permission"),
+            responseDataField: "data",
+            onSuccess: onSuccess,
+            onError: onError
+        )
     }
 }
 

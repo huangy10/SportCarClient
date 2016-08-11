@@ -24,6 +24,8 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
     
     var expanded: Bool = false
     
+    var marker: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -53,6 +55,7 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! RadarFilterHeader
+        marker = header.marker
         if selectedRow < 4 {
             header.titleLbl.text = [LS("附近热门"), LS("我关注的"), LS("我的粉丝"), LS("互相关注")][selectedRow]
         }else {
@@ -71,7 +74,7 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
             detail.selectdClubID = self.selectedClubID
             detail.selectdClub = self.selectedClub
             detail.delegate = self
-            selectedRow = 5
+            selectedRow = 4
             self.navigationController?.pushViewController(detail, animated: true)
             return
         }
@@ -87,7 +90,20 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
         selectedClub = controller.selectdClub
         selectedClubID = controller.selectdClubID
         self.navigationController?.popViewControllerAnimated(true)
+        tableView.reloadData()
         delegate?.radarFilterDidChange()
+    }
+    
+    func getFitlerTypeString() -> String {
+        return ["distance", "follows", "fans", "friends", "club"][selectedRow]
+    }
+    
+    func getFilterParam() -> [String: AnyObject]? {
+        if let selectedClubID = selectedClubID where selectedRow == 4 {
+            return ["club_id": "\(selectedClubID)"]
+        } else {
+            return nil
+        }
     }
 }
 
@@ -155,13 +171,15 @@ class RadarFilterHeader: UITableViewHeaderFooterView {
             make.left.equalTo(superview).offset(20)
             make.centerY.equalTo(superview)
         }
-        //
-        marker = superview.addSubview(UIImageView.self).config(UIImage(named: "up_arrow"))
-            .layout({ (make) in
+        let markerContainer = superview.addSubview(UIView)
+            .layout { (make) in
                 make.right.equalTo(superview).offset(-20)
                 make.centerY.equalTo(superview)
                 make.size.equalTo(CGSizeMake(13, 8))
-            })
+        }
+        //
+        marker = markerContainer.addSubview(UIImageView.self).config(UIImage(named: "up_arrow"))
+            .setFrame(CGRectMake(0, 0, 13, 8))
 //        marker = UIImageView(image: UIImage(named: "down_arrow"))
 //        superview.addSubview(marker)
 //        marker.snp_makeConstraints { (make) -> Void in

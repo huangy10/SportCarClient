@@ -15,7 +15,7 @@ protocol StatusDeleteDelegate: class {
 }
 
 
-class StatusDeleteController: PresentTemplateViewController {
+class StatusDeleteController: PresentTemplateViewController, LoadingProtocol {
     
     weak var delegate: StatusDeleteDelegate?
     
@@ -46,20 +46,23 @@ class StatusDeleteController: PresentTemplateViewController {
         hideConfirmToast(toast!)
         let requester = StatusRequester.sharedInstance
         let waitSignal = dispatch_semaphore_create(0)
+        lp_start()
         requester.deleteStatus(status.ssidString, onSuccess: { (json) -> () in
+            self.lp_stop()
             // 删除成功以后发送一个notification
             NSNotificationCenter.defaultCenter().postNotificationName(kStatusDidDeletedNotification, object: nil, userInfo: [kStatusDidDeletedStatusIDKey: self.status.ssidString, kStatusKey: self.status])
             dispatch_semaphore_signal(waitSignal)
+            
+            self.delegate?.statusDidDeleted()
+            self.hideAnimated({ [weak self] in
+                dispatch_async(dispatch_get_main_queue(), {
+                    self?.delegate?.statusDidDeleted()
+                })
+                })
             }) { (code) -> () in
-                dispatch_semaphore_signal(waitSignal)
+                self.lp_stop()
+                self.showToast(LS("删除失败"), onSelf: true)
         }
-        dispatch_semaphore_wait(waitSignal, DISPATCH_TIME_FOREVER)
-        delegate?.statusDidDeleted()
-        hideAnimated({ [weak delegate] in
-            dispatch_async(dispatch_get_main_queue(), { 
-                delegate?.statusDidDeleted()
-            })
-        })
     }
     
     func deleteCancelled() {

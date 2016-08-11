@@ -297,7 +297,7 @@ extension PersonMineInfoController {
             targetUser.avatarCarModel = selectedCar
             self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 1)], withRowAnimation: .Automatic)
             }) { (code) -> () in
-                
+                self.showToast(LS("网络错误"), onSelf: true)
         }
     }
     
@@ -313,7 +313,7 @@ extension PersonMineInfoController {
             targetUser.avatarClubModel = selectedClub
             self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 2, inSection: 1)], withRowAnimation: .Automatic)
             }) { (code) -> () in
-                
+                self.showToast(LS("网络错误"), onSelf: true)
         }
     }
     

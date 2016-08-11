@@ -366,8 +366,12 @@ extension RadarHomeController {
             let nav = BlackBarNavigationController(rootViewController: selector)
             self.presentViewController(nav, animated: true, completion: nil)
         case 2:
-            let detail = ActivityReleasePresentableController()
-            detail.presentFrom(self)
+            if PermissionCheck.sharedInstance.releaseActivity {
+                let release = ActivityReleaseController()
+                release.presentFrom(self)
+            } else {
+                showToast(LS("请先认证一辆车辆"), onSelf: true)
+            }
         default:
             break
         }
@@ -383,6 +387,7 @@ extension RadarHomeController {
         if users.count == 1 {
             let room = ChatRoomController()
             room.targetUser = users.first
+            room.chatCreated = false
             self.navigationController?.pushViewController(room, animated: true)
         }else if users.count > 1 {
             let detail = GroupChatSetupController()

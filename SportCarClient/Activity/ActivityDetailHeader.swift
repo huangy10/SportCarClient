@@ -251,7 +251,6 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     }
     
     func loadDataAndUpdateUI() -> CGFloat {
-        print(act.timeDes)
         cover.kf_setImageWithURL(act.posterURL!, placeholderImage: nil, optionsInfo: nil) { (image, error, cacheType, imageURL) in
             self.cover.setupForImageViewer(backgroundColor: UIColor.blackColor(), fadeToHide: true)
         }
@@ -269,11 +268,12 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         actDateLbl.text = act.timeDes!
         
         inlineMiniUserSelect.reloadData()
-        let inlineUserSelectHeight = max(35, inlineMiniUserSelect.contentSize.height)
+//        let inlineUserSelectHeight = max(35, inlineMiniUserSelect.contentSize.height)
+        let rows = CGFloat((act.applicants.count) / 7 + 1)
+        let inlineUserSelectHeight = rows * 35 + (rows - 1) * 5
         inlineMiniUserSelect.snp_updateConstraints { (make) in
             make.height.equalTo(inlineUserSelectHeight)
         }
-        
         self.frame = UIScreen.mainScreen().bounds
         self.updateConstraints()
         self.layoutIfNeeded()

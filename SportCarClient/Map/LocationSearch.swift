@@ -32,7 +32,12 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
     private var searcher: BMKPoiSearch!
     
     private var data: [BMKPoiInfo] = []
-    private var selectedPoi: BMKPoiInfo?
+    private var selectedPoi: BMKPoiInfo? {
+        didSet {
+            location = selectedPoi?.pt
+            locDescription = selectedPoi?.name
+        }
+    }
     
     var location: CLLocationCoordinate2D?
     private var userLocation: BMKUserLocation? {
@@ -42,9 +47,9 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
     }
     var locDescription: String?
     
-    convenience init() {
-        self.init (currentLocation: nil, des: nil)
-    }
+//    convenience init() {
+//        self.init (currentLocation: nil, des: nil)
+//    }
     
     init (currentLocation: CLLocationCoordinate2D?, des: String?) {
         super.init(nibName: nil, bundle: nil)
@@ -156,11 +161,17 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
     }
     
     func navRightBtnPressed() {
-        guard let poi = self.selectedPoi else {
-            self.showToast(LS("请选择一个地点"))
-            return
+        keywordInput.resignFirstResponder()
+        if let location = location, let locDescription = locDescription {
+            delegate.locationSelectDidSelect(Location(location: location, description: locDescription))
+        } else {
+            showToast(LS("请选择一个地点"), onSelf: true)
         }
-        delegate.locationSelectDidSelect(Location(location: poi.pt, description: poi.name))
+//        guard let poi = self.selectedPoi else {
+//            self.showToast(LS("请选择一个地点"), onSelf: true)
+//            return
+//        }
+//        delegate.locationSelectDidSelect(Location(location: poi.pt, description: poi.name))
     }
     
     // MARK: - TextField delegate
@@ -171,7 +182,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
 //        }
 //        return true
 //    }
-//    
+//
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         if textField.textInputMode?.primaryLanguage == "zh-Hans" {
             let selectedRange = textField.markedTextRange
@@ -183,6 +194,15 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         let newText = curText.stringByReplacingCharactersInRange(range, withString: string) as String
         searchLocName(newText)
         return true
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        searchLocName(textField.text!)
+        return true
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        searchLocName(textField.text!)
     }
     
     // MARK: - Map utilities
@@ -197,6 +217,10 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
     }
     
     func searchLocName(name: String) {
+        locDescription = name
+        if name.length == 0 {
+            return
+        }
         let option = BMKNearbySearchOption()
         option.pageIndex = 0
         option.pageCapacity = 10
@@ -253,11 +277,9 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
                 data.each({ print($0.name) })
                 self.tableView.hidden = false
                 self.tableView.reloadData()
-            } else {
-                self.showToast(LS("没有找到结果"), onSelf: true)
             }
         } else if errorCode == BMK_SEARCH_RESULT_NOT_FOUND {
-            self.showToast(LS("没有找到结果"), onSelf: true)
+//            self.showToast(LS("没有找到结果"), onSelf: true)
         } else {
             self.showToast(LS("查找过程中出错"))
         }

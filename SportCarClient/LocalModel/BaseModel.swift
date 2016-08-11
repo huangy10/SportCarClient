@@ -21,7 +21,15 @@ class BaseModel: NSManagedObject {
         return "\(ssid)"
     }
     
-    weak var manager: MainManager!
+    weak var manager: MainManager! {
+        didSet {
+            managerDidSet()
+        }
+    }
+    
+    func managerDidSet() {
+        // 留给子类实现
+    }
     
     /**
      从json数据中载入Model需要的数据

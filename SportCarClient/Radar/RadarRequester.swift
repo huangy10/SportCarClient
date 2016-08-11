@@ -43,6 +43,33 @@ class RadarRequester: BasicRequester {
         )
     }
     
+    func getRadarDataWithFilter(
+        loc: CLLocationCoordinate2D,
+        scanCenter: CLLocationCoordinate2D,
+        filterDistance: Double,
+        filterType: String,
+        filterParam: [String: AnyObject]?,
+        onSuccess: (json: JSON?)->(),
+        onError: (code: String?)->()
+        ) -> Request {
+        var params: [String: AnyObject] = [
+            "filter": filterType,
+            "loc": ["lat": loc.latitude, "lon": loc.longitude],
+            "scan_center": ["lat": scanCenter.latitude, "lon": scanCenter.longitude],
+            "scan_distance": filterDistance
+        ]
+        if let filterParam = filterParam {
+            params["filter_param"] = filterParam
+        }
+        return post(
+            urlForName("nearby"),
+            parameters: params,
+            encoding: .JSON,
+               responseDataField: "result",
+               onSuccess: onSuccess, onError: onError
+        )
+    }
+    
     func getRadarData(
         loc: CLLocationCoordinate2D,
         scanCenter: CLLocationCoordinate2D,

@@ -46,7 +46,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
         mapCell.map.viewWillAppear()
-        infoView.loadDataAndUpdateUI()
+//        infoView.loadDataAndUpdateUI()
         tableView.setContentOffset(CGPointMake(0, -infoView.preferedHeight), animated: false)
     }
     
@@ -287,6 +287,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
      Fetch the latest information about the act
      */
     func loadActInfo() {
+        lp_start()
         ActivityRequester.sharedInstance.getActivityDetail(act.ssidString, onSuccess: { (json) in
             if let data = json {
                 try! self.act.loadDataFromJSON(data, detailLevel: 1)
@@ -307,8 +308,10 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             } else {
                 assertionFailure()
             }
+            self.lp_stop()
             }) { (code) in
-                
+                self.lp_stop()
+                self.showToast(LS("无法获取活动信息"))
         }
     }
     

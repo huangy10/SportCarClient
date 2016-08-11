@@ -87,7 +87,6 @@ class ChatModelManger: MainManager {
             return []
         }
         let context = self.getOperationContext()
-        print(context.notifications.count())
         let notifs: [Notification] = context.notifications.filter({
             $0.hostSSID == self.hostUserID!
         }).orderByDescending({$0.createdAt})

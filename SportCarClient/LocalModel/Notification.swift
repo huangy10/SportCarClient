@@ -24,6 +24,11 @@ class Notification: BaseModel {
         }
         return SFURL(image!)
     }
+    
+    override func managerDidSet() {
+        user?.manager = manager
+        _obj?.manager = manager
+    }
 
     override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool) throws -> Self {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)

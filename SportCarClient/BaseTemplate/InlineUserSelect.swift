@@ -20,6 +20,8 @@ class InlineUserSelectController: UICollectionViewController {
     
     weak var parentController: UIViewController?
     
+    var showAllMembersBtn: UIButton!
+    
     convenience init() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .Vertical
@@ -39,13 +41,26 @@ class InlineUserSelectController: UICollectionViewController {
     }
     weak var delegate: InlineUserSelectDelegate?
     // 显示的用户列表
-    var users: [User] = []
+    var users: [User] = [] {
+        didSet {
+            if users.count >= 12 {
+                showAllMembersBtn.hidden = false
+            } else {
+                showAllMembersBtn.hidden = true
+            }
+        }
+    }
     var relatedClub: Club?
     // 是否显示删除按钮---注：添加按钮总是显示
     var showDeleteBtn: Bool = false
     var showAddBtn: Bool = true
     // 最大可以显示的用户的数量，设置为0表示没有限制
     var maxUserNum: Int = 0
+    
+    override func loadView() {
+        super.loadView()
+        configureShowAllMembersBtn()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,6 +127,25 @@ class InlineUserSelectController: UICollectionViewController {
                 parentController?.navigationController?.pushViewController(detail, animated: true)
             }
         }
+    }
+    
+    // MARK: - 全部成员按钮
+    
+    func configureShowAllMembersBtn() {
+        showAllMembersBtn = self.view.addSubview(UIButton)
+            .config(self, selector: #selector(showAllMembersBtnPressed), title: LS("全部成员"), titleColor: kHighlightRed, titleSize: 14, titleWeight: UIFontWeightUltraLight)
+            .layout({ (make) in
+                make.right.equalTo(self.view).offset(-15)
+                make.bottom.equalTo(self.view)
+                make.size.equalTo(CGSizeMake(100, 44))
+            })
+        showAllMembersBtn.hidden = true
+    }
+    
+    func showAllMembersBtnPressed() {
+        let membersList = ClubMembersController()
+        membersList.targetClub = relatedClub!
+        parentController?.navigationController?.pushViewController(membersList, animated: true)
     }
 }
 

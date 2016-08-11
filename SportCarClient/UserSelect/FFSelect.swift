@@ -145,8 +145,13 @@ class FFSelectController: UserSelectController {
         
         navRightBtn = UIButton()
         navRightBtn?.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-        navRightBtn?.setTitle(LS("确定") + "(\(selectedUsers.count)/\(maxSelectUserNum))", forState: .Normal)
+        if maxSelectUserNum == 0 {
+            navRightBtn?.setTitle(LS("确定"), forState: .Normal)
+        } else {
+            navRightBtn?.setTitle(LS("确定") + "(\(selectedUsers.count)/\(maxSelectUserNum))", forState: .Normal)
+        }
         navRightBtn?.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        navRightBtn?.titleLabel?.textAlignment = .Right
         navRightBtn?.addTarget(self, action: #selector(FFSelectController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         navRightBtn?.frame = CGRectMake(0, 0, 67, 20)
         let rightBtnItem = UIBarButtonItem(customView: navRightBtn!)
@@ -258,12 +263,17 @@ class FFSelectController: UserSelectController {
     }
     
     override func userSelectionDidChange() {
-        let currentSelectedNum = selectedUsers.count
-        navRightBtn?.setTitle(LS("确定") + "(\(currentSelectedNum)/\(maxSelectUserNum))", forState: .Normal)
+        if maxSelectUserNum > 0 {
+            let currentSelectedNum = selectedUsers.count
+            navRightBtn?.setTitle(LS("确定") + "(\(currentSelectedNum)/\(maxSelectUserNum))", forState: .Normal)
+        } else {
+            let currentSelectedNum = selectedUsers.count
+            navRightBtn?.setTitle(LS("确定") + "(\(currentSelectedNum))", forState: .Normal)
+        }
     }
     
     override func userSelectionShouldChange(user: User, addOrDelete: Bool) -> Bool {
-        if selectedUsers.count >= maxSelectUserNum && addOrDelete {
+        if selectedUsers.count >= maxSelectUserNum && addOrDelete && maxSelectUserNum > 0 {
             showToast(LS("你最多只能同时@\(maxSelectUserNum)名用户"))
             return false
         }

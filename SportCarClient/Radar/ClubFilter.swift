@@ -26,6 +26,7 @@ class ClubFilterController: RadarFilterController {
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! RadarFilterHeader
+        marker = header.marker
         header.titleLbl.text = [LS("附近"), LS("总价最高"), LS("均价最高"), LS("成员最多"), LS("美女最多"), LS("新近成立")][selectedRow]
         return header
     }

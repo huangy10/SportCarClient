@@ -17,6 +17,7 @@ class ChatParser {
         let roster = data["roster"]
         if roster.exists() {
             let rosterItem = RosterManager.defaultManager.getOrCreateNewRoster(roster, autoBringToFront: true)
+            rosterItem.updatedAt = newRecrod.createdAt
             return (newRecrod, rosterItem)
         }
         return (newRecrod, nil)

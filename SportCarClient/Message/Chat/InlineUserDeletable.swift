@@ -67,10 +67,10 @@ class InlineUserSelectDeletable: InlineUserSelectController {
             let user = users[indexPath.row]
             if user.isHost {
                 let detail = PersonBasicController(user: user)
-                parentViewController?.navigationController?.pushViewController(detail, animated: true)
+                parentController?.navigationController?.pushViewController(detail, animated: true)
             } else {
                 let detail = PersonOtherController(user: user)
-                parentViewController?.navigationController?.pushViewController(detail, animated: true)
+                parentController?.navigationController?.pushViewController(detail, animated: false)
             }
         }
     }

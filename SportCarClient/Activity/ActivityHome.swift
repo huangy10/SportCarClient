@@ -182,8 +182,12 @@ class ActivityHomeController: UIViewController {
     }
     
     func navRightBtnPressed() {
-        let release = ActivityReleasePresentableController()
-        release.presentFrom(self)
+        if PermissionCheck.sharedInstance.releaseActivity {
+            let release = ActivityReleaseController()
+            release.presentFrom(self)
+        } else {
+            showToast(LS("请先认证一辆车辆"), onSelf: true)
+        }
     }
     
     func createSubviews() {

@@ -155,6 +155,7 @@ class RosterManager {
     }
     
     func deleteAndQuitClub(club: Club) {
+        club.attended = false
         let wait = dispatch_semaphore_create(0)
         dispatch_async(queue) {
             let context = ChatModelManger.sharedManager.getOperationContext()

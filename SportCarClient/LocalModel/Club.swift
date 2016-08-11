@@ -51,6 +51,7 @@ class Club: BaseModel {
                     .filter({ $0.relatedID == self.ssid })
                     .filter({ $0.entityType == "club"})
                     .first()
+                _rosterItem?.loadData()
                 return _rosterItem
             } else {
                 return nil

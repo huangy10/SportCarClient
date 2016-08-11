@@ -23,7 +23,13 @@ class ChatCell: UITableViewCell {
         tableView.registerClass(self, forCellReuseIdentifier: "audio")
     }
     
-    weak var delegate: ChatCellDelegate?
+    weak var delegate: ChatCellDelegate? {
+        didSet {
+            if let audioBubble = self.bubbleAudio {
+                audioBubble.delegate = delegate
+            }
+        }
+    }
     /// 数据
     var chat: ChatRecord?
     var bubbleType: String? {
@@ -235,6 +241,7 @@ class ChatCell: UITableViewCell {
             bubbleContentSize = contentSize
         }else{
             bubbleAudio?.chatRecord = chat
+            bubbleAudio?.remainingTimeLbl?.textColor = isMine ? UIColor.whiteColor() : UIColor.blackColor()
             bubbleContentSize = CGSizeMake(maxBubbleWidth - 30, 30)
         }
         if isMine {

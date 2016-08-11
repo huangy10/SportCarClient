@@ -164,6 +164,7 @@
 		BFC36BB41C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */; };
 		BFC4F14E1CE6C2CE004D7BD0 /* LocationSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC4F14D1CE6C2CE004D7BD0 /* LocationSearch.swift */; };
 		BFC4F1511CE6F1A7004D7BD0 /* LocationSelectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC4F1501CE6F1A7004D7BD0 /* LocationSelectCell.swift */; };
+		BFC50FDD1D464B8E00152B60 /* ClubMembersList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC50FDC1D464B8E00152B60 /* ClubMembersList.swift */; };
 		BFC8F1491CC8A5B200ABE31F /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC8F1411CC8A5B200ABE31F /* TencentOpenAPI.framework */; };
 		BFC8F14A1CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BFC8F1421CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle */; };
 		BFC8F14B1CC8A5B200ABE31F /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC8F1441CC8A5B200ABE31F /* libWeChatSDK.a */; };
@@ -180,6 +181,7 @@
 		BFCB96401C205DF1004F77E8 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB963F1C205DF1004F77E8 /* Home.swift */; };
 		BFCB96441C206169004F77E8 /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96431C206169004F77E8 /* SideBar.swift */; };
 		BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96451C2061E0004F77E8 /* LoadingButton.swift */; };
+		BFDBD6011D3D1A4200793256 /* PermissionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */; };
 		BFDFF2771C8BC36200055C1C /* ChineseSubdivisions.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFDFF2761C8BC36200055C1C /* ChineseSubdivisions.plist */; };
 		BFDFF2791C8BC3A300055C1C /* CityElementSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFF2781C8BC3A300055C1C /* CityElementSelect.swift */; };
 		BFDFF27B1C8BF6EA00055C1C /* ClubDiscover.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFF27A1C8BF6EA00055C1C /* ClubDiscover.swift */; };
@@ -272,6 +274,8 @@
 		BFF7152F1CC289C30028F87F /* 合成 1_00047.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714FD1CC289C30028F87F /* 合成 1_00047.png */; };
 		BFF715301CC289C30028F87F /* 合成 1_00048.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714FE1CC289C30028F87F /* 合成 1_00048.png */; };
 		BFF715311CC289C30028F87F /* 合成 1_00049.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714FF1CC289C30028F87F /* 合成 1_00049.png */; };
+		BFF82B431D32208B0039A478 /* BlockUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF82B421D32208B0039A478 /* BlockUser.swift */; };
+		BFF82B451D323E090039A478 /* Blacklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF82B441D323E090039A478 /* Blacklist.swift */; };
 		BFFA15451C9D271E00E985DF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15441C9D271E00E985DF /* Location.swift */; };
 		BFFA15471C9D2B1700E985DF /* RequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15461C9D2B1700E985DF /* RequestProtocol.swift */; };
 		BFFA51161C05D9910019E5EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA51151C05D9910019E5EF /* AppDelegate.swift */; };
@@ -462,6 +466,8 @@
 		BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsLocationVisiblity.swift; path = Person/PersonMineSettingsLocationVisiblity.swift; sourceTree = "<group>"; };
 		BFC4F14D1CE6C2CE004D7BD0 /* LocationSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationSearch.swift; path = Map/LocationSearch.swift; sourceTree = "<group>"; };
 		BFC4F1501CE6F1A7004D7BD0 /* LocationSelectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationSelectCell.swift; path = Map/LocationSelectCell.swift; sourceTree = "<group>"; };
+		BFC50FDC1D464B8E00152B60 /* ClubMembersList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubMembersList.swift; path = Message/Chat/ClubMembersList.swift; sourceTree = "<group>"; };
+		BFC7F26D1D5C57FA00C5BE46 /* SportCarClient V160811.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SportCarClient V160811.xcdatamodel"; sourceTree = "<group>"; };
 		BFC8F1411CC8A5B200ABE31F /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
 		BFC8F1421CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TencentOpenApi_IOS_Bundle.bundle; sourceTree = "<group>"; };
 		BFC8F1441CC8A5B200ABE31F /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
@@ -481,6 +487,7 @@
 		BFCB963F1C205DF1004F77E8 /* Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Home.swift; path = Home/Home.swift; sourceTree = "<group>"; };
 		BFCB96431C206169004F77E8 /* SideBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideBar.swift; path = Home/SideBar.swift; sourceTree = "<group>"; };
 		BFCB96451C2061E0004F77E8 /* LoadingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingButton.swift; path = BaseTemplate/LoadingButton.swift; sourceTree = "<group>"; };
+		BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PermissionCheck.swift; path = Sync/PermissionCheck.swift; sourceTree = "<group>"; };
 		BFDFF2761C8BC36200055C1C /* ChineseSubdivisions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = ChineseSubdivisions.plist; path = data/ChineseSubdivisions.plist; sourceTree = "<group>"; };
 		BFDFF2781C8BC3A300055C1C /* CityElementSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CityElementSelect.swift; path = Person/CityElementSelect.swift; sourceTree = "<group>"; };
 		BFDFF27A1C8BF6EA00055C1C /* ClubDiscover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubDiscover.swift; path = Radar/ClubDiscover.swift; sourceTree = "<group>"; };
@@ -573,6 +580,8 @@
 		BFF714FD1CC289C30028F87F /* 合成 1_00047.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00047.png"; sourceTree = "<group>"; };
 		BFF714FE1CC289C30028F87F /* 合成 1_00048.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00048.png"; sourceTree = "<group>"; };
 		BFF714FF1CC289C30028F87F /* 合成 1_00049.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00049.png"; sourceTree = "<group>"; };
+		BFF82B421D32208B0039A478 /* BlockUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlockUser.swift; path = Person/BlockUser.swift; sourceTree = "<group>"; };
+		BFF82B441D323E090039A478 /* Blacklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Blacklist.swift; path = Person/Blacklist.swift; sourceTree = "<group>"; };
 		BFFA15441C9D271E00E985DF /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Location.swift; path = Map/Location.swift; sourceTree = "<group>"; };
 		BFFA15461C9D2B1700E985DF /* RequestProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestProtocol.swift; path = BaseTemplate/RequestProtocol.swift; sourceTree = "<group>"; };
 		BFFA51121C05D9910019E5EF /* SportCarClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SportCarClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -850,6 +859,7 @@
 			isa = PBXGroup;
 			children = (
 				BF5E7EEA1C860804004B8305 /* PersonOtherInfo.swift */,
+				BFF82B421D32208B0039A478 /* BlockUser.swift */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -1009,6 +1019,7 @@
 				BF9B54B41C802E3B0006D673 /* GroupChatSetUp.swift */,
 				BF9664031C89CBD10096D131 /* ClubBriefInfo.swift */,
 				BFE9676B1CA92AD40097C42C /* GroupMemberSelecter.swift */,
+				BFC50FDC1D464B8E00152B60 /* ClubMembersList.swift */,
 			);
 			name = Group;
 			sourceTree = "<group>";
@@ -1315,6 +1326,7 @@
 				BFC0324A1C6CCC7D00ECA69A /* PersonMineSettingsInvitation.swift */,
 				BF5E7EE31C85E568004B8305 /* ClearCache.swift */,
 				BF5E7EE51C85EA3D004B8305 /* Suggestions.swift */,
+				BFF82B441D323E090039A478 /* Blacklist.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1411,6 +1423,14 @@
 				BFAA0CA81C46009F00AB5C3C /* StatusRequester.swift */,
 			);
 			name = Network;
+			sourceTree = "<group>";
+		};
+		BFDBD5FF1D3D19B600793256 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */,
+			);
+			name = Sync;
 			sourceTree = "<group>";
 		};
 		BFDFF2751C8BC33700055C1C /* CitySelect */ = {
@@ -1708,6 +1728,7 @@
 		BFFA51141C05D9910019E5EF /* SportCarClient */ = {
 			isa = PBXGroup;
 			children = (
+				BFDBD5FF1D3D19B600793256 /* Sync */,
 				BFB857D31CD89A9400610349 /* Network */,
 				BFC8F13F1CC8A58600ABE31F /* Share */,
 				BFF714CC1CC289B00028F87F /* data */,
@@ -2048,6 +2069,7 @@
 			files = (
 				BFE967571CA6D9B90097C42C /* Notification.swift in Sources */,
 				BFE9676A1CA90CF60097C42C /* SportCarAuthHeader.swift in Sources */,
+				BFDBD6011D3D1A4200793256 /* PermissionCheck.swift in Sources */,
 				BFE967311CA588580097C42C /* BaseInMemModel.swift in Sources */,
 				BFE967601CA6EE080097C42C /* ChatModelManager.swift in Sources */,
 				BF662A171CCBA3C600B3D84D /* SideBar2.swift in Sources */,
@@ -2132,6 +2154,7 @@
 				BFB72FEA1CB791D400ABB0CB /* CommonHeader.swift in Sources */,
 				BFB72FEC1CB7A80800ABB0CB /* PropertyCellInputable.swift in Sources */,
 				BFC032551C6DD73700ECA69A /* PersonMineSettingAuth.swift in Sources */,
+				BFF82B451D323E090039A478 /* Blacklist.swift in Sources */,
 				BFAC522A1C1C84A700107F71 /* InputableViewController.swift in Sources */,
 				BF1D93561C52776F00FD9997 /* DetailCommentCell.swift in Sources */,
 				BFC0325F1C6EE92600ECA69A /* UIImageEffects.swift in Sources */,
@@ -2174,6 +2197,7 @@
 				BF2429271C7D62D6005D4C6E /* UserOnMap.swift in Sources */,
 				BFB857D51CD89AAF00610349 /* BasicRequester.swift in Sources */,
 				BFBC527D1C53CE8D00EE7D34 /* ChatAudioAnalyser.swift in Sources */,
+				BFC50FDD1D464B8E00152B60 /* ClubMembersList.swift in Sources */,
 				BFE9675C1CA6E8D60097C42C /* News.swift in Sources */,
 				BF5107131C60CBA6008DC14F /* ChatListCell.swift in Sources */,
 				BF77F3191C85357D00B09D9A /* ReportAndBlacklist.swift in Sources */,
@@ -2190,6 +2214,7 @@
 				BF1EC23F1C49414F0016F425 /* UserSelect.swift in Sources */,
 				BFDFF27B1C8BF6EA00055C1C /* ClubDiscover.swift in Sources */,
 				BFC4F1511CE6F1A7004D7BD0 /* LocationSelectCell.swift in Sources */,
+				BFF82B431D32208B0039A478 /* BlockUser.swift in Sources */,
 				BFCA900F1C50A09100B05E74 /* StatusBasic.swift in Sources */,
 				BF313B7C1CA3D62A00545DB7 /* UIFactory.swift in Sources */,
 				BFC0326C1C6F39EA00ECA69A /* ActivityHome.swift in Sources */,
@@ -2351,7 +2376,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6ca3bed5-1ce8-4746-acac-6834b94df070";
+				PROVISIONING_PROFILE = "d61d31a9-c089-4057-b128-2bae7e8da5db";
 				SWIFT_OBJC_BRIDGING_HEADER = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h";
 			};
 			name = adhoc;
@@ -2483,7 +2508,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6ca3bed5-1ce8-4746-acac-6834b94df070";
+				PROVISIONING_PROFILE = "d61d31a9-c089-4057-b128-2bae7e8da5db";
 				SWIFT_OBJC_BRIDGING_HEADER = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h";
 			};
 			name = Debug;
@@ -2510,7 +2535,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6ca3bed5-1ce8-4746-acac-6834b94df070";
+				PROVISIONING_PROFILE = "d61d31a9-c089-4057-b128-2bae7e8da5db";
 				SWIFT_OBJC_BRIDGING_HEADER = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h";
 			};
 			name = Release;
@@ -2612,9 +2637,10 @@
 		BFE967471CA6D8920097C42C /* SportCarClient.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				BFC7F26D1D5C57FA00C5BE46 /* SportCarClient V160811.xcdatamodel */,
 				BFE967481CA6D8920097C42C /* SportCarClient.xcdatamodel */,
 			);
-			currentVersion = BFE967481CA6D8920097C42C /* SportCarClient.xcdatamodel */;
+			currentVersion = BFC7F26D1D5C57FA00C5BE46 /* SportCarClient V160811.xcdatamodel */;
 			path = SportCarClient.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
