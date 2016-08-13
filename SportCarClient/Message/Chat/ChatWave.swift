@@ -14,12 +14,12 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
     
     var chatRecord: ChatRecord? {
         didSet {
-
-            let b = UIView(frame: CGRectMake(0, 0, 100, 100))
-            b.backgroundColor = UIColor(white: 1, alpha: 0.2)
-            let c = UIView(frame: CGRectMake(5, 5, 50, 50))
-            c.backgroundColor = UIColor(white: 1, alpha: 1)
-            b.addSubview(c)
+//
+//            let b = UIView(frame: CGRectMake(0, 0, 100, 100))
+//            b.backgroundColor = UIColor(white: 1, alpha: 0.2)
+//            let c = UIView(frame: CGRectMake(5, 5, 50, 50))
+//            c.backgroundColor = UIColor(white: 1, alpha: 1)
+//            b.addSubview(c)
             
             waveMask = ChatWaveMaskView()
             waveMask?.frame = CGRectMake(0, 0, 167, 30)

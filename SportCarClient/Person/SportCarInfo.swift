@@ -62,8 +62,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
 //            make.top.equalTo(superview)
 //            make.height.equalTo(carCover.snp_width).multipliedBy(0.588)
 //        }
-        carGallary = SportCarGallary()
-        carGallary.dataSource = self
+        carGallary = SportCarGallary(dataSource: self)
         superview.addSubview(carGallary)
         carGallary.snp_makeConstraints { (make) in
             make.left.equalTo(superview)
@@ -316,6 +315,103 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         } else {
             return SportCargallaryItem(itemType: "video", resource: car.videoURL!)
         }
+    }
+    
+    func configCarAudioWave() {
+        // 配置跑车声浪
+        
+    }
+}
+
+class CarWaveView: UIView {
+    var playBtn: UIButton!
+    var isPlaying: Bool = false
+    var remainingTimeLbl: UILabel!
+    var processView: WideProcessView!
+    var wavMask: UIImageView!
+    
+    var longPressGestureRecognizer: UILongPressGestureRecognizer!
+    
+    var audioURL: NSURL!
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configPlayBtn()
+        configProcessView()
+        configWaveMask()
+        configRemainingTimeLbl()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configPlayBtn() {
+        playBtn = addSubview(UIButton)
+            .config(self, selector: #selector(playBtnPressed(_:)), image: UIImage(named: "chat_voice_play"), contentMode: .ScaleAspectFit)
+            .layout({ (make) in
+                make.left.equalTo(self)
+                make.centerY.equalTo(self)
+                make.size.equalTo(25)
+            })
+    }
+    
+    func configProcessView() {
+        processView = addSubview(WideProcessView).layout({ (make) in
+            make.left.equalTo(playBtn.snp_right).offset(15)
+            make.height.equalTo(self)
+            make.centerY.equalTo(self)
+            make.width.equalTo(167)
+        })
+        longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onLongPressed(_:)))
+        addGestureRecognizer(longPressGestureRecognizer)
+    }
+    
+    func configWaveMask() {
+    }
+    
+    func configRemainingTimeLbl() {
+        remainingTimeLbl = addSubview(UILabel).config(10, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0.58, alpha: 1), textAlignment: .Left, text: "--:--")
+            .layout({ (make) in
+                make.centerY.equalTo(self)
+                make.left.equalTo(processView.snp_right).offset(10)
+            })
+    }
+    
+    func playBtnPressed(sender: UIButton) {
+        wavMask = UIImageView()
+        wavMask.frame = processView.bounds
+        wavMask.backgroundColor = UIColor(white: 1, alpha: 0)
+        processView.maskView = wavMask
+    }
+    
+    func onLongPressed(gesture: UILongPressGestureRecognizer) {
+        
+    }
+    
+    func stopPlayerAnyWay() {
+        if isPlaying {
+            playBtnPressed(playBtn)
+        }
+    }
+    
+    func getRemainingTimeString(process: Double, duration: Double) -> String{
+        let leftTime = Int(duration * (1 - process))
+        let min = leftTime / 60
+        let sec = leftTime - 60 * min
+        return "-\(min):\(sec)"
+    }
+    
+    func getRequiredWidth() -> CGFloat {
+        var contentRect = CGRectZero
+        for view in self.subviews {
+            contentRect = CGRectUnion(contentRect, view.frame)
+        }
+        return contentRect.width
     }
 }
 

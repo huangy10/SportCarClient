@@ -52,15 +52,16 @@ class SportCar: BaseModel{
         let imagesRaw = media["image"]
         images = String(data: try! imagesRaw.rawData(), encoding: NSUTF8StringEncoding)
         imageArray = $.map(imagesRaw.arrayValue, transform: { SFURL($0.stringValue)! })
-        let audioRaw = media["audio"]
-        if audioRaw.exists() {
-            audio = audioRaw.stringValue
+        let audioRaw = media["audio"].arrayValue
+        if audioRaw.count > 0 {
+            audio = audioRaw[0].stringValue
             audioURL = SFURL(audio!)
         }
-        let videoRaw = media["video"]
-        if videoRaw.exists() {
-            video = videoRaw.stringValue
+        let videoRaw = media["video"].arrayValue
+        if videoRaw.count > 0 {
+            video = videoRaw[0].stringValue
             videoURL = SFURL(video!)
+            print(video, videoURL)
         }
         logo = json["logo"].stringValue
         name = json["name"].stringValue

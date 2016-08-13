@@ -47,8 +47,9 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
     var pageMarker: UIPageControl!
     var collectionView: UICollectionView!
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(dataSource: SportCarGallaryDataSource) {
+        super.init(frame: CGRectZero)
+        self.dataSource = dataSource
         configCollectionView()
         configPageMarker()
         configCells()
@@ -72,9 +73,11 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
         layout.scrollDirection = .Horizontal
         
         collectionView = UICollectionView(frame: CGRectMake(0, 0, size.width, size.height), collectionViewLayout: layout)
+        collectionView.backgroundColor = UIColor.whiteColor()
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.pagingEnabled = true
         addSubview(collectionView)
         collectionView.frame = CGRectMake(0, 0, size.width, size.height)
     }
@@ -83,13 +86,13 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
         pageMarker = UIPageControl()
         addSubview(pageMarker)
         pageMarker.layout { (make) in
-            make.bottom.equalTo(self).offset(-15)
+            make.bottom.equalTo(self)
             make.centerX.equalTo(self)
         }
     }
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 0
+        return 1
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -118,6 +121,7 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
     }
     
     func reloadData() {
+        pageMarker.numberOfPages = dataSource.numberOfItems()
         collectionView.reloadData()
     }
 }
@@ -147,6 +151,7 @@ class SportCarGallaryVideoCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        configVideoPlayer()
     }
     
     required init?(coder aDecoder: NSCoder) {
