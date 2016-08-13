@@ -116,21 +116,21 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
                 cell.staticLbl.text = LS("俱乐部认证")
                 cell.authed = targetClub.identified
                 return cell
-            case 3..<6:
+            case 3..<5:
                 // 后面的cell向后移动
                 return super.tableView(tableView, cellForRowAtIndexPath: NSIndexPath(forRow: indexPath.row - 1, inSection: indexPath.section))
-            case 6..<8:
+            case 5..<7:
                 let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
                 cell.boolSelect.hidden = false
                 cell.infoLbl.text = ""
-                cell.boolSelect.on = [targetClub.onlyHostCanInvite, targetClub.showMembers][indexPath.row - 6]
+                cell.boolSelect.on = [targetClub.onlyHostCanInvite, targetClub.showMembers][indexPath.row - 5]
                 // 0，1，2已经被占用了，这里从3开始编号，此时页面的5个switch按钮的对应关系如下：
                 // 0 - 显示本群昵称； 1 - 消息免打扰； 2 - 置顶聊天； 3 - 仅我可以邀请，4 - 对外公布成员信息
                 cell.boolSelect.tag = indexPath.row - 3
-                cell.staticLbl.text = [LS("仅我可以邀请"), LS("对外公布群成员信息")][indexPath.row - 6]
+                cell.staticLbl.text = [LS("仅我可以邀请"), LS("对外公布群成员信息")][indexPath.row - 5]
                 cell.boolSelect.addTarget(self, action: #selector(switchBtnPressed(_:)), forControlEvents: .ValueChanged)
                 return cell
-            case 8:
+            case 7:
                 // user inlineUserSelectDeletable
                 inlineUserSelect?.collectionView?.reloadData()
                 return inlineUsersCell
@@ -163,7 +163,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 1 {
-            if indexPath.row < 8 {
+            if indexPath.row < 7 {
                 return 50
             }else {
                 let userNum = targetClub.members.count + 2
@@ -191,7 +191,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
                 modifier.initValue = targetClub.name
             case 1:
                 modifier.initValue = targetClub.clubDescription
-            case 4:
+            case 3:
                 modifier.initValue = targetClub.remarkName ?? MainManager.sharedManager.hostUser!.nickName!
             case 2:
                 if !targetClub.identified {
@@ -201,12 +201,12 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
                     self.navigationController?.pushViewController(auth, animated: true)
                 }
                 return
-            case 3:
-                if let act = targetClub.recentActivity {
-                    let detail = ActivityDetailController(act: act)
-                    self.navigationController?.pushViewController(detail, animated: true)
-                }
-                return
+//            case 3:
+//                if let act = targetClub.recentActivity {
+//                    let detail = ActivityDetailController(act: act)
+//                    self.navigationController?.pushViewController(detail, animated: true)
+//                }
+//                return
             default:
                 return
             }

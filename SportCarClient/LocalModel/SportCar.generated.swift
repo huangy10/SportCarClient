@@ -16,10 +16,11 @@ import AlecrimCoreData
 
 extension SportCar {
 
+    @NSManaged var audio: String?
     @NSManaged var body: String?
     @NSManaged var engine: String?
     @NSManaged var identified: Bool // cannot mark as optional because Objective-C compatibility issues
-    @NSManaged var image: String?
+    @NSManaged var images: String?
     @NSManaged var logo: String?
     @NSManaged var manufacturer: String?
     @NSManaged var maxSpeed: String?
@@ -28,6 +29,7 @@ extension SportCar {
     @NSManaged var price: String?
     @NSManaged var signature: String?
     @NSManaged var torque: String?
+    @NSManaged var video: String?
     @NSManaged var zeroTo60: String?
 
 }
@@ -36,10 +38,11 @@ extension SportCar {
 
 extension SportCar {
 
+    static let audio = AlecrimCoreData.NullableAttribute<String>("audio")
     static let body = AlecrimCoreData.NullableAttribute<String>("body")
     static let engine = AlecrimCoreData.NullableAttribute<String>("engine")
     static let identified = AlecrimCoreData.NullableAttribute<Bool>("identified")
-    static let image = AlecrimCoreData.NullableAttribute<String>("image")
+    static let images = AlecrimCoreData.NullableAttribute<String>("images")
     static let logo = AlecrimCoreData.NullableAttribute<String>("logo")
     static let manufacturer = AlecrimCoreData.NullableAttribute<String>("manufacturer")
     static let maxSpeed = AlecrimCoreData.NullableAttribute<String>("maxSpeed")
@@ -48,6 +51,7 @@ extension SportCar {
     static let price = AlecrimCoreData.NullableAttribute<String>("price")
     static let signature = AlecrimCoreData.NullableAttribute<String>("signature")
     static let torque = AlecrimCoreData.NullableAttribute<String>("torque")
+    static let video = AlecrimCoreData.NullableAttribute<String>("video")
     static let zeroTo60 = AlecrimCoreData.NullableAttribute<String>("zeroTo60")
 
 }
@@ -56,10 +60,11 @@ extension SportCar {
 
 extension AlecrimCoreData.AttributeType where Self.ValueType: SportCar {
 
+    var audio: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("audio", self) }
     var body: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("body", self) }
     var engine: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("engine", self) }
     var identified: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("identified", self) }
-    var image: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("image", self) }
+    var images: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("images", self) }
     var logo: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("logo", self) }
     var manufacturer: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("manufacturer", self) }
     var maxSpeed: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("maxSpeed", self) }
@@ -68,6 +73,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: SportCar {
     var price: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("price", self) }
     var signature: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("signature", self) }
     var torque: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("torque", self) }
+    var video: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("video", self) }
     var zeroTo60: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("zeroTo60", self) }
 
 }

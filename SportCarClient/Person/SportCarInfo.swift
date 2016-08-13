@@ -16,14 +16,17 @@ protocol SportCarInfoCellDelegate: class {
 }
 
 
-class SportCarInfoCell: UICollectionViewCell{
+class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     static let reuseIdentifier = "sport_car_info_cell"
     
     weak var delegate: SportCarInfoCellDelegate?
     var car: SportCar!
     var mine: Bool = false
     
+    @available(*, deprecated=1)
     var carCover: UIImageView!
+    var carGallary: SportCarGallary!
+    
     var carNameLbl: UILabel!
     var carAuthIcon: UIImageView!
     var carEditBtn: UIButton!
@@ -49,15 +52,24 @@ class SportCarInfoCell: UICollectionViewCell{
         let superview = self.contentView
         superview.backgroundColor = UIColor.whiteColor()
         //
-        carCover = UIImageView()
-        carCover.contentMode = .ScaleAspectFill
-        carCover.clipsToBounds = true
-        superview.addSubview(carCover)
-        carCover.snp_makeConstraints { (make) -> Void in
+//        carCover = UIImageView()
+//        carCover.contentMode = .ScaleAspectFill
+//        carCover.clipsToBounds = true
+//        superview.addSubview(carCover)
+//        carCover.snp_makeConstraints { (make) -> Void in
+//            make.left.equalTo(superview)
+//            make.right.equalTo(superview)
+//            make.top.equalTo(superview)
+//            make.height.equalTo(carCover.snp_width).multipliedBy(0.588)
+//        }
+        carGallary = SportCarGallary()
+        carGallary.dataSource = self
+        superview.addSubview(carGallary)
+        carGallary.snp_makeConstraints { (make) in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.top.equalTo(superview)
-            make.height.equalTo(carCover.snp_width).multipliedBy(0.588)
+            make.height.equalTo(carGallary.snp_width).multipliedBy(0.588)
         }
         //
         carNameLbl = UILabel()
@@ -67,7 +79,7 @@ class SportCarInfoCell: UICollectionViewCell{
         superview.addSubview(carNameLbl)
         carNameLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(20)
-            make.top.equalTo(carCover.snp_bottom).offset(15)
+            make.top.equalTo(carGallary.snp_bottom).offset(15)
             make.width.equalTo(superview).multipliedBy(0.55)
         }
         //
@@ -235,7 +247,8 @@ class SportCarInfoCell: UICollectionViewCell{
         // 设置跑车名
         carNameLbl.text = car.name
         // 设置封面图
-        carCover.kf_setImageWithURL(car.imageURL!)
+//        carCover.kf_setImageWithURL(car.imageArray[0])
+        carGallary.reloadData()
         // 设置认证标签
         if car.identified {
             carAuthIcon.image = UIImage(named: "auth_status_authed")
@@ -282,6 +295,27 @@ class SportCarInfoCell: UICollectionViewCell{
         let signatureLblHeight = signature.boundingRectWithSize(CGSizeMake(signatureLblWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)], context: nil).height
         let carNameHeight = carName.boundingRectWithSize(CGSizeMake(signatureLblWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(19, weight: UIFontWeightSemibold)], context: nil).height
         return CGSizeMake(screenWidth, signatureLblHeight + staticHeight + coverHeight + carNameHeight)
+    }
+    
+    func numberOfItems() -> Int {
+        let imageNum = car.imageArray.count
+        let videoNum = car.videoURL == nil ? 0 : 1
+        return imageNum + videoNum
+    }
+    
+    func itemSize() -> CGSize {
+        let screenWidth = UIScreen.mainScreen().bounds.width
+        return CGSizeMake(screenWidth, screenWidth * 0.588)
+    }
+    
+    func itemForPage(pageNum: Int) -> SportCargallaryItem {
+        let imageNum = car.imageArray.count
+        if pageNum < imageNum {
+            let image = car.imageArray[pageNum]
+            return SportCargallaryItem(itemType: "image", resource: image)
+        } else {
+            return SportCargallaryItem(itemType: "video", resource: car.videoURL!)
+        }
     }
 }
 

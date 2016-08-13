@@ -162,6 +162,7 @@
 		BFC36BAF1C6C5E1D00DC6FE2 /* PersonMineSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BAE1C6C5E1D00DC6FE2 /* PersonMineSettings.swift */; };
 		BFC36BB21C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */; };
 		BFC36BB41C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */; };
+		BFC3D42C1D5DB6B200494592 /* SportCarGallary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC3D42B1D5DB6B200494592 /* SportCarGallary.swift */; };
 		BFC4F14E1CE6C2CE004D7BD0 /* LocationSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC4F14D1CE6C2CE004D7BD0 /* LocationSearch.swift */; };
 		BFC4F1511CE6F1A7004D7BD0 /* LocationSelectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC4F1501CE6F1A7004D7BD0 /* LocationSelectCell.swift */; };
 		BFC50FDD1D464B8E00152B60 /* ClubMembersList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC50FDC1D464B8E00152B60 /* ClubMembersList.swift */; };
@@ -464,6 +465,7 @@
 		BFC36BAE1C6C5E1D00DC6FE2 /* PersonMineSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettings.swift; path = Person/PersonMineSettings.swift; sourceTree = "<group>"; };
 		BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsNewMessageNotification.swift; path = Person/PersonMineSettingsNewMessageNotification.swift; sourceTree = "<group>"; };
 		BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsLocationVisiblity.swift; path = Person/PersonMineSettingsLocationVisiblity.swift; sourceTree = "<group>"; };
+		BFC3D42B1D5DB6B200494592 /* SportCarGallary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarGallary.swift; path = Person/SportCarGallary.swift; sourceTree = "<group>"; };
 		BFC4F14D1CE6C2CE004D7BD0 /* LocationSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationSearch.swift; path = Map/LocationSearch.swift; sourceTree = "<group>"; };
 		BFC4F1501CE6F1A7004D7BD0 /* LocationSelectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationSelectCell.swift; path = Map/LocationSelectCell.swift; sourceTree = "<group>"; };
 		BFC50FDC1D464B8E00152B60 /* ClubMembersList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubMembersList.swift; path = Message/Chat/ClubMembersList.swift; sourceTree = "<group>"; };
@@ -1294,6 +1296,7 @@
 				BFC36BA21C69A90400DC6FE2 /* SportscarViewList.swift */,
 				BFC36BA41C6AE5F500DC6FE2 /* SportCarInfo.swift */,
 				BFC36BA61C6B0F7400DC6FE2 /* PersonStatusHeader.swift */,
+				BFC3D42B1D5DB6B200494592 /* SportCarGallary.swift */,
 			);
 			name = Component;
 			sourceTree = "<group>";
@@ -2077,6 +2080,7 @@
 				BFC032531C6DD14000ECA69A /* AuthThreeImageInput.swift in Sources */,
 				BFA64F001C946AB900BA460F /* StatusHot.swift in Sources */,
 				BF5E7EE01C85C770004B8305 /* PresentTemplate.swift in Sources */,
+				BFC3D42C1D5DB6B200494592 /* SportCarGallary.swift in Sources */,
 				BFCA90111C50A0C000B05E74 /* StatusFollow.swift in Sources */,
 				BF1D93581C52783000FD9997 /* StatusDetailCommentCell.swift in Sources */,
 				BFC36BA01C69A6A900DC6FE2 /* PersonDataSource.swift in Sources */,

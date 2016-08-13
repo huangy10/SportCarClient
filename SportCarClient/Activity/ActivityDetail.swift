@@ -150,37 +150,85 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     func navRightBtnPressed() {
         if act.mine {
-            if !act.finished {
-                act.endAt = NSDate()
-                setNavRightBtn()
-                lp_start()
-                ActivityRequester.sharedInstance.closeActivty(act.ssidString, onSuccess: { (json) in
-                    self.lp_stop()
-                    self.parentCollectionView?.reloadData()
-                    // push a notification to tell other related component to update the status
-                    NSNotificationCenter.defaultCenter().postNotificationName(kActivityManualEndedNotification, object: nil, userInfo: [kActivityKey: self.act])
-                    self.showToast(LS("活动已关闭报名"))
-                    }, onError: { (code) in
-                        self.showToast(LS("Access Error: \(code)"))
-                        self.lp_stop()
-                })
-            }
+            closeActivity()
+//            if !act.finished {
+//                act.endAt = NSDate()
+//                setNavRightBtn()
+//                lp_start()
+//                ActivityRequester.sharedInstance.closeActivty(act.ssidString, onSuccess: { (json) in
+//                    self.lp_stop()
+//                    self.parentCollectionView?.reloadData()
+//                    // push a notification to tell other related component to update the status
+//                    NSNotificationCenter.defaultCenter().postNotificationName(kActivityManualEndedNotification, object: nil, userInfo: [kActivityKey: self.act])
+//                    self.showToast(LS("活动已关闭报名"))
+//                    }, onError: { (code) in
+//                        self.showToast(LS("Access Error: \(code)"))
+//                        self.lp_stop()
+//                })
+//            }
         } else {
-            if act.applied {
-                return
-            }
-            if act.finished {
-                showToast(LS("活动已结束，无法报名"))
-            }
-            act.hostApply()
-            infoView.loadDataAndUpdateUI()
-            setNavRightBtn()
-            self.lp_start()
-            ActivityRequester.sharedInstance.postToApplyActivty(act.ssidString, onSuccess: { (json) in
-                self.showToast(LS("报名成功"))
-                self.lp_stop()
-                }, onError: { (code) in
+            applyForActivity()
+//            if act.applied {
+//                return
+//            }
+//            if act.finished {
+//                showToast(LS("活动已结束，无法报名"))
+//            }
+//            act.hostApply()
+//            infoView.loadDataAndUpdateUI()
+//            setNavRightBtn()
+//            self.lp_start()
+//            ActivityRequester.sharedInstance.postToApplyActivty(act.ssidString, onSuccess: { (json) in
+//                self.showToast(LS("报名成功"))
+//                self.lp_stop()
+//                }, onError: { (code) in
+//                    self.showToast(LS("报名失败"))
+//                    self.lp_stop()
+//            })
+        }
+    }
+    
+    func applyForActivity() {
+        if act.applied {
+            showToast(LS("已经报名了这个活动"))
+            return
+        }
+        if act.finished {
+            showToast(LS("活动已结束"))
+            return
+        }
+        act.hostApply()
+        infoView.loadDataAndUpdateUI()
+        setNavRightBtn()
+        ActivityRequester.sharedInstance.postToApplyActivty(act.ssidString, onSuccess: { (json) in
+            self.showToast(LS("报名成功"))
+            }) { (code) in
+                if code == "full" {
+                    self.showToast(LS("活动已报满"))
+                    self.updateActivityMembersList()
+                } else {
                     self.showToast(LS("报名失败"))
+                }
+                self.lp_stop()
+        }
+    }
+    
+    func updateActivityMembersList() {
+        loadActInfo()
+    }
+    
+    func closeActivity() {
+        if !act.finished {
+            act.endAt = NSDate()
+            setNavRightBtn()
+            lp_start()
+            ActivityRequester.sharedInstance.closeActivty(act.ssidString, onSuccess: { (json) in
+                self.lp_stop()
+                self.parentCollectionView?.reloadData()
+                NSNotificationCenter.defaultCenter().postNotificationName(kActivityManualEndedNotification, object: nil, userInfo: [kActivityKey: self.act])
+                self.showToast(LS("活动已关闭报名"))
+                }, onError: { (code) in
+                    self.showToast(LS("Access Error: \(code)"))
                     self.lp_stop()
             })
         }

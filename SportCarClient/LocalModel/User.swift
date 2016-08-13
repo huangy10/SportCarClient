@@ -90,6 +90,7 @@ class User: BaseModel {
         nickName = data["nick_name"].stringValue
         avatar = data["avatar"].stringValue
         recentStatusDes = data["recent_status"].stringValue
+        identified = data["identified"].boolValue
         if detailLevel >= 1 {
             district = data["district"].stringValue
             gender = data["gender"].stringValue

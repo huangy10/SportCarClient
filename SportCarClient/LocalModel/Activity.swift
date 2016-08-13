@@ -82,6 +82,7 @@ class Activity: BaseModel {
         name = data["name"].stringValue
         poster = data["poster"].stringValue
         liked = data["liked"].boolValue
+        authedUserOnly = data["authed_user_only"].boolValue
         if data["applied"].exists() {
             applied = data["applied"].boolValue
         }

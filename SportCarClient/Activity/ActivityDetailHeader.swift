@@ -331,7 +331,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         } else {
             var forceUsers = act.applicants
             forceUsers.append(act.user!)
-            let select = FFSelectController(maxSelectNum: kMaxSelectUserNum, preSelectedUsers: forceUsers, preSelect: false)
+            let select = FFSelectController(maxSelectNum: 0, preSelectedUsers: forceUsers, preSelect: false, authedUserOnly: act.authedUserOnly)
             select.delegate = parentController
             parentController?.presentViewController(select.toNavWrapper(), animated: true, completion: nil)
         }

@@ -148,7 +148,11 @@ class NotificationController: UITableViewController {
                     cell.closeOperation = true
                     cell.doneLbl.text = LS("已确认")
                     }, onError: { (code) -> () in
-                        self?.showToast(LS("无法连接到服务器"))
+                        if code == "full" {
+                            self?.showToast(LS("活动已报满"))
+                        } else {
+                            self?.showToast(LS("无法连接到服务器"))
+                        }
                 })
             }
             cell.onDenyBtnPressed = { [weak self] _ in

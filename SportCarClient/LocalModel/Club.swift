@@ -62,6 +62,7 @@ class Club: BaseModel {
         }
     }
     
+    @available(*, deprecated=1)
     var recentActivity: Activity? = nil
 
     override func loadDataFromJSON(data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Self {
@@ -81,10 +82,10 @@ class Club: BaseModel {
         founder = founderJSON.rawString()
         _founderUser = try! manager.getOrCreate(founderJSON) as User
         mine = _founderUser?.ssid == manager.hostUserID
-        let actJSON = data["recent_act"]
-        if actJSON.exists() {
-            self.recentActivity = try manager.getOrCreate(actJSON) as Activity
-        }
+//        let actJSON = data["recent_act"]
+//        if actJSON.exists() {
+//            self.recentActivity = try manager.getOrCreate(actJSON) as Activity
+//        }
         let attendedJSON = data["attended"]
         if attendedJSON.exists() {
             attended = attendedJSON.boolValue

@@ -57,9 +57,13 @@ class FFSelectController: UserSelectController {
     var titleBtnIcon: UIImageView!
     var navRightBtn: UIButton?
     
-    convenience init(maxSelectNum: Int, preSelectedUsers: [User] = [], preSelect: Bool = true, forced: Bool = true) {
+    var authedUserOnly: Bool = false
+    
+    convenience init(maxSelectNum: Int, preSelectedUsers: [User] = [], preSelect: Bool = true, forced: Bool = true, authedUserOnly: Bool = false) {
+        // 2016-08-11 authedUserOnly这个参数表明是否只允许选择认证用户
         self.init(nibName: nil, bundle: nil)
         maxSelectUserNum = maxSelectNum
+        self.authedUserOnly = authedUserOnly
         if forced {
             forceSelectedUsers.appendContentsOf(preSelectedUsers)
         }
@@ -80,6 +84,10 @@ class FFSelectController: UserSelectController {
     override func viewDidLoad() {
         super.viewDidLoad()
         getMoreUserData()
+        
+        if authedUserOnly {
+            userTableView?.registerClass(UserSelectCellGray.self, forCellReuseIdentifier: "user_select_cell_gray")
+        }
     }
     
     /**
@@ -146,7 +154,7 @@ class FFSelectController: UserSelectController {
         navRightBtn = UIButton()
         navRightBtn?.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
         if maxSelectUserNum == 0 {
-            navRightBtn?.setTitle(LS("确定"), forState: .Normal)
+            navRightBtn?.setTitle(LS("确定(0)"), forState: .Normal)
         } else {
             navRightBtn?.setTitle(LS("确定") + "(\(selectedUsers.count)/\(maxSelectUserNum))", forState: .Normal)
         }
@@ -289,5 +297,33 @@ class FFSelectController: UserSelectController {
         followDateThreshold = NSDate()
         // get new data
         getMoreUserData()
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let user = users[indexPath.row]
+        if user.identified || !authedUserOnly {
+            return super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+        } else {
+            let cell = tableView.dequeueReusableCellWithIdentifier("user_select_cell_gray", forIndexPath: indexPath) as! UserSelectCellGray
+            cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
+            cell.nickNameLbl?.text = user.nickName
+            cell.recentStatusLbL?.text = user.recentStatusDes
+            if forceSelectedUsers.findIndex({ $0.ssid == user.ssid}) != nil {
+                cell.forceSelected = true
+                cell.selectBtn?.selected = true
+            } else {
+                cell.forceSelected = false
+                cell.selectBtn?.selected = false
+            }
+            return cell
+        }
+    }
+}
+
+class UserSelectCellGray: UserSelectCell {
+    override func createSubviews() {
+        super.createSubviews()
+        selectBtn?.enabled = false
+        nickNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
     }
 }

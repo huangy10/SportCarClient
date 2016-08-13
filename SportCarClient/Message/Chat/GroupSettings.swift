@@ -61,10 +61,10 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 let user: User = try! MainManager.sharedManager.getOrCreate(data)
                 self.targetClub.members.append(user)
             }
-            let actJson = json!["recent_act"]
-            if actJson.exists() {
-                self.targetClub.recentActivity = try! MainManager.sharedManager.getOrCreate(actJson) as Activity
-            }
+//            let actJson = json!["recent_act"]
+//            if actJson.exists() {
+//                self.targetClub.recentActivity = try! MainManager.sharedManager.getOrCreate(actJson) as Activity
+//            }
             self.tableView.reloadData()
             self.inlineUserSelect?.users = self.targetClub.members
             self.inlineUserSelect?.collectionView?.reloadData()
@@ -137,7 +137,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         case 0:
             return 1
         case 1:
-            return 6
+            return 5
         case 2:
             return 2
         default:
@@ -167,7 +167,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         case 0:
             return 114
         case 1:
-            if indexPath.row < 5 {
+            if indexPath.row < 4 {
                 return 50
             }else {
                 let userNum = targetClub.members.count + (inlineUserSelect!.showAddBtn ? 1 : 0)
@@ -201,7 +201,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             })
             return cell
         case 1:
-            if indexPath.row < 5 {
+            if indexPath.row < 4 {
                 let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
                 cell.selectionStyle = .None
                 switch indexPath.row {
@@ -216,11 +216,6 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                     cell.boolSelect.hidden = true
                     break
                 case 2:
-                    cell.staticLbl.text = LS("本群活动")
-                    cell.infoLbl.text = targetClub.recentActivity?.name
-                    cell.boolSelect.hidden = true
-                    break
-                case 3:
                     cell.staticLbl.text = LS("我在本群的昵称")
                     cell.infoLbl.text = targetClub.remarkName ?? MainManager.sharedManager.hostUser!.nickName
                     cell.boolSelect.hidden = true
@@ -337,10 +332,10 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             let report = ReportBlacklistViewController(userID: targetClub.ssid, reportType: "club", parent: self)
             self.presentViewController(report, animated: false, completion: nil)
         } else if indexPath.section == 1 && indexPath.row == 2 {
-            if let act = targetClub.recentActivity {
-                let detail = ActivityDetailController(act: act)
-                self.navigationController?.pushViewController(detail, animated: true)
-            }
+//            if let act = targetClub.recentActivity {
+//                let detail = ActivityDetailController(act: act)
+//                self.navigationController?.pushViewController(detail, animated: true)
+//            }
         }
     }
     

@@ -27,6 +27,7 @@ extension User {
     @NSManaged var followed: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var followsNum: Int32 // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var gender: String?
+    @NSManaged var identified: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var job: String?
     @NSManaged var nickName: String?
     @NSManaged var phoneNum: String?
@@ -87,6 +88,7 @@ extension User {
     static let followed = AlecrimCoreData.NullableAttribute<Bool>("followed")
     static let followsNum = AlecrimCoreData.NullableAttribute<Int32>("followsNum")
     static let gender = AlecrimCoreData.NullableAttribute<String>("gender")
+    static let identified = AlecrimCoreData.NullableAttribute<Bool>("identified")
     static let job = AlecrimCoreData.NullableAttribute<String>("job")
     static let nickName = AlecrimCoreData.NullableAttribute<String>("nickName")
     static let phoneNum = AlecrimCoreData.NullableAttribute<String>("phoneNum")
@@ -117,6 +119,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: User {
     var followed: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("followed", self) }
     var followsNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("followsNum", self) }
     var gender: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("gender", self) }
+    var identified: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("identified", self) }
     var job: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("job", self) }
     var nickName: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("nickName", self) }
     var phoneNum: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("phoneNum", self) }

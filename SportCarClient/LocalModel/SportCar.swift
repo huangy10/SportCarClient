@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 import AlecrimCoreData
 import SwiftyJSON
+import Dollar
 
 class SportCar: BaseModel{
     
@@ -24,11 +25,21 @@ class SportCar: BaseModel{
         return SFURL(logo!)
     }
     
-    var imageURL: NSURL? {
-        if image == nil {
-            return nil
+    var imageArray: [NSURL]!
+    var videoURL: NSURL?
+    var audioURL: NSURL?
+    
+    override func awakeFromFetch() {
+        super.awakeFromFetch()
+        let imagesRaw = JSON(data: images!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+        imageArray = $.map(imagesRaw.arrayValue, transform: { SFURL($0.stringValue)!})
+        
+        if let video = video {
+            videoURL = SFURL(video)
         }
-        return SFURL(image!)
+        if let audio = audio {
+            audioURL = SFURL(audio)
+        }
     }
 
     override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool) throws -> Self {
@@ -37,7 +48,20 @@ class SportCar: BaseModel{
             json = SportCar.reorgnaizeJSON(data)
         }
         try super.loadDataFromJSON(json, detailLevel: detailLevel, forceMainThread: forceMainThread)
-        image = json["image"].stringValue
+        let media = json["medias"]
+        let imagesRaw = media["image"]
+        images = String(data: try! imagesRaw.rawData(), encoding: NSUTF8StringEncoding)
+        imageArray = $.map(imagesRaw.arrayValue, transform: { SFURL($0.stringValue)! })
+        let audioRaw = media["audio"]
+        if audioRaw.exists() {
+            audio = audioRaw.stringValue
+            audioURL = SFURL(audio!)
+        }
+        let videoRaw = media["video"]
+        if videoRaw.exists() {
+            video = videoRaw.stringValue
+            videoURL = SFURL(video!)
+        }
         logo = json["logo"].stringValue
         name = json["name"].stringValue
         if detailLevel >= 1 {
@@ -54,12 +78,23 @@ class SportCar: BaseModel{
     }
     
     override func toJSONObject(detailLevel: Int) throws -> JSON {
-        return [
+        let json: NSMutableDictionary = [
             SportCar.idField: ssidString,
-            "image": image!,
             "name": name!,
-            "logo": logo!
+            "logo": logo!,
         ]
+        var media = [
+            "image": images!
+        ]
+        if let video = self.video {
+            media["video"] = video
+        }
+        if let audio = self.audio {
+            media["audio"] = audio
+        }
+        json["media"] = media
+        return JSON(json)
+        
     }
     
     class func reorgnaizeJSON(json: JSON) -> JSON {

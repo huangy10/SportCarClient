@@ -93,10 +93,11 @@
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <entity name="SportCar" representedClassName=".SportCar" parentEntity="BaseModel" syncable="YES">
+        <attribute name="audio" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="engine" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="identified" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="images" optional="YES" attributeType="String" elementID="image" syncable="YES"/>
         <attribute name="logo" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="manufacturer" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="maxSpeed" optional="YES" attributeType="String" syncable="YES"/>
@@ -105,6 +106,7 @@
         <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="torque" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="video" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="zeroTo60" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Status" representedClassName=".Status" parentEntity="BaseModel" syncable="YES">
@@ -137,6 +139,7 @@
         <attribute name="followed" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="followsNum" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="identified" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="job" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nickName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="phoneNum" optional="YES" attributeType="String" syncable="YES"/>
@@ -156,8 +159,8 @@
         <element name="Club" positionX="198" positionY="18" width="128" height="345"/>
         <element name="Notification" positionX="63" positionY="-351" width="128" height="195"/>
         <element name="RosterItem" positionX="144" positionY="-198" width="128" height="180"/>
-        <element name="SportCar" positionX="349" positionY="189" width="128" height="240"/>
+        <element name="SportCar" positionX="349" positionY="189" width="128" height="270"/>
         <element name="Status" positionX="-36" positionY="0" width="128" height="283"/>
-        <element name="User" positionX="196" positionY="510" width="128" height="375"/>
+        <element name="User" positionX="196" positionY="510" width="128" height="390"/>
     </elements>
 </model>
