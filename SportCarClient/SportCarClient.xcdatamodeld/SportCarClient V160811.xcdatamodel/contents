@@ -105,6 +105,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="torque" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="video" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="zeroTo60" optional="YES" attributeType="String" syncable="YES"/>
@@ -159,7 +160,7 @@
         <element name="Club" positionX="198" positionY="18" width="128" height="345"/>
         <element name="Notification" positionX="63" positionY="-351" width="128" height="195"/>
         <element name="RosterItem" positionX="144" positionY="-198" width="128" height="180"/>
-        <element name="SportCar" positionX="349" positionY="189" width="128" height="270"/>
+        <element name="SportCar" positionX="349" positionY="189" width="128" height="285"/>
         <element name="Status" positionX="-36" positionY="0" width="128" height="283"/>
         <element name="User" positionX="196" positionY="510" width="128" height="390"/>
     </elements>

@@ -333,7 +333,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             return CGSizeMake(screenWidth / 3 - 5, screenWidth / 3 - 5)
         }else {
             if indexPath.section == 0 {
-                return SportCarInfoCell.getPreferredSizeForSignature(data.selectedCar!.signature ?? "", carName: data.selectedCar!.name!)
+                return SportCarInfoCell.getPreferredSizeForSignature(data.selectedCar!.signature ?? "", carName: data.selectedCar!.name!, withAudioWave: data.selectedCar?.audioURL != nil)
             }else{
                 return CGSizeMake(screenWidth / 3 - 5, screenWidth / 3 - 5)
             }
