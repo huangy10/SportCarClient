@@ -67,6 +67,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     */
     var locationLbL: UILabel?
     var likeIcon: UIImageView?
+    var likeBtn: UIButton!
     var likeNumLbl: UILabel?
     var commentIcon: UIImageView?
     var commentNumLbL: UILabel?
@@ -537,6 +538,13 @@ extension StatusDetailController {
             make.top.equalTo(likeNumLbl!)
             make.size.equalTo(15)
         })
+        
+        likeBtn = superview.addSubview(UIButton)
+            .config(self, selector: #selector(likeBtnPressed))
+            .layout({ (make) in
+                make.center.equalTo(likeIcon!)
+                make.size.equalTo(20)
+            })
     }
     
     func statusHostAvatarPressed() {

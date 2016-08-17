@@ -72,7 +72,7 @@ class ClubMembersController: UserSelectController {
         ClubRequester.sharedInstance.getClubMembers(targetClub.ssidString, skip: skip, limit: limit, searchText: searchBar?.text ?? "", onSuccess: { (json) in
             if let data = json?.arrayValue {
                 for element in data {
-                    let user: User = try! MainManager.sharedManager.getOrCreate(element["user"])
+                    let user: User = try! MainManager.sharedManager.getOrCreate(element)
                     self.members.append(user)
                 }
                 if data.count > 0 {

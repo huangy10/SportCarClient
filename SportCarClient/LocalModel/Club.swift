@@ -159,7 +159,7 @@ class Club: BaseModel {
         var temp = json["club"]
         if temp.exists() {
             for (key, value) in json {
-                if key == "club" {
+                if key == "club" || key == Club.idField {
                     continue
                 }
                 temp[key] = value

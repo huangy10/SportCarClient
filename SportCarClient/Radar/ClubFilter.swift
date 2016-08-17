@@ -40,3 +40,34 @@ class ClubFilterController: RadarFilterController {
         delegate?.radarFilterDidChange()
     }
 }
+
+
+class ClubFilterForBillboardController: ClubFilterController {
+    
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 4
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! RadarFilterCell
+        cell.titleLbl.text = [LS("总价最高"), LS("均价最高"), LS("成员最多"), LS("美女最多")][indexPath.row]
+        cell.marker.hidden = selectedRow != indexPath.row
+        return cell
+    }
+    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! RadarFilterHeader
+        marker = header.marker
+        header.titleLbl.text = [LS("总价最高"), LS("均价最高"), LS("成员最多"), LS("美女最多")][selectedRow]
+        return header
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if selectedRow != indexPath.row {
+            dirty = true
+        }
+        selectedRow = indexPath.row
+        tableView.reloadData()
+        delegate?.radarFilterDidChange()
+    }
+}

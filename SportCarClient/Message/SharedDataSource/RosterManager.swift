@@ -67,9 +67,9 @@ class RosterManager {
         } else {
             let newItem = try! ChatModelManger.sharedManager.getOrCreate(json) as RosterItem
             data[mapKey] = newItem
-            if autoBringToFront {
-                data.bringKeyToFront(mapKey)
-            }
+            // always bring to front
+            data.bringKeyToFront(mapKey)
+            
             return newItem
         }
     }

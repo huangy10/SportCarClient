@@ -120,6 +120,8 @@ class CityElementSelectController: UITableViewController {
                     dataSource.selectedProv = data[indexPath.row - 1]
                 } else {
                     dataSource.selectedProv = "全国"
+                    dataSource.selectedCity = nil
+                    delegate?.cityElementSelectDidSelect(dataSource)
                 }
             } else {
                 dataSource.selectedProv = data[indexPath.row]

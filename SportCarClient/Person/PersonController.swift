@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import Dollar
 
 class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, SportCarBrandSelecterControllerDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate, SportCarSelectDetailProtocol {
     weak var homeDelegate: HomeDelegate?
@@ -78,6 +79,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             self.carsViewList.collectionView?.reloadData()
             self.collectionView?.reloadData()
             }) { (code) -> () in
+                self.showToast(LS("车辆关注列表获取失败"))
         }
         // 第三个响应：开始获取的动态列表，每次获取十个
         AccountRequester2.sharedInstance.getStatusListSimplified(data.user.ssidString, carID: nil, dateThreshold: NSDate(), limit: 10, onSuccess: { (json) -> () in
@@ -490,6 +492,7 @@ extension PersonBasicController {
             let newStatus: Status = try! MainManager.sharedManager.getOrCreate(statusJSON)
             container.append(newStatus)
         }
+        container = $.uniq(container, by: { $0.ssid })
         container.sortInPlace { (s1, s2) -> Bool in
             switch s1.createdAt!.compare(s2.createdAt!) {
             case .OrderedAscending:

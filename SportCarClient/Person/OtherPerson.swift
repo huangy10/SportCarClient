@@ -23,6 +23,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol, LoadingProt
     
     override func viewWillAppear(animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        header.map.delegate = self
     }
     
     override func viewDidLoad() {
@@ -39,6 +40,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol, LoadingProt
     override func viewWillDisappear(animated: Bool) {
         // Override this to disable self.locating
         rp_cancelRequest()
+        header.map.delegate = nil
         if toast != nil {
             hideToast()
         }
@@ -184,13 +186,20 @@ class PersonOtherController: PersonBasicController, RequestProtocol, LoadingProt
             let region = BMKCoordinateRegionMakeWithDistance(backOffLocation!.location, 3000, 5000)
             header.map.setRegion(region, animated: true)
             userLoc = backOffLocation
+            header.map.addAnnotation(userAnno)
         } else {
             rp_currentRequest = RadarRequester.sharedInstance.trackUser(data.user.ssidString, onSuccess: { (json) -> () in
                 self.userLoc = Location(latitude: json!["lat"].doubleValue, longitude: json!["lon"].doubleValue, description: json!["description"].stringValue)
                 self.userAnno.coordinate = self.userLoc!.location
-                let region = BMKCoordinateRegionMakeWithDistance(self.userLoc!.location, 3000, 5000)
+                let userLocInScreen = self.header.map.convertCoordinate(self.userLoc!.location, toPointToView: self.header.map)
+                let userLocWithOffset = CGPointMake(userLocInScreen.x + self.header.frame.width / 40, userLocInScreen.y - self.header.frame.height / 60)
+                let newCoordinate = self.header.map.convertPoint(userLocWithOffset, toCoordinateFromView: self.header.map)
+                let region = BMKCoordinateRegionMakeWithDistance(newCoordinate, 3000, 5000)
+//                let region = BMKCoordinateRegionMakeWithDistance(self.userLoc!.location, 3000, 5000)
                 self.header.map.setRegion(region, animated: true)
+                self.header.map.addAnnotation(self.userAnno)
                 }) { (code) -> () in
+                    self.showToast(LS("无法获取他/她的位置"))
             }
         }
     }

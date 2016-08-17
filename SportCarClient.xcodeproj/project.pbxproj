@@ -12,6 +12,9 @@
 		BF11F6AE1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */; };
 		BF11F6B01CC0A11F0092A7E9 /* EmptyListHintCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */; };
 		BF139E6E1C4E6E8E0022F4FC /* FFSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF139E6D1C4E6E8E0022F4FC /* FFSelect.swift */; };
+		BF1A63691D61EAA4005C86C8 /* Billboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A63681D61EAA4005C86C8 /* Billboard.swift */; };
+		BF1A636B1D61EAD7005C86C8 /* BillboardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A636A1D61EAD7005C86C8 /* BillboardCell.swift */; };
+		BF1A636E1D635206005C86C8 /* TitilliumWeb-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF1A636D1D635206005C86C8 /* TitilliumWeb-BoldItalic.ttf */; };
 		BF1AB8351CCB205700959096 /* MessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1AB8341CCB205700959096 /* MessageManager.swift */; };
 		BF1D93561C52776F00FD9997 /* DetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1D93551C52776F00FD9997 /* DetailCommentCell.swift */; };
 		BF1D93581C52783000FD9997 /* StatusDetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1D93571C52783000FD9997 /* StatusDetailCommentCell.swift */; };
@@ -314,6 +317,9 @@
 		BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GlobalNotifiicationSettings.swift; path = BaseTemplate/GlobalNotifiicationSettings.swift; sourceTree = "<group>"; };
 		BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmptyListHintCell.swift; path = BaseTemplate/Views/EmptyListHintCell.swift; sourceTree = "<group>"; };
 		BF139E6D1C4E6E8E0022F4FC /* FFSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FFSelect.swift; path = UserSelect/FFSelect.swift; sourceTree = "<group>"; };
+		BF1A63681D61EAA4005C86C8 /* Billboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Billboard.swift; path = Radar/Billboard.swift; sourceTree = "<group>"; };
+		BF1A636A1D61EAD7005C86C8 /* BillboardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BillboardCell.swift; path = Radar/BillboardCell.swift; sourceTree = "<group>"; };
+		BF1A636D1D635206005C86C8 /* TitilliumWeb-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TitilliumWeb-BoldItalic.ttf"; sourceTree = "<group>"; };
 		BF1AB8341CCB205700959096 /* MessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageManager.swift; path = Message/SharedDataSource/MessageManager.swift; sourceTree = "<group>"; };
 		BF1D93551C52776F00FD9997 /* DetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetailCommentCell.swift; path = BaseTemplate/Views/DetailCommentCell.swift; sourceTree = "<group>"; };
 		BF1D93571C52783000FD9997 /* StatusDetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusDetailCommentCell.swift; path = Status/Detail/StatusDetailCommentCell.swift; sourceTree = "<group>"; };
@@ -672,6 +678,23 @@
 			name = Map;
 			sourceTree = "<group>";
 		};
+		BF1A63651D61E8D0005C86C8 /* Billboard */ = {
+			isa = PBXGroup;
+			children = (
+				BF1A63681D61EAA4005C86C8 /* Billboard.swift */,
+				BF1A636A1D61EAD7005C86C8 /* BillboardCell.swift */,
+			);
+			name = Billboard;
+			sourceTree = "<group>";
+		};
+		BF1A636C1D6351C7005C86C8 /* ExtraResources */ = {
+			isa = PBXGroup;
+			children = (
+				BF1A636D1D635206005C86C8 /* TitilliumWeb-BoldItalic.ttf */,
+			);
+			name = ExtraResources;
+			sourceTree = "<group>";
+		};
 		BF1AB8331CCB202B00959096 /* SharedDataSource */ = {
 			isa = PBXGroup;
 			children = (
@@ -932,6 +955,7 @@
 		BF8D42F11C745DA3009AD4BA /* Radar */ = {
 			isa = PBXGroup;
 			children = (
+				BF1A63651D61E8D0005C86C8 /* Billboard */,
 				BF9B54B01C80107D0006D673 /* Club */,
 				BFFA61B11C7DDC76003BCB2B /* Network */,
 				BF2429231C7C8FB8005D4C6E /* Basic */,
@@ -1731,6 +1755,7 @@
 		BFFA51141C05D9910019E5EF /* SportCarClient */ = {
 			isa = PBXGroup;
 			children = (
+				BF1A636C1D6351C7005C86C8 /* ExtraResources */,
 				BFDBD5FF1D3D19B600793256 /* Sync */,
 				BFB857D31CD89A9400610349 /* Network */,
 				BFC8F13F1CC8A58600ABE31F /* Share */,
@@ -1977,6 +2002,7 @@
 				BFF715051CC289C30028F87F /* 合成 1_00005.png in Resources */,
 				BFC8F14A1CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
 				BFF715041CC289C30028F87F /* 合成 1_00004.png in Resources */,
+				BF1A636E1D635206005C86C8 /* TitilliumWeb-BoldItalic.ttf in Resources */,
 				BFF7152E1CC289C30028F87F /* 合成 1_00046.png in Resources */,
 				BFF715131CC289C30028F87F /* 合成 1_00019.png in Resources */,
 				BFE598561CB40AA700001F99 /* Assets.xcassets in Resources */,
@@ -2074,6 +2100,7 @@
 				BFE9676A1CA90CF60097C42C /* SportCarAuthHeader.swift in Sources */,
 				BFDBD6011D3D1A4200793256 /* PermissionCheck.swift in Sources */,
 				BFE967311CA588580097C42C /* BaseInMemModel.swift in Sources */,
+				BF1A63691D61EAA4005C86C8 /* Billboard.swift in Sources */,
 				BFE967601CA6EE080097C42C /* ChatModelManager.swift in Sources */,
 				BF662A171CCBA3C600B3D84D /* SideBar2.swift in Sources */,
 				BFC0326F1C6F3A1100ECA69A /* ActivityHomeCell.swift in Sources */,
@@ -2128,6 +2155,7 @@
 				BF5E7EEB1C860804004B8305 /* PersonOtherInfo.swift in Sources */,
 				BFC032641C6EF55400ECA69A /* AvatarCarSelect.swift in Sources */,
 				BFE967661CA81E060097C42C /* ActivityEdit.swift in Sources */,
+				BF1A636B1D61EAD7005C86C8 /* BillboardCell.swift in Sources */,
 				BF5E7EE41C85E568004B8305 /* ClearCache.swift in Sources */,
 				BFBE19211C9521FF005114A0 /* LocSelectPin.swift in Sources */,
 				BF26FD3D1C686E5A0077D1F0 /* GroupSettings.swift in Sources */,

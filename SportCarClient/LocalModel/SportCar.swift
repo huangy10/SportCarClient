@@ -65,6 +65,7 @@ class SportCar: BaseModel{
         }
         logo = json["logo"].stringValue
         name = json["name"].stringValue
+        subname = json["subname"].stringValue
         if detailLevel >= 1 {
             price = json["price"].stringValue
             engine = json["engine"].stringValue
@@ -95,7 +96,6 @@ class SportCar: BaseModel{
         }
         json["media"] = media
         return JSON(json)
-        
     }
     
     class func reorgnaizeJSON(json: JSON) -> JSON {

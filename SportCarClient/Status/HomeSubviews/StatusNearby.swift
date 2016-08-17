@@ -74,7 +74,7 @@ class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate,
         if let req = request {
             req.cancel()
         }
-        request = StatusRequester.sharedInstance.getNearByStatus(NSDate(), opType: "more", lat: location.latitude, lon: location.longitude, distance: 15000, onSuccess: { (json) in
+        request = StatusRequester.sharedInstance.getNearByStatus(NSDate(), opType: "more", lat: location.latitude, lon: location.longitude, distance: 30000, onSuccess: { (json) in
             self.fetchLocDescription(location)
             self.refreshView.endRefreshing()
             self.status.removeAll()

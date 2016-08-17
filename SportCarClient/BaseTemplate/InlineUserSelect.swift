@@ -22,6 +22,8 @@ class InlineUserSelectController: UICollectionViewController {
     
     var showAllMembersBtn: UIButton!
     
+    let maxDispalyNum: Int = 12
+    
     convenience init() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .Vertical
@@ -43,7 +45,7 @@ class InlineUserSelectController: UICollectionViewController {
     // 显示的用户列表
     var users: [User] = [] {
         didSet {
-            if users.count >= 12 {
+            if users.count >= maxDispalyNum {
                 showAllMembersBtn.hidden = false
             } else {
                 showAllMembersBtn.hidden = true

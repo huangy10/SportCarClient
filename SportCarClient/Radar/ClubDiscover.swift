@@ -146,7 +146,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             }
         } else {
             let detail = ClubBriefInfoController()
-            detail.targetClub = clubs[indexPath.row]
+            detail.targetClub = club
             radarHome?.navigationController?.pushViewController(detail, animated: true)
         }
 

@@ -124,7 +124,7 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
             let waiter: dispatch_semaphore_t = dispatch_semaphore_create(0)
             dispatch_async(ChatModelManger.sharedManager.workQueue, {
                 club = try! ChatModelManger.sharedManager.getOrCreate(json!) as Club
-                let rosterItem = RosterManager.defaultManager.getOrCreateNewRoster(json!["roster"])
+                let rosterItem = RosterManager.defaultManager.getOrCreateNewRoster(json!["roster"], autoBringToFront: true)
                 try! ChatModelManger.sharedManager.save()
                 club.rosterItem = rosterItem
                 dispatch_semaphore_signal(waiter)
