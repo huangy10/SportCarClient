@@ -111,6 +111,34 @@ class RosterManager {
 //        dispatch_async(queue) {
 //            self._sync()
 //        }
+        dispatch_async(queue) { 
+            self._load()
+        }
+    }
+    
+    private func _load() {
+        if data.count > 0 {
+            assertionFailure()
+        }
+        guard let hostID = MainManager.sharedManager.hostUserID else {
+            return
+        }
+        let context = ChatModelManger.sharedManager.getOperationContext()
+        let existingRosterItems = context.rosterItems.filter({$0.hostSSID == hostID})
+            .orderBy({$0.updatedAt})
+        for item in existingRosterItems {
+            let mapKey: String
+            if item.entityType! == "user" {
+                mapKey = "user:\(item.relatedID)"
+            } else if item.entityType! == "club" {
+                mapKey = "club\(item.relatedID)"
+            } else {
+                print(item.entityType)
+                mapKey = ""
+                assertionFailure()
+            }
+            data[mapKey] = item
+        }
     }
     
     /**
@@ -190,7 +218,10 @@ class RosterManager {
     /**
      暂时删除存储在本地的聊天数据，当重新有该聊天的数据到来时会重新出现
      */
-    func removeLocalRosterItemStorage() {
-        
+    func removeLocalRosterItemStorage(at index: Int) {
+        let item = data.valueForIndex(index)
+        let context = ChatModelManger.sharedManager.getOperationContext()
+        context.rosterItems.deleteEntity(item!)
+        data.remove(at: index)
     }
 }

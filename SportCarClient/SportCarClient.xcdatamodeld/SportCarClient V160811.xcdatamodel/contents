@@ -46,6 +46,7 @@
         <attribute name="sent" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="targetID" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="textContent" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <entity name="Club" representedClassName=".Club" parentEntity="BaseModel" syncable="YES">
         <attribute name="alwayOnTop" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -156,7 +157,7 @@
     <elements>
         <element name="Activity" positionX="-63" positionY="-18" width="128" height="315"/>
         <element name="BaseModel" positionX="358" positionY="48" width="128" height="73"/>
-        <element name="ChatRecord" positionX="-54" positionY="-9" width="128" height="360"/>
+        <element name="ChatRecord" positionX="-54" positionY="-9" width="128" height="375"/>
         <element name="Club" positionX="198" positionY="18" width="128" height="345"/>
         <element name="Notification" positionX="63" positionY="-351" width="128" height="195"/>
         <element name="RosterItem" positionX="144" positionY="-198" width="128" height="180"/>

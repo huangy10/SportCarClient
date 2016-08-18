@@ -96,6 +96,7 @@ class RosterItem: BaseModel {
         } else {
             assertionFailure()
         }
+        updatedAt = NSDate()
         return self
     }
 }

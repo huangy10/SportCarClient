@@ -76,6 +76,15 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
         messageController.navigationController?.pushViewController(detail, animated: true)
     }
     
+    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let action = UITableViewRowAction(style: .Default, title: "删除") { (action, indexPath) in
+            
+            RosterManager.defaultManager.removeLocalRosterItemStorage(at: indexPath.row)
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        }
+        return [action]
+    }
+    
     // MARK: User select delegate
     func userSelected(users: [User]) {
         messageController.dismissViewControllerAnimated(false, completion: nil)

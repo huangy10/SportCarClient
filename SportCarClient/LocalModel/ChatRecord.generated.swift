@@ -37,6 +37,7 @@ extension ChatRecord {
     @NSManaged var sent: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var targetID: Int32 // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var textContent: String?
+    @NSManaged var updatedAt: NSDate?
 
 }
 
@@ -65,6 +66,7 @@ extension ChatRecord {
     static let sent = AlecrimCoreData.NullableAttribute<Bool>("sent")
     static let targetID = AlecrimCoreData.NullableAttribute<Int32>("targetID")
     static let textContent = AlecrimCoreData.NullableAttribute<String>("textContent")
+    static let updatedAt = AlecrimCoreData.NullableAttribute<NSDate>("updatedAt")
 
 }
 
@@ -93,6 +95,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: ChatRecord {
     var sent: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("sent", self) }
     var targetID: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("targetID", self) }
     var textContent: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("textContent", self) }
+    var updatedAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("updatedAt", self) }
 
 }
 

@@ -51,6 +51,12 @@ class MyOrderedDict<Key: Hashable, Value> {
         _dict.removeAll()
     }
     
+    func remove(at at: Int) {
+        let key = _keys[at]
+        _keys.removeAtIndex(at)
+        _dict.removeValueForKey(key)
+    }
+    
     func resort(isOrderredBefore: (Value, Value)-> Bool) {
         _keys.sortInPlace { (key1, key2) -> Bool in
             let v1 = _dict[key1]
