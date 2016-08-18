@@ -40,6 +40,7 @@
 		BF32EEB01C08B22F0098FEC1 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = BF32EEAF1C08B22F0098FEC1 /* Podfile */; };
 		BF3387E61C47C2AF00B95CAB /* StatusReleaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3387E51C47C2AF00B95CAB /* StatusReleaseController.swift */; };
 		BF3BD5EA1C28E89000499674 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BF3BD5E91C28E89000499674 /* Settings.bundle */; };
+		BF4113D11D649A76005B6757 /* NotificationCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4113D01D649A76005B6757 /* NotificationCell2.swift */; };
 		BF49FBAD1C19424D0019EBC2 /* ShinyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF49FBAC1C19424D0019EBC2 /* ShinyButton.swift */; };
 		BF51070D1C609B45008DC14F /* ChatAudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF51070C1C609B45008DC14F /* ChatAudioRecorder.swift */; };
 		BF5107131C60CBA6008DC14F /* ChatListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5107121C60CBA6008DC14F /* ChatListCell.swift */; };
@@ -345,6 +346,7 @@
 		BF32EEAF1C08B22F0098FEC1 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		BF3387E51C47C2AF00B95CAB /* StatusReleaseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusReleaseController.swift; path = Status/Release/StatusReleaseController.swift; sourceTree = "<group>"; };
 		BF3BD5E91C28E89000499674 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		BF4113D01D649A76005B6757 /* NotificationCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationCell2.swift; path = Message/Notification/NotificationCell2.swift; sourceTree = "<group>"; };
 		BF49FBAC1C19424D0019EBC2 /* ShinyButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShinyButton.swift; path = Accounts/ShinyButton.swift; sourceTree = "<group>"; };
 		BF51070C1C609B45008DC14F /* ChatAudioRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatAudioRecorder.swift; path = Message/Chat/Record/ChatAudioRecorder.swift; sourceTree = "<group>"; };
 		BF5107121C60CBA6008DC14F /* ChatListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatListCell.swift; path = Message/Chat/ChatListCell.swift; sourceTree = "<group>"; };
@@ -781,6 +783,7 @@
 			children = (
 				BF2F7E8D1C62F39A00E3A3A2 /* NotificationCtrl.swift */,
 				BF2F7E961C644C7600E3A3A2 /* NotificationCell.swift */,
+				BF4113D01D649A76005B6757 /* NotificationCell2.swift */,
 			);
 			name = Notification;
 			sourceTree = "<group>";
@@ -2312,6 +2315,7 @@
 				BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */,
 				BFC032841C734C8300ECA69A /* ActivityCommentPanel.swift in Sources */,
 				BF8FE9A31C86C22400008170 /* ImageViewer.swift in Sources */,
+				BF4113D11D649A76005B6757 /* NotificationCell2.swift in Sources */,
 				BFC4F14E1CE6C2CE004D7BD0 /* LocationSearch.swift in Sources */,
 				BFB857D71CD9983600610349 /* SettingsRequester.swift in Sources */,
 			);

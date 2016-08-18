@@ -99,6 +99,10 @@ class NotificationBaseCell: UITableViewCell {
             assertionFailure()
         }
     }
+    
+    func makeTitleString(eles: String...) {
+        
+    }
 }
 
 

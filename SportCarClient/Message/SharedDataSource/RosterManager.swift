@@ -108,9 +108,9 @@ class RosterManager {
      Request roster list from server, work on the Message queue
      */
     func sync() {
-        dispatch_async(queue) {
-            self._sync()
-        }
+//        dispatch_async(queue) {
+//            self._sync()
+//        }
     }
     
     /**
@@ -185,5 +185,12 @@ class RosterManager {
                 return
             }
         }
+    }
+    
+    /**
+     暂时删除存储在本地的聊天数据，当重新有该聊天的数据到来时会重新出现
+     */
+    func removeLocalRosterItemStorage() {
+        
     }
 }

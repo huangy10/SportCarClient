@@ -9,17 +9,24 @@
 import UIKit
 import SnapKit
 
-class NotificationController: UITableViewController {
+class NotificationController: UITableViewController, NotificationCellDelegate, LoadingProtocol {
     // Pointer to the home controller which you can use to push or present detail controllers
     var messageHome: MessageController?
     
     var data: [Notification] = []
     
+    var delayTask: dispatch_block_t?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.registerClass(NotificationBaseCell.self, forCellReuseIdentifier: NotificationBaseCell.reuseIdentifier())
-        tableView.registerClass(NotificationCellAboutActivity.self, forCellReuseIdentifier: NotificationCellAboutActivity.reuseIdentifier())
-        tableView.registerClass(NotificationCellWithCoverThumbnail.self, forCellReuseIdentifier: NotificationCellWithCoverThumbnail.reuseIdentifier())
+//        tableView.registerClass(NotificationBaseCell.self, forCellReuseIdentifier: NotificationBaseCell.reuseIdentifier())
+//        tableView.registerClass(NotificationCellAboutActivity.self, forCellReuseIdentifier: NotificationCellAboutActivity.reuseIdentifier())
+//        tableView.registerClass(NotificationCellWithCoverThumbnail.self, forCellReuseIdentifier: NotificationCellWithCoverThumbnail.reuseIdentifier())
+        
+//        tableView.registerClass(NotificationBaseCell2.self, forCellReuseIdentifier: "cell2")
+//        tableView.registerClass(NotificationDetailedCell.self, forCellReuseIdentifier: "detail")
+//        tableView.registerClass(NotificationInteractCell.self, forCellReuseIdentifier: "interact")
+        tableView.registerClass(NotificationCell.self, forCellReuseIdentifier: "cell")
         tableView.separatorColor = UIColor(white: 0.945, alpha: 1)
         MessageManager.defaultManager.enterNotificationList(self)
     }
@@ -47,20 +54,37 @@ class NotificationController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let notification = data[indexPath.row]
-        let messageType = notification.messageType!
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! NotificationCell
+        cell.delegate = self
+        print(notification.messageBody)
+        cell.setData(
+            notification.user!.avatarURL!,
+            date: notification.createdAt!,
+            read: notification.read,
+            titleContents: notification.makeDisplayTitlePhrases(),
+            coverURL: notification.imageURL!,
+            detailDescription: notification.messageBody ?? "",
+            checked: notification.checked,
+            flag: notification.flag,
+            displayMode: notification.getDisplayMode()
+        )
+        return cell
+        /*
         switch messageType{
         case "status_like":
             // 给状态点赞了
-            let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellWithCoverThumbnail.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellWithCoverThumbnail
-            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
-            cell.navigationController = messageHome?.navigationController
-            cell.notification = notification
-            cell.nickNameLbl.text = notification.user!.nickName
-            cell.dateLbl.text = dateDisplay(notification.createdAt!)
-            cell.informLbL.text = LS("赞了你的动态")
-            cell.cover.kf_setImageWithURL(SFURL(notification.image!)!)
-            cell.messageBodyLbl.text = nil
-            cell.readDot.hidden = notification.read
+            let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! NotificationCell
+            cell.delegate = self
+            cell.setData(notification.user!.avatarURL!, date: notification.createdAt!, read: notification.read, titleContents: notification.makeDisplayTitlePhrases(), coverURL: notification.imageURL!, detailDescription: "")
+//            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
+//            cell.navigationController = messageHome?.navigationController
+//            cell.notification = notification
+//            cell.nickNameLbl.text = notification.user!.nickName
+//            cell.dateLbl.text = dateDisplay(notification.createdAt!)
+//            cell.informLbL.text = LS("赞了你的动态")
+//            cell.cover.kf_setImageWithURL(SFURL(notification.image!)!)
+//            cell.messageBodyLbl.text = nil
+//            cell.readDot.hidden = notification.read
             return cell
             
         case "status_comment":
@@ -89,14 +113,16 @@ class NotificationController: UITableViewController {
             return cell
         
         case "relation_follow":
-            let cell = tableView.dequeueReusableCellWithIdentifier(NotificationBaseCell.reuseIdentifier(), forIndexPath: indexPath) as! NotificationBaseCell
-            cell.navigationController = messageHome?.navigationController
-            cell.notification = notification
-            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
-            cell.nickNameLbl.text = notification.user!.nickName
-            cell.dateLbl.text = dateDisplay(notification.createdAt!)
-            cell.informLbL.text = LS("关注了你")
-            cell.readDot.hidden = notification.read
+            let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! NotificationCell
+            cell.delegate = self
+            cell.setData(notification.user!.avatarURL!, date: notification.createdAt!, read: notification.read, titleContents: notification.makeDisplayTitlePhrases())
+//            cell.navigationController = messageHome?.navigationController
+//            cell.notification = notification
+//            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
+//            cell.nickNameLbl.text = notification.user!.nickName
+//            cell.dateLbl.text = dateDisplay(notification.createdAt!)
+//            cell.informLbL.text = LS("关注了你")
+//            cell.readDot.hidden = notification.read
             return cell
         
         case "status_inform":
@@ -128,45 +154,48 @@ class NotificationController: UITableViewController {
             return cell
         
         case "act_invited":
-            let cell = tableView.dequeueReusableCellWithIdentifier(NotificationCellAboutActivity.reuseIdentifier(), forIndexPath: indexPath) as! NotificationCellAboutActivity
-            let act: Activity = try! notification.getRelatedObj()!
-            cell.navigationController = messageHome?.navigationController
-            cell.notification = notification
-            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
-            cell.nickNameLbl.text = notification.user!.nickName
-            cell.dateLbl.text = dateDisplay(notification.createdAt!)
-            cell.informLbL.text = LS("邀请你参加")
-            cell.name2LbL.text = act.name
-            cell.inform2Lbl.text = ""
-            cell.closeOperation = notification.checked
-            cell.doneLbl.text = notification.flag ? LS("已确认") : LS("已拒绝")
-            cell.onAgreeBtnPressed = { [weak self] _ in
-                let requester = ActivityRequester.sharedInstance
-                requester.activityOperation(act.ssidString, targetUserID: "", opType: "invite_accepted", onSuccess: { (json) -> () in
-                    notification.flag = true
-                    notification.checked = true
-                    cell.closeOperation = true
-                    cell.doneLbl.text = LS("已确认")
-                    }, onError: { (code) -> () in
-                        if code == "full" {
-                            self?.showToast(LS("活动已报满"))
-                        } else {
-                            self?.showToast(LS("无法连接到服务器"))
-                        }
-                })
-            }
-            cell.onDenyBtnPressed = { [weak self] _ in
-                let requester = ActivityRequester.sharedInstance
-                requester.activityOperation(act.ssidString, targetUserID: "", opType: "invite_accepted", onSuccess: { (json) -> () in
-                    notification.flag = false
-                    notification.checked = true
-                    cell.closeOperation = true
-                    cell.doneLbl.text = LS("已拒绝")
-                    }, onError: { (code) -> () in
-                        self?.showToast(LS("无法连接到服务器"))
-                })
-            }
-            cell.readDot.hidden = notification.read
+            let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! NotificationCell
+            cell.delegate = self
+            let activity: Activity = try! notification.getRelatedObj()!
+            cell.setData(notification.user!.avatarURL!, date: notification.createdAt!, read: notification.read, titleContents: notification.makeDisplayTitlePhrases(), coverURL: activity.posterURL!, detailDescription: "", checked: notification.checked, flag: notification.flag)
+//            let act: Activity = try! notification.getRelatedObj()!
+//            cell.navigationController = messageHome?.navigationController
+//            cell.notification = notification
+//            cell.avatarBtn.kf_setImageWithURL(notification.user!.avatarURL!, forState: .Normal)
+//            cell.nickNameLbl.text = notification.user!.nickName
+//            cell.dateLbl.text = dateDisplay(notification.createdAt!)
+//            cell.informLbL.text = LS("邀请你参加")
+//            cell.name2LbL.text = act.name
+//            cell.inform2Lbl.text = ""
+//            cell.closeOperation = notification.checked
+//            cell.doneLbl.text = notification.flag ? LS("已确认") : LS("已拒绝")
+//            cell.onAgreeBtnPressed = { [weak self] _ in
+//                let requester = ActivityRequester.sharedInstance
+//                requester.activityOperation(act.ssidString, targetUserID: "", opType: "invite_accepted", onSuccess: { (json) -> () in
+//                    notification.flag = true
+//                    notification.checked = true
+//                    cell.closeOperation = true
+//                    cell.doneLbl.text = LS("已确认")
+//                    }, onError: { (code) -> () in
+//                        if code == "full" {
+//                            self?.showToast(LS("活动已报满"))
+//                        } else {
+//                            self?.showToast(LS("无法连接到服务器"))
+//                        }
+//                })
+//            }
+//            cell.onDenyBtnPressed = { [weak self] _ in
+//                let requester = ActivityRequester.sharedInstance
+//                requester.activityOperation(act.ssidString, targetUserID: "", opType: "invite_accepted", onSuccess: { (json) -> () in
+//                    notification.flag = false
+//                    notification.checked = true
+//                    cell.closeOperation = true
+//                    cell.doneLbl.text = LS("已拒绝")
+//                    }, onError: { (code) -> () in
+//                        self?.showToast(LS("无法连接到服务器"))
+//                })
+//            }
+//            cell.readDot.hidden = notification.read
             return cell
             
         case "act_denied":
@@ -280,27 +309,36 @@ class NotificationController: UITableViewController {
             assertionFailure()
             return UITableViewCell()
         }
+ */
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let notification = data[indexPath.row]
-        let messageType = notification.messageType!
-        switch messageType {
-        case "status_like", "relation_follow", "status_inform", "act_applied", "act_denied", "act_invitation_accepted":
-            return 75
-        case "status_comment", "status_comment_replied":
-            let messageBody = notification.messageBody ?? ""
-            return 90 + messageBody.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightLight), boundingSize: CGSizeMake(NotificationCellWithCoverThumbnail.messageBodyLblMaxWidth, CGFloat.max)).height
-        case "act_invited":
-            return 100
-//            if notification.checked {
-//                return 75
-//            } else {
-//                return 93.5
-//            }
-        default:
-            return 90
-        }
+        return NotificationCell.cellHeightForTitle(notification.makeDisplayTitlePhrases(), detailDescription: notification.messageBody ?? "", displayMode: notification.getDisplayMode())
+//        let messageType = notification.messageType!
+//        if messageType == "relation_follow" {
+//            return NotificationCell.cellHeightForTitle(notification.makeDisplayTitlePhrases(), detailDescription: "", displayMode: .Minimal)
+//            
+//        } else if messageType == "status_like" {
+//            return NotificationCell.cellHeightForTitle(notification.makeDisplayTitlePhrases(), detailDescription: "", displayMode: .WithCover)
+//        }
+//        switch messageType {
+//        case "status_like", "relation_follow", "status_inform", "act_applied", "act_denied", "act_invitation_accepted":
+//            return 75
+//        case "status_comment", "status_comment_replied":
+//            let messageBody = notification.messageBody ?? ""
+//            return 90 + messageBody.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightLight), boundingSize: CGSizeMake(NotificationCellWithCoverThumbnail.messageBodyLblMaxWidth, CGFloat.max)).height
+//        case "act_invited":
+//            return NotificationCell.cellHeightForTitle(notification.makeDisplayTitlePhrases(), detailDescription: "", displayMode: .Interact)
+////            return 100
+////            if notification.checked {
+////                return 75
+////            } else {
+////                return 93.5
+////            }
+//        default:
+//            return 90
+//        }
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -314,45 +352,109 @@ class NotificationController: UITableViewController {
                 
             })
         }
-        let messageType = notification.messageType!
-        switch messageType {
-        case "status_like", "status_inform":
-            let detail = StatusDetailController(status: try! notification.getRelatedObj()!)
+        messageHome?.navigationController?.pushViewController(getDetailController(forRow: indexPath.row), animated: true)
+//        let messageType = notification.messageType!
+//        switch messageType {
+//        case "status_like", "status_inform":
+//            let detail = StatusDetailController(status: try! notification.getRelatedObj()!)
+//            detail.loadAnimated = false
+//            self.messageHome?.navigationController?.pushViewController(detail, animated: true)
+//            
+//        case "status_comment", "status_comment_replied":
+//            let relatedStatusComment: StatusComment = try! notification.getRelatedObj()!
+//            let relatedStatus = relatedStatusComment.status
+//            let detail = StatusDetailController(status: relatedStatus)
+//            detail.loadAnimated = false
+//            self.messageHome?.navigationController?.pushViewController(detail, animated: true)
+//            
+//        case "relation_follow":
+//            let detail = PersonOtherController(user: notification.user!)
+//            self.messageHome?.navigationController?.pushViewController(detail, animated: true)
+//            
+//        case "act_applied", "act_invited", "act_denied", "act_invitation_agreed":
+//            let detail = ActivityDetailController(act: try! notification.getRelatedObj()!)
+//            self.messageHome?.navigationController?.pushViewController(detail, animated: true)
+//        case "club_apply", "club_apply_agreed", "club_apply_denied":
+//            let club: Club = try! notification.getRelatedObj()!
+//            if club.attended {
+//                if club.founderUser!.isHost {
+//                    let detail = GroupChatSettingHostController(targetClub: club)
+//                    messageHome?.navigationController?.pushViewController(detail, animated: true)
+//                } else {
+//                    let detail = GroupChatSettingController(targetClub: club)
+//                    messageHome?.navigationController?.pushViewController(detail, animated: true)
+//                }
+//            } else {
+//                let detail = ClubBriefInfoController()
+//                detail.targetClub = club
+//                messageHome?.navigationController?.pushViewController(detail, animated: true)
+//            }
+//        default:
+//            break
+//        }
+    }
+    
+    lazy var detailControllerMap: [String: Notification->UIViewController] = {
+        func user(notification: Notification) -> UIViewController {
+            let user = notification.user!
+            if user.isHost {
+                return PersonBasicController(user: user)
+            } else {
+                return PersonOtherController(user: user)
+            }
+        }
+        
+        func status(notification: Notification) -> UIViewController {
+            let status = try! notification.getRelatedObj()! as Status
+            let detail = StatusDetailController(status: status)
             detail.loadAnimated = false
-            self.messageHome?.navigationController?.pushViewController(detail, animated: true)
-            
-        case "status_comment", "status_comment_replied":
-            let relatedStatusComment: StatusComment = try! notification.getRelatedObj()!
-            let relatedStatus = relatedStatusComment.status
-            let detail = StatusDetailController(status: relatedStatus)
+            return detail
+        }
+        
+        func statusComment(notification: Notification) -> UIViewController {
+            let status =  (try! notification.getRelatedObj()! as StatusComment).status
+            let detail = StatusDetailController(status: status)
             detail.loadAnimated = false
-            self.messageHome?.navigationController?.pushViewController(detail, animated: true)
-            
-        case "relation_follow":
-            let detail = PersonOtherController(user: notification.user!)
-            self.messageHome?.navigationController?.pushViewController(detail, animated: true)
-            
-        case "act_applied", "act_invited", "act_denied", "act_invitation_agreed":
-            let detail = ActivityDetailController(act: try! notification.getRelatedObj()!)
-            self.messageHome?.navigationController?.pushViewController(detail, animated: true)
-        case "club_apply", "club_apply_agreed", "club_apply_denied":
+            return detail
+        }
+
+        
+        func activity(notification: Notification) -> UIViewController {
+            let act = try! notification.getRelatedObj()! as  Activity
+            return ActivityDetailController(act: act)
+        }
+        
+        func activityComment(notification: Notification) -> UIViewController {
+            let act = (try! notification.getRelatedObj()! as ActivityComment).act
+            return ActivityDetailController(act: act)
+        }
+        
+        func club(notification: Notification) -> UIViewController {
             let club: Club = try! notification.getRelatedObj()!
             if club.attended {
                 if club.founderUser!.isHost {
                     let detail = GroupChatSettingHostController(targetClub: club)
-                    messageHome?.navigationController?.pushViewController(detail, animated: true)
+                    return detail
                 } else {
                     let detail = GroupChatSettingController(targetClub: club)
-                    messageHome?.navigationController?.pushViewController(detail, animated: true)
+                    return detail
                 }
             } else {
                 let detail = ClubBriefInfoController()
                 detail.targetClub = club
-                messageHome?.navigationController?.pushViewController(detail, animated: true)
+                return detail
             }
-        default:
-            break
         }
+        
+        return ["User": user, "Status": status, "StatusComment": statusComment, "Activity": activity, "ActivityComment": activity, "ActivityJoin": activity, "Club": club, "ClubJoining": club]
+    }()
+    
+    func getDetailController(forRow row: Int) -> UIViewController {
+        let notification = data[row]
+        let messageType = notification.simplifiedMessageType
+        let senderClassKey = messageType.split(":")[0]
+        let detail = detailControllerMap[senderClassKey]!(notification)
+        return detail
     }
     
     override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
@@ -364,6 +466,63 @@ class NotificationController: UITableViewController {
                 self.data.appendContentsOf(notifs)
                 self.tableView.reloadData()
             })
+        }
+    }
+    
+    func notificationCellAvatarBtnPressed(atCell cell: NotificationCell) {
+        if let indexPath = tableView.indexPathForCell(cell) {
+            let notification = data[indexPath.row]
+            if let user = notification.user, nav = messageHome?.navigationController {
+                if user.isHost {
+                    let detail = PersonBasicController(user: user)
+                    nav.pushViewController(detail, animated: true)
+                } else {
+                    let detail = PersonOtherController(user: user)
+                    nav.pushViewController(detail, animated: true)
+                }
+            } else {
+                assertionFailure()
+            }
+        } else {
+            assertionFailure()
+        }
+    }
+    
+    func notificationCellOperationInvoked(atCell cell: NotificationCell, operationType: NotificationCell.OperationType) {
+        if let indexPath = tableView.indexPathForCell(cell) {
+            let notification = data[indexPath.row]
+            let messageType = notification.simplifiedMessageType
+            
+            switch messageType {
+            case  "ActivityJoin:invited":
+                let opType = "invite_\(operationType.rawValue)"
+                let activity = try! notification.getRelatedObj()! as Activity
+                lp_start()
+                ActivityRequester.sharedInstance.activityOperation(activity.ssidString, targetUserID: notification.user!.ssidString, opType: opType, onSuccess: { (json) in
+                    notification.flag = operationType == .Agree
+                    notification.checked = true
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                    self.lp_stop()
+                    }, onError: { (code) in
+                        self.lp_stop()
+                        self.showToast(LS("操作失败"))
+                })
+            case "ClubJoining:apply":
+                let opType = "club_apply_\(operationType.rawValue)"
+                let club = try! notification.getRelatedObj()! as Club
+                lp_start()
+                ClubRequester.sharedInstance.clubOperation(club.ssidString, targetUserID: notification.user!.ssidString, opType: opType, onSuccess: { (json) in
+                    notification.checked = true
+                    notification.flag = operationType == .Agree
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                    self.lp_stop()
+                    }, onError: { (code) in
+                        self.lp_stop()
+                        self.showToast(LS("操作失败"))
+                })
+            default:
+                break
+            }
         }
     }
     

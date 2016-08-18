@@ -14,6 +14,13 @@ import AlecrimCoreData
 
 class Notification: BaseModel {
     
+    var simplifiedMessageType: String {
+        get {
+            let elements = messageType!.split(":")
+            return elements[1..<elements.count].joinWithSeparator(":")
+        }
+    }
+    
     override class var idField: String {
         return "notification_id"
     }
@@ -47,7 +54,9 @@ class Notification: BaseModel {
         }
         let clubJSON = data["related_club"]
         if clubJSON.exists() {
-            _obj = try manager.getOrCreate(clubJSON) as Club
+            let club = try manager.getOrCreate(clubJSON) as Club
+            image = club.logo
+            _obj = club
         }
         let newsJSON = data["related_news"]
         if newsJSON.exists() {
@@ -67,7 +76,7 @@ class Notification: BaseModel {
         let statusJSON = data["related_status"]
         if statusJSON.exists() {
             let status = try manager.getOrCreate(statusJSON) as Status
-            messageBody = status.content
+//            messageBody = status.content
             image = status.image
             
             if user == nil {
@@ -86,7 +95,7 @@ class Notification: BaseModel {
         let activityJSON = data["related_act"]
         if activityJSON.exists() {
             let act = try manager.getOrCreate(activityJSON) as Activity
-            messageBody = act.actDescription
+            messageBody = ""
             image = act.poster
             if user == nil {
                 user = act.user
@@ -133,5 +142,63 @@ class Notification: BaseModel {
         }
         return _objInMem as? T
     }
-
+    
+    func makeDisplayTitlePhrases() -> [String] {
+        let username = user!.nickName!
+        switch simplifiedMessageType {
+        case "User:minimal":
+            return [username, "关注了你"]
+        case "Status:like":
+            return [username, "赞了你的动态"]
+        case "Status:at":
+            return [username, "在状态中提到了你"]
+        case "StatusComment:at":
+            return [username, "在状态评论中提到了你"]
+        case "StatusComment:response":
+            return [username, "在状态中回复了你"]
+            
+        case "ActivityJoin:invited":
+            let activity = try! getRelatedObj()! as Activity
+            return [user!.nickName!, "邀请你参加", activity.name!]
+        case "ActivityJoin:invite_agreed":
+            let activity = try! getRelatedObj()! as Activity
+            return [user!.nickName!, "通过了你对活动", activity.name!, "的申请"]
+        case "ActivityJoin:invite_denied":
+            let activity = try! getRelatedObj()! as Activity
+            return [user!.nickName!, "拒绝了你对活动", activity.name!, "的申请"]
+        case "Activity:like":
+            let activity = try! getRelatedObj()! as Activity
+            return [user!.nickName!, "赞了你的活动", activity.name!]
+        case "ActivityJoin: apply":
+            let activity = try! getRelatedObj()! as Activity
+            return [user!.nickName!, "申请了你的活动", activity.name!]
+        case "ClubJoining:apply":
+            let club = try! getRelatedObj()! as Club
+            return [user!.nickName!, "申请了你的俱乐部", club.name!]
+        case "ClubJoining:agree":
+            let club = try! getRelatedObj()! as Club
+            return [user!.nickName!, "通过了你对俱乐部", club.name!, "的申请"]
+        case "ClubJoining:deny":
+            let club = try! getRelatedObj()! as Club
+            return [user!.nickName!, "拒绝了你对俱乐部", club.name!, "的申请"]
+        
+        default:
+            return []
+        }
+    }
+    
+    lazy var displayModeMap: [String: NotificationCell.DisplayMode] = {
+        return [
+            "minimal": NotificationCell.DisplayMode.Minimal,
+            "with_cover": NotificationCell.DisplayMode.WithCover,
+            "interact": NotificationCell.DisplayMode.Interact
+        ]
+    }()
+    
+    func getDisplayMode() -> NotificationCell.DisplayMode {
+        let elements = messageType!.split(":")
+        let displayModeString = elements[0]
+        
+        return displayModeMap[displayModeString]!
+    }
 }
