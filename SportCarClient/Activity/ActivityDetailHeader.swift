@@ -25,6 +25,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     var releaseDateLbl: UILabel!
     
     var likeIcon: UIImageView!
+    var likeBtn: UIButton!
     var likeNumLbl: UILabel!
     var commentIcon: UIImageView!
     var commentNumLbl: UILabel!
@@ -133,6 +134,11 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
                 make.centerY.equalTo(likeNumLbl)
                 make.right.equalTo(likeNumLbl.snp_left).offset(-4)
                 make.size.equalTo(15)
+            })
+        likeBtn = superview.addSubview(UIButton)
+            .layout({ (make) in
+                make.center.equalTo(likeIcon)
+                make.size.equalTo(30)
             })
         let sepLine = superview.addSubview(UIView.self).config(UIColor(white: 0.8, alpha: 1))
             .layout { (make) in

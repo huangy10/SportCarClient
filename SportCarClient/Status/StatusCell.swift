@@ -255,18 +255,19 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
     }
     
     class func heightForStatus(data: Status) -> CGFloat{
-        let content = data.content! as NSString
+        let content = data.content!
         let screenWidth = UIScreen.mainScreen().bounds.width
         let textHeight: CGFloat
         if content == "" {
             textHeight = 0
         } else {
-            textHeight = content.boundingRectWithSize(CGSizeMake(screenWidth - 50, 1000), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)], context: nil).height
+//            textHeight = content.boundingRectWithSize(CGSizeMake(screenWidth - 50, 1000), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)], context: nil).height
+            textHeight = heightForStatusContent(content)
         }
         // 1080 + 40 - 200 - 114
         let imageInfo = data.image!
         let otherImageHeight: CGFloat = imageInfo.split(";").count > 1 ? 100 : 0
-        return 500.0 / 375 * screenWidth + textHeight + otherImageHeight
+        return 520.0 / 375 * screenWidth + textHeight + otherImageHeight
     }
     
     func loadDataAndUpdateUI() {
@@ -318,8 +319,9 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
                 make.height.equalTo(100)
             })
         }
-        contentLbl?.text = status?.content
-        /* 
+//        contentLbl?.text = status?.content
+        contentLbl?.attributedText = self.dynamicType.makeFormatedStatusContent(status!.content!)
+        /*
          底部区域数据
         */
         if let loc_des = status?.location?.descr {
@@ -335,6 +337,20 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
             likeIcon?.image = UIImage(named: "news_like_unliked")
         }
         self.contentView.layoutIfNeeded()
+    }
+    
+    class func heightForStatusContent(content: String) -> CGFloat {
+        let attributedContent = makeFormatedStatusContent(content)
+        let maxWidth = UIScreen.mainScreen().bounds.width - 30
+        return attributedContent.boundingRectWithSize(CGSizeMake(maxWidth, CGFloat.max), options: .UsesLineFragmentOrigin, context: nil).height
+    }
+    
+    class func makeFormatedStatusContent(content: String) -> NSAttributedString {
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 3
+        style.lineBreakMode = .ByCharWrapping
+        let result = NSAttributedString(string: content, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.58), NSParagraphStyleAttributeName: style])
+        return result
     }
     
     func setAvatarCar(car: SportCar) {

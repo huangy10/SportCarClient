@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		59709BA10C676D5E26BB2779 /* Pods_SportCarClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */; };
+		BF01FDA51D65E78A00865630 /* ActivityMembers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF01FDA41D65E78A00865630 /* ActivityMembers.swift */; };
 		BF11C7041CF32A8A00CCD184 /* LoadingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11C7031CF32A8A00CCD184 /* LoadingProtocol.swift */; };
 		BF11F6AE1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */; };
 		BF11F6B01CC0A11F0092A7E9 /* EmptyListHintCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */; };
@@ -314,6 +315,7 @@
 /* Begin PBXFileReference section */
 		0FBECD0994E751F3F3D75AE4 /* Pods-SportCarClient.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportCarClient.adhoc.xcconfig"; path = "Pods/Target Support Files/Pods-SportCarClient/Pods-SportCarClient.adhoc.xcconfig"; sourceTree = "<group>"; };
 		9A5E49C1C25FA1645A7E44A3 /* Pods_SportCarClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SportCarClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF01FDA41D65E78A00865630 /* ActivityMembers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityMembers.swift; path = Activity/ActivityMembers.swift; sourceTree = "<group>"; };
 		BF11C7031CF32A8A00CCD184 /* LoadingProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingProtocol.swift; path = BaseTemplate/LoadingProtocol.swift; sourceTree = "<group>"; };
 		BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GlobalNotifiicationSettings.swift; path = BaseTemplate/GlobalNotifiicationSettings.swift; sourceTree = "<group>"; };
 		BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmptyListHintCell.swift; path = BaseTemplate/Views/EmptyListHintCell.swift; sourceTree = "<group>"; };
@@ -1292,6 +1294,7 @@
 				BFC0327F1C72EEEB00ECA69A /* ActivityDetail.swift */,
 				BFC032811C72F69300ECA69A /* ActivityDetailBoard.swift */,
 				BFC032831C734C8300ECA69A /* ActivityCommentPanel.swift */,
+				BF01FDA41D65E78A00865630 /* ActivityMembers.swift */,
 			);
 			name = Detail;
 			sourceTree = "<group>";
@@ -2179,6 +2182,7 @@
 				BFC36BAF1C6C5E1D00DC6FE2 /* PersonMineSettings.swift in Sources */,
 				BF6308A31C19A8040087A4F0 /* ResetPassword.swift in Sources */,
 				BFE967491CA6D8920097C42C /* SportCarClient.xcdatamodeld in Sources */,
+				BF01FDA51D65E78A00865630 /* ActivityMembers.swift in Sources */,
 				BF8D42FA1C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift in Sources */,
 				BF139E6E1C4E6E8E0022F4FC /* FFSelect.swift in Sources */,
 				BF2336921C5732D800F0AE41 /* ChatCell.swift in Sources */,

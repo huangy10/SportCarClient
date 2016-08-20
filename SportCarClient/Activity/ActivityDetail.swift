@@ -84,6 +84,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         tableView.registerClass(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty_cell")
         
         infoView = ActivityDetailHeaderView(act: act)
+        infoView.likeBtn.addTarget(self, action: #selector(likeBtnPressed), forControlEvents: .TouchUpInside)
         infoView.parentController = self
         tableView.addSubview(infoView)
         infoView.snp_makeConstraints { (make) in

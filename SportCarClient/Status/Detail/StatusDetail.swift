@@ -470,7 +470,6 @@ extension StatusDetailController {
         //
         contentLbl = UILabel()
         contentLbl?.textColor = UIColor.blackColor()
-        contentLbl?.font = UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)
         contentLbl?.numberOfLines = 0
         superview.addSubview(contentLbl!)
         contentLbl?.snp_makeConstraints(closure: { (make) -> Void in
@@ -603,7 +602,7 @@ extension StatusDetailController {
                 make.height.equalTo(100)
             })
         }
-        contentLbl?.text = status?.content
+        contentLbl?.attributedText = self.dynamicType.makeAttributedContentText(status!.content!)
         /*
         底部区域数据
         */
@@ -617,6 +616,19 @@ extension StatusDetailController {
         likeIcon?.image = status!.liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
         commentPanel?.likeBtnIcon.image = status!.liked ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
         self.view.layoutIfNeeded()
+    }
+    
+    class func makeAttributedContentText(content: String) -> NSAttributedString {
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 3
+        style.lineBreakMode = .ByCharWrapping
+        return NSAttributedString(string: content, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.58), NSParagraphStyleAttributeName: style])
+    }
+    
+    class func heightForStatusContent(content: String) -> CGFloat {
+        let attributedContent = makeAttributedContentText(content)
+        let maxWidth = UIScreen.mainScreen().bounds.width - 30
+        return attributedContent.boundingRectWithSize(CGSizeMake(maxWidth, CGFloat.max), options: .UsesLineFragmentOrigin, context: nil).height
     }
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {

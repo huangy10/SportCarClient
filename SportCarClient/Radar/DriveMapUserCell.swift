@@ -76,7 +76,7 @@ class DriverMapUserCell: UITableViewCell {
         }
         //
         distanceLbl = UILabel()
-        distanceLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        distanceLbl.textColor = UIColor(white: 0, alpha: 0.58)
         distanceLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
         superview.addSubview(distanceLbl)
         distanceLbl.snp_makeConstraints { (make) -> Void in

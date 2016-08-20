@@ -8,6 +8,7 @@
 
 import UIKit
 import Spring
+import Spring
 
 extension UIViewController {
     
@@ -108,6 +109,10 @@ extension UIViewController {
             }) { (_) -> Void in
                 toastContainer.removeFromSuperview()
         }
+    }
+    
+    func showConfirmToast(title: String, message: String, target: AnyObject!, onConfirm: Selector) {
+        ConfirmToastPresentationController(title: title, des: message, target: target, confirmSelector: onConfirm).presentFromRootController()
     }
     
     func showConfirmToast(title: String, message: String, target: AnyObject, confirmSelector: Selector, cancelSelector: Selector, onSelf: Bool = true) -> UIView {
@@ -235,89 +240,9 @@ extension UIViewController {
             })
         }
     }
-    
-    /**
-     Display a toast to ask for permisson
-     
-     - parameter message:   Message content to be displayed
-     */
-    @available(*, deprecated=1)
-    func showConfirmToast(message: String, target: AnyObject, confirmSelector: Selector, cancelSelector: Selector, onSelf: Bool = false) -> UIView {
-        let container = UIView()
-        let containerWidth = UIScreen.mainScreen().bounds.width * 0.5
-        container.backgroundColor = UIColor(red: 0.067, green: 0.051, blue: 0.051, alpha: 1)
-        container.layer.addDefaultShadow(6, opacity: 0.3, offset: CGSizeMake(0, 4))
-        let staticLbl = UILabel()
-        staticLbl.font = UIFont.systemFontOfSize(14)
-        staticLbl.textColor = UIColor.whiteColor()
-        staticLbl.text = message
-        staticLbl.numberOfLines = 0
-        container.addSubview(staticLbl)
-        staticLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(container).offset(20)
-            make.right.equalTo(container).offset(-20)
-            make.top.equalTo(container).offset(15)
-        }
-        let lblHeight = staticLbl.sizeThatFits(CGSizeMake(containerWidth - 40, CGFloat.max)).height
-        
-        let confirmBtn = UIButton()
-        confirmBtn.addTarget(target, action: confirmSelector, forControlEvents: .TouchUpInside)
-        confirmBtn.setTitle(LS("确定"), forState: .Normal)
-        confirmBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-        confirmBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        container.addSubview(confirmBtn)
-        confirmBtn.snp_makeConstraints { (make) -> Void in
-            make.size.equalTo(CGSizeMake(74, 43))
-            make.bottom.equalTo(container)
-            make.right.equalTo(container).offset(-10)
-        }
-        //
-        let cancelBtn = UIButton()
-        cancelBtn.addTarget(self, action: cancelSelector, forControlEvents: .TouchUpInside)
-        cancelBtn.setTitle(LS("取消"), forState: .Normal)
-        cancelBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), forState: .Normal)
-        cancelBtn.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        container.addSubview(cancelBtn)
-        cancelBtn.snp_makeConstraints { (make) -> Void in
-            make.centerY.equalTo(confirmBtn)
-            make.size.equalTo(CGSizeMake(74, 43))
-            make.right.equalTo(confirmBtn.snp_left)
-        }
-        
-        let superview = onSelf ? self.view : UIApplication.sharedApplication().keyWindow!.rootViewController!.view
-        superview.addSubview(container)
-        container.snp_makeConstraints { (make) -> Void in
-            make.width.equalTo(containerWidth)
-            make.height.equalTo(lblHeight + 44)
-            make.top.equalTo(superview.snp_bottom)
-            make.centerX.equalTo(superview)
-        }
-        
-        superview.updateConstraints()
-        superview.layoutIfNeeded()
-        container.snp_remakeConstraints { (make) -> Void in
-            make.width.equalTo(containerWidth)
-            make.height.equalTo(lblHeight + 64)
-            make.top.equalTo(superview).offset(150)
-            make.centerX.equalTo(superview)
-        }
-        
-        SpringAnimation.spring(0.5) { () -> Void in
-            self.view.layoutIfNeeded()
-        }
-        
-        return container
-    }
-    
     func hideConfirmToast(toast: UIView) {
         hideToast(toast)
-//        SpringAnimation.springWithCompletion(0.5, animations: { () -> Void in
-//            toast.layer.opacity = 0
-//            }) { (_) -> Void in
-//                toast.removeFromSuperview()
-//        }
     }
-    
 }
 
 extension CALayer {
@@ -331,5 +256,220 @@ extension CALayer {
         self.shadowColor = color.CGColor
         self.shadowOpacity = opacity
         self.shadowOffset = offset
+    }
+}
+
+
+class ConfirmToastPresentationController: UIViewController {
+    
+    var confirmTitle: String!
+    var confirmDes: String! {
+        didSet {
+            calculateDesLblHeight()
+        }
+    }
+    var bg: UIView!
+    var dialog: UIView!
+    var titleLbl: UILabel!
+    var desLbl: UILabel!
+    var confirmBtn: UIButton!
+    var confirmBtnLbl: UILabel!
+    var cancelBtn: UIButton!
+    var canceLBtnLbl: UILabel!
+    var blurMask: UIVisualEffectView!
+    
+    var target: AnyObject!
+    var confirmSelector: Selector!
+    
+    
+    private var desLblHeight: CGFloat = 0
+    private let desLineSpacing: CGFloat = 5
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureBlurredBackground()
+        configureDialog()
+        configureTitleLbl()
+        configureDesLbl()
+        configureConfirmBtn()
+        configureCancelBtn()
+        
+        animateEntry()
+    }
+    
+    init(title: String, des: String, target: AnyObject, confirmSelector: Selector) {
+        self.confirmTitle = title
+        self.confirmDes = des
+        self.target = target
+        self.confirmSelector = confirmSelector
+        
+        super.init(nibName: nil, bundle: nil)
+        
+        calculateDesLblHeight()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func presentFromRootController() {
+        let controller = UIApplication.sharedApplication().keyWindow!.rootViewController!
+        willMoveToParentViewController(controller)
+        controller.view.addSubview(view)
+        controller.addChildViewController(self)
+        didMoveToParentViewController(controller)
+    }
+    
+    func dismissFromRootController() {
+        willMoveToParentViewController(nil)
+        view.removeFromSuperview()
+        removeFromParentViewController()
+    }
+    
+    func animateEntry() {
+        view.layoutIfNeeded()
+        let height = desLblHeight + 160 - 44
+        dialog.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(view)
+            make.width.equalTo(view).multipliedBy(0.667)
+            make.height.equalTo(height)
+            make.bottom.equalTo(view.snp_centerY)
+        }
+//        UIView.animateWithDuration(0.3, animations: {
+//            self.view.layoutIfNeeded()
+//            self.blurMask.layer.opacity = 0.5
+//            }, completion: nil)
+//        
+        SpringAnimation.spring(0.5) {
+            self.view.layoutIfNeeded()
+        }
+        
+        UIView.animateWithDuration(0.5) {
+            self.bg.layer.opacity = 1
+        }
+    }
+    
+    func animateHide(complete: ()->()) {
+        let height = desLblHeight + 160 - 44
+        dialog.snp_remakeConstraints { (make) in
+            make.centerX.equalTo(view)
+            make.width.equalTo(view).multipliedBy(0.667)
+            make.height.equalTo(height)
+            make.top.equalTo(view.snp_bottom).offset(10)
+        }
+        
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            self.bg.layer.opacity = 0
+            }, completion: { _ in
+                complete()
+        })
+    }
+    
+    
+    func configureBlurredBackground() {
+        view.backgroundColor = UIColor.clearColor()
+        bg = view.addSubview(UIView).config(UIColor.clearColor())
+            .layout({ (make) in
+                make.edges.equalTo(view)
+            })
+        let blurEffect = UIBlurEffect(style: .Dark)
+        blurMask = UIVisualEffectView(effect: blurEffect)
+        bg.addSubview(blurMask)
+        blurMask.snp_makeConstraints { (make) in
+            make.edges.equalTo(bg)
+        }
+        blurMask.layer.opacity = 0.5
+        
+        bg.layer.opacity = 0
+    }
+    
+    func calculateDesLblHeight() {
+        if confirmDes.length == 0 {
+            desLblHeight = 0
+        } else {
+            let screenWidth = UIScreen.mainScreen().bounds.width
+            let dialogWidth = screenWidth * 0.667
+            let detailLblMaxWidth = dialogWidth - 40
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = desLineSpacing
+            desLblHeight = (confirmDes as NSString).boundingRectWithSize(CGSizeMake(detailLblMaxWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSParagraphStyleAttributeName: style], context: nil).height
+        }
+    }
+    
+    func configureDialog() {
+        let height = desLblHeight + 160 - 44
+        dialog = view.addSubview(UIView)
+            .config(UIColor.whiteColor())
+            .toRound(2)
+            .addShadow()
+            .layout({ (make) in
+                make.centerX.equalTo(view)
+                make.width.equalTo(view).multipliedBy(0.667)
+                make.height.equalTo(height)
+//                make.bottom.equalTo(view.snp_centerY)
+                make.top.equalTo(view.snp_bottom).offset(10)
+            })
+    }
+    
+    func configureTitleLbl() {
+        titleLbl = dialog.addSubview(UILabel)
+            .config(17, fontWeight: UIFontWeightSemibold, textColor: UIColor.blackColor(), text: confirmTitle)
+            .layout({ (make) in
+                make.left.equalTo(dialog).offset(20)
+                make.top.equalTo(20)
+                make.right.equalTo(dialog).offset(-20)
+            })
+    }
+    
+    func configureDesLbl() {
+        desLbl = dialog.addSubview(UILabel)
+            .layout({ (make) in
+                make.left.equalTo(titleLbl)
+                make.right.equalTo(titleLbl)
+                make.top.equalTo(titleLbl.snp_bottom).offset(10)
+            })
+        desLbl.numberOfLines = 0
+        desLbl.lineBreakMode = .ByCharWrapping
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = desLineSpacing
+        let str = NSAttributedString(string: confirmDes, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSParagraphStyleAttributeName: style, NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.72)])
+        desLbl.attributedText = str
+    }
+    
+    func configureConfirmBtn() {
+        confirmBtnLbl = dialog.addSubview(UILabel)
+            .config(14, fontWeight: UIFontWeightUltraLight, textColor: kHighlightRed, textAlignment: .Center, text: LS("确定"))
+            .layout({ (make) in
+                make.right.equalTo(dialog).offset(-25)
+                make.bottom.equalTo(dialog).offset(-16)
+            })
+        confirmBtn = dialog.addSubview(UIButton)
+            .config(target, selector: confirmSelector)
+            .layout({ (make) in
+                make.center.equalTo(confirmBtnLbl)
+                make.size.equalTo(30)
+            })
+    }
+    
+    func configureCancelBtn() {
+        canceLBtnLbl = dialog.addSubview(UILabel)
+            .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .Center, text: LS("取消"))
+            .layout({ (make) in
+                make.centerY.equalTo(confirmBtnLbl)
+                make.right.equalTo(confirmBtnLbl.snp_left).offset(-35)
+            })
+        cancelBtn = dialog.addSubview(UIButton)
+            .config(self, selector: #selector(cancelBtnPressed))
+            .layout({ (make) in
+                make.center.equalTo(canceLBtnLbl)
+                make.size.equalTo(30)
+            })
+    }
+    
+    func cancelBtnPressed() {
+        animateHide { 
+            self.dismissFromRootController()
+        }
     }
 }

@@ -79,7 +79,7 @@ class BillboardCell: UITableViewCell {
     func configureClubInfo() {
         icon = contentView.addSubview(UIImageView)
             .layout({ (make) in
-                make.centerY.equalTo(contentView)
+                make.centerY.equalTo(contentView).offset(-3)
                 make.left.equalTo(container).offset(40)
                 make.size.equalTo(45)
             })
@@ -88,14 +88,14 @@ class BillboardCell: UITableViewCell {
         nameLbl = contentView.addSubview(UILabel)
             .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor.blackColor(), textAlignment: .Left)
             .layout({ (make) in
-                make.left.equalTo(icon.snp_right).offset(10)
-                make.top.equalTo(icon)
+                make.left.equalTo(icon.snp_right).offset(13)
+                make.top.equalTo(icon).offset(3)
             })
         descriLbl = contentView.addSubview(UILabel)
             .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.58), textAlignment: .Left)
             .layout({ (make) in
                 make.left.equalTo(nameLbl)
-                make.bottom.equalTo(icon)
+                make.bottom.equalTo(icon).offset(-2)
             })
     }
     
@@ -120,7 +120,7 @@ class BillboardCell: UITableViewCell {
                 make.size.equalTo(8)
             })
         newMarkerLbl = contentView.addSubview(UILabel)
-            .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor.RGB(101, 169, 26), textAlignment: .Center, text: "new")
+            .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor.RGB(255, 21, 21), textAlignment: .Center, text: "new")
             .layout({ (make) in
                 make.centerX.equalTo(upAndDownStaticLbl)
                 make.bottom.equalTo(upAndDownLbl)
@@ -159,10 +159,13 @@ class BillboardCell: UITableViewCell {
             upAndDownLbl.hidden = false
             if orderChange > 0 {
                 upAndDownIcon.image = UIImage(named: "order_change_up")
+                upAndDownLbl.textColor = UIColor.RGB(255, 21, 21)
             } else if orderChange < 0 {
                 upAndDownIcon.image = UIImage(named: "order_change_down")
+                upAndDownLbl.textColor = UIColor.RGB(100, 170, 2)
             } else {
                 upAndDownIcon.image = UIImage(named: "order_change_stay")
+                upAndDownLbl.textColor = UIColor(white: 0, alpha: 0.2)
             }
         }
     }
@@ -178,7 +181,11 @@ class BillboardCell: UITableViewCell {
     }
     
     func getDescriLblContent() -> String {
-        return "\(club.city!) 价值\(club.value)"
+        if club.city == "" {
+            return "价值\(club.value/10000)万"
+        } else {
+            return "\(club.city!) 价值\(club.value)"
+        }
     }
 }
 
@@ -192,7 +199,7 @@ class BillboardFirstThree: BillboardCell {
         contentView.bringSubviewToFront(greatMark)
         greatMark.snp_makeConstraints { (make) in
             make.left.equalTo(container)
-            make.bottom.equalTo(icon)
+            make.bottom.equalTo(icon).offset(-3)
             make.size.equalTo(CGSizeMake(2.5, 40))
         }
         contentView.layoutIfNeeded()

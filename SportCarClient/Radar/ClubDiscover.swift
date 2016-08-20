@@ -149,7 +149,6 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             detail.targetClub = club
             radarHome?.navigationController?.pushViewController(detail, animated: true)
         }
-
     }
     
     func clubBubbleDidClickOn(club: Club) {

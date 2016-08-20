@@ -85,7 +85,7 @@ class ChatListCell: UITableViewCell {
         //
         recentTalkLbl = UILabel()
         recentTalkLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        recentTalkLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        recentTalkLbl.textColor = UIColor(white: 0, alpha: 0.58)
         superview.addSubview(recentTalkLbl)
         recentTalkLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(nickNameLbl)
