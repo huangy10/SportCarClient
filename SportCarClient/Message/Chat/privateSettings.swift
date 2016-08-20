@@ -31,8 +31,6 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     var startGroupChatBtn: UIButton?
     var startChat: UIButton?
     
-    var toast: UIView?
-    
     @available(*, deprecated=1)
     init(targetUser: User) {
         super.init(style: .Plain)
@@ -310,7 +308,7 @@ extension PrivateChatSettingController {
             self.navigationController?.pushViewController(detail, animated: true)
         case 2:
             if indexPath.row == 0 {
-                toast = showConfirmToast(LS("清除聊天信息"), message: LS("确定要清除聊天信息吗？"), target: self, confirmSelector: #selector(PrivateChatSettingController.clearChatContent), cancelSelector: #selector(PrivateChatSettingController.hideToast as (PrivateChatSettingController) -> () -> ()))
+                showConfirmToast(LS("清除聊天信息"), message: LS("确定要清除聊天信息吗？"), target: self, onConfirm: #selector(clearChatContent))
             } else if indexPath.row == 1 {
                 let report = ReportBlacklistViewController(userID: chater.ssid, parent: self)
                 self.presentViewController(report, animated: false, completion: nil)
@@ -384,8 +382,7 @@ extension PrivateChatSettingController {
      清空聊天内容
      */
     func clearChatContent() {
-        // 
-        hideToast()
+        //
         MessageManager.defaultManager.clearChatHistory(rosterItem)
     }
 
@@ -394,12 +391,6 @@ extension PrivateChatSettingController {
      */
     func searchChatContent() {
         
-    }
-    
-    func hideToast() {
-        if toast != nil {
-            hideToast(toast!)
-        }
     }
     
     func startChatBtnPressed() {

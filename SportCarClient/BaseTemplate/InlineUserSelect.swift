@@ -32,6 +32,8 @@ class InlineUserSelectController: UICollectionViewController {
         let screenWidth = UIScreen.mainScreen().bounds.width
         layout.itemSize = CGSizeMake(screenWidth / 4, screenWidth / 4)
         self.init(collectionViewLayout: layout)
+        
+        collectionView?.contentInset = UIEdgeInsetsMake(15, 0, 0, 0)
     }
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
@@ -69,6 +71,13 @@ class InlineUserSelectController: UICollectionViewController {
         collectionView?.backgroundColor = UIColor.whiteColor()
         collectionView?.registerClass(InlineUserSelectBtnCell.self, forCellWithReuseIdentifier: InlineUserSelectBtnCell.reuseIdentifier)
         collectionView?.registerClass(InlineUserSelectCell.self, forCellWithReuseIdentifier: InlineUserSelectCell.reuseIdentifier)
+    }
+    
+    class func preferedHeightFor(userNum: Int, showAddBtn: Bool, showDeleteBtn: Bool) -> CGFloat {
+        let cellHeight = UIScreen.mainScreen().bounds.width / 4
+        let cellNum = userNum + (showAddBtn ? 1 : 0) + (showDeleteBtn ? 1 : 0)
+        let height = CGFloat((cellNum - 1) / 4 + 1) * cellHeight + 15
+        return height
     }
     
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {

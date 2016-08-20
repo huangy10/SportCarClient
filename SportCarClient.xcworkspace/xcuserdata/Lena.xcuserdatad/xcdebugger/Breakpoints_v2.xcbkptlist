@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SportCarClient/Person/OtherPerson.swift"
-            timestampString = "493117686.76451"
+            timestampString = "493378810.718097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
             landmarkName = "trackTargetUserLocation()"
             landmarkType = "5">
          </BreakpointContent>
@@ -86,11 +86,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SportCarClient/Message/Notification/NotificationCell2.swift"
-            timestampString = "493201480.763183"
+            timestampString = "493375632.965373"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "595"
-            endingLineNumber = "595"
+            startingLineNumber = "596"
+            endingLineNumber = "596"
             landmarkName = "setData(_:date:read:titleContents:coverURL:detailDescription:checked:flag:displayMode:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -102,11 +102,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SportCarClient/Message/Notification/NotificationCell2.swift"
-            timestampString = "493201480.763183"
+            timestampString = "493375632.965373"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "593"
-            endingLineNumber = "593"
+            startingLineNumber = "594"
+            endingLineNumber = "594"
             landmarkName = "setData(_:date:read:titleContents:coverURL:detailDescription:checked:flag:displayMode:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -230,11 +230,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SportCarClient/Message/Notification/NotificationCell2.swift"
-            timestampString = "493201480.763183"
+            timestampString = "493375632.965373"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "494"
-            endingLineNumber = "494"
+            startingLineNumber = "495"
+            endingLineNumber = "495"
             landmarkName = "cellHeightForTitle(_:detailDescription:displayMode:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -276,12 +276,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SportCarClient/BaseTemplate/ViewControllerExtensions.swift"
-            timestampString = "493305674.079286"
+            timestampString = "493378810.718097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "332"
-            endingLineNumber = "332"
+            startingLineNumber = "333"
+            endingLineNumber = "333"
             landmarkName = "animateEntry()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SportCarClient/Message/Chat/GroupSettings.swift"
+            timestampString = "493378810.718097"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
+            landmarkName = "tableView(_:heightForRowAtIndexPath:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

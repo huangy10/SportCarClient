@@ -26,8 +26,6 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     var deleteQuitBtn: UIButton?
     var startChatBtn: UIButton?
     
-    var toast: UIView?
-    
     var inlineUsersCell: UITableViewCell!
     
     init(targetClub: Club) {
@@ -49,6 +47,8 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select")
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "quit")
+        
+        tableView.showsVerticalScrollIndicator = false
         
         let requester = ClubRequester.sharedInstance
         lp_start()
@@ -170,12 +170,15 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             if indexPath.row < 4 {
                 return 50
             }else {
-                let userNum = targetClub.members.count + (inlineUserSelect!.showAddBtn ? 1 : 0)
-                if userNum == 0 {
-                    return 110
-                }
-                let height: CGFloat = 110 * CGFloat((userNum - 1) / 4 + 1)
-                return height
+//                let userCellHeight = UIScreen.mainScreen().bounds.width / 4
+//                let userNum = targetClub.members.count + (inlineUserSelect!.showAddBtn ? 1 : 0)
+//                if userNum == 0 {
+//                    return userCellHeight
+//                }
+//                let height: CGFloat = userCellHeight * CGFloat((userNum - 1) / 4 + 1)
+//                return height
+                
+                return InlineUserSelectController.preferedHeightFor(targetClub.members.count, showAddBtn: inlineUserSelect!.showAddBtn, showDeleteBtn: false)
             }
         case 2:
             return 50
@@ -326,7 +329,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             detail.delegate = self
             self.navigationController?.pushViewController(detail, animated: true)
         } else if indexPath.section == 3 && indexPath.row == 0 {
-            toast = showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(GroupChatSettingController.clearChatContent), cancelSelector: #selector(GroupChatSettingController.hideToast as (GroupChatSettingController) -> () -> ()))
+            showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录?"), target: self, onConfirm: #selector(clearChatContent))
         } else if indexPath.section == 3 && indexPath.row == 1 {
             // 举报
             let report = ReportBlacklistViewController(userID: targetClub.ssid, reportType: "club", parent: self)
@@ -403,14 +406,9 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     }
     
     func clearChatContent() {
-        hideToast()
+//        hideToast()
     }
-    
-    func hideToast() {
-        if toast != nil {
-            hideToast(toast!)
-        }
-    }
+
 }
 
 extension GroupChatSettingController {
@@ -432,12 +430,11 @@ extension GroupChatSettingController {
     }
     
     func deleteAndQuitBtnPressed() {
-        toast = showConfirmToast(LS("退出"), message: LS("确认删除并退出？"), target: self, confirmSelector: #selector(GroupChatSettingController.deleteAndQuitConfirm), cancelSelector: #selector(GroupChatSettingController.hideToast as (GroupChatSettingController) -> () -> ()))
+        showConfirmToast(LS("退出"), message: LS("确定删除并退出？"), target: self, onConfirm: #selector(deleteAndQuitConfirm))
     }
     
     func deleteAndQuitConfirm() {
         // TOOD: re-implement this
-        hideToast()
         let waiter = dispatch_semaphore_create(0)
         var success = false
         lp_start()

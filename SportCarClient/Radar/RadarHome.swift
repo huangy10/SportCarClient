@@ -140,32 +140,31 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     }
     
     func navRightBtnPressed() {
-        showConfirmToast("测试", message: "这里需要显示一条两行的文字来测试多行显示是否正常", target: self, onConfirm: #selector(navLeftBtnPressed))
-//        let superview = self.view
-//        let trans: CATransform3D
-//        if navRightBtn.tag == 1 {
-//            releaseBoard.snp_remakeConstraints { (make) -> Void in
-//                make.bottom.equalTo(superview.snp_top).offset(-10)
-//                make.right.equalTo(superview)
-//                make.width.equalTo(125)
-//                make.height.equalTo(150)
-//            }
-//            trans = CATransform3DIdentity
-//            navRightBtn.tag = 0
-//        }else {
-//            releaseBoard.snp_remakeConstraints { (make) -> Void in
-//                make.top.equalTo(superview)
-//                make.right.equalTo(superview)
-//                make.width.equalTo(125)
-//                make.height.equalTo(150)
-//            }
-//            trans = CATransform3DMakeRotation(CGFloat(M_PI / 4), 0, 0, 1.0)
-//            navRightBtn.tag = 1
-//        }
-//        UIView.animateWithDuration(0.2) { () -> Void in
-//            self.view.layoutIfNeeded()
-//            self.navRightIcon.layer.transform = trans
-//        }
+        let superview = self.view
+        let trans: CATransform3D
+        if navRightBtn.tag == 1 {
+            releaseBoard.snp_remakeConstraints { (make) -> Void in
+                make.bottom.equalTo(superview.snp_top).offset(-10)
+                make.right.equalTo(superview)
+                make.width.equalTo(125)
+                make.height.equalTo(150)
+            }
+            trans = CATransform3DIdentity
+            navRightBtn.tag = 0
+        }else {
+            releaseBoard.snp_remakeConstraints { (make) -> Void in
+                make.top.equalTo(superview)
+                make.right.equalTo(superview)
+                make.width.equalTo(125)
+                make.height.equalTo(150)
+            }
+            trans = CATransform3DMakeRotation(CGFloat(M_PI / 4), 0, 0, 1.0)
+            navRightBtn.tag = 1
+        }
+        UIView.animateWithDuration(0.2) { () -> Void in
+            self.view.layoutIfNeeded()
+            self.navRightIcon.layer.transform = trans
+        }
     }
     
     func navTitleBtnPressed(sender: UIButton) {

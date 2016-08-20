@@ -115,6 +115,7 @@ extension UIViewController {
         ConfirmToastPresentationController(title: title, des: message, target: target, confirmSelector: onConfirm).presentFromRootController()
     }
     
+    @available(*, deprecated=1)
     func showConfirmToast(title: String, message: String, target: AnyObject, confirmSelector: Selector, cancelSelector: Selector, onSelf: Bool = true) -> UIView {
         let superview = onSelf ? self.navigationController?.view ?? self.view : UIApplication.sharedApplication().keyWindow!.rootViewController!.view
         let container = superview.addSubview(UIView).config(UIColor.clearColor())
@@ -445,7 +446,7 @@ class ConfirmToastPresentationController: UIViewController {
                 make.bottom.equalTo(dialog).offset(-16)
             })
         confirmBtn = dialog.addSubview(UIButton)
-            .config(target, selector: confirmSelector)
+            .config(self, selector: #selector(confirmBtnPressed))
             .layout({ (make) in
                 make.center.equalTo(confirmBtnLbl)
                 make.size.equalTo(30)
@@ -465,6 +466,11 @@ class ConfirmToastPresentationController: UIViewController {
                 make.center.equalTo(canceLBtnLbl)
                 make.size.equalTo(30)
             })
+    }
+    
+    func confirmBtnPressed() {
+        cancelBtnPressed()
+        (target as! NSObject).performSelector(confirmSelector)
     }
     
     func cancelBtnPressed() {

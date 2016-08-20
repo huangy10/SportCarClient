@@ -86,7 +86,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
             }
             timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(RadarDriverMapController.getLocationData), userInfo: nil, repeats: true)
         } else {
-            toast = showConfirmToast(LS("跑车雷达"), message: LS("这里会将您的实时位置共享给周围用户，确认继续？"), target: self, confirmSelector: #selector(confirmShowOnMap), cancelSelector: #selector(hideToast as ()->()))
+            showConfirmToast(LS("跑车雷达"), message: LS("这里会将您的实时位置共享给周围用户，确认继续？"), target: self, onConfirm: #selector(confirmShowOnMap))
         }
     }
     

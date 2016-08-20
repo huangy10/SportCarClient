@@ -166,12 +166,15 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
             if indexPath.row < 7 {
                 return 50
             }else {
-                let userNum = targetClub.members.count + 2
-                if userNum == 0 {
-                    return 110
-                }
-                let height: CGFloat = 110 * CGFloat((userNum - 1) / 4 + 1)
-                return height
+//                let userCellHeight = UIScreen.mainScreen().bounds.width / 4
+//                let userNum = targetClub.members.count + 2
+//                if userNum == 0 {
+//                    return userCellHeight
+//                }
+//                let height: CGFloat = userCellHeight * CGFloat((userNum - 1) / 4 + 1)
+//                return height
+//                
+                return InlineUserSelectController.preferedHeightFor(targetClub.members.count, showAddBtn: true, showDeleteBtn: true)
             }
         }
         return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
@@ -217,7 +220,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         case 3:
             switch indexPath.row {
             case 0:
-                toast = showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录?"), target: self, confirmSelector: #selector(clearChatContent), cancelSelector: #selector(hideToast as ()->()))
+                showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录？"), target: self, onConfirm: #selector(clearChatContent))
             case 1:
                 let report = ReportBlacklistViewController(userID: targetClub.ssid, reportType: "club", parent: self)
                 self.presentViewController(report, animated: false, completion: nil)
@@ -345,7 +348,6 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
     
     // MARK: 退出群聊
     override func deleteAndQuitConfirm() {
-        hideToast()
         let select = GroupMemberSelectController(club: targetClub)
         select.delegate = self
         select.presentFrom(self)

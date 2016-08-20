@@ -18,7 +18,6 @@ class PersonOtherController: PersonBasicController, RequestProtocol, LoadingProt
     var backOffLocation: Location?
     var userLoc: Location?
     
-    weak var toast: UIView?
     var rp_currentRequest: Request?
     
     override func viewWillAppear(animated: Bool) {
@@ -41,9 +40,6 @@ class PersonOtherController: PersonBasicController, RequestProtocol, LoadingProt
         // Override this to disable self.locating
         rp_cancelRequest()
         header.map.delegate = nil
-        if toast != nil {
-            hideToast()
-        }
     }
     
     override func navSettings() {
@@ -143,17 +139,10 @@ class PersonOtherController: PersonBasicController, RequestProtocol, LoadingProt
         needNavigation()
     }
     func needNavigation() {
-        toast = self.showConfirmToast(LS("导航"), message: LS("跳转到地图导航?"), target: self, confirmSelector: #selector(PersonOtherController.openMapToNavigate), cancelSelector: #selector(PersonOtherController.hideToast as (PersonOtherController) -> () -> ()))
-    }
-    
-    func hideToast() {
-        if toast != nil {
-            self.hideToast(toast!)
-        }
+        showConfirmToast(LS("导航"), message: LS("跳转到地图导航至该用户地址？"), target: self, onConfirm: #selector(openMapToNavigate))
     }
     
     func openMapToNavigate() {
-        self.hideToast(toast!)
         let param = BMKNaviPara()
         let end = BMKPlanNode()
         let center = userLoc!.location

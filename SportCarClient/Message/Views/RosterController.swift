@@ -15,7 +15,6 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
     }
     
     weak var messageController: MessageController!
-    weak var toast: UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,20 +33,13 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
      上级的MessageController的导航栏右侧按钮按下之后调用这个来调出用户选择页面
      */
     func navRightBtnPressed() {
-        toast = messageController.showConfirmToast(LS("新建群聊?"), message: LS("选择与朋友发起聊天或者群聊"), target: self, confirmSelector: #selector(confirmNewChat), cancelSelector: #selector(hideToast as ()->()))
+        showConfirmToast(LS("新建群聊"), message: LS("选择与朋友发起聊天或者群聊"), target: self, onConfirm: #selector(confirmNewChat))
     }
     
     func confirmNewChat() {
         let selector = FFSelectController()
         selector.delegate = self
         messageController.presentViewController(selector.toNavWrapper(), animated: true, completion: nil)
-        hideToast()
-    }
-    
-    func hideToast() {
-        if let toast = toast {
-            hideToast(toast)
-        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

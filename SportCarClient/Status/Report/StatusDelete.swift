@@ -22,8 +22,6 @@ class StatusDeleteController: PresentTemplateViewController, LoadingProtocol {
     var deleteBtn: UIButton!
     var status: Status!
     
-    weak var toast: UIView?
-    
     override func createContent() {
         deleteBtn = UIButton()
         deleteBtn.setTitle(LS("删除"), forState: .Normal)
@@ -39,11 +37,12 @@ class StatusDeleteController: PresentTemplateViewController, LoadingProtocol {
     }
     
     func deleteBtnPressed() {
-        toast = showConfirmToast(LS("删除动态"), message: LS("确认删除这条动态吗？"), target: self, confirmSelector: #selector(StatusDeleteController.deleteConfirmed), cancelSelector: #selector(StatusDeleteController.deleteCancelled), onSelf: true)
+//        toast = showConfirmToast(LS("删除动态"), message: LS("确认删除这条动态吗？"), target: self, confirmSelector: #selector(StatusDeleteController.deleteConfirmed), cancelSelector: #selector(StatusDeleteController.deleteCancelled), onSelf: true)
+        
+        showConfirmToast(LS("删除动态"), message: LS("确认删除这条动态吗？"), target: self, onConfirm: #selector(deleteConfirmed))
     }
     
     func deleteConfirmed() {
-        hideConfirmToast(toast!)
         let requester = StatusRequester.sharedInstance
         let waitSignal = dispatch_semaphore_create(0)
         lp_start()
@@ -63,9 +62,5 @@ class StatusDeleteController: PresentTemplateViewController, LoadingProtocol {
                 self.lp_stop()
                 self.showToast(LS("删除失败"), onSelf: true)
         }
-    }
-    
-    func deleteCancelled() {
-        hideConfirmToast(toast!)
     }
 }

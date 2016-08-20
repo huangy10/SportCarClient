@@ -329,7 +329,13 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         let designTotalHeight: CGFloat = 634
         let staticHeight = designTotalHeight - 216 - 52 - 52
         let signatureLblWidth = screenWidth * 0.55
-        let signatureLblHeight = signature.boundingRectWithSize(CGSizeMake(signatureLblWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)], context: nil).height
+        
+        let signatureLblHeight: CGFloat
+        if signature == "" {
+            signatureLblHeight = 0
+        } else {
+            signatureLblHeight = signature.boundingRectWithSize(CGSizeMake(signatureLblWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)], context: nil).height
+        }
         let carNameHeight = carName.boundingRectWithSize(CGSizeMake(signatureLblWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(19, weight: UIFontWeightSemibold)], context: nil).height
         let audioWaveHeight: CGFloat = withAudioWave ? 72.5 : 0
         return CGSizeMake(screenWidth, signatureLblHeight + staticHeight + coverHeight + carNameHeight + audioWaveHeight)

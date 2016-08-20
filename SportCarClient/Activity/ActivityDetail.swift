@@ -25,7 +25,6 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     var responseToRow: Int = -1
     var atUser: [String] = []
     var responseToPrefixStr = ""
-    var toast: UIView?
     
     var mapCell: MapCell!
     
@@ -513,18 +512,11 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     // MARK: navigation
     
     func needNavigation() {
-        toast = showConfirmToast(LS("导航"), message: LS("跳转到地图导航?"), target: self, confirmSelector: #selector(openMapToNavigate), cancelSelector: #selector(hideToast as ()->()))
+        showConfirmToast(LS("导航"), message: LS("跳转到地图导航？"), target: self, onConfirm: #selector(openMapToNavigate))
 //        toast = showConfirmToast(LS("跳转到地图导航?"), target: self, confirmSelector: #selector(openMapToNavigate), cancelSelector: #selector(hideToast as ()->()))
     }
     
-    func hideToast() {
-        if let t = toast {
-            hideToast(t)
-        }
-    }
-    
     func openMapToNavigate() {
-        hideToast()
         let param = BMKNaviPara()
         let end = BMKPlanNode()
         

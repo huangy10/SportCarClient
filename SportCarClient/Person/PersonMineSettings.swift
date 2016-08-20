@@ -30,8 +30,6 @@ class PersonMineSettings: UITableViewController {
         return PersonMineSettingsDataSource.sharedDataSource.cacheSizeDes ?? LS("正在获取缓存大小")
     }
     
-    private weak var toast: UIView?
-    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
@@ -59,9 +57,6 @@ class PersonMineSettings: UITableViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(true)
-        if toast != nil {
-            hideToast(toast!)
-        }
     }
     
     func navSettings() {
@@ -147,7 +142,7 @@ class PersonMineSettings: UITableViewController {
             let detail = PersonMineSettingsInvitationController()
             self.navigationController?.pushViewController(detail, animated: true)
         case 4:
-            toast = showConfirmToast(LS("清除缓存"), message: LS("确认清除全部缓存?"), target: self, confirmSelector: #selector(clearCacheConfirmed), cancelSelector: #selector(hideToast as ()->()), onSelf: false)
+            showConfirmToast(LS("清除缓存"), message: LS("确认清除全部缓存？"), target: self, onConfirm: #selector(clearCacheConfirmed))
 //            let detail = ClearCacheController(parent: self)
 //            self.presentViewController(detail, animated: false, completion: nil)
             break
@@ -180,23 +175,15 @@ class PersonMineSettings: UITableViewController {
     }
     
     func quitBtnPressed() {
-        toast = showConfirmToast(LS("退出登录"), message: LS("是否确认退出?"), target: self, confirmSelector: #selector(quitConfirmed), cancelSelector: #selector(hideToast as ()->()), onSelf: false)
+        showConfirmToast(LS("退出登录"), message: LS("是否确认退出？"), target: self, onConfirm: #selector(quitConfirmed))
     }
     
     func quitConfirmed() {
-        hideToast()
         let app = AppManager.sharedAppManager
         app.logout()
     }
     
-    func hideToast() {
-        if toast != nil {
-            hideToast(toast!)
-        }
-    }
-    
     func clearCacheConfirmed() {
-        hideToast()
         if !PersonMineSettingsDataSource.sharedDataSource.clearCacheFolder() {
             self.showToast(LS("清除缓存时出现错误"))
         }
@@ -228,7 +215,7 @@ class PersonMineSettingsBtnsCell: UITableViewCell {
         superview.addSubview(quitBtn)
         quitBtn.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
-            make.top.equalTo(superview).offset(35)
+            make.top.equalTo(superview).offset(3)
             make.size.equalTo(CGSizeMake(150, 50))
         }
         //

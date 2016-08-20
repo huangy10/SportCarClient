@@ -16,8 +16,6 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     
     var car: SportCar!
     
-    weak var toast: UIView?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
@@ -51,13 +49,14 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     }
     
     func navRightBtnPressed() {
-        toast = showConfirmToast(
-            LS("删除"), message: LS("确认删除爱车?"),
-            target: self,
-            confirmSelector: #selector(confirmDelete),
-            cancelSelector: #selector(hideConfirmToast as ()->()),
-            onSelf: false
-        )
+//        toast = showConfirmToast(
+//            LS("删除"), message: LS("确认删除爱车?"),
+//            target: self,
+//            confirmSelector: #selector(confirmDelete),
+//            cancelSelector: #selector(hideConfirmToast as ()->()),
+//            onSelf: false
+//        )
+        showConfirmToast(LS("删除"), message: LS("确认删除爱车？"), target: self, onConfirm: #selector(confirmDelete))
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -152,7 +151,7 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     }
     
     func confirmDelete() {
-        hideConfirmToast()
+//        hideConfirmToast()
         SportCarRequester.sharedInstance.deleteCar(car.ssidString, onSuccess: { (json) in
             self.showToast(LS("删除成功"))
             NSNotificationCenter.defaultCenter().postNotificationName(kCarDeletedNotification, object: nil, userInfo: [kSportcarKey: self.car])
@@ -161,14 +160,14 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
                 self.showToast(LS("删除失败"))
         }
     }
-    /**
-     hide the confirm toast
-     */
-    func hideConfirmToast() {
-        if let t = toast {
-            hideConfirmToast(t)
-        }
-    }
+//    /**
+//     hide the confirm toast
+//     */
+//    func hideConfirmToast() {
+//        if let t = toast {
+//            hideConfirmToast(t)
+//        }
+//    }
     
     func singlePropertyModifierDidCancelled() {
         // 

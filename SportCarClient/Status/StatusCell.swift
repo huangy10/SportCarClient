@@ -181,7 +181,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         contentLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.left.equalTo(superview).offset(15)
-            make.top.equalTo(otherImgList!.snp_bottom).offset(15)
+            make.top.equalTo(mainCover!.snp_bottom).offset(15)
         })
         /*
          下方其他信息部分

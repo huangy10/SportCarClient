@@ -451,7 +451,8 @@ class NotificationCell: UITableViewCell {
         resultLbl = contentView.addSubview(UILabel)
             .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor.blackColor(), textAlignment: .Right)
             .layout({ (make) in
-                make.edges.equalTo(agreeBtn)
+                make.centerY.equalTo(agreeBtn)
+                make.right.equalTo(cover)
             })
         resultLbl.hidden = true
     }
