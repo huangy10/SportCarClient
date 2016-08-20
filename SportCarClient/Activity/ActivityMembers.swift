@@ -21,14 +21,13 @@ protocol  ActivityMemberDelegate: class {
 }
 
 
-class ActivityMembersController: UITableViewController, ActivityMemberCellDelegate {
+class ActivityMembersController: UITableViewController, ActivityMemberCellDelegate, LoadingProtocol {
     var act: Activity!
-    var members: [User] = []
-    
-    weak var toast: UIView?
     
     weak var delegate: ActivityMemberDelegate!
     var indexToDelete: Int?
+    
+    var delayTask: dispatch_block_t?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +47,7 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
         navigationItem.title = LS("已报名")
         let leftBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed))
         leftBtn.frame = CGRectMake(0, 0, 15, 15)
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         leftBtn.contentMode = .ScaleAspectFit
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     }
@@ -61,12 +61,12 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return members.count
+        return act.applicants.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ActivityMemberCell
-        let member = members[indexPath.row]
+        let member = act.applicants[indexPath.row]
         cell.delegate = self
         cell.setData(
             member.nickName!,
@@ -79,22 +79,29 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
     func activityMemberKickoutPressed(at cell: ActivityMemberCell) {
         if let indexPath = tableView.indexPathForCell(cell) {
             indexToDelete = indexPath.row
-            
+            let user = act.applicants[indexPath.row]
+            print(user.nickName, act.name)
+            let message = String(format: LS("确认将 %@ 从活动 %@ 中请出？"), user.nickName!, act.name!)
+            showConfirmToast(LS("请出成员"), message: message, target: self, onConfirm: #selector(confirmKickoutUser))
+        } else {
+            assertionFailure()
         }
     }
     
     func confirmKickoutUser() {
-        hideToast()
-        guard let user = indexToDelete else {
+        guard let userIndex = indexToDelete else {
             return
         }
-//        delegate.activityMemberControllerDidRemove(user)
-        
-    }
-    
-    func hideToast() {
-        if let toast = toast {
-            hideToast(toast)
+        let user = act.applicants[userIndex]
+        lp_start()
+        ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: user.ssidString, opType: "kick_out", onSuccess: { (json) in
+            self.lp_stop()
+            self.delegate.activityMemberControllerDidRemove(user)
+            self.act.applicants.removeAtIndex(userIndex)
+            self.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: userIndex, inSection: 0)], withRowAnimation: .Automatic)
+            }) { (code) in
+                self.lp_stop()
+                self.showToast(LS("删除失败"))
         }
     }
 }
@@ -134,13 +141,14 @@ class ActivityMemberCell: UITableViewCell {
                 make.centerY.equalTo(contentView)
                 make.size.equalTo(35)
             })
+        avatar.clipsToBounds = true
     }
     
     func configureNameLbl() {
         nameLbl = contentView.addSubview(UILabel)
             .config(14, fontWeight: UIFontWeightSemibold, textColor: UIColor.blackColor())
             .layout({ (make) in
-                make.left.equalTo(13)
+                make.left.equalTo(avatar.snp_right).offset(12)
                 make.top.equalTo(avatar)
             })
     }
@@ -157,7 +165,7 @@ class ActivityMemberCell: UITableViewCell {
     func configureAuthIcon() {
         authIcon = contentView.addSubview(UIImageView)
             .layout({ (make) in
-                make.centerY.equalTo(avatarCarLbl)
+                make.bottom.equalTo(avatar)
                 make.left.equalTo(avatarCarLbl.snp_right).offset(5)
                 make.size.equalTo(CGSizeMake(40, 15))
             })
@@ -185,7 +193,7 @@ class ActivityMemberCell: UITableViewCell {
     
     func setData(username: String, avatarURL: NSURL, avatarCarName: String?, authed: Bool) {
         nameLbl.text = username
-        avatarCarLbl.text = avatarCarName
+        avatarCarLbl.text = avatarCarName ?? "奥迪"
         avatar.kf_setImageWithURL(avatarURL)
         authIcon.image = authed ? UIImage(named: "auth_status_authed") : UIImage(named: "auth_status_unauthed")
     }

@@ -118,7 +118,7 @@ class RosterManager {
     
     private func _load() {
         if data.count > 0 {
-            assertionFailure()
+            data.removeAll()
         }
         guard let hostID = MainManager.sharedManager.hostUserID else {
             return

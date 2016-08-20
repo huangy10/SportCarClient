@@ -166,6 +166,9 @@ class Notification: BaseModel {
         case "ActivityJoin:invite_denied":
             let activity = try! getRelatedObj()! as Activity
             return [user!.nickName!, "拒绝了你对活动", activity.name!, "的申请"]
+        case "ActivityJoin:kick_out":
+            let activity = try! getRelatedObj()! as Activity
+            return [user!.nickName!, "将你请出了活动", activity.name!]
         case "Activity:like":
             let activity = try! getRelatedObj()! as Activity
             return [user!.nickName!, "赞了你的活动", activity.name!]
@@ -183,7 +186,8 @@ class Notification: BaseModel {
             return [user!.nickName!, "拒绝了你对俱乐部", club.name!, "的申请"]
         
         default:
-            return []
+            print(simplifiedMessageType)
+            return ["没有定义的消息类型"]
         }
     }
     

@@ -134,11 +134,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SportCarClient/LocalModel/Notification.swift"
-            timestampString = "493202605.577917"
+            timestampString = "493394368.554388"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
             landmarkName = "displayModeMap"
             landmarkType = "19">
          </BreakpointContent>
@@ -150,11 +150,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SportCarClient/LocalModel/Notification.swift"
-            timestampString = "493202605.577917"
+            timestampString = "493394368.554388"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "202"
-            endingLineNumber = "202"
+            startingLineNumber = "206"
+            endingLineNumber = "206"
             landmarkName = "getDisplayMode()"
             landmarkType = "5">
          </BreakpointContent>
@@ -298,6 +298,22 @@
             startingLineNumber = "180"
             endingLineNumber = "180"
             landmarkName = "tableView(_:heightForRowAtIndexPath:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SportCarClient/LocalModel/Notification.swift"
+            timestampString = "493394368.554388"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
+            landmarkName = "makeDisplayTitlePhrases()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

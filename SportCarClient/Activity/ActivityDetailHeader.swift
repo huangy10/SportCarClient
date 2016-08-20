@@ -9,7 +9,7 @@
 import UIKit
 
 
-class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollectionViewDelegate {
+class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, ActivityMemberDelegate {
     var act: Activity!
     weak var parentController: ActivityDetailController?
     
@@ -34,6 +34,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     var actDateLbl: UILabel!
     var attendNumLbl: UILabel!
     var inlineMiniUserSelect: UICollectionView!
+    var showAllMemberBtn: UIButton!
     
     var preferedHeight: CGFloat = 0
     
@@ -227,10 +228,25 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         inlineMiniUserSelect.layout { (make) in
             make.left.equalTo(static4)
             make.top.equalTo(static4.snp_bottom).offset(10)
-            make.right.equalTo(superview).offset(-20)
+//            make.right.equalTo(superview).offset(-75)
+            make.width.equalTo(35)
             make.height.equalTo(35)
         }
         inlineMiniUserSelect.registerClass(InlineUserSelectMiniCell.self, forCellWithReuseIdentifier: InlineUserSelectMiniCell.reuseIdentifier)
+        
+        showAllMemberBtn = superview.addSubview(UIButton)
+            .config(self, selector: #selector(showAllMemberBtnPressed))
+            .layout({ (make) in
+                make.left.equalTo(inlineMiniUserSelect.snp_right).offset(5)
+                make.height.equalTo(35)
+                make.centerY.equalTo(inlineMiniUserSelect)
+                make.width.equalTo(60)
+            })
+        showAllMemberBtn.setTitle(LS("全部"), forState: .Normal)
+        showAllMemberBtn.setTitleColor(kHighlightRed, forState: .Normal)
+        showAllMemberBtn.layer.borderColor = kHighlightRed.CGColor
+        showAllMemberBtn.layer.borderWidth = 0.5
+        showAllMemberBtn.layer.cornerRadius = 17.5
         
         superview.addSubview(UIView).config(kHighlightedRedTextColor)
             .layout { (make) in
@@ -275,11 +291,17 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         
         inlineMiniUserSelect.reloadData()
 //        let inlineUserSelectHeight = max(35, inlineMiniUserSelect.contentSize.height)
-        let rows = CGFloat((act.applicants.count) / 7 + 1)
-        let inlineUserSelectHeight = rows * 35 + (rows - 1) * 5
+//        let rows = CGFloat((act.applicants.count) / 7 + 1)
+//        let inlineUserSelectHeight = rows * 35 + (rows - 1) * 5
+//        inlineMiniUserSelect.snp_updateConstraints { (make) in
+//            make.height.equalTo(inlineUserSelectHeight)
+//        }
+        let cellNum = min(estimatedDisplayCellNumber(), act.applicants.count + 1)
         inlineMiniUserSelect.snp_updateConstraints { (make) in
-            make.height.equalTo(inlineUserSelectHeight)
+            make.width.equalTo(CGFloat(cellNum) * 40 - 5)
         }
+        showAllMemberBtn.hidden = !act.user!.isHost
+        
         self.frame = UIScreen.mainScreen().bounds
         self.updateConstraints()
         self.layoutIfNeeded()
@@ -317,12 +339,26 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return act.applicants.count + 1
+        return min(estimatedDisplayCellNumber(), act.applicants.count + 1)
+//        return act.applicants.count + 1
+    }
+    
+    func estimatedDisplayCellNumber() -> Int {
+        let screenWidth = UIScreen.mainScreen().bounds.width
+        let leftOffset: CGFloat = 25 + 10 + 20
+        let rightOffset: CGFloat = 15 + (act.user!.isHost ? (60 + 5) : 0)
+        let maxWidth = screenWidth - leftOffset - rightOffset
+        let cellWidth: CGFloat = 35
+        let cellInterval: CGFloat = 5
+        
+        return Int((maxWidth + cellInterval) / (cellWidth + cellInterval))
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(InlineUserSelectMiniCell.reuseIdentifier, forIndexPath: indexPath) as! InlineUserSelectMiniCell
-        if indexPath.row < act.applicants.count {
+        
+        let cellCount = min(estimatedDisplayCellNumber(), act.applicants.count + 1)
+        if indexPath.row < cellCount - 1 {
             cell.user = act.applicants[indexPath.row]
         } else {
             cell.imageView.image = UIImage(named: "chat_settings_add_person")
@@ -359,5 +395,16 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     
     func setLikeIconState(flag: Bool) {
         likeIcon.image = flag ? UIImage(named: "news_like_liked") : UIImage(named: "news_like_unliked")
+    }
+    
+    func showAllMemberBtnPressed() {
+        let membersDisplay = ActivityMembersController()
+        membersDisplay.act = act
+        membersDisplay.delegate = self
+        parentController?.navigationController?.pushViewController(membersDisplay, animated: true)
+    }
+    
+    func activityMemberControllerDidRemove(user: User) {
+        inlineMiniUserSelect.reloadData()
     }
 }
