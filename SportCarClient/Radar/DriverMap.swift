@@ -57,14 +57,8 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
     
     func confirmShowOnMap() {
         showOnMap = true
+        toast = showStaticToast(LS("正在定位..."))
         timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(RadarDriverMapController.getLocationData), userInfo: nil, repeats: true)
-        hideToast()
-    }
-    
-    func hideToast() {
-        if let toast = toast {
-            hideToast(toast)
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -96,7 +90,6 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         locationService.delegate = nil
         timer?.invalidate()
         locationUpdatingRequest?.cancel()
-        hideToast()
     }
     
     func createSubviews() {
@@ -176,6 +169,10 @@ extension RadarDriverMapController {
     
     func getLocationData() {
         locationService.startUserLocationService()
+        
+        if let toast = toast {
+            hideToast(toast)
+        }
     }
     
     func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {

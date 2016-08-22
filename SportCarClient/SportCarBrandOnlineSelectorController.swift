@@ -239,3 +239,33 @@ class SportCarBrandOnlineSelectorController: UITableViewController, UISearchBarD
         }
     }
 }
+
+class SportCarBrandSelectCell: UITableViewCell {
+    var nameLbl: UILabel?
+    
+    static let reuseIdentifier = "SportCarBrandSelectCell"
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        //
+        nameLbl = UILabel()
+        nameLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
+        nameLbl?.textColor = UIColor.blackColor()
+        self.contentView.addSubview(nameLbl!)
+        nameLbl?.snp_makeConstraints(closure: { (make) -> Void in
+            make.edges.equalTo(self.contentView).inset(UIEdgeInsets(top: 2, left: 15, bottom: 2, right: 15))
+        })
+        //
+        let rightIcon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
+        nameLbl?.addSubview(rightIcon)
+        rightIcon.snp_makeConstraints { (make) -> Void in
+            make.right.equalTo(nameLbl!)
+            make.centerY.equalTo(nameLbl!)
+            make.size.equalTo(CGSize(width: 9, height: 15))
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}

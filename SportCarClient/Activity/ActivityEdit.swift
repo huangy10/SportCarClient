@@ -41,9 +41,14 @@ class ActivityEditController: ActivityReleaseController {
             self.poster = image
         }
         userLocation = act.location?.coordinate
+        locDescription = act.location?.descr
         mapCell.locDisplay.text = act.location?.descr
         desInput.textColor = UIColor.blackColor()
         self.tableView.reloadData()
+    }
+    
+    override func navLeftBtnPressed() {
+        navigationController?.popViewControllerAnimated(true)
     }
 
     override func navRightBtnPressed() {
@@ -77,31 +82,55 @@ class ActivityEditController: ActivityReleaseController {
         }
         let toast = showStaticToast(LS("发布中..."))
         pp_showProgressView()
-        ActivityRequester.sharedInstance.activityEdit(
-            self.act.ssidString, name: actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate,
-                self.navigationController?.popViewControllerAnimated(true)
-                if let mine = self.actHomeController?.mine {
-                    mine.refreshControl.beginRefreshing()
-                    mine.getLatestActData()
-                }
-                self.hideToast(toast)
-                self.pp_hideProgressView()
-                if let presenter = self.presentingViewController {
-                    presenter.showToast(LS("修改成功"))
-                } else {
-                    self.showToast(LS("修改成功!"))
-                }
-                
+        ActivityRequester.sharedInstance.activityEdit(act.ssidString, name: actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, authedUserOnly: authedUserOnly, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", onSuccess: { (json) in
+            self.navigationController?.popViewControllerAnimated(true)
+            if let mine = self.actHomeController?.mine {
+                mine.refreshControl.beginRefreshing()
+                mine.getLatestActData()
+            }
+            self.hideToast(toast)
+            self.pp_hideProgressView()
+            if let presenter = self.presentingViewController {
+                presenter.showToast(LS("修改成功"))
+            } else {
+                self.showToast(LS("修改成功!"))
+            }
             }, onProgress: { (progress) in
                 dispatch_async(dispatch_get_main_queue(), {
                     self.pp_updateProgress(progress)
                 })
-        }) { (code) in
-            dispatch_async(dispatch_get_main_queue(), {
-                self.hideToast(toast)
-                self.showToast(LS("修改失败，请检查网络设置"), onSelf: true)
-                self.pp_hideProgressView()
-            })
+            }) { (code) in
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.hideToast(toast)
+                    self.showToast(LS("修改失败，请检查网络设置"), onSelf: true)
+                    self.pp_hideProgressView()
+                })
         }
+//        ActivityRequester.sharedInstance.activityEdit(
+//            self.act.ssidString, name: actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate,
+//                self.navigationController?.popViewControllerAnimated(true)
+//                if let mine = self.actHomeController?.mine {
+//                    mine.refreshControl.beginRefreshing()
+//                    mine.getLatestActData()
+//                }
+//                self.hideToast(toast)
+//                self.pp_hideProgressView()
+//                if let presenter = self.presentingViewController {
+//                    presenter.showToast(LS("修改成功"))
+//                } else {
+//                    self.showToast(LS("修改成功!"))
+//                }
+//                
+//            }, onProgress: { (progress) in
+//                dispatch_async(dispatch_get_main_queue(), {
+//                    self.pp_updateProgress(progress)
+//                })
+//        }) { (code) in
+//            dispatch_async(dispatch_get_main_queue(), {
+//                self.hideToast(toast)
+//                self.showToast(LS("修改失败，请检查网络设置"), onSelf: true)
+//                self.pp_hideProgressView()
+//            })
+//        }
     }
 }

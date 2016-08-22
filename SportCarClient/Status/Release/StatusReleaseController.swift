@@ -260,7 +260,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             showToast(LS("您的动态还差一张图片"), onSelf: true)
             return
         }
-        let content = firstEditting ? "" : statusContentInput?.text ?? ""
+        let content = (firstEditting ? "" : statusContentInput?.text ?? "").stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
         let car_id = sportCarList?.selectedCar?.ssidString
         guard let lat: Double = userLocation?.latitude else {
             showToast(LS("无法获取当前位置"), onSelf: true)
