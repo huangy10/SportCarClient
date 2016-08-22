@@ -58,7 +58,6 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     }
     
     deinit {
-        print("deinit status releaser")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     

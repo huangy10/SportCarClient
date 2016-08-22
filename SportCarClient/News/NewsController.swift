@@ -20,10 +20,6 @@ class NewsController: UITableViewController {
     
     var homeBtn: BackToHomeBtn!
     
-    deinit {
-        print("deinit news controller")
-    }
-    
     override init(style: UITableViewStyle) {
         super.init(style: style)
     }
@@ -200,6 +196,8 @@ extension NewsController {
                 self.tableView.reloadData()
             }
             }) { (code) -> () in
+                self.refreshControl?.endRefreshing()
+                self.showToast(LS("网络访问错误"))
         }
     }
     

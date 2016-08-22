@@ -12,7 +12,7 @@ import SwiftyJSON
 import Alamofire
 
 
-class PersonOtherController: PersonBasicController, RequestProtocol, LoadingProtocol {
+class PersonOtherController: PersonBasicController, RequestProtocol {
     
     // backOffLocation
     var backOffLocation: Location?

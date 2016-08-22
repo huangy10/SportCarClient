@@ -133,7 +133,6 @@ class RosterManager {
             } else if item.entityType! == "club" {
                 mapKey = "club\(item.relatedID)"
             } else {
-                print(item.entityType)
                 mapKey = ""
                 assertionFailure()
             }

@@ -172,10 +172,11 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
                 self.loadDataAndUpdateUI()
             }
             }) { (code) in
-                print(code)
                 if code == "status not found" {
                     self.showToast(LS("动态不存在或者已经被删除"))
                     self.navigationController?.popViewControllerAnimated(true)
+                } else {
+                    self.showToast(LS("网络访问错误:\(code)"))
                 }
         }
     }

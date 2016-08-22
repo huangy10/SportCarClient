@@ -29,6 +29,12 @@ class SportCar: BaseModel{
     var videoURL: NSURL?
     var audioURL: NSURL?
     
+    var fullName: String {
+        get {
+            return "\(name!) \(subname!)"
+        }
+    }
+    
     override func awakeFromFetch() {
         super.awakeFromFetch()
         let imagesRaw = JSON(data: images!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
@@ -61,7 +67,6 @@ class SportCar: BaseModel{
         if videoRaw.count > 0 {
             video = videoRaw[0].stringValue
             videoURL = SFURL(video!)
-            print(video, videoURL)
         }
         logo = json["logo"].stringValue
         name = json["name"].stringValue

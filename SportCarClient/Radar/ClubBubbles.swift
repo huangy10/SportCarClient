@@ -24,10 +24,6 @@ class ClubBubbleView: UIView {
     var updator: CADisplayLink?
     weak var aaa: UIViewController?
     
-    deinit {
-        print("deinit club bubble view")
-    }
-    
     func reloadBubble() {
         updator?.invalidate()
         for bubble in bubbles {

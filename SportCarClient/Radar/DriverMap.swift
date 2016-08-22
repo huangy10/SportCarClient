@@ -41,7 +41,6 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
     deinit {
         timer?.invalidate()
         NSNotificationCenter.defaultCenter().removeObserver(self)
-        print("deinit driver map")
     }
     
     override func viewDidLoad() {

@@ -35,7 +35,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     var carParamBoard: UIView!
     var carPrice: UILabel!
     var carEngine: UILabel!
-    var carTorque: UILabel!
+    var carSubname: UILabel!
     var carBody: UILabel!
     var carSpeed: UILabel!
     var carAcce: UILabel!
@@ -141,15 +141,15 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         //
         let staticCarPriceLbl = getCarParamStaticLabel()
         carParamBoard.addSubview(staticCarPriceLbl)
-        staticCarPriceLbl.text = LS("价格")
+        staticCarPriceLbl.text = LS("型号")
         staticCarPriceLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(carParamBoard).offset(20)
             make.top.equalTo(carParamBoard).offset(20)
         }
         //
-        carPrice = getCarParamContentLbl()
-        carParamBoard.addSubview(carPrice)
-        carPrice.snp_makeConstraints { (make) -> Void in
+        carSubname = getCarParamContentLbl()
+        carParamBoard.addSubview(carSubname)
+        carSubname.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(staticCarPriceLbl)
             make.top.equalTo(staticCarPriceLbl.snp_bottom)
         }
@@ -180,16 +180,16 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         }
         //
         let staticTransLbl = getCarParamStaticLabel()
-        staticTransLbl.text = LS("扭矩")
+        staticTransLbl.text = LS("价格")
         carParamBoard.addSubview(staticTransLbl)
         staticTransLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(carParamBoard).offset(20)
             make.top.equalTo(sepLine2).offset(20)
         }
         //
-        carTorque = getCarParamContentLbl()
-        carParamBoard.addSubview(carTorque)
-        carTorque.snp_makeConstraints { (make) -> Void in
+        carPrice = getCarParamContentLbl()
+        carParamBoard.addSubview(carPrice)
+        carPrice.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(staticTransLbl)
             make.top.equalTo(staticTransLbl.snp_bottom)
         }
@@ -297,7 +297,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         // 跑车性能指标设置
         carPrice.text = car.price
         carEngine.text = car.engine
-        carTorque.text = car.torque
+        carSubname.text = "\(car.name!) \(car.subname ?? "")"
         carBody.text = car.body
         carSpeed.text = car.maxSpeed
         carAcce.text = car.zeroTo60
@@ -544,7 +544,6 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     func getRequiredWidth() -> CGFloat {
         var contentRect = CGRectZero
         for view in self.subviews {
-            print(view.frame)
             contentRect = CGRectUnion(contentRect, view.frame)
         }
         return contentRect.width

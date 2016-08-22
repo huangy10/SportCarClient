@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import Dollar
 
-class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, SportCarBrandSelecterControllerDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate, SportCarSelectDetailProtocol {
+class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate, SportCarSelectDetailProtocol, SportCarBrandOnlineSelectorDelegate, LoadingProtocol {
     weak var homeDelegate: HomeDelegate?
     // 显示的用户的信息
     var data: PersonDataSource!
@@ -30,7 +30,6 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     var delayTask: dispatch_block_t?
     
     deinit {
-        print("deinit person basic controller")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -67,7 +66,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             self.header.user = hostUser
             self.header.loadDataAndUpdateUI()
             }) { (code) -> () in
-                print(code)
+                self.showToast(LS("网络访问错误:\(code)"))
         }
         // 获取认证车辆的列表
         requester.getAuthedCarsList(data.user.ssidString, onSuccess: { (json) -> () in
@@ -87,7 +86,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             self.jsonDataHandler(json!, container: &self.data.statusList)
             self.collectionView?.reloadData()
             }) { (code) -> () in
-                print(code)
+                self.showToast(LS("网络访问错误:\(code)"))
         }
     }
     
@@ -415,10 +414,13 @@ extension PersonBasicController {
 
     func needAddSportCar() {
         // show sportcar brand select controller
-        let detail = SportCarBrandSelecterController()
+//        let detail = SportCarBrandSelecterController()
+//        detail.delegate = self
+//        let nav = BlackBarNavigationController(rootViewController: detail)
+//        self.presentViewController(nav, animated: true, completion: nil)
+        let detail = ManufacturerOnlineSelectorController()
         detail.delegate = self
-        let nav = BlackBarNavigationController(rootViewController: detail)
-        self.presentViewController(nav, animated: true, completion: nil)
+        presentViewController(detail.toNavWrapper(), animated: true, completion: nil)   
     }
     
     /**
@@ -438,33 +440,63 @@ extension PersonBasicController {
         self.navigationController?.pushViewController(detail, animated: true)
     }
     
-    func brandSelected(manufacturer: String?, carType: String?) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-        if manufacturer == nil || carType == nil {
-            return
-        }
-
-        let toast = showStaticToast(LS("获取跑车数据中..."))
-        SportCarRequester.sharedInstance.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
-            self.hideToast(toast)
-            guard let data = data else {
+//    func brandSelected(manufacturer: String?, carType: String?) {
+//        self.dismissViewControllerAnimated(true, completion: nil)
+//        if manufacturer == nil || carType == nil {
+//            return
+//        }
+//
+//        let toast = showStaticToast(LS("获取跑车数据中..."))
+//        SportCarRequester.sharedInstance.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
+//            self.hideToast(toast)
+//            guard let data = data else {
+//                return
+//            }
+//            let carImgURL = SF(data["image_url"].stringValue)
+//            let headers = [LS("具体型号"), LS("爱车签名"), LS("价格"), LS("发动机"), LS("扭矩"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
+//            let contents = [carType, nil, data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
+//            let detail = SportCarSelectDetailController()
+//            detail.delegate = self
+//            detail.headers = headers
+//            detail.carId = data["carID"].stringValue
+//            detail.contents = contents
+//            detail.carType = carType
+//            detail.carDisplayURL = NSURL(string: carImgURL ?? "")
+//            self.navigationController?.pushViewController(detail, animated: true)
+//            }) { (code) -> () in
+//                // 弹窗说明错误
+//                self.hideToast(toast)
+//                self.showToast(LS("获取跑车数据失败"))
+//        }
+//    }
+    
+    func sportCarBrandOnlineSelectorDidCancel() {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func sportCarBrandOnlineSelectorDidSelect(manufacture: String, carName: String, subName: String) {
+        dismissViewControllerAnimated(true, completion: nil)
+        lp_start()
+        SportCarRequester.sharedInstance.querySportCarWith(manufacture, carName: carName, subName: subName, onSuccess: { (json) in
+            self.lp_stop()
+            guard let data = json else {
                 return
             }
             let carImgURL = SF(data["image_url"].stringValue)
             let headers = [LS("具体型号"), LS("爱车签名"), LS("价格"), LS("发动机"), LS("扭矩"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
-            let contents = [carType, nil, data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
+            let contents = [carName, nil, data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
             let detail = SportCarSelectDetailController()
             detail.delegate = self
             detail.headers = headers
             detail.carId = data["carID"].stringValue
             detail.contents = contents
-            detail.carType = carType
+            detail.carType = carName
             detail.carDisplayURL = NSURL(string: carImgURL ?? "")
             self.navigationController?.pushViewController(detail, animated: true)
-            }) { (code) -> () in
-                // 弹窗说明错误
-                self.hideToast(toast)
+            }) { (code) in
+                self.lp_stop()
                 self.showToast(LS("获取跑车数据失败"))
+  
         }
     }
     

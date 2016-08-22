@@ -158,6 +158,7 @@ class ActivityRequester: BasicRequester {
         upload(
             urlForName("edit", param: ["actID": actID]),
             parameters: param,
+            responseDataField: "data",
             onSuccess: onSuccess, onError: onError
         )
     }

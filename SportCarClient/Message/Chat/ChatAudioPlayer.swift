@@ -130,6 +130,5 @@ class UniversalAudioPlayer: NSObject, AVAudioPlayerDelegate {
         let session = AVAudioSession.sharedInstance()
         try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
         try session.overrideOutputAudioPort(.None)
-        print(session.currentRoute)
     }
 }

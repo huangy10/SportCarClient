@@ -274,7 +274,6 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         if errorCode == BMK_SEARCH_NO_ERROR {
             if let data = poiResult.poiInfoList as? [BMKPoiInfo] where data.count > 0{
                 self.data = data
-                data.each({ print($0.name) })
                 self.tableView.hidden = false
                 self.tableView.reloadData()
             }

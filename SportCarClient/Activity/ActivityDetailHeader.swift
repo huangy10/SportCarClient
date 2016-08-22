@@ -406,5 +406,10 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     
     func activityMemberControllerDidRemove(user: User) {
         inlineMiniUserSelect.reloadData()
+        let cellNum = min(estimatedDisplayCellNumber(), act.applicants.count + 1)
+        inlineMiniUserSelect.snp_updateConstraints { (make) in
+            make.width.equalTo(CGFloat(cellNum) * 40 - 5)
+        }
+        layoutIfNeeded()
     }
 }

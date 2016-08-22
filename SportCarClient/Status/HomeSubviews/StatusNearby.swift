@@ -29,7 +29,6 @@ class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate,
     deinit {
         refreshView.scrollView = nil
         refreshView = nil
-        print("status nearby deinit")
     }
     
     override func viewDidLoad() {

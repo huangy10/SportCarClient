@@ -122,7 +122,6 @@ class AppManager: UIViewController {
     
     func loadHistoricalNotifications(launchOptions: [NSObject: AnyObject]?) {
         if let notification = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [String: AnyObject] {
-            
             print(notification)
         }
     }

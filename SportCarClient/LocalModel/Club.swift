@@ -70,10 +70,6 @@ class Club: BaseModel {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         data = Club.reorganizeJSON(data)
         name = data["club_name"].stringValue
-        if name == "" {
-            print(data)
-            assertionFailure()
-        }
         logo = data["club_logo"].stringValue
         clubDescription = data["description"].stringValue
         identified = data["identified"].boolValue

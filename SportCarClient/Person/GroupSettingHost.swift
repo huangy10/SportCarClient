@@ -46,9 +46,6 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         leftBtn.frame = CGRectMake(0, 0, 9, 15)
         leftBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
-//        let barBtnItem = UIBarButtonItem(title: LS("发布活动"), style: .Plain, target: self, action: #selector(navRightBtnPressed))
-//        barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
-//        self.navigationItem.rightBarButtonItem = barBtnItem
     }
     
     override func navLeftBtnPressed() {

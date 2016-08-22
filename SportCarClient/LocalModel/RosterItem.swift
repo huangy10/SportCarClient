@@ -64,7 +64,6 @@ class RosterItem: BaseModel {
             }
             
         } else {
-            print(self.entityType)
             assertionFailure()
         }
         dataLoaded = true

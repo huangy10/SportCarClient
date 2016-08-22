@@ -137,7 +137,6 @@ class Notification: BaseModel {
             return nil
         }
         if _objInMem == nil {
-            print(T)
             try _objInMem = T.fromJSONString(relatedObj!, detailLevel: 0)
         }
         return _objInMem as? T

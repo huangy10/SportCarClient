@@ -51,11 +51,11 @@ class MessageController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        if _curTag == 0 {
-            notificationList.viewWillAppear(animated)
-        } else {
-            chatList.viewWillAppear(animated)
-        }
+//        if _curTag == 0 {
+//            notificationList.viewWillAppear(animated)
+//        } else {
+//            chatList.viewWillAppear(animated)
+//        }
         notifUnreadLbl.setUnreadNum(MessageManager.defaultManager.unreadNotifNum)
         chatUnreadLbl.setUnreadNum(MessageManager.defaultManager.unreadChatNum)
     }
@@ -76,6 +76,7 @@ class MessageController: UIViewController {
         }
         
         chatList = RosterController()
+        addChildViewController(chatList)
         board.addSubview(chatList.view)
         chatList.messageController = self
         chatList.view.snp_makeConstraints { (make) -> Void in
@@ -84,9 +85,12 @@ class MessageController: UIViewController {
             make.bottom.equalTo(superview)
             make.width.equalTo(screenWidth)
         }
+        chatList.didMoveToParentViewController(self)
+        
 //        ChatRecordDataSource.sharedDataSource.listCtrl = chatList
         
         notificationList = NotificationController()
+        addChildViewController(notificationList)
         board.addSubview(notificationList.view)
         notificationList.messageHome = self
         notificationList.view.snp_makeConstraints { (make) -> Void in
@@ -95,6 +99,7 @@ class MessageController: UIViewController {
             make.bottom.equalTo(superview)
             make.width.equalTo(screenWidth)
         }
+        notificationList.didMoveToParentViewController(self)
     }
     
     func navSettings() {

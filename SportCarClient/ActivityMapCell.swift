@@ -32,10 +32,6 @@ class MapCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        print("map deinit")
-    }
-    
     func createSubviews() {
         map = BMKMapView()
         self.contentView.addSubview(map)

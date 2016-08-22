@@ -131,7 +131,6 @@ class MessageManager {
                 self.request = nil
                 dispatch_async(self.queue) { self.listen() }
             }, onError: { (code) in
-                print(code)
                 if let code = code {
                     self.errorHanlde(code)
                 }

@@ -37,10 +37,6 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         createSubviews()
     }
     
-    deinit {
-        print("deinit radar home")
-    }
-    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)

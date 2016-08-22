@@ -80,7 +80,6 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
         if let indexPath = tableView.indexPathForCell(cell) {
             indexToDelete = indexPath.row
             let user = act.applicants[indexPath.row]
-            print(user.nickName, act.name)
             let message = String(format: LS("确认将 %@ 从活动 %@ 中请出？"), user.nickName!, act.name!)
             showConfirmToast(LS("请出成员"), message: message, target: self, onConfirm: #selector(confirmKickoutUser))
         } else {
@@ -126,6 +125,8 @@ class ActivityMemberCell: UITableViewCell {
     }
     
     func createSubviews() {
+        selectionStyle = .None
+        
         configureAvatar()
         configureNameLbl()
         configureAvatarCarLbl()

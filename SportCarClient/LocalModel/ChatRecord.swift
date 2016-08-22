@@ -32,7 +32,6 @@ class ChatRecord: BaseModel {
     private var _cachedWaveData: [Float]?
     var cachedWaveData: [Float]? {
         get {
-            print(self.audioCaches)
             if _cachedWaveData == nil {
                 if let cache = self.audioCaches {
                     let data = JSON(data: cache.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!).arrayValue

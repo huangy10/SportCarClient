@@ -62,11 +62,7 @@ class HomeController: UIViewController, HomeDelegate {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    deinit {
-        print("deinit home controller")
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.createSubviews()
@@ -86,7 +82,8 @@ class HomeController: UIViewController, HomeDelegate {
             // 令侧边栏更新数据
             self.reloadData()
             }) { (code) -> () in
-                print(code)
+//                print(code)
+                self.showToast(LS("网络访问错误:\(code)"))
         }
     }
     
@@ -246,6 +243,5 @@ extension HomeController {
         }
         let cache = KingfisherManager.sharedManager.cache
         cache.clearMemoryCache()
-        print("clear cache")
     }
 }

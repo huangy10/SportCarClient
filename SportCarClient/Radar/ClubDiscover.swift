@@ -28,18 +28,13 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     var clubFilterType: String = "nearby"
     var cityFilterType: String = "全国"
     
-    deinit {
-        print("deinit club discover")
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
         createSubviews()
 
         let requester = ClubRequester.sharedInstance
-        requester.discoverClub("nearby", cityLimit: "全国", skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
-            print(json!)
+        requester.discoverClub("value", cityLimit: "全国", skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
                 let club: Club = try! MainManager.sharedManager.getOrCreate(data)
                 self.clubs.append(club)
@@ -47,7 +42,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             self.clubs = $.uniq(self.clubs, by: { $0.ssid })
             self.clubList.reloadData()
             }) { (code) -> () in
-                print(code)
+                self.showToast(LS("网络访问错误:\(code)"))
         }
     }
     
@@ -151,6 +146,12 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        if scrollView.contentOffset.y + scrollView.bounds.height >= scrollView.contentSize.height {
+            sendRequest()
+        }
+    }
+    
     func clubBubbleDidClickOn(club: Club) {
         if club.attended {
             if club.founderUser!.isHost {
@@ -184,7 +185,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             clubFilterView.snp_remakeConstraints(closure: { (make) -> Void in
                 make.bottom.equalTo(self.view).offset(-25)
                 make.right.equalTo(self.view).offset(-20)
-                make.size.equalTo(CGSizeMake(115, 40 * 7))
+                make.size.equalTo(CGSizeMake(115, 40 * 6))
             })
             UIView.animateWithDuration(0.3) { () -> Void in
                 self.clubFilter.view.toRound(5)
@@ -195,9 +196,12 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         clubFilter.expanded = !clubFilter.expanded
     }
     
-    func sendRequest() {
-        let opType = ["nearby", "value", "average", "members", "beauty", "recent"][clubFilter.selectedRow]
+    func sendRequest(reload: Bool = false) {
+        let opType = ["value", "average", "members", "beauty", "recent"][clubFilter.selectedRow]
         ClubRequester.sharedInstance.discoverClub(opType, cityLimit: self.cityFilterType, skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
+            if reload {
+                self.clubs.removeAll()
+            }
             for data in json!.arrayValue {
     
                 let club: Club = try! MainManager.sharedManager.getOrCreate(data)
@@ -206,7 +210,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             self.clubs = $.uniq(self.clubs, by: { $0.ssid })
             self.clubList.reloadData()
         }) { (code) -> () in
-            print(code)
+            self.showToast(LS("网络访问错误:\(code)"))
         }
     }
     
@@ -217,12 +221,12 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             return
         }
         self.clubs.removeAll()
-        sendRequest()
+        sendRequest(true)
     }
     
     func cityFilterPressed() {
         let select = CityElementSelectController()
-        select.maxLevel = 0
+        select.maxLevel = 1
         select.showAllContry = true
         select.delegate = self
         self.radarHome?.presentViewController(select.toNavWrapper(), animated: true, completion: nil)
@@ -232,9 +236,9 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     
     func cityElementSelectDidSelect(dataSource: CityElementSelectDataSource) {
         self.radarHome?.dismissViewControllerAnimated(true, completion: nil)
-        cityFilterType = dataSource.selectedProv ?? "全国"
+        cityFilterType = dataSource.selectedCity ?? "全国"
         cityFilterLbl.text = cityFilterType
-        sendRequest()
+        sendRequest(true)
     }
     
     func cityElementSelectDidCancel() {

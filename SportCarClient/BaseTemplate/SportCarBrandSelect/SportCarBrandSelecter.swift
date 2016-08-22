@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-
+@available(*, deprecated=1)
 protocol SportCarBrandSelecterControllerDelegate: class {
     func brandSelected(manufacturer: String?, carType: String?)
 }
@@ -98,6 +98,7 @@ class SportCarBrandDataManager {
 }
 
 
+@available(*, deprecated=1)
 class SportCarBrandSelecterController: InputableViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
     weak var delegate: SportCarBrandSelecterControllerDelegate?
     let dataManager = SportCarBrandDataManager.sharedManager

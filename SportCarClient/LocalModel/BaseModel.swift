@@ -43,7 +43,6 @@ class BaseModel: NSManagedObject {
         }
         if ssid == 0 {
             ssid = data[self.dynamicType.idField].int32Value
-            print(self.dynamicType.idField)
             assert(ssid > 0, "Model can not be initalized without a id")
         }
         

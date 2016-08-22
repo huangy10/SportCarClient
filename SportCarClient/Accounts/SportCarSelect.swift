@@ -11,7 +11,7 @@ import SnapKit
 import Kingfisher
 import Alamofire
 
-class SportCarSelectController: InputableViewController, SportCarBrandSelecterControllerDelegate {
+class SportCarSelectController: InputableViewController, SportCarBrandOnlineSelectorDelegate {
     
     var sportCarDisplay: UIImageView?
     var brandSelectBtn: UIButton?
@@ -155,7 +155,7 @@ class SportCarSelectController: InputableViewController, SportCarBrandSelecterCo
         if let req = reqOnfly {
             req.cancel()
         }
-        let select = SportCarBrandSelecterController()
+        let select = ManufacturerOnlineSelectorController()
         select.delegate = self
         let nav = BlackBarNavigationController(rootViewController: select)
         self.presentViewController(nav, animated: true, completion: nil)
@@ -169,30 +169,70 @@ class SportCarSelectController: InputableViewController, SportCarBrandSelecterCo
         }
         brandSelectBtn?.setTitle(LS("获取跑车资料中..."), forState: .Normal)
         brandSelectBtn?.enabled = false
-        reqOnfly = SportCarRequester.sharedInstance.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
-            guard let data = data else {
+//        reqOnfly = SportCarRequester.sharedInstance.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
+//            guard let data = data else {
+//                return
+//            }
+//            let carImgURL = SF(data["image_url"].stringValue)
+//            let headers = [LS("具体型号"), LS("跑车签名"), LS("价格"), LS("发动机"), LS("扭矩"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
+//            let contents = [carType, self.signatureInput?.text, data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
+//            let detail = SportCarSelectDetailController()
+//            detail.headers = headers
+//            detail.carId = data["carID"].stringValue
+//            detail.contents = contents
+//            detail.carType = carType
+//            detail.carDisplayURL = NSURL(string: carImgURL ?? "")
+//            
+//            self.navigationController?.pushViewController(detail, animated: true)
+//            self.brandSelectBtn?.enabled = true
+//            }) { (code) -> () in
+//                // 弹窗说明错误
+//                let alert = UIAlertController(title: LS("载入跑车数据失败"), message: nil, preferredStyle: .Alert)
+//                alert.addAction(UIAlertAction(title: LS("取消"), style: .Cancel, handler: { (action) -> Void in
+//                    self.brandSelectBtn?.setTitle(LS("重选跑车"), forState: .Normal)
+//                }))
+//                self.brandSelectBtn?.enabled = true
+//        }
+    }
+    
+    func sportCarBrandOnlineSelectorDidCancel() {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func sportCarBrandOnlineSelectorDidSelect(manufacture: String, carName: String, subName: String) {
+        dismissViewControllerAnimated(true, completion: nil)
+        brandSelectBtn?.setTitle(LS("获取跑车资料中"), forState: .Normal)
+        brandSelectBtn?.enabled = false
+        
+        reqOnfly = SportCarRequester.sharedInstance.querySportCarWith(manufacture, carName: carName, subName: subName, onSuccess: { (json) in
+            guard let data = json else {
                 return
             }
+            self.brandSelectBtn?.setTitle(LS("请选择品牌型号"), forState: .Normal)
+            self.brandSelectBtn?.enabled = true
+            
             let carImgURL = SF(data["image_url"].stringValue)
             let headers = [LS("具体型号"), LS("跑车签名"), LS("价格"), LS("发动机"), LS("扭矩"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
-            let contents = [carType, self.signatureInput?.text, data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
+            let contents = [carName, self.signatureInput?.text, data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
             let detail = SportCarSelectDetailController()
             detail.headers = headers
             detail.carId = data["carID"].stringValue
             detail.contents = contents
-            detail.carType = carType
+            detail.carType = carName
             detail.carDisplayURL = NSURL(string: carImgURL ?? "")
             
             self.navigationController?.pushViewController(detail, animated: true)
             self.brandSelectBtn?.enabled = true
-            }) { (code) -> () in
-                // 弹窗说明错误
+            }, onError: { (code) in
+                self.brandSelectBtn?.setTitle(LS("请选择品牌型号"), forState: .Normal)
+                self.brandSelectBtn?.enabled = true
+                
                 let alert = UIAlertController(title: LS("载入跑车数据失败"), message: nil, preferredStyle: .Alert)
                 alert.addAction(UIAlertAction(title: LS("取消"), style: .Cancel, handler: { (action) -> Void in
                     self.brandSelectBtn?.setTitle(LS("重选跑车"), forState: .Normal)
                 }))
                 self.brandSelectBtn?.enabled = true
-        }
+        })
     }
 }
 

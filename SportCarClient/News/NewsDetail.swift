@@ -70,7 +70,6 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     var likeRequesting: Bool = false
     
     deinit {
-        print("deinit news detail")
         NSNotificationCenter.defaultCenter().removeObserver(self)
         newsDetailPanelView.removeObserver(self, forKeyPath: "scrollView.contentSize", context: &newsContext)
     }
@@ -660,7 +659,6 @@ extension NewsDetailController {
      */
     private func reArrangeCommentTableFrame() {
         let tableContentSize = commentTableView?.contentSize
-        print(tableContentSize?.height)
         commentTableView?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(tableContentSize!.height)
         })
@@ -732,7 +730,7 @@ extension NewsDetailController {
             }
             self.requestingCommentData = false
             }) { (code) -> () in
-                print(code)
+                self.showToast(LS("网络访问错误:\(code)"))
                 self.requestingCommentData = false
                 assertionFailure()
         }

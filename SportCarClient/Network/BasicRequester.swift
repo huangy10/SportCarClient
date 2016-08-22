@@ -80,8 +80,8 @@ class BasicRequester {
         ) {
         switch response.result {
         case .Failure(let err):
-            print(requestURL)
-            print(err)
+//            print(requestURL)
+//            print(err)
             if let newError = self.internalErrorHandler(err) {
                 onError(code: "\(newError.code)")
             } else {
@@ -152,7 +152,6 @@ class BasicRequester {
         }
         let req = manager.request(.GET, URLString, parameters: parameters, encoding: encoding, headers: defaultHeader)
         req.responseJSON(responseQueue) { (response) in
-            print(response.request?.URL)
             self.responseChecker(URLString, response, dataField: responseDataField, onSuccess: onSuccess, onError: onError)
         }
         if let progressClosure = onProgress {

@@ -37,10 +37,6 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
     
     private var _curTag = 1
     
-    deinit {
-        print("deinit status home")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
@@ -50,15 +46,15 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        let controllers = [nearByStatusCtrl, followStatusCtrl, hotStatusCtrl]
-        controllers[_curTag].viewWillAppear(animated)
+//        let controllers = [nearByStatusCtrl, followStatusCtrl, hotStatusCtrl]
+//        controllers[_curTag].viewWillAppear(animated)
         navLeftBtn.unreadStatusChanged()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        let controllers = [nearByStatusCtrl, followStatusCtrl, hotStatusCtrl]
-        controllers[_curTag].viewWillDisappear(true)
+//        let controllers = [nearByStatusCtrl, followStatusCtrl, hotStatusCtrl]
+//        controllers[_curTag].viewWillDisappear(true)
     }
     
     internal func createSubviews() {
@@ -76,19 +72,25 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         board.frame = rect
         // 关注
         followStatusCtrl.homeController = self
+        addChildViewController(followStatusCtrl)
         let followView = followStatusCtrl.view
         board.addSubview(followView)
         followView.frame = CGRectMake(screenSize.width, 0, screenSize.width, rect.height)
+        followStatusCtrl.didMoveToParentViewController(self)
         //
         hotStatusCtrl.homeController = self
+        addChildViewController(hotStatusCtrl)
         let hotView = hotStatusCtrl.view
         board.addSubview(hotView)
         hotView.frame = CGRectMake(screenSize.width * 2, 0, screenSize.width, rect.height)
+        hotStatusCtrl.didMoveToParentViewController(self)
         // 附近
         nearByStatusCtrl.homeController = self
+        addChildViewController(nearByStatusCtrl)
         let nearbyView = nearByStatusCtrl.view
         board.addSubview(nearbyView)
         nearbyView.frame = CGRectMake(0, 0, screenSize.width, rect.height)
+        nearByStatusCtrl.didMoveToParentViewController(self)
     }
     
     internal func navSettings() {

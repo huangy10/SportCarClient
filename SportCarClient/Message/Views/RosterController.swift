@@ -29,6 +29,7 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
+
     /**
      上级的MessageController的导航栏右侧按钮按下之后调用这个来调出用户选择页面
      */

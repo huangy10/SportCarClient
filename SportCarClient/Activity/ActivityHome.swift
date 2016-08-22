@@ -29,10 +29,6 @@ class ActivityHomeController: UIViewController {
     
     var navLeftBtn: BackToHomeBtn!
     
-    deinit {
-        print("deinit activity home controller")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()

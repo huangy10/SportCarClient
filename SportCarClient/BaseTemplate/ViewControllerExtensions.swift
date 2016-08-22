@@ -69,6 +69,9 @@ extension UIViewController {
         assert(NSThread.isMainThread())
         let superview = onSelf ? self.view : UIApplication.sharedApplication().keyWindow!.rootViewController!.view
 //        let superview = self.view
+        
+        let messageHeight: CGFloat = (message as NSString).boundingRectWithSize(CGSizeMake(170, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(14)], context: nil).height
+        
         let toastContainer = UIView()
         toastContainer.backgroundColor = UIColor(red: 0.067, green: 0.051, blue: 0.051, alpha: 1)
         toastContainer.layer.addDefaultShadow(6, opacity: 0.3, offset: CGSizeMake(0, 4))
@@ -78,23 +81,27 @@ extension UIViewController {
         toastContainer.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.bottom.equalTo(superview.snp_top)
-            make.size.equalTo(CGSizeMake(200, 45))
+            make.size.equalTo(CGSizeMake(200, messageHeight + 30))
         }
         let lbl = UILabel()
+        lbl.numberOfLines = 0
+        lbl.lineBreakMode = .ByCharWrapping
         lbl.font = UIFont.systemFontOfSize(14)
         lbl.textColor = UIColor.whiteColor()
         lbl.textAlignment = .Center
         toastContainer.addSubview(lbl)
         lbl.text = message
         lbl.snp_makeConstraints { (make) -> Void in
+//            make.edges.equalTo(toastContainer)
             make.center.equalTo(toastContainer)
+            make.size.equalTo(CGSizeMake(170, messageHeight))
         }
         //
         superview.layoutIfNeeded()
         toastContainer.snp_remakeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(40 + 44)
-            make.size.equalTo(CGSizeMake(200, 45))
+            make.size.equalTo(CGSizeMake(200, messageHeight + 30))
         }
         SpringAnimation.spring(0.3) { 
             superview.layoutIfNeeded()
@@ -103,7 +110,7 @@ extension UIViewController {
             toastContainer.snp_remakeConstraints { (make) -> Void in
                 make.centerX.equalTo(superview)
                 make.bottom.equalTo(superview.snp_top)
-                make.size.equalTo(CGSizeMake(200, 45))
+                make.size.equalTo(CGSizeMake(200, messageHeight + 30))
             }
             superview.layoutIfNeeded()
             }) { (_) -> Void in
@@ -380,8 +387,8 @@ class ConfirmToastPresentationController: UIViewController {
         blurMask.snp_makeConstraints { (make) in
             make.edges.equalTo(bg)
         }
-        blurMask.layer.opacity = 0.5
         
+        bg.addSubview(UIView).config(UIColor(white: 0, alpha: 0.3))
         bg.layer.opacity = 0
     }
     

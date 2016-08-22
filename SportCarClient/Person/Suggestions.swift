@@ -83,6 +83,7 @@ class SuggestionController: PresentTemplateViewController {
         confirmBtn = UIButton()
         confirmBtn.setTitle(LS("确定"), forState: .Normal)
         confirmBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
+        confirmBtn.addTarget(self, action: #selector(confirmMessageSent), forControlEvents: .TouchUpInside)
         confirmBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
         container.addSubview(confirmBtn)
         confirmBtn.snp_makeConstraints { (make) -> Void in
@@ -93,7 +94,7 @@ class SuggestionController: PresentTemplateViewController {
         //
         cancelBtn = UIButton()
         cancelBtn.setTitle(LS("取消"), forState: .Normal)
-        cancelBtn.addTarget(self, action: #selector(PresentTemplateViewController.hideAnimated), forControlEvents: .TouchUpInside)
+        cancelBtn.addTarget(self, action: #selector(hideAnimated), forControlEvents: .TouchUpInside)
         cancelBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), forState: .Normal)
         cancelBtn.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
         container.addSubview(cancelBtn)
@@ -147,5 +148,10 @@ class SuggestionController: PresentTemplateViewController {
         beginEditing = true
         textView.text = ""
         textView.textColor = UIColor.blackColor()
+    }
+    
+    func confirmMessageSent() {
+        hideAnimated(nil)
+        UIApplication.sharedApplication().keyWindow?.rootViewController?.showToast(LS("感谢您提出的意见！"))
     }
 }

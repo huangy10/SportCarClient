@@ -93,7 +93,7 @@ class SportCarSelectParamEditableCell: SportCarSelectParamCell {
     }
 }
 
-class SportCarSelectDetailController: UITableViewController, SportCarBrandSelecterControllerDelegate {
+class SportCarSelectDetailController: UITableViewController, SportCarBrandOnlineSelectorDelegate {
     
     var headers: [String]?
     var contents: [String?]?
@@ -235,30 +235,51 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandSelect
     }
     
     func selectSportCarBrandPressed() {
-        let select = SportCarBrandSelecterController()
+        let select = ManufacturerOnlineSelectorController()
         select.delegate = self
         let nav = BlackBarNavigationController(rootViewController: select)
         self.presentViewController(nav, animated: true, completion: nil)
     }
     
-    func brandSelected(manufacturer: String?, carType: String?) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-        if manufacturer == nil || carType == nil {
-            return
-        }
-        SportCarRequester.sharedInstance.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
-            guard let data = data else {
+//    func brandSelected(manufacturer: String?, carType: String?) {
+//        self.dismissViewControllerAnimated(true, completion: nil)
+//        if manufacturer == nil || carType == nil {
+//            return
+//        }
+//        SportCarRequester.sharedInstance.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
+//            guard let data = data else {
+//                return
+//            }
+//            let carImgURL = SF(data["image_url"].stringValue)
+//            self.carDisplayURL = NSURL(string: carImgURL ?? "")
+//            self.carId = data["carID"].stringValue
+//            self.contents = [carType, self.contents![1], data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
+//            self.tableView?.reloadData()
+//
+//            }) { (code) -> () in
+//                self.showToast(LS("载入爱车数据失败"))
+//        }
+//    }
+    
+    func sportCarBrandOnlineSelectorDidSelect(manufacture: String, carName: String, subName: String) {
+        dismissViewControllerAnimated(true, completion: nil)
+        SportCarRequester.sharedInstance.querySportCarWith(manufacture, carName: carName, subName: subName, onSuccess: { (json) in
+            guard let data = json else {
                 return
             }
             let carImgURL = SF(data["image_url"].stringValue)
             self.carDisplayURL = NSURL(string: carImgURL ?? "")
             self.carId = data["carID"].stringValue
-            self.contents = [carType, self.contents![1], data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
+            self.contents = [carName, self.contents![1], data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
             self.tableView?.reloadData()
 
-            }) { (code) -> () in
+            }) { (code) in
                 self.showToast(LS("载入爱车数据失败"))
         }
+    }
+    
+    func sportCarBrandOnlineSelectorDidCancel() {
+        dismissViewControllerAnimated(true, completion: nil)
     }
 }
 

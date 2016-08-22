@@ -56,7 +56,6 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
         let notification = data[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! NotificationCell
         cell.delegate = self
-        print(notification.messageBody)
         cell.setData(
             notification.user!.avatarURL!,
             date: notification.createdAt!,

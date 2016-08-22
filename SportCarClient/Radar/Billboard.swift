@@ -180,7 +180,6 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
             req.cancel()
         }
         ongoingRequest = ClubRequester.sharedInstance.clubBillboard(skip, limit: limit, scope: scope, filterType: filterType, onSuccess: { (json) in
-            print(json!)
             self.parseServerData(json!.arrayValue, alwaysReload: alwaysReload)
             self.refreshControl.endRefreshing()
             }) { (code) in
