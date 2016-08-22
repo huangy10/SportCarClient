@@ -186,6 +186,7 @@
 		BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96451C2061E0004F77E8 /* LoadingButton.swift */; };
 		BFDB5CB41D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB5CB31D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift */; };
 		BFDBD6011D3D1A4200793256 /* PermissionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */; };
+		BFDD88601D6AF2700043A333 /* CityElementSelectWithSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDD885F1D6AF2700043A333 /* CityElementSelectWithSuggestion.swift */; };
 		BFDFF2771C8BC36200055C1C /* ChineseSubdivisions.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFDFF2761C8BC36200055C1C /* ChineseSubdivisions.plist */; };
 		BFDFF2791C8BC3A300055C1C /* CityElementSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFF2781C8BC3A300055C1C /* CityElementSelect.swift */; };
 		BFDFF27B1C8BF6EA00055C1C /* ClubDiscover.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFF27A1C8BF6EA00055C1C /* ClubDiscover.swift */; };
@@ -496,6 +497,7 @@
 		BFCB96451C2061E0004F77E8 /* LoadingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingButton.swift; path = BaseTemplate/LoadingButton.swift; sourceTree = "<group>"; };
 		BFDB5CB31D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SportCarBrandOnlineSelectorController.swift; sourceTree = "<group>"; };
 		BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PermissionCheck.swift; path = Sync/PermissionCheck.swift; sourceTree = "<group>"; };
+		BFDD885F1D6AF2700043A333 /* CityElementSelectWithSuggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CityElementSelectWithSuggestion.swift; path = Person/CityElementSelectWithSuggestion.swift; sourceTree = "<group>"; };
 		BFDFF2761C8BC36200055C1C /* ChineseSubdivisions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = ChineseSubdivisions.plist; path = data/ChineseSubdivisions.plist; sourceTree = "<group>"; };
 		BFDFF2781C8BC3A300055C1C /* CityElementSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CityElementSelect.swift; path = Person/CityElementSelect.swift; sourceTree = "<group>"; };
 		BFDFF27A1C8BF6EA00055C1C /* ClubDiscover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubDiscover.swift; path = Radar/ClubDiscover.swift; sourceTree = "<group>"; };
@@ -1465,6 +1467,7 @@
 			children = (
 				BFDFF2761C8BC36200055C1C /* ChineseSubdivisions.plist */,
 				BFDFF2781C8BC3A300055C1C /* CityElementSelect.swift */,
+				BFDD885F1D6AF2700043A333 /* CityElementSelectWithSuggestion.swift */,
 			);
 			name = CitySelect;
 			sourceTree = "<group>";
@@ -2314,6 +2317,7 @@
 				BF4113D11D649A76005B6757 /* NotificationCell2.swift in Sources */,
 				BFC4F14E1CE6C2CE004D7BD0 /* LocationSearch.swift in Sources */,
 				BFB857D71CD9983600610349 /* SettingsRequester.swift in Sources */,
+				BFDD88601D6AF2700043A333 /* CityElementSelectWithSuggestion.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

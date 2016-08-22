@@ -42,6 +42,7 @@ class ActivityEditController: ActivityReleaseController {
         }
         userLocation = act.location?.coordinate
         locDescription = act.location?.descr
+        city = act.location?.city
         mapCell.locDisplay.text = act.location?.descr
         desInput.textColor = UIColor.blackColor()
         self.tableView.reloadData()
@@ -82,7 +83,7 @@ class ActivityEditController: ActivityReleaseController {
         }
         let toast = showStaticToast(LS("发布中..."))
         pp_showProgressView()
-        ActivityRequester.sharedInstance.activityEdit(act.ssidString, name: actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, authedUserOnly: authedUserOnly, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", onSuccess: { (json) in
+        ActivityRequester.sharedInstance.activityEdit(act.ssidString, name: actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, authedUserOnly: authedUserOnly, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", city: city ?? "", onSuccess: { (json) in
             self.navigationController?.popViewControllerAnimated(true)
             if let mine = self.actHomeController?.mine {
                 mine.refreshControl.beginRefreshing()

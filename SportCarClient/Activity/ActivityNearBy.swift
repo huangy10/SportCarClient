@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import Alamofire
 
 
-class ActivityNearByController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate {
+class ActivityNearByController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate, CityElementSelectDelegate {
     
     weak var home: RadarHomeController!
     
@@ -25,6 +26,15 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
     var pageCount: UIPageControl!
     var _prePage: Int = 0
     var showReload: Bool = true
+    
+    var cityFilterBtn: UIButton!
+    var cityFilterLbl: UILabel!
+    
+    var nearByOnly: Bool {
+        return cityFilterLbl.text == "全国"
+    }
+    
+    var ongoingRequest: Request?
     
 //    var cityFilter: UIButton!
 //    var cityFilterLbl: UILabel!
@@ -96,6 +106,43 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
             make.right.equalTo(superview)
             make.height.equalTo(220)
         }
+        
+        configureCityFilter()
+    }
+    
+    func configureCityFilter() {
+        cityFilterBtn = view.addSubview(UIButton)
+            .config(self, selector: #selector(cityFilterBtnPressed)).config(UIColor.whiteColor())
+            .addShadow()
+            .toRound(20)
+            .layout({ (make) in
+                make.right.equalTo(view).offset(-13)
+                make.top.equalTo(view).offset(13)
+                make.size.equalTo(CGSizeMake(120, 40))
+            })
+        let icon = cityFilterBtn.addSubview(UIImageView)
+            .config(UIImage(named: "down_arrow_black"))
+            .layout { (make) in
+                make.centerY.equalTo(cityFilterBtn)
+                make.right.equalTo(cityFilterBtn).offset(-20)
+                make.size.equalTo(CGSizeMake(13, 9))
+        }
+        cityFilterLbl = cityFilterBtn.addSubview(UILabel)
+            .config(14, textColor: UIColor(white: 0, alpha: 0.87), text: LS("全国"))
+            .layout({ (make) in
+                make.left.equalTo(cityFilterBtn).offset(20)
+                make.right.equalTo(icon.snp_left).offset(-10)
+                make.centerY.equalTo(cityFilterBtn)
+            })
+    }
+    
+    func cityFilterBtnPressed() {
+        let select = CityElementSelectWithSuggestionsController()
+        select.maxLevel = 1
+        select.showAllContry = true
+        select.delegate = self
+        select.curSelected = cityFilterLbl.text
+        home.presentViewController(select.toNavWrapper(), animated: true, completion: nil)
     }
     
     //
@@ -204,12 +251,23 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
             }
         }
     }
+    
+    func cityElementSelectDidCancel() {
+        home.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func cityElementSelectDidSelect(dataSource: CityElementSelectDataSource) {
+        home.dismissViewControllerAnimated(true, completion: nil)
+        let keyword = dataSource.selectedCity ?? "全国"
+        cityFilterLbl.text = keyword
+        
+        loadActivities()
+    }
 }
 
 // MARK: - About map
 extension ActivityNearByController {
     
-    //
     /**
     当前focus的活动发生了变化
     */
@@ -235,22 +293,53 @@ extension ActivityNearByController {
             let region = BMKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 3000, 5000)
             map.setRegion(region, animated: true)
             map.setCenterCoordinate(userLocation.location.coordinate, animated: true)
-            ActivityRequester.sharedInstance.getNearByActivities(userLocation.location, queryDistance: 1000, skip: 0, limit: 10, onSuccess: { (json) -> () in
-                self.acts.removeAll()
-                for data in json!.arrayValue {
-                    let act: Activity = try! MainManager.sharedManager.getOrCreate(data)
-                    self.acts.append(act)
-                }
-                self.actsBoard.reloadData()
-                self.pageCount.currentPage = 0
-                if self.acts.count > 0 {
-                    self.activityFocusedChanged()
-                }
-                }, onError: { (code) -> () in
-            })
+            if nearByOnly {
+                self.userLocation = userLocation
+                loadActivities()
+            }
+//            ActivityRequester.sharedInstance.getNearByActivities(userLocation.location.coordinate, queryDistance: 10000, cityLimit: cityFilterLbl.text!, skip: 0, limit: 10, onSuccess: { (json) -> () in
+//                self.acts.removeAll()
+//                for data in json!.arrayValue {
+//                    let act: Activity = try! MainManager.sharedManager.getOrCreate(data)
+//                    self.acts.append(act)
+//                }
+//                self.actsBoard.reloadData()
+//                self.pageCount.currentPage = 0
+//                if self.acts.count > 0 {
+//                    self.activityFocusedChanged()
+//                }
+//                }, onError: { (code) -> () in
+//            })
         }
         userAnno?.coordinate = userLocation.location.coordinate
         self.userLocation = userLocation
+    }
+    
+    func loadActivities() {
+        let userLoc: CLLocationCoordinate2D
+        if let loc = userLocation where nearByOnly {
+            userLoc = loc.location.coordinate
+        } else if !nearByOnly {
+            // 此时为按地址筛选，这里的userLoc只需要提供一个fake的就可以了
+            userLoc = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        } else {
+            return
+        }
+        
+        ActivityRequester.sharedInstance.getNearByActivities(userLoc, queryDistance: 10000, cityLimit: cityFilterLbl.text!, skip: 0, limit: 10, onSuccess: { (json) -> () in
+            self.acts.removeAll()
+            for data in json!.arrayValue {
+                let act: Activity = try! MainManager.sharedManager.getOrCreate(data)
+                self.acts.append(act)
+            }
+            self.actsBoard.reloadData()
+            self.pageCount.currentPage = 0
+            if self.acts.count > 0 {
+                self.activityFocusedChanged()
+            }
+            }, onError: { (code) -> () in
+                self.showToast(LS("网络访问错误:\(code)"))
+        })
     }
     
     func mapView(mapView: BMKMapView!, viewForAnnotation annotation: BMKAnnotation!) -> BMKAnnotationView! {

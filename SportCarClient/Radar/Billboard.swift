@@ -168,10 +168,11 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
     }
     
     func cityFilterPressed() {
-        let cityPicker = CityElementSelectController()
+        let cityPicker = CityElementSelectWithSuggestionsController()
         cityPicker.maxLevel = 1
         cityPicker.showAllContry = true
         cityPicker.delegate = self
+        cityPicker.curSelected = cityFilterLbl.text
         presentViewController(cityPicker.toNavWrapper(), animated: true, completion: nil)
     }
     

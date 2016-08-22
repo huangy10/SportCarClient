@@ -14,6 +14,7 @@ class LocationModel: BaseInMemModel {
     var latitude: Double = 0
     var longitude: Double = 0
     var descr: String = ""
+    var city: String = ""
     
     var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2DMake(latitude, longitude)
@@ -36,6 +37,7 @@ class LocationModel: BaseInMemModel {
         latitude = data["lat"].doubleValue
         longitude = data["lon"].doubleValue
         descr = data["description"].stringValue
+        city = data["city"].stringValue
         if latitude == 0 && longitude == 0 {
             throw SSModelError.InvalidJSON
         }
@@ -46,7 +48,8 @@ class LocationModel: BaseInMemModel {
         return [
             "lat": latitude,
             "lon": longitude,
-            "des": descr
+            "des": descr,
+            "city": city
             ] as JSON
     }
 }

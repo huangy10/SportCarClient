@@ -29,7 +29,8 @@ class ClubRequester: BasicRequester {
         "quit": "<clubID>/quit",
         "apply": "<clubID>/apply",
         "operation": "<clubID>/operation",
-        "billboard": "billboard"
+        "billboard": "billboard",
+        "cities": "cities"
     ]
     
     override var urlMap: [String : String] {
@@ -198,6 +199,11 @@ class ClubRequester: BasicRequester {
             "scope": scope,
             "filter": filterType
             ], responseDataField: "data", onSuccess: onSuccess, onError: onError)
+    }
+    
+    func clubPopularCities(onSuccess: SSSuccessCallback,
+                           onError: SSFailureCallback) -> Request {
+        return get(urlForName("cities"), responseDataField: "data", onSuccess: onSuccess, onError: onError)
     }
 }
 

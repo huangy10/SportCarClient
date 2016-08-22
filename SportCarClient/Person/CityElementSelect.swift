@@ -57,6 +57,8 @@ class CityElementSelectController: UITableViewController {
     var data: [String] = []
     var showAllContry: Bool = false
     
+    //
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
@@ -145,3 +147,7 @@ class CityElementSelectController: UITableViewController {
         self.navigationController?.pushViewController(detail, animated: true)
     }
 }
+
+
+
+

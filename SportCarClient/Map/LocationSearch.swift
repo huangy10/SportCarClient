@@ -36,10 +36,12 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         didSet {
             location = selectedPoi?.pt
             locDescription = selectedPoi?.name
+            city = selectedPoi?.city
         }
     }
     
     var location: CLLocationCoordinate2D?
+    var city: String?
     private var userLocation: BMKUserLocation? {
         didSet {
             self.location = userLocation?.location.coordinate
@@ -163,7 +165,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
     func navRightBtnPressed() {
         keywordInput.resignFirstResponder()
         if let location = location, let locDescription = locDescription {
-            delegate.locationSelectDidSelect(Location(location: location, description: locDescription))
+            delegate.locationSelectDidSelect(Location(location: location, description: locDescription, city: city ?? ""))
         } else {
             showToast(LS("请选择一个地点"), onSelf: true)
         }
@@ -274,6 +276,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         if errorCode == BMK_SEARCH_NO_ERROR {
             if let data = poiResult.poiInfoList as? [BMKPoiInfo] where data.count > 0{
                 self.data = data
+                
                 self.tableView.hidden = false
                 self.tableView.reloadData()
             }

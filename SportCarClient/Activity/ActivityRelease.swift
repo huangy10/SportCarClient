@@ -40,6 +40,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     var geoSearch: BMKGeoCodeSearch!
     var userLocation: CLLocationCoordinate2D?
     var locDescription: String?
+    var city: String?
     
     var didBeginEditActDes: Bool = false
     weak var presenter: UIViewController? = nil
@@ -243,7 +244,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         }
         let toast = showStaticToast(LS("发布中..."))
         pp_showProgressView()
-        ActivityRequester.sharedInstance.createNewActivity(actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, authedUserOnly: authedUserOnly, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", onSuccess: { (json) in
+        ActivityRequester.sharedInstance.createNewActivity(actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, authedUserOnly: authedUserOnly, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", city: city ?? "", onSuccess: { (json) in
             self.presenter?.dismissViewControllerAnimated(true, completion: {
                 self.presenter?.showToast(LS("发布成功"))
             })
@@ -528,21 +529,6 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         mapView.delegate = self
         getLocationDescription(self.userLocation!)
     }
-//    
-//    func mapView(mapView: BMKMapView!, regionDidChangeAnimated animated: Bool) {
-//        if !animated {
-//            let visibleRegion = mapView.region
-//            userLocation = visibleRegion.center
-//            tableView.scrollEnabled = true
-//        }
-//        getLocationDescription(userLocation!)
-//    }
-//    
-//    func mapView(mapView: BMKMapView!, regionWillChangeAnimated animated: Bool) {
-//        if !animated {
-//            tableView.scrollEnabled = false
-//        }
-//    }
     
     func getLocationDescription(location: CLLocationCoordinate2D) {
         let option = BMKReverseGeoCodeOption()
@@ -556,6 +542,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     func onGetReverseGeoCodeResult(searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
         if error == BMK_SEARCH_NO_ERROR {
             locDescription = result.address
+            city = result.addressDetail.city
             mapCell.locDisplay.text = result.address
         } else {
             self.showToast(LS("无法获取位置信息"), onSelf: true)
@@ -622,6 +609,8 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         dismissViewControllerAnimated(true, completion: nil)
         self.userLocation = location.location
         self.locDescription = location.description
+        self.city = location.city
+        
         mapCell.locDisplay.text = location.description
         mapView.setCenterCoordinate(location.location, animated: true)
         

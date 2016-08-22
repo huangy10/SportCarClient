@@ -178,7 +178,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
             header.map.addAnnotation(userAnno)
         } else {
             rp_currentRequest = RadarRequester.sharedInstance.trackUser(data.user.ssidString, onSuccess: { (json) -> () in
-                self.userLoc = Location(latitude: json!["lat"].doubleValue, longitude: json!["lon"].doubleValue, description: json!["description"].stringValue)
+                self.userLoc = Location(latitude: json!["lat"].doubleValue, longitude: json!["lon"].doubleValue, description: json!["description"].stringValue, city: json!["city"].stringValue)
                 self.userAnno.coordinate = self.userLoc!.location
                 let userLocInScreen = self.header.map.convertCoordinate(self.userLoc!.location, toPointToView: self.header.map)
                 let userLocWithOffset = CGPointMake(userLocInScreen.x + self.header.frame.width / 40, userLocInScreen.y - self.header.frame.height / 60)
