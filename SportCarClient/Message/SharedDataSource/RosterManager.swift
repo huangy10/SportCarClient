@@ -31,6 +31,8 @@ class RosterManager {
         return ChatModelManger.sharedManager.workQueue
     }
     
+    var onTopNum: Int = 0
+    
     /**
      - parameter bringToFront: whether to bring the added roster item to the  very front of the roster list
      - returns: if the new item has already exists in the roster list before the insertion
@@ -126,18 +128,41 @@ class RosterManager {
         let context = ChatModelManger.sharedManager.getOperationContext()
         let existingRosterItems = context.rosterItems.filter({$0.hostSSID == hostID})
             .orderBy({$0.updatedAt})
+        var unread: Int = 0
+        existingRosterItems.forEach { (item) in
+            item.manager = ChatModelManger.sharedManager
+            unread += Int(item.unreadNum)
+        }
+        MessageManager.defaultManager.unreadChatNum += unread
         for item in existingRosterItems {
             let mapKey: String
             if item.entityType! == "user" {
                 mapKey = "user:\(item.relatedID)"
             } else if item.entityType! == "club" {
-                mapKey = "club\(item.relatedID)"
+                mapKey = "club:\(item.relatedID)"
             } else {
                 mapKey = ""
                 assertionFailure()
             }
             data[mapKey] = item
         }
+    }
+    
+    func countOnTopNum() {
+        var temp = 0
+        for key in data.keys {
+            let item = data[key]!
+            
+            switch item.data! {
+            case .CLUB(let club):
+                if club.alwayOnTop {
+                    temp += 1
+                }
+            default:
+                break
+            }
+        }
+        onTopNum = 0
     }
     
     /**

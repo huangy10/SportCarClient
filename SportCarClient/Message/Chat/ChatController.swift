@@ -29,8 +29,8 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
             }
             chatCreated = true
             switch rosterItem!.data! {
-            case .USER(let chater):
-                targetUser = chater.relatedUser()
+            case .USER(let user):
+                targetUser = user
                 targetClub = nil
             case .CLUB(let club):
                 targetClub = club
@@ -53,7 +53,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         }
         switch rosterItem.data! {
         case .USER(let chater):
-            return chater.nickName
+            return chater.chatName
         case .CLUB(let  club):
             return club.name
         }
@@ -589,7 +589,7 @@ extension ChatRoomController {
 
 extension ChatRoomController {
     func avatarPressed(chatRecord: ChatRecord) {
-        if let user = chatRecord.senderUser?.toUser() {
+        if let user = chatRecord.senderUser {
             if user.isHost {
                 let detail = PersonBasicController(user: user)
                 self.navigationController?.pushViewController(detail, animated: true)

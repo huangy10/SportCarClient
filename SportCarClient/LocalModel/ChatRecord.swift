@@ -48,23 +48,16 @@ class ChatRecord: BaseModel {
     }
     var displayTimeMark: Bool = false
     
-    private var _senderUser: Chater? {
-        didSet {
-            _senderUser?.chat = self
-        }
-    }
+    private var _senderUser: User?
     
-    var senderUser : Chater? {
+    var senderUser : User? {
         if mine {
-            let chater = manager.hostUser?.toChatter()
-            chater?.chat = self
-            return chater
+            return manager.hostUser
         }
         assert(sender != nil, "No sender for chat")
         if _senderUser == nil {
             let json = JSON(data: sender!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
-            _senderUser = try! Chater().loadDataFromJSON(json)
-            _senderUser?.chat = self
+            _senderUser = try! manager.getOrCreate(json, detailLevel: 0) as User
         }
         return _senderUser
     }
@@ -134,8 +127,7 @@ class ChatRecord: BaseModel {
         textContent = data["text"].stringValue
         let userJSON = data["sender"]
         sender = userJSON.rawString()
-        _senderUser = try Chater().loadDataFromJSON(userJSON)
-        _senderUser?.chat = self
+        _senderUser = try! manager.getOrCreate(userJSON) as User
         mine = _senderUser?.ssid == manager.hostUserID
         image = data["image"].stringValue
         imageWidth = data["image_width"].int32Value

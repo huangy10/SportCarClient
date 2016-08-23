@@ -60,6 +60,10 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 // 添加成员
                 let user: User = try! MainManager.sharedManager.getOrCreate(data)
                 self.targetClub.members.append(user)
+                
+                if user.isHost {
+                    self.targetClub.remarkName = user.clubNickName
+                }
             }
 //            let actJson = json!["recent_act"]
 //            if actJson.exists() {
@@ -87,6 +91,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         inlineUserSelect?.relatedClub = targetClub
         inlineUserSelect?.parentController = self
         inlineUserSelect?.showAddBtn = !targetClub.onlyHostCanInvite
+        inlineUserSelect?.showClubName = targetClub.showNickName
         inlineUsersCell = cell
     }
     
@@ -122,7 +127,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
             requester.updateClubSettings(targetClub, onSuccess: { (json) -> () in
                 // Do nothing when succeed since modification has already taken effects
                 }, onError: { (code) -> () in
-                    
+                    self.showToast(LS("网络访问错误:\(code)"))
             })
         }
         self.navigationController?.popViewControllerAnimated(true)
@@ -321,7 +326,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 1 && indexPath.row == 3 {
+        if indexPath.section == 1 && indexPath.row == 2 {
             // 修改本群昵称
             let detail = PersonMineSinglePropertyModifierController()
             detail.initValue = targetClub.remarkName ?? MainManager.sharedManager.hostUser!.nickName
@@ -343,7 +348,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     }
     
     func didModify(newValue: String?, indexPath: NSIndexPath) {
-        if indexPath.section == 1 && indexPath.row == 3 {
+        if indexPath.section == 1 && indexPath.row == 2 {
             dirty = true
             targetClub.remarkName = newValue
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
@@ -418,6 +423,7 @@ extension GroupChatSettingController {
         switch sender.tag {
         case 0:
             targetClub.showNickName = sender.on
+            inlineUserSelect?.showClubName = sender.on
             break
         case 1:
             targetClub.noDisturbing = sender.on

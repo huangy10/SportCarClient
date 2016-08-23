@@ -35,6 +35,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         inlineUserSelect?.parentController = self
         inlineUserSelect?.showAddBtn = true
         inlineUserSelect?.showDeleteBtn = true
+        inlineUserSelect?.showClubName = targetClub.showNickName
         inlineUsersCell = cell
     }
     
@@ -123,7 +124,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
                 cell.boolSelect.on = [targetClub.onlyHostCanInvite, targetClub.showMembers][indexPath.row - 5]
                 // 0，1，2已经被占用了，这里从3开始编号，此时页面的5个switch按钮的对应关系如下：
                 // 0 - 显示本群昵称； 1 - 消息免打扰； 2 - 置顶聊天； 3 - 仅我可以邀请，4 - 对外公布成员信息
-                cell.boolSelect.tag = indexPath.row - 3
+                cell.boolSelect.tag = indexPath.row - 2
                 cell.staticLbl.text = [LS("仅我可以邀请"), LS("对外公布群成员信息")][indexPath.row - 5]
                 cell.boolSelect.addTarget(self, action: #selector(switchBtnPressed(_:)), forControlEvents: .ValueChanged)
                 return cell
@@ -299,7 +300,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
             // 本群简介
             targetClub.clubDescription = newValue
             break
-        case 4:
+        case 3:
             // 我在本群的昵称
             targetClub.remarkName = newValue
             break

@@ -22,7 +22,7 @@ class ChatListCell: UITableViewCell {
             switch data.data! {
             case .USER(let user):
                 avatarBtn.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
-                nickNameLbl.text = user.nickName
+                nickNameLbl.text = user.chatName
             case .CLUB(let club):
                 avatarBtn.kf_setImageWithURL(club.logoURL!, forState: .Normal)
                 nickNameLbl.text = club.name! + "(\(club.memberNum))"

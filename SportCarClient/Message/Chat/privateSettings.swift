@@ -19,7 +19,8 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     /// 目标用户
     var rosterItem: RosterItem!
 //    var targetUser: User!
-    var chater: Chater!
+//    var chater: Chater!
+    var user: User!
     var seeHisStatus: Bool = true
     var allowSeeStatus: Bool = true
     // 是否发生了修改
@@ -41,8 +42,8 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         super.init(style: .Plain)
         self.rosterItem = rosterItem
         switch rosterItem.data! {
-        case .USER(let chater):
-            self.chater = chater
+        case .USER(let user):
+            self.user = user
             break
         default:
             assertionFailure()
@@ -79,7 +80,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     }
     
     func navSettings() {
-        self.navigationItem.title = chater.nickName
+        self.navigationItem.title = user.chatName
         let leftBtn = UIButton()
         leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
         leftBtn.frame = CGRectMake(0, 0, 9, 15)
@@ -94,14 +95,14 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     }
     
     func navRightBtnPressed() {
-        let report = ReportBlacklistViewController(userID: chater.ssid, parent: self)
+        let report = ReportBlacklistViewController(userID: user.ssid, parent: self)
         self.presentViewController(report, animated: false, completion: nil)
     }
     
     func navLeftBtnPressed() {
         self.navigationController?.popViewControllerAnimated(true)
         if dirty {
-            ChatRequester2.sharedInstance.postUpdateUserRelationSettings(rosterItem.ssidString, remark_name: chater.nickName, alwaysOnTop: false, noDisturbing: false, onSuccess: { (_) in
+            ChatRequester2.sharedInstance.postUpdateUserRelationSettings(rosterItem.ssidString, remark_name: user.noteName ?? "", alwaysOnTop: false, noDisturbing: false, onSuccess: { (_) in
                 // do nothing
                 self.showToast(LS("修改成功"))
                 }) { (code) in
@@ -157,7 +158,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
             cell.selectionStyle = .None
-            cell.avatarImage.kf_setImageWithURL(chater.avatarURL!)
+            cell.avatarImage.kf_setImageWithURL(user.avatarURL!)
             return cell
         case 1:
             if indexPath.row < 1 {
@@ -166,7 +167,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                 cell.staticLbl.text = LS("备注")
                 cell.boolSelect.hidden = true
                 if indexPath.row == 0 {
-                    cell.infoLbl.text = chater.nickName
+                    cell.infoLbl.text = user.chatName
                 }
                 return cell
             }else {
@@ -261,10 +262,10 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     
     func startGroupChatPressed() {
         userSelectPurpose = "group_chat"
-        guard let user = chater.toUser() else {
-            assertionFailure()
-            return
-        }
+//        guard let user = chater.toUser() else {
+//            assertionFailure()
+//            return
+//        }
         let selector = FFSelectController(maxSelectNum: 100, preSelectedUsers: [user])
         let nav = BlackBarNavigationController(rootViewController: selector)
         selector.delegate = self
@@ -291,10 +292,10 @@ extension PrivateChatSettingController {
         switch indexPath.section {
         case 0:
             // 点击头像进入个人详情
-            guard let user = chater.toUser() else {
-                assertionFailure()
-                return
-            }
+//            guard let user = chater.toUser() else {
+//                assertionFailure()
+//                return
+//            }
             let detail = PersonOtherController(user: user)
             self.navigationController?.pushViewController(detail, animated: true)
             break
@@ -304,13 +305,13 @@ extension PrivateChatSettingController {
             detail.focusedIndexPath = indexPath
             detail.delegate = self
             detail.propertyName = LS("修改备注")
-            detail.initValue = chater.nickName
+            detail.initValue = user.chatName
             self.navigationController?.pushViewController(detail, animated: true)
         case 2:
             if indexPath.row == 0 {
                 showConfirmToast(LS("清除聊天信息"), message: LS("确定要清除聊天信息吗？"), target: self, onConfirm: #selector(clearChatContent))
             } else if indexPath.row == 1 {
-                let report = ReportBlacklistViewController(userID: chater.ssid, parent: self)
+                let report = ReportBlacklistViewController(userID: user.ssid, parent: self)
                 self.presentViewController(report, animated: false, completion: nil)
             }
             break
@@ -325,7 +326,7 @@ extension PrivateChatSettingController {
         switch indexPath.section {
         case 1:
             if indexPath.row == 0 {
-                chater.nickName = newValue
+                user.noteName = newValue
             }
             break
         default:
@@ -357,7 +358,7 @@ extension PrivateChatSettingController {
         var users = users
         self.dismissViewControllerAnimated(true, completion: nil)
         if userSelectPurpose == "group_chat" {
-            if users.findIndex({ $0.ssid == self.chater.ssid}) == nil, let user = self.chater.toUser() {
+            if users.findIndex({ $0.ssid == self.user.ssid}) == nil {
                 users.insert(user, atIndex: 0)
             }
             if users.count <= 1 {

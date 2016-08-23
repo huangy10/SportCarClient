@@ -293,6 +293,10 @@ class ConfirmToastPresentationController: UIViewController {
     private var desLblHeight: CGFloat = 0
     private let desLineSpacing: CGFloat = 5
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureBlurredBackground()
@@ -303,6 +307,8 @@ class ConfirmToastPresentationController: UIViewController {
         configureCancelBtn()
         
         animateEntry()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(cancelBtnPressed), name: kAccontNolongerLogin, object: nil)
     }
     
     init(title: String, des: String, target: AnyObject, confirmSelector: Selector) {

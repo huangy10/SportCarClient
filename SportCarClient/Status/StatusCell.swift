@@ -125,7 +125,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         avatarCarNameLbl = UILabel()
         avatarCarNameLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
         avatarCarNameLbl?.textAlignment = .Right
-        avatarCarNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
+        avatarCarNameLbl?.textColor = UIColor(white: 0, alpha: 0.58)
         headerContainer?.addSubview(avatarCarNameLbl!)
         avatarCarNameLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(headerContainer!).offset(-15)
@@ -359,6 +359,8 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         
         avatarCarNameLbl?.text = carName
         avatarCarLogoIcon?.kf_setImageWithURL(carLogo, placeholderImage: nil)
+        avatarCarNameLbl?.hidden = false
+        avatarCarLogoIcon?.hidden = false
         
         let carNameSingleLineLen: CGFloat = UIScreen.mainScreen().bounds.width * 0.4
         let carNameWidth = carName.sizeWithFont(avatarCarNameLbl!.font, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)).width

@@ -12,7 +12,7 @@ import AlecrimCoreData
 import SwiftyJSON
 
 enum RosterItemType {
-    case USER(Chater)
+    case USER(User)
     case CLUB(Club)
 }
 
@@ -50,8 +50,15 @@ class RosterItem: BaseModel {
         }
         if let entityType = entityType where entityType == "user", let entityData = entityData {
             let jsonData = JSON(data: entityData)
-            let chater = try! Chater().loadDataFromJSON(jsonData)
-            self.data = RosterItemType.USER(chater)
+            let userID = jsonData[User.idField].int32Value
+            if let user = ChatModelManger.sharedManager.objectWithSSID(userID) as? User {
+                self.data = RosterItemType.USER(user)
+            } else {
+                let user = try! ChatModelManger.sharedManager.getOrCreate(jsonData) as User
+                self.data = RosterItemType.USER(user)
+            }
+//            let chater = try! Chater().loadDataFromJSON(jsonData)
+//            self.data = RosterItemType.USER(chater)
         } else if let entityType = entityType where entityType == "club", let entityData = entityData {
             let json = JSON(data: entityData)
             let clubID = json[Club.idField].int32Value
@@ -84,7 +91,7 @@ class RosterItem: BaseModel {
         self.createdAt = DateSTR(data["created_at"].stringValue)
         if entityType == "user" {
             self.entityData = try! data["user"].rawData()
-            let user = try Chater().loadDataFromJSON(data["user"])  // level user.chat as nil
+            let user = try manager.getOrCreate(data["user"]) as User  // level user.chat as nil
             self.data = RosterItemType.USER(user)
         } else if entityType == "club" {
             entityData = try! data["club"].rawData()

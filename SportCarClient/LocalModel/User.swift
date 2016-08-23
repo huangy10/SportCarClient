@@ -60,17 +60,19 @@ class User: BaseModel {
         }
     }
     
-    private var _chater: Chater?
-    func toChatter() -> Chater {
-        if _chater == nil {
-            _chater = try! Chater().loadDataFromJSON([
-                User.idField: ssidString,
-                "nick_name": nickName!,
-                "avatar": avatar!
-                ])
-        }
-        return _chater!
-    }
+//    private var _chater: Chater?
+//    
+//    @available(*, deprecated=1)
+//    func toChatter() -> Chater {
+//        if _chater == nil {
+//            _chater = try! Chater().loadDataFromJSON([
+//                User.idField: ssidString,
+//                "nick_name": nickName!,
+//                "avatar": avatar!
+//                ])
+//        }
+//        return _chater!
+//    }
     
     private var _rosterItem: RosterItem?
     var rosterItem: RosterItem? {
@@ -84,6 +86,24 @@ class User: BaseModel {
             return nil
         }
     }
+    
+    var chatName: String {
+        if let noteName = noteName where noteName != "" {
+            return noteName
+        } else {
+            return nickName!
+        }
+    }
+    
+    private var _clubNickName: String?
+    var clubNickName: String {
+        set {
+            _clubNickName = clubNickName
+        }
+        get {
+            return _clubNickName ?? nickName!
+        }
+    }
 
     override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> Self {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
@@ -91,6 +111,15 @@ class User: BaseModel {
         avatar = data["avatar"].stringValue
         recentStatusDes = data["recent_status"].stringValue
         identified = data["identified"].boolValue
+        let noteNameJson = data["note_name"]
+        if !noteNameJson.isEmpty {
+            noteName = noteNameJson.stringValue
+        }
+        
+        let clubNameJson = data["club_name"]
+        if clubNameJson.exists() {
+            _clubNickName = clubNameJson.stringValue
+        }
         if detailLevel >= 1 {
             district = data["district"].stringValue
             gender = data["gender"].stringValue
@@ -135,7 +164,7 @@ class User: BaseModel {
         if detailLevel > 0 {
             assertionFailure("Not supported")
         }
-        let json = [User.idField: ssidString, "nick_name": nickName!, "avatar": avatar!] as JSON
+        let json = [User.idField: ssidString, "nick_name": nickName!, "avatar": avatar!, "note_name": noteName ?? ""] as JSON
         return json
     }
     // MARK: 一下是User自己的Utility函数

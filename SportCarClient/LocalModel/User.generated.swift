@@ -30,6 +30,7 @@ extension User {
     @NSManaged var identified: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var job: String?
     @NSManaged var nickName: String?
+    @NSManaged var noteName: String?
     @NSManaged var phoneNum: String?
     @NSManaged var recentStatusDes: String?
     @NSManaged var remarkName: String?
@@ -91,6 +92,7 @@ extension User {
     static let identified = AlecrimCoreData.NullableAttribute<Bool>("identified")
     static let job = AlecrimCoreData.NullableAttribute<String>("job")
     static let nickName = AlecrimCoreData.NullableAttribute<String>("nickName")
+    static let noteName = AlecrimCoreData.NullableAttribute<String>("noteName")
     static let phoneNum = AlecrimCoreData.NullableAttribute<String>("phoneNum")
     static let recentStatusDes = AlecrimCoreData.NullableAttribute<String>("recentStatusDes")
     static let remarkName = AlecrimCoreData.NullableAttribute<String>("remarkName")
@@ -122,6 +124,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: User {
     var identified: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("identified", self) }
     var job: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("job", self) }
     var nickName: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("nickName", self) }
+    var noteName: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("noteName", self) }
     var phoneNum: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("phoneNum", self) }
     var recentStatusDes: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("recentStatusDes", self) }
     var remarkName: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("remarkName", self) }

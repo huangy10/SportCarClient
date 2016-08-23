@@ -52,7 +52,7 @@ class InlineUserSelectDeletable: InlineUserSelectController {
         } else {
             cell.avatarCarLogo.image = nil
         }
-        let userNickName = user.remarkName ?? user.nickName!
+        let userNickName = showClubName ? user.clubNickName : user.nickName!
         cell.nameLbl.text = userNickName
         return cell
     }

@@ -144,6 +144,7 @@
         <attribute name="identified" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="job" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nickName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="phoneNum" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="recentStatusDes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="remarkName" optional="YES" attributeType="String" syncable="YES"/>
@@ -163,6 +164,6 @@
         <element name="RosterItem" positionX="144" positionY="-198" width="128" height="180"/>
         <element name="SportCar" positionX="349" positionY="189" width="128" height="285"/>
         <element name="Status" positionX="-36" positionY="0" width="128" height="283"/>
-        <element name="User" positionX="196" positionY="510" width="128" height="390"/>
+        <element name="User" positionX="196" positionY="510" width="128" height="405"/>
     </elements>
 </model>

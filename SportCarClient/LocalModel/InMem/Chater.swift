@@ -11,6 +11,7 @@ import SwiftyJSON
 import AlecrimCoreData
 
 
+@available(*, deprecated=1)
 class Chater: BaseInMemModel {
     
     weak var chat: ChatRecord?

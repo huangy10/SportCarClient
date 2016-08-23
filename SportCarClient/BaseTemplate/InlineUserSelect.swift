@@ -24,6 +24,12 @@ class InlineUserSelectController: UICollectionViewController {
     
     let maxDispalyNum: Int = 12
     
+    var showClubName: Bool = true {
+        didSet {
+            collectionView?.reloadData()
+        }
+    }
+    
     convenience init() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .Vertical
@@ -108,7 +114,7 @@ class InlineUserSelectController: UICollectionViewController {
             } else {
                 cell.avatarCarLogo.image = nil
             }
-            var userNickName = user.remarkName ?? user.nickName!
+            var userNickName = showClubName ? user.clubNickName : user.nickName!
             if userNickName.length > 5 {
                 userNickName = userNickName[0..<5]
             }
