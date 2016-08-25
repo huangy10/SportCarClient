@@ -42,9 +42,6 @@ class Notification: BaseModel {
         createdAt = DateSTR(data["created_at"].stringValue)
         messageBody = data["message_body"].stringValue
         messageType = data["message_type"].stringValue
-//        if messageType == "status_inform" {
-////            print(data)
-//        }
         read = data["read"].boolValue
         flag = data["flag"].boolValue
         checked = data["checked"].boolValue
@@ -202,6 +199,6 @@ class Notification: BaseModel {
         let elements = messageType!.split(":")
         let displayModeString = elements[0]
         
-        return displayModeMap[displayModeString]!
+        return displayModeMap[displayModeString] ?? .Minimal
     }
 }

@@ -98,13 +98,6 @@ class BaseModel: NSManagedObject {
         return self
     }
     
-//    private func toContextHelper<T: BaseModel>(ctx: DataContext) -> T? {
-//        let obj = ctx.objectWithID(self.objectID)
-//        print(T.description())
-//        print(self.dynamicType)
-//        print(obj)
-//        return ctx.objectWithID(self.objectID) as! T
-//    }
     
     func toContext(ctx: DataContext) -> BaseModel? {
         if self.managedObjectContext == ctx {

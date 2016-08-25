@@ -82,8 +82,7 @@ class HomeController: UIViewController, HomeDelegate {
             // 令侧边栏更新数据
             self.reloadData()
             }) { (code) -> () in
-//                print(code)
-                self.showToast(LS("网络访问错误:\(code)"))
+                self.showToast(LS("网络访问错误:\(code ?? "")"))
         }
     }
     

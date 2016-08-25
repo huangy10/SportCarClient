@@ -95,7 +95,6 @@
 		BF95EC2D1C8F251A00B77817 /* InlineUserDeletable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF95EC2C1C8F251900B77817 /* InlineUserDeletable.swift */; };
 		BF9663FE1C8889220096D131 /* GroupSettingHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9663FD1C8889220096D131 /* GroupSettingHost.swift */; };
 		BF9664001C89449F0096D131 /* ClubAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9663FF1C89449F0096D131 /* ClubAuth.swift */; };
-		BF9664021C89C0770096D131 /* ActivityReleasePresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9664011C89C0770096D131 /* ActivityReleasePresentable.swift */; };
 		BF9664041C89CBD10096D131 /* ClubBriefInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9664031C89CBD10096D131 /* ClubBriefInfo.swift */; };
 		BF9664061C89F0B60096D131 /* AvatarClubSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9664051C89F0B60096D131 /* AvatarClubSelect.swift */; };
 		BF972F101C9D6D9A00AF997B /* imageResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF972F0F1C9D6D9A00AF997B /* imageResizer.swift */; };
@@ -401,7 +400,6 @@
 		BF95EC2C1C8F251900B77817 /* InlineUserDeletable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InlineUserDeletable.swift; path = Message/Chat/InlineUserDeletable.swift; sourceTree = "<group>"; };
 		BF9663FD1C8889220096D131 /* GroupSettingHost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GroupSettingHost.swift; path = Person/GroupSettingHost.swift; sourceTree = "<group>"; };
 		BF9663FF1C89449F0096D131 /* ClubAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubAuth.swift; path = Message/Chat/ClubAuth.swift; sourceTree = "<group>"; };
-		BF9664011C89C0770096D131 /* ActivityReleasePresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityReleasePresentable.swift; path = Activity/ActivityReleasePresentable.swift; sourceTree = "<group>"; };
 		BF9664031C89CBD10096D131 /* ClubBriefInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubBriefInfo.swift; path = Message/Chat/ClubBriefInfo.swift; sourceTree = "<group>"; };
 		BF9664051C89F0B60096D131 /* AvatarClubSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AvatarClubSelect.swift; path = Person/AvatarClubSelect.swift; sourceTree = "<group>"; };
 		BF972F0F1C9D6D9A00AF997B /* imageResizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = imageResizer.swift; path = 3rdParty/imageResizer.swift; sourceTree = "<group>"; };
@@ -1248,7 +1246,6 @@
 				BFC032701C6F507D00ECA69A /* Home */,
 				BFC0326D1C6F39FB00ECA69A /* Cell */,
 				BFC0326B1C6F39EA00ECA69A /* ActivityHome.swift */,
-				BF9664011C89C0770096D131 /* ActivityReleasePresentable.swift */,
 			);
 			name = Activity;
 			sourceTree = "<group>";
@@ -2204,7 +2201,6 @@
 				BFC36BB41C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift in Sources */,
 				BFE967121CA584870097C42C /* Activity.swift in Sources */,
 				BFE9673D1CA5908E0097C42C /* SportCar.generated.swift in Sources */,
-				BF9664021C89C0770096D131 /* ActivityReleasePresentable.swift in Sources */,
 				BFBC52711C52946300EE7D34 /* ChatController.swift in Sources */,
 				BFE967591CA6D9DC0097C42C /* Notification.generated.swift in Sources */,
 				BFA1FEFD1C36DD8500F127FA /* NewsDetailCommentCell.swift in Sources */,

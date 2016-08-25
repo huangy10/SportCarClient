@@ -232,8 +232,6 @@ extension SideBarController {
 
             
         }
-//        print(ChatRecordDataSource.sharedDataSource.totalUnreadNum)
-//        print(NotificationDataSource.sharedDataSource.unreadNum)
         let unreadNum = MessageManager.defaultManager.unreadNum
         if unreadNum > 0 {
             unreadMessagesLbl.hidden = false

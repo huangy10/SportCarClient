@@ -535,9 +535,6 @@ class LoginRegisterController: InputableViewController {
                 self.authCodeBtn?.status = AuthCodeBtnViewStatus.Normal
                 self.showToast(LS("获取验证码失败"), onSelf: true)
         }
-//        self.requester.requestAuthCode(registerPhoneInput!.text!) { (code) -> (Void) in
-//            print("\(code)")
-//        }
     }
     
     // MARK: 网络回调
@@ -549,12 +546,6 @@ class LoginRegisterController: InputableViewController {
     
     override func dismissKeyboard() {
         super.dismissKeyboard()
-//        self.loginPasswordInput?.resignFirstResponder()
-//        self.loginPhoneInput?.resignFirstResponder()
-//        self.registerPhoneInput?.resignFirstResponder()
-//        self.registerPasswordInput?.resignFirstResponder()
-//        self.registerAuthCode?.resignFirstResponder()
-//        self.tapper?.enabled = false
         self.titleLbl?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(125)
         })

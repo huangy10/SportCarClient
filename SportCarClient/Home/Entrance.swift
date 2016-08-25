@@ -104,8 +104,8 @@ class HomeController2: UIViewController, HomeDelegate {
             })
         
         var formerView: UIView! = avatarBtn
-        let titles = [LS("雷达"), LS("活动"), LS("资讯"), LS("排行"), LS("动态"), LS("消息")]
-        let icons = ["side_discover", "side_act", "side_news", "side_billboard", "side_status", "side_message"]
+        let titles = [LS("雷达"), LS("活动"), LS("资讯"), LS("动态"), LS("消息"), LS("我的")]
+        let icons = ["side_discover", "side_act", "side_news", "side_status", "side_message", "side_mine"]
         var topOffset: CGFloat = 25
         for index in 0..<titles.count {
             let container = sideBar.addSubview(UIButton)
@@ -190,9 +190,9 @@ class HomeController2: UIViewController, HomeDelegate {
     }
     
     func avatarPressed() {
-//        sideBarBtnPressed(sideBtns.last()!)
-        switchController(curControllerIndex, to: 6)
-        curControllerIndex = 6
+        sideBarBtnPressed(sideBtns.last()!)
+//        switchController(curControllerIndex, to: 6)
+//        curControllerIndex = 6
     }
     
     func sideBarBtnPressed(sender: UIButton) {
@@ -357,25 +357,25 @@ class HomeController2: UIViewController, HomeDelegate {
                 news?.homeDelegate = self
                 wrappedControllers[index] = news?.toNavWrapper()
             }
+//        case 3:
+//            if billboard == nil {
+//                billboard = BillboardController()
+//                billboard?.homeDelegate = self
+//                wrappedControllers[index] = billboard?.toNavWrapper()
+//            }
         case 3:
-            if billboard == nil {
-                billboard = BillboardController()
-                billboard?.homeDelegate = self
-                wrappedControllers[index] = billboard?.toNavWrapper()
-            }
-        case 4:
             if status == nil {
                 status = StatusHomeController()
                 status?.homeDelegate = self
                 wrappedControllers[index] = status!.toNavWrapper()
             }
-        case 5:
+        case 4:
             if message == nil {
                 message = MessageController()
                 message?.homeDelegate = self
                 wrappedControllers[index] = message!.toNavWrapper()
             }
-        case 6:
+        case 5:
             if person == nil {
                 person = PersonBasicController(user: MainManager.sharedManager.hostUser!)
                 person?.isRoot = true

@@ -38,11 +38,6 @@ class AppManager: UIViewController {
         let unreadNum = MessageManager.defaultManager.unreadNum
         UIApplication.sharedApplication().applicationIconBadgeNumber = unreadNum
         // sync to the backend
-//        ChatRequester.requester.clearNotificationUnreadNum({ (json) in
-////            print("success")
-//            }) { (code) in
-////                print("fail")
-//        }
     }
     
     /**

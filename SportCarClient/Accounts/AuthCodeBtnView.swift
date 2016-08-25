@@ -76,7 +76,6 @@ class AuthCodeBtnView: UIButton {
     
     func countDownUpdater() {
         cdTime -= 1
-        // print("\(cdTime)")
         if cdTime < 0 {
             cdTime = maxCD
             status = .Normal

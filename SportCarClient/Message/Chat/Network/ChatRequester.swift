@@ -46,7 +46,6 @@ class ChatRequester2: BasicRequester {
     
     override func internalErrorHandler(error: NSError) -> NSError? {
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey]?.absoluteString where url.hasSuffix("/chat/update") {
-            print(error)
             if error.code == -999 {
                 return nil
             } else {

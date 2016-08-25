@@ -386,7 +386,8 @@ extension ChatRoomController {
 //            let identifier = getIdentifierForChatRoom(self)
 //            ChatRecordDataSource.sharedDataSource.chatRecords.bringKeyToFront(identifier)
             }) { (code) -> () in
-                print(code)
+//                print(code)
+                self.showToast(LS("消息发送失败"))
         }
         
     }
