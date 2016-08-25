@@ -184,7 +184,7 @@ class BillboardCell: UITableViewCell {
         if club.city == "" {
             return "价值\(club.value/10000)万"
         } else {
-            return "\(club.city!) 价值\(club.value)"
+            return "\(club.city!) 价值\(club.value/10000)万"
         }
     }
 }

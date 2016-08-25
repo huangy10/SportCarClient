@@ -29,7 +29,7 @@ class CityElementSelectWithSuggestionsController: CityElementSelectController, U
         lp_start()
         ClubRequester.sharedInstance.clubPopularCities({ (json) in
             self.lp_stop()
-            self.popularCities = $.map(json!.arrayValue, transform: { $0.stringValue })
+            self.popularCities = $.map(json!.arrayValue, transform: { $0.stringValue }).filter({ $0 != "" })
 //            self.popularCities = ["北京市", "上海市", "广州市", "深圳市", "南京市", "天津市", "武汉市", "成都市", "重庆市"]
             self.tableView.reloadData()
             }) { (code) in

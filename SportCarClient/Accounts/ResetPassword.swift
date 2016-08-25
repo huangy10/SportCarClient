@@ -110,7 +110,7 @@ class ResetPasswordController: LoginRegisterController {
         sendCodeBtn.setTitle(NSLocalizedString("获取验证码", comment: ""), forState: .Normal)
         sendCodeBtn.displayText = NSLocalizedString("获取验证码", comment: "")
         sendCodeBtn.setTitleColor(UIColor(red: 1, green: 0.2667, blue: 0.2745, alpha: 1), forState: .Normal)
-        sendCodeBtn.titleLabel?.font = UIFont.systemFontOfSize(12)
+        sendCodeBtn.titleLabel?.font = UIFont.systemFontOfSize(14)
         inputContainer.addSubview(sendCodeBtn)
         sendCodeBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(registerPhoneInput!)
@@ -124,7 +124,7 @@ class ResetPasswordController: LoginRegisterController {
         registerAuthCode = TextFieldWithLeadingIconView()
         registerAuthCode?.delegate = self
         registerAuthCode?.placeholder = NSLocalizedString("请输入验证码", comment: "")
-        registerAuthCode?.font = UIFont.systemFontOfSize(12)
+        registerAuthCode?.font = UIFont.systemFontOfSize(14)
         registerAuthCode?.leftViewMode = UITextFieldViewMode.Always
         let registerAuthCodeIcon = UIImageView(image: UIImage(named: "account_auth_code"))
         registerAuthCode?.leftView = registerAuthCodeIcon
@@ -140,7 +140,7 @@ class ResetPasswordController: LoginRegisterController {
         registerPasswordInput?.delegate = self
         registerPasswordInput?.placeholder = NSLocalizedString("请输入新密码", comment: "")
         registerPasswordInput?.secureTextEntry = true
-        registerPasswordInput?.font = UIFont.systemFontOfSize(12)
+        registerPasswordInput?.font = UIFont.systemFontOfSize(14)
         registerPasswordInput?.leftViewMode = UITextFieldViewMode.Always
         let registerPasswordInputIcon = UIImageView(image: UIImage(named: "account_password_input"))
         registerPasswordInput?.leftView = registerPasswordInputIcon

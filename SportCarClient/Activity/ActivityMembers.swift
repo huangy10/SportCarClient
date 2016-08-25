@@ -22,7 +22,12 @@ protocol  ActivityMemberDelegate: class {
 
 
 class ActivityMembersController: UITableViewController, ActivityMemberCellDelegate, LoadingProtocol {
-    var act: Activity!
+    var act: Activity! {
+        didSet {
+            showKickoutBtn = act.user!.isHost
+        }
+    }
+    var showKickoutBtn: Bool = false
     
     weak var delegate: ActivityMemberDelegate!
     var indexToDelete: Int?
@@ -72,8 +77,15 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
             member.nickName!,
             avatarURL: member.avatarURL!,
             avatarCarName: member.avatarCarModel?.name,
-            authed: member.identified)
+            authed: member.identified,
+            showKickoutBtn: showKickoutBtn
+        )
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let user = act.applicants[indexPath.row]
+        navigationController?.pushViewController(user.showDetailController(), animated: true)
     }
     
     func activityMemberKickoutPressed(at cell: ActivityMemberCell) {
@@ -192,10 +204,11 @@ class ActivityMemberCell: UITableViewCell {
         delegate.activityMemberKickoutPressed(at: self)
     }
     
-    func setData(username: String, avatarURL: NSURL, avatarCarName: String?, authed: Bool) {
+    func setData(username: String, avatarURL: NSURL, avatarCarName: String?, authed: Bool, showKickoutBtn: Bool) {
         nameLbl.text = username
         avatarCarLbl.text = avatarCarName ?? "奥迪"
         avatar.kf_setImageWithURL(avatarURL)
         authIcon.image = authed ? UIImage(named: "auth_status_authed") : UIImage(named: "auth_status_unauthed")
+        kickoutBtn.hidden = !showKickoutBtn
     }
 }

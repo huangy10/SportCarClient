@@ -286,7 +286,12 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         commentNumLbl.text = "\(act.commentNum)"
         likeNumLbl.text = "\(act.likeNum)"
         setLikeIconState(act.liked)
-        attendNumLbl.text = "要求人数:\(act.maxAttend) 已报名:\(act.applicants.count)"
+        let attendNumDes = "要求人数:\(act.maxAttend) 已报名:\(act.applicants.count)"
+        if act.authedUserOnly {
+            attendNumLbl.text = "\(attendNumDes)(\(LS("仅认证用户")))"
+        } else {
+            attendNumLbl.text = attendNumDes
+        }
         actDateLbl.text = act.timeDes!
         
         inlineMiniUserSelect.reloadData()
@@ -300,7 +305,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         inlineMiniUserSelect.snp_updateConstraints { (make) in
             make.width.equalTo(CGFloat(cellNum) * 40 - 5)
         }
-        showAllMemberBtn.hidden = !act.user!.isHost
+//        showAllMemberBtn.hidden = !act.user!.isHost
         
         self.frame = UIScreen.mainScreen().bounds
         self.updateConstraints()

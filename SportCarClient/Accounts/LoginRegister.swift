@@ -86,7 +86,7 @@ class LoginRegisterController: InputableViewController {
         titleLbl?.addSubview(titleLogo)
         titleLogo.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(titleLbl!)
-            make.height.equalTo(23)
+            make.height.equalTo(30)
             make.width.equalTo(81)
         }
         //
@@ -153,7 +153,7 @@ class LoginRegisterController: InputableViewController {
         loginPhoneInput = TextFieldWithLeadingIconView()
         loginPhoneInput?.delegate = self
         loginPhoneInput?.placeholder = NSLocalizedString("请输入您的手机号", comment: "")
-        loginPhoneInput?.font = UIFont.systemFontOfSize(12)
+        loginPhoneInput?.font = UIFont.systemFontOfSize(14)
         loginPhoneInput?.leftViewMode = UITextFieldViewMode.Always
         let loginPhoneInputIcon = UIImageView(image: UIImage(named: "account_phone_input"))
         loginPhoneInput?.leftView = loginPhoneInputIcon
@@ -170,7 +170,7 @@ class LoginRegisterController: InputableViewController {
         loginPasswordInput?.placeholder = NSLocalizedString("请输入密码", comment: "")
         loginPasswordInput?.secureTextEntry = true
         loginPasswordInput?.leftViewMode = UITextFieldViewMode.Always
-        loginPasswordInput?.font = UIFont.systemFontOfSize(12)
+        loginPasswordInput?.font = UIFont.systemFontOfSize(14)
         let loginPasswordInputIcon =  UIImageView(image: UIImage(named: "account_password_input"))
         loginPasswordInput?.leftView = loginPasswordInputIcon
         container.addSubview(loginPasswordInput!)
@@ -248,7 +248,7 @@ class LoginRegisterController: InputableViewController {
         registerPhoneInput = TextFieldWithLeadingIconView()
         registerPhoneInput?.delegate = self
         registerPhoneInput?.placeholder = NSLocalizedString("请输入您的手机号", comment: "")
-        registerPhoneInput?.font = UIFont.systemFontOfSize(12)
+        registerPhoneInput?.font = UIFont.systemFontOfSize(14)
         registerPhoneInput?.leftViewMode = UITextFieldViewMode.Always
         let registerPhoneInputIcon = UIImageView(image: UIImage(named: "account_phone_input"))
         registerPhoneInput?.leftView = registerPhoneInputIcon
@@ -264,7 +264,7 @@ class LoginRegisterController: InputableViewController {
         sendCodeBtn.setTitle(NSLocalizedString("获取验证码", comment: ""), forState: .Normal)
         sendCodeBtn.displayText = NSLocalizedString("获取验证码", comment: "")
         sendCodeBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-        sendCodeBtn.titleLabel?.font = UIFont.systemFontOfSize(12)
+        sendCodeBtn.titleLabel?.font = UIFont.systemFontOfSize(14)
         inputContainer.addSubview(sendCodeBtn)
         sendCodeBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(registerPhoneInput!)
@@ -278,7 +278,7 @@ class LoginRegisterController: InputableViewController {
         registerAuthCode = TextFieldWithLeadingIconView()
         registerAuthCode?.delegate = self
         registerAuthCode?.placeholder = NSLocalizedString("请输入验证码", comment: "")
-        registerAuthCode?.font = UIFont.systemFontOfSize(12)
+        registerAuthCode?.font = UIFont.systemFontOfSize(14)
         registerAuthCode?.leftViewMode = UITextFieldViewMode.Always
         let registerAuthCodeIcon = UIImageView(image: UIImage(named: "account_auth_code"))
         registerAuthCode?.leftView = registerAuthCodeIcon
@@ -294,7 +294,7 @@ class LoginRegisterController: InputableViewController {
         registerPasswordInput?.delegate = self
         registerPasswordInput?.placeholder = NSLocalizedString("请输入密码", comment: "")
         registerPasswordInput?.secureTextEntry = true
-        registerPasswordInput?.font = UIFont.systemFontOfSize(12)
+        registerPasswordInput?.font = UIFont.systemFontOfSize(14)
         registerPasswordInput?.leftViewMode = UITextFieldViewMode.Always
         let registerPasswordInputIcon = UIImageView(image: UIImage(named: "account_password_input"))
         registerPasswordInput?.leftView = registerPasswordInputIcon

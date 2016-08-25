@@ -267,7 +267,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         // 1080 + 40 - 200 - 114
         let imageInfo = data.image!
         let otherImageHeight: CGFloat = imageInfo.split(";").count > 1 ? 100 : 0
-        return 520.0 / 375 * screenWidth + textHeight + otherImageHeight
+        return 515.0 / 375 * screenWidth + textHeight + otherImageHeight
     }
     
     func loadDataAndUpdateUI() {

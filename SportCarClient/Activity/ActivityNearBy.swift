@@ -55,6 +55,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
         map.delegate = self
         if showReload {
             userLocation = nil
+            loadActivities()
         } else {
             showReload = true
         }
@@ -261,7 +262,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
         let keyword = dataSource.selectedCity ?? "全国"
         cityFilterLbl.text = keyword
         
-        loadActivities()
+//        loadActivities()
     }
 }
 
