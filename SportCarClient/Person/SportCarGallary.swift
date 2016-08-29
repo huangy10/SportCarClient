@@ -21,11 +21,16 @@ protocol SportCarGallaryDataSource: class {
 
 struct SportCargallaryItem {
     let itemType: String
-    let resource: NSURL
+    var resource: NSURL? {
+        get {
+            return NSURL(string: resourceString)
+        }
+    }
+    let resourceString: String
     
-    init(itemType: String, resource: NSURL) {
+    init(itemType: String, resource: String) {
         self.itemType = itemType
-        self.resource = resource
+        self.resourceString = resource
     }
 }
 
@@ -103,13 +108,14 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
         let item = dataSource.itemForPage(indexPath.row)
         if item.itemType == "image" {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("image", forIndexPath: indexPath) as! SportCarGallaryImageCell
-            cell.imageView.kf_setImageWithURL(item.resource, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) in
+            cell.imageView.kf_setImageWithURL(item.resource!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) in
                 cell.imageView.setupForImageViewer(nil, backgroundColor: UIColor.blackColor(), fadeToHide: false)
             })
             return cell
         } else {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("video", forIndexPath: indexPath) as! SportCarGallaryVideoCell
-            cell.play(item.resource)
+//            cell.play(item.resourceString)
+            cell.play("<iframe style='width:375px; height:220px;' src='http://player.youku.com/embed/XMTcwMTIxODgxMg==' frameborder=0 'allowfullscreen'></iframe>")
             return cell
         }
     }
@@ -148,6 +154,7 @@ class SportCarGallaryImageCell: UICollectionViewCell {
 
 class SportCarGallaryVideoCell: UICollectionViewCell {
     var videoPlayer: AVPlayerViewController!
+    var webPlayer: UIWebView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -165,11 +172,33 @@ class SportCarGallaryVideoCell: UICollectionViewCell {
             make.edges.equalTo(contentView)
         }
         videoPlayer.showsPlaybackControls = false
+        
+        webPlayer = UIWebView()
+        webPlayer.scrollView.scrollEnabled = false
+        contentView.addSubview(webPlayer)
+        webPlayer.snp_makeConstraints { (make) in
+            make.edges.equalTo(contentView)
+        }
+        webPlayer.backgroundColor = UIColor.redColor()
+        webPlayer.hidden = true
+        
+        contentView.backgroundColor = UIColor.greenColor()
     }
     
-    func play(url: NSURL) {
-        let player = AVPlayer(URL: url)
-        videoPlayer.player = player
-        player.play()
+    func play(content: String) {
+        // <iframe height=498 width=510 src='http://player.youku.com/embed/XMTcwMTIxODgxMg==' frameborder=0 'allowfullscreen'></iframe>
+        if let url = NSURL(string: content) {
+            videoPlayer.view.hidden = false
+            let player = AVPlayer(URL: url)
+            videoPlayer.player = player
+            player.play()
+            
+            webPlayer.hidden = true
+        } else {
+            webPlayer.hidden = false
+            webPlayer.loadHTMLString(content, baseURL: nil)
+            
+            videoPlayer.view.hidden = true
+        }
     }
 }

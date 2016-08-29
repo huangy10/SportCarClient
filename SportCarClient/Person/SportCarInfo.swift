@@ -343,7 +343,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     
     func numberOfItems() -> Int {
         let imageNum = car.imageArray.count
-        let videoNum = car.videoURL == nil ? 0 : 1
+        let videoNum = car.video == nil ? 0 : 1
         return imageNum + videoNum
     }
     
@@ -356,9 +356,9 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         let imageNum = car.imageArray.count
         if pageNum < imageNum {
             let image = car.imageArray[pageNum]
-            return SportCargallaryItem(itemType: "image", resource: image)
+            return SportCargallaryItem(itemType: "image", resource: image.absoluteString)
         } else {
-            return SportCargallaryItem(itemType: "video", resource: car.videoURL!)
+            return SportCargallaryItem(itemType: "video", resource: car.video!)
         }
     }
 }
