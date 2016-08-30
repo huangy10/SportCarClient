@@ -392,7 +392,7 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
         backgroundColor = UIColor(white: 0.945, alpha: 1)
         configPlayBtn()
         configProcessView()
-//        configWaveMask()
+        configWaveMask()
         configRemainingTimeLbl()
     }
     
@@ -423,9 +423,9 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     }
     
     func configWaveMask() {
-        wavMask = UIImageView()
-        wavMask.frame = processView.bounds
-        wavMask.backgroundColor = UIColor(white: 1, alpha: 0)
+        wavMask = UIImageView(image: UIImage(named: "static_wave_mask"))
+        wavMask.frame = CGRectMake(0, 0, 167, 50)
+        wavMask.backgroundColor = UIColor.clearColor()
         processView.maskView = wavMask
     }
     

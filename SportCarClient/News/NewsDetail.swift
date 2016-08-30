@@ -591,7 +591,10 @@ extension NewsDetailController{
             let newCommentID = data!.int32Value
             newComment.ssid = newCommentID
             newComment.sent = true
+            self.news.commentNum += 1
+            self.commentNumLbl.text = "\(self.news.commentNum)"
             }) { (code) -> () in
+                
         }
         // 重载数据
         

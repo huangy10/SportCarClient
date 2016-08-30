@@ -114,8 +114,7 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
             return cell
         } else {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("video", forIndexPath: indexPath) as! SportCarGallaryVideoCell
-//            cell.play(item.resourceString)
-            cell.play("<iframe style='width:375px; height:220px;' src='http://player.youku.com/embed/XMTcwMTIxODgxMg==' frameborder=0 'allowfullscreen'></iframe>")
+            cell.play("<body style=\"margin:0;\"><iframe style=\"width:375px; height:220px; border:0px; margin:0; padding: 0;\" src='\(item.resourceString)' frameborder=0 'allowfullscreen'></iframe></body>")
             return cell
         }
     }
@@ -179,10 +178,7 @@ class SportCarGallaryVideoCell: UICollectionViewCell {
         webPlayer.snp_makeConstraints { (make) in
             make.edges.equalTo(contentView)
         }
-        webPlayer.backgroundColor = UIColor.redColor()
         webPlayer.hidden = true
-        
-        contentView.backgroundColor = UIColor.greenColor()
     }
     
     func play(content: String) {

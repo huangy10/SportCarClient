@@ -183,6 +183,7 @@
 		BFCB96401C205DF1004F77E8 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB963F1C205DF1004F77E8 /* Home.swift */; };
 		BFCB96441C206169004F77E8 /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96431C206169004F77E8 /* SideBar.swift */; };
 		BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96451C2061E0004F77E8 /* LoadingButton.swift */; };
+		BFD044331D75CC72003F8831 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFD044321D75CC72003F8831 /* Assets.xcassets */; };
 		BFDB5CB41D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB5CB31D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift */; };
 		BFDBD6011D3D1A4200793256 /* PermissionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */; };
 		BFDD88601D6AF2700043A333 /* CityElementSelectWithSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDD885F1D6AF2700043A333 /* CityElementSelectWithSuggestion.swift */; };
@@ -193,7 +194,6 @@
 		BFDFF2811C8C0E8600055C1C /* ClubDiscoverListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFF2801C8C0E8600055C1C /* ClubDiscoverListCell.swift */; };
 		BFDFF2871C8CB11000055C1C /* ClubFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFF2861C8CB11000055C1C /* ClubFilter.swift */; };
 		BFE0CD151C8D79810031C45B /* AlamofireExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE0CD141C8D79810031C45B /* AlamofireExtension.swift */; };
-		BFE598561CB40AA700001F99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFE598551CB40AA700001F99 /* Assets.xcassets */; };
 		BFE598591CB4107300001F99 /* ActivityDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE598581CB4107300001F99 /* ActivityDetailHeader.swift */; };
 		BFE5985D1CB4A31100001F99 /* InlineUserSelectMiniCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE5985C1CB4A31100001F99 /* InlineUserSelectMiniCell.swift */; };
 		BFE966C51CA57C220097C42C /* MainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE966C41CA57C220097C42C /* MainManager.swift */; };
@@ -493,6 +493,7 @@
 		BFCB963F1C205DF1004F77E8 /* Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Home.swift; path = Home/Home.swift; sourceTree = "<group>"; };
 		BFCB96431C206169004F77E8 /* SideBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideBar.swift; path = Home/SideBar.swift; sourceTree = "<group>"; };
 		BFCB96451C2061E0004F77E8 /* LoadingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingButton.swift; path = BaseTemplate/LoadingButton.swift; sourceTree = "<group>"; };
+		BFD044321D75CC72003F8831 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFDB5CB31D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SportCarBrandOnlineSelectorController.swift; sourceTree = "<group>"; };
 		BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PermissionCheck.swift; path = Sync/PermissionCheck.swift; sourceTree = "<group>"; };
 		BFDD885F1D6AF2700043A333 /* CityElementSelectWithSuggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CityElementSelectWithSuggestion.swift; path = Person/CityElementSelectWithSuggestion.swift; sourceTree = "<group>"; };
@@ -503,7 +504,6 @@
 		BFDFF2801C8C0E8600055C1C /* ClubDiscoverListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubDiscoverListCell.swift; path = Radar/ClubDiscoverListCell.swift; sourceTree = "<group>"; };
 		BFDFF2861C8CB11000055C1C /* ClubFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubFilter.swift; path = Radar/ClubFilter.swift; sourceTree = "<group>"; };
 		BFE0CD141C8D79810031C45B /* AlamofireExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlamofireExtension.swift; path = 3rdParty/AlamofireExtension.swift; sourceTree = "<group>"; };
-		BFE598551CB40AA700001F99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFE598581CB4107300001F99 /* ActivityDetailHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityDetailHeader.swift; path = Activity/ActivityDetailHeader.swift; sourceTree = "<group>"; };
 		BFE5985C1CB4A31100001F99 /* InlineUserSelectMiniCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InlineUserSelectMiniCell.swift; path = BaseTemplate/Views/InlineUserSelectMiniCell.swift; sourceTree = "<group>"; };
 		BFE966C41CA57C220097C42C /* MainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainManager.swift; path = LocalModel/Manager/MainManager.swift; sourceTree = "<group>"; };
@@ -1773,11 +1773,11 @@
 				BFCB963E1C205DE2004F77E8 /* Home */,
 				BFAC52281C1C849000107F71 /* BaseTemplate */,
 				BF32EEAA1C088CF60098FEC1 /* Account */,
-				BFE598551CB40AA700001F99 /* Assets.xcassets */,
 				BFFA51151C05D9910019E5EF /* AppDelegate.swift */,
 				BFFA51241C05D9920019E5EF /* Info.plist */,
 				BFE967471CA6D8920097C42C /* SportCarClient.xcdatamodeld */,
 				BF3BD5E91C28E89000499674 /* Settings.bundle */,
+				BFD044321D75CC72003F8831 /* Assets.xcassets */,
 				BF63089C1C1970AB0087A4F0 /* Localizable.strings */,
 			);
 			path = SportCarClient;
@@ -1997,6 +1997,7 @@
 				BF63089F1C1972050087A4F0 /* agreement.rtf in Resources */,
 				BFF7150B1CC289C30028F87F /* 合成 1_00011.png in Resources */,
 				BFC8F14C1CC8A5B200ABE31F /* read_me.txt in Resources */,
+				BFD044331D75CC72003F8831 /* Assets.xcassets in Resources */,
 				BFF7152D1CC289C30028F87F /* 合成 1_00045.png in Resources */,
 				BFF715051CC289C30028F87F /* 合成 1_00005.png in Resources */,
 				BFC8F14A1CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
@@ -2004,7 +2005,6 @@
 				BF1A636E1D635206005C86C8 /* TitilliumWeb-BoldItalic.ttf in Resources */,
 				BFF7152E1CC289C30028F87F /* 合成 1_00046.png in Resources */,
 				BFF715131CC289C30028F87F /* 合成 1_00019.png in Resources */,
-				BFE598561CB40AA700001F99 /* Assets.xcassets in Resources */,
 				BFF7152B1CC289C30028F87F /* 合成 1_00043.png in Resources */,
 				BFF715231CC289C30028F87F /* 合成 1_00035.png in Resources */,
 				BFF715111CC289C30028F87F /* 合成 1_00017.png in Resources */,
