@@ -109,7 +109,7 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
         if item.itemType == "image" {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("image", forIndexPath: indexPath) as! SportCarGallaryImageCell
             cell.imageView.kf_setImageWithURL(item.resource!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) in
-                cell.imageView.setupForImageViewer(nil, backgroundColor: UIColor.blackColor(), fadeToHide: false)
+                cell.imageView.setupForImageViewer(item.resource!, backgroundColor: UIColor.blackColor(), fadeToHide: false)
             })
             return cell
         } else {
@@ -148,6 +148,8 @@ class SportCarGallaryImageCell: UICollectionViewCell {
             .layout({ (make) in
                 make.edges.equalTo(contentView)
             })
+        imageView.contentMode = .ScaleAspectFill
+        imageView.clipsToBounds = true
     }
 }
 

@@ -86,7 +86,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
             .layout({ (make) in
                 make.left.equalTo(superview).offset(20)
                 make.top.equalTo(cover.snp_bottom)
-                make.width.equalTo(superview).multipliedBy(0.5)
+                make.width.equalTo(superview).multipliedBy(0.6)
             })
         hostAvatar = superview.addSubview(UIButton.self)
             .config(self, selector: #selector(hostAvatarPressed))
@@ -109,8 +109,12 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         desLbl = superview.addSubview(UILabel.self)
             .config(15, multiLine: true).layout({ (make) in
                 make.left.equalTo(hostAvatar)
+                make.right.equalTo(superview).offset(-20)
                 make.top.equalTo(hostAvatar.snp_bottom).offset(18)
             })
+        desLbl.numberOfLines = 0
+        desLbl.lineBreakMode = .ByCharWrapping
+        
         commentNumLbl = superview.addSubview(UILabel.self)
             .config(12, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .Right)
             .layout({ (make) in

@@ -297,7 +297,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         // 跑车性能指标设置
         carPrice.text = car.price
         carEngine.text = car.engine
-        carSubname.text = "\(car.name!) \(car.subname ?? "")"
+        carSubname.text = car.subname ?? car.name!
         carBody.text = car.body
         carSpeed.text = car.maxSpeed
         carAcce.text = car.zeroTo60

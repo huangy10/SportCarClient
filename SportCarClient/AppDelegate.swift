@@ -216,11 +216,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
     // MARK: Sina Weibo
     
     func didReceiveWeiboRequest(request: WBBaseRequest!) {
-        
+        print(request)
     }
     
     func didReceiveWeiboResponse(response: WBBaseResponse!) {
-        
+        print(response)
     }
 
 
