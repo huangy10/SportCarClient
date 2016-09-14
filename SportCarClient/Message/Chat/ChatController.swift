@@ -10,6 +10,14 @@ import UIKit
 import SnapKit
 import Kingfisher
 
+protocol ChatRoomDataSource {
+    func willEnter(room: ChatRoomController)
+    
+    func numberOfChats() -> Int
+    
+    func chatAt(index: Int) -> ChatRecord
+}
+
 enum ChatRoomType {
     case Club
     case Private
@@ -98,6 +106,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         // 添加键盘出现时时间的监听
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatRoomController.changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatRoomController.changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onChatHostoryCleared(_:)), name: kMessageChatHistoryCleared, object: nil)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -228,6 +237,15 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         self.talkBoard?.reloadData()
         if needScrollToBottom {
             talkBoard!.setContentOffset(CGPointMake(0, talkBoard!.contentSize.height - talkBoard!.frame.height), animated: true)
+        }
+    }
+    
+    func onChatHostoryCleared(notification: NSNotification) {
+        if let relatedRoster = notification.userInfo?[kRosterItemKey] as? RosterItem where relatedRoster == rosterItem {
+            dispatch_async(dispatch_get_main_queue(), { 
+                self.chats.removeAll()
+                self.talkBoard?.reloadData()
+            })
         }
     }
 }

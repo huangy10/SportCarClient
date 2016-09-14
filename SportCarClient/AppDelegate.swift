@@ -81,7 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         // handle real time notification
-        
+        AppManager.sharedAppManager.onReceiveNewRemoteNotificaiton()
     }
     
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {

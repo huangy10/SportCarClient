@@ -158,7 +158,7 @@ class Notification: BaseModel {
             return [user!.nickName!, "邀请你参加", activity.name!]
         case "ActivityJoin:invite_agreed":
             let activity = try! getRelatedObj()! as Activity
-            return [user!.nickName!, "通过了你对活动", activity.name!, "的申请"]
+            return [user!.nickName!, "接受了你关于活动", activity.name!, "的申请"]
         case "ActivityJoin:invite_denied":
             let activity = try! getRelatedObj()! as Activity
             return [user!.nickName!, "拒绝了你对活动", activity.name!, "的申请"]
@@ -173,7 +173,7 @@ class Notification: BaseModel {
             return [user!.nickName!, "申请了你的活动", activity.name!]
         case "ClubJoining:apply":
             let club = try! getRelatedObj()! as Club
-            return [user!.nickName!, "申请了你的俱乐部", club.name!]
+            return [user!.nickName!, "申请加入你的俱乐部", club.name!]
         case "ClubJoining:agree":
             let club = try! getRelatedObj()! as Club
             return [user!.nickName!, "通过了你对俱乐部", club.name!, "的申请"]

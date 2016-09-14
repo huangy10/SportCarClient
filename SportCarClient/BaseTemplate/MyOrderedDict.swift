@@ -71,6 +71,7 @@ class MyOrderedDict<Key: Hashable, Value> {
      - parameter index:    目标index
      - parameter frontPos: 前端位置
      */
+    @available(*, deprecated=1)
     func bringIndexToFront(index: Int, frontPos: Int = 0) {
         let count = self.count
         if index >= count || frontPos >= count || index < frontPos {
@@ -82,6 +83,7 @@ class MyOrderedDict<Key: Hashable, Value> {
         _keys.insert(a, atIndex: frontPos)
     }
     
+    @available(*, deprecated=1)
     func bringKeyToFront(key: Key, frontPos: Int = 0) {
         if let index = _keys.indexOf(key) {
             bringIndexToFront(index, frontPos: frontPos)
@@ -92,5 +94,4 @@ class MyOrderedDict<Key: Hashable, Value> {
         let key = _keys[index]
         return _dict[key]
     }
-
 }

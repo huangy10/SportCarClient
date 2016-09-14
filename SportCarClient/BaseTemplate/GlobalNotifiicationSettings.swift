@@ -40,6 +40,8 @@ let kMessageClubMemberChangeNotification = "club_member_change"
 let kMessageClubKey = "club"
 let kMessageClubDelete = "club_delete"
 let kMessageStopAllVoicePlayNotification = "stop_all_voice_play"
+let kMessageChatHistoryCleared = "chat_history_cleared"
+let kRosterItemKey  = "roster_item"
 
 
 // MARK: Account

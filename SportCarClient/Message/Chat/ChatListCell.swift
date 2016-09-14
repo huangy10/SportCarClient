@@ -19,6 +19,11 @@ class ChatListCell: UITableViewCell {
             recentTalkLbl.text = data.recentChatDes
             recentTalkTimeLbl.text = dateDisplay(data.updatedAt!)
             setUnreadNumber(Int(data.unreadNum))
+            if data.alwaysOnTop {
+                contentView.backgroundColor = UIColor(white: 0, alpha: 0.04)
+            } else {
+                contentView.backgroundColor = UIColor.whiteColor()
+            }
             switch data.data! {
             case .USER(let user):
                 avatarBtn.kf_setImageWithURL(user.avatarURL!, forState: .Normal)

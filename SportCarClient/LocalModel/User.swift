@@ -101,7 +101,11 @@ class User: BaseModel {
             _clubNickName = clubNickName
         }
         get {
-            return _clubNickName ?? nickName!
+            if let name = _clubNickName where name != "" {
+                return name
+            } else {
+                return nickName!
+            }
         }
     }
 

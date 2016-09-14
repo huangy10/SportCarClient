@@ -22,6 +22,5 @@ class ChatParser {
         }
         return (newRecrod, nil)
     }
-    
 }
 

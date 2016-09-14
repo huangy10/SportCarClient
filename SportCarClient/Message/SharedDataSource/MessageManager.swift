@@ -52,12 +52,16 @@ class MessageManager {
     }
     var unreadChatNum: Int = 0 {
         didSet {
-            ss_sendUnreadNumberDidChangeNotification()
+            if oldValue != unreadChatNum {
+                ss_sendUnreadNumberDidChangeNotification()
+            }
         }
     }
     var unreadNotifNum: Int = 0 {
         didSet {
-            ss_sendUnreadNumberDidChangeNotification()
+            if oldValue != unreadNotifNum {
+                ss_sendUnreadNumberDidChangeNotification()
+            }
         }
     }
     var unreadNum: Int {
@@ -314,10 +318,10 @@ class MessageManager {
             load({
                 // 如果没有从本地数据库里面查找到数据，那么尝试获取历史
                 if room.chats.count == 0 {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        room.refresh.beginRefreshing()
-                        room.loadChatHistoryMannually(false)
-                    })
+//                    dispatch_async(dispatch_get_main_queue(), {
+//                        room.refresh.beginRefreshing()
+//                        room.loadChatHistoryMannually(false)
+//                    })
                 } else {
                     dispatch_async(dispatch_get_main_queue(), { 
                         room.talkBoard?.reloadData()
@@ -379,6 +383,7 @@ class MessageManager {
                     .filter({$0.hostSSID == self.hostUser.ssid})
                     .filter({$0.rosterID == rosterItem.ssid})
                     .delete()
+                NSNotificationCenter.defaultCenter().postNotificationName(kMessageChatHistoryCleared, object: nil, userInfo: [kRosterItemKey: rosterItem])
             } catch {}
         }
         
@@ -388,6 +393,14 @@ class MessageManager {
             })
         } else {
             _clear(rosterItem)
+        }
+    }
+    
+    func clearChatHistory(club: Club) {
+        let context = ChatModelManger.sharedManager.getOperationContext()
+        if let roster = context.rosterItems.filter({ $0.hostSSID == self.hostUser.ssid })
+            .first({ $0.relatedID == club.ssid && $0.entityType == "club" }) {
+            self.clearChatHistory(roster)
         }
     }
     

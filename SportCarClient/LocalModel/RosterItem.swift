@@ -77,7 +77,10 @@ class RosterItem: BaseModel {
     }
     
     func takeChatRecord(chat: ChatRecord) -> Bool {
-        return chat.chatType! == self.entityType && chat.targetID == self.relatedID
+//        print(chat.chatType, self.entityType)
+//        print(chat.targetID, self.relatedID)
+//        print(chat.senderUser?.ssid)
+        return (chat.chatType! == self.entityType && chat.targetID == self.relatedID) || (chat.chatType! == "user" && chat.senderUser!.ssid == self.relatedID)
     }
     
     override func loadDataFromJSON(data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Self {

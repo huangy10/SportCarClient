@@ -8,6 +8,12 @@
 
 import UIKit
 
+protocol RosterDataSource {
+    func numberOfRosters() -> Int
+    
+    func rosterAt(index: Int) -> RosterItem
+}
+
 
 class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupDelegate {
     var data: MyOrderedDict<String, RosterItem> {

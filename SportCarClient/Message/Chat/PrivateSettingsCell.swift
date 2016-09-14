@@ -77,15 +77,6 @@ class PrivateChatSettingsAvatarCell: UITableViewCell {
             make.center.equalTo(self.contentView)
             make.size.equalTo(74)
         }
-        //
-        let icon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
-        self.contentView.addSubview(icon)
-        icon.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(self.contentView).offset(-15)
-            make.centerY.equalTo(self.contentView)
-            make.size.equalTo(CGSizeMake(9, 15))
-        }
-        
     }
 }
 

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AudioToolbox
 
 let kAppManagerNotificationLogout = "app_manager_notification_logout"
 
@@ -119,6 +120,23 @@ class AppManager: UIViewController {
         if let notification = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [String: AnyObject] {
             print(notification)
         }
+    }
+    
+    func onReceiveNewRemoteNotificaiton() {
+        let setting = PersonMineSettingsDataSource.sharedDataSource
+        if setting.newMessageNotificationSound {
+            playRemoteNotificaitonSound()
+        } else {
+            shakeWhenRemoteNotificationComes()
+        }
+    }
+    
+    func playRemoteNotificaitonSound() {
+        AudioServicesPlaySystemSound(1007)
+    }
+    
+    func shakeWhenRemoteNotificationComes() {
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
     }
     
     /**

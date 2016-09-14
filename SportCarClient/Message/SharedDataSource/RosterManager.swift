@@ -10,10 +10,25 @@ import UIKit
 import SwiftyJSON
 import AlecrimCoreData
 
+class RosterDict: MyOrderedDict<String, RosterItem> {
+    
+    func resortRosters() {
+        let rosters = _dict.map({ $0.1 })
+        _keys = rosters.sort({ (r1, r2) -> Bool in
+            if r1.alwaysOnTop && !r2.alwaysOnTop {
+                return true
+            } else if r1.updatedAt!.compare(r2.updatedAt!) == .OrderedDescending {
+                return true
+            }
+            return false
+        }).map({$0.mapKey})
+    }
+}
+
 class RosterManager {
     static let defaultManager = RosterManager()
     /// The data of the roster
-    var data = MyOrderedDict<String, RosterItem>()
+    var data = RosterDict()
     /// The rosterList
     weak var rosterList: UITableView?
     
@@ -63,14 +78,16 @@ class RosterManager {
         if let existingRosterItem = data[mapKey] {
             try! existingRosterItem.loadDataFromJSON(json)
             if autoBringToFront {
-                data.bringKeyToFront(mapKey)
+//                data.bringKeyToFront(mapKey)
+                data.resortRosters()
             }
             return existingRosterItem
         } else {
             let newItem = try! ChatModelManger.sharedManager.getOrCreate(json) as RosterItem
             data[mapKey] = newItem
             // always bring to front
-            data.bringKeyToFront(mapKey)
+//            data.bringKeyToFront(mapKey)
+            data.resortRosters()
             
             return newItem
         }
@@ -170,7 +187,7 @@ class RosterManager {
      */
     private func _sync() {
         ChatRequester2.sharedInstance.getChatList({ (json) in
-            let newRosters = MyOrderedDict<String, RosterItem>()
+            let newRosters = RosterDict()
             var unreadTotal = 0
             for var data in json!.arrayValue {
                 do {

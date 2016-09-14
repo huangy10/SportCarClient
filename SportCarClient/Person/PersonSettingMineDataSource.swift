@@ -65,6 +65,7 @@ class PersonMineSettingsDataSource {
             "accept_invitation": acceptInvitation,
             "show_on_map": showOnMap ? "y" : "n"
         ]
+        saveToUserDefault()
         let requester = SettingsRequester.sharedInstance
         requester.syncPersonMineSettings(uploadParam, onSuccess: { (data) -> () in
             print("setting data uploaded")

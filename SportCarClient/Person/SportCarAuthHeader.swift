@@ -16,12 +16,13 @@ class SportCarAuthHeader: SSCommonHeader {
     }
     
     var authBtn: UIButton!
+    var authLbl: UILabel!
     var authed: Bool = false {
         didSet {
             if authed {
-                authBtn.setTitle(LS("已认证"), forState: .Normal)
+                authLbl.text = LS("已认证")
             } else {
-                authBtn.setTitle(LS("申请认证"), forState: .Normal)
+                authLbl.text = LS("申请认证")
             }
         }
     }
@@ -31,15 +32,19 @@ class SportCarAuthHeader: SSCommonHeader {
         authBtn = UIButton()
         let superview = self.contentView
         superview.addSubview(authBtn)
-        authBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        authBtn.setTitle(LS("申请认证"), forState: .Normal)
-        authBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
+
         authBtn.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(titleLbl)
             make.height.equalTo(superview)
             make.width.equalTo(60)
         }
+        
+        authLbl = authBtn.addSubview(UILabel)
+            .config(14, fontWeight: UIFontWeightUltraLight, textColor: kHighlightedRedTextColor, textAlignment: .Right, text: LS("申请认证"))
+            .layout({ (make) in
+                make.edges.equalTo(authBtn)
+            })
     }
     
 }

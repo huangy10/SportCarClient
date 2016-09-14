@@ -40,6 +40,7 @@ class InlineUserSelectController: UICollectionViewController {
         self.init(collectionViewLayout: layout)
         
         collectionView?.contentInset = UIEdgeInsetsMake(15, 0, 0, 0)
+        collectionView?.scrollEnabled = false
     }
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
@@ -83,7 +84,11 @@ class InlineUserSelectController: UICollectionViewController {
         let cellHeight = UIScreen.mainScreen().bounds.width / 4
         let cellNum = userNum + (showAddBtn ? 1 : 0) + (showDeleteBtn ? 1 : 0)
         let height = CGFloat((cellNum - 1) / 4 + 1) * cellHeight + 15
-        return height
+        if userNum >= 12 && !showAddBtn && !showDeleteBtn {
+            return height + 30
+        } else {
+            return height
+        }
     }
     
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {

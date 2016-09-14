@@ -31,9 +31,9 @@ let kBarTitleFont = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
 let kTextInputFont = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
 
 // Network
-//let kHostName = "101.5.65.42"
-let kHostName = "paochefan.com"
-let kPortName = "8000"
+let kHostName = "localhost"
+//let kHostName = "paochefan.com"
+let kPortName = "80"
 let kChatPortName = "8888"
 let kProtocalName = "http"
 // 在跑车雷达中，当前显示用户最长维持的时间，即如果在这个时间内（秒）没有获取新的数据，则下次打开发现页面是，会清空原来的结果
@@ -51,7 +51,7 @@ func LS(str: String, comment: String="") -> String{
  这个宏在静态文件地址前方加上域名
  
  - parameter urlStr: 返回的完整的路径
- */
+ */ 
 func SF(urlStr: String?)->String?{
     if urlStr == nil {
         return nil

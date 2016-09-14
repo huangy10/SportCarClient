@@ -32,6 +32,17 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         super.init(style: .Plain)
         self.targetClub = targetClub
     }
+    
+//    init(rosterItem: RosterItem) {
+//        super.init(style: .Plain)
+//        self.rosterItem = rosterItem
+//        switch rosterItem.data! {
+//        case .CLUB(let club):
+//            targetClub = club
+//        default:
+//            break
+//        }
+//    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -108,16 +119,17 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         leftBtn.addTarget(self, action: #selector(GroupChatSettingController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
         let rightBtn = UIButton()
-        rightBtn.hidden = true
-        rightBtn.setImage(UIImage(named: "status_detail_other_operation"), forState: .Normal)
-        rightBtn.imageView?.contentMode = .ScaleAspectFit
-        rightBtn.frame = CGRectMake(0, 0, 21, 21)
+        let btnText = LS("进入聊天")
+        rightBtn.frame = CGRectMake(0, 0, btnText.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), boundingSize: CGSizeMake(CGFloat.max, 21)).width, 21)
+        rightBtn.setTitle(btnText, forState: .Normal)
+        rightBtn.titleLabel!.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        rightBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
         rightBtn.addTarget(self, action: #selector(GroupChatSettingController.navRightBtnPressed), forControlEvents: .TouchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
     }
     
     func navRightBtnPressed() {
-        
+        startChatBtnPressed()
     }
     
     func navLeftBtnPressed() {
@@ -412,6 +424,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     
     func clearChatContent() {
 //        hideToast()
+        MessageManager.defaultManager.clearChatHistory(targetClub)
     }
 
 }

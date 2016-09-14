@@ -32,7 +32,8 @@ class AccountRequester2: BasicRequester {
         "get_blacklist": "blacklist",
         "operation": "<userID>/operation",
         "status": "<userID>/status",
-        "permission": "permission"
+        "permission": "permission",
+        "reset": "reset"
     ]
     
     override var urlMap: [String : String] {
@@ -265,6 +266,14 @@ class AccountRequester2: BasicRequester {
             onSuccess: onSuccess,
             onError: onError
         )
+    }
+    
+    func resetPassword(phoneNum: String, passwd: String, authCode: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+        var param = ["username": phoneNum, "password": passwd, "password2": passwd, "auth_code": authCode]
+        if let token = AppManager.sharedAppManager.deviceTokenString {
+            param["device_token"] = token
+        }
+        return post(urlForName("reset"), parameters: param, responseDataField: "data", onSuccess: onSuccess, onError: onError)
     }
 }
 

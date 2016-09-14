@@ -593,6 +593,7 @@ extension NewsDetailController{
             newComment.sent = true
             self.news.commentNum += 1
             self.commentNumLbl.text = "\(self.news.commentNum)"
+            self.showToast(LS("评论成功！"))
             }) { (code) -> () in
                 
         }
@@ -828,6 +829,7 @@ extension NewsDetailController {
 
     func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         newsDetailLoading?.startAnimating()
+        print(request)
         return true
     }
     

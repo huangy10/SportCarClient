@@ -9,9 +9,13 @@
 import UIKit
 
 
-class ResetPasswordController: LoginRegisterController {
+class ResetPasswordController: LoginRegisterController, LoadingProtocol {
     
     override func createSubviews() {
+        self.tapper = UITapGestureRecognizer(target: self, action: #selector(InputableViewController.dismissKeyboard))
+        tapper?.enabled = false
+        self.view.addGestureRecognizer(tapper!)
+        
         self.navigationItem.title = NSLocalizedString("找回密码", comment: "")
         self.navigationItem.leftBarButtonItem = self.leftBarBtn()
         //
@@ -158,6 +162,7 @@ class ResetPasswordController: LoginRegisterController {
         registerBtn.layer.shadowOffset = CGSize(width: 0, height: 3)
         registerBtn.layer.shadowRadius = 7
         registerBtn.layer.shadowOpacity = 1
+        registerBtn.addTarget(self, action: #selector(registerPressed), forControlEvents: .TouchUpInside)
         container.addSubview(registerBtn)
         registerBtn.snp_makeConstraints { (make) -> Void in
             make.width.equalTo(100)
@@ -176,6 +181,28 @@ class ResetPasswordController: LoginRegisterController {
     //
     override func registerPressed() {
         
+        guard let phone = registerPhoneInput?.text else{
+            showToast(LS("请输入手机号"), onSelf: true)
+            return
+        }
+        guard let authCode = registerAuthCode?.text else{
+            showToast(LS("请输入验证码"), onSelf: true)
+            return
+        }
+        guard let passwd = registerPasswordInput?.text else{
+            showToast(LS("请输入密码"), onSelf: true)
+            return
+        }
+        lp_start()
+        AccountRequester2.sharedInstance.resetPassword(phone, passwd: passwd, authCode: authCode, onSuccess: { (json) in
+            self.lp_stop()
+//            self.showToast(LS("密码修改成功！"))
+            UIApplication.sharedApplication().keyWindow?.rootViewController?.showToast(LS("密码修改成功！"))
+            self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+            }) { (code) in
+            self.lp_stop()
+            self.showToast(LS("密码修改失败！"))
+        }
     }
 //    
     override func leftBarBtn() -> UIBarButtonItem! {

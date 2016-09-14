@@ -9,6 +9,14 @@
 import UIKit
 import SnapKit
 
+protocol NotificationDataSource: class {
+    func numberOfNotifications() -> Int
+    
+    func notificationAt(index: Int) -> Notification
+    
+    func markNotificationAsReadAt(index: Int)
+}
+
 class NotificationController: UITableViewController, NotificationCellDelegate, LoadingProtocol {
     // Pointer to the home controller which you can use to push or present detail controllers
     var messageHome: MessageController?
@@ -431,13 +439,17 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
         func club(notification: Notification) -> UIViewController {
             let club: Club = try! notification.getRelatedObj()!
             if club.attended {
-                if club.founderUser!.isHost {
-                    let detail = GroupChatSettingHostController(targetClub: club)
-                    return detail
-                } else {
-                    let detail = GroupChatSettingController(targetClub: club)
-                    return detail
-                }
+//                if club.founderUser!.isHost {
+//                    let detail = GroupChatSettingHostController(targetClub: club)
+//                    return detail
+//                } else {
+//                    let detail = GroupChatSettingController(targetClub: club)
+//                    return detail
+//                }
+                let chatRoom  = ChatRoomController()
+                chatRoom.targetClub = club
+                chatRoom.chatCreated = false
+                return chatRoom
             } else {
                 let detail = ClubBriefInfoController()
                 detail.targetClub = club
