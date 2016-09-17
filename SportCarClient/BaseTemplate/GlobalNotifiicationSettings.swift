@@ -57,3 +57,7 @@ let kAccountBlackStatusBlocked = "blocked"
 
 let kCarDeletedNotification = "car_deleted"
 let kSportcarKey = "sportcar_key"
+
+// MAKR: Activity
+
+let kActivityInfoChanged = "activity_changed"

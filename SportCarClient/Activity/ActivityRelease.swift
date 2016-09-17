@@ -45,6 +45,9 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     var didBeginEditActDes: Bool = false
     weak var presenter: UIViewController? = nil
     
+    //
+    let actDescriptionWordLimit: Int = 140
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
@@ -132,7 +135,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 make.height.equalTo(100)
             }).addToInputable(self)
         desWordCountLbl = container.addSubview(UILabel)
-            .config(12, textAlignment: .Right, text: "0/40", textColor: UIColor(white: 0.72, alpha: 1)).layout({ (make) in
+            .config(12, textAlignment: .Right, text: "0/\(actDescriptionWordLimit)", textColor: UIColor(white: 0.72, alpha: 1)).layout({ (make) in
                 make.right.equalTo(container).offset(-15)
                 make.bottom.equalTo(desInput)
             })
@@ -236,6 +239,10 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         }
         guard let startAtDate = startAt, let endAtDate = endAt else {
             showToast(LS("请设置活动时间"), onSelf: true)
+            return
+        }
+        if startAtDate.compare(endAtDate) == .OrderedDescending {
+            showToast(LS("开始时间不能晚于结束时间"))
             return
         }
         var selectedUserIDs: [String]? = nil
@@ -593,10 +600,10 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             }
         }
         let text = textView.text
-        if text.length > 40 {
-            textView.text = text[0..<40]
+        if text.length > actDescriptionWordLimit {
+            textView.text = text[0..<actDescriptionWordLimit]
         }
-        desWordCountLbl.text = "\(min(text.length, 40))/40"
+        desWordCountLbl.text = "\(min(text.length, actDescriptionWordLimit))/\(actDescriptionWordLimit)"
     }
     
     // MARK: - Location Select Delegate

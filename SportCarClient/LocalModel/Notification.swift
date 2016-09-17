@@ -142,7 +142,7 @@ class Notification: BaseModel {
     func makeDisplayTitlePhrases() -> [String] {
         let username = user!.nickName!
         switch simplifiedMessageType {
-        case "User:minimal":
+        case "User:like":
             return [username, "关注了你"]
         case "Status:like":
             return [username, "赞了你的动态"]
@@ -168,9 +168,9 @@ class Notification: BaseModel {
         case "Activity:like":
             let activity = try! getRelatedObj()! as Activity
             return [user!.nickName!, "赞了你的活动", activity.name!]
-        case "ActivityJoin: apply":
+        case "ActivityJoin:apply":
             let activity = try! getRelatedObj()! as Activity
-            return [user!.nickName!, "申请了你的活动", activity.name!]
+            return [user!.nickName!, "报名了你发起的活动", activity.name!]
         case "ClubJoining:apply":
             let club = try! getRelatedObj()! as Club
             return [user!.nickName!, "申请加入你的俱乐部", club.name!]

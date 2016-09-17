@@ -31,7 +31,7 @@ let kBarTitleFont = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
 let kTextInputFont = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
 
 // Network
-let kHostName = "localhost"
+let kHostName = "166.111.17.104"
 //let kHostName = "paochefan.com"
 let kPortName = "80"
 let kChatPortName = "8888"
@@ -41,6 +41,10 @@ let kMaxRadarKeptTime: NSTimeInterval = 600
 //
 let kMaxPhotoSelect: Int = 9    // 最大可以选择的照片的数量
 let kLoadingAppearDelay: Int64 = 300
+
+// video html template
+
+let VIDEO_HTML_TEMPLATE: String = "<body style=\"margin:0;\"><iframe style=\"width:\(UIScreen.mainScreen().bounds.width)px; height:\(UIScreen.mainScreen().bounds.width / 375 * 220)px; border:0px; margin:0; padding: 0;\" src='%@' frameborder=0 'allowfullscreen'></iframe></body>"
 
 // Macro
 func LS(str: String, comment: String="") -> String{

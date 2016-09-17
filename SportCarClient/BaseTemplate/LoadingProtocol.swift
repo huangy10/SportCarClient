@@ -36,10 +36,16 @@ extension LoadingProtocol where Self: UIViewController {
                 return container
             } else {
                 let superview = self.view
-                let container = superview.addSubview(UIView).config(UIColor(white: 0, alpha: 0.2))
-                    .layout({ (make) in
-                        make.edges.equalTo(superview)
-                    })
+                let container: UIView
+                if superview.isKindOfClass(UITableView.self) {
+                    container = superview.addSubview(UIView).config(UIColor(white: 0, alpha: 0.2))
+                    container.frame = UIScreen.mainScreen().bounds
+                } else {
+                    container = superview.addSubview(UIView).config(UIColor(white: 0, alpha: 0.2))
+                        .layout({ (make) in
+                            make.edges.equalTo(superview)
+                        })
+                }
                 
                 let rect = container.addSubview(UIView).config(UIColor.whiteColor())
                     .toRound(6)

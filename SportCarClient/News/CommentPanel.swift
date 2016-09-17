@@ -35,21 +35,45 @@ class CommentBarView: UIView {
     var likeBtn: UIButton?
     var likeBtnIcon: UIImageView!
     
-    var barheight: CGFloat
+    let barheight: CGFloat = 45
+    
+    private var frameFirstSet: Bool = true
     
     override init(frame: CGRect) {
-        barheight = 45
         super.init(frame: frame)
         createSubivews()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        barheight = 45
         super.init(coder: aDecoder)
     }
     
     convenience init() {
         self.init(frame: CGRect.zero)
+    }
+    
+    func setOriginY(y: CGFloat) {
+        if frameFirstSet {
+            frame = CGRectMake(0, y, UIScreen.mainScreen().bounds.width, barheight)
+        } else {
+            let oldFrame = frame
+            frame = CGRectMake(0, y, UIScreen.mainScreen().bounds.width, oldFrame.height)
+            frameFirstSet = false
+        }
+    }
+    
+    func setBarHeight(height: CGFloat) {
+        var oldFrame = frame
+        let validHeight = max(height, barheight)
+        oldFrame.origin.y = oldFrame.origin.y + oldFrame.height - validHeight
+        oldFrame.size.height = validHeight
+        frame = oldFrame
+    }
+    
+    func restBarHeight() {
+        var oldFrame = frame
+        oldFrame.size.height = barheight
+        frame = oldFrame
     }
     
     func createSubivews() {
@@ -116,7 +140,7 @@ class CommentBarView: UIView {
         contentInput?.textColor = UIColor.blackColor()
         roundCornerContainer.addSubview(contentInput!)
         contentInput?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(commentIcon!.snp_right).offset(24)
+            make.left.equalTo(commentIcon!.snp_right).offset(10)
             make.right.equalTo(roundCornerContainer).offset(-18)
             make.top.equalTo(roundCornerContainer)
             make.bottom.equalTo(roundCornerContainer)

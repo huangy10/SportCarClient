@@ -77,6 +77,10 @@ class ActivityEditController: ActivityReleaseController {
             showToast(LS("请设置活动时间"), onSelf: true)
             return
         }
+        if startAtDate.compare(endAtDate) == .OrderedDescending {
+            showToast(LS("开始时间不能晚于结束时间"))
+            return
+        }
         var selectedUserIDs: [String]? = nil
         if selectedUser.count > 0 {
             selectedUserIDs = selectedUser.map { $0.ssidString }
@@ -96,6 +100,7 @@ class ActivityEditController: ActivityReleaseController {
             } else {
                 self.showToast(LS("修改成功!"))
             }
+            NSNotificationCenter.defaultCenter().postNotificationName(kActivityInfoChanged, object: nil, userInfo: [kActivityKey: self.act])
             }, onProgress: { (progress) in
                 dispatch_async(dispatch_get_main_queue(), {
                     self.pp_updateProgress(progress)

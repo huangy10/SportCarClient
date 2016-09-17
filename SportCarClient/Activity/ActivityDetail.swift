@@ -28,6 +28,8 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     var mapCell: MapCell!
     
+    var needReloadActInfo: Bool = false
+    
     init(act: Activity) {
         super.init(nibName: nil, bundle: nil)
         self.act = act
@@ -47,6 +49,10 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         mapCell.map.viewWillAppear()
 //        infoView.loadDataAndUpdateUI()
         tableView.setContentOffset(CGPointMake(0, -infoView.preferedHeight), animated: false)
+        
+        if needReloadActInfo {
+            loadActInfo()
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -65,6 +71,16 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         //
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onActivityInfoChanged(_:)), name: kActivityInfoChanged, object: nil)
+        
+    }
+    
+    func onActivityInfoChanged(notification: NSNotification) {
+        if let act = notification.userInfo?[kActivityKey] as? Activity where act == self.act{
+            dispatch_async(dispatch_get_main_queue(), { 
+                self.loadActInfo()
+            })
+        }
     }
     
     override func createSubviews() {
@@ -197,24 +213,29 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             showToast(LS("活动已结束"))
             return
         }
-        act.hostApply()
-        infoView.loadDataAndUpdateUI()
-        setNavRightBtn()
+        
+        lp_start()
+        
         ActivityRequester.sharedInstance.postToApplyActivty(act.ssidString, onSuccess: { (json) in
             self.showToast(LS("报名成功"))
+            self.act.hostApply()
+            self.infoView.loadDataAndUpdateUI()
+            self.setNavRightBtn()
+            self.lp_stop()
             }) { (code) in
+                
                 if code == "full" {
                     self.showToast(LS("活动已报满"))
                     self.updateActivityMembersList()
                 } else {
+                    self.lp_stop()
                     self.showToast(LS("报名失败"))
                 }
-                self.lp_stop()
         }
     }
     
     func updateActivityMembersList() {
-        loadActInfo()
+        loadActInfo(false)
     }
     
     func closeActivity() {
@@ -334,8 +355,10 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     /**
      Fetch the latest information about the act
      */
-    func loadActInfo() {
-        lp_start()
+    func loadActInfo(showLoading: Bool = true) {
+        if showLoading {
+            lp_start()
+        }
         ActivityRequester.sharedInstance.getActivityDetail(act.ssidString, onSuccess: { (json) in
             if let data = json {
                 try! self.act.loadDataFromJSON(data, detailLevel: 1)

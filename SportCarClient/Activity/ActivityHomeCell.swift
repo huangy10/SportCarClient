@@ -46,6 +46,7 @@ class ActivityCell: UICollectionViewCell {
             .layout({ (make) in
                 make.edges.equalTo(container)
             })
+        cover.contentMode = .ScaleAspectFill
         coverMask = container.addSubview(UIImageView).config(UIImage(named: "activityMask"))
             .layout({ (make) in
                 make.bottom.equalTo(cover)
@@ -79,7 +80,7 @@ class ActivityCell: UICollectionViewCell {
                 make.size.equalTo(CGSizeMake(44, 18.5))
             })
         self.contentView.clipsToBounds = false
-        self.contentView.addShadow(6, color: UIColor.blackColor(), opacity: 0.2, offset: CGSizeMake(0, 2.5))
+        self.contentView.addShadow(3, color: UIColor.blackColor(), opacity: 0.4, offset: CGSizeMake(0, 2.5))
     }
 //    
 //    func createSubviews() {

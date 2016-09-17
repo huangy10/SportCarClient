@@ -569,7 +569,7 @@ class NotificationCell: UITableViewCell {
         date: NSDate,
         read: Bool,
         titleContents: [String],
-        coverURL: NSURL,
+        coverURL: NSURL?,
         detailDescription: String,
         displayMode: DisplayMode = .WithCover
         ) {
@@ -577,7 +577,9 @@ class NotificationCell: UITableViewCell {
         if displayMode.rawValue < DisplayMode.WithCover.rawValue {
             return
         }
-        cover.kf_setImageWithURL(coverURL)
+        if let url = coverURL {
+            cover.kf_setImageWithURL(url)
+        }
         detailLbl.text = detailDescription
     }
     
@@ -586,7 +588,7 @@ class NotificationCell: UITableViewCell {
         date: NSDate,
         read: Bool,
         titleContents: [String],
-        coverURL: NSURL,
+        coverURL: NSURL?,
         detailDescription: String,
         checked: Bool,
         flag: Bool,

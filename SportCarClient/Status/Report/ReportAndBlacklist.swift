@@ -80,7 +80,12 @@ class ReportBlacklistViewController: PresentTemplateViewController {
     
     func reportItemPressed(sender: UIButton) {
         // TODO: 将举报内容发送给服务器
-        showToast(LS("举报内容发送成功"), onSelf: true)
+//        showToast(LS("举报内容发送成功"), onSelf: false)
         hideAnimated()
+        let delay: dispatch_time_t = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC))
+        dispatch_after(delay, dispatch_get_main_queue()) { 
+            UIApplication.sharedApplication().keyWindow?.rootViewController?.showToast(LS("举报内容发送成功"), onSelf: true)
+        }
+        
     }
 }

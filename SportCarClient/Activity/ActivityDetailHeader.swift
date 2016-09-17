@@ -38,6 +38,10 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     
     var preferedHeight: CGFloat = 0
     
+    
+    //
+    let coverExtraHeightRatio: CGFloat = 1.4
+    
     init (act: Activity) {
         super.init(frame: CGRectZero)
         self.act = act
@@ -47,6 +51,16 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setCoverRelativeMove(y: CGFloat) {
+        cover.snp_remakeConstraints { (make) in
+            make.left.equalTo(coverContainer)
+            make.right.equalTo(coverContainer)
+            make.height.equalTo(coverContainer).multipliedBy(coverExtraHeightRatio)
+            make.top.equalTo(coverContainer).offset(-y)
+        }
+        layoutIfNeeded()
     }
     
     private func createSubviews() {
@@ -62,8 +76,12 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         
         cover = coverContainer.addSubview(UIImageView).config(nil)
             .layout({ (make) in
-                make.edges.equalTo(coverContainer)
+                make.left.equalTo(coverContainer)
+                make.right.equalTo(coverContainer)
+                make.top.equalTo(coverContainer).offset(0)
+                make.height.equalTo(coverContainer).multipliedBy(coverExtraHeightRatio)
             })
+        cover.contentMode = .ScaleAspectFill
         
         backMaskView = BackMaskView()
         backMaskView.centerHegiht = 28
@@ -72,7 +90,16 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         backMaskView.userInteractionEnabled = false
         superview.addSubview(backMaskView)
         backMaskView.snp_makeConstraints { (make) in
-            make.edges.equalTo(cover)
+            make.edges.equalTo(coverContainer)
+        }
+        backMaskView.addShadow(offset: CGSizeMake(0, -3), opacity: 0.1)
+        
+        superview.addSubview(UIView).config(UIColor.whiteColor())
+            .layout { (make) in
+                make.top.equalTo(coverContainer.snp_bottom)
+                make.left.equalTo(superview)
+                make.right.equalTo(superview)
+                make.bottom.equalTo(cover)
         }
         editBtn = superview.addSubview(UIButton.self)
             .config(self, selector: #selector(editBtnPressed), title: LS("编辑"))
@@ -85,7 +112,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
             .config(21, fontWeight: UIFontWeightSemibold, multiLine: true)
             .layout({ (make) in
                 make.left.equalTo(superview).offset(20)
-                make.top.equalTo(cover.snp_bottom)
+                make.top.equalTo(coverContainer.snp_bottom)
                 make.width.equalTo(superview).multipliedBy(0.6)
             })
         hostAvatar = superview.addSubview(UIButton.self)
@@ -326,17 +353,21 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     }
     
     func adjustCoverScaleAccordingToTableOffset(offset: CGFloat) {
-        if offset >= 0 && offset < 10 {
+        let coverHeight = UIScreen.mainScreen().bounds.width * 0.588
+        let extraHeight = coverHeight * (coverExtraHeightRatio - 1)
+        if offset >= 0 {
             cover.transform = CGAffineTransformIdentity
-            cover.snp_remakeConstraints(closure: { (make) in
-                make.edges.equalTo(coverContainer)
-            })
+            if offset <= coverHeight {
+                let relativeMove = extraHeight * (offset / coverHeight)
+                setCoverRelativeMove(relativeMove)
+            }
         } else if offset < 0 {
             let scaleFactor = (-offset) / coverContainer.frame.height + 1
             cover.snp_remakeConstraints(closure: { (make) in
                 make.centerX.equalTo(coverContainer)
-                make.bottom.equalTo(coverContainer)
-                make.size.equalTo(coverContainer).multipliedBy(scaleFactor)
+                make.bottom.equalTo(coverContainer).offset(extraHeight)
+                make.width.equalTo(coverContainer).multipliedBy(scaleFactor)
+                make.height.equalTo(coverContainer).multipliedBy(scaleFactor * coverExtraHeightRatio)
             })
         }
     }

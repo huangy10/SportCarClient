@@ -69,7 +69,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
             date: notification.createdAt!,
             read: notification.read,
             titleContents: notification.makeDisplayTitlePhrases(),
-            coverURL: notification.imageURL!,
+            coverURL: notification.imageURL,
             detailDescription: notification.messageBody ?? "",
             checked: notification.checked,
             flag: notification.flag,

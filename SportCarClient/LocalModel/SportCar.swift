@@ -56,8 +56,10 @@ class SportCar: BaseModel{
         try super.loadDataFromJSON(json, detailLevel: detailLevel, forceMainThread: forceMainThread)
         let media = json["medias"]
         let imagesRaw = media["image"]
-        images = String(data: try! imagesRaw.rawData(), encoding: NSUTF8StringEncoding)
-        imageArray = $.map(imagesRaw.arrayValue, transform: { SFURL($0.stringValue)! })
+        if imagesRaw.exists() {
+            images = String(data: try! imagesRaw.rawData(), encoding: NSUTF8StringEncoding)
+            imageArray = $.map(imagesRaw.arrayValue, transform: { SFURL($0.stringValue)! })
+        }
         let audioRaw = media["audio"].arrayValue
         if audioRaw.count > 0 {
             audio = audioRaw[0].stringValue

@@ -18,7 +18,7 @@ class HomeController2: UIViewController, HomeDelegate {
     
     // MARK: controllers
     var person: PersonBasicController?
-    var news: NewsController?
+    var news: NewsController2?
     var billboard: BillboardController?
     var status: StatusHomeController?
     var message: MessageController?
@@ -55,6 +55,8 @@ class HomeController2: UIViewController, HomeDelegate {
         hideFrame = CGRectMake(-view.bounds.width, 0, view.bounds.width, view.bounds.height)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUnreadNumberChange(_:)), name: kUnreadNumberDidChangeNotification, object: nil)
+        
+        setUnreadNum(MessageManager.defaultManager.unreadNum)
     }
 
     func createSidebar() {
@@ -353,7 +355,7 @@ class HomeController2: UIViewController, HomeDelegate {
             }
         case 2:
             if news == nil {
-                news = NewsController(style: .Plain)
+                news = NewsController2(style: .Plain)
                 news?.homeDelegate = self
                 wrappedControllers[index] = news?.toNavWrapper()
             }

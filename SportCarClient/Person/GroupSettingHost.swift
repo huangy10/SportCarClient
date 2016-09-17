@@ -161,7 +161,11 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
 //                inlineUserSelect?.showDeleteBtn = true
 //                return cell
             default:
-                return super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+                let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+                if let c = cell as? PrivateChatSettingsCommonCell {
+                    c.arrowHidden = false
+                }
+                return cell
             }
         default:
             return super.tableView(tableView, cellForRowAtIndexPath: indexPath)

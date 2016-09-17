@@ -78,6 +78,13 @@ class News: BaseInMemModel {
     }
     
     func getLikeDescription() -> NSAttributedString{
-        return NSAttributedString(string: "")
+        if let name = recentLikeName {
+            let result = NSMutableAttributedString(string: "\(name)和其他\(likeNum - 1)人赞了")
+            result.addAttributes([NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], range: NSRange(location: 0, length: name.length))
+            result.addAttributes([NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: UIColor(white: 0.72, alpha: 1)], range: NSRange(location: name.length, length: result.length - name.length))
+            return result
+        } else {
+            return NSAttributedString(string: LS("还没有人点赞"), attributes: [NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: UIColor(white: 0.72, alpha: 1)])
+        }
     }
 }

@@ -53,6 +53,8 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     var likeInfoIcon: UIImageView!
     var likeDescriptionLbl: UILabel!
     //
+    
+    //
     var commentPanel: CommentBarView!
     
     
@@ -81,6 +83,8 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         initializeCommentBar()
         loadDataAndUpdateUI()
         loadNewsCoverAnimated()
+        
+        print(navigationController?.delegate)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -736,7 +740,6 @@ extension NewsDetailController {
             }) { (code) -> () in
                 self.showToast(LS("网络访问错误:\(code)"))
                 self.requestingCommentData = false
-                assertionFailure()
         }
     }
     

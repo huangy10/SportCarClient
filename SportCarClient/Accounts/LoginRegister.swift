@@ -498,7 +498,7 @@ class LoginRegisterController: InputableViewController {
             }) { (code) -> (Void) in
                 switch code! {
                 case "1003":
-                    self.showToast(LS("密码太短，密码长度请设置在8位以上"), onSelf: true)
+                    self.showToast(LS("密码太短，密码长度请设置在4位以上"), onSelf: true)
                 case "1002":
                     self.showToast(LS("验证码错误"), onSelf: true)
                 case "0000":
@@ -519,7 +519,8 @@ class LoginRegisterController: InputableViewController {
     
     func checkAgreement() {
         let agreementCtrl = AgreementController()
-        self.navigationController?.pushViewController(agreementCtrl, animated: true)
+//        self.navigationController?.pushViewController(agreementCtrl, animated: true)
+        presentViewController(agreementCtrl.toNavWrapper(), animated: true, completion: nil)
     }
     
     func sendAuthCodePressed() {

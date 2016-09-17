@@ -17,7 +17,7 @@
 		BF1A636B1D61EAD7005C86C8 /* BillboardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1A636A1D61EAD7005C86C8 /* BillboardCell.swift */; };
 		BF1A636E1D635206005C86C8 /* TitilliumWeb-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BF1A636D1D635206005C86C8 /* TitilliumWeb-BoldItalic.ttf */; };
 		BF1AB8351CCB205700959096 /* MessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1AB8341CCB205700959096 /* MessageManager.swift */; };
-		BF1D93561C52776F00FD9997 /* DetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1D93551C52776F00FD9997 /* DetailCommentCell.swift */; };
+		BF1D93561C52776F00FD9997 /* DetailCommentCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1D93551C52776F00FD9997 /* DetailCommentCell2.swift */; };
 		BF1D93581C52783000FD9997 /* StatusDetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1D93571C52783000FD9997 /* StatusDetailCommentCell.swift */; };
 		BF1EC23F1C49414F0016F425 /* UserSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1EC23E1C49414F0016F425 /* UserSelect.swift */; };
 		BF23368B1C563F4200F0AE41 /* ChatAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF23368A1C563F4200F0AE41 /* ChatAudioPlayer.swift */; };
@@ -51,6 +51,12 @@
 		BF54DD7A1C303D5100F635C0 /* NewsRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF54DD791C303D5100F635C0 /* NewsRequester.swift */; };
 		BF58990C1C4CFF26005496EA /* informUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF58990B1C4CFF26005496EA /* informUser.swift */; };
 		BF58990E1C4D14A3005496EA /* SportCarSelectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF58990D1C4D14A3005496EA /* SportCarSelectList.swift */; };
+		BF5D19CE1D8A349C00A66FC0 /* NewsController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5D19CD1D8A349C00A66FC0 /* NewsController2.swift */; };
+		BF5D19D01D8A380E00A66FC0 /* NewsCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5D19CF1D8A380E00A66FC0 /* NewsCell2.swift */; };
+		BF5D19D21D8A6C5300A66FC0 /* NewsDetail2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5D19D11D8A6C5300A66FC0 /* NewsDetail2.swift */; };
+		BF5D19D41D8A940100A66FC0 /* NewsCommentCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5D19D31D8A940100A66FC0 /* NewsCommentCell2.swift */; };
+		BF5D19D61D8A942200A66FC0 /* DetailCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5D19D51D8A942200A66FC0 /* DetailCommentCell.swift */; };
+		BF5D19D81D8C1E6700A66FC0 /* RequestManageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5D19D71D8C1E6700A66FC0 /* RequestManageProtocol.swift */; };
 		BF5E7EE01C85C770004B8305 /* PresentTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5E7EDF1C85C770004B8305 /* PresentTemplate.swift */; };
 		BF5E7EE21C85D559004B8305 /* StatusDelete.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5E7EE11C85D559004B8305 /* StatusDelete.swift */; };
 		BF5E7EE41C85E568004B8305 /* ClearCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5E7EE31C85E568004B8305 /* ClearCache.swift */; };
@@ -322,7 +328,7 @@
 		BF1A636A1D61EAD7005C86C8 /* BillboardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BillboardCell.swift; path = Radar/BillboardCell.swift; sourceTree = "<group>"; };
 		BF1A636D1D635206005C86C8 /* TitilliumWeb-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TitilliumWeb-BoldItalic.ttf"; sourceTree = "<group>"; };
 		BF1AB8341CCB205700959096 /* MessageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageManager.swift; path = Message/SharedDataSource/MessageManager.swift; sourceTree = "<group>"; };
-		BF1D93551C52776F00FD9997 /* DetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetailCommentCell.swift; path = BaseTemplate/Views/DetailCommentCell.swift; sourceTree = "<group>"; };
+		BF1D93551C52776F00FD9997 /* DetailCommentCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetailCommentCell2.swift; path = BaseTemplate/Views/DetailCommentCell2.swift; sourceTree = "<group>"; };
 		BF1D93571C52783000FD9997 /* StatusDetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusDetailCommentCell.swift; path = Status/Detail/StatusDetailCommentCell.swift; sourceTree = "<group>"; };
 		BF1EC23E1C49414F0016F425 /* UserSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserSelect.swift; path = UserSelect/UserSelect.swift; sourceTree = "<group>"; };
 		BF23368A1C563F4200F0AE41 /* ChatAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatAudioPlayer.swift; path = Message/Chat/ChatAudioPlayer.swift; sourceTree = "<group>"; };
@@ -356,6 +362,12 @@
 		BF54DD791C303D5100F635C0 /* NewsRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsRequester.swift; path = News/NewsRequester.swift; sourceTree = "<group>"; };
 		BF58990B1C4CFF26005496EA /* informUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = informUser.swift; path = Status/Release/informUser.swift; sourceTree = "<group>"; };
 		BF58990D1C4D14A3005496EA /* SportCarSelectList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarSelectList.swift; path = Status/Release/SportCarSelectList.swift; sourceTree = "<group>"; };
+		BF5D19CD1D8A349C00A66FC0 /* NewsController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsController2.swift; path = News/V2/NewsController2.swift; sourceTree = "<group>"; };
+		BF5D19CF1D8A380E00A66FC0 /* NewsCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsCell2.swift; path = News/V2/NewsCell2.swift; sourceTree = "<group>"; };
+		BF5D19D11D8A6C5300A66FC0 /* NewsDetail2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsDetail2.swift; path = News/V2/NewsDetail2.swift; sourceTree = "<group>"; };
+		BF5D19D31D8A940100A66FC0 /* NewsCommentCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsCommentCell2.swift; path = News/V2/NewsCommentCell2.swift; sourceTree = "<group>"; };
+		BF5D19D51D8A942200A66FC0 /* DetailCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetailCommentCell.swift; path = BaseTemplate/DetailCommentCell.swift; sourceTree = "<group>"; };
+		BF5D19D71D8C1E6700A66FC0 /* RequestManageProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestManageProtocol.swift; path = BaseTemplate/RequestManageProtocol.swift; sourceTree = "<group>"; };
 		BF5E7EDF1C85C770004B8305 /* PresentTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PresentTemplate.swift; path = BaseTemplate/PresentTemplate.swift; sourceTree = "<group>"; };
 		BF5E7EE11C85D559004B8305 /* StatusDelete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusDelete.swift; path = Status/Report/StatusDelete.swift; sourceTree = "<group>"; };
 		BF5E7EE31C85E568004B8305 /* ClearCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClearCache.swift; path = Person/ClearCache.swift; sourceTree = "<group>"; };
@@ -709,11 +721,12 @@
 			isa = PBXGroup;
 			children = (
 				BFB72FE81CB7919300ABB0CB /* GeneralHeaders */,
-				BF1D93551C52776F00FD9997 /* DetailCommentCell.swift */,
+				BF1D93551C52776F00FD9997 /* DetailCommentCell2.swift */,
 				BFB72FE71CB7918C00ABB0CB /* PropertyCells */,
 				BF630EE01CABF6DD00EFD37E /* SinglePropertyModifer.swift */,
 				BFE5985C1CB4A31100001F99 /* InlineUserSelectMiniCell.swift */,
 				BF8EC2D71CBA951D00003735 /* BackToHomeBtn.swift */,
+				BF5D19D51D8A942200A66FC0 /* DetailCommentCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -855,6 +868,7 @@
 		BF54DD661C2D879000F635C0 /* News */ = {
 			isa = PBXGroup;
 			children = (
+				BF5D19CC1D8A347200A66FC0 /* V2 */,
 				BFADDF681C82A34300893435 /* Tool */,
 				BF268FC61C32C757005D1B68 /* Detail */,
 				BF54DD781C303D4000F635C0 /* Networks */,
@@ -879,6 +893,17 @@
 				BFAA0CAD1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift */,
 			);
 			name = PhotoSelect;
+			sourceTree = "<group>";
+		};
+		BF5D19CC1D8A347200A66FC0 /* V2 */ = {
+			isa = PBXGroup;
+			children = (
+				BF5D19CD1D8A349C00A66FC0 /* NewsController2.swift */,
+				BF5D19CF1D8A380E00A66FC0 /* NewsCell2.swift */,
+				BF5D19D11D8A6C5300A66FC0 /* NewsDetail2.swift */,
+				BF5D19D31D8A940100A66FC0 /* NewsCommentCell2.swift */,
+			);
+			name = V2;
 			sourceTree = "<group>";
 		};
 		BF5E7EE91C8607B9004B8305 /* Other */ = {
@@ -991,6 +1016,7 @@
 				BF2BB97B1C9D995100049337 /* PresntableProtocol.swift */,
 				BF8EC2D21CB9277C00003735 /* WaitableProtocol.swift */,
 				BF11C7031CF32A8A00CCD184 /* LoadingProtocol.swift */,
+				BF5D19D71D8C1E6700A66FC0 /* RequestManageProtocol.swift */,
 			);
 			name = Puglins;
 			sourceTree = "<group>";
@@ -2109,7 +2135,9 @@
 				BFC3D42C1D5DB6B200494592 /* SportCarGallary.swift in Sources */,
 				BFCA90111C50A0C000B05E74 /* StatusFollow.swift in Sources */,
 				BF1D93581C52783000FD9997 /* StatusDetailCommentCell.swift in Sources */,
+				BF5D19D21D8A6C5300A66FC0 /* NewsDetail2.swift in Sources */,
 				BFC36BA01C69A6A900DC6FE2 /* PersonDataSource.swift in Sources */,
+				BF5D19CE1D8A349C00A66FC0 /* NewsController2.swift in Sources */,
 				BFBC52791C53902500EE7D34 /* ChatOpPanel.swift in Sources */,
 				BF2336941C57353C00F0AE41 /* ChatWave.swift in Sources */,
 				BF9847341C76311D006DDE3C /* ActivityReleaseMapCell.swift in Sources */,
@@ -2149,6 +2177,7 @@
 				BFDFF2871C8CB11000055C1C /* ClubFilter.swift in Sources */,
 				BFDB5CB41D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift in Sources */,
 				BF51070D1C609B45008DC14F /* ChatAudioRecorder.swift in Sources */,
+				BF5D19D61D8A942200A66FC0 /* DetailCommentCell.swift in Sources */,
 				BF11C7041CF32A8A00CCD184 /* LoadingProtocol.swift in Sources */,
 				BF23368B1C563F4200F0AE41 /* ChatAudioPlayer.swift in Sources */,
 				BF5E7EEB1C860804004B8305 /* PersonOtherInfo.swift in Sources */,
@@ -2185,10 +2214,11 @@
 				BF630ED71CABA2C800EFD37E /* PropertyCell.swift in Sources */,
 				BFB72FEA1CB791D400ABB0CB /* CommonHeader.swift in Sources */,
 				BFB72FEC1CB7A80800ABB0CB /* PropertyCellInputable.swift in Sources */,
+				BF5D19D01D8A380E00A66FC0 /* NewsCell2.swift in Sources */,
 				BFC032551C6DD73700ECA69A /* PersonMineSettingAuth.swift in Sources */,
 				BFF82B451D323E090039A478 /* Blacklist.swift in Sources */,
 				BFAC522A1C1C84A700107F71 /* InputableViewController.swift in Sources */,
-				BF1D93561C52776F00FD9997 /* DetailCommentCell.swift in Sources */,
+				BF1D93561C52776F00FD9997 /* DetailCommentCell2.swift in Sources */,
 				BFC0325F1C6EE92600ECA69A /* UIImageEffects.swift in Sources */,
 				BF9230B31CDD9D640018E3BE /* NotificationRequester.swift in Sources */,
 				BF6308A51C19AF600087A4F0 /* ProfileInformation.swift in Sources */,
@@ -2305,11 +2335,13 @@
 				BF662A0F1CCB626800B3D84D /* RosterManager.swift in Sources */,
 				BFE967261CA584A20097C42C /* User.generated.swift in Sources */,
 				BF8D42FF1C748CB8009AD4BA /* ActivityApplied.swift in Sources */,
+				BF5D19D81D8C1E6700A66FC0 /* RequestManageProtocol.swift in Sources */,
 				BF662A0C1CCB2F4C00B3D84D /* BaseParser.swift in Sources */,
 				BFCB963C1C1FFD2D004F77E8 /* SportCarSelectDetail.swift in Sources */,
 				BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */,
 				BFC032841C734C8300ECA69A /* ActivityCommentPanel.swift in Sources */,
 				BF8FE9A31C86C22400008170 /* ImageViewer.swift in Sources */,
+				BF5D19D41D8A940100A66FC0 /* NewsCommentCell2.swift in Sources */,
 				BF4113D11D649A76005B6757 /* NotificationCell2.swift in Sources */,
 				BFC4F14E1CE6C2CE004D7BD0 /* LocationSearch.swift in Sources */,
 				BFB857D71CD9983600610349 /* SettingsRequester.swift in Sources */,

@@ -113,6 +113,25 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         }
     }
     
+    var arrowHidden: Bool = false {
+        didSet {
+            if arrowHidden {
+                icon.hidden = true
+                infoLbl.snp_remakeConstraints(closure: { (make) in
+                    make.centerY.equalTo(staticLbl)
+                    make.right.equalTo(icon)
+                })
+            } else {
+                icon.hidden = false
+                infoLbl.snp_makeConstraints { (make) -> Void in
+                    make.centerY.equalTo(staticLbl)
+                    make.right.equalTo(icon.snp_left).offset(-15)
+                }
+            }
+            contentView.layoutIfNeeded()
+        }
+    }
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()

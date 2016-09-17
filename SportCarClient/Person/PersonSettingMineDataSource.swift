@@ -150,15 +150,13 @@ class PersonMineSettingsDataSource {
         let cacheFolderPath = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)[0]
         let cacheFolderURL = NSURL(fileURLWithPath: cacheFolderPath)
         let enumerator = fileManger.enumeratorAtPath(cacheFolderPath)!
-        do {
-            while let file: String = enumerator.nextObject() as? String {
+        while let file: String = enumerator.nextObject() as? String {
+            do {
                 try fileManger.removeItemAtURL(cacheFolderURL.URLByAppendingPathComponent(file))
-            }
-            self.cacheSize = 0
-            self.cacheSizeDes = ""
-            return true
-        } catch _ {
-            return false
+            } catch {}
         }
+        self.cacheSize = 0
+        self.cacheSizeDes = ""
+        return true
     }
 }

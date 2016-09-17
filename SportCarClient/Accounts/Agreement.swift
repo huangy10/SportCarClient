@@ -39,7 +39,6 @@ class AgreementController: UIViewController {
         let fileURL = NSBundle.mainBundle().URLForResource(filename, withExtension: "rtf")
         do{
             let text = try NSAttributedString(URL: fileURL!, options: [NSDocumentTypeDocumentAttribute: NSRTFTextDocumentType], documentAttributes: nil)
-
             return text
         }
         catch{
@@ -48,16 +47,24 @@ class AgreementController: UIViewController {
     }
     
     func leftBarBtn() -> UIBarButtonItem! {
-        let backBtn = UIButton()
-        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        backBtn.addTarget(self, action: #selector(AgreementController.backBtnPressed), forControlEvents: .TouchUpInside)
-        backBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
+//        let backBtn = UIButton()
+//        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
+//        backBtn.addTarget(self, action: #selector(AgreementController.backBtnPressed), forControlEvents: .TouchUpInside)
+//        backBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
+//        
+//        let leftBtnItem = UIBarButtonItem(customView: backBtn)
         
-        let leftBtnItem = UIBarButtonItem(customView: backBtn)
-        return leftBtnItem
+        let leftBtn = UIBarButtonItem(title: LS("取消"), style: .Done, target: self, action: #selector(backBtnPressed))
+        leftBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        return leftBtn
     }
     
     func backBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+//        self.navigationController?.popViewControllerAnimated(true)
+        if let nav = navigationController {
+            nav.popViewControllerAnimated(true)
+        } else {
+            dismissViewControllerAnimated(true, completion: nil)
+        }
     }
 }

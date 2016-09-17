@@ -28,5 +28,6 @@ class SSEmptyListHintCell: UITableViewCell {
             .layout({ (make) in
                 make.center.equalTo(superview).offset(CGPoint(x: 0, y: -15))
             })
+        contentView.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.width, 100)
     }
 }

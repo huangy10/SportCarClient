@@ -114,7 +114,7 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
             return cell
         } else {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("video", forIndexPath: indexPath) as! SportCarGallaryVideoCell
-            cell.play("<body style=\"margin:0;\"><iframe style=\"width:375px; height:220px; border:0px; margin:0; padding: 0;\" src='\(item.resourceString)' frameborder=0 'allowfullscreen'></iframe></body>")
+            cell.play(String(format: VIDEO_HTML_TEMPLATE, item.resourceString))
             return cell
         }
     }

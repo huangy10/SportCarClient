@@ -24,6 +24,8 @@ class AppManager: UIViewController {
     
     var state: AppManagerState = .Init
     
+    weak var homeController: HomeController2?
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
@@ -62,6 +64,7 @@ class AppManager: UIViewController {
         state = .Normal
         if let _ = MainManager.sharedManager.hostUser {
             let ctl = HomeController2()
+            homeController = ctl
 //            NotificationDataSource.sharedDataSource.start()
             self.navigationController?.pushViewController(ctl, animated: false)
             self.dismissViewControllerAnimated(true, completion: nil)

@@ -156,7 +156,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         case 1:
             return 5
         case 2:
-            return 2
+            return 1
         default:
             return 3
         }
@@ -228,16 +228,20 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                 case 0:
                     cell.staticLbl.text = LS("群聊名称")
                     cell.infoLbl.text = targetClub.name
+                    cell.arrowHidden = true
                     cell.boolSelect.hidden = true
+                    
                     break
                 case 1:
                     cell.staticLbl.text = LS("本群简介")
                     cell.infoLbl.text = targetClub.clubDescription
+                    cell.arrowHidden = true
                     cell.boolSelect.hidden = true
                     break
                 case 2:
                     cell.staticLbl.text = LS("我在本群的昵称")
                     cell.infoLbl.text = targetClub.remarkName ?? MainManager.sharedManager.hostUser!.nickName
+                    cell.arrowHidden = false
                     cell.boolSelect.hidden = true
                     break
                 default:
@@ -425,6 +429,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     func clearChatContent() {
 //        hideToast()
         MessageManager.defaultManager.clearChatHistory(targetClub)
+        showToast(LS("清除成功!"))
     }
 
 }
