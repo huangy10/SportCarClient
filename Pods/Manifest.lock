@@ -1,16 +1,15 @@
 PODS:
   - Alamofire (4.0.0)
-  - AlecrimCoreData (4.1.1)
+  - AlecrimCoreData (4.2.1)
   - BaiduMapKit (3.0.0)
-  - Cent (5.0.2):
-    - Dollar (~> 5.1.0)
-  - Dollar (5.1.0)
-  - Kingfisher (2.4.2)
-  - SnapKit (0.21.1)
+  - Cent (0.3.0)
+  - Dollar (6.0.0)
+  - Kingfisher (3.0.1)
+  - SnapKit (3.0.1)
   - Spring (1.0.3)
   - SwiftDate (3.0.8)
   - SwiftyJSON (2.3.2)
-  - SwiftyTimer (1.4.0)
+  - SwiftyTimer (1.4.1)
   - WeiboSDK (3.1.4)
 
 DEPENDENCIES:
@@ -18,7 +17,7 @@ DEPENDENCIES:
   - AlecrimCoreData
   - BaiduMapKit
   - Cent
-  - Dollar
+  - Dollar (~> 6.0.0)
   - Kingfisher
   - SnapKit
   - Spring (from `https://github.com/MengTo/Spring.git`, branch `swift3`)
@@ -49,18 +48,18 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
-  AlecrimCoreData: 1888f0ea2bc7d28ded9a967d863027c9446b9069
+  AlecrimCoreData: 4ed303b516446238663db44c129ebb7c5887b825
   BaiduMapKit: de2a726d5296d6b2dc0e974b683af73153608dcd
-  Cent: b8ac30edd7851255320f2a100585fd61d5807503
-  Dollar: d40032c85eced868f65b86aaede4ef7c093a1bb2
-  Kingfisher: 05bf8d04408aaa70fcd2c8c81b9f1d0f1ad313dd
-  SnapKit: bbad04cb016c7cead63965f16b00c09318d271ee
+  Cent: 78e8b86ce1eb34c82b6c8c5e6dae1030a0434cff
+  Dollar: 6e69123e0901307d67a416dac70aeec56243a6e0
+  Kingfisher: d5a491b45ea453d90a31bd2c0831d5243e73a73f
+  SnapKit: f818b8326d45b4e1c777d0ab27b5c0a3624bfdeb
   Spring: 3f02b5dc3308572ef177b3cad0fa7bbc4b0706f7
   SwiftDate: 971f8b9394f664f2226b9c3ab64e801a7291c612
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
-  SwiftyTimer: db4458cfaf67fc71e16ad6e4637c60b86f76a649
+  SwiftyTimer: 4d25b60ebdbdc5c34782663ab6a5974424f9095e
   WeiboSDK: bceab625ec59b7039ba721cc4ba9f5868804f63e
 
-PODFILE CHECKSUM: 9e3ed7c9ddf3905fe56294d71389c372470ec997
+PODFILE CHECKSUM: 0eaf7aa44a277a684e4199f574856c5a7f71960a
 
 COCOAPODS: 1.1.0.beta.2

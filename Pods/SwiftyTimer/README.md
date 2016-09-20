@@ -4,7 +4,7 @@
 [![CI Status](https://api.travis-ci.org/radex/SwiftyTimer.svg?branch=master)](https://travis-ci.org/radex/SwiftyTimer)
 [![CocoaPods](http://img.shields.io/cocoapods/v/SwiftyTimer.svg)](https://cocoapods.org/pods/SwiftyTimer)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](#carthage)
-![Swift version](https://img.shields.io/badge/swift-2.2-orange.svg)
+![Swift version](https://img.shields.io/badge/swift-2.2%20|%202.3-orange.svg)
 
 #### Modern Swifty API for `NSTimer`
 ###### SwiftyTimer allows you to instantly schedule delays and repeating timers using convenient closure syntax. It's time to get rid of Objective-C cruft.
@@ -77,6 +77,10 @@ NSTimer.every(5.seconds) { (timer: NSTimer) in
 ```
 
 ## Installation
+
+**For Swift 3 compatibility, check out [the `swift3` branch](https://github.com/radex/SwiftyTimer/tree/swift3)**
+
+#### CocoaPods
 
 If you're using CocoaPods, just add this line to your Podfile:
 

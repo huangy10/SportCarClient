@@ -18,7 +18,6 @@ internal final class FetchRequestControllerDelegate<T: NSManagedObject>: NSObjec
     
     private lazy var didInsertSectionClosures = Array<(FetchRequestControllerSection<T>, Int) -> Void>()
     private lazy var didDeleteSectionClosures = Array<(FetchRequestControllerSection<T>, Int) -> Void>()
-    private lazy var didUpdateSectionClosures = Array<(FetchRequestControllerSection<T>, Int) -> Void>()
     
     private lazy var didInsertEntityClosures = Array<(T, NSIndexPath) -> Void>()
     private lazy var didDeleteEntityClosures = Array<(T, NSIndexPath) -> Void>()
@@ -31,6 +30,10 @@ internal final class FetchRequestControllerDelegate<T: NSManagedObject>: NSObjec
     
     @objc func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         switch type {
+        case NSFetchedResultsChangeType(rawValue: 0)!:
+            // iOS 8 bug - Do nothing if we get an invalid change type.
+            break
+            
         case .Insert:
             for closure in self.didInsertEntityClosures {
                 closure(anObject as! T, newIndexPath!)
@@ -62,11 +65,6 @@ internal final class FetchRequestControllerDelegate<T: NSManagedObject>: NSObjec
             
         case .Delete:
             for closure in self.didDeleteSectionClosures {
-                closure(FetchRequestControllerSection(underlyingSectionInfo: sectionInfo), sectionIndex)
-            }
-            
-        case .Update:
-            for closure in self.didUpdateSectionClosures {
                 closure(FetchRequestControllerSection(underlyingSectionInfo: sectionInfo), sectionIndex)
             }
             
@@ -104,7 +102,7 @@ extension FetchRequestController {
         }
         
         if let cacheName = self.cacheName {
-            FetchRequestController.deleteCacheWithName(cacheName)
+            FetchRequestController.deleteCache(with: cacheName)
         }
         
         try self.performFetch()
@@ -144,11 +142,6 @@ extension FetchRequestController {
     
     public func didDeleteSection(closure: (FetchRequestControllerSection<T>, Int) -> Void) -> Self {
         self.delegate.didDeleteSectionClosures.append(closure)
-        return self
-    }
-    
-    public func didUpdateSection(closure: (FetchRequestControllerSection<T>, Int) -> Void) -> Self {
-        self.delegate.didUpdateSectionClosures.append(closure)
         return self
     }
     

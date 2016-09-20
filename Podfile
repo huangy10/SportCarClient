@@ -11,7 +11,7 @@ target 'SportCarClient' do
     pod 'Kingfisher'
     pod 'SwiftDate'
     pod 'AlecrimCoreData'
-    pod 'Dollar'
+    pod 'Dollar', '~> 6.0.0'
     pod 'Cent'
     pod 'SwiftyTimer'
     pod "WeiboSDK", :git => "https://github.com/sinaweibosdk/weibo_ios_sdk.git"
