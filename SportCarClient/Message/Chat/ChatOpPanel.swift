@@ -13,14 +13,14 @@ import Dollar
 let kMaxChatWordCount = 140
 
 enum ChatOpPanelInputMode {
-    case Text
-    case Voice
+    case text
+    case voice
 }
 
 
 protocol ChatOpPanelDelegate: class {
-    func opPanelWillSwitchInputMode(opPanel: ChatOpPanelController)
-    func opPanelDidSwitchInputModel(opPanel: ChatOpPanelController)
+    func opPanelWillSwitchInputMode(_ opPanel: ChatOpPanelController)
+    func opPanelDidSwitchInputModel(_ opPanel: ChatOpPanelController)
     /**
      调出accessory面板
      */
@@ -32,7 +32,7 @@ protocol ChatOpPanelDelegate: class {
 
 class ChatOpPanelController: UIViewController {
     static let barHeight: CGFloat = 45
-    var inputMode = ChatOpPanelInputMode.Text
+    var inputMode = ChatOpPanelInputMode.text
     
     weak var delegate: ChatOpPanelDelegate?
 
@@ -47,8 +47,8 @@ class ChatOpPanelController: UIViewController {
     
     var voiceAnimationView: UIImageView!
     var timeCountLbl: UILabel!
-    var startRecordDate: NSDate?
-    var timer: NSTimer?
+    var startRecordDate: Date?
+    var timer: Timer?
     
     var accessoryBtn: UIButton?
     
@@ -61,7 +61,7 @@ class ChatOpPanelController: UIViewController {
     
     internal func createSubviews() {
         let superview = self.view
-        superview.backgroundColor = UIColor(white: 0.92, alpha: 1)
+        superview?.backgroundColor = UIColor(white: 0.92, alpha: 1)
 //        superview.layer.shadowColor = UIColor.blackColor().CGColor
 //        superview.layer.shadowOffset = CGSizeMake(0, -1)
 //        superview.layer.shadowOpacity = 0.2
@@ -70,31 +70,31 @@ class ChatOpPanelController: UIViewController {
         let edgeInset: CGFloat = 5
         // 创建左侧按钮
         inputToggleBtn = UIButton()
-        inputToggleBtn?.backgroundColor = UIColor.clearColor()
-        inputToggleBtn?.setImage(UIImage(named: "chat_voice_input_btn"), forState: .Normal)
-        superview.addSubview(inputToggleBtn!)
+        inputToggleBtn?.backgroundColor = UIColor.clear
+        inputToggleBtn?.setImage(UIImage(named: "chat_voice_input_btn"), for: UIControlState())
+        superview?.addSubview(inputToggleBtn!)
         inputToggleBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.size.equalTo(contentHeight)
             make.bottom.equalTo(superview).offset(-edgeInset)
             make.left.equalTo(superview).offset(15)
         })
-        inputToggleBtn?.addTarget(self, action: #selector(ChatOpPanelController.inputToggleBtnPressed), forControlEvents: .TouchUpInside)
+        inputToggleBtn?.addTarget(self, action: #selector(ChatOpPanelController.inputToggleBtnPressed), for: .touchUpInside)
         // 创建右侧按钮
         accessoryBtn = UIButton()
-        accessoryBtn?.setImage(UIImage(named: "chat_add_asscessory"), forState: .Normal)
-        superview.addSubview(accessoryBtn!)
+        accessoryBtn?.setImage(UIImage(named: "chat_add_asscessory"), for: UIControlState())
+        superview?.addSubview(accessoryBtn!)
         accessoryBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.size.equalTo(contentHeight)
             make.bottom.equalTo(superview).offset(-edgeInset)
         })
-        accessoryBtn?.addTarget(self, action: #selector(ChatOpPanelController.accessoryBtnPressed), forControlEvents: .TouchUpInside)
+        accessoryBtn?.addTarget(self, action: #selector(ChatOpPanelController.accessoryBtnPressed), for: .touchUpInside)
         //
         let contentInputContainer = UIView()
         contentInputContainer.layer.cornerRadius = contentHeight / 2
         contentInputContainer.clipsToBounds = true
-        contentInputContainer.backgroundColor = UIColor.whiteColor()
-        superview.addSubview(contentInputContainer)
+        contentInputContainer.backgroundColor = UIColor.white
+        superview?.addSubview(contentInputContainer)
         contentInputContainer.snp_makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview).offset(-edgeInset)
             make.right.equalTo(accessoryBtn!.snp_left).offset(-10)
@@ -103,8 +103,8 @@ class ChatOpPanelController: UIViewController {
         }
         //
         contentInput = UITextView()
-        contentInput?.textColor = UIColor.blackColor()
-        contentInput?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        contentInput?.textColor = UIColor.black
+        contentInput?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         contentInputContainer.addSubview(contentInput!)
         contentInput?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(contentInputContainer).offset(-contentHeight / 2)
@@ -114,39 +114,39 @@ class ChatOpPanelController: UIViewController {
         })
         //
         voiceInputBtn = UIButton()
-        voiceInputBtn?.backgroundColor = UIColor.whiteColor()
+        voiceInputBtn?.backgroundColor = UIColor.white
         voiceInputBtn?.layer.cornerRadius = contentHeight / 2
-        voiceInputBtn?.setTitle(LS("按住 说话"), forState: .Normal)
-        voiceInputBtn?.setTitleColor(UIColor(white: 0.72, alpha: 1), forState: .Normal)
-        voiceInputBtn?.setTitleColor(UIColor.blackColor(), forState: .Highlighted)
+        voiceInputBtn?.setTitle(LS("按住 说话"), for: UIControlState())
+        voiceInputBtn?.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
+        voiceInputBtn?.setTitleColor(UIColor.black, for: .highlighted)
         contentInputContainer.addSubview(voiceInputBtn!)
         voiceInputBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.edges.equalTo(contentInputContainer)
         })
-        voiceInputBtn?.hidden = true
-        voiceInputBtn?.addTarget(self, action: #selector(ChatOpPanelController.startRecording), forControlEvents: .TouchDown)
-        voiceInputBtn?.addTarget(self, action: #selector(ChatOpPanelController.cancelRecording), forControlEvents: .TouchDragExit)
-        voiceInputBtn?.addTarget(self, action: #selector(ChatOpPanelController.finishRecording), forControlEvents: .TouchUpInside)
+        voiceInputBtn?.isHidden = true
+        voiceInputBtn?.addTarget(self, action: #selector(ChatOpPanelController.startRecording), for: .touchDown)
+        voiceInputBtn?.addTarget(self, action: #selector(ChatOpPanelController.cancelRecording), for: .touchDragExit)
+        voiceInputBtn?.addTarget(self, action: #selector(ChatOpPanelController.finishRecording), for: .touchUpInside)
         
         // 
         voiceAnimationView = UIImageView()
         voiceAnimationView.animationImages = $.map(0..<50, transform: { UIImage(named: String(format: "合成 1_%.5d", $0))! })
-        superview.addSubview(voiceAnimationView)
+        superview?.addSubview(voiceAnimationView)
         voiceAnimationView.startAnimating()
-        voiceAnimationView.userInteractionEnabled = false
-        voiceAnimationView.backgroundColor = UIColor.redColor()
+        voiceAnimationView.isUserInteractionEnabled = false
+        voiceAnimationView.backgroundColor = UIColor.red
         voiceAnimationView.snp_makeConstraints { (make) in
             make.centerX.equalTo(superview).offset(-20)
             make.bottom.equalTo(superview.snp_top)
-            make.size.equalTo(CGSizeMake(150, 50))
+            make.size.equalTo(CGSize(width: 150, height: 50))
         }
-        voiceAnimationView.hidden = true
+        voiceAnimationView.isHidden = true
         
-        timeCountLbl = superview.addSubview(UILabel).config(14, textColor: kHighlightedRedTextColor, text: "0.0").layout({ (make) in
+        timeCountLbl = superview?.addSubview(UILabel).config(14, textColor: kHighlightedRedTextColor, text: "0.0").layout({ (make) in
             make.bottom.equalTo(voiceAnimationView).offset(-2)
             make.left.equalTo(voiceAnimationView.snp_right).offset(10)
         })
-        timeCountLbl.hidden = true
+        timeCountLbl.isHidden = true
     }
 }
 
@@ -160,23 +160,23 @@ extension ChatOpPanelController {
             recorder = ChatAudioRecorder(delegate: (delegate as! ChatRoomController))
         }
         recorder?.startRecording(nil)
-        voiceAnimationView.hidden = false
-        timeCountLbl.hidden = false
-        startRecordDate = NSDate()
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.05, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: true)
+        voiceAnimationView.isHidden = false
+        timeCountLbl.isHidden = false
+        startRecordDate = Date()
+        timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: true)
     }
     
     func cancelRecording() {
         recording = false
-        voiceInputBtn?.backgroundColor = UIColor.whiteColor()
+        voiceInputBtn?.backgroundColor = UIColor.white
         recorder?.finishRecording(false)
-        voiceAnimationView.hidden = true
-        timeCountLbl.hidden = true
+        voiceAnimationView.isHidden = true
+        timeCountLbl.isHidden = true
         timer?.invalidate()
     }
     
     func timerUpdate() {
-        let duration = NSDate().timeIntervalSinceDate(startRecordDate!)
+        let duration = Date().timeIntervalSince(startRecordDate!)
         timeCountLbl.text = String(format: "%1.1fs", duration)
     }
     
@@ -185,10 +185,10 @@ extension ChatOpPanelController {
             return
         }
         recording = false
-        voiceInputBtn?.backgroundColor = UIColor.whiteColor()
+        voiceInputBtn?.backgroundColor = UIColor.white
         recorder?.finishRecording(true)
-        voiceAnimationView.hidden = true
-        timeCountLbl.hidden = true
+        voiceAnimationView.isHidden = true
+        timeCountLbl.isHidden = true
         timer?.invalidate()
     }
     
@@ -199,11 +199,11 @@ extension ChatOpPanelController {
      */
     func preferredHeight() -> CGFloat{
         switch inputMode {
-        case .Text:
+        case .text:
             let fixedWidth = contentInput!.frame.width
-            let newSize = contentInput!.sizeThatFits(CGSizeMake(fixedWidth, CGFloat.max))
+            let newSize = contentInput!.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
             return newSize.height + 10      // 10为上下的空隙的高度
-        case .Voice:
+        case .voice:
             return ChatOpPanelController.barHeight
         }
     }
@@ -213,26 +213,26 @@ extension ChatOpPanelController {
      */
     func inputToggleBtnPressed() {
         switch inputMode {
-        case .Text:
+        case .text:
             // 改变inputmode，即将进入音频输入模式
-            inputMode = .Voice
+            inputMode = .voice
             // 告知代理输入状态即将发生改变，注意代理在这里需要及时调整opPanel的高度
             delegate?.opPanelWillSwitchInputMode(self)
             // 显示出音频输入按钮
-            voiceInputBtn?.hidden = false
+            voiceInputBtn?.isHidden = false
             // 更改toggle按钮图标
-            inputToggleBtn?.setImage(UIImage(named: "chat_text_input_btn"), forState: .Normal)
+            inputToggleBtn?.setImage(UIImage(named: "chat_text_input_btn"), for: UIControlState())
             // 取消contentInput的可能focused状态
             contentInput?.resignFirstResponder()
             // 完成状态转换后告知代理
             delegate?.opPanelDidSwitchInputModel(self)
             break
-        case .Voice:
-            inputMode = .Text
+        case .voice:
+            inputMode = .text
             delegate?.opPanelWillSwitchInputMode(self)
-            voiceInputBtn?.hidden = true
+            voiceInputBtn?.isHidden = true
             contentInput?.becomeFirstResponder()
-            inputToggleBtn?.setImage(UIImage(named: "chat_voice_input_btn"), forState: .Normal)
+            inputToggleBtn?.setImage(UIImage(named: "chat_voice_input_btn"), for: UIControlState())
             break
         }
     }

@@ -22,12 +22,12 @@ class BackToHomeBtn: UIButton {
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     func createSubview() {
-        setImage(UIImage(named: "home_back"), forState: .Normal)
-        bounds = CGRectMake(0, 0, 15, 13.5)
+        setImage(UIImage(named: "home_back"), for: UIControlState())
+        bounds = CGRect(x: 0, y: 0, width: 15, height: 13.5)
 //        imageView?.contentMode = .ScaleAspectFit
         clipsToBounds = false
         
@@ -40,7 +40,7 @@ class BackToHomeBtn: UIButton {
         // check the unread status
         unreadStatusChanged()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(unreadStatusChanged), name: kUnreadNumberDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(unreadStatusChanged), name: NSNotification.Name(rawValue: kUnreadNumberDidChangeNotification), object: nil)
     }
     
     func wrapToBarBtn() -> UIBarButtonItem {
@@ -49,8 +49,8 @@ class BackToHomeBtn: UIButton {
     
     func unreadStatusChanged() {
         let unreadNum = MessageManager.defaultManager.unreadNum
-        dispatch_async(dispatch_get_main_queue()) { 
-            self.messageMark.hidden = unreadNum == 0
+        DispatchQueue.main.async { 
+            self.messageMark.isHidden = unreadNum == 0
         }
     }
 }

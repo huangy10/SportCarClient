@@ -20,7 +20,7 @@ extension User {
     @NSManaged var avatar: String?
     @NSManaged var avatarCar: String?
     @NSManaged var avatarClub: String?
-    @NSManaged var birthDate: NSDate?
+    @NSManaged var birthDate: Date?
     @NSManaged var blacklisted: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var district: String?
     @NSManaged var fansNum: Int32 // cannot mark as optional because Objective-C compatibility issues
@@ -48,29 +48,29 @@ extension User {
 
 extension User {
 
-    @NSManaged private func addActsObject(object: Activity)
-    @NSManaged private func removeActsObject(object: Activity)
-    @NSManaged func addActs(acts: Set<Activity>)
-    @NSManaged func removeActs(acts: Set<Activity>)
+    @NSManaged fileprivate func addActsObject(_ object: Activity)
+    @NSManaged fileprivate func removeActsObject(_ object: Activity)
+    @NSManaged func addActs(_ acts: Set<Activity>)
+    @NSManaged func removeActs(_ acts: Set<Activity>)
 
-    @NSManaged private func addNotificationsObject(object: Notification)
-    @NSManaged private func removeNotificationsObject(object: Notification)
-    @NSManaged func addNotifications(notifications: Set<Notification>)
-    @NSManaged func removeNotifications(notifications: Set<Notification>)
+    @NSManaged fileprivate func addNotificationsObject(_ object: Notification)
+    @NSManaged fileprivate func removeNotificationsObject(_ object: Notification)
+    @NSManaged func addNotifications(_ notifications: Set<Notification>)
+    @NSManaged func removeNotifications(_ notifications: Set<Notification>)
 
-    @NSManaged private func addStatusObject(object: Status)
-    @NSManaged private func removeStatusObject(object: Status)
-    @NSManaged func addStatus(status: Set<Status>)
-    @NSManaged func removeStatus(status: Set<Status>)
+    @NSManaged fileprivate func addStatusObject(_ object: Status)
+    @NSManaged fileprivate func removeStatusObject(_ object: Status)
+    @NSManaged func addStatus(_ status: Set<Status>)
+    @NSManaged func removeStatus(_ status: Set<Status>)
 
-    func addAct(act: Activity) { self.addActsObject(act) }
-    func removeAct(act: Activity) { self.removeActsObject(act) }
+    func addAct(_ act: Activity) { self.addActsObject(act) }
+    func removeAct(_ act: Activity) { self.removeActsObject(act) }
 
-    func addNotification(notification: Notification) { self.addNotificationsObject(notification) }
-    func removeNotification(notification: Notification) { self.removeNotificationsObject(notification) }
+    func addNotification(_ notification: Notification) { self.addNotificationsObject(notification) }
+    func removeNotification(_ notification: Notification) { self.removeNotificationsObject(notification) }
 
-    func addStatu(statu: Status) { self.addStatusObject(statu) }
-    func removeStatu(statu: Status) { self.removeStatusObject(statu) }
+    func addStatu(_ statu: Status) { self.addStatusObject(statu) }
+    func removeStatu(_ statu: Status) { self.removeStatusObject(statu) }
 
 }
 
@@ -114,7 +114,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: User {
     var avatar: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("avatar", self) }
     var avatarCar: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("avatarCar", self) }
     var avatarClub: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("avatarClub", self) }
-    var birthDate: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("birthDate", self) }
+    var birthDate: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("birthDate", self) }
     var blacklisted: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("blacklisted", self) }
     var district: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("district", self) }
     var fansNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("fansNum", self) }

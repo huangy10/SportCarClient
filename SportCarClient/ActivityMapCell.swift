@@ -22,9 +22,9 @@ class MapCell: UITableViewCell {
     var trailingHeight: CGFloat = 0
     
     init (trailingHeight: CGFloat) {
-        super.init(style: .Default, reuseIdentifier: MapCell.reuseIdentifier)
+        super.init(style: .default, reuseIdentifier: MapCell.reuseIdentifier)
         self.trailingHeight = trailingHeight
-        self.selectionStyle = .None
+        self.selectionStyle = .none
         createSubviews()
     }
 
@@ -35,14 +35,14 @@ class MapCell: UITableViewCell {
     func createSubviews() {
         map = BMKMapView()
         self.contentView.addSubview(map)
-        map.scrollEnabled = false
-        map.zoomEnabled = false
+        map.isScrollEnabled = false
+        map.isZoomEnabled = false
         map.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(self.contentView).inset(UIEdgeInsetsMake(0, 0, -trailingHeight, 0))
         }
         //
         let locDesContainer = UIButton()
-        locDesContainer.backgroundColor = UIColor.whiteColor()
+        locDesContainer.backgroundColor = UIColor.white
         locDesContainer.addShadow()
         self.contentView.addSubview(locDesContainer)
         locDesContainer.snp_makeConstraints { (make) -> Void in
@@ -55,7 +55,7 @@ class MapCell: UITableViewCell {
         //
         locDesIcon = UIImageView(image: UIImage(named: "news_comment_icon"))
         locDesContainer.addSubview(locDesIcon)
-        locDesIcon.contentMode = .ScaleAspectFit
+        locDesIcon.contentMode = .scaleAspectFit
         locDesIcon.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(20)
             make.left.equalTo(locDesContainer).offset(15)
@@ -63,8 +63,8 @@ class MapCell: UITableViewCell {
         }
         //
         locLbl = UILabel()
-        locLbl.textColor = UIColor.blackColor()
-        locLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        locLbl.textColor = UIColor.black
+        locLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         locDesContainer.addSubview(locLbl)
         locLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(locDesIcon.snp_right).offset(17)
@@ -75,14 +75,14 @@ class MapCell: UITableViewCell {
         //
         let marker = UIImageView(image: UIImage(named: "map_default_marker"))
         self.contentView.addSubview(marker)
-        marker.contentMode = .ScaleAspectFit
+        marker.contentMode = .scaleAspectFit
         marker.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(map) //.offset(CGPointMake(0, -trailingHeight/2))
-            make.size.equalTo(CGSizeMake(38, 74))
+            make.size.equalTo(CGSize(width: 38, height: 74))
         }
     }
     
-    func setMapCenter(center: CLLocationCoordinate2D) {
+    func setMapCenter(_ center: CLLocationCoordinate2D) {
         loc = center
         let region = BMKCoordinateRegionMakeWithDistance(center, 3, 5)
         map.setRegion(region, animated: true)

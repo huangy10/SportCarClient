@@ -12,13 +12,13 @@ import Dollar
 let kMaxSelectUserNum = 9
 
 enum FFSelectState {
-    case Fans
-    case Follow
+    case fans
+    case follow
 }
 
 protocol FFSelectDelegate: class {
     
-    func userSelected(users: [User])
+    func userSelected(_ users: [User])
     
     func userSelectCancelled()
     
@@ -38,17 +38,17 @@ class FFSelectController: UserSelectController {
     override var users: [User] {
         get {
             switch navTitlestate {
-            case .Fans:
+            case .fans:
                 return fans
-            case .Follow:
+            case .follow:
                 return follows
             }
         }
     }
     
-    var fansDateThreshold: NSDate?
-    var followDateThreshold: NSDate?
-    var navTitlestate: FFSelectState = .Fans
+    var fansDateThreshold: Date?
+    var followDateThreshold: Date?
+    var navTitlestate: FFSelectState = .fans
     
     var maxSelectUserNum: Int
     
@@ -65,14 +65,14 @@ class FFSelectController: UserSelectController {
         maxSelectUserNum = maxSelectNum
         self.authedUserOnly = authedUserOnly
         if forced {
-            forceSelectedUsers.appendContentsOf(preSelectedUsers)
+            forceSelectedUsers.append(contentsOf: preSelectedUsers)
         }
         if preSelect {
-            selectedUsers.appendContentsOf(preSelectedUsers)
+            selectedUsers.append(contentsOf: preSelectedUsers)
         }
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         maxSelectUserNum = kMaxSelectUserNum
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -86,7 +86,7 @@ class FFSelectController: UserSelectController {
         getMoreUserData()
         
         if authedUserOnly {
-            userTableView?.registerClass(UserSelectCellGray.self, forCellReuseIdentifier: "user_select_cell_gray")
+            userTableView?.register(UserSelectCellGray.self, forCellReuseIdentifier: "user_select_cell_gray")
         }
     }
     
@@ -97,9 +97,9 @@ class FFSelectController: UserSelectController {
     override func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         let barHeight = self.navigationController!.navigationBar.frame.size.height
-        let screenWidth = UIScreen.mainScreen().bounds.width
+        let screenWidth = UIScreen.main.bounds.width
         let containerWidth = screenWidth * 0.5
-        let container = UIView(frame: CGRectMake(0, 0, containerWidth, barHeight))
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: containerWidth, height: barHeight))
         // 创建粉丝按钮
         let titleFansBtn = UIButton()
         titleFansBtn.tag = 0
@@ -110,12 +110,12 @@ class FFSelectController: UserSelectController {
             make.centerY.equalTo(container)
             make.right.equalTo(container.snp_centerX)
         })
-        titleFansBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        titleFansBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), for: .touchUpInside)
         titleFansLbl = titleFansBtn.addSubview(UILabel)
-            .config(15, textColor: kTextBlack, textAlignment: .Center, text: LS("粉丝"), fontWeight: UIFontWeightBold)
+            .config(15, textColor: kTextBlack, textAlignment: .center, text: LS("粉丝"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleFansBtn)
-                make.size.equalTo(LS(" 粉丝 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+                make.size.equalTo(LS(" 粉丝 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
             })
         // 创建关注按钮
         let titleFollowBtn = UIButton()
@@ -127,17 +127,17 @@ class FFSelectController: UserSelectController {
             make.centerY.equalTo(container)
             make.left.equalTo(container.snp_centerX)
         })
-        titleFollowBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        titleFollowBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), for: .touchUpInside)
         titleFollowLbl = titleFollowBtn.addSubview(UILabel)
-            .config(15, textColor: kTextGray, textAlignment: .Center, text: LS("关注"), fontWeight: UIFontWeightBold)
+            .config(15, textColor: kTextGray, textAlignment: .center, text: LS("关注"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleFollowBtn)
-                make.size.equalTo(LS(" 关注 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+                make.size.equalTo(LS(" 关注 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
             })
         // 创建可以平移的白色按钮形状
         titleBtnIcon = UIImageView(image: UIImage(named: "nav_title_btn_icon"))
         container.addSubview(titleBtnIcon!)
-        container.sendSubviewToBack(titleBtnIcon!)
+        container.sendSubview(toBack: titleBtnIcon!)
         titleBtnIcon?.snp_makeConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(container)
             make.left.equalTo(titleFansLbl)
@@ -146,31 +146,31 @@ class FFSelectController: UserSelectController {
         })
         self.navigationItem.titleView = container
         
-        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: #selector(UserSelectController.navLeftBtnPressed))
-        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .plain, target: self, action: #selector(UserSelectController.navLeftBtnPressed))
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         self.navigationItem.leftBarButtonItem = leftBtnItem
 
         
         navRightBtn = UIButton()
-        navRightBtn?.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
+        navRightBtn?.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
         if maxSelectUserNum == 0 {
-            navRightBtn?.setTitle(LS("确定(0)"), forState: .Normal)
+            navRightBtn?.setTitle(LS("确定(0)"), for: UIControlState())
         } else {
-            navRightBtn?.setTitle(LS("确定") + "(\(selectedUsers.count)/\(maxSelectUserNum))", forState: .Normal)
+            navRightBtn?.setTitle(LS("确定") + "(\(selectedUsers.count)/\(maxSelectUserNum))", for: UIControlState())
         }
-        navRightBtn?.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        navRightBtn?.titleLabel?.textAlignment = .Right
-        navRightBtn?.addTarget(self, action: #selector(FFSelectController.navRightBtnPressed), forControlEvents: .TouchUpInside)
-        navRightBtn?.frame = CGRectMake(0, 0, 67, 20)
+        navRightBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        navRightBtn?.titleLabel?.textAlignment = .right
+        navRightBtn?.addTarget(self, action: #selector(FFSelectController.navRightBtnPressed), for: .touchUpInside)
+        navRightBtn?.frame = CGRect(x: 0, y: 0, width: 67, height: 20)
         let rightBtnItem = UIBarButtonItem(customView: navRightBtn!)
         self.navigationItem.rightBarButtonItem = rightBtnItem
 
     }
     
-    func titleBtnPressed(sender: UIButton) {
+    func titleBtnPressed(_ sender: UIButton) {
         if sender.tag == 0 {
             // 按下了粉丝键
-            if navTitlestate == .Fans {
+            if navTitlestate == .fans {
                 // 此时不需要任何操作
                 return
             }
@@ -182,13 +182,13 @@ class FFSelectController: UserSelectController {
             })
             titleFansLbl.textColor = kTextBlack
             titleFollowLbl.textColor = kTextGray
-            UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 sender.superview?.layoutIfNeeded()
                 }, completion: nil)
-            navTitlestate = .Fans
+            navTitlestate = .fans
             self.userTableView?.reloadData()
         }else{
-            if navTitlestate == .Follow {
+            if navTitlestate == .follow {
                 return
             }
             titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
@@ -199,10 +199,10 @@ class FFSelectController: UserSelectController {
             })
             titleFansLbl.textColor = kTextGray
             titleFollowLbl.textColor = kTextBlack
-            UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 sender.superview?.layoutIfNeeded()
                 }, completion: nil)
-            navTitlestate = .Follow
+            navTitlestate = .follow
             if follows.count == 0 {
                 getMoreUserData()
             }
@@ -222,12 +222,12 @@ class FFSelectController: UserSelectController {
      根据当前选定的模式从服务器获取更多的数据
      */
     func getMoreUserData() {
-        let threshold: NSDate
+        let threshold: Date
         let requester = AccountRequester2.sharedInstance
         switch navTitlestate {
-        case .Fans:
-            threshold = fansDateThreshold ?? NSDate()
-            requester.getFansList(targetUser.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
+        case .fans:
+            threshold = fansDateThreshold ?? Date()
+            requester.getFansList(targetUser.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (data) -> () in
                 if let fansJSONData = data?.arrayValue {
                     for json in fansJSONData {
                         let user: User = try! MainManager.sharedManager.getOrCreate(json["user"])
@@ -243,9 +243,9 @@ class FFSelectController: UserSelectController {
                     self.showToast(LS("获取数据失败"))
             })
             break
-        case .Follow:
-            threshold = followDateThreshold ?? NSDate()
-            requester.getFollowList(targetUser.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
+        case .follow:
+            threshold = followDateThreshold ?? Date()
+            requester.getFollowList(targetUser.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (data) -> () in
                 if let followJSONData = data?.arrayValue {
                     for json in followJSONData {
                         let user: User = try! MainManager.sharedManager.getOrCreate(json["user"])
@@ -264,7 +264,7 @@ class FFSelectController: UserSelectController {
     }
     
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.height {
             getMoreUserData()
         }
@@ -273,14 +273,14 @@ class FFSelectController: UserSelectController {
     override func userSelectionDidChange() {
         if maxSelectUserNum > 0 {
             let currentSelectedNum = selectedUsers.count
-            navRightBtn?.setTitle(LS("确定") + "(\(currentSelectedNum)/\(maxSelectUserNum))", forState: .Normal)
+            navRightBtn?.setTitle(LS("确定") + "(\(currentSelectedNum)/\(maxSelectUserNum))", for: UIControlState())
         } else {
             let currentSelectedNum = selectedUsers.count
-            navRightBtn?.setTitle(LS("确定") + "(\(currentSelectedNum))", forState: .Normal)
+            navRightBtn?.setTitle(LS("确定") + "(\(currentSelectedNum))", for: UIControlState())
         }
     }
     
-    override func userSelectionShouldChange(user: User, addOrDelete: Bool) -> Bool {
+    override func userSelectionShouldChange(_ user: User, addOrDelete: Bool) -> Bool {
         if selectedUsers.count >= maxSelectUserNum && addOrDelete && maxSelectUserNum > 0 {
             showToast(LS("你最多只能同时@\(maxSelectUserNum)名用户"))
             return false
@@ -293,27 +293,27 @@ class FFSelectController: UserSelectController {
         fans.removeAll()
         follows.removeAll()
         userTableView?.reloadData()
-        fansDateThreshold = NSDate()
-        followDateThreshold = NSDate()
+        fansDateThreshold = Date()
+        followDateThreshold = Date()
         // get new data
         getMoreUserData()
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let user = users[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let user = users[(indexPath as NSIndexPath).row]
         if user.identified || !authedUserOnly {
-            return super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+            return super.tableView(tableView: tableView, cellForRowAtIndexPath: indexPath)
         } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier("user_select_cell_gray", forIndexPath: indexPath) as! UserSelectCellGray
+            let cell = tableView.dequeueReusableCell(withIdentifier: "user_select_cell_gray", for: indexPath) as! UserSelectCellGray
             cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
             cell.nickNameLbl?.text = user.nickName
             cell.recentStatusLbL?.text = user.recentStatusDes
             if forceSelectedUsers.findIndex({ $0.ssid == user.ssid}) != nil {
                 cell.forceSelected = true
-                cell.selectBtn?.selected = true
+                cell.selectBtn?.isSelected = true
             } else {
                 cell.forceSelected = false
-                cell.selectBtn?.selected = false
+                cell.selectBtn?.isSelected = false
             }
             return cell
         }
@@ -323,7 +323,7 @@ class FFSelectController: UserSelectController {
 class UserSelectCellGray: UserSelectCell {
     override func createSubviews() {
         super.createSubviews()
-        selectBtn?.enabled = false
+        selectBtn?.isEnabled = false
         nickNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
     }
 }

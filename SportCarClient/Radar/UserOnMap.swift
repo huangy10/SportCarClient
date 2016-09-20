@@ -26,15 +26,15 @@ class UserOnMapView: UIButton {
     var avatar: UIImageView!
     var avatarCar: UIImageView!
     /// 上次更改的数据的时间
-    var updatedAt: NSDate
+    var updatedAt: Date
     
     init(size: CGSize) {
         self.size = size
-        updatedAt = NSDate()
-        super.init(frame: CGRectZero)
+        updatedAt = Date()
+        super.init(frame: CGRect.zero)
         
         createSubviews()
-        self.bounds = CGRectMake(0, 0, size.width, size.height)
+        self.bounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -69,7 +69,7 @@ class UserOnMapView: UIButton {
         if let avatarURL = user?.avatarCarModel?.logoURL {
             avatarCar.kf_setImageWithURL(avatarURL)
         }
-        updatedAt = NSDate()
+        updatedAt = Date()
     }
     
 }

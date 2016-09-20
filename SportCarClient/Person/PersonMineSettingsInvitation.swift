@@ -20,8 +20,8 @@ class PersonMineSettingsInvitationController: UITableViewController {
         //
         navSettings()
         //
-        tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
-        tableView.separatorStyle = .None
+        tableView.register(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
+        tableView.separatorStyle = .none
         tableView.rowHeight = 50
         //
         let dataSource = PersonMineSettingsDataSource.sharedDataSource
@@ -33,22 +33,22 @@ class PersonMineSettingsInvitationController: UITableViewController {
         self.navigationItem.title = LS("新消息通知")
         //
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: #selector(PersonMineSettingsInvitationController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
+        navLeftBtn.addTarget(self, action: #selector(PersonMineSettingsInvitationController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: #selector(PersonMineSettingsInvitationController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let rightItem = UIBarButtonItem(title: LS("确定"), style: .done, target: self, action: #selector(PersonMineSettingsInvitationController.navRightBtnPressed))
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
         if dirty {
             let dataSource = PersonMineSettingsDataSource.sharedDataSource
             dataSource.acceptInvitation = selectedType
@@ -56,28 +56,28 @@ class PersonMineSettingsInvitationController: UITableViewController {
         }
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 6
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsCommonCell
         cell.useAsMark = true
-        cell.staticLbl.text = kPersonMineSettingsInvitationStaticLabelString[indexPath.row]
+        cell.staticLbl.text = kPersonMineSettingsInvitationStaticLabelString[(indexPath as NSIndexPath).row]
         if cell.staticLbl.text == kPersonMineSettingsAcceptInvitationMapping[selectedType] {
-            cell.markIcon.hidden = false
+            cell.markIcon.isHidden = false
         }else {
-            cell.markIcon.hidden = true
+            cell.markIcon.isHidden = true
         }
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        selectedType = kPersonMineSettingsAcceptInvitationList[indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedType = kPersonMineSettingsAcceptInvitationList[(indexPath as NSIndexPath).row]
         dirty = true
         tableView.reloadData()
     }

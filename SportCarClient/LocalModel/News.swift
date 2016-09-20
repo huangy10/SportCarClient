@@ -15,38 +15,38 @@ class News: BaseInMemModel {
         return "newsID"
     }
     
-    var coverURL: NSURL? {
+    var coverURL: URL? {
         if cover == nil {
             return nil
         }
         return SFURL(cover!)
     }
     
-    var contentURL: NSURL? {
+    var contentURL: URL? {
         if content == nil {
             return nil
         }
-        return NSURL(string: content!)
+        return URL(string: content!)
     }
     
     var commentNum: Int32 = 0
     var likeNum: Int32 = 0
     var cover: String!
     var content: String!
-    var createdAt: NSDate!
+    var createdAt: Date!
     var recentLikeName: String?
     var shareNum: Int32 = 0
     var title: String!
     var liked: Bool = false
     var isVideo: Bool = false
     
-    override func fromJSONString(string: String, detailLevel: Int) throws -> News {
-        let json = JSON(data: string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+    override func fromJSONString(_ string: String, detailLevel: Int) throws -> News {
+        let json = JSON(data: string.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
         try loadDataFromJSON(json)
         return self
     }
     
-    override func loadDataFromJSON(data: JSON) throws -> News {
+    override func loadDataFromJSON(_ data: JSON) throws -> News {
         try super.loadDataFromJSON(data)
         ssid = data["id"].int32Value
         commentNum = data["comment_num"].int32Value
@@ -62,7 +62,7 @@ class News: BaseInMemModel {
         return self
     }
     
-    override func toJSONObject(detailLevel: Int) throws -> JSON {
+    override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         return [
             "id": ssidString,
             "comment_num": "\(commentNum)",
@@ -80,11 +80,11 @@ class News: BaseInMemModel {
     func getLikeDescription() -> NSAttributedString{
         if let name = recentLikeName {
             let result = NSMutableAttributedString(string: "\(name)和其他\(likeNum - 1)人赞了")
-            result.addAttributes([NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], range: NSRange(location: 0, length: name.length))
-            result.addAttributes([NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: UIColor(white: 0.72, alpha: 1)], range: NSRange(location: name.length, length: result.length - name.length))
+            result.addAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], range: NSRange(location: 0, length: name.length))
+            result.addAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: UIColor(white: 0.72, alpha: 1)], range: NSRange(location: name.length, length: result.length - name.length))
             return result
         } else {
-            return NSAttributedString(string: LS("还没有人点赞"), attributes: [NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: UIColor(white: 0.72, alpha: 1)])
+            return NSAttributedString(string: LS("还没有人点赞"), attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: UIColor(white: 0.72, alpha: 1)])
         }
     }
 }

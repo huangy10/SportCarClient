@@ -10,7 +10,7 @@ import UIKit
 
 
 class ShinyButton: UIView {
-    var timer: NSTimer?
+    var timer: Timer?
     var borderWidth = CGFloat(3)   // 边框的宽度
     var brightBorderColor = UIColor(red: 1, green: 0.28, blue: 0.30, alpha: 1)  // 边框部分闪亮的颜色
     var speed = CGFloat(3)       // in Point/100ms
@@ -20,8 +20,8 @@ class ShinyButton: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.clearColor()
-        self.userInteractionEnabled = false
+        self.backgroundColor = UIColor.clear
+        self.isUserInteractionEnabled = false
     }
     
     convenience init() {
@@ -32,14 +32,14 @@ class ShinyButton: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         let width = self.frame.size.width
         let height = self.frame.size.height
         
         let context = UIGraphicsGetCurrentContext()
         if preScreenShot != nil{
-            preScreenShot?.drawInRect(self.bounds)
-            preScreenShot?.drawInRect(self.bounds, blendMode: .Normal, alpha: 1)
+            preScreenShot?.draw(in: self.bounds)
+            preScreenShot?.draw(in: self.bounds, blendMode: .normal, alpha: 1)
         }
         
         // 计算新的绘图点的坐标
@@ -54,15 +54,15 @@ class ShinyButton: UIView {
             curPoint.y = max(curPoint.y - speed, 0)
         }
         
-        CGContextSaveGState(context)
-        let path = CGPathCreateMutable()
+        context?.saveGState()
+        let path = CGMutablePath()
         CGPathMoveToPoint(path, nil, prePoint.x, prePoint.y)
         CGPathAddLineToPoint(path, nil, curPoint.x, curPoint.y)
-        CGContextSetStrokeColorWithColor(context, UIColor.greenColor().CGColor)
-        CGContextSetLineWidth(context, self.borderWidth)
-        CGContextAddPath(context, path)
-        CGContextStrokePath(context)
-        CGContextRestoreGState(context)
+        context?.setStrokeColor(UIColor.green.cgColor)
+        context?.setLineWidth(self.borderWidth)
+        context?.addPath(path)
+        context?.strokePath()
+        context?.restoreGState()
         
         preScreenShot = saveCurrentImage()
         
@@ -71,11 +71,11 @@ class ShinyButton: UIView {
     
     func saveCurrentImage() -> UIImage {
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, CGFloat(1))
-        self.drawViewHierarchyInRect(self.bounds, afterScreenUpdates: false)
+        self.drawHierarchy(in: self.bounds, afterScreenUpdates: false)
         // self.drawRect(self.bounds)
         let result =  UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return result
+        return result!
     }
     
     func updateSelf() {
@@ -85,7 +85,7 @@ class ShinyButton: UIView {
     
     func start() {
         preScreenShot = nil
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(ShinyButton.updateSelf), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(ShinyButton.updateSelf), userInfo: nil, repeats: true)
         self.timer?.fire()
     }
 }

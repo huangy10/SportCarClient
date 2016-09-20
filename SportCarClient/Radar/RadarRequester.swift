@@ -15,7 +15,7 @@ class RadarRequester: BasicRequester {
     
     static let sharedInstance = RadarRequester()
     
-    private let _urlMap: [String: String] = [
+    fileprivate let _urlMap: [String: String] = [
         "update": "update",
         "nearby": "nearby",
         "track": "<userID>/track"
@@ -29,9 +29,9 @@ class RadarRequester: BasicRequester {
         return "radar"
     }
     
-    @available(*, deprecated=1)
+    @available(*, deprecated: 1)
     func updateCurrentLocation(
-        loc: CLLocationCoordinate2D,
+        _ loc: CLLocationCoordinate2D,
         onSuccess: SSSuccessCallback,
         onError: SSFailureCallback
         ) -> Request {
@@ -44,13 +44,13 @@ class RadarRequester: BasicRequester {
     }
     
     func getRadarDataWithFilter(
-        loc: CLLocationCoordinate2D,
+        _ loc: CLLocationCoordinate2D,
         scanCenter: CLLocationCoordinate2D,
         filterDistance: Double,
         filterType: String,
         filterParam: [String: AnyObject]?,
-        onSuccess: (json: JSON?)->(),
-        onError: (code: String?)->()
+        onSuccess: (_ json: JSON?)->(),
+        onError: (_ code: String?)->()
         ) -> Request {
         var params: [String: AnyObject] = [
             "filter": filterType,
@@ -64,18 +64,18 @@ class RadarRequester: BasicRequester {
         return post(
             urlForName("nearby"),
             parameters: params,
-            encoding: .JSON,
+            encoding: .json,
                responseDataField: "result",
                onSuccess: onSuccess, onError: onError
         )
     }
     
     func getRadarData(
-        loc: CLLocationCoordinate2D,
+        _ loc: CLLocationCoordinate2D,
         scanCenter: CLLocationCoordinate2D,
         filterDistance: Double,
-        onSuccess: (json: JSON?)->(),
-        onError: (code: String?)->()
+        onSuccess: (_ json: JSON?)->(),
+        onError: (_ code: String?)->()
         ) -> Request{
         return post(
             urlForName("nearby"),
@@ -83,13 +83,13 @@ class RadarRequester: BasicRequester {
                 "filter": "distance", "filter_param": filterDistance,
                 "loc": ["lat": loc.latitude, "lon": loc.longitude],
                 "scan_center": ["lat": scanCenter.latitude, "lon": scanCenter.longitude]
-            ], encoding: .JSON,
+            ], encoding: .json,
             responseDataField: "result",
             onSuccess: onSuccess, onError: onError
         )
     }
     
-    func trackUser(userID: String, onSuccess: (json: JSON?)->(), onError: (code: String?)->()) -> Request {
+    func trackUser(_ userID: String, onSuccess: (_ json: JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return get(urlForName("track", param: ["userID": userID]),
                    responseDataField: "location",
                    onSuccess: onSuccess, onError: onError)

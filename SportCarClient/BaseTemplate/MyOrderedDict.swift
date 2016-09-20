@@ -31,7 +31,7 @@ class MyOrderedDict<Key: Hashable, Value> {
         set {
             
             if newValue == nil {
-                _dict.removeValueForKey(key)
+                _dict.removeValue(forKey: key)
                 _keys.remove(key)
                 return
             }
@@ -51,14 +51,14 @@ class MyOrderedDict<Key: Hashable, Value> {
         _dict.removeAll()
     }
     
-    func remove(at at: Int) {
+    func remove(at: Int) {
         let key = _keys[at]
-        _keys.removeAtIndex(at)
-        _dict.removeValueForKey(key)
+        _keys.remove(at: at)
+        _dict.removeValue(forKey: key)
     }
     
-    func resort(isOrderredBefore: (Value, Value)-> Bool) {
-        _keys.sortInPlace { (key1, key2) -> Bool in
+    func resort(_ isOrderredBefore: (Value, Value)-> Bool) {
+        _keys.sort { (key1, key2) -> Bool in
             let v1 = _dict[key1]
             let v2 = _dict[key2]
             return isOrderredBefore(v1!, v2!)
@@ -71,26 +71,26 @@ class MyOrderedDict<Key: Hashable, Value> {
      - parameter index:    目标index
      - parameter frontPos: 前端位置
      */
-    @available(*, deprecated=1)
-    func bringIndexToFront(index: Int, frontPos: Int = 0) {
+    @available(*, deprecated: 1)
+    func bringIndexToFront(_ index: Int, frontPos: Int = 0) {
         let count = self.count
         if index >= count || frontPos >= count || index < frontPos {
             assertionFailure()
             return
         }
         let a = _keys[index]
-        _keys.removeAtIndex(index)
-        _keys.insert(a, atIndex: frontPos)
+        _keys.remove(at: index)
+        _keys.insert(a, at: frontPos)
     }
     
-    @available(*, deprecated=1)
-    func bringKeyToFront(key: Key, frontPos: Int = 0) {
-        if let index = _keys.indexOf(key) {
+    @available(*, deprecated: 1)
+    func bringKeyToFront(_ key: Key, frontPos: Int = 0) {
+        if let index = _keys.index(of: key) {
             bringIndexToFront(index, frontPos: frontPos)
         }
     }
     
-    func valueForIndex(index: Int) -> Value? {
+    func valueForIndex(_ index: Int) -> Value? {
         let key = _keys[index]
         return _dict[key]
     }

@@ -11,20 +11,20 @@ import UIKit
 
 class NewsCommentCell2: DetailCommentCell2 {
     
-    func setData(avatarURL: NSURL, name: String, content: String, commentAt: NSDate, responseTo: String?, showReplyBtn: Bool) {
-        avatarBtn.kf_setImageWithURL(avatarURL, forState: .Normal)
+    func setData(_ avatarURL: URL, name: String, content: String, commentAt: Date, responseTo: String?, showReplyBtn: Bool) {
+        avatarBtn.kf_setImageWithURL(avatarURL, forState: UIControlState())
         nameLbl.text = name
         contentLbl.text = content
         commentDateLbl.text = dateDisplay(commentAt)
         if let temp = responseTo {
-            responseLbl.hidden = false
-            responseStaticLbl.hidden = false
+            responseLbl.isHidden = false
+            responseStaticLbl.isHidden = false
             responseLbl.text = temp
         } else {
-            responseLbl.hidden = true
-            responseStaticLbl.hidden = true
+            responseLbl.isHidden = true
+            responseStaticLbl.isHidden = true
         }
-        replyBtn.hidden = !showReplyBtn
+        replyBtn.isHidden = !showReplyBtn
     }
     
 }

@@ -41,7 +41,7 @@ class SportCarAuthHeader: SSCommonHeader {
         }
         
         authLbl = authBtn.addSubview(UILabel)
-            .config(14, fontWeight: UIFontWeightUltraLight, textColor: kHighlightedRedTextColor, textAlignment: .Right, text: LS("申请认证"))
+            .config(14, fontWeight: UIFontWeightUltraLight, textColor: kHighlightedRedTextColor, textAlignment: .right, text: LS("申请认证"))
             .layout({ (make) in
                 make.edges.equalTo(authBtn)
             })

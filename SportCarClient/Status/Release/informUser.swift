@@ -19,7 +19,7 @@ class InformOtherUserController: UIViewController, UICollectionViewDelegate, UIC
     /// 选中的用户显示在这个横向列表中
     var collectionView: UICollectionView?
     /// 这里采用closure来传递消息
-    var onInvokeUserSelectController: ((sender: InformOtherUserController)->())?
+    var onInvokeUserSelectController: ((_ sender: InformOtherUserController)->())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,30 +28,30 @@ class InformOtherUserController: UIViewController, UICollectionViewDelegate, UIC
     
     internal func createSubviews() {
         let superview = self.view
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
         //
         atBtn = UIButton()
-        superview.addSubview(atBtn!)
-        atBtn?.setTitle(LS("@ 提醒谁看"), forState: .Normal)
-        atBtn?.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        atBtn?.titleLabel?.textAlignment = .Center
-        atBtn?.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        atBtn?.addTarget(self, action: #selector(InformOtherUserController.atBtnPressed), forControlEvents: .TouchUpInside)
+        superview?.addSubview(atBtn!)
+        atBtn?.setTitle(LS("@ 提醒谁看"), for: UIControlState())
+        atBtn?.setTitleColor(UIColor.black, for: UIControlState())
+        atBtn?.titleLabel?.textAlignment = .center
+        atBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        atBtn?.addTarget(self, action: #selector(InformOtherUserController.atBtnPressed), for: .touchUpInside)
         atBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.centerY.equalTo(superview)
-            make.size.equalTo(CGSizeMake(75, 35))
+            make.size.equalTo(CGSize(width: 75, height: 35))
         })
         //
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .Horizontal
-        flowLayout.itemSize = CGSizeMake(35, 35)
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.itemSize = CGSize(width: 35, height: 35)
         flowLayout.minimumInteritemSpacing = 5
-        collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: flowLayout)
-        collectionView?.backgroundColor = UIColor.whiteColor()
+        collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
+        collectionView?.backgroundColor = UIColor.white
         collectionView?.delegate = self
         collectionView?.dataSource = self
-        superview.addSubview(collectionView!)
+        superview?.addSubview(collectionView!)
         collectionView?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(atBtn!.snp_right).offset(15)
             make.top.equalTo(superview)
@@ -59,28 +59,28 @@ class InformOtherUserController: UIViewController, UICollectionViewDelegate, UIC
             make.right.equalTo(superview).offset(-15)
         })
         
-        collectionView?.registerClass(InformOtherUserCell.self, forCellWithReuseIdentifier: InformOtherUserCell.reuseIdentifier)
+        collectionView?.register(InformOtherUserCell.self, forCellWithReuseIdentifier: InformOtherUserCell.reuseIdentifier)
     }
     
     func atBtnPressed() {
         if let handler = onInvokeUserSelectController {
-            handler(sender: self)
+            handler(self)
         }else{
             assertionFailure()
         }
     }
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return users.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(InformOtherUserCell.reuseIdentifier, forIndexPath: indexPath) as! InformOtherUserCell
-        let user = users[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InformOtherUserCell.reuseIdentifier, for: indexPath) as! InformOtherUserCell
+        let user = users[(indexPath as NSIndexPath).row]
         cell.user = user
         cell.imageView?.kf_setImageWithURL(user.avatarURL!)
         return cell

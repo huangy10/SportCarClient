@@ -12,7 +12,7 @@ import Kingfisher
 
 
 protocol SportCarInfoCellDelegate: class {
-    func carNeedEdit(own: SportCar)
+    func carNeedEdit(_ own: SportCar)
 }
 
 
@@ -23,7 +23,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     var car: SportCar!
     var mine: Bool = false
     
-    @available(*, deprecated=1)
+    @available(*, deprecated: 1)
     var carCover: UIImageView!
     var carGallary: SportCarGallary!
     var carAudioWave: CarWaveView?
@@ -51,7 +51,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     
     func createSubviews() {
         let superview = self.contentView
-        superview.backgroundColor = UIColor.whiteColor()
+        superview.backgroundColor = UIColor.white
         //
 //        carCover = UIImageView()
 //        carCover.contentMode = .ScaleAspectFill
@@ -73,8 +73,8 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         }
         //
         carNameLbl = UILabel()
-        carNameLbl.font = UIFont.systemFontOfSize(19, weight: UIFontWeightSemibold)
-        carNameLbl.textColor = UIColor.blackColor()
+        carNameLbl.font = UIFont.systemFont(ofSize: 19, weight: UIFontWeightSemibold)
+        carNameLbl.textColor = UIColor.black
         carNameLbl.numberOfLines = 0
         superview.addSubview(carNameLbl)
         carNameLbl.snp_makeConstraints { (make) -> Void in
@@ -88,19 +88,19 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         carAuthIcon.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(carNameLbl.snp_right).offset(5)
             make.top.equalTo(carNameLbl).offset(5)
-            make.size.equalTo(CGSizeMake(44, 18.5))
+            make.size.equalTo(CGSize(width: 44, height: 18.5))
         }
         //
         carEditBtn = UIButton()
-        carEditBtn.setTitle(LS("认证"), forState: .Normal)
-        carEditBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-        carEditBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        carEditBtn.addTarget(self, action: #selector(carEditBtnPressed), forControlEvents: .TouchUpInside)
+        carEditBtn.setTitle(LS("认证"), for: UIControlState())
+        carEditBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        carEditBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        carEditBtn.addTarget(self, action: #selector(carEditBtnPressed), for: .touchUpInside)
         superview.addSubview(carEditBtn)
         carEditBtn.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(carAuthIcon)
-            make.size.equalTo(CGSizeMake(56, 32))
+            make.size.equalTo(CGSize(width: 56, height: 32))
         }
         //
         let sepLineBackgroundColor = UIColor(white: 0.1, alpha: 1)
@@ -126,7 +126,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         carAudioWave!.snp_makeConstraints(closure: { (make) in
             make.top.equalTo(carSignatureLbl.snp_bottom).offset(22.5)
             make.left.equalTo(carSignatureLbl)
-            make.size.equalTo(CGSizeMake(270, 50))
+            make.size.equalTo(CGSize(width: 270, height: 50))
         })
         
         carParamBoard = superview.addSubview(UIView.self)
@@ -252,7 +252,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     
     func showAudioWave() {
         let superview = self.contentView
-        carAudioWave?.hidden = false
+        carAudioWave?.isHidden = false
         carParamBoard.snp_remakeConstraints { (make) in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -264,7 +264,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     
     func hideAudioWave() {
         let superview = self.contentView
-        carAudioWave?.hidden = true
+        carAudioWave?.isHidden = true
         carParamBoard.snp_remakeConstraints { (make) in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -281,7 +281,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
 //        carCover.kf_setImageWithURL(car.imageArray[0])
         carGallary.reloadData()
         if let audioURL = car.audioURL {
-            carAudioWave?.audioURL = audioURL
+            carAudioWave?.audioURL = audioURL as URL!
             showAudioWave()
         } else {
             hideAudioWave()
@@ -301,21 +301,21 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         carBody.text = car.body
         carSpeed.text = car.maxSpeed
         carAcce.text = car.zeroTo60
-        carEditBtn.hidden = !mine
+        carEditBtn.isHidden = !mine
 
     }
     
     func getCarParamStaticLabel() -> UILabel {
         let staticLbl = UILabel()
-        staticLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        staticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         staticLbl.textColor = UIColor(white: 0.72, alpha: 1)
         return staticLbl
     }
     
     func getCarParamContentLbl() -> UILabel {
         let contentLbl = UILabel()
-        contentLbl.font = UIFont.systemFontOfSize(17, weight: UIFontWeightSemibold)
-        contentLbl.textColor = UIColor.whiteColor()
+        contentLbl.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightSemibold)
+        contentLbl.textColor = UIColor.white
         return contentLbl
     }
     
@@ -323,8 +323,8 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         delegate?.carNeedEdit(car)
     }
     
-    class func getPreferredSizeForSignature(signature: String, carName: String, withAudioWave: Bool) -> CGSize {
-        let screenWidth = UIScreen.mainScreen().bounds.width
+    class func getPreferredSizeForSignature(_ signature: String, carName: String, withAudioWave: Bool) -> CGSize {
+        let screenWidth = UIScreen.main.bounds.width
         let coverHeight = screenWidth * 0.588
         let designTotalHeight: CGFloat = 634
         let staticHeight = designTotalHeight - 216 - 52 - 52
@@ -334,11 +334,11 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         if signature == "" {
             signatureLblHeight = 0
         } else {
-            signatureLblHeight = signature.boundingRectWithSize(CGSizeMake(signatureLblWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)], context: nil).height
+            signatureLblHeight = signature.boundingRect(with: CGSize(width: signatureLblWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)], context: nil).height
         }
-        let carNameHeight = carName.boundingRectWithSize(CGSizeMake(signatureLblWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(19, weight: UIFontWeightSemibold)], context: nil).height
+        let carNameHeight = carName.boundingRect(with: CGSize(width: signatureLblWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 19, weight: UIFontWeightSemibold)], context: nil).height
         let audioWaveHeight: CGFloat = withAudioWave ? 72.5 : 0
-        return CGSizeMake(screenWidth, signatureLblHeight + staticHeight + coverHeight + carNameHeight + audioWaveHeight)
+        return CGSize(width: screenWidth, height: signatureLblHeight + staticHeight + coverHeight + carNameHeight + audioWaveHeight)
     }
     
     func numberOfItems() -> Int {
@@ -348,15 +348,15 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     }
     
     func itemSize() -> CGSize {
-        let screenWidth = UIScreen.mainScreen().bounds.width
-        return CGSizeMake(screenWidth, screenWidth * 0.588)
+        let screenWidth = UIScreen.main.bounds.width
+        return CGSize(width: screenWidth, height: screenWidth * 0.588)
     }
     
-    func itemForPage(pageNum: Int) -> SportCargallaryItem {
+    func itemForPage(_ pageNum: Int) -> SportCargallaryItem {
         let imageNum = car.imageArray.count
         if pageNum < imageNum {
             let image = car.imageArray[pageNum]
-            return SportCargallaryItem(itemType: "image", resource: image.absoluteString)
+            return SportCargallaryItem(itemType: "image", resource: image.absoluteString!)
         } else {
             return SportCargallaryItem(itemType: "video", resource: car.video!)
         }
@@ -368,9 +368,9 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     var isPlaying: Bool = false {
         didSet {
             if isPlaying {
-                playBtn.setImage(UIImage(named: "chat_voice_pause"), forState: .Normal)
+                playBtn.setImage(UIImage(named: "chat_voice_pause"), for: UIControlState())
             } else {
-                playBtn.setImage(UIImage(named: "chat_voice_play"), forState: .Normal)
+                playBtn.setImage(UIImage(named: "chat_voice_play"), for: UIControlState())
             }
         }
     }
@@ -380,11 +380,11 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     
     var longPressGestureRecognizer: UILongPressGestureRecognizer!
     
-    var audioURL: NSURL!
+    var audioURL: URL!
     var audioDuration: Double = 0
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override init(frame: CGRect) {
@@ -402,7 +402,7 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     
     func configPlayBtn() {
         playBtn = addSubview(UIButton)
-            .config(self, selector: #selector(playBtnPressed(_:)), image: UIImage(named: "chat_voice_play"), contentMode: .ScaleAspectFit)
+            .config(self, selector: #selector(playBtnPressed(_:)), image: UIImage(named: "chat_voice_play"), contentMode: .scaleAspectFit)
             .layout({ (make) in
                 make.left.equalTo(self).offset(15)
                 make.centerY.equalTo(self)
@@ -424,20 +424,20 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     
     func configWaveMask() {
         wavMask = UIImageView(image: UIImage(named: "static_wave_mask"))
-        wavMask.frame = CGRectMake(0, 0, 167, 50)
-        wavMask.backgroundColor = UIColor.clearColor()
-        processView.maskView = wavMask
+        wavMask.frame = CGRect(x: 0, y: 0, width: 167, height: 50)
+        wavMask.backgroundColor = UIColor.clear
+        processView.mask = wavMask
     }
     
     func configRemainingTimeLbl() {
-        remainingTimeLbl = addSubview(UILabel).config(10, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0.58, alpha: 1), textAlignment: .Left, text: "--:--")
+        remainingTimeLbl = addSubview(UILabel).config(10, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0.58, alpha: 1), textAlignment: .left, text: "--:--")
             .layout({ (make) in
                 make.centerY.equalTo(self)
                 make.left.equalTo(processView.snp_right).offset(10)
             })
     }
     
-    func playBtnPressed(sender: UIButton) {
+    func playBtnPressed(_ sender: UIButton) {
         let player = UniversalAudioPlayer.sharedPlayer
         if !isPlaying {
             isPlaying = true
@@ -451,9 +451,9 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
         }
     }
     
-    func onLongPressed(gesture: UILongPressGestureRecognizer) {
+    func onLongPressed(_ gesture: UILongPressGestureRecognizer) {
         switch gesture.state {
-        case .Began:
+        case .began:
             showAudioPlayerOutputTypeSelector()
         default:
             break
@@ -461,31 +461,31 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     }
     
     func showAudioPlayerOutputTypeSelector() {
-        NSNotificationCenter.defaultCenter().postNotificationName(kMessageStopAllVoicePlayNotification, object: nil)
+        NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kMessageStopAllVoicePlayNotification), object: nil)
         let ctrl = getPopoverContronllerForOutputSelection()
-        ctrl.modalPresentationStyle = .Popover
+        ctrl.modalPresentationStyle = .popover
         let popover = ctrl.popoverPresentationController
         popover?.sourceView = self
         popover?.sourceRect = self.bounds
-        popover?.permittedArrowDirections = [.Down, .Up]
+        popover?.permittedArrowDirections = [.down, .up]
         popover?.delegate = self
-        popover?.backgroundColor = UIColor.blackColor()
+        popover?.backgroundColor = UIColor.black
     }
     
     func getPopoverContronllerForOutputSelection() -> UIViewController {
         let controller = UIViewController()
-        controller.preferredContentSize = CGSizeMake(100, 44)
+        controller.preferredContentSize = CGSize(width: 100, height: 44)
         let player = UniversalAudioPlayer.sharedPlayer
         if player.isOnSpeaker() {
             let btn = controller.view.addSubview(UIButton)
-                .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("听筒播放"), titleColor: UIColor.whiteColor(), titleSize: 14, titleWeight: UIFontWeightRegular)
+                .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("听筒播放"), titleColor: UIColor.white, titleSize: 14, titleWeight: UIFontWeightRegular)
                 .layout({ (make) in
                     make.edges.equalTo(controller.view)
                 })
             btn.tag = 0
         } else {
             let btn = controller.view.addSubview(UIButton)
-                .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("扬声器播放"), titleColor: UIColor.whiteColor(), titleSize: 14, titleWeight: UIFontWeightRegular)
+                .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("扬声器播放"), titleColor: UIColor.white, titleSize: 14, titleWeight: UIFontWeightRegular)
                 .layout({ (make) in
                     make.edges.equalTo(controller.view)
                 })
@@ -494,15 +494,15 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
         return controller
     }
     
-    func onAudioPlayerOutputTypeSwitchBtnPressed(sender: UIButton) {
+    func onAudioPlayerOutputTypeSwitchBtnPressed(_ sender: UIButton) {
         let player = UniversalAudioPlayer.sharedPlayer
-        let controller = UIApplication.sharedApplication().keyWindow?.rootViewController
+        let controller = UIApplication.shared.keyWindow?.rootViewController
         if sender.tag == 1 {
             do {
                 try player.setPlayFromSpeaker()
             } catch {
                 controller?.showToast(LS("无法从听筒播放"))
-                controller?.dismissViewControllerAnimated(true, completion: nil)
+                controller?.dismiss(animated: true, completion: nil)
                 return
             }
         } else {
@@ -510,20 +510,20 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
                 try player.setToUseDefaultOutputType()
             } catch {
                 controller?.showToast(LS("无法从扬声器播放"))
-                controller?.dismissViewControllerAnimated(true, completion: nil)
+                controller?.dismiss(animated: true, completion: nil)
                 return
             }
         }
-        controller?.dismissViewControllerAnimated(true, completion: nil)
+        controller?.dismiss(animated: true, completion: nil)
         playBtnPressed(playBtn)
     }
     
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
-        return UIModalPresentationStyle.None
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.none
     }
     
-    func onStopAllVoicePlay(notification: NSNotification) {
-        dispatch_async(dispatch_get_main_queue()) {
+    func onStopAllVoicePlay(_ notification: Foundation.Notification) {
+        DispatchQueue.main.async {
             self.stopPlayerAnyway()
         }
     }
@@ -534,7 +534,7 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
         }
     }
     
-    func getRemainingTimeString(process: Double) -> String{
+    func getRemainingTimeString(_ process: Double) -> String{
         let leftTime = Int(audioDuration * (1 - process))
         let min = leftTime / 60
         let sec = leftTime - 60 * min
@@ -542,9 +542,9 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     }
     
     func getRequiredWidth() -> CGFloat {
-        var contentRect = CGRectZero
+        var contentRect = CGRect.zero
         for view in self.subviews {
-            contentRect = CGRectUnion(contentRect, view.frame)
+            contentRect = contentRect.union(view.frame)
         }
         return contentRect.width
     }
@@ -563,7 +563,7 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
         processView.process = 0
     }
     
-    func playProcessUpdate(process: Double) {
+    func playProcessUpdate(_ process: Double) {
         processView.process  = process
         remainingTimeLbl.text = getRemainingTimeString(process)
     }

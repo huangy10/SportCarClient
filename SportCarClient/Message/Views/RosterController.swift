@@ -11,7 +11,7 @@ import UIKit
 protocol RosterDataSource {
     func numberOfRosters() -> Int
     
-    func rosterAt(index: Int) -> RosterItem
+    func rosterAt(_ index: Int) -> RosterItem
 }
 
 
@@ -24,14 +24,14 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.registerClass(ChatListCell.self, forCellReuseIdentifier: ChatListCell.reuseIdentifier)
+        tableView.register(ChatListCell.self, forCellReuseIdentifier: ChatListCell.reuseIdentifier)
         tableView.rowHeight = 75
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         
         RosterManager.defaultManager.rosterList = tableView
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
@@ -46,27 +46,27 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
     func confirmNewChat() {
         let selector = FFSelectController()
         selector.delegate = self
-        messageController.presentViewController(selector.toNavWrapper(), animated: true, completion: nil)
+        messageController.present(selector.toNavWrapper(), animated: true, completion: nil)
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(ChatListCell.reuseIdentifier, forIndexPath: indexPath) as! ChatListCell
-        let access = data.valueForIndex(indexPath.row)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ChatListCell.reuseIdentifier, for: indexPath) as! ChatListCell
+        let access = data.valueForIndex((indexPath as NSIndexPath).row)
         cell.data = access
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detail = ChatRoomController()
-        guard let access = data.valueForIndex(indexPath.row) else {
+        guard let access = data.valueForIndex((indexPath as NSIndexPath).row) else {
             assertionFailure()
             return
         }
@@ -75,18 +75,18 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
         messageController.navigationController?.pushViewController(detail, animated: true)
     }
     
-    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        let action = UITableViewRowAction(style: .Default, title: "删除") { (action, indexPath) in
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let action = UITableViewRowAction(style: .default, title: "删除") { (action, indexPath) in
             
-            RosterManager.defaultManager.removeLocalRosterItemStorage(at: indexPath.row)
-            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            RosterManager.defaultManager.removeLocalRosterItemStorage(at: (indexPath as NSIndexPath).row)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
         }
         return [action]
     }
     
     // MARK: User select delegate
-    func userSelected(users: [User]) {
-        messageController.dismissViewControllerAnimated(false, completion: nil)
+    func userSelected(_ users: [User]) {
+        messageController.dismiss(animated: false, completion: nil)
         
         if users.count == 0 {
         }else if users.count == 1 {
@@ -106,12 +106,12 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
     }
     
     func userSelectCancelled() {
-        messageController.dismissViewControllerAnimated(true, completion: nil)
+        messageController.dismiss(animated: true, completion: nil)
     }
     
-    func groupChatSetupControllerDidSuccessCreatingClub(newClub: Club) {
+    func groupChatSetupControllerDidSuccessCreatingClub(_ newClub: Club) {
         // 群聊创建成功，打开聊天窗口
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
         let chatRoom = ChatRoomController()
         chatRoom.targetClub = newClub
         

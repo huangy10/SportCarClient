@@ -17,11 +17,11 @@ import AlecrimCoreData
 extension Club {
 
     @NSManaged var alwayOnTop: Bool // cannot mark as optional because Objective-C compatibility issues
-    @NSManaged var alwaysOnTopDate: NSDate?
+    @NSManaged var alwaysOnTopDate: Date?
     @NSManaged var attended: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var city: String?
     @NSManaged var clubDescription: String?
-    @NSManaged var createdAt: NSDate?
+    @NSManaged var createdAt: Date?
     @NSManaged var founder: String?
     @NSManaged var identified: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var logo: String?
@@ -71,11 +71,11 @@ extension Club {
 extension AlecrimCoreData.AttributeType where Self.ValueType: Club {
 
     var alwayOnTop: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("alwayOnTop", self) }
-    var alwaysOnTopDate: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("alwaysOnTopDate", self) }
+    var alwaysOnTopDate: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("alwaysOnTopDate", self) }
     var attended: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("attended", self) }
     var city: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("city", self) }
     var clubDescription: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("clubDescription", self) }
-    var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
+    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
     var founder: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("founder", self) }
     var identified: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("identified", self) }
     var logo: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("logo", self) }

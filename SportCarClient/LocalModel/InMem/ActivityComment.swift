@@ -18,7 +18,7 @@ class ActivityComment: BaseInMemModel {
     var act: Activity
     
     var content: String!
-    var createdAt: NSDate!
+    var createdAt: Date!
     var sent: Bool!
     var responseTo: ActivityComment?
     var user: User!
@@ -28,30 +28,30 @@ class ActivityComment: BaseInMemModel {
         super.init()
     }
     
-    override func fromJSONString(string: String, detailLevel: Int) throws -> ActivityComment {
+    override func fromJSONString(_ string: String, detailLevel: Int) throws -> ActivityComment {
         // ignore detailLevel
-        if let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+        if let data = string.data(using: String.Encoding.utf8, allowLossyConversion: false) {
             let json = JSON(data: data)
             ssid = json["actID"].int32Value
             try loadDataFromJSON(json)
             return self
         } else {
-            throw SSModelError.InvalidJSONString
+            throw SSModelError.invalidJSONString
         }
     }
     
-    class override func fromJSONString(string: String, detailLevel: Int) throws -> ActivityComment {
-        if let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+    class override func fromJSONString(_ string: String, detailLevel: Int) throws -> ActivityComment {
+        if let data = string.data(using: String.Encoding.utf8, allowLossyConversion: false) {
             let json = JSON(data: data)
             let act = try MainManager.sharedManager.getOrCreate(json["activity"]) as Activity
             let obj = try ActivityComment(act: act).loadDataFromJSON(json)
             return obj
         } else {
-            throw SSModelError.InvalidJSONString
+            throw SSModelError.invalidJSONString
         }
     }
     
-    override func toJSONObject(detailLevel: Int) throws -> JSON {
+    override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         var json = [
             "commentID": ssidString,
             "content": content,
@@ -65,7 +65,7 @@ class ActivityComment: BaseInMemModel {
         return json
     }
     
-    override func loadDataFromJSON(data: JSON) throws -> ActivityComment {
+    override func loadDataFromJSON(_ data: JSON) throws -> ActivityComment {
         try super.loadDataFromJSON(data)
         ssid = data["commentID"].int32Value
         content = data["content"].stringValue
@@ -80,16 +80,16 @@ class ActivityComment: BaseInMemModel {
         return self
     }
     
-    func initForPost(content: String, responseTo: ActivityComment?) -> ActivityComment {
+    func initForPost(_ content: String, responseTo: ActivityComment?) -> ActivityComment {
         self.content = content
         self.responseTo = responseTo
         self.user = act.manager.hostUser
         self.sent = false
-        self.createdAt = NSDate()
+        self.createdAt = Date()
         return self
     }
     
-    func confirmSent(newID: Int32) -> ActivityComment {
+    func confirmSent(_ newID: Int32) -> ActivityComment {
         self.sent = true
         self.ssid = newID
         return self

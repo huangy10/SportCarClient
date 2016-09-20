@@ -15,7 +15,7 @@ class PersonMineSettingsNewsMessageNotificationController: UITableViewController
     var dirty: Bool = false
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -23,12 +23,12 @@ class PersonMineSettingsNewsMessageNotificationController: UITableViewController
         //
         navSettings()
         //
-        tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
-        tableView.separatorStyle = .None
+        tableView.register(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
+        tableView.separatorStyle = .none
         tableView.rowHeight = 50
         //
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonMineSettingsNewsMessageNotificationController.dataSourceDidFinishUpdating(_:)), name: PMUpdateFinishedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonMineSettingsNewsMessageNotificationController.dataSourceUpateError(_:)), name: PMUpdateErrorNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PersonMineSettingsNewsMessageNotificationController.dataSourceDidFinishUpdating(_:)), name: NSNotification.Name(rawValue: PMUpdateFinishedNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PersonMineSettingsNewsMessageNotificationController.dataSourceUpateError(_:)), name: NSNotification.Name(rawValue: PMUpdateErrorNotification), object: nil)
         //
         let dataSource = PersonMineSettingsDataSource.sharedDataSource
         settings[0] = dataSource.newMessageNotificationAccept
@@ -41,22 +41,22 @@ class PersonMineSettingsNewsMessageNotificationController: UITableViewController
         self.navigationItem.title = LS("新消息通知")
         //
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: #selector(PersonMineSettingsNewsMessageNotificationController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
+        navLeftBtn.addTarget(self, action: #selector(PersonMineSettingsNewsMessageNotificationController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: #selector(PersonMineSettingsNewsMessageNotificationController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let rightItem = UIBarButtonItem(title: LS("确定"), style: .done, target: self, action: #selector(PersonMineSettingsNewsMessageNotificationController.navRightBtnPressed))
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
         //
         if dirty {
             let dataSource = PersonMineSettingsDataSource.sharedDataSource
@@ -67,33 +67,34 @@ class PersonMineSettingsNewsMessageNotificationController: UITableViewController
         }
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // 暂时取消对『振动』选项的设置
+        return 2
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-        cell.boolSelect.hidden = false
-        cell.staticLbl.text = [LS("接受通知"), LS("声音"), LS("振动")][indexPath.row]
-        cell.boolSelect.addTarget(self, action: #selector(PersonMineSettingsNewsMessageNotificationController.switchBtnPressed(_:)), forControlEvents: .ValueChanged)
-        cell.boolSelect.tag = indexPath.row
-        cell.boolSelect.on = settings[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsCommonCell
+        cell.boolSelect.isHidden = false
+        cell.staticLbl.text = [LS("接受通知"), LS("声音"), LS("振动")][(indexPath as NSIndexPath).row]
+        cell.boolSelect.addTarget(self, action: #selector(PersonMineSettingsNewsMessageNotificationController.switchBtnPressed(_:)), for: .valueChanged)
+        cell.boolSelect.tag = (indexPath as NSIndexPath).row
+        cell.boolSelect.isOn = settings[(indexPath as NSIndexPath).row]
         return cell
     }
     
-    func switchBtnPressed(sender: UISwitch) {
+    func switchBtnPressed(_ sender: UISwitch) {
         dirty = true
-        settings[sender.tag] = sender.on
+        settings[sender.tag] = sender.isOn
     }
     
-    func dataSourceDidFinishUpdating(notif: Notification) {
+    func dataSourceDidFinishUpdating(_ notif: Notification) {
         tableView.reloadData()
     }
     
-    func dataSourceUpateError(notif: Notification) {
+    func dataSourceUpateError(_ notif: Notification) {
     }
 }

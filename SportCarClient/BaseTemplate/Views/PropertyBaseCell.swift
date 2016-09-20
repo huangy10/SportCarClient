@@ -17,14 +17,14 @@ class SSPropertyBaseCell: UITableViewCell {
         return "base_cell"
     }
     
-    class func registerTableView(tableView: UITableView) {
-        tableView.registerClass(self.self, forCellReuseIdentifier: reuseIdentifier)
+    class func registerTableView(_ tableView: UITableView) {
+        tableView.register(self.self, forCellReuseIdentifier: reuseIdentifier)
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
-        self.selectionStyle = .None
+        self.selectionStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,7 +44,7 @@ class SSPropertyBaseCell: UITableViewCell {
             .layout({ (make) in
                 make.centerY.equalTo(staticLbl)
                 make.right.equalTo(superview).offset(-15)
-                make.size.equalTo(CGSizeMake(9, 15))
+                make.size.equalTo(CGSize(width: 9, height: 15))
             })
         sepLine = superview.addSubview(UIView.self)
             .config(UIColor(white: 0.933, alpha: 1))
@@ -61,14 +61,14 @@ class SSPropertyBaseCell: UITableViewCell {
 
 
 extension UITableViewCell {
-    func ss_toPropertyCell<T: SSPropertyBaseCell>(type: T.Type) -> T {
+    func ss_toPropertyCell<T: SSPropertyBaseCell>(_ type: T.Type) -> T {
         return self as! T
     }
 }
 
 
 extension UITableView {
-    func ss_reuseablePropertyCell<T: SSPropertyBaseCell>(type: T.Type, forIndexPath indexPath: NSIndexPath) -> T {
-        return self.dequeueReusableCellWithIdentifier(T.reuseIdentifier, forIndexPath: indexPath).ss_toPropertyCell(type)
+    func ss_reuseablePropertyCell<T: SSPropertyBaseCell>(_ type: T.Type, forIndexPath indexPath: IndexPath) -> T {
+        return self.dequeueReusableCell(withIdentifier: T.reuseIdentifier, for: indexPath).ss_toPropertyCell(type)
     }
 }

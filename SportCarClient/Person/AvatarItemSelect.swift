@@ -15,8 +15,8 @@ class AvatarItemSelectController: UITableViewController {
         super.viewDidLoad()
         //
         navSettings()
-        tableView.registerClass(AvatarItemSelectCell.self, forCellReuseIdentifier: AvatarItemSelectCell.reuseIdentifier)
-        tableView.separatorStyle = .None
+        tableView.register(AvatarItemSelectCell.self, forCellReuseIdentifier: AvatarItemSelectCell.reuseIdentifier)
+        tableView.separatorStyle = .none
         tableView.rowHeight = 90
     }
     
@@ -25,13 +25,13 @@ class AvatarItemSelectController: UITableViewController {
         self.navigationItem.title = navTitle()
         //
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: #selector(AvatarItemSelectController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
+        navLeftBtn.addTarget(self, action: #selector(AvatarItemSelectController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: #selector(AvatarItemSelectController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let rightItem = UIBarButtonItem(title: LS("确定"), style: .done, target: self, action: #selector(AvatarItemSelectController.navRightBtnPressed))
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
@@ -41,11 +41,11 @@ class AvatarItemSelectController: UITableViewController {
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
 
     
@@ -63,9 +63,9 @@ class AvatarItemSelectCell: UserSelectCell {
         authIcon.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(avatarImg!)
             make.right.equalTo(self.contentView).offset(-40)
-            make.size.equalTo(CGSizeMake(44, 18.5))
+            make.size.equalTo(CGSize(width: 44, height: 18.5))
         }
-        recentStatusLbL?.hidden = true
+        recentStatusLbL?.isHidden = true
         nickNameLbl?.snp_remakeConstraints(closure: { (make) -> Void in
             make.left.equalTo(avatarImg!.snp_right).offset(12)
             make.centerY.equalTo(avatarImg!)

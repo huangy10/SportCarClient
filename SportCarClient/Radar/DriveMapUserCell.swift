@@ -26,7 +26,7 @@ class DriverMapUserCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
-        self.selectionStyle = .None
+        self.selectionStyle = .none
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -35,7 +35,7 @@ class DriverMapUserCell: UITableViewCell {
     
     func createSubviews() {
         let superview = self.contentView
-        superview.backgroundColor = UIColor.whiteColor()
+        superview.backgroundColor = UIColor.white
         //
         avatar = UIImageView()
         superview.addSubview(avatar)
@@ -48,8 +48,8 @@ class DriverMapUserCell: UITableViewCell {
         }
         //
         nameLbl = UILabel()
-        nameLbl.textColor = UIColor.blackColor()
-        nameLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold)
+        nameLbl.textColor = UIColor.black
+        nameLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         superview.addSubview(nameLbl)
         nameLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(avatar.snp_right).offset(13)
@@ -68,7 +68,7 @@ class DriverMapUserCell: UITableViewCell {
         //
         avatarClubLbl = UILabel()
         avatarClubLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        avatarClubLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        avatarClubLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(avatarClubLbl)
         avatarClubLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(avatarClubLogo.snp_right).offset(4)
@@ -77,7 +77,7 @@ class DriverMapUserCell: UITableViewCell {
         //
         distanceLbl = UILabel()
         distanceLbl.textColor = UIColor(white: 0, alpha: 0.58)
-        distanceLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        distanceLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(distanceLbl)
         distanceLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(nameLbl)
@@ -89,7 +89,7 @@ class DriverMapUserCell: UITableViewCell {
         arrow.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(avatar)
             make.right.equalTo(superview).offset(-25)
-            make.size.equalTo(CGSizeMake(9, 15))
+            make.size.equalTo(CGSize(width: 9, height: 15))
         }
         //
         let sepLine = UIView()
@@ -106,7 +106,7 @@ class DriverMapUserCell: UITableViewCell {
     func loadDataAndUpdateUI() {
         avatar.kf_setImageWithURL(user.avatarURL!)
         nameLbl.text = user.nickName
-        var distance = hostLoc.distanceFromLocation(userLoc)
+        var distance = hostLoc.distance(from: userLoc)
         var showKM = false
         if distance > 1000 {
             distance = distance / 1000

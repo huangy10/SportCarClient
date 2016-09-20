@@ -45,14 +45,14 @@ class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate,
         geoSearch = BMKGeoCodeSearch()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         locationService.delegate = self
         geoSearch.delegate = self
         locationService.startUserLocationService()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         locationService.delegate = nil
         geoSearch.delegate = self
@@ -73,7 +73,7 @@ class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate,
         if let req = request {
             req.cancel()
         }
-        request = StatusRequester.sharedInstance.getNearByStatus(NSDate(), opType: "more", lat: location.latitude, lon: location.longitude, distance: 30000, onSuccess: { (json) in
+        request = StatusRequester.sharedInstance.getNearByStatus(Date(), opType: "more", lat: location.latitude, lon: location.longitude, distance: 30000, onSuccess: { (json) in
             self.fetchLocDescription(location)
             self.refreshView.endRefreshing()
             self.status.removeAll()
@@ -85,21 +85,21 @@ class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate,
         }
     }
     
-    func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
+    func didUpdate(_ userLocation: BMKUserLocation!) {
         location = userLocation.location.coordinate
         if locDes == nil {
             fetchLocDescription(location!)
         }
         if self.status.count == 0 && !self.initFetched {
             initFetched = true
-            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC))
-            dispatch_after(delay, dispatch_get_main_queue(), { 
+            let delay = DispatchTime.now() + Double(Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
+            DispatchQueue.main.asyncAfter(deadline: delay, execute: { 
                 self.refreshView.startRefreshing()
             })
         }
     }
     
-    func fetchLocDescription(loc: CLLocationCoordinate2D) {
+    func fetchLocDescription(_ loc: CLLocationCoordinate2D) {
         let option = BMKReverseGeoCodeOption()
         option.reverseGeoPoint = loc
         let res = geoSearch.reverseGeoCode(option)
@@ -107,7 +107,7 @@ class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate,
             locDes = "\(loc.latitude), \(loc.longitude)"
         }
     }
-    func onGetReverseGeoCodeResult(searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
+    func onGetReverseGeoCodeResult(_ searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
         if error == BMK_SEARCH_NO_ERROR && result.address.length > 0 {
             locDes = LS("上次刷新位置: ") +  result.address
         } else {
@@ -115,9 +115,9 @@ class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate,
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let s = self.status[indexPath.row]
-        let cell =  tableView.cellForRowAtIndexPath(indexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let s = self.status[(indexPath as NSIndexPath).row]
+        let cell =  tableView.cellForRow(at: indexPath)
         let pos = cell!.frame.origin.y - tableView.contentOffset.y + 10
         let detail = StatusDetailController(status: s, background: getScreenShot(), initPos: pos, initHeight: cell!.frame.height)
         detail.list = tableView
@@ -126,13 +126,13 @@ class StatusNearbyController: StatusBasicController, BMKLocationServiceDelegate,
     }
     
     func getScreenShot() -> UIImage{
-        UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, true, UIScreen.mainScreen().scale)
+        UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, true, UIScreen.main.scale)
         let context = UIGraphicsGetCurrentContext()!
-        CGContextTranslateCTM(context, 0, -self.tableView.contentOffset.y)
-        self.view.layer.renderInContext(context)
+        context.translateBy(x: 0, y: -self.tableView.contentOffset.y)
+        self.view.layer.render(in: context)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return image
+        return image!
     }
 }

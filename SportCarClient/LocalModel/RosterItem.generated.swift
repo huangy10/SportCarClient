@@ -17,14 +17,14 @@ import AlecrimCoreData
 extension RosterItem {
 
     @NSManaged var alwaysOnTop: Bool // cannot mark as optional because Objective-C compatibility issues
-    @NSManaged var createdAt: NSDate?
-    @NSManaged var entityData: NSData?
+    @NSManaged var createdAt: Date?
+    @NSManaged var entityData: Data?
     @NSManaged var entityType: String?
     @NSManaged var noDisturbing: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var recentChatDes: String?
     @NSManaged var relatedID: Int32 // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var unreadNum: Int32 // cannot mark as optional because Objective-C compatibility issues
-    @NSManaged var updatedAt: NSDate?
+    @NSManaged var updatedAt: Date?
 
 }
 
@@ -49,14 +49,14 @@ extension RosterItem {
 extension AlecrimCoreData.AttributeType where Self.ValueType: RosterItem {
 
     var alwaysOnTop: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("alwaysOnTop", self) }
-    var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
-    var entityData: AlecrimCoreData.NullableAttribute<NSData> { return AlecrimCoreData.NullableAttribute<NSData>("entityData", self) }
+    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
+    var entityData: AlecrimCoreData.NullableAttribute<Data> { return AlecrimCoreData.NullableAttribute<NSData>("entityData", self) }
     var entityType: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("entityType", self) }
     var noDisturbing: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("noDisturbing", self) }
     var recentChatDes: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("recentChatDes", self) }
     var relatedID: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("relatedID", self) }
     var unreadNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("unreadNum", self) }
-    var updatedAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("updatedAt", self) }
+    var updatedAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("updatedAt", self) }
 
 }
 

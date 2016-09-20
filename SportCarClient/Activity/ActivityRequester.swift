@@ -16,7 +16,7 @@ class ActivityRequester: BasicRequester {
     
     static let sharedInstance = ActivityRequester()
     
-    private let _urlMap: [String: String] = [
+    fileprivate let _urlMap: [String: String] = [
         "operation": "<actID>/operation",
         "close": "<actID>/close",
         "apply": "<actID>/apply",
@@ -38,7 +38,7 @@ class ActivityRequester: BasicRequester {
         return "activity"
     }
     
-    func getMineActivityList(dateThreshold: NSDate, op_type: String, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func getMineActivityList(_ dateThreshold: Date, op_type: String, limit: Int, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return get(
             urlForName("mine"),
             parameters: ["date_threshold": STRDate(dateThreshold), "limit": limit, "op_type": op_type],
@@ -47,7 +47,7 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func getNearByActivities(userLocation: CLLocationCoordinate2D, queryDistance: Double, cityLimit: String, skip: Int, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func getNearByActivities(_ userLocation: CLLocationCoordinate2D, queryDistance: Double, cityLimit: String, skip: Int, limit: Int, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         let lat: Double = userLocation.latitude
         let lon: Double = userLocation.longitude
         return get(
@@ -58,7 +58,7 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func getActivityApplied(dateThreshold: NSDate, op_type: String, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func getActivityApplied(_ dateThreshold: Date, op_type: String, limit: Int, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return get(
             urlForName("applied"),
             parameters: ["date_threshold": STRDate(dateThreshold), "limit": limit, "op_type": op_type],
@@ -67,7 +67,7 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func getActivityDetail(actID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func getActivityDetail(_ actID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return get(
             urlForName("detail", param: ["actID": actID]),
             responseDataField: "data",
@@ -75,15 +75,15 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func sendActivityComment(actID: String, content: String, responseTo: String?, informOf: [String]?,  onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+    func sendActivityComment(_ actID: String, content: String, responseTo: String?, informOf: [String]?,  onSuccess: (JSON?)->(), onError: (_ code: String?)->()) {
         var param: [String: AnyObject] = [
-            "content": content
+            "content": content as AnyObject
         ]
         if let responseTo = responseTo {
-            param["response_to"] = responseTo
+            param["response_to"] = responseTo as AnyObject?
         }
         if let informOf = informOf {
-            param["inform_of"] = informOf
+            param["inform_of"] = informOf as AnyObject?
         }
         upload(
             urlForName("new_comment", param: ["actID": actID]),
@@ -92,7 +92,7 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func getActivityComments(actID: String, dateThreshold: NSDate, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func getActivityComments(_ actID: String, dateThreshold: Date, limit: Int, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return get(
             urlForName("comments", param: ["actID": actID]),
             parameters: ["date_threshold": STRDate(dateThreshold), "limit": limit, "op_type": "more"],
@@ -102,20 +102,20 @@ class ActivityRequester: BasicRequester {
     }
     
     func createNewActivity(
-        name: String,
+        _ name: String,
         des: String,
         informUser: [String]?,
         maxAttend: Int,
-        startAt: NSDate, endAt: NSDate,
+        startAt: Date, endAt: Date,
         authedUserOnly: Bool,
         poster: UIImage,
         lat: Double, lon: Double, loc_des: String, city: String,
-        onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()
+        onSuccess: (JSON?)->(), onProgress: (_ progress: Float)->(), onError: (_ code: String?)->()
         ) {
         var param: [String: AnyObject] = [
-            "name": name,
-            "description": des,
-            "max_attend": maxAttend,
+            "name": name as AnyObject,
+            "description": des as AnyObject,
+            "max_attend": maxAttend as AnyObject,
             "start_at": STRDate(startAt),
             "end_at": STRDate(endAt),
             "poster": poster,
@@ -123,7 +123,7 @@ class ActivityRequester: BasicRequester {
             "authed_user_only": authedUserOnly
         ]
         if let informUser = informUser {
-            param["inform_of"] = informUser
+            param["inform_of"] = informUser as AnyObject?
         }
         upload(urlForName("new"), parameters: param,
                responseDataField: "id",
@@ -131,21 +131,21 @@ class ActivityRequester: BasicRequester {
     }
     
     func activityEdit(
-        actID: String,
+        _ actID: String,
         name: String,
         des: String,
         informUser: [String]?,
         maxAttend: Int,
-        startAt: NSDate, endAt: NSDate,
+        startAt: Date, endAt: Date,
         authedUserOnly: Bool,
         poster: UIImage,
         lat: Double, lon: Double, loc_des: String, city: String,
-        onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()
+        onSuccess: (JSON?)->(), onProgress: (_ progress: Float)->(), onError: (_ code: String?)->()
         ) {
         var param: [String: AnyObject] = [
-            "name": name,
-            "description": des,
-            "max_attend": maxAttend,
+            "name": name as AnyObject,
+            "description": des as AnyObject,
+            "max_attend": maxAttend as AnyObject,
             "start_at": STRDate(startAt),
             "end_at": STRDate(endAt),
             "poster": poster,
@@ -153,7 +153,7 @@ class ActivityRequester: BasicRequester {
             "authed_user_only": authedUserOnly
         ]
         if let informUser = informUser {
-            param["inform_of"] = informUser
+            param["inform_of"] = informUser as AnyObject?
         }
         upload(
             urlForName("edit", param: ["actID": actID]),
@@ -163,7 +163,7 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func postToApplyActivty(actID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func postToApplyActivty(_ actID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return post(
             urlForName("apply", param: ["actID": actID]),
             responseDataField: "join",
@@ -171,11 +171,11 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func closeActivty(actID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func closeActivty(_ actID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return post(urlForName("close", param: ["actID": actID]), onSuccess: onSuccess, onError: onError)
     }
     
-    func activityOperation(actID: String, targetUserID: String, opType: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request{
+    func activityOperation(_ actID: String, targetUserID: String, opType: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request{
         return post(
             urlForName("operation", param: ["actID": actID]),
             parameters: ["op_type": opType, "target_user": targetUserID],

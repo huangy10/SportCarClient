@@ -31,12 +31,12 @@ class BaseInMemModel: NSObject {
      - parameter data: json数据
      - parameter ctx:  所属的context
      */
-    func loadDataFromJSON(data: JSON) throws -> Self {
+    func loadDataFromJSON(_ data: JSON) throws -> Self {
         return self
     }
     
-    func toJSONObject(detailLevel: Int) throws -> JSON {
-        throw SSModelError.NotImplemented
+    func toJSONObject(_ detailLevel: Int) throws -> JSON {
+        throw SSModelError.notImplemented
     }
     
     /**
@@ -46,15 +46,15 @@ class BaseInMemModel: NSObject {
      
      - returns: json字符串
      */
-    func toJSONString(detailLevel: Int) throws -> String {
+    func toJSONString(_ detailLevel: Int) throws -> String {
         let json = try toJSONObject(detailLevel)
         if json.isEmpty {
-            throw SSModelError.Unknown
+            throw SSModelError.unknown
         }
         if let result = json.rawString() {
             return result
         } else {
-            throw SSModelError.Unknown
+            throw SSModelError.unknown
         }
     }
     
@@ -64,12 +64,12 @@ class BaseInMemModel: NSObject {
      - parameter string:      字符串内容
      - parameter detailLevel: 详细程度
      */
-    func fromJSONString(string: String, detailLevel: Int) throws -> Self {
-        throw SSModelError.NotImplemented
+    func fromJSONString(_ string: String, detailLevel: Int) throws -> Self {
+        throw SSModelError.notImplemented
     }
     
-    class func fromJSONString(string: String, detailLevel: Int) throws -> Self {
-        throw SSModelError.NotImplemented
+    class func fromJSONString(_ string: String, detailLevel: Int) throws -> Self {
+        throw SSModelError.notImplemented
     }
     
     

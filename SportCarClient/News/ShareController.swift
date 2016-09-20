@@ -45,14 +45,14 @@ class ShareController: UIViewController {
 //        showAnimated()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         showAnimated()
     }
     
     func showAnimated() {
 
-        UIView.animateWithDuration(0.5, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+        UIView.animate(withDuration: 0.5, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.bg.layer.opacity = 0
             self.bgBlured.layer.opacity = 1
             self.bgMask.layer.opacity = 1
@@ -65,17 +65,17 @@ class ShareController: UIViewController {
     
     func createSubviews() {
         let superview = self.view
-        superview.backgroundColor = UIColor.blackColor()
+        superview?.backgroundColor = UIColor.black
         //
         bg = UIImageView(image: bgImg)
-        superview.addSubview(bg)
+        superview?.addSubview(bg)
         bg.layer.opacity = 1
         bg.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         //
         bgBlured = UIImageView(image: self.blurImageUsingCoreImage(bgImg))
-        superview.addSubview(bgBlured)
+        superview?.addSubview(bgBlured)
         bgBlured.layer.opacity = 0
         bgBlured.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(bg)
@@ -83,20 +83,20 @@ class ShareController: UIViewController {
         //
         bgMask = UIView()
         bgMask.backgroundColor = UIColor(white: 1, alpha: 0.7)
-        superview.addSubview(bgMask)
+        superview?.addSubview(bgMask)
         bgMask.layer.opacity = 0
         //
         container = UIView()
-        container.backgroundColor = UIColor.clearColor()
-        superview.addSubview(container)
+        container.backgroundColor = UIColor.clear
+        superview?.addSubview(container)
         container.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         container.layer.opacity = 0
         //
         let cancelBtn = UIButton()
-        cancelBtn.setImage(UIImage(named: "news_comment_cancel_btn"), forState: .Normal)
-        cancelBtn.addTarget(self, action: #selector(ShareController.cancelBtnPressed), forControlEvents: .TouchUpInside)
+        cancelBtn.setImage(UIImage(named: "news_comment_cancel_btn"), for: UIControlState())
+        cancelBtn.addTarget(self, action: #selector(ShareController.cancelBtnPressed), for: .touchUpInside)
         container.addSubview(cancelBtn)
         cancelBtn.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
@@ -105,7 +105,7 @@ class ShareController: UIViewController {
         }
         //
         let sepLine = UIView()
-        sepLine.backgroundColor = UIColor.whiteColor()
+        sepLine.backgroundColor = UIColor.white
         container.addSubview(sepLine)
         sepLine.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
@@ -116,8 +116,8 @@ class ShareController: UIViewController {
         //
         let shareLbl = UILabel()
         shareLbl.text = LS("分享")
-        shareLbl.font = UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)
-        shareLbl.textColor = UIColor.whiteColor()
+        shareLbl.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
+        shareLbl.textColor = UIColor.white
         container.addSubview(shareLbl)
         shareLbl.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
@@ -126,8 +126,8 @@ class ShareController: UIViewController {
         //
         shareSina = UIButton()
         shareSina.tag = 2
-        shareSina.setImage(UIImage(named: "share_sinaweibo"), forState: .Normal)
-        shareSina.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        shareSina.setImage(UIImage(named: "share_sinaweibo"), for: UIControlState())
+        shareSina.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), for: .touchUpInside)
         container.addSubview(shareSina)
         shareSina.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(container.snp_centerX).offset(15)
@@ -137,8 +137,8 @@ class ShareController: UIViewController {
         //
         shareQQ = UIButton()
         shareQQ.tag = 3
-        shareQQ.setImage(UIImage(named: "share_qq"), forState: .Normal)
-        shareQQ.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        shareQQ.setImage(UIImage(named: "share_qq"), for: UIControlState())
+        shareQQ.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), for: .touchUpInside)
         container.addSubview(shareQQ)
         shareQQ.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(shareSina.snp_right).offset(30)
@@ -148,8 +148,8 @@ class ShareController: UIViewController {
         //
         shareWechatFriend = UIButton()
         shareWechatFriend.tag = 1
-        shareWechatFriend.setImage(UIImage(named: "share_wechat_friend"), forState: .Normal)
-        shareWechatFriend.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        shareWechatFriend.setImage(UIImage(named: "share_wechat_friend"), for: UIControlState())
+        shareWechatFriend.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), for: .touchUpInside)
         container.addSubview(shareWechatFriend)
         shareWechatFriend.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(container.snp_centerX).offset(-15)
@@ -159,8 +159,8 @@ class ShareController: UIViewController {
         //
         shareWechat = UIButton()
         shareWechat.tag = 0
-        shareWechat.setImage(UIImage(named: "share_wechat"), forState: .Normal)
-        shareWechat.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        shareWechat.setImage(UIImage(named: "share_wechat"), for: UIControlState())
+        shareWechat.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), for: .touchUpInside)
         container.addSubview(shareWechat)
         shareWechat.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(shareWechatFriend.snp_left).offset(-30)
@@ -170,7 +170,7 @@ class ShareController: UIViewController {
     }
 
     func cancelBtnPressed() {
-        UIView.animateWithDuration(0.5, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+        UIView.animate(withDuration: 0.5, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.bg.layer.opacity = 1
             self.bgBlured.layer.opacity = 0
             self.bgMask.layer.opacity = 0
@@ -180,7 +180,7 @@ class ShareController: UIViewController {
         })
     }
     
-    func shareBtnPressed(sender: UIButton) {
+    func shareBtnPressed(_ sender: UIButton) {
         switch sender.tag {
         case 0:
             if !WXApi.isWXAppInstalled() {
@@ -199,7 +199,7 @@ class ShareController: UIViewController {
                 req.bText = false
                 req.scene = Int32(WXSceneSession.rawValue)
                 req.message = message
-                if !WXApi.sendReq(req) {
+                if !WXApi.send(req) {
                     showToast(LS("分享失败"), onSelf: true)
                 }
             }
@@ -220,7 +220,7 @@ class ShareController: UIViewController {
                 req.bText = false
                 req.scene = Int32(WXSceneTimeline.rawValue)
                 req.message = message
-                if !WXApi.sendReq(req) {
+                if !WXApi.send(req) {
                     showToast(LS("分享失败"), onSelf: true)
                 }
             }
@@ -242,7 +242,7 @@ class ShareController: UIViewController {
                 
                 let req = WBSendMessageToWeiboRequest()
                 req.message = message
-                WeiboSDK.sendRequest(req)
+                WeiboSDK.send(req)
             }
         case 3:
             if !QQApiInterface.isQQInstalled() {
@@ -250,9 +250,9 @@ class ShareController: UIViewController {
                 return
             }
             if let delegate = delegate {
-                let message = QQApiNewsObject(URL: NSURL(string: delegate.linkForShare()), title: delegate.titleForShare(), description: delegate.descriptionForShare(), previewImageData: UIImagePNGRepresentation(delegate.thumbnailForShare())!, targetContentType: QQApiURLTargetTypeNews)
+                let message = QQApiNewsObject(url: URL(string: delegate.linkForShare()), title: delegate.titleForShare(), description: delegate.descriptionForShare(), previewImageData: UIImagePNGRepresentation(delegate.thumbnailForShare())!, targetContentType: QQApiURLTargetTypeNews)
                 let req = SendMessageToQQReq(content: message)
-                QQApiInterface.sendReq(req)
+                QQApiInterface.send(req)
             }
         default:
             assertionFailure()

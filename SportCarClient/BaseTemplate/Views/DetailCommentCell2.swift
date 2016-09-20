@@ -11,11 +11,11 @@ import Kingfisher
 
 
 protocol DetailCommentCellDelegate: class {
-    func avatarPressed(cell: DetailCommentCell)
+    func avatarPressed(_ cell: DetailCommentCell)
     
-    func replyPressed(cell: DetailCommentCell)
+    func replyPressed(_ cell: DetailCommentCell)
     
-    func checkImageDetail(cell: DetailCommentCell)
+    func checkImageDetail(_ cell: DetailCommentCell)
 }
 
 
@@ -45,7 +45,7 @@ class DetailCommentCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
-        self.selectionStyle = .None
+        self.selectionStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -55,14 +55,14 @@ class DetailCommentCell: UITableViewCell {
     /**
      创建子View
      */
-    private func createSubviews() {
+    fileprivate func createSubviews() {
         let superview = self.contentView
         //
         avatarBtn = UIButton()
-        avatarBtn?.addTarget(self, action: #selector(DetailCommentCell.avatarPressed), forControlEvents: .TouchUpInside)
+        avatarBtn?.addTarget(self, action: #selector(DetailCommentCell.avatarPressed), for: .touchUpInside)
         avatarBtn?.layer.cornerRadius = 17.5
         avatarBtn?.clipsToBounds = true
-        avatarBtn?.backgroundColor = UIColor.grayColor()
+        avatarBtn?.backgroundColor = UIColor.gray
         superview.addSubview(avatarBtn!)
         avatarBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview).offset(15)
@@ -72,8 +72,8 @@ class DetailCommentCell: UITableViewCell {
         //
         nameLbl = UILabel()
         nameLbl?.text = LS("用户昵称")
-        nameLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold)
-        nameLbl?.textColor = UIColor.blackColor()
+        nameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        nameLbl?.textColor = UIColor.black
         superview.addSubview(nameLbl!)
         nameLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(avatarBtn!.snp_right).offset(11)
@@ -83,26 +83,26 @@ class DetailCommentCell: UITableViewCell {
         responseStaticLbl = UILabel()
         responseStaticLbl?.text = LS("回复了")
         responseStaticLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-        responseStaticLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        responseStaticLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(responseStaticLbl!)
         responseStaticLbl!.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(nameLbl!.snp_right).offset(2)
             make.bottom.equalTo(nameLbl!)
         }
-        responseStaticLbl?.hidden = true
+        responseStaticLbl?.isHidden = true
         //
         responseLbl = UILabel()
-        responseLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold)
-        responseLbl?.textColor = UIColor.blackColor()
+        responseLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        responseLbl?.textColor = UIColor.black
         superview.addSubview(responseLbl!)
         responseLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(responseStaticLbl!.snp_right).offset(2)
             make.bottom.equalTo(nameLbl!)
         })
-        responseLbl?.hidden = true
+        responseLbl?.isHidden = true
         //
         commentDateLbl = UILabel()
-        commentDateLbl?.font = UIFont.systemFontOfSize(10, weight: UIFontWeightLight)
+        commentDateLbl?.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightLight)
         commentDateLbl?.textColor = UIColor(white: 0.72, alpha: 1)
         commentDateLbl?.text = LS("评论时间")
         superview.addSubview(commentDateLbl!)
@@ -113,9 +113,9 @@ class DetailCommentCell: UITableViewCell {
         })
         //
         replyBtn = UIButton()
-        replyBtn?.setTitle(LS("回复"), forState: .Normal)
-        replyBtn?.setTitleColor(UIColor(white: 0.72, alpha: 1), forState: .Normal)
-        replyBtn?.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        replyBtn?.setTitle(LS("回复"), for: UIControlState())
+        replyBtn?.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
+        replyBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(replyBtn!)
         replyBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
@@ -123,11 +123,11 @@ class DetailCommentCell: UITableViewCell {
             make.height.equalTo(17)
             make.width.equalTo(25)
         })
-        replyBtn?.addTarget(self, action: #selector(DetailCommentCell.replyPressed), forControlEvents: .TouchUpInside)
+        replyBtn?.addTarget(self, action: #selector(DetailCommentCell.replyPressed), for: .touchUpInside)
         //
         commentContentLbl = UILabel()
-        commentContentLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        commentContentLbl?.lineBreakMode = .ByWordWrapping
+        commentContentLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        commentContentLbl?.lineBreakMode = .byWordWrapping
         commentContentLbl?.numberOfLines = 0
         commentContentLbl?.text = LS("评论内容")
         superview.addSubview(commentContentLbl!)
@@ -139,8 +139,8 @@ class DetailCommentCell: UITableViewCell {
         //
         commentImage = UIButton()
         superview.addSubview(commentImage!)
-        commentImage?.addTarget(self, action: #selector(DetailCommentCell.commentImagePressed), forControlEvents: .TouchUpInside)
-        commentImage?.hidden = true
+        commentImage?.addTarget(self, action: #selector(DetailCommentCell.commentImagePressed), for: .touchUpInside)
+        commentImage?.isHidden = true
     }
     
     /**
@@ -150,15 +150,15 @@ class DetailCommentCell: UITableViewCell {
      
      - returns: Cell的高度
      */
-    func getHeightForThisCell(data: NewsComment?) -> CGFloat {
+    func getHeightForThisCell(_ data: NewsComment?) -> CGFloat {
         return 0
     }
     
-    class func heightForComment(commentContent: String) -> CGFloat {
+    class func heightForComment(_ commentContent: String) -> CGFloat {
         let otherContentHeight = 78 as CGFloat
-        let screenWidth = UIScreen.mainScreen().bounds.width
+        let screenWidth = UIScreen.main.bounds.width
         let content = commentContent as NSString
-        let textRect = content.boundingRectWithSize(CGSizeMake(screenWidth - 101, 1000), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)], context: nil)
+        let textRect = content.boundingRect(with: CGSize(width: screenWidth - 101, height: 1000), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)], context: nil)
         return otherContentHeight + textRect.height
     }
     

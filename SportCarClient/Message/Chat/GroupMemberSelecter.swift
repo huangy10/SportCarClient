@@ -10,7 +10,7 @@ import UIKit
 import Dollar
 
 protocol GroupMemberSelectDelegate: class {
-    func groupMemberSelectControllerDidSelectUser(user: User)
+    func groupMemberSelectControllerDidSelectUser(_ user: User)
     func groupMemberSelectControllerDidCancel()
 }
 
@@ -45,32 +45,32 @@ class GroupMemberSelectController: UserSelectController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        userTableView?.registerClass(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
+        userTableView?.register(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
     }
     
     override func navLeftBtnPressed() {
-        presenter?.dismissViewControllerAnimated(true, completion: nil)
+        presenter?.dismiss(animated: true, completion: nil)
         delegate?.groupMemberSelectControllerDidCancel()
     }
     
-    func presentFrom(presenter: UIViewController) {
+    func presentFrom(_ presenter: UIViewController) {
         self.presenter = presenter
         let wrapper = BlackBarNavigationController(rootViewController: self)
-        presenter.presentViewController(wrapper, animated: true, completion: nil)
+        presenter.present(wrapper, animated: true, completion: nil)
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UserSelectCellUnselectable
-        let user = users[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserSelectCellUnselectable
+        let user = users[(indexPath as NSIndexPath).row]
         cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let selectedUser = users[indexPath.row]
-        presenter?.dismissViewControllerAnimated(true, completion: nil)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedUser = users[(indexPath as NSIndexPath).row]
+        presenter?.dismiss(animated: true, completion: nil)
         delegate?.groupMemberSelectControllerDidSelectUser(selectedUser)
     }
 }

@@ -11,7 +11,7 @@ import UIKit
 
 public extension UIImageView {
     
-    public func setHighQualityImageURL(url: NSURL) {
+    public func setHighQualityImageURL(_ url: URL) {
         guard let gestures = gestureRecognizers else {
             assertionFailure("You should call setupForImageViewer before changing the high quality image url")
             return
@@ -23,8 +23,8 @@ public extension UIImageView {
         }
     }
     
-    public func setupForImageViewer(highQualityImageUrl: NSURL? = nil, backgroundColor: UIColor = UIColor.whiteColor(), fadeToHide: Bool = false) {
-        userInteractionEnabled = true
+    public func setupForImageViewer(_ highQualityImageUrl: URL? = nil, backgroundColor: UIColor = UIColor.white, fadeToHide: Bool = false) {
+        isUserInteractionEnabled = true
         if gestureRecognizers != nil {
             for g in gestureRecognizers! {
                 if let gg = g as? ImageViewerTapGestureRecognizer {
@@ -41,14 +41,14 @@ public extension UIImageView {
         addGestureRecognizer(longPress)
     }
     
-    internal func didTap(recognizer: ImageViewerTapGestureRecognizer) {        
+    internal func didTap(_ recognizer: ImageViewerTapGestureRecognizer) {        
         let imageViewer = ImageViewer(senderView: self, highQualityImageUrl: recognizer.highQualityImageUrl, backgroundColor: recognizer.backgroundColor, fadeToHide: recognizer.fadeToHide)
         imageViewer.presentFromRootViewController()
     }
     
-    internal func didLongPress(recognizer: UILongPressGestureRecognizer) {
+    internal func didLongPress(_ recognizer: UILongPressGestureRecognizer) {
         switch recognizer.state {
-        case .Began:
+        case .began:
             if image == nil {
                 return
             }
@@ -59,37 +59,37 @@ public extension UIImageView {
     }
     
     func showSaveImageBtn() {
-        let rootViewController = UIApplication.sharedApplication().keyWindow?.rootViewController
+        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
         let popover = getPopoverControllerForImageSave()
-        rootViewController?.presentViewController(popover, animated: true, completion: nil)
+        rootViewController?.present(popover, animated: true, completion: nil)
     }
     
     func getPopoverControllerForImageSave() -> UIViewController {
         let controller = UIViewController()
-        controller.preferredContentSize = CGSizeMake(100, 44)
-        controller.view.addSubview(UIButton).config(self, selector: #selector(saveImageToPhotoAlbums(_:)), title: LS("保存"), titleColor: UIColor.whiteColor(), titleSize: 14, titleWeight: UIFontWeightRegular)
+        controller.preferredContentSize = CGSize(width: 100, height: 44)
+        controller.view.addSubview(UIButton).config(self, selector: #selector(saveImageToPhotoAlbums(_:)), title: LS("保存"), titleColor: UIColor.white, titleSize: 14, titleWeight: UIFontWeightRegular)
             .layout { (make) in
                 make.edges.equalTo(controller.view)
         }
-        controller.modalPresentationStyle = .Popover
+        controller.modalPresentationStyle = .popover
         let popover = controller.popoverPresentationController
         popover?.sourceRect = bounds
         popover?.sourceView = self
-        popover?.permittedArrowDirections = [.Down, .Up]
-        popover?.backgroundColor = UIColor.blackColor()
+        popover?.permittedArrowDirections = [.down, .up]
+        popover?.backgroundColor = UIColor.black
         popover?.delegate = self
         return controller
     }
     
-    func saveImageToPhotoAlbums(sender: UIButton) {
-        let rootViewController = UIApplication.sharedApplication().keyWindow?.rootViewController
-        rootViewController?.dismissViewControllerAnimated(true, completion: nil)
+    func saveImageToPhotoAlbums(_ sender: UIButton) {
+        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+        rootViewController?.dismiss(animated: true, completion: nil)
         
         UIImageWriteToSavedPhotosAlbum(image!, self, #selector(imageSaved(_: didFinishSavingWithError:contextInfo:)), nil)
     }
     
-    @objc func imageSaved(image: UIImage, didFinishSavingWithError: NSErrorPointer, contextInfo: UnsafePointer<Void>) {
-        let rootViewController = UIApplication.sharedApplication().keyWindow?.rootViewController
+    @objc func imageSaved(_ image: UIImage, didFinishSavingWithError: NSErrorPointer, contextInfo: UnsafeRawPointer) {
+        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
         rootViewController?.showToast(LS("保存成功"))
     }
 }
@@ -97,18 +97,18 @@ public extension UIImageView {
 
 extension UIImageView: UIPopoverPresentationControllerDelegate {
     
-    public func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
-        return UIModalPresentationStyle.None
+    public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.none
     }
     
 }
 
 class ImageViewerTapGestureRecognizer: UITapGestureRecognizer {
-    var highQualityImageUrl: NSURL?
+    var highQualityImageUrl: URL?
     var backgroundColor: UIColor!
     var fadeToHide: Bool = false
     
-    init(target: AnyObject, action: Selector, highQualityImageUrl: NSURL?, backgroundColor: UIColor, fadeToHide: Bool = false) {
+    init(target: AnyObject, action: Selector, highQualityImageUrl: URL?, backgroundColor: UIColor, fadeToHide: Bool = false) {
         self.highQualityImageUrl = highQualityImageUrl
         self.backgroundColor = backgroundColor
         self.fadeToHide = fadeToHide

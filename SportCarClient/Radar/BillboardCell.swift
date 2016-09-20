@@ -45,12 +45,12 @@ class BillboardCell: UITableViewCell {
     }
     
     func configSelf() {
-        selectionStyle = .None
+        selectionStyle = .none
     }
     
     func configureContrainer() {
         container = contentView.addSubview(UIView)
-            .config(UIColor.whiteColor())
+            .config(UIColor.white)
             .layout({ (make) in
                 make.top.equalTo(contentView)
                 make.left.equalTo(contentView).offset(10)
@@ -86,13 +86,13 @@ class BillboardCell: UITableViewCell {
         icon.layer.cornerRadius = 22.5
         icon.clipsToBounds = true
         nameLbl = contentView.addSubview(UILabel)
-            .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor.blackColor(), textAlignment: .Left)
+            .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor.black, textAlignment: .left)
             .layout({ (make) in
                 make.left.equalTo(icon.snp_right).offset(13)
                 make.top.equalTo(icon).offset(3)
             })
         descriLbl = contentView.addSubview(UILabel)
-            .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.58), textAlignment: .Left)
+            .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.58), textAlignment: .left)
             .layout({ (make) in
                 make.left.equalTo(nameLbl)
                 make.bottom.equalTo(icon).offset(-2)
@@ -101,14 +101,14 @@ class BillboardCell: UITableViewCell {
     
     func configureOrderDisplay() {
         upAndDownStaticLbl = contentView.addSubview(UILabel)
-            .config(10, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.38), textAlignment: .Right)
+            .config(10, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.38), textAlignment: .right)
             .layout({ (make) in
                 make.centerY.equalTo(nameLbl)
                 make.right.equalTo(container).offset(-13)
             })
         upAndDownStaticLbl.text = LS("升降")
         upAndDownLbl = contentView.addSubview(UILabel)
-            .config(10, fontWeight: UIFontWeightRegular, textColor: UIColor.blackColor(), textAlignment: .Right)
+            .config(10, fontWeight: UIFontWeightRegular, textColor: UIColor.black, textAlignment: .right)
             .layout({ (make) in
                 make.right.equalTo(upAndDownStaticLbl)
                 make.top.equalTo(descriLbl)
@@ -120,12 +120,12 @@ class BillboardCell: UITableViewCell {
                 make.size.equalTo(8)
             })
         newMarkerLbl = contentView.addSubview(UILabel)
-            .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor.RGB(255, 21, 21), textAlignment: .Center, text: "new")
+            .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor.RGB(255, 21, 21), textAlignment: .center, text: "new")
             .layout({ (make) in
                 make.centerX.equalTo(upAndDownStaticLbl)
                 make.bottom.equalTo(upAndDownLbl)
             })
-        newMarkerLbl.hidden = true
+        newMarkerLbl.isHidden = true
     }
     
     func configureSepLine() {
@@ -139,7 +139,7 @@ class BillboardCell: UITableViewCell {
             })
     }
     
-    func setData(club: Club, order: Int, orderChange: Int, new: Bool) {
+    func setData(_ club: Club, order: Int, orderChange: Int, new: Bool) {
         self.club = club
         self.order = order
         self.orderChange = orderChange
@@ -150,13 +150,13 @@ class BillboardCell: UITableViewCell {
         orderLbl.text = "\(order)"
         upAndDownLbl.text = "\(abs(orderChange))"
         if new {
-            newMarkerLbl.hidden = false
-            upAndDownLbl.hidden = true
-            upAndDownIcon.hidden = true
+            newMarkerLbl.isHidden = false
+            upAndDownLbl.isHidden = true
+            upAndDownIcon.isHidden = true
         } else {
-            newMarkerLbl.hidden = true
-            upAndDownIcon.hidden = false
-            upAndDownLbl.hidden = false
+            newMarkerLbl.isHidden = true
+            upAndDownIcon.isHidden = false
+            upAndDownLbl.isHidden = false
             if orderChange > 0 {
                 upAndDownIcon.image = UIImage(named: "order_change_up")
                 upAndDownLbl.textColor = UIColor.RGB(255, 21, 21)
@@ -170,8 +170,8 @@ class BillboardCell: UITableViewCell {
         }
     }
     
-    func getOrderTextFont(size: CGFloat) -> UIFont {
-        let fontName = UIFont.fontNamesForFamilyName("Titillium Web")
+    func getOrderTextFont(_ size: CGFloat) -> UIFont {
+        let fontName = UIFont.fontNames(forFamilyName: "Titillium Web")
         return UIFont(name: fontName[0], size: size)!
 //        return UIFont.systemFontOfSize(size, weight: UIFontWeightBold)
     }
@@ -196,11 +196,11 @@ class BillboardFirstThree: BillboardCell {
     override func createSubviews() {
         greatMark = contentView.addSubview(UIView)
         super.createSubviews()
-        contentView.bringSubviewToFront(greatMark)
+        contentView.bringSubview(toFront: greatMark)
         greatMark.snp_makeConstraints { (make) in
             make.left.equalTo(container)
             make.bottom.equalTo(icon).offset(-3)
-            make.size.equalTo(CGSizeMake(2.5, 40))
+            make.size.equalTo(CGSize(width: 2.5, height: 40))
         }
         contentView.layoutIfNeeded()
     }
@@ -216,13 +216,13 @@ class BillboardFirstThree: BillboardCell {
     
     override func configureOrderLbl() {
         orderStaticLbl = contentView.addSubview(UILabel)
-            .config(12, fontWeight: UIFontWeightRegular, textAlignment: .Left, text: LS("排名"), textColor: UIColor(white: 0, alpha: 0.38))
+            .config(12, fontWeight: UIFontWeightRegular, textAlignment: .left, text: LS("排名"), textColor: UIColor(white: 0, alpha: 0.38))
             .layout({ (make) in
                 make.left.equalTo(container).offset(12)
                 make.top.equalTo(greatMark)
             })
         orderLbl = contentView.addSubview(UILabel)
-        orderLbl.font = UIFont.systemFontOfSize(32, weight: UIFontWeightBold)
+        orderLbl.font = UIFont.systemFont(ofSize: 32, weight: UIFontWeightBold)
         orderLbl.snp_makeConstraints { (make) in
             make.left.equalTo(container).offset(12)
             make.bottom.equalTo(greatMark)
@@ -233,7 +233,7 @@ class BillboardFirstThree: BillboardCell {
     
     override func configureContrainer() {
         container = contentView.addSubview(UIView)
-            .config(UIColor.whiteColor())
+            .config(UIColor.white)
             .addShadow()
             .layout({ (make) in
                 make.top.equalTo(contentView)
@@ -248,7 +248,7 @@ class BillboardFirstThree: BillboardCell {
         // do nothing
     }
     
-    override func setData(club: Club, order: Int, orderChange: Int, new: Bool) {
+    override func setData(_ club: Club, order: Int, orderChange: Int, new: Bool) {
         super.setData(club, order: order, orderChange: orderChange, new: new)
         if order == 1 {
             orderLbl.textColor = UIColor.RGB(255, 0, 0, alpha: 0.87)

@@ -14,10 +14,10 @@ class RosterDict: MyOrderedDict<String, RosterItem> {
     
     func resortRosters() {
         let rosters = _dict.map({ $0.1 })
-        _keys = rosters.sort({ (r1, r2) -> Bool in
+        _keys = rosters.sorted(by: { (r1, r2) -> Bool in
             if r1.alwaysOnTop && !r2.alwaysOnTop {
                 return true
-            } else if r1.updatedAt!.compare(r2.updatedAt!) == .OrderedDescending {
+            } else if r1.updatedAt!.compare(r2.updatedAt!) == .orderedDescending {
                 return true
             }
             return false
@@ -35,14 +35,14 @@ class RosterManager {
     var synchronized: Bool = false;
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     init () {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onClubMemberChange(_:)), name: kMessageClubMemberChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onClubMemberChange(_:)), name: NSNotification.Name(rawValue: kMessageClubMemberChangeNotification), object: nil)
     }
     
-    var queue: dispatch_queue_t {
+    var queue: DispatchQueue {
         return ChatModelManger.sharedManager.workQueue
     }
     
@@ -52,8 +52,8 @@ class RosterManager {
      - parameter bringToFront: whether to bring the added roster item to the  very front of the roster list
      - returns: if the new item has already exists in the roster list before the insertion
      */
-    @available(*, deprecated=1)
-    func addNewRosterItem(newItem: RosterItem, bringToFront: Bool = false) -> Bool{
+    @available(*, deprecated: 1)
+    func addNewRosterItem(_ newItem: RosterItem, bringToFront: Bool = false) -> Bool{
         if let roster = data[newItem.mapKey] {
             roster.recentChatDes = newItem.recentChatDes
             self.data.bringKeyToFront(newItem.mapKey)
@@ -67,7 +67,7 @@ class RosterManager {
     /**
      Accept json data as input and get the output
      */
-    func getOrCreateNewRoster(json: JSON, autoBringToFront: Bool = false) -> RosterItem {
+    func getOrCreateNewRoster(_ json: JSON, autoBringToFront: Bool = false) -> RosterItem {
         let entityType = json["entity_type"].stringValue
         var mapKey = ""
         if entityType == "user" {
@@ -93,11 +93,11 @@ class RosterManager {
         }
     }
     
-    @available(*, deprecated=1)
-    func rosterItemForUser(user: User) -> RosterItem? {
+    @available(*, deprecated: 1)
+    func rosterItemForUser(_ user: User) -> RosterItem? {
         for (_, item) in data._dict {
             switch item.data! {
-            case .USER(let chater):
+            case .user(let chater):
                 if chater.ssid == user.ssid {
                     return item
                 }
@@ -108,11 +108,11 @@ class RosterManager {
         return nil
     }
     
-    @available(*, deprecated=1)
-    func rosterItemForClub(club: Club) -> RosterItem? {
+    @available(*, deprecated: 1)
+    func rosterItemForClub(_ club: Club) -> RosterItem? {
         for (_, item) in data._dict {
             switch item.data! {
-            case .CLUB(let club):
+            case .club(let club):
                 if club.ssid == club.ssid {
                     return item
                 }
@@ -130,12 +130,12 @@ class RosterManager {
 //        dispatch_async(queue) {
 //            self._sync()
 //        }
-        dispatch_async(queue) { 
+        queue.async { 
             self._load()
         }
     }
     
-    private func _load() {
+    fileprivate func _load() {
         if data.count > 0 {
             data.removeAll()
         }
@@ -171,7 +171,7 @@ class RosterManager {
             let item = data[key]!
             
             switch item.data! {
-            case .CLUB(let club):
+            case .club(let club):
                 if club.alwayOnTop {
                     temp += 1
                 }
@@ -185,7 +185,7 @@ class RosterManager {
     /**
      actual working queue
      */
-    private func _sync() {
+    fileprivate func _sync() {
         ChatRequester2.sharedInstance.getChatList({ (json) in
             let newRosters = RosterDict()
             var unreadTotal = 0
@@ -203,7 +203,7 @@ class RosterManager {
             self.data = newRosters
             MessageManager.defaultManager.unreadChatNum = unreadTotal
             self.synchronized = true
-            dispatch_async(dispatch_get_main_queue(), { 
+            DispatchQueue.main.async(execute: { 
                 self.rosterList?.reloadData()
             })
             }) { (code) in
@@ -215,7 +215,7 @@ class RosterManager {
                         $0.hostSSID == MainManager.sharedManager.hostUserID!
                     }).each { self.data[$0.mapKey] = $0 }
                     if self.data.count > 0 {
-                        dispatch_async(dispatch_get_main_queue(), {
+                        DispatchQueue.main.async(execute: {
                             self.rosterList?.reloadData()
                         })
                     }
@@ -223,32 +223,32 @@ class RosterManager {
         }
     }
     
-    func deleteAndQuitClub(club: Club) {
+    func deleteAndQuitClub(_ club: Club) {
         club.attended = false
-        let wait = dispatch_semaphore_create(0)
-        dispatch_async(queue) {
+        let wait = DispatchSemaphore(value: 0)
+        queue.async {
             let context = ChatModelManger.sharedManager.getOperationContext()
             do {
                 try context.rosterItems.filter({ $0.ssid == MainManager.sharedManager.hostUserID! })
                     .filter({ $0.entityType == "club" && $0.relatedID == club.ssid })
                     .delete()
             } catch {}
-            dispatch_semaphore_signal(wait)
+            wait.signal()
         }
-        dispatch_semaphore_wait(wait, DISPATCH_TIME_FOREVER)
+        wait.wait(timeout: DispatchTime.distantFuture)
         let mapKey = "club:\(club.ssid)"
         self.data[mapKey] = nil
     }
     
-    @objc func onClubMemberChange(notification: NSNotification) {
-        guard let club = notification.userInfo?[kMessageClubKey] as? Club else {
+    @objc func onClubMemberChange(_ notification: Foundation.Notification) {
+        guard let club = (notification as NSNotification).userInfo?[kMessageClubKey] as? Club else {
             assertionFailure()
             return
         }
         let mapKey = "club:\(club.ssid)"
         if let rosterItem = self.data[mapKey] {
             switch rosterItem.data! {
-            case .CLUB(let _club):
+            case .club(let _club):
                 _club.memberNum = club.memberNum
             default:
                 return

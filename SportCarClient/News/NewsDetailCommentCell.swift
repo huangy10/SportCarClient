@@ -21,29 +21,29 @@ class NewsDetailCommentCell: DetailCommentCell {
             return
         }
         let user = data.user!
-        replyBtn?.hidden = user.isHost
+        replyBtn?.isHidden = user.isHost
         // 设置头像
-        avatarBtn?.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
+        avatarBtn?.kf_setImageWithURL(user.avatarURL!, forState: UIControlState())
         //
         nameLbl?.text = user.nickName
         // 检查是否有回应对象
         if let targetComment = comment?.responseTo {
-            responseLbl?.hidden = false
-            responseStaticLbl?.hidden = false
+            responseLbl?.isHidden = false
+            responseStaticLbl?.isHidden = false
             responseLbl?.text = targetComment.user?.nickName
         }else{
-            responseLbl?.hidden = true
-            responseStaticLbl?.hidden = true
+            responseLbl?.isHidden = true
+            responseStaticLbl?.isHidden = true
         }
         //
         commentDateLbl?.text = dateDisplay(data.createdAt!)
         // 设置评论内容
         if let content = data.content {
-            commentContentLbl?.hidden = false
+            commentContentLbl?.isHidden = false
             commentContentLbl?.text = content
         }else{
-            commentContentLbl?.hidden = true
+            commentContentLbl?.isHidden = true
         }
-        commentImage?.hidden = true
+        commentImage?.isHidden = true
     }
 }

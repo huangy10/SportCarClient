@@ -22,11 +22,11 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
 //            b.addSubview(c)
             
             waveMask = ChatWaveMaskView()
-            waveMask?.frame = CGRectMake(0, 0, 167, 30)
+            waveMask?.frame = CGRect(x: 0, y: 0, width: 167, height: 30)
             waveMask?.chat = chatRecord
             waveMask?.backgroundColor = UIColor(white: 1, alpha: 0)
             
-            processView?.maskView = waveMask
+            processView?.mask = waveMask
 //            processView?.addSubview(mask)
 //            waveMask = ChatWaveMaskView(chatRecord: chatRecord!)
 //            waveMask?.frame = CGRectMake(0, 0, 167, 30)
@@ -55,14 +55,14 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
     var longPressGestureRecognizer: UILongPressGestureRecognizer!
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         createSubviews()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onStopAllVoicePlay(_:)), name: kMessageStopAllVoicePlayNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onStopAllVoicePlay(_:)), name: NSNotification.Name(rawValue: kMessageStopAllVoicePlayNotification), object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -73,9 +73,9 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
         let superview = self
         //
         playBtn = UIButton()
-        playBtn?.setImage(UIImage(named: "chat_voice_play"), forState: .Normal)
-        playBtn?.addTarget(self, action: #selector(ChatWaveView.playBtnPressed), forControlEvents: .TouchUpInside)
-        playBtn?.imageView?.contentMode = .ScaleAspectFit
+        playBtn?.setImage(UIImage(named: "chat_voice_play"), for: UIControlState())
+        playBtn?.addTarget(self, action: #selector(ChatWaveView.playBtnPressed), for: .touchUpInside)
+        playBtn?.imageView?.contentMode = .scaleAspectFit
         playBtn?.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4)
         playBtn?.tag = 0
         superview.addSubview(playBtn!)
@@ -98,8 +98,8 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
         
         //
         remainingTimeLbl = UILabel()
-        remainingTimeLbl?.font = UIFont.systemFontOfSize(10, weight: UIFontWeightRegular)
-        remainingTimeLbl?.textColor = UIColor.whiteColor()
+        remainingTimeLbl?.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightRegular)
+        remainingTimeLbl?.textColor = UIColor.white
         superview.addSubview(remainingTimeLbl!)
         remainingTimeLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.centerY.equalTo(superview)
@@ -108,7 +108,7 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
         })
     }
     
-    func getRemainingTimeString(process: Double) -> String {
+    func getRemainingTimeString(_ process: Double) -> String {
         guard let duration = chatRecord?.audioLength else{
             return "--:--"
         }
@@ -127,7 +127,7 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
         // TODO: use isPlaying property instead of operating on `tag` directly
         
         if playBtn?.tag == 0 {
-            playBtn?.setImage(UIImage(named: "chat_voice_pause"), forState: .Normal)
+            playBtn?.setImage(UIImage(named: "chat_voice_pause"), for: UIControlState())
             player.play(SFURL(audioURL)!, newDelegate: self)
             playBtn?.tag = 1
         }else{
@@ -136,21 +136,21 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
                 remainingTimeLbl?.text = getRemainingTimeString(0)
             }
             playBtn?.tag = 0
-            playBtn?.setImage(UIImage(named: "chat_voice_play"), forState: .Normal)
+            playBtn?.setImage(UIImage(named: "chat_voice_play"), for: UIControlState())
         }
     }
     
     func getRequiredWidth() -> CGFloat {
-        var contentRect = CGRectZero
+        var contentRect = CGRect.zero
         for view in self.subviews {
-            contentRect = CGRectUnion(contentRect, view.frame)
+            contentRect = contentRect.union(view.frame)
         }
         return contentRect.width
     }
     
-    func onChatBubbleLongPressed(gesture: UILongPressGestureRecognizer) {
+    func onChatBubbleLongPressed(_ gesture: UILongPressGestureRecognizer) {
         switch gesture.state {
-        case .Began:
+        case .began:
             showAudioPlayerOutputTypeSelector()
         default:
             break
@@ -158,37 +158,37 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
     }
     
     func showAudioPlayerOutputTypeSelector() {
-        NSNotificationCenter.defaultCenter().postNotificationName(kMessageStopAllVoicePlayNotification, object: nil)
+        NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kMessageStopAllVoicePlayNotification), object: nil)
         let ctrl = getPopoverContronllerForOutputSelection()
-        ctrl.modalPresentationStyle = .Popover
+        ctrl.modalPresentationStyle = .popover
         let popover = ctrl.popoverPresentationController
         popover?.sourceView = self
         popover?.sourceRect = self.bounds
-        popover?.permittedArrowDirections = [.Down, .Up]
+        popover?.permittedArrowDirections = [.down, .up]
         popover?.delegate = self
-        popover?.backgroundColor = UIColor.blackColor()
+        popover?.backgroundColor = UIColor.black
         let presenter = delegate as? UIViewController
-        presenter?.presentViewController(ctrl, animated: true, completion: nil)
+        presenter?.present(ctrl, animated: true, completion: nil)
     }
     
-    func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
-        return UIModalPresentationStyle.None
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.none
     }
     
     func getPopoverContronllerForOutputSelection() -> UIViewController {
         let controller = UIViewController()
-        controller.preferredContentSize = CGSizeMake(100, 44)
+        controller.preferredContentSize = CGSize(width: 100, height: 44)
         let player = UniversalAudioPlayer.sharedPlayer
         if player.isOnSpeaker() {
             let btn = controller.view.addSubview(UIButton)
-                .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("听筒播放"), titleColor: UIColor.whiteColor(), titleSize: 14, titleWeight: UIFontWeightRegular)
+                .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("听筒播放"), titleColor: UIColor.white, titleSize: 14, titleWeight: UIFontWeightRegular)
                 .layout({ (make) in
                     make.edges.equalTo(controller.view)
                 })
             btn.tag = 0
         } else {
             let btn = controller.view.addSubview(UIButton)
-                .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("扬声器播放"), titleColor: UIColor.whiteColor(), titleSize: 14, titleWeight: UIFontWeightRegular)
+                .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("扬声器播放"), titleColor: UIColor.white, titleSize: 14, titleWeight: UIFontWeightRegular)
                 .layout({ (make) in
                     make.edges.equalTo(controller.view)
                 })
@@ -197,7 +197,7 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
         return controller
     }
     
-    func onAudioPlayerOutputTypeSwitchBtnPressed(sender: UIButton) {
+    func onAudioPlayerOutputTypeSwitchBtnPressed(_ sender: UIButton) {
         let player = UniversalAudioPlayer.sharedPlayer
         let controller = delegate as? UIViewController
         if sender.tag == 1 {
@@ -205,7 +205,7 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
                 try player.setPlayFromSpeaker()
             } catch {
                 controller?.showToast(LS("无法从听筒播放"))
-                controller?.dismissViewControllerAnimated(true, completion: nil)
+                controller?.dismiss(animated: true, completion: nil)
                 return
             }
         } else {
@@ -213,16 +213,16 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
                 try player.setToUseDefaultOutputType()
             } catch {
                 controller?.showToast(LS("无法从扬声器播放"))
-                controller?.dismissViewControllerAnimated(true, completion: nil)
+                controller?.dismiss(animated: true, completion: nil)
                 return
             }
         }
-        controller?.dismissViewControllerAnimated(true, completion: nil)
+        controller?.dismiss(animated: true, completion: nil)
         playBtnPressed()
     }
     
-    func onStopAllVoicePlay(notification: NSNotification) {
-        dispatch_async(dispatch_get_main_queue()) { 
+    func onStopAllVoicePlay(_ notification: Foundation.Notification) {
+        DispatchQueue.main.async { 
             self.stopPlayerAnyway()
         }
     }
@@ -237,26 +237,26 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
 
 extension ChatWaveView {
     func willPlayAnotherAudioFile() {
-        playBtn?.setImage(UIImage(named: "chat_voice_play"), forState: .Normal)
+        playBtn?.setImage(UIImage(named: "chat_voice_play"), for: UIControlState())
         playBtn?.tag = 0
         remainingTimeLbl?.text = getRemainingTimeString(0)
     }
     
     func willStartPlaying() {
-        playBtn?.setImage(UIImage(named: "chat_voice_pause"), forState: .Normal)
+        playBtn?.setImage(UIImage(named: "chat_voice_pause"), for: UIControlState())
         processView?.process = 0
         remainingTimeLbl?.text = getRemainingTimeString(0)
         chatRecord?.read = true
     }
     
-    func playProcessUpdate(process: Double) {
+    func playProcessUpdate(_ process: Double) {
         processView?.process = process
         remainingTimeLbl?.text = getRemainingTimeString(process)
     }
     
     func playDidFinished() {
         processView?.process = 1
-        playBtn?.setImage(UIImage(named: "chat_voice_play"), forState: .Normal)
+        playBtn?.setImage(UIImage(named: "chat_voice_play"), for: UIControlState())
         playBtn?.tag = 0
         remainingTimeLbl?.text = getRemainingTimeString(0)
     }
@@ -277,32 +277,32 @@ class ChatWaveMaskView: UIView {
         }
     }
     
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         guard let data = chat?.cachedWaveData else {
             return
         }
         self.backgroundColor = UIColor(white: 1, alpha: 0)
         let ctx = UIGraphicsGetCurrentContext()
-        CGContextSaveGState(ctx)
+        ctx?.saveGState()
         let contextSize = self.frame.size
         // 将背景填充成为黑色
 //        CGContextClearRect(ctx, self.bounds)
 //        CGContextSetFillColorWithColor(ctx, UIColor(white: 1, alpha: 0).CGColor)
 //        CGContextFillRect(ctx, self.bounds)
         // 绘制水平线
-        let horizontalLine = CGPathCreateMutable()
+        let horizontalLine = CGMutablePath()
         CGPathMoveToPoint(horizontalLine, nil, 0, contextSize.height / 2)
         CGPathAddLineToPoint(horizontalLine, nil, contextSize.width, contextSize.height / 2)
-        CGContextAddPath(ctx, horizontalLine)
-        CGContextSetStrokeColorWithColor(ctx, UIColor(white: 1, alpha: 1).CGColor)
-        CGContextSetLineWidth(ctx, 0.5)
-        CGContextStrokePath(ctx)
+        ctx?.addPath(horizontalLine)
+        ctx?.setStrokeColor(UIColor(white: 1, alpha: 1).cgColor)
+        ctx?.setLineWidth(0.5)
+        ctx?.strokePath()
         // 绘制波形图
-        let waveShape = CGPathCreateMutable()
-        var trans = CGAffineTransformIdentity
-        trans = CGAffineTransformTranslate(trans, 0, contextSize.height/2)
-        trans = CGAffineTransformScale(trans, 1, contextSize.height/2)
+        let waveShape = CGMutablePath()
+        var trans = CGAffineTransform.identity
+        trans = trans.translatedBy(x: 0, y: contextSize.height/2)
+        trans = trans.scaledBy(x: 1, y: contextSize.height/2)
         CGPathMoveToPoint(waveShape, &trans, 0, 0)
         var pos: CGFloat = 1.5
         let interval = (contextSize.width - 3) / CGFloat(data.count - 1)
@@ -312,10 +312,10 @@ class ChatWaveMaskView: UIView {
             CGPathAddLineToPoint(waveShape, &trans, pos, -y)
             pos += interval
         }
-        CGContextAddPath(ctx, waveShape)
-        CGContextSetLineWidth(ctx, 2)
-        CGContextStrokePath(ctx)
-        CGContextRestoreGState(ctx)
+        ctx?.addPath(waveShape)
+        ctx?.setLineWidth(2)
+        ctx?.strokePath()
+        ctx?.restoreGState()
     }
 }
 
@@ -342,7 +342,7 @@ class WideProcessView: UIView {
     }
     
     override init(frame: CGRect) {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         self.backgroundColor = UIColor(white: 0.72, alpha: 1)
         self.addSubview(barView)
         barView.snp_makeConstraints { (make) -> Void in

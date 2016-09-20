@@ -33,18 +33,18 @@ class NewsController: UITableViewController {
         // 设置导航栏
         navigationBarSettings()
         // 注册news的cell
-        tableView.registerClass(NewsCell.self, forCellReuseIdentifier: NewsCell.reusableIdentifier)
+        tableView.register(NewsCell.self, forCellReuseIdentifier: NewsCell.reusableIdentifier)
         tableView.backgroundColor = kGeneralTableViewBGColor
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(NewsController.handleRefreshing), forControlEvents: .ValueChanged)
+        refreshControl?.addTarget(self, action: #selector(NewsController.handleRefreshing), for: .valueChanged)
         tableView.addSubview(refreshControl!)
-        refreshControl?.enabled = true
+        refreshControl?.isEnabled = true
         // 开始准备获取数据
         self.loadMoreNewsBelow()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
         tableView.reloadData()
@@ -58,41 +58,41 @@ extension NewsController {
     /**
      总是只有一个Section
      */
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     /**
      返回news的个数
      */
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return news.count
     }
     
     /**
      cell的高度是固定的
      */
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let screenWidth = self.tableView.frame.width
         return screenWidth * 0.573
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(NewsCell.reusableIdentifier, forIndexPath: indexPath) as! NewsCell
-        cell.news = news[indexPath.row]
-        cell.selectionStyle = .None
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewsCell.reusableIdentifier, for: indexPath) as! NewsCell
+        cell.news = news[(indexPath as NSIndexPath).row]
+        cell.selectionStyle = .none
         // 自动载入更多news
-        if indexPath.row == news.count-1 {
+        if (indexPath as NSIndexPath).row == news.count-1 {
             self.loadMoreNewsBelow()
         }
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 选中cell后弹出的详情页面
         let detailCtrl = NewsDetailController()
-        detailCtrl.news = news[indexPath.row]
-        let cell = tableView.cellForRowAtIndexPath(indexPath)!
+        detailCtrl.news = news[(indexPath as NSIndexPath).row]
+        let cell = tableView.cellForRow(at: indexPath)!
         let initPos = cell.frame.origin.y - tableView.contentOffset.y
         detailCtrl.initPos = initPos
         detailCtrl.initBgImg = self.getScreenShotBlurred(false)
@@ -128,7 +128,7 @@ extension NewsController {
 //        homeBtn.frame = CGRect(x: 0, y: 0, width: 15, height: 13.5)
 //        let leftBtnItem = UIBarButtonItem(customView: homeBtn)
         homeBtn = BackToHomeBtn()
-        homeBtn.addTarget(self, action: #selector(backToHomePressed), forControlEvents: .TouchUpInside)
+        homeBtn.addTarget(self, action: #selector(backToHomePressed), for: .touchUpInside)
         return homeBtn.wrapToBarBtn()
     }
     
@@ -151,7 +151,7 @@ extension NewsController {
      */
     func updateToFetchLatestNews() {
         
-        guard let firstNews = news.first() else {
+        guard let firstNews = news.first else {
             loadMoreNewsBelow()
             return
         }
@@ -165,7 +165,7 @@ extension NewsController {
             for newsJSON in data.arrayValue {
                 newNews.append(try! News().loadDataFromJSON(newsJSON))
             }
-            self.news.appendContentsOf(newNews)
+            self.news.append(contentsOf: newNews)
             self.reorganizeNews()
             self.refreshControl?.endRefreshing()
             self.tableView.reloadData()
@@ -179,7 +179,7 @@ extension NewsController {
      载入更早的资讯
      */
     func loadMoreNewsBelow() {
-        let lastNewsDate = news.last()?.createdAt ?? NSDate()
+        let lastNewsDate = news.last?.createdAt ?? Date()
         NewsRequester.sharedInstance.getMoreNewsList(lastNewsDate, onSuccess: { (json) -> () in
             guard let data = json else{
                 self.refreshControl?.endRefreshing()
@@ -189,7 +189,7 @@ extension NewsController {
             for newsJSON in data.arrayValue {
                 newNews.append(try! News().loadDataFromJSON(newsJSON))
             }
-            self.news.appendContentsOf(newNews)
+            self.news.append(contentsOf: newNews)
             self.reorganizeNews()
             self.refreshControl?.endRefreshing()
             if newNews.count > 0{
@@ -206,9 +206,9 @@ extension NewsController {
      */
     func reorganizeNews() {
         news = $.uniq(news, by: {return $0.ssidString})
-        news.sortInPlace { (news1 , news2) -> Bool in
-            switch news1.createdAt!.compare(news2.createdAt!) {
-            case .OrderedDescending:
+        news.sort { (news1 , news2) -> Bool in
+            switch news1.createdAt!.compare(news2.createdAt! as Date) {
+            case .orderedDescending:
                 return true
             default:
                 return false

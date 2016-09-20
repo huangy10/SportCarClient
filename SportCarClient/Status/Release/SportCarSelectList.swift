@@ -15,7 +15,7 @@ class SportCarSelectListController: UICollectionViewController{
     var cars: [SportCar] = []
     
     var selectedCar: SportCar?
-    private var _preSel: Int = -1
+    fileprivate var _preSel: Int = -1
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
@@ -23,19 +23,19 @@ class SportCarSelectListController: UICollectionViewController{
     
     convenience init() {
         let flowlayout = UICollectionViewFlowLayout()
-        flowlayout.itemSize = CGSizeMake(140, 60)
+        flowlayout.itemSize = CGSize(width: 140, height: 60)
         flowlayout.minimumInteritemSpacing = 0.01
-        flowlayout.scrollDirection = .Horizontal
+        flowlayout.scrollDirection = .horizontal
         self.init(collectionViewLayout: flowlayout)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.registerClass(SportCarSelectListCell.self, forCellWithReuseIdentifier: SportCarSelectListCell.reuseIdentifier)
-        collectionView?.registerClass(SportCarSelectListAddCell.self, forCellWithReuseIdentifier: SportCarSelectListAddCell.reuseIdentifier)
+        collectionView?.register(SportCarSelectListCell.self, forCellWithReuseIdentifier: SportCarSelectListCell.reuseIdentifier)
+        collectionView?.register(SportCarSelectListAddCell.self, forCellWithReuseIdentifier: SportCarSelectListAddCell.reuseIdentifier)
         
         collectionView?.backgroundColor = UIColor(white: 0.945, alpha: 1)
-        collectionView?.layer.borderColor = UIColor(white: 0.72, alpha: 1).CGColor
+        collectionView?.layer.borderColor = UIColor(white: 0.72, alpha: 1).cgColor
         collectionView?.layer.borderWidth = 0.5
         
         getSportCarData()
@@ -45,45 +45,45 @@ class SportCarSelectListController: UICollectionViewController{
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cars.count
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let carCount = cars.count
-        if indexPath.row == carCount {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(SportCarSelectListAddCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarSelectListAddCell
+        if (indexPath as NSIndexPath).row == carCount {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SportCarSelectListAddCell.reuseIdentifier, for: indexPath) as! SportCarSelectListAddCell
             cell.onAddPressed = { ()->() in
                 
             }
             return cell
         }
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(SportCarSelectListCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarSelectListCell
-        let car = cars[indexPath.row]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SportCarSelectListCell.reuseIdentifier, for: indexPath) as! SportCarSelectListCell
+        let car = cars[(indexPath as NSIndexPath).row]
         cell.car = car
         cell.marked = (car.ssid == selectedCar?.ssid)
         cell.sportCarNameLbL?.text = car.name
         return cell
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row < cars.count{
-            if indexPath.row != _preSel {
-                selectedCar = cars[indexPath.row]
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).row < cars.count{
+            if (indexPath as NSIndexPath).row != _preSel {
+                selectedCar = cars[(indexPath as NSIndexPath).row]
                 if _preSel >= 0 {
-                    collectionView.reloadItemsAtIndexPaths([indexPath, NSIndexPath(forItem: _preSel, inSection: 0)])
+                    collectionView.reloadItems(at: [indexPath, IndexPath(item: _preSel, section: 0)])
                 } else {
-                    collectionView.reloadItemsAtIndexPaths([indexPath])
+                    collectionView.reloadItems(at: [indexPath])
                 }
-                _preSel = indexPath.row
+                _preSel = (indexPath as NSIndexPath).row
             } else {
                 selectedCar = nil
-                collectionView.reloadItemsAtIndexPaths([indexPath])
+                collectionView.reloadItems(at: [indexPath])
                 _preSel = -1
             }
         }
@@ -93,7 +93,7 @@ class SportCarSelectListController: UICollectionViewController{
      从服务器获取认证跑车信息
      */
     func getSportCarData() {
-        AccountRequester2.sharedInstance.getAuthedCarsList(MainManager.sharedManager.hostUserIDString!, onSuccess: { (let data) -> () in
+        AccountRequester2.sharedInstance.getAuthedCarsList(MainManager.sharedManager.hostUserIDString!, onSuccess: { (data) -> () in
             for carOwnerShipJSON in data!.arrayValue {
                 let carJSON = carOwnerShipJSON["car"]
                 let car: SportCar = try! MainManager.sharedManager.getOrCreate(carJSON)
@@ -119,7 +119,7 @@ class SportCarSelectListCell: UICollectionViewCell {
         didSet {
             if marked {
                 selectMarker?.image = UIImage(named: "status_add_sport_car_selected")
-                sportCarNameLbL?.textColor = UIColor.blackColor()
+                sportCarNameLbL?.textColor = UIColor.black
             }else {
                 selectMarker?.image = UIImage(named: "status_add_sport_car_unselected")
                 sportCarNameLbL?.textColor = UIColor(white: 0.72, alpha: 1)
@@ -148,7 +148,7 @@ class SportCarSelectListCell: UICollectionViewCell {
         })
         //
         sportCarNameLbL = UILabel()
-        sportCarNameLbL?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold)
+        sportCarNameLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         sportCarNameLbL?.textColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(sportCarNameLbL!)
         sportCarNameLbL?.snp_makeConstraints(closure: { (make) -> Void in
@@ -181,11 +181,11 @@ class SportCarSelectListAddCell: UICollectionViewCell {
         let superview = self.contentView
         //
         addBtn = UIButton()
-        addBtn?.setImage(UIImage(named: "person_add_more"), forState: .Normal)
-        addBtn?.addTarget(self, action: #selector(SportCarSelectListAddCell.addPressed), forControlEvents: .TouchUpInside)
+        addBtn?.setImage(UIImage(named: "person_add_more"), for: UIControlState())
+        addBtn?.addTarget(self, action: #selector(SportCarSelectListAddCell.addPressed), for: .touchUpInside)
         superview.addSubview(addBtn!)
         addBtn?.snp_makeConstraints(closure: { (make) -> Void in
-            make.center.equalTo(superview).offset(CGPointMake(-20, 0))
+            make.center.equalTo(superview).offset(CGPoint(x: -20, y: 0))
             make.size.equalTo(18)
         })
     }

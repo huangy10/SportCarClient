@@ -10,7 +10,7 @@ import UIKit
 
 
 class UserMapLocationManager: UIView {
-    var _size: CGSize = CGSizeZero
+    var _size: CGSize = CGSize.zero
     
     var centerMark: UIImageView!
     var radarScan: UIImageView!
@@ -19,9 +19,9 @@ class UserMapLocationManager: UIView {
     var _curAngle: CGFloat = 0
     
     init(size: CGSize) {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         _size = size
-        self.bounds = CGRectMake(0, 0, size.width, size.height)
+        self.bounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         createSubviews()
     }
 
@@ -36,23 +36,23 @@ class UserMapLocationManager: UIView {
     func createSubviews() {
         centerMark = UIImageView(image: UIImage(named: "location_mark"))
         self.addSubview(centerMark)
-        centerMark.center = CGPointMake(_size.width / 2, _size.height / 2)
-        centerMark.bounds = CGRectMake(0, 0, 27.5, 30)
+        centerMark.center = CGPoint(x: _size.width / 2, y: _size.height / 2)
+        centerMark.bounds = CGRect(x: 0, y: 0, width: 27.5, height: 30)
         //
         radarScan = UIImageView(image: UIImage(named: "location_radar_scan"))
         self.addSubview(radarScan)
-        radarScan.frame = CGRectMake(0, 0, _size.width, _size.width)
-        radarScan.transform = CGAffineTransformMakeRotation(3.14 / 2)
+        radarScan.frame = CGRect(x: 0, y: 0, width: _size.width, height: _size.width)
+        radarScan.transform = CGAffineTransform(rotationAngle: 3.14 / 2)
         //
         updator = CADisplayLink(target: self, selector: #selector(UserMapLocationManager.scanUpdate))
-        updator.paused = true
+        updator.isPaused = true
         updator.frameInterval = 1
-        updator.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
-        updator.paused = false
+        updator.add(to: RunLoop.current, forMode: RunLoopMode.defaultRunLoopMode)
+        updator.isPaused = false
     }
     
     func scanUpdate() {
-        let trans = CGAffineTransformMakeRotation(_curAngle)
+        let trans = CGAffineTransform(rotationAngle: _curAngle)
         radarScan.transform = trans
         self.setNeedsDisplay()
         _curAngle += 0.03

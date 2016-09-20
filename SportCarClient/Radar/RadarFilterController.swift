@@ -29,32 +29,32 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         tableView.layer.cornerRadius = 4
-        tableView.registerClass(RadarFilterHeader.self, forHeaderFooterViewReuseIdentifier: "header")
-        tableView.registerClass(RadarFilterCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(RadarFilterHeader.self, forHeaderFooterViewReuseIdentifier: "header")
+        tableView.register(RadarFilterCell.self, forCellReuseIdentifier: "cell")
         tableView.rowHeight = 40
-        tableView.scrollEnabled = false
-        tableView.backgroundColor = UIColor.whiteColor()
+        tableView.isScrollEnabled = false
+        tableView.backgroundColor = UIColor.white
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! RadarFilterCell
-        cell.titleLbl.text = [LS("附近热门"), LS("我关注的"), LS("我的粉丝"), LS("互相关注"), LS("群组")][indexPath.row]
-        cell.marker.hidden = selectedRow != indexPath.row
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! RadarFilterCell
+        cell.titleLbl.text = [LS("附近热门"), LS("我关注的"), LS("我的粉丝"), LS("互相关注"), LS("群组")][(indexPath as NSIndexPath).row]
+        cell.marker.isHidden = selectedRow != (indexPath as NSIndexPath).row
         return cell
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! RadarFilterHeader
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! RadarFilterHeader
         marker = header.marker
         if selectedRow < 4 {
             header.titleLbl.text = [LS("附近热门"), LS("我关注的"), LS("我的粉丝"), LS("互相关注")][selectedRow]
@@ -64,12 +64,12 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
         return header
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 4 {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).row == 4 {
             let detail = RadarClubFilterController()
             detail.selectdClubID = self.selectedClubID
             detail.selectdClub = self.selectedClub
@@ -79,17 +79,17 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
             return
         }
         
-        if indexPath.row != selectedRow {
-            selectedRow = indexPath.row
+        if (indexPath as NSIndexPath).row != selectedRow {
+            selectedRow = (indexPath as NSIndexPath).row
             tableView.reloadData()
             delegate?.radarFilterDidChange()
         }
     }
     
-    func radarClubFilterDidChange(controller: RadarClubFilterController) {
+    func radarClubFilterDidChange(_ controller: RadarClubFilterController) {
         selectedClub = controller.selectdClub
         selectedClubID = controller.selectdClubID
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
         tableView.reloadData()
         delegate?.radarFilterDidChange()
     }
@@ -99,8 +99,8 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
     }
     
     func getFilterParam() -> [String: AnyObject]? {
-        if let selectedClubID = selectedClubID where selectedRow == 4 {
-            return ["club_id": "\(selectedClubID)"]
+        if let selectedClubID = selectedClubID , selectedRow == 4 {
+            return ["club_id": "\(selectedClubID)" as AnyObject]
         } else {
             return nil
         }
@@ -114,7 +114,7 @@ class RadarFilterCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
-        self.selectionStyle = .None
+        self.selectionStyle = .none
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -123,11 +123,11 @@ class RadarFilterCell: UITableViewCell {
     
     func createSubviews() {
         let superview = self.contentView
-        self.backgroundColor = UIColor.clearColor()
-        superview.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
+        superview.backgroundColor = UIColor.clear
         //
         titleLbl = UILabel()
-        titleLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        titleLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         titleLbl.textColor = UIColor(white: 0, alpha: 0.87)
         superview.addSubview(titleLbl)
         titleLbl.snp_makeConstraints { (make) -> Void in
@@ -140,9 +140,9 @@ class RadarFilterCell: UITableViewCell {
         marker.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-10)
             make.centerY.equalTo(superview)
-            make.size.equalTo(CGSizeMake(17, 12))
+            make.size.equalTo(CGSize(width: 17, height: 12))
         }
-        marker.hidden = true
+        marker.isHidden = true
     }
 }
 
@@ -161,10 +161,10 @@ class RadarFilterHeader: UITableViewHeaderFooterView {
     
     func createSubviews() {
         let superview = self.contentView
-        superview.backgroundColor = UIColor.whiteColor()
+        superview.backgroundColor = UIColor.white
         //
         titleLbl = UILabel()
-        titleLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        titleLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         titleLbl.textColor = UIColor(white: 0, alpha: 0.87)
         superview.addSubview(titleLbl)
         titleLbl.snp_makeConstraints { (make) -> Void in
@@ -175,11 +175,11 @@ class RadarFilterHeader: UITableViewHeaderFooterView {
             .layout { (make) in
                 make.right.equalTo(superview).offset(-20)
                 make.centerY.equalTo(superview)
-                make.size.equalTo(CGSizeMake(13, 8))
+                make.size.equalTo(CGSize(width: 13, height: 8))
         }
         //
         marker = markerContainer.addSubview(UIImageView.self).config(UIImage(named: "up_arrow"))
-            .setFrame(CGRectMake(0, 0, 13, 8))
+            .setFrame(CGRect(x: 0, y: 0, width: 13, height: 8))
 //        marker = UIImageView(image: UIImage(named: "down_arrow"))
 //        superview.addSubview(marker)
 //        marker.snp_makeConstraints { (make) -> Void in

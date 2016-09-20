@@ -48,7 +48,7 @@ class NewsCell: UITableViewCell {
         let superview = self.contentView
         //
         coverImg = UIImageView()
-        coverImg?.backgroundColor = UIColor.grayColor()
+        coverImg?.backgroundColor = UIColor.gray
         superview.addSubview(coverImg!)
         coverImg?.snp_makeConstraints(closure: { (make) -> Void in
             make.edges.equalTo(superview)
@@ -64,7 +64,7 @@ class NewsCell: UITableViewCell {
 
         // 首先创建右下角的三个按钮
         shareNumLbl = UILabel()
-        shareNumLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        shareNumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         shareNumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
         shareNumLbl?.text = "0"
         superview.addSubview(shareNumLbl!)
@@ -83,7 +83,7 @@ class NewsCell: UITableViewCell {
         })
         //
         commentNumLbl = UILabel()
-        commentNumLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        commentNumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         commentNumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
         commentNumLbl?.text = "0"
         superview.addSubview(commentNumLbl!)
@@ -101,13 +101,13 @@ class NewsCell: UITableViewCell {
         })
         //
         likeNumLbl = UILabel()
-        likeNumLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        likeNumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         likeNumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(likeNumLbl!)
         likeNumLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(commentIcon!)
             make.right.equalTo(commentIcon!.snp_left)
-            make.size.equalTo(CGSizeMake(30, 15))
+            make.size.equalTo(CGSize(width: 30, height: 15))
         })
         likeIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
         superview.addSubview(likeIcon!)
@@ -118,10 +118,10 @@ class NewsCell: UITableViewCell {
         })
         // 创建标题
         titleLbl = UILabel()
-        titleLbl?.font = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
-        titleLbl?.textColor = UIColor.whiteColor()
+        titleLbl?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightBlack)
+        titleLbl?.textColor = UIColor.white
         titleLbl?.numberOfLines = 0
-        titleLbl?.lineBreakMode = .ByWordWrapping
+        titleLbl?.lineBreakMode = .byWordWrapping
         super.addSubview(titleLbl!)
         titleLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview).offset(15)

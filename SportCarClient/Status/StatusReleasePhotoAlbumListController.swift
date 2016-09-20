@@ -18,17 +18,17 @@ class StatusReleasePhotoAlbumListController: UITableViewController {
     /// 最大选择的照片数量
     var maxSelectLimit: Int
     /// 从照片库里面获取结果
-    var fetchResult: [PHFetchResult]
+    var fetchResult: [PHFetchResult<AnyObject>]
     
     override init(style: UITableViewStyle) {
         
         let fetchOption = PHFetchOptions()
         // 用户定义的智能相册
-        let cameraRollResult = PHAssetCollection.fetchAssetCollectionsWithType(.SmartAlbum, subtype: .SmartAlbumUserLibrary, options: fetchOption)
+        let cameraRollResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: fetchOption)
         // 机器创建的相册
-        let albumResult = PHAssetCollection.fetchAssetCollectionsWithType(.Album, subtype: .Any, options: fetchOption)
+        let albumResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOption)
         //
-        fetchResult = [cameraRollResult, albumResult]
+        fetchResult = [cameraRollResult as! PHFetchResult<AnyObject>, albumResult as! PHFetchResult<AnyObject>]
         //
         maxSelectLimit = 9
         //
@@ -40,26 +40,26 @@ class StatusReleasePhotoAlbumListController: UITableViewController {
     }
     
     convenience init(maxSelectLimit: Int) {
-        self.init(style: .Plain)
+        self.init(style: .plain)
         self.maxSelectLimit = maxSelectLimit
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.registerClass(StatusReleasePhotoAlbumListCell.self, forCellReuseIdentifier: StatusReleasePhotoAlbumListCell.reuseIdentifier)
+        tableView.register(StatusReleasePhotoAlbumListCell.self, forCellReuseIdentifier: StatusReleasePhotoAlbumListCell.reuseIdentifier)
         tableView.rowHeight = 100
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         
         navSettings()
     }
     
     convenience init() {
-        self.init(style: .Plain)
+        self.init(style: .plain)
     }
     
     func navSettings() {
         self.navigationItem.title = LS("相册")
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: LS("取消"), style: .Done, target: self, action: #selector(StatusReleasePhotoAlbumListController.photoSelectCancelled))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: LS("取消"), style: .done, target: self, action: #selector(StatusReleasePhotoAlbumListController.photoSelectCancelled))
     }
     
     func photoSelectCancelled() {
@@ -71,20 +71,20 @@ class StatusReleasePhotoAlbumListController: UITableViewController {
 // MARK: - Table相关
 extension StatusReleasePhotoAlbumListController {
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return fetchResult.count
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fetchResult[section].count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(StatusReleasePhotoAlbumListCell.reuseIdentifier, forIndexPath: indexPath) as! StatusReleasePhotoAlbumListCell
-        let cachingManager = PHCachingImageManager.defaultManager() as? PHCachingImageManager
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: StatusReleasePhotoAlbumListCell.reuseIdentifier, for: indexPath) as! StatusReleasePhotoAlbumListCell
+        let cachingManager = PHCachingImageManager.default() as? PHCachingImageManager
         cachingManager?.allowsCachingHighQualityImages = false
         
-        if let album = fetchResult[indexPath.section][indexPath.row] as? PHAssetCollection {
+        if let album = fetchResult[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row] as? PHAssetCollection {
             // title
             cell.albumNameLbl?.text = album.localizedTitle
             //
@@ -92,15 +92,15 @@ extension StatusReleasePhotoAlbumListController {
             fetchOptions.sortDescriptors = [
                 NSSortDescriptor(key: "creationDate", ascending: false)
             ]
-            fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.Image.rawValue)
+            fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
             
-            let result = PHAsset.fetchAssetsInAssetCollection(album, options: fetchOptions)
+            let result = PHAsset.fetchAssets(in: album, options: fetchOptions)
             cell.photoNumInAlbumLbl?.text = "(\(result.count))"
             
             if let asset = result.firstObject as? PHAsset {
-                let imageSize = CGSizeMake(100, 100)
-                let imageContentMode: PHImageContentMode = .AspectFill
-                PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: imageSize, contentMode: imageContentMode, options: nil, resultHandler: { (image, _) -> Void in
+                let imageSize = CGSize(width: 100, height: 100)
+                let imageContentMode: PHImageContentMode = .aspectFill
+                PHCachingImageManager.default().requestImage(for: asset, targetSize: imageSize, contentMode: imageContentMode, options: nil, resultHandler: { (image, _) -> Void in
                     cell.imageCover?.image = image
                 })
             }
@@ -109,14 +109,14 @@ extension StatusReleasePhotoAlbumListController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let album = fetchResult[indexPath.section][indexPath.row] as? PHAssetCollection {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let album = fetchResult[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row] as? PHAssetCollection {
             let fetchOptions = PHFetchOptions()
             fetchOptions.sortDescriptors = [
                 NSSortDescriptor(key: "creationDate", ascending: false)
             ]
-            fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.Image.rawValue)
-            let detail = StatusReleasePhotoSelectController(fetchResult: PHAsset.fetchAssetsInAssetCollection(album, options: fetchOptions), maxSelectLimit: maxSelectLimit)
+            fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+            let detail = StatusReleasePhotoSelectController(fetchResult: PHAsset.fetchAssets(in: album, options: fetchOptions), maxSelectLimit: maxSelectLimit)
             detail.delegate = self.delegate
             self.navigationController?.pushViewController(detail, animated: true)
         }
@@ -147,7 +147,7 @@ class StatusReleasePhotoAlbumListCell: UITableViewCell {
         //
         imageCover = UIImageView()
         imageCover?.clipsToBounds = true
-        imageCover?.contentMode = .ScaleAspectFill
+        imageCover?.contentMode = .scaleAspectFill
         superview.addSubview(imageCover!)
         imageCover?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview)
@@ -157,8 +157,8 @@ class StatusReleasePhotoAlbumListCell: UITableViewCell {
         })
         //
         albumNameLbl = UILabel()
-        albumNameLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightBold)
-        albumNameLbl?.textColor = UIColor.blackColor()
+        albumNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightBold)
+        albumNameLbl?.textColor = UIColor.black
         superview.addSubview(albumNameLbl!)
         albumNameLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.centerY.equalTo(superview)
@@ -167,7 +167,7 @@ class StatusReleasePhotoAlbumListCell: UITableViewCell {
         //
         photoNumInAlbumLbl = UILabel()
         photoNumInAlbumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-        photoNumInAlbumLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        photoNumInAlbumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(photoNumInAlbumLbl!)
         photoNumInAlbumLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(albumNameLbl!.snp_right)
@@ -177,7 +177,7 @@ class StatusReleasePhotoAlbumListCell: UITableViewCell {
         let rightArrow = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         superview.addSubview(rightArrow)
         rightArrow.snp_makeConstraints { (make) -> Void in
-            make.size.equalTo(CGSizeMake(9, 15.5))
+            make.size.equalTo(CGSize(width: 9, height: 15.5))
             make.centerY.equalTo(imageCover!)
             make.right.equalTo(superview).offset(-10)
         }

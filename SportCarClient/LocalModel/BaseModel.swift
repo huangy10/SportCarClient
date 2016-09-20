@@ -37,12 +37,12 @@ class BaseModel: NSManagedObject {
      - parameter data: json数据
      - parameter ctx:  所属的context
      */
-    func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> Self {
-        if forceMainThread && !NSThread.isMainThread() {
+    func loadDataFromJSON(_ data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> Self {
+        if forceMainThread && !Thread.isMainThread {
             assertionFailure()
         }
         if ssid == 0 {
-            ssid = data[self.dynamicType.idField].int32Value
+            ssid = data[type(of: self).idField].int32Value
             assert(ssid > 0, "Model can not be initalized without a id")
         }
         
@@ -54,7 +54,7 @@ class BaseModel: NSManagedObject {
         return self
     }
     
-    func loadInitialFromJSON(data: JSON) throws -> Self {
+    func loadInitialFromJSON(_ data: JSON) throws -> Self {
         if let host = MainManager.sharedManager.hostUserID {
             hostSSID = host
         } else {
@@ -70,20 +70,20 @@ class BaseModel: NSManagedObject {
      
      - returns: json字符串
      */
-    func toJSONString(detailLevel: Int) throws -> String {
+    func toJSONString(_ detailLevel: Int) throws -> String {
         let json = try toJSONObject(detailLevel)
         if json.isEmpty {
-            throw SSModelError.Unknown
+            throw SSModelError.unknown
         }
         if let result = json.rawString() {
             return result
         } else {
-            throw SSModelError.Unknown
+            throw SSModelError.unknown
         }
     }
     
-    func toJSONObject(detailLevel: Int) throws -> JSON {
-        throw SSModelError.NotImplemented
+    func toJSONObject(_ detailLevel: Int) throws -> JSON {
+        throw SSModelError.notImplemented
     }
     
     /**
@@ -92,18 +92,18 @@ class BaseModel: NSManagedObject {
      - parameter string:      字符串内容
      - parameter detailLevel: 详细程度
      */
-    func fromJSONString(string: String, detailLevel: Int) throws -> Self{
-        let json = JSON(data: string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+    func fromJSONString(_ string: String, detailLevel: Int) throws -> Self{
+        let json = JSON(data: string.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
         try self.loadDataFromJSON(json, detailLevel: detailLevel)
         return self
     }
     
     
-    func toContext(ctx: DataContext) -> BaseModel? {
+    func toContext(_ ctx: DataContext) -> BaseModel? {
         if self.managedObjectContext == ctx {
             return self
         }
-        return ctx.objectWithID(self.objectID) as? BaseModel
+        return ctx.object(with: self.objectID) as? BaseModel
     }
 }
 

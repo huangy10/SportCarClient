@@ -9,7 +9,7 @@
 import UIKit
 
 protocol AvatarCarSelectDelegate: class {
-    func avatarCarSelectDidFinish(selectedCar: SportCar)
+    func avatarCarSelectDidFinish(_ selectedCar: SportCar)
     
     func avatarCarSelectDidCancel()
 }
@@ -24,9 +24,9 @@ class AvatarCarSelectController: AvatarItemSelectController {
     
     var selectedRow: Int = -1
     
-    private var addAuthCarBtn: UIButton!
-    private var addAuthCarLbl: UILabel!
-    private weak var toast: UIView?
+    fileprivate var addAuthCarBtn: UIButton!
+    fileprivate var addAuthCarLbl: UILabel!
+    fileprivate weak var toast: UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +53,7 @@ class AvatarCarSelectController: AvatarItemSelectController {
                 self.hideToast(self.toast!)
             }
             }) { (code) in
-                assert(NSThread.isMainThread())
+                assert(Thread.isMainThread)
                 self.showNoCars()
                 if self.toast != nil {
                     self.hideToast(self.toast!)
@@ -65,28 +65,28 @@ class AvatarCarSelectController: AvatarItemSelectController {
         let superview = self.view
         //
         addAuthCarBtn = UIButton()
-        addAuthCarBtn.setImage(UIImage(named: "auth_add_item_btn"), forState: .Normal)
-        superview.addSubview(addAuthCarBtn)
+        addAuthCarBtn.setImage(UIImage(named: "auth_add_item_btn"), for: UIControlState())
+        superview?.addSubview(addAuthCarBtn)
         addAuthCarBtn.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(35)
             make.size.equalTo(90)
         }
-        addAuthCarBtn.addTarget(self, action: #selector(AvatarCarSelectController.addAuthBtnPressed), forControlEvents: .TouchUpInside)
+        addAuthCarBtn.addTarget(self, action: #selector(AvatarCarSelectController.addAuthBtnPressed), for: .touchUpInside)
         //
         addAuthCarLbl = UILabel()
         addAuthCarLbl.text = LS("暂无认证跑车，点击添加")
-        addAuthCarLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        addAuthCarLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         addAuthCarLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        addAuthCarLbl.textAlignment = .Center
-        superview.addSubview(addAuthCarLbl)
+        addAuthCarLbl.textAlignment = .center
+        superview?.addSubview(addAuthCarLbl)
         addAuthCarLbl.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(addAuthCarBtn)
             make.top.equalTo(addAuthCarBtn.snp_bottom).offset(25)
         }
         
-        addAuthCarBtn.hidden = true
-        addAuthCarLbl.hidden = true
+        addAuthCarBtn.isHidden = true
+        addAuthCarLbl.isHidden = true
     }
     
     func addAuthBtnPressed() {
@@ -111,20 +111,20 @@ class AvatarCarSelectController: AvatarItemSelectController {
         }
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cars.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(AvatarItemSelectCell.reuseIdentifier, forIndexPath: indexPath) as! AvatarItemSelectCell
-        let car = cars[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: AvatarItemSelectCell.reuseIdentifier, for: indexPath) as! AvatarItemSelectCell
+        let car = cars[(indexPath as NSIndexPath).row]
         cell.avatarImg?.kf_setImageWithURL(car.logoURL!)
         cell.nickNameLbl?.text = car.name
-        cell.selectBtn?.tag = indexPath.row
+        cell.selectBtn?.tag = (indexPath as NSIndexPath).row
         if car.identified {
             cell.authed = true
             cell.authIcon.image = UIImage(named: "auth_status_authed")
@@ -133,10 +133,10 @@ class AvatarCarSelectController: AvatarItemSelectController {
             cell.authIcon.image = UIImage(named: "auth_status_unauthed")
         }
         //
-        if selectedRow == indexPath.row {
-            cell.selectBtn?.selected = true
+        if selectedRow == (indexPath as NSIndexPath).row {
+            cell.selectBtn?.isSelected = true
         }else {
-            cell.selectBtn?.selected = false
+            cell.selectBtn?.isSelected = false
         }
         cell.onSelect = { [weak self] (sender: UIButton) in
             guard let sSelf = self else {
@@ -148,7 +148,7 @@ class AvatarCarSelectController: AvatarItemSelectController {
                 sSelf.showToast(LS("请返回认证跑车"))
                 return true
             }
-            if sender.selected {
+            if sender.isSelected {
                 sSelf.selectedRow = -1
             }else{
                 sSelf.selectedRow = row

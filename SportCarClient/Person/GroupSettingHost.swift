@@ -18,13 +18,13 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.registerClass(GroupChatSettingHostClubAuthCell.self, forCellReuseIdentifier: "auth_status")
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select_deletable")
+        tableView.register(GroupChatSettingHostClubAuthCell.self, forCellReuseIdentifier: "auth_status")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select_deletable")
     }
     
     override func createInlineUserSelect() {
-        let cell = UITableViewCell(style: .Default, reuseIdentifier: "inline_user_select")
-        cell.selectionStyle = .None
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "inline_user_select")
+        cell.selectionStyle = .none
         inlineUserSelect = InlineUserSelectDeletable()
         inlineUserSelect?.delegate = self
         cell.contentView.addSubview(inlineUserSelect!.view)
@@ -43,18 +43,18 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         // Override this method to enable "release activity" button
         self.navigationItem.title = targetClub.name
         let leftBtn = UIButton()
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        leftBtn.frame = CGRectMake(0, 0, 9, 15)
-        leftBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
+        leftBtn.addTarget(self, action: #selector(navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
         
         let rightBtn = UIButton()
         let btnText = LS("进入聊天")
-        rightBtn.frame = CGRectMake(0, 0, btnText.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), boundingSize: CGSizeMake(CGFloat.max, 21)).width, 21)
-        rightBtn.setTitle(btnText, forState: .Normal)
-        rightBtn.titleLabel!.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        rightBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-        rightBtn.addTarget(self, action: #selector(navRightBtnPressed), forControlEvents: .TouchUpInside)
+        rightBtn.frame = CGRect(x: 0, y: 0, width: btnText.sizeWithFont(UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), boundingSize: CGSize(width: CGFloat.max, height: 21)).width, height: 21)
+        rightBtn.setTitle(btnText, for: UIControlState())
+        rightBtn.titleLabel!.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        rightBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        rightBtn.addTarget(self, action: #selector(navRightBtnPressed), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
     }
     
@@ -70,7 +70,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         if newLogo != nil {
             let requester = ClubRequester.sharedInstance
             requester.updateClubLogo(targetClub, newLogo: newLogo!, onSuccess: { (json) -> () in
-                if let newLogoURL = json?.string where self.newLogo != nil {
+                if let newLogoURL = json?.string , self.newLogo != nil {
                     self.targetClub.logo = newLogoURL
                     // save the uploaded image to the shared cache
                     let logoURL = SFURL(newLogoURL)!
@@ -81,7 +81,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
                     
             })
         }
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
 //    override func navRightBtnPressed() {
@@ -97,17 +97,17 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
 //        detail.presentFrom(self)
 //    }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {
             return super.tableView(tableView, numberOfRowsInSection: section) + 3
         }
         return super.tableView(tableView, numberOfRowsInSection: section)
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch indexPath.section {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch (indexPath as NSIndexPath).section {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsAvatarCell
             if newLogo != nil {
                 cell.avatarImage.image = newLogo
                 return cell
@@ -115,27 +115,27 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
             cell.avatarImage.kf_setImageWithURL(targetClub.logoURL!)
             return cell
         case 1:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 2:
                 // 群主打开本群活动改成俱乐部认证状态
-                let cell = tableView.dequeueReusableCellWithIdentifier("auth_status", forIndexPath: indexPath) as! GroupChatSettingHostClubAuthCell
-                cell.selectionStyle = .None
+                let cell = tableView.dequeueReusableCell(withIdentifier: "auth_status", for: indexPath) as! GroupChatSettingHostClubAuthCell
+                cell.selectionStyle = .none
                 cell.staticLbl.text = LS("俱乐部认证")
                 cell.authed = targetClub.identified
                 return cell
             case 3..<5:
                 // 后面的cell向后移动
-                return super.tableView(tableView, cellForRowAtIndexPath: NSIndexPath(forRow: indexPath.row - 1, inSection: indexPath.section))
+                return super.tableView(tableView, cellForRowAt: IndexPath(row: (indexPath as NSIndexPath).row - 1, section: (indexPath as NSIndexPath).section))
             case 5..<7:
-                let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-                cell.boolSelect.hidden = false
+                let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsCommonCell
+                cell.boolSelect.isHidden = false
                 cell.infoLbl.text = ""
-                cell.boolSelect.on = [targetClub.onlyHostCanInvite, targetClub.showMembers][indexPath.row - 5]
+                cell.boolSelect.isOn = [targetClub.onlyHostCanInvite, targetClub.showMembers][(indexPath as NSIndexPath).row - 5]
                 // 0，1，2已经被占用了，这里从3开始编号，此时页面的5个switch按钮的对应关系如下：
                 // 0 - 显示本群昵称； 1 - 消息免打扰； 2 - 置顶聊天； 3 - 仅我可以邀请，4 - 对外公布成员信息
-                cell.boolSelect.tag = indexPath.row - 2
-                cell.staticLbl.text = [LS("仅我可以邀请"), LS("对外公布群成员信息")][indexPath.row - 5]
-                cell.boolSelect.addTarget(self, action: #selector(switchBtnPressed(_:)), forControlEvents: .ValueChanged)
+                cell.boolSelect.tag = (indexPath as NSIndexPath).row - 2
+                cell.staticLbl.text = [LS("仅我可以邀请"), LS("对外公布群成员信息")][(indexPath as NSIndexPath).row - 5]
+                cell.boolSelect.addTarget(self, action: #selector(switchBtnPressed(_:)), for: .valueChanged)
                 return cell
             case 7:
                 // user inlineUserSelectDeletable
@@ -161,20 +161,20 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
 //                inlineUserSelect?.showDeleteBtn = true
 //                return cell
             default:
-                let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+                let cell = super.tableView(tableView, cellForRowAt: indexPath)
                 if let c = cell as? PrivateChatSettingsCommonCell {
                     c.arrowHidden = false
                 }
                 return cell
             }
         default:
-            return super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+            return super.tableView(tableView, cellForRowAt: indexPath)
         }
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 1 {
-            if indexPath.row < 7 {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath as NSIndexPath).section == 1 {
+            if (indexPath as NSIndexPath).row < 7 {
                 return 50
             }else {
 //                let userCellHeight = UIScreen.mainScreen().bounds.width / 4
@@ -188,18 +188,18 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
                 return InlineUserSelectController.preferedHeightFor(targetClub.members.count, showAddBtn: true, showDeleteBtn: true)
             }
         }
-        return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+        return super.tableView(tableView, heightForRowAt: indexPath)
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        switch indexPath.section {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch (indexPath as NSIndexPath).section {
         case 0:
             // 点击第一个section修改logo
             setLogoPressed()
             break
         case 1:
             let modifier = PersonMineSinglePropertyModifierController()
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 // 这三行：群聊名称，本群简介和我再本群的昵称可以修改
                 modifier.initValue = targetClub.name
@@ -229,12 +229,12 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
             self.navigationController?.pushViewController(modifier, animated: true)
             break
         case 3:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录？"), target: self, onConfirm: #selector(clearChatContent))
             case 1:
                 let report = ReportBlacklistViewController(userID: targetClub.ssid, reportType: "club", parent: self)
-                self.presentViewController(report, animated: false, completion: nil)
+                self.present(report, animated: false, completion: nil)
             default:
                 break
             }
@@ -243,68 +243,68 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         }
     }
     
-    override func switchBtnPressed(sender: UISwitch) {
+    override func switchBtnPressed(_ sender: UISwitch) {
         dirty = true
         if sender.tag < 3 {
             super.switchBtnPressed(sender)
         }else if sender.tag == 3 {
-            targetClub.onlyHostCanInvite = sender.on
+            targetClub.onlyHostCanInvite = sender.isOn
         }else {
-            targetClub.showMembers = sender.on
+            targetClub.showMembers = sender.isOn
         }
     }
     
     func setLogoPressed() {
-        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .ActionSheet)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .Default, handler: { (action) -> Void in
-            let sourceType = UIImagePickerControllerSourceType.Camera
+        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.camera
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = sourceType
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .Default, handler: { (action) -> Void in
-            let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.photoLibrary
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = sourceType
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .Cancel, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     // MARK: - 图像选择的代理
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         // 选择了新的logo
-        self.dismissViewControllerAnimated(false, completion: nil)
+        self.dismiss(animated: false, completion: nil)
         newLogo = image
         // 由于俱乐部标志的修改被单独分离了出来，故这里不再设置dirty参数
 //        dirty = true
-        tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
     }
     
     // MARK: - 单项属性修改器代理
-    override func didModify(newValue: String?, indexPath: NSIndexPath) {
-        switch indexPath.row {
+    override func didModify(_ newValue: String?, indexPath: IndexPath) {
+        switch (indexPath as NSIndexPath).row {
         case 0:
             // 群聊名称
             targetClub.name = newValue
@@ -321,7 +321,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
             break
         }
         dirty = true
-        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
     
     override func modificationCancelled() {
@@ -334,14 +334,14 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
      
      - parameter user: 被删除的一个用户
      */
-    override func inlineUserSelectShouldDeleteUser(user: User) {
+    override func inlineUserSelectShouldDeleteUser(_ user: User) {
         self.lp_start()
         ClubRequester.sharedInstance.updateClubMembers(self.targetClub.ssidString, members: [user.ssidString], opType: "delete", onSuccess: { (_) in
             self.targetClub.removeMember(user)
             self.targetClub.memberNum -= 1
             self.inlineUserSelect?.users = self.targetClub.members
             self.tableView.reloadData()
-            NSNotificationCenter.defaultCenter().postNotificationName(kMessageClubMemberChangeNotification, object: self, userInfo: [kMessageClubKey: self.targetClub])
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kMessageClubMemberChangeNotification), object: self, userInfo: [kMessageClubKey: self.targetClub])
             self.showToast(LS("删除成功"))
             self.lp_stop()
             }) { (code) in
@@ -354,7 +354,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         let select = FFSelectController(maxSelectNum: kMaxSelectUserNum, preSelectedUsers: targetClub.members, preSelect: false, forced: true)
         select.delegate = self
         let wrapper = BlackBarNavigationController(rootViewController: select)
-        self.presentViewController(wrapper, animated: true, completion: nil)
+        self.present(wrapper, animated: true, completion: nil)
     }
     
     // MARK: 退出群聊
@@ -367,16 +367,16 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
     /**
      退出群了以后选择新的接替的新群主后会调用这个函数
      */
-    func groupMemberSelectControllerDidSelectUser(user: User) {
-        let waiter = dispatch_semaphore_create(0)
+    func groupMemberSelectControllerDidSelectUser(_ user: User) {
+        let waiter = DispatchSemaphore(value: 0)
         var success = false
         ClubRequester.sharedInstance.clubQuit(targetClub.ssidString, newHostID: user.ssidString, onSuccess: { (json) -> () in
             success = true
-            dispatch_semaphore_signal(waiter)
+            waiter.signal()
             }) { (code) -> () in
-                dispatch_semaphore_signal(waiter)
+                waiter.signal()
         }
-        dispatch_semaphore_wait(waiter, DISPATCH_TIME_FOREVER)
+        waiter.wait(timeout: DispatchTime.distantFuture)
         if success {
             targetClub.attended = false
             targetClub.mine = true
@@ -386,7 +386,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
             if let _ = nav?.viewControllers[n-1] as? ChatRoomController {
                 nav?.pushViewController(nav!.viewControllers[n-2], animated: true)
             } else {
-                nav?.popViewControllerAnimated(true)
+                nav?.popViewController(animated: true)
             }
             
         } else {
@@ -418,15 +418,15 @@ class GroupChatSettingHostClubAuthCell: PrivateChatSettingsCommonCell {
     override func createSubviews() {
         super.createSubviews()
         //
-        infoLbl.hidden = true
-        boolSelect.hidden = true
-        markIcon.hidden = true
+        infoLbl.isHidden = true
+        boolSelect.isHidden = true
+        markIcon.isHidden = true
         authIcon = UIImageView(image: UIImage(named: "auth_status_authed"))
         self.contentView.addSubview(authIcon)
         authIcon.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(icon)
             make.right.equalTo(icon.snp_left).offset(-15)
-            make.size.equalTo(CGSizeMake(44, 18.5))
+            make.size.equalTo(CGSize(width: 44, height: 18.5))
         }
     }
 }

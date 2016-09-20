@@ -58,7 +58,7 @@ class PersonMineSettingsDataSource {
      */
     func sync() {
         let uploadParam: [String: AnyObject] = [
-            "notification_accept": newMessageNotificationAccept ? "y" : "n",
+            "notification_accept": newMessageNotificationAccept ? "y" : "n" as AnyObject,
             "notification_shake": newMessageNotificationShake ? "y" : "n",
             "notification_sound": newMessageNotificationSound ? "y" : "n",
             "location_visible_to": locationVisible,
@@ -78,6 +78,9 @@ class PersonMineSettingsDataSource {
      从服务器获取最新的设置
      */
     func update() {
+        if MainManager.sharedManager.hostUser == nil {
+            return
+        }
         getCacheFolderSize()
         let requester = SettingsRequester.sharedInstance
         requester.updatePersonMineSettings({ (json) -> () in
@@ -89,43 +92,43 @@ class PersonMineSettingsDataSource {
                 self.newMessageNotificationSound = data["notification_sound"].boolValue
                 self.showOnMap = data["show_on_map"].boolValue
                 self.saveToUserDefault()
-                NSNotificationCenter.defaultCenter().postNotificationName(PMUpdateFinishedNotification, object: nil)
+                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: PMUpdateFinishedNotification), object: nil)
             }
             }) { (code) -> () in
-                NSNotificationCenter.defaultCenter().postNotificationName(PMUpdateErrorNotification, object: nil, userInfo: ["code": code ?? "0000"])
+                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: PMUpdateErrorNotification), object: nil, userInfo: ["code": code ?? "0000"])
         }
     }
     
     func saveToUserDefault() {
         let prefix = MainManager.sharedManager.hostUserIDString!
-        let userDefault = NSUserDefaults.standardUserDefaults()
-        userDefault.setObject(locationVisible, forKey: prefix + "_location_visibile")
-        userDefault.setObject(acceptInvitation, forKey: prefix + "_accept_invitation")
-        userDefault.setBool(newMessageNotificationSound, forKey: prefix + "_notification_sound")
-        userDefault.setBool(newMessageNotificationShake, forKey: prefix + "_notification_shake")
-        userDefault.setBool(newMessageNotificationAccept, forKey: prefix + "_notification_accept")
+        let userDefault = UserDefaults.standard
+        userDefault.set(locationVisible, forKey: prefix + "_location_visibile")
+        userDefault.set(acceptInvitation, forKey: prefix + "_accept_invitation")
+        userDefault.set(newMessageNotificationSound, forKey: prefix + "_notification_sound")
+        userDefault.set(newMessageNotificationShake, forKey: prefix + "_notification_shake")
+        userDefault.set(newMessageNotificationAccept, forKey: prefix + "_notification_accept")
     }
     
     func loadFromUserDefault() {
         let prefix = MainManager.sharedManager.hostUserIDString!
-        let userDefault = NSUserDefaults.standardUserDefaults()
-        locationVisible = (userDefault.objectForKey(prefix + "_location_visible") as? String) ?? "all"
-        acceptInvitation = (userDefault.objectForKey(prefix + "_accept_invitation") as? String) ?? "all"
-        newMessageNotificationAccept = (userDefault.boolForKey(prefix + "_notification_accept")) ?? true
-        newMessageNotificationShake = userDefault.boolForKey(prefix + "_notification_shake") ?? true
-        newMessageNotificationSound = userDefault.boolForKey(prefix + "_notification_sound") ?? true
-        newMessageNotificationAccept = userDefault.boolForKey(prefix + "_notification_accept") ?? true
+        let userDefault = UserDefaults.standard
+        locationVisible = (userDefault.object(forKey: prefix + "_location_visible") as? String) ?? "all"
+        acceptInvitation = (userDefault.object(forKey: prefix + "_accept_invitation") as? String) ?? "all"
+        newMessageNotificationAccept = (userDefault.bool(forKey: prefix + "_notification_accept")) ?? true
+        newMessageNotificationShake = userDefault.bool(forKey: prefix + "_notification_shake") ?? true
+        newMessageNotificationSound = userDefault.bool(forKey: prefix + "_notification_sound") ?? true
+        newMessageNotificationAccept = userDefault.bool(forKey: prefix + "_notification_accept") ?? true
     }
     
     func getCacheFolderSize() {
-        let fileManger = NSFileManager.defaultManager()
-        let cacheFolderPath: AnyObject = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)[0]
+        let fileManger = FileManager.default
+        let cacheFolderPath: AnyObject = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0] as AnyObject
         do {
-            let subpaths = try fileManger.subpathsOfDirectoryAtPath(cacheFolderPath as! String)
+            let subpaths = try fileManger.subpathsOfDirectory(atPath: cacheFolderPath as! String)
             var size: UInt64 = 0
             for fileName in subpaths {
-                let filePath = cacheFolderPath.stringByAppendingPathComponent(fileName)
-                let fileInfo: NSDictionary = try fileManger.attributesOfItemAtPath(filePath)
+                let filePath = cacheFolderPath.appendingPathComponent(fileName)
+                let fileInfo: NSDictionary = try fileManger.attributesOfItem(atPath: filePath)
                 size += fileInfo.fileSize()
             }
             cacheSize = size
@@ -138,21 +141,24 @@ class PersonMineSettingsDataSource {
                     break
                 }
             }
-            let sizeString = String(format: "%.1f", sizedouble)
-            cacheSizeDes = sizeString + ["", "KB", "MB", "GB"][shiftLevel]
+            var sizeString = String(format: "%.1f", sizedouble)
+            if sizeString.hasSuffix(".0") {
+                sizeString = sizeString[0..<(sizeString.length - 2)]
+            }
+            cacheSizeDes = sizeString + ["B", "KB", "MB", "GB"][shiftLevel]
         }catch _ {
             cacheSizeDes = LS("获取缓存大小失败")
         }
     }
     
     func clearCacheFolder() -> Bool {
-        let fileManger = NSFileManager.defaultManager()
-        let cacheFolderPath = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)[0]
-        let cacheFolderURL = NSURL(fileURLWithPath: cacheFolderPath)
-        let enumerator = fileManger.enumeratorAtPath(cacheFolderPath)!
+        let fileManger = FileManager.default
+        let cacheFolderPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
+        let cacheFolderURL = URL(fileURLWithPath: cacheFolderPath)
+        let enumerator = fileManger.enumerator(atPath: cacheFolderPath)!
         while let file: String = enumerator.nextObject() as? String {
             do {
-                try fileManger.removeItemAtURL(cacheFolderURL.URLByAppendingPathComponent(file))
+                try fileManger.removeItem(at: cacheFolderURL.appendingPathComponent(file))
             } catch {}
         }
         self.cacheSize = 0

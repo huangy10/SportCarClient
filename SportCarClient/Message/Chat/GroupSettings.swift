@@ -13,7 +13,7 @@ let kGroupChatSettingSectionTitles = ["", "信息", "通知", "聊天"]
 
 class GroupChatSettingController: UITableViewController, PersonMineSinglePropertyModifierDelegate, InlineUserSelectDelegate, FFSelectDelegate, LoadingProtocol {
     
-    var delayTask: dispatch_block_t?
+    var delayTask: ()->()?
     
     var targetClub: Club!
     // 是否设置发生了更改
@@ -29,7 +29,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     var inlineUsersCell: UITableViewCell!
     
     init(targetClub: Club) {
-        super.init(style: .Plain)
+        super.init(style: .plain)
         self.targetClub = targetClub
     }
     
@@ -51,13 +51,13 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         
-        tableView.registerClass(PrivateChatSettingsAvatarCell.self, forCellReuseIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier)
-        tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
-        tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select")
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "quit")
+        tableView.register(PrivateChatSettingsAvatarCell.self, forCellReuseIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier)
+        tableView.register(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
+        tableView.register(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "quit")
         
         tableView.showsVerticalScrollIndicator = false
         
@@ -91,8 +91,8 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     }
     
     func createInlineUserSelect() {
-        let cell = UITableViewCell(style: .Default, reuseIdentifier: "inline_user_select")
-        cell.selectionStyle = .None
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "inline_user_select")
+        cell.selectionStyle = .none
         inlineUserSelect = InlineUserSelectController()
         inlineUserSelect?.delegate = self
         cell.contentView.addSubview(inlineUserSelect!.view)
@@ -106,7 +106,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         inlineUsersCell = cell
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
@@ -114,17 +114,17 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     func navSettings() {
         self.navigationItem.title = targetClub.name
         let leftBtn = UIButton()
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        leftBtn.frame = CGRectMake(0, 0, 9, 15)
-        leftBtn.addTarget(self, action: #selector(GroupChatSettingController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
+        leftBtn.addTarget(self, action: #selector(GroupChatSettingController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
         let rightBtn = UIButton()
         let btnText = LS("进入聊天")
-        rightBtn.frame = CGRectMake(0, 0, btnText.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), boundingSize: CGSizeMake(CGFloat.max, 21)).width, 21)
-        rightBtn.setTitle(btnText, forState: .Normal)
-        rightBtn.titleLabel!.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        rightBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-        rightBtn.addTarget(self, action: #selector(GroupChatSettingController.navRightBtnPressed), forControlEvents: .TouchUpInside)
+        rightBtn.frame = CGRect(x: 0, y: 0, width: btnText.sizeWithFont(UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), boundingSize: CGSize(width: CGFloat.max, height: 21)).width, height: 21)
+        rightBtn.setTitle(btnText, for: UIControlState())
+        rightBtn.titleLabel!.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        rightBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        rightBtn.addTarget(self, action: #selector(GroupChatSettingController.navRightBtnPressed), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
     }
     
@@ -142,14 +142,14 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                     self.showToast(LS("网络访问错误:\(code)"))
             })
         }
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return kGroupChatSettingSectionTitles.count
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section{
         case 0:
             return 1
@@ -162,7 +162,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         }
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
             return 0
         }else {
@@ -170,21 +170,21 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         }
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0{
             return nil
         }
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("reuse_header") as! PrivateChatSettingsHeader
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "reuse_header") as! PrivateChatSettingsHeader
         header.titleLbl.text = kGroupChatSettingSectionTitles[section]
         return header
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.section {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch (indexPath as NSIndexPath).section {
         case 0:
             return 114
         case 1:
-            if indexPath.row < 4 {
+            if (indexPath as NSIndexPath).row < 4 {
                 return 50
             }else {
 //                let userCellHeight = UIScreen.mainScreen().bounds.width / 4
@@ -200,7 +200,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         case 2:
             return 50
         case 3:
-            if indexPath.row < 2 {
+            if (indexPath as NSIndexPath).row < 2 {
                 return 50
             }else {
                 return 128
@@ -210,47 +210,47 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch indexPath.section {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch (indexPath as NSIndexPath).section {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsAvatarCell
             cell.avatarImage.kf_setImageWithURL(targetClub.logoURL!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
                 if error == nil {
-                    cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+                    cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.black)
                 }
             })
             return cell
         case 1:
-            if indexPath.row < 4 {
-                let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-                cell.selectionStyle = .None
-                switch indexPath.row {
+            if (indexPath as NSIndexPath).row < 4 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsCommonCell
+                cell.selectionStyle = .none
+                switch (indexPath as NSIndexPath).row {
                 case 0:
                     cell.staticLbl.text = LS("群聊名称")
                     cell.infoLbl.text = targetClub.name
                     cell.arrowHidden = true
-                    cell.boolSelect.hidden = true
+                    cell.boolSelect.isHidden = true
                     
                     break
                 case 1:
                     cell.staticLbl.text = LS("本群简介")
                     cell.infoLbl.text = targetClub.clubDescription
                     cell.arrowHidden = true
-                    cell.boolSelect.hidden = true
+                    cell.boolSelect.isHidden = true
                     break
                 case 2:
                     cell.staticLbl.text = LS("我在本群的昵称")
                     cell.infoLbl.text = targetClub.remarkName ?? MainManager.sharedManager.hostUser!.nickName
                     cell.arrowHidden = false
-                    cell.boolSelect.hidden = true
+                    cell.boolSelect.isHidden = true
                     break
                 default:
                     cell.staticLbl.text = LS("显示本群昵称")
-                    cell.boolSelect.hidden = false
+                    cell.boolSelect.isHidden = false
                     cell.infoLbl.text = ""
-                    cell.boolSelect.on = targetClub.showNickName ?? true
+                    cell.boolSelect.isOn = targetClub.showNickName ?? true
                     cell.tag = 0
-                    cell.boolSelect.addTarget(self, action: #selector(GroupChatSettingController.switchBtnPressed(_:)), forControlEvents: .ValueChanged)
+                    cell.boolSelect.addTarget(self, action: #selector(GroupChatSettingController.switchBtnPressed(_:)), for: .valueChanged)
                 }
                 return cell
             }else {
@@ -274,39 +274,39 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
 //                return cell
             }
         case 2:
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-            cell.selectionStyle = .None
-            switch indexPath.row {
+            let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsCommonCell
+            cell.selectionStyle = .none
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 cell.staticLbl.text = LS("消息免打扰")
                 cell.infoLbl.text = ""
-                cell.boolSelect.hidden = false
+                cell.boolSelect.isHidden = false
                 cell.boolSelect.tag = 1
-                cell.boolSelect.on = targetClub.noDisturbing
-                cell.boolSelect.addTarget(self, action: #selector(GroupChatSettingController.switchBtnPressed(_:)), forControlEvents: .ValueChanged)
+                cell.boolSelect.isOn = targetClub.noDisturbing
+                cell.boolSelect.addTarget(self, action: #selector(GroupChatSettingController.switchBtnPressed(_:)), for: .valueChanged)
                 break
             case 1:
                 cell.staticLbl.text = LS("置顶聊天")
                 cell.infoLbl.text = ""
-                cell.boolSelect.hidden = false
+                cell.boolSelect.isHidden = false
                 cell.boolSelect.tag = 2
-                cell.boolSelect.on = targetClub.alwayOnTop
-                cell.boolSelect.addTarget(self, action: #selector(GroupChatSettingController.switchBtnPressed(_:)), forControlEvents: .ValueChanged)
+                cell.boolSelect.isOn = targetClub.alwayOnTop
+                cell.boolSelect.addTarget(self, action: #selector(GroupChatSettingController.switchBtnPressed(_:)), for: .valueChanged)
                 break
             default:
                 break
             }
             return cell
         default:
-            if indexPath.row < 2 {
-                let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-                cell.staticLbl.text = [LS("清空聊天内容"), LS("举报")][indexPath.row]
+            if (indexPath as NSIndexPath).row < 2 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsCommonCell
+                cell.staticLbl.text = [LS("清空聊天内容"), LS("举报")][(indexPath as NSIndexPath).row]
                 cell.infoLbl.text = ""
-                cell.boolSelect.hidden = true
+                cell.boolSelect.isHidden = true
                 return cell
             }else {
-                let cell = tableView.dequeueReusableCellWithIdentifier("quit", forIndexPath: indexPath)
-                cell.selectionStyle = .None
+                let cell = tableView.dequeueReusableCell(withIdentifier: "quit", for: indexPath)
+                cell.selectionStyle = .none
                 if deleteQuitBtn == nil {
 //                    deleteQuitBtn = UIButton()
 //                    deleteQuitBtn?.setImage(UIImage(named: "delete_and_quit_btn"), forState: .Normal)
@@ -322,7 +322,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                         .layout({ (make) in
                             make.centerX.equalTo(cell.contentView)
                             make.top.equalTo(cell.contentView).offset(15)
-                            make.size.equalTo(CGSizeMake(150, 50))
+                            make.size.equalTo(CGSize(width: 150, height: 50))
                         })
                     
                 }
@@ -341,21 +341,21 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 1 && indexPath.row == 2 {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).section == 1 && (indexPath as NSIndexPath).row == 2 {
             // 修改本群昵称
             let detail = PersonMineSinglePropertyModifierController()
             detail.initValue = targetClub.remarkName ?? MainManager.sharedManager.hostUser!.nickName
             detail.focusedIndexPath = indexPath
             detail.delegate = self
             self.navigationController?.pushViewController(detail, animated: true)
-        } else if indexPath.section == 3 && indexPath.row == 0 {
+        } else if (indexPath as NSIndexPath).section == 3 && (indexPath as NSIndexPath).row == 0 {
             showConfirmToast(LS("清除聊天记录"), message: LS("确定清除聊天记录?"), target: self, onConfirm: #selector(clearChatContent))
-        } else if indexPath.section == 3 && indexPath.row == 1 {
+        } else if (indexPath as NSIndexPath).section == 3 && (indexPath as NSIndexPath).row == 1 {
             // 举报
             let report = ReportBlacklistViewController(userID: targetClub.ssid, reportType: "club", parent: self)
-            self.presentViewController(report, animated: false, completion: nil)
-        } else if indexPath.section == 1 && indexPath.row == 2 {
+            self.present(report, animated: false, completion: nil)
+        } else if (indexPath as NSIndexPath).section == 1 && (indexPath as NSIndexPath).row == 2 {
 //            if let act = targetClub.recentActivity {
 //                let detail = ActivityDetailController(act: act)
 //                self.navigationController?.pushViewController(detail, animated: true)
@@ -363,11 +363,11 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         }
     }
     
-    func didModify(newValue: String?, indexPath: NSIndexPath) {
-        if indexPath.section == 1 && indexPath.row == 2 {
+    func didModify(_ newValue: String?, indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).section == 1 && (indexPath as NSIndexPath).row == 2 {
             dirty = true
             targetClub.remarkName = newValue
-            tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
     
@@ -383,15 +383,15 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         let select = FFSelectController(maxSelectNum: kMaxSelectUserNum, preSelectedUsers: targetClub.members, preSelect: false, forced: true)
         select.delegate = self
         let wrapper = BlackBarNavigationController(rootViewController: select)
-        self.presentViewController(wrapper, animated: true, completion: nil)
+        self.present(wrapper, animated: true, completion: nil)
     }
     
-    func inlineUserSelectShouldDeleteUser(user: User) {
+    func inlineUserSelectShouldDeleteUser(_ user: User) {
         // do nothing
     }
     
     func userSelectCancelled() {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     /**
@@ -399,9 +399,9 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
      
      - parameter users: 被邀请的用户list
      */
-    func userSelected(users: [User]) {
+    func userSelected(_ users: [User]) {
         // send request to the server
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
         if users.count == 0 { return }
         let userIDs = users.map({return $0.ssidString})
         let originIDs = Array(targetClub.members).map({return $0.ssidString})
@@ -410,11 +410,11 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         self.lp_start()
         requester.updateClubMembers(targetClub.ssidString, members: targets, opType: "add", onSuccess: { (json) -> () in
             // TODO: 放到请求外面
-            self.targetClub.members.appendContentsOf(users)
+            self.targetClub.members.append(contentsOf: users)
             self.targetClub.memberNum = Int32(self.targetClub.members.count)
             self.inlineUserSelect?.users = self.targetClub.members
             self.tableView.reloadData()
-            NSNotificationCenter.defaultCenter().postNotificationName(kMessageClubMemberChangeNotification, object: self, userInfo:
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kMessageClubMemberChangeNotification), object: self, userInfo:
                 [kMessageClubKey: self.targetClub])
             self.showToast(LS("邀请成功"))
             self.lp_stop()
@@ -436,18 +436,18 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
 
 extension GroupChatSettingController {
     
-    func switchBtnPressed(sender: UISwitch) {
+    func switchBtnPressed(_ sender: UISwitch) {
         dirty = true
         switch sender.tag {
         case 0:
-            targetClub.showNickName = sender.on
-            inlineUserSelect?.showClubName = sender.on
+            targetClub.showNickName = sender.isOn
+            inlineUserSelect?.showClubName = sender.isOn
             break
         case 1:
-            targetClub.noDisturbing = sender.on
+            targetClub.noDisturbing = sender.isOn
             break
         case 2:
-            targetClub.alwayOnTop = sender.on
+            targetClub.alwayOnTop = sender.isOn
         default:
             break
         }
@@ -459,18 +459,18 @@ extension GroupChatSettingController {
     
     func deleteAndQuitConfirm() {
         // TOOD: re-implement this
-        let waiter = dispatch_semaphore_create(0)
+        let waiter = DispatchSemaphore(value: 0)
         var success = false
         lp_start()
         ClubRequester.sharedInstance.clubQuit(targetClub.ssidString, newHostID: "", onSuccess: { (json) -> () in
             success = true
             self.lp_stop()
-            dispatch_semaphore_signal(waiter)
+            waiter.signal()
             }) { (code) -> () in
                 self.lp_stop()
-                dispatch_semaphore_signal(waiter)
+                waiter.signal()
         }
-        dispatch_semaphore_wait(waiter, DISPATCH_TIME_FOREVER)
+        waiter.wait(timeout: DispatchTime.distantFuture)
         if success {
             MessageManager.defaultManager.deleteAndQuit(targetClub)
             let nav = self.navigationController!
@@ -478,7 +478,7 @@ extension GroupChatSettingController {
             if let _ = nav.viewControllers[n-1] as? ChatRoomController {
                 self.navigationController?.popToViewController(nav.viewControllers[n-2], animated: true)
             } else {
-                self.navigationController?.popViewControllerAnimated(true)
+                self.navigationController?.popViewController(animated: true)
             }
         } else {
             showToast(LS("删除失败"), onSelf: true)
@@ -490,8 +490,8 @@ extension GroupChatSettingController {
             return
         }
         let controller = controllers[controllers.count - 2]
-        if controller.isKindOfClass(ChatRoomController.self){
-            navigationController?.popViewControllerAnimated(true)
+        if controller.isKind(of: ChatRoomController.self){
+            navigationController?.popViewController(animated: true)
         } else if let temp = controller as? RadarHomeController {
             let chatRoom = ChatRoomController()
             chatRoom.targetClub = targetClub

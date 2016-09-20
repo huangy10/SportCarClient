@@ -31,11 +31,11 @@ class ChatAccessoryBoard: UIView {
     
     func createSubViews() {
         let superview = self
-        superview.backgroundColor = UIColor.whiteColor()
+        superview.backgroundColor = UIColor.white
         //
         takePhotoBtn = UIButton()
-        takePhotoBtn?.setImage(UIImage(named: "chat_accessory_take_photo"), forState: .Normal)
-        takePhotoBtn?.addTarget(self, action: #selector(ChatAccessoryBoard.takePhotoBtnPressed), forControlEvents: .TouchUpInside)
+        takePhotoBtn?.setImage(UIImage(named: "chat_accessory_take_photo"), for: UIControlState())
+        takePhotoBtn?.addTarget(self, action: #selector(ChatAccessoryBoard.takePhotoBtnPressed), for: .touchUpInside)
         superview.addSubview(takePhotoBtn!)
         takePhotoBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview).offset(15)
@@ -44,9 +44,9 @@ class ChatAccessoryBoard: UIView {
         })
         let takePhotoLbl = UILabel()
         takePhotoLbl.text = LS("拍照")
-        takePhotoLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        takePhotoLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         takePhotoLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        takePhotoLbl.textAlignment = .Center
+        takePhotoLbl.textAlignment = .center
         superview.addSubview(takePhotoLbl)
         takePhotoLbl.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(takePhotoBtn!)
@@ -54,8 +54,8 @@ class ChatAccessoryBoard: UIView {
         }
         //
         photoAlbumBtn = UIButton()
-        photoAlbumBtn?.setImage(UIImage(named: "chat_accessory_photos"), forState: .Normal)
-        photoAlbumBtn?.addTarget(self, action: #selector(ChatAccessoryBoard.photoAlbumBtnPressed), forControlEvents: .TouchUpInside)
+        photoAlbumBtn?.setImage(UIImage(named: "chat_accessory_photos"), for: UIControlState())
+        photoAlbumBtn?.addTarget(self, action: #selector(ChatAccessoryBoard.photoAlbumBtnPressed), for: .touchUpInside)
         superview.addSubview(photoAlbumBtn!)
         photoAlbumBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.top.equalTo(takePhotoBtn!)
@@ -63,9 +63,9 @@ class ChatAccessoryBoard: UIView {
             make.size.equalTo(69)
         })
         let photoAlbumLbl = UILabel()
-        photoAlbumLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        photoAlbumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         photoAlbumLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        photoAlbumLbl.textAlignment = .Center
+        photoAlbumLbl.textAlignment = .center
         photoAlbumLbl.text = LS("照片")
         superview.addSubview(photoAlbumLbl)
         photoAlbumLbl.snp_makeConstraints { (make) -> Void in
@@ -76,7 +76,7 @@ class ChatAccessoryBoard: UIView {
     
     func takePhotoBtnPressed() {
         // 拍摄照片
-        let sourceType = UIImagePickerControllerSourceType.Camera
+        let sourceType = UIImagePickerControllerSourceType.camera
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
             chatRoomController?.showToast(LS("无法打开相机"))
             return
@@ -85,12 +85,12 @@ class ChatAccessoryBoard: UIView {
         imagePicker.sourceType = sourceType
         imagePicker.delegate = chatRoomController
         imagePicker.allowsEditing = false
-        chatRoomController?.presentViewController(imagePicker, animated: true, completion: nil)
+        chatRoomController?.present(imagePicker, animated: true, completion: nil)
     }
     
     func photoAlbumBtnPressed() {
         // 从已有的相册中选择
-        let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        let sourceType = UIImagePickerControllerSourceType.photoLibrary
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
             chatRoomController?.showToast(LS("无法打开相册"))
             return
@@ -99,7 +99,7 @@ class ChatAccessoryBoard: UIView {
         imagePicker.sourceType = sourceType
         imagePicker.delegate = chatRoomController
         imagePicker.allowsEditing = false
-        chatRoomController?.presentViewController(imagePicker, animated: true, completion: nil)
+        chatRoomController?.present(imagePicker, animated: true, completion: nil)
     }
     
 }

@@ -17,7 +17,7 @@ class Notification: BaseModel {
     var simplifiedMessageType: String {
         get {
             let elements = messageType!.split(":")
-            return elements[1..<elements.count].joinWithSeparator(":")
+            return elements[1..<elements.count].joined(separator: ":")
         }
     }
     
@@ -25,7 +25,7 @@ class Notification: BaseModel {
         return "notification_id"
     }
     
-    var imageURL: NSURL? {
+    var imageURL: URL? {
         if image == nil {
             return nil
         }
@@ -37,7 +37,7 @@ class Notification: BaseModel {
         _obj?.manager = manager
     }
 
-    override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool) throws -> Self {
+    override func loadDataFromJSON(_ data: JSON, detailLevel: Int, forceMainThread: Bool) throws -> Self {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         createdAt = DateSTR(data["created_at"].stringValue)
         messageBody = data["message_body"].stringValue
@@ -115,8 +115,8 @@ class Notification: BaseModel {
         return self
     }
     
-    private var _obj: BaseModel?
-    private var _objInMem: BaseInMemModel?
+    fileprivate var _obj: BaseModel?
+    fileprivate var _objInMem: BaseInMemModel?
     
     func getRelatedObj<T: BaseModel>() throws -> T? {
         if relatedObj == nil {
@@ -180,7 +180,10 @@ class Notification: BaseModel {
         case "ClubJoining:deny":
             let club = try! getRelatedObj()! as Club
             return [user!.nickName!, "拒绝了你对俱乐部", club.name!, "的申请"]
-        
+        case "ActivityComment:at":
+            return [username, "在评论中提到了你"]
+        case "ActivityComment:response":
+            return [username, "在活动中回复了你"]
         default:
             print(simplifiedMessageType)
             return ["没有定义的消息类型"]
@@ -189,9 +192,9 @@ class Notification: BaseModel {
     
     lazy var displayModeMap: [String: NotificationCell.DisplayMode] = {
         return [
-            "minimal": NotificationCell.DisplayMode.Minimal,
-            "with_cover": NotificationCell.DisplayMode.WithCover,
-            "interact": NotificationCell.DisplayMode.Interact
+            "minimal": NotificationCell.DisplayMode.minimal,
+            "with_cover": NotificationCell.DisplayMode.withCover,
+            "interact": NotificationCell.DisplayMode.interact
         ]
     }()
     
@@ -199,6 +202,6 @@ class Notification: BaseModel {
         let elements = messageType!.split(":")
         let displayModeString = elements[0]
         
-        return displayModeMap[displayModeString] ?? .Minimal
+        return displayModeMap[displayModeString] ?? .minimal
     }
 }

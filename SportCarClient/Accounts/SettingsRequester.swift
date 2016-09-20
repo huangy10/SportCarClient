@@ -14,7 +14,7 @@ import SwiftyJSON
 class SettingsRequester: BasicRequester {
     static let sharedInstance = SettingsRequester()
     
-    private let _urlMap: [String: String] = [
+    fileprivate let _urlMap: [String: String] = [
         "settings": "settings"
     ]
     
@@ -26,11 +26,11 @@ class SettingsRequester: BasicRequester {
         return "settings"
     }
     
-    func updatePersonMineSettings(onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func updatePersonMineSettings(_ onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return get(urlForName("settings"), responseDataField: "settings", onSuccess: onSuccess, onError: onError)
     }
     
-    func syncPersonMineSettings(param: [String: AnyObject], onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func syncPersonMineSettings(_ param: [String: AnyObject], onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return post(
             urlForName("settings"),
             parameters: param,

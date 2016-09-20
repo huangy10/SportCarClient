@@ -24,11 +24,11 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
     
     override func navRightBtnPressed() {
         // send request to server
-        guard let district = districtLbl.text where district != "" else {
+        guard let district = districtLbl.text , district != "" else {
             showToast(LS("请选择活跃地区"))
             return
         }
-        guard let desc = descriptionLbl.text where desc != "" else {
+        guard let desc = descriptionLbl.text , desc != "" else {
             showToast(LS("请填写俱乐部简介"))
             return
         }
@@ -46,7 +46,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
                 self.showToast(LS("俱乐部认证申请发送失败"))
                 self.pp_hideProgressView()
         }
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     override func titleForRightNavBtn() -> String {
@@ -69,16 +69,16 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
         let container = UIView()
         let image1 = UIImageView(image: UIImage(named: "privilege_show_avatar_logo"))
         container.addSubview(image1)
-        image1.contentMode = .ScaleAspectFit
+        image1.contentMode = .scaleAspectFit
         image1.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(container.snp_centerX).offset(-40)
             make.size.equalTo(37)
             make.top.equalTo(container).offset(22)
         }
         let static1 = ss_createLabel(
-            UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight),
-            textColor: UIColor.blackColor(),
-            textAlignment: .Center,
+            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
+            textColor: UIColor.black,
+            textAlignment: .center,
             text: LS("头像旁俱乐部LOGO")
         )
         container.addSubview(static1)
@@ -87,7 +87,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             make.top.equalTo(image1.snp_bottom).offset(11)
         }
         let image2 = UIImageView(image: UIImage(named: "privilege_allow_start_activity"))
-        image2.contentMode = .ScaleAspectFit
+        image2.contentMode = .scaleAspectFit
         container.addSubview(image2)
         image2.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(container.snp_centerX).offset(40)
@@ -95,9 +95,9 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             make.top.equalTo(container).offset(22)
         }
         let static2 = ss_createLabel(
-            UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight),
-            textColor: UIColor.blackColor(),
-            textAlignment: .Center,
+            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
+            textColor: UIColor.black,
+            textAlignment: .center,
             text: LS("可以发布活动")
         )
         container.addSubview(static2)
@@ -111,9 +111,9 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
     override func createDescriptionLabel() -> UIView {
         let container = UIView()
         let districtStaticLbl = ss_createLabel(
-            UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight),
+            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
             textColor: UIColor(white: 0.72, alpha: 1),
-            textAlignment: .Left,
+            textAlignment: .left,
             text: LS("活跃地区")
         )
         container.addSubview(districtStaticLbl)
@@ -126,12 +126,12 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
         arrow.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(container)
             make.centerY.equalTo(districtStaticLbl)
-            make.size.equalTo(CGSizeMake(9, 15))
+            make.size.equalTo(CGSize(width: 9, height: 15))
         }
         districtLbl = ss_createLabel(
-            UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight),
-            textColor: UIColor.blackColor(),
-            textAlignment: .Right,
+            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
+            textColor: UIColor.black,
+            textAlignment: .right,
             text: LS("北京市")
         )
         container.addSubview(districtLbl)
@@ -150,7 +150,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
         }
         let districtSelectBtn = UIButton()
         container.addSubview(districtSelectBtn)
-        districtSelectBtn.addTarget(self, action: #selector(ClubAuthController.districtSelectBtnPressed), forControlEvents: .TouchUpInside)
+        districtSelectBtn.addTarget(self, action: #selector(ClubAuthController.districtSelectBtnPressed), for: .touchUpInside)
         districtSelectBtn.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(container)
             make.top.equalTo(container)
@@ -158,9 +158,9 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             make.bottom.equalTo(sepLine1)
         }
         let desStaticLbl = ss_createLabel(
-            UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight),
+            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
             textColor: UIColor(white: 0.72, alpha: 1),
-            textAlignment: .Right,
+            textAlignment: .right,
             text: LS("本群简介"))
         container.addSubview(desStaticLbl)
         desStaticLbl.snp_makeConstraints { (make) -> Void in
@@ -172,12 +172,12 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
         arrow2.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(arrow)
             make.centerY.equalTo(desStaticLbl)
-            make.size.equalTo(CGSizeMake(9, 15))
+            make.size.equalTo(CGSize(width: 9, height: 15))
         }
         descriptionLbl = ss_createLabel(
-            UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight),
-            textColor: UIColor.blackColor(),
-            textAlignment: .Right,
+            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
+            textColor: UIColor.black,
+            textAlignment: .right,
             text: LS("待补充")
         )
         container.addSubview(descriptionLbl)
@@ -196,7 +196,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             make.height.equalTo(0.5)
         }
         let desEditBtn = UIButton()
-        desEditBtn.addTarget(self, action: #selector(ClubAuthController.desEditBtnPressed), forControlEvents: .TouchUpInside)
+        desEditBtn.addTarget(self, action: #selector(ClubAuthController.desEditBtnPressed), for: .touchUpInside)
         container.addSubview(desEditBtn)
         desEditBtn.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(desStaticLbl)
@@ -210,9 +210,9 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
     override func createImagesImputPanel() -> UIView {
         let container = UIView()
         let label = ss_createLabel(
-            UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight),
+            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
             textColor: UIColor(white: 0.72, alpha: 1),
-            textAlignment: .Left,
+            textAlignment: .left,
             text: "1. 头像应为企业商标/标识或品牌Logo\n2.昵称应为俱乐部的全称或无歧义简称\n3.昵称不能仅包含一个通用性描述词语，不可过度修饰\n4.俱乐部人数满100人，认证用户50人以上\n5.有完整的俱乐部简介")
         label.numberOfLines = 0
         container.addSubview(label)
@@ -233,13 +233,13 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
     
     func desEditBtnPressed() {
         let modifier = PersonMineSinglePropertyModifierController()
-        modifier.focusedIndexPath = NSIndexPath()
+        modifier.focusedIndexPath = IndexPath()
         modifier.propertyName = LS("俱乐部简介")
         modifier.delegate = self
         self.navigationController?.pushViewController(modifier, animated: true)
     }
     
-    func cityElementSelectDidSelect(dataSource: CityElementSelectDataSource) {
+    func cityElementSelectDidSelect(_ dataSource: CityElementSelectDataSource) {
         self.navigationController?.popToViewController(self, animated: true)
         districtLbl.text = dataSource.selectedCity
     }
@@ -248,7 +248,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
         self.navigationController?.popToViewController(self, animated: true)
     }
     
-    func didModify(newValue: String?, indexPath: NSIndexPath) {
+    func didModify(_ newValue: String?, indexPath: IndexPath) {
         descriptionLbl.text = newValue
     }
     

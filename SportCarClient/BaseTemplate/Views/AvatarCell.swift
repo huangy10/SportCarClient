@@ -21,7 +21,7 @@ class SSAvatarCell: SSPropertyBaseCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
-        selectionStyle = .None
+        selectionStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -30,9 +30,9 @@ class SSAvatarCell: SSPropertyBaseCell {
     
     internal override func createSubviews() {
         super.createSubviews()
-        staticLbl.hidden = true
-        arrowIcon.hidden = true
-        sepLine.hidden = true
+        staticLbl.isHidden = true
+        arrowIcon.isHidden = true
+        sepLine.isHidden = true
         
         let superview = self.contentView
         avatarImg = superview.addSubview(UIImageView.self)
@@ -43,11 +43,11 @@ class SSAvatarCell: SSPropertyBaseCell {
             })
     }
     
-    func setData(imageURL: NSURL, showArrow: Bool = false, zoomable: Bool = false) -> Self {
-        arrowIcon.hidden = !showArrow
+    func setData(_ imageURL: URL, showArrow: Bool = false, zoomable: Bool = false) -> Self {
+        arrowIcon.isHidden = !showArrow
         avatarImg.kf_setImageWithURL(imageURL, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
             if error == nil && zoomable {
-                self.avatarImg.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+                self.avatarImg.setupForImageViewer(nil, backgroundColor: UIColor.black)
             }
         })
         return self

@@ -13,14 +13,14 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
     
     override func createSubviews() {
         self.tapper = UITapGestureRecognizer(target: self, action: #selector(InputableViewController.dismissKeyboard))
-        tapper?.enabled = false
+        tapper?.isEnabled = false
         self.view.addGestureRecognizer(tapper!)
         
         self.navigationItem.title = NSLocalizedString("找回密码", comment: "")
         self.navigationItem.leftBarButtonItem = self.leftBarBtn()
         //
         let superview = self.view!
-        superview.backgroundColor = UIColor.blackColor()
+        superview.backgroundColor = UIColor.black
         //
         bgImgView = UIImageView(image: UIImage(named: "account_bg_image"))
         bgImgView.layer.opacity = 0.5
@@ -53,7 +53,7 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
 
         // 复用了注册页面的结构
         let panel = self.registerView()
-        superview.addSubview(panel)
+        superview.addSubview(panel!)
         panel.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(titleLogo!.snp_bottom).offset(43)
             make.left.equalTo(superview)
@@ -66,7 +66,7 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         let container = UIView()
         //
         let inputContainer = UIView()
-        inputContainer.backgroundColor = UIColor.whiteColor()
+        inputContainer.backgroundColor = UIColor.white
         inputContainer.layer.cornerRadius = 4
         container.addSubview(inputContainer)
         inputContainer.snp_makeConstraints { (make) -> Void in
@@ -98,8 +98,8 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         registerPhoneInput = TextFieldWithLeadingIconView()
         registerPhoneInput?.delegate = self
         registerPhoneInput?.placeholder = NSLocalizedString("请输入您的手机号", comment: "")
-        registerPhoneInput?.font = UIFont.systemFontOfSize(12)
-        registerPhoneInput?.leftViewMode = UITextFieldViewMode.Always
+        registerPhoneInput?.font = UIFont.systemFont(ofSize: 12)
+        registerPhoneInput?.leftViewMode = UITextFieldViewMode.always
         let registerPhoneInputIcon = UIImageView(image: UIImage(named: "account_phone_input"))
         registerPhoneInput?.leftView = registerPhoneInputIcon
         inputContainer.addSubview(registerPhoneInput!)
@@ -111,10 +111,10 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         })
         //
         let sendCodeBtn = AuthCodeBtnView()
-        sendCodeBtn.setTitle(NSLocalizedString("获取验证码", comment: ""), forState: .Normal)
+        sendCodeBtn.setTitle(NSLocalizedString("获取验证码", comment: ""), for: UIControlState())
         sendCodeBtn.displayText = NSLocalizedString("获取验证码", comment: "")
-        sendCodeBtn.setTitleColor(UIColor(red: 1, green: 0.2667, blue: 0.2745, alpha: 1), forState: .Normal)
-        sendCodeBtn.titleLabel?.font = UIFont.systemFontOfSize(14)
+        sendCodeBtn.setTitleColor(UIColor(red: 1, green: 0.2667, blue: 0.2745, alpha: 1), for: UIControlState())
+        sendCodeBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         inputContainer.addSubview(sendCodeBtn)
         sendCodeBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(registerPhoneInput!)
@@ -122,14 +122,14 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
             make.right.equalTo(inputContainer).offset(-13)
             make.centerY.equalTo(registerPhoneInput!)
         }
-        sendCodeBtn.addTarget(self, action: #selector(sendAuthCodePressed), forControlEvents: .TouchUpInside)
+        sendCodeBtn.addTarget(self, action: #selector(sendAuthCodePressed), for: .touchUpInside)
         self.authCodeBtn = sendCodeBtn
         //
         registerAuthCode = TextFieldWithLeadingIconView()
         registerAuthCode?.delegate = self
         registerAuthCode?.placeholder = NSLocalizedString("请输入验证码", comment: "")
-        registerAuthCode?.font = UIFont.systemFontOfSize(14)
-        registerAuthCode?.leftViewMode = UITextFieldViewMode.Always
+        registerAuthCode?.font = UIFont.systemFont(ofSize: 14)
+        registerAuthCode?.leftViewMode = UITextFieldViewMode.always
         let registerAuthCodeIcon = UIImageView(image: UIImage(named: "account_auth_code"))
         registerAuthCode?.leftView = registerAuthCodeIcon
         inputContainer.addSubview(registerAuthCode!)
@@ -143,9 +143,9 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         registerPasswordInput = TextFieldWithLeadingIconView()
         registerPasswordInput?.delegate = self
         registerPasswordInput?.placeholder = NSLocalizedString("请输入新密码", comment: "")
-        registerPasswordInput?.secureTextEntry = true
-        registerPasswordInput?.font = UIFont.systemFontOfSize(14)
-        registerPasswordInput?.leftViewMode = UITextFieldViewMode.Always
+        registerPasswordInput?.isSecureTextEntry = true
+        registerPasswordInput?.font = UIFont.systemFont(ofSize: 14)
+        registerPasswordInput?.leftViewMode = UITextFieldViewMode.always
         let registerPasswordInputIcon = UIImageView(image: UIImage(named: "account_password_input"))
         registerPasswordInput?.leftView = registerPasswordInputIcon
         inputContainer.addSubview(registerPasswordInput!)
@@ -157,12 +157,12 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         })
         
         let registerBtn = UIButton()
-        registerBtn.setBackgroundImage(UIImage(named: "account_resetpwd_confirm_btn"), forState: .Normal)
-        registerBtn.layer.shadowColor = UIColor(red: 0.95, green: 0.21, blue: 0.21, alpha: 1).CGColor
+        registerBtn.setBackgroundImage(UIImage(named: "account_resetpwd_confirm_btn"), for: UIControlState())
+        registerBtn.layer.shadowColor = UIColor(red: 0.95, green: 0.21, blue: 0.21, alpha: 1).cgColor
         registerBtn.layer.shadowOffset = CGSize(width: 0, height: 3)
         registerBtn.layer.shadowRadius = 7
         registerBtn.layer.shadowOpacity = 1
-        registerBtn.addTarget(self, action: #selector(registerPressed), forControlEvents: .TouchUpInside)
+        registerBtn.addTarget(self, action: #selector(registerPressed), for: .touchUpInside)
         container.addSubview(registerBtn)
         registerBtn.snp_makeConstraints { (make) -> Void in
             make.width.equalTo(100)
@@ -174,8 +174,8 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
     }
     
     // MARK: 重写按钮的功能
-    override func backBtnPressed(sender: UIButton) {
-        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+    override func backBtnPressed(_ sender: UIButton) {
+        presentingViewController?.dismiss(animated: true, completion: nil)
 //        self.navigationController?.popViewControllerAnimated(true)
     }
     //
@@ -197,8 +197,8 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         AccountRequester2.sharedInstance.resetPassword(phone, passwd: passwd, authCode: authCode, onSuccess: { (json) in
             self.lp_stop()
 //            self.showToast(LS("密码修改成功！"))
-            UIApplication.sharedApplication().keyWindow?.rootViewController?.showToast(LS("密码修改成功！"))
-            self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+            UIApplication.shared.keyWindow?.rootViewController?.showToast(LS("密码修改成功！"))
+            self.presentingViewController?.dismiss(animated: true, completion: nil)
             }) { (code) in
             self.lp_stop()
             self.showToast(LS("密码修改失败！"))
@@ -206,8 +206,8 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
     }
 //    
     override func leftBarBtn() -> UIBarButtonItem! {
-        let btn = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: #selector(LoginRegisterController.backBtnPressed(_:)))
-        btn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let btn = UIBarButtonItem(title: LS("取消"), style: .plain, target: self, action: #selector(LoginRegisterController.backBtnPressed(_:)))
+        btn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         return btn
     }
 }

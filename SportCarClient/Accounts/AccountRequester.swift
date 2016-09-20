@@ -15,7 +15,7 @@ class AccountRequester2: BasicRequester {
     
     static let sharedInstance = AccountRequester2()
     
-    private let _urlMap: [String: String] = [
+    fileprivate let _urlMap: [String: String] = [
         "sendcode": "sendcode",
         "login": "login",
         "register": "register",
@@ -47,7 +47,7 @@ class AccountRequester2: BasicRequester {
     
     // MARK: Orignial Request from old AccountRequester
 
-    func requestAuthCode(phoneNum: String, onSuccess: ()->(Void), onError: ()->(Void)) -> Request{
+    func requestAuthCode(_ phoneNum: String, onSuccess: ()->(Void), onError: ()->(Void)) -> Request{
         let onFailure: SSFailureCallback = { (code: String?) in
             onError()
         }
@@ -61,7 +61,7 @@ class AccountRequester2: BasicRequester {
     }
     
     func postToLogin(
-        phoneNum: String, password: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback
+        _ phoneNum: String, password: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback
         ) -> Request {
         var param = ["username": phoneNum, "password": password]
         if let token = AppManager.sharedAppManager.deviceTokenString {
@@ -70,7 +70,7 @@ class AccountRequester2: BasicRequester {
         return post(urlForName("login"), parameters: param, responseDataField: "data", onSuccess: onSuccess, onError: onError)
     }
     
-    func postToRegister(phoneNum: String, passwd: String, authCode: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func postToRegister(_ phoneNum: String, passwd: String, authCode: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         var param = ["username": phoneNum, "password": passwd, "password2": passwd, "auth_code": authCode]
         if let token = AppManager.sharedAppManager.deviceTokenString {
             param["device_token"] = token
@@ -78,12 +78,12 @@ class AccountRequester2: BasicRequester {
         return post(urlForName("register"), parameters: param, responseDataField: "data", onSuccess: onSuccess, onError: onError)
     }
     
-    func logout(onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func logout(_ onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return post(urlForName("logout"), onSuccess: onSuccess, onError: onError)
     }
     
     func postToSetProfile(
-        nickName: String,
+        _ nickName: String,
         gender: String,
         birthDate: String,
         avatar: UIImage,
@@ -96,19 +96,19 @@ class AccountRequester2: BasicRequester {
         }
         var params: [String: AnyObject] = [:]
         params["avatar"] = avatar
-        params["nick_name"] = nickName
-        params["gender"] = genderLetter
-        params["birth_date"] = birthDate
+        params["nick_name"] = nickName as AnyObject?
+        params["gender"] = genderLetter as AnyObject?
+        params["birth_date"] = birthDate as AnyObject?
         upload(urlForName("setprofile"), parameters: params, onSuccess: onSuccess, onProgress: onProgress, onError: onError)
     }
     
-    func getProfileDataFor(userID: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func getProfileDataFor(_ userID: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return get(urlForName("getprofile", param: ["userID": userID]), responseDataField: "data", onSuccess: onSuccess, onError: onError)
     }
     
     func getFansList(
-        userID: String,
-        dateThreshold: NSDate,
+        _ userID: String,
+        dateThreshold: Date,
         op_type: String,
         limit: Int = 20,
         filterStr: String? = nil,
@@ -123,8 +123,8 @@ class AccountRequester2: BasicRequester {
     }
     
     func getFollowList(
-        userID: String,
-        dateThreshold: NSDate,
+        _ userID: String,
+        dateThreshold: Date,
         op_type: String,
         limit: Int = 20,
         filterStr: String? = nil,
@@ -137,7 +137,7 @@ class AccountRequester2: BasicRequester {
         )
     }
     
-    func block(user: User, flag: Bool, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func block(_ user: User, flag: Bool, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return post(
             urlForName("operation", param: ["userID": user.ssidString]),
             parameters: ["op_type": "blacklist", "block": flag],
@@ -169,7 +169,7 @@ class AccountRequester2: BasicRequester {
     
     // MARK: Request from old SportCarRequester
     
-    func getAuthedCarsList(userID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func getAuthedCarsList(_ userID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return get(urlForName("authed_cars", param: ["userID": userID]),
             responseDataField: "cars", onSuccess: onSuccess, onError: onError
         )
@@ -177,12 +177,12 @@ class AccountRequester2: BasicRequester {
     
     // MARK: Request from old PersonRequester
     
-    @available(*, deprecated=1)
+    @available(*, deprecated: 1)
     func getBlackList(
-        dateThreshold: NSDate,
+        _ dateThreshold: Date,
         limit: Int,
         onSuccess: (JSON?)->(),
-        onError: (code: String?)->()
+        onError: (_ code: String?)->()
         ) -> Request {
         return get(urlForName("get_blacklist"),
                    parameters: ["date_threshold": STRDate(dateThreshold), "op_type": "more", "limit": limit],
@@ -190,7 +190,7 @@ class AccountRequester2: BasicRequester {
                    onSuccess: onSuccess, onError: onError)
     }
 
-    func getBlacklist(skip: Int, limit: Int, searchText: String="", onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func getBlacklist(_ skip: Int, limit: Int, searchText: String="", onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return get(
             urlForName("get_blacklist"),
             parameters: ["skip": skip, "limit": limit, "search_text": searchText],
@@ -204,7 +204,7 @@ class AccountRequester2: BasicRequester {
      Get settings from server
      */
     
-    func postCorporationUserApplication(images: [UIImage], onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()) {
+    func postCorporationUserApplication(_ images: [UIImage], onSuccess: (JSON?)->(), onProgress: (_ progress: Float)->(), onError: (_ code: String?)->()) {
         assert(images.count == 3)
         upload(
             urlForName("corporation_auth"),
@@ -221,12 +221,12 @@ class AccountRequester2: BasicRequester {
      Modify the profile information of the current user, the available attributes are 'nick_name', 'avatar', 'avatar_club', 'avatar_car', 'signature',
      'job', 'district'
      */
-    func profileModifiy(param: [String: AnyObject], onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func profileModifiy(_ param: [String: AnyObject], onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return post(urlForName("modify"), parameters: param, onSuccess: onSuccess, onError: onError)
     }
     
     func profileModifyUploadAvatar(
-        avatar: UIImage, onSuccess: SSSuccessCallback, onProgress: SSProgressCallback, onError: SSFailureCallback
+        _ avatar: UIImage, onSuccess: SSSuccessCallback, onProgress: SSProgressCallback, onError: SSFailureCallback
         ) {
         upload(
             urlForName("modify"),
@@ -235,7 +235,7 @@ class AccountRequester2: BasicRequester {
         )
     }
     
-    func follow(userID: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func follow(_ userID: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return post(
             urlForName("operation", param: ["userID": userID]),
             parameters: ["op_type": "follow"],
@@ -246,7 +246,7 @@ class AccountRequester2: BasicRequester {
     
     // MARK: Request from old StatusRequester
     
-    func getStatusListSimplified(userID: String, carID: String?, dateThreshold: NSDate, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func getStatusListSimplified(_ userID: String, carID: String?, dateThreshold: Date, limit: Int, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         var params: [String: AnyObject] = ["date_threshold": STRDate(dateThreshold), "limit": limit, "op_type": "more"]
         if let carID = carID {
             params["filter_car"] = carID
@@ -259,7 +259,7 @@ class AccountRequester2: BasicRequester {
     
     // MARK: Permission Check
     
-    func syncPermission(onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func syncPermission(_ onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return get(
             urlForName("permission"),
             responseDataField: "data",
@@ -268,7 +268,7 @@ class AccountRequester2: BasicRequester {
         )
     }
     
-    func resetPassword(phoneNum: String, passwd: String, authCode: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func resetPassword(_ phoneNum: String, passwd: String, authCode: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         var param = ["username": phoneNum, "password": passwd, "password2": passwd, "auth_code": authCode]
         if let token = AppManager.sharedAppManager.deviceTokenString {
             param["device_token"] = token

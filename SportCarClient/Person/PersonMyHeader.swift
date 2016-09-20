@@ -45,16 +45,16 @@ class PersonHeaderMine: UIView {
     
     func createSubviews() {
         let superview = self
-        map = superview.addSubview(BMKMapView).config(UIColor.blackColor())
+        map = superview.addSubview(BMKMapView).config(UIColor.black)
             .layout({ (make) in
                 make.edges.equalTo(superview).inset(UIEdgeInsetsMake(-300, 0, 0, 0))
             })
         //
         backMask = BackMaskView()
-        backMask.backgroundColor = UIColor.clearColor()
+        backMask.backgroundColor = UIColor.clear
         backMask.centerHegiht = 175
         backMask.ratio = 0.2
-        backMask.addShadow(offset: CGSizeMake(0, -3), opacity: 0.1)
+        backMask.addShadow(opacity: 0.1, offset: CGSize(width: 0, height: -3))
         superview.addSubview(backMask)
         backMask.snp_makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview)
@@ -79,7 +79,7 @@ class PersonHeaderMine: UIView {
         avatarCarBtn.layer.cornerRadius = 16.5
 //        avatarCarBtn.backgroundColor = UIColor(white: 0.72, alpha: 1)
         avatarCarBtn.imageView?.layer.cornerRadius = 16.5
-        avatarCarBtn.imageView?.contentMode = .ScaleAspectFit
+        avatarCarBtn.imageView?.contentMode = .scaleAspectFit
         superview.addSubview(avatarCarBtn)
         avatarCarBtn.snp_makeConstraints { (make) -> Void in
             make.bottom.equalTo(avatarBtn)
@@ -88,8 +88,8 @@ class PersonHeaderMine: UIView {
         }
         //
         nameLbl = UILabel()
-        nameLbl.font = UIFont.systemFontOfSize(19, weight: UIFontWeightUltraLight)
-        nameLbl.textColor = UIColor.blackColor()
+        nameLbl.font = UIFont.systemFont(ofSize: 19, weight: UIFontWeightUltraLight)
+        nameLbl.textColor = UIColor.black
         superview.addSubview(nameLbl)
         nameLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(avatarBtn.snp_right).offset(15)
@@ -108,8 +108,8 @@ class PersonHeaderMine: UIView {
         //
         genderAgeLbl = UILabel()
         genderAgeLbl.backgroundColor = UIColor(red: 0.227, green: 0.439, blue: 0.686, alpha: 1)
-        genderAgeLbl.textColor = UIColor.whiteColor()
-        genderAgeLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        genderAgeLbl.textColor = UIColor.white
+        genderAgeLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(genderAgeLbl)
         genderAgeLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(nameLbl)
@@ -119,14 +119,14 @@ class PersonHeaderMine: UIView {
         let arrowIcon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         superview.addSubview(arrowIcon)
         arrowIcon.snp_makeConstraints { (make) -> Void in
-            make.size.equalTo(CGSizeMake(9, 15))
+            make.size.equalTo(CGSize(width: 9, height: 15))
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(genderAgeLbl).offset(2)
         }
         //
         avatarCarNameLbl = UILabel()
-        avatarCarNameLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        avatarCarNameLbl.textColor = UIColor.blackColor()
+        avatarCarNameLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        avatarCarNameLbl.textColor = UIColor.black
         superview.addSubview(avatarCarNameLbl)
         avatarCarNameLbl.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(genderAgeLbl.snp_bottom).offset(12)
@@ -143,42 +143,42 @@ class PersonHeaderMine: UIView {
         }
         //
         fansNumLbl = superview.addSubview(UILabel.self)
-            .config(21, fontWeight: UIFontWeightSemibold, textAlignment: .Center)
+            .config(21, fontWeight: UIFontWeightSemibold, textAlignment: .center)
             .layout({ (make) in
                 make.centerX.equalTo(avatarBtn)
                 make.top.equalTo(avatarBtn.snp_bottom).offset(35)
             })
         //
         superview.addSubview(UILabel.self)
-            .config(15, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .Center, text: LS("粉丝"))
+            .config(15, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("粉丝"))
             .layout { (make) in
                 make.top.equalTo(fansNumLbl.snp_bottom).offset(2)
                 make.centerX.equalTo(fansNumLbl)
         }
         //
         statusNumLbl = superview.addSubview(UILabel.self)
-            .config(21, fontWeight: UIFontWeightSemibold, textAlignment: .Center)
+            .config(21, fontWeight: UIFontWeightSemibold, textAlignment: .center)
             .layout({ (make) in
                 make.centerX.equalTo(fansNumLbl).offset(-85)
                 make.centerY.equalTo(fansNumLbl)
             })
         //
         superview.addSubview(UILabel.self)
-            .config(15, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .Center, text: LS("动态"))
+            .config(15, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("动态"))
             .layout { (make) in
                 make.centerX.equalTo(statusNumLbl)
                 make.top.equalTo(statusNumLbl.snp_bottom).offset(2)
         }
         //
         followNumLbl = superview.addSubview(UILabel.self)
-            .config(21, fontWeight: UIFontWeightSemibold, textAlignment: .Center)
+            .config(21, fontWeight: UIFontWeightSemibold, textAlignment: .center)
             .layout({ (make) in
                 make.centerX.equalTo(fansNumLbl).offset(85)
                 make.centerY.equalTo(fansNumLbl)
             })
         //
         superview.addSubview(UILabel.self)
-            .config(15, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .Center, text: LS("关注"))
+            .config(15, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("关注"))
             .layout { (make) in
                 make.centerX.equalTo(followNumLbl)
                 make.top.equalTo(followNumLbl.snp_bottom).offset(2)
@@ -211,20 +211,20 @@ class PersonHeaderMine: UIView {
     
     func loadDataAndUpdateUI() {
         // 头像
-        avatarBtn.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
+        avatarBtn.kf_setImageWithURL(user.avatarURL!, forState: UIControlState())
         // 认证跑车
         if let car = user.avatarCarModel {
-            avatarCarBtn.kf_setImageWithURL(car.logoURL!, forState: .Normal)
+            avatarCarBtn.kf_setImageWithURL(car.logoURL!, forState: UIControlState())
             avatarCarNameLbl.text = car.name
         } else {
-            avatarCarBtn.setImage(nil, forState: .Normal)
+            avatarCarBtn.setImage(nil, for: UIControlState())
             avatarCarNameLbl.text = ""
         }
         // 认证俱乐部
         if let club = user.avatarClubModel {
-            avatarClubLogo.kf_setImageWithURL(club.logoURL!, forState: .Normal)
+            avatarClubLogo.kf_setImageWithURL(club.logoURL!, forState: UIControlState())
         }else {
-            avatarClubLogo.setImage(nil, forState: .Normal)
+            avatarClubLogo.setImage(nil, for: UIControlState())
         }
         // 
         nameLbl.text = user.nickName
@@ -250,21 +250,21 @@ class BackMaskView: UIView {
     var ratio: CGFloat = 0.1
     var centerHegiht : CGFloat = 100
     
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         let ctx = UIGraphicsGetCurrentContext()
         let width = self.frame.width
         let height = self.frame.height
-        CGContextSaveGState(ctx)
-        CGContextSetFillColorWithColor(ctx, UIColor.whiteColor().CGColor)
-        CGContextMoveToPoint(ctx, 0, height)
-        CGContextAddLineToPoint(ctx, width, height)
+        ctx?.saveGState()
+        ctx?.setFillColor(UIColor.white.cgColor)
+        ctx?.move(to: CGPoint(x: 0, y: height))
+        ctx?.addLine(to: CGPoint(x: width, y: height))
         let rightHeight = centerHegiht + width * ratio / 2
         let leftHeight = centerHegiht - width * ratio / 2
-        CGContextAddLineToPoint(ctx, width, height - rightHeight)
-        CGContextAddLineToPoint(ctx, 0, height - leftHeight)
-        CGContextClosePath(ctx)
-        CGContextFillPath(ctx)
-        CGContextRestoreGState(ctx)
+        ctx?.addLine(to: CGPoint(x: width, y: height - rightHeight))
+        ctx?.addLine(to: CGPoint(x: 0, y: height - leftHeight))
+        ctx?.closePath()
+        ctx?.fillPath()
+        ctx?.restoreGState()
     }
 }

@@ -16,45 +16,45 @@ class NewsDetailEntranceAnimation: NSObject, UIViewControllerAnimatedTransitioni
     
     var slowDownFactor: Double = 1
     
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.7 * slowDownFactor
     }
     
-    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-        let fromViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey) as! NewsController2
-        let toViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey) as! NewsDetailController2
-        let containerView = transitionContext.containerView()!
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) as! NewsController2
+        let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to) as! NewsDetailController2
+        let containerView = transitionContext.containerView
         
         let fromView = fromViewController.view
         let toView = toViewController.view
         
-        toView.layer.opacity = 0
-        toView.frame = transitionContext.finalFrameForViewController(toViewController)
-        containerView.addSubview(toView)
+        toView?.layer.opacity = 0
+        toView?.frame = transitionContext.finalFrame(for: toViewController)
+        containerView.addSubview(toView!)
         
-        let tempCover = fromViewController.selectedCell!.snapshotViewAfterScreenUpdates(false)
+        let tempCover = fromViewController.selectedCell!.snapshotView(afterScreenUpdates: false)
         let originFrame = fromViewController.getSelectedNewsCellFrame()
         toViewController.initCoverFrame = originFrame
-        tempCover.frame = originFrame
-        containerView.addSubview(tempCover)
-        let targetFrame = CGRectMake(0, 64, originFrame.width, originFrame.height)
+        tempCover?.frame = originFrame
+        containerView.addSubview(tempCover!)
+        let targetFrame = CGRect(x: 0, y: 64, width: originFrame.width, height: originFrame.height)
         
-        UIView.animateWithDuration(0.4 * slowDownFactor, animations: {
-            tempCover.frame = targetFrame
-            fromView.transform = CGAffineTransformMakeScale(0.9, 0.9)
-            fromView.layer.opacity = 0.1
-            toView.layer.opacity = 1
-            }) { (_) in
-                tempCover.removeFromSuperview()
+        UIView.animate(withDuration: 0.4 * slowDownFactor, animations: {
+            tempCover?.frame = targetFrame
+            fromView?.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            fromView?.layer.opacity = 0.1
+            toView?.layer.opacity = 1
+            }, completion: { (_) in
+                tempCover?.removeFromSuperview()
                 toViewController.animateTitleEntry(0.3 * self.slowDownFactor, onFinished: {
-                    if transitionContext.transitionWasCancelled() {
-                        toView.removeFromSuperview()
+                    if transitionContext.transitionWasCancelled {
+                        toView?.removeFromSuperview()
                     } else {
-                        fromView.removeFromSuperview()
+                        fromView?.removeFromSuperview()
                     }
-                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 })
-        }
+        }) 
     }
 }
 
@@ -62,47 +62,47 @@ class NewsDetailDismissAnimation: NSObject, UIViewControllerAnimatedTransitionin
     
     var slowDownFactor: Double = 1
     
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.7 * slowDownFactor
     }
     
-    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-        let fromViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey) as! NewsDetailController2
-        let toViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey) as! NewsController2
-        let containerView = transitionContext.containerView()!
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) as! NewsDetailController2
+        let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to) as! NewsController2
+        let containerView = transitionContext.containerView
         
         fromViewController.animateTitleOut(0.3 * slowDownFactor) {
             let fromView = fromViewController.view
             let toView = toViewController.view
-            toView.layer.opacity = 0.1
-            toView.transform = CGAffineTransformMakeScale(0.9, 0.9)
-            containerView.addSubview(toView)
-            containerView.addSubview(fromView)
-            containerView.sendSubviewToBack(toView)
+            toView?.layer.opacity = 0.1
+            toView?.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            containerView.addSubview(toView!)
+            containerView.addSubview(fromView!)
+            containerView.sendSubview(toBack: toView!)
             
-            let tempCover = fromViewController.cover.snapshotViewAfterScreenUpdates(false)
-            tempCover.backgroundColor = UIColor.redColor()
+            let tempCover = fromViewController.cover.snapshotView(afterScreenUpdates: false)
+            tempCover?.backgroundColor = UIColor.red
             let targetFrame = fromViewController.initCoverFrame
-            var originFrame = fromViewController.cover.convertRect(fromViewController.cover.bounds, toView: containerView)
+            var originFrame = fromViewController.cover.convert(fromViewController.cover.bounds, to: containerView)
             if originFrame.origin.y + originFrame.height < 0 {
                 originFrame.origin.y = -originFrame.height
             }
-            tempCover.frame = originFrame
-            containerView.addSubview(tempCover)
+            tempCover?.frame = originFrame
+            containerView.addSubview(tempCover!)
             
-            UIView.animateWithDuration(0.4 * self.slowDownFactor, animations: {
-                tempCover.frame = targetFrame
-                toView.transform = CGAffineTransformIdentity
-                toView.layer.opacity = 1
-                fromView.layer.opacity = 0
+            UIView.animate(withDuration: 0.4 * self.slowDownFactor, animations: {
+                tempCover?.frame = targetFrame
+                toView?.transform = CGAffineTransform.identity
+                toView?.layer.opacity = 1
+                fromView?.layer.opacity = 0
                 }, completion: { (_) in
-                    tempCover.removeFromSuperview()
-                    if transitionContext.transitionWasCancelled() {
-                        toView.removeFromSuperview()
+                    tempCover?.removeFromSuperview()
+                    if transitionContext.transitionWasCancelled {
+                        toView?.removeFromSuperview()
                     } else {
-                        fromView.removeFromSuperview()
+                        fromView?.removeFromSuperview()
                     }
-                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             })
         }
     }
@@ -144,7 +144,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
 //    }
     
     // animation related
-    var initCoverFrame: CGRect = CGRectZero
+    var initCoverFrame: CGRect = CGRect.zero
     
     // data related
     var onGoingRequest: [String: Request] = [:]
@@ -155,7 +155,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     var atUser: [String] = []
     
     //
-    var delayTask: dispatch_block_t?
+    var delayTask: ()->()?
     
     // 
     var tapper: UITapGestureRecognizer!
@@ -172,7 +172,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     var webViewReqPermitted: Int = 2
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         newsDetail.removeObserver(self, forKeyPath: "scrollView.contentSize", context: &newsContext)
         clearAllRequest()
     }
@@ -210,18 +210,18 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     func configureNavigationBar() {
         navigationItem.title = LS("资讯详情")
         let backBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "account_header_back_btn"))
-            .setFrame(CGRectMake(0, 0, 18, 18))
-        backBtn.imageView?.contentMode = .ScaleAspectFit
+            .setFrame(CGRect(x: 0, y: 0, width: 18, height: 18))
+        backBtn.imageView?.contentMode = .scaleAspectFit
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
         
         let shareBtn = UIButton().config(self, selector: #selector(navRightBtnPressed), image: UIImage(named: "news_share"))
-            .setFrame(CGRectMake(0, 0, 24, 24))
-        shareBtn.imageView?.contentMode = .ScaleAspectFit
+            .setFrame(CGRect(x: 0, y: 0, width: 24, height: 24))
+        shareBtn.imageView?.contentMode = .scaleAspectFit
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareBtn)
     }
     
     func navLeftBtnPressed() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
@@ -229,28 +229,28 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func configureTableView() {
-        tableView = UITableView(frame: view.bounds, style: .Plain)
+        tableView = UITableView(frame: view.bounds, style: .plain)
         tableView.dataSource = self
         tableView.delegate = self
         view.addSubview(tableView)
         tableView.snp_makeConstraints { (make) in
             make.edges.equalTo(view)
         }
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         tableView.estimatedRowHeight = 87.0
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.registerClass(NewsCommentCell2.self, forCellReuseIdentifier: "cell")
-        tableView.registerClass(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty")
+        tableView.register(NewsCommentCell2.self, forCellReuseIdentifier: "cell")
+        tableView.register(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty")
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(reloadNewsContent), forControlEvents: .ValueChanged)
+        refreshControl.addTarget(self, action: #selector(reloadNewsContent), for: .valueChanged)
         tableView.addSubview(refreshControl)
     }
     
     func configureTapperGesture() {
         tapper = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapper)
-        tapper.enabled = false
+        tapper.isEnabled = false
     }
     
     func configureCover() {
@@ -259,9 +259,9 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
                 make.left.equalTo(header)
                 make.right.equalTo(header)
                 make.top.equalTo(header)
-                make.height.equalTo(UIScreen.mainScreen().bounds.width * 0.573)
+                make.height.equalTo(UIScreen.main.bounds.width * 0.573)
             })
-        cover.hidden = true
+        cover.isHidden = true
         
         cover.addSubview(UIImageView).config(UIImage(named: "news_cover_mask"))
             .layout { (make) in
@@ -325,7 +325,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     
     func configureTitleLbl() {
         titleLbl = header.addSubview(UILabel)
-            .config(17, fontWeight: UIFontWeightBlack, textColor: UIColor.blackColor(), multiLine: true)
+            .config(17, fontWeight: UIFontWeightBlack, textColor: UIColor.black, multiLine: true)
             .layout({ (make) in
                 make.left.equalTo(cover).offset(15)
                 make.bottom.equalTo(cover).offset(-10)
@@ -334,7 +334,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         titleLbl.layer.opacity = 0
         
         titleLblWhite = cover.addSubview(UILabel)
-            .config(17, fontWeight: UIFontWeightBlack, textColor: UIColor.whiteColor(), multiLine: true)
+            .config(17, fontWeight: UIFontWeightBlack, textColor: UIColor.white, multiLine: true)
             .layout({ (make) in
                 make.edges.equalTo(titleLbl)
             })
@@ -345,7 +345,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         newsDetail = UIWebView()
         newsDetail.delegate = self
         
-        newsDetail.addObserver(self, forKeyPath: "scrollView.contentSize", options: .New, context: &newsContext)
+        newsDetail.addObserver(self, forKeyPath: "scrollView.contentSize", options: .new, context: &newsContext)
         header.addSubview(newsDetail)
         
         newsDetail.snp_makeConstraints { (make) in
@@ -354,7 +354,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
             make.right.equalTo(cover)
             make.height.equalTo(100)
         }
-        newsDetail.scrollView.scrollEnabled = false
+        newsDetail.scrollView.isScrollEnabled = false
     }
     
     func configureRecentLikeInfo() {
@@ -380,7 +380,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
                 make.height.equalTo(0.5)
                 make.top.equalTo(likeInfoIcon.snp_bottom).offset(24)
         }
-        header.addSubview(UILabel).config(UIColor.whiteColor()).config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .Center, text: LS("评论"))
+        header.addSubview(UILabel).config(UIColor.white).config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("评论"))
             .layout { (make) in
                 make.centerY.equalTo(sepLine.snp_top)
                 make.centerX.equalTo(header)
@@ -394,19 +394,19 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         commentPanel.contentInput?.delegate = self
         commentPanel.setOriginY(view.bounds.height)
         
-        commentPanel.likeBtn?.addTarget(self, action: #selector(likeBtnPressed), forControlEvents: .TouchUpInside)
-        commentPanel.shareBtn?.addTarget(self, action: #selector(shareBtnPressed), forControlEvents: .TouchUpInside)
+        commentPanel.likeBtn?.addTarget(self, action: #selector(likeBtnPressed), for: .touchUpInside)
+        commentPanel.shareBtn?.addTarget(self, action: #selector(shareBtnPressed), for: .touchUpInside)
         
         tableView.contentInset = UIEdgeInsetsMake(0, 0, commentPanel.barheight, 0)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: UIKeyboardWillHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
     
     func configureHeader() {
         header = UIView()
-        header.frame = CGRectMake(0, 0, view.frame.width, 100)
+        header.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
 
         tableView.tableHeaderView = header
     }
@@ -475,12 +475,12 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         if news.isVideo {
             newsDetail.loadHTMLString(String(format: VIDEO_HTML_TEMPLATE, news.content), baseURL: nil)
         } else {
-            let req = NSURLRequest(URL: news.contentURL!)
+            let req = URLRequest(url: news.contentURL! as URL)
             newsDetail.loadRequest(req)
         }
     }
     
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "scrollView.contentSize" {
             view.updateConstraints()
             view.layoutIfNeeded()
@@ -494,9 +494,9 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     
     func updateHeaderHeight() {
         header.layoutIfNeeded()
-        var headerRect: CGRect = CGRectZero
+        var headerRect: CGRect = CGRect.zero
         for view in header.subviews {
-            headerRect = CGRectUnion(headerRect, view.frame)
+            headerRect = headerRect.union(view.frame)
         }
         var currentFrame = header.frame
         currentFrame.size.height = headerRect.height + 18
@@ -507,39 +507,39 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     
     //
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return max(comments.count, 1)
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if comments.count > 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! NewsCommentCell2
-            let comment = comments[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! NewsCommentCell2
+            let comment = comments[(indexPath as NSIndexPath).row]
             cell.setData(comment.user.avatarURL!, name: comment.user.nickName!, content: comment.content, commentAt: comment.createdAt, responseTo: comment.responseTo?.user.nickName, showReplyBtn: !comment.user.isHost)
             cell.delegate = self
             cell.setNeedsUpdateConstraints()
             cell.updateConstraintsIfNeeded()
             return cell
         } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier("empty", forIndexPath: indexPath) as! SSEmptyListHintCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "empty", for: indexPath) as! SSEmptyListHintCell
             cell.titleLbl.text = LS("还没有评论")
             return cell
         }
     }
     
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return UITableViewAutomaticDimension
     }
     
     // Animation utilities
     
-    func animateTitleEntry(duration: Double, onFinished: ()->()) {
+    func animateTitleEntry(_ duration: Double, onFinished: @escaping ()->()) {
         titleLblWhite.layer.opacity = 1
-        cover.hidden = false
+        cover.isHidden = false
         let titleWidth = titleLbl.frame.width
         view.layoutIfNeeded()
         titleLbl.snp_remakeConstraints { (make) in
@@ -554,22 +554,22 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
             make.height.equalTo(newsDetail.scrollView.contentSize.height)
         }
         
-        UIView.animateWithDuration(duration, animations: {
+        UIView.animate(withDuration: duration, animations: {
             self.titleLbl.layer.opacity = 1
             self.titleLblWhite.layer.opacity = 0
-            let titleTransform = CGAffineTransformMakeScale(1.23, 1.23)
+            let titleTransform = CGAffineTransform(scaleX: 1.23, y: 1.23)
             self.titleLbl.transform = titleTransform
             self.titleLblWhite.transform = titleTransform
             
             self.commentPanel.setOriginY(self.view.bounds.height - self.commentPanel.barheight)
             self.view.layoutIfNeeded()
             self.updateHeaderHeight()
-            }) { (_) in
+            }, completion: { (_) in
                 onFinished()
-        }
+        }) 
     }
     
-    func animateTitleOut(duration: Double, onFinished: ()->()) {
+    func animateTitleOut(_ duration: Double, onFinished: @escaping ()->()) {
         titleLbl.snp_remakeConstraints { (make) in
             make.left.equalTo(cover).offset(15)
             make.bottom.equalTo(cover).offset(-10)
@@ -582,26 +582,26 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
             make.height.equalTo(newsDetail.scrollView.contentSize.height)
         }
         
-        UIView.animateWithDuration(duration, animations: { 
+        UIView.animate(withDuration: duration, animations: { 
             self.titleLbl.layer.opacity = 0
             self.titleLblWhite.layer.opacity = 1
-            self.titleLbl.transform = CGAffineTransformIdentity
-            self.titleLblWhite.transform = CGAffineTransformIdentity
+            self.titleLbl.transform = CGAffineTransform.identity
+            self.titleLblWhite.transform = CGAffineTransform.identity
             
             self.view.layoutIfNeeded()
             self.commentPanel.setOriginY(self.view.frame.height)
             self.updateHeaderHeight()
-            }) { (_) in
+            }, completion: { (_) in
                 onFinished()
-        }
+        }) 
     }
     
     // data
     
-    func loadMoreCommentData(initialCall: Bool = false) {
+    func loadMoreCommentData(_ initialCall: Bool = false) {
         clearRequestForKey(#function)
         
-        let dateThreshold = comments.last()?.createdAt ?? NSDate()
+        let dateThreshold = comments.last?.createdAt ?? Date()
         
         NewsRequester.sharedInstance.getMoreNewsComment(dateThreshold, newsID: news.ssidString, onSuccess: { (json) in
             let array = json!.arrayValue
@@ -644,26 +644,26 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         let share = ShareController()
         share.delegate = self
         share.bgImg = self.getScreenShotBlurred(false)
-        self.presentViewController(share, animated: false, completion: nil)
+        self.present(share, animated: false, completion: nil)
     }
     
     func shareControllerFinished() {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
-    func changeLayoutWhenKeyboardStatusChanges(notification: NSNotification) {
+    func changeLayoutWhenKeyboardStatusChanges(_ notification: Foundation.Notification) {
         switch notification.name {
-        case UIKeyboardWillShowNotification:
-            let userInfo = notification.userInfo!
-            let keyboardFrame = userInfo[UIKeyboardFrameBeginUserInfoKey]!.CGRectValue
+        case NSNotification.Name.UIKeyboardWillShow:
+            let userInfo = (notification as NSNotification).userInfo!
+            let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue
             commentPanel.setOriginY(view.frame.height - keyboardFrame.height - commentPanel.frame.height)
             tableView.contentInset = UIEdgeInsetsMake(0, 0, view.bounds.height - commentPanel.frame.origin.y, 0)
             break
-        case UIKeyboardWillHideNotification:
+        case NSNotification.Name.UIKeyboardWillHide:
             commentPanel.setOriginY(view.frame.height - commentPanel.frame.height)
             tableView.contentInset = UIEdgeInsetsMake(0, 0, view.bounds.height - commentPanel.frame.origin.y, 0)
             break
-        case UIKeyboardDidChangeFrameNotification:
+        case NSNotification.Name.UIKeyboardDidChangeFrame:
             break
         default:
             break
@@ -672,18 +672,18 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     
     // text editor
     
-    func textViewDidBeginEditing(textView: UITextView) {
-        tapper.enabled = true
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        tapper.isEnabled = true
     }
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         let textView = commentPanel.contentInput!
         let fixedWidth = textView.bounds.width
-        let newSize = textView.sizeThatFits(CGSizeMake(fixedWidth, CGFloat.max))
+        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
         commentPanel.setBarHeight(newSize.height)
     }
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             let commentText = textView.text ?? ""
             if commentText.length > 0 {
@@ -707,14 +707,14 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     
     func dismissKeyboard() {
         commentPanel.contentInput?.resignFirstResponder()
-        tapper.enabled = false
+        tapper.isEnabled = false
     }
     
     func commentCanceled() {
         // do nothing
     }
     
-    func commentConfirmed(commentString: String?) {
+    func commentConfirmed(_ commentString: String?) {
         var responseToComment: NewsComment? = nil
         if responseToRow != nil {
             responseToComment = comments[responseToRow!]
@@ -726,7 +726,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         newComment.responseTo = responseToComment
         newComment.sent = false
         newComment.user = MainManager.sharedManager.hostUser
-        newComment.createdAt = NSDate()
+        newComment.createdAt = Date()
         //
         let requester = NewsRequester.sharedInstance
         requester.postCommentToNews(news.ssidString, content: commentString, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (data) -> () in
@@ -747,11 +747,11 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         
         tableView.beginUpdates()
         // 将这个新建的commnet添加在列表的头部
-        comments.insert(newComment, atIndex: 0)
+        comments.insert(newComment, at: 0)
         if comments.count == 1 {
-            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+            tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         } else {
-            tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+            tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
         tableView.endUpdates()
         commentPanel?.contentInput?.text = ""
@@ -760,7 +760,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     }
     
     // 
-    func webViewDidFinishLoad(webView: UIWebView) {
+    func webViewDidFinishLoad(_ webView: UIWebView) {
         self.initialTaskUndone -= 1
         self.webViewReqPermitted -= 1
         
@@ -769,7 +769,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         return webViewReqPermitted > 0
     }
     
@@ -783,16 +783,16 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     
     func thumbnailForShare() -> UIImage {
         let image = cover.image!
-        let thumbnail = RBSquareImageTo(image, size: CGSizeMake(100, 100))
+        let thumbnail = RBSquareImageTo(image, size: CGSize(width: 100, height: 100))
         return thumbnail
     }
     
     func linkForShare() -> String {
-        return news.contentURL!.absoluteString
+        return news.contentURL!.absoluteString!
     }
     
-    func detailCommentCellReplyPressed(cell: DetailCommentCell2) {
-        responseToRow = tableView.indexPathForCell(cell)?.row
+    func detailCommentCellReplyPressed(_ cell: DetailCommentCell2) {
+        responseToRow = (tableView.indexPath(for: cell) as NSIndexPath?)?.row
         let targetComment = comments[responseToRow!]
         let responseToName = targetComment.user!.nickName!
         responseToPrefixStr = LS("回复") + responseToName + ": "
@@ -801,8 +801,8 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         commentPanel.contentInput?.becomeFirstResponder()
     }
     
-    func detailCommentCellAvatarPressed(cell: DetailCommentCell2) {
-        if let row = tableView.indexPathForCell(cell)?.row {
+    func detailCommentCellAvatarPressed(_ cell: DetailCommentCell2) {
+        if let row = (tableView.indexPath(for: cell) as NSIndexPath?)?.row {
             let comment = comments[row]
             navigationController?.pushViewController(comment.user.showDetailController(), animated: true)
         }

@@ -49,7 +49,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     
     var requesting = false
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
 
@@ -58,7 +58,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -67,11 +67,11 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
 //        locationService?.allowsBackgroundLocationUpdates = true
         locSearch = BMKGeoCodeSearch()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusReleaseController.changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusReleaseController.changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StatusReleaseController.changeLayoutWhenKeyboardAppears(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StatusReleaseController.changeLayoutWhenKeyboardDisappears(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         locationService?.delegate = self
         mapView.viewWillAppear()
@@ -82,7 +82,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         }
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         mapView.viewWillDisappear()
         mapView.delegate = nil
@@ -93,13 +93,13 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     override func createSubviews() {
         super.createSubviews()
         navSettings()
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
         let superview = self.view
         //
         board = UIScrollView()
-        board?.backgroundColor = UIColor.whiteColor()
+        board?.backgroundColor = UIColor.white
         board?.contentSize = self.view.bounds.size
-        superview.addSubview(board!)
+        superview?.addSubview(board!)
         board?.snp_makeConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(superview).offset(0)
             make.right.equalTo(superview)
@@ -107,8 +107,8 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             make.height.equalTo(superview)
         })
         addImageBtn = UIButton()
-        addImageBtn.setImage(UIImage(named: "status_add_image"), forState: .Normal)
-        addImageBtn.addTarget(self, action: #selector(StatusReleaseController.addImageBtnPressed), forControlEvents: .TouchUpInside)
+        addImageBtn.setImage(UIImage(named: "status_add_image"), for: UIControlState())
+        addImageBtn.addTarget(self, action: #selector(StatusReleaseController.addImageBtnPressed), for: .touchUpInside)
         board?.addSubview(addImageBtn)
         addImageBtn.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(15)
@@ -120,7 +120,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         statusContentInput?.text = LS("有什么想说的呢...")
         statusContentInput?.delegate = self
         inputFields.append(statusContentInput)
-        statusContentInput?.font = UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)
+        statusContentInput?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
         statusContentInput?.textColor = UIColor(white: 0.72, alpha: 1)
         board?.addSubview(statusContentInput!)
         statusContentInput?.snp_makeConstraints(closure: { (make) -> Void in
@@ -131,9 +131,9 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         })
         // 状态内容的字数统计
         statusContentWordCountLbl = UILabel()
-        statusContentWordCountLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        statusContentWordCountLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         statusContentWordCountLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-        statusContentWordCountLbl?.textAlignment = .Right
+        statusContentWordCountLbl?.textAlignment = .right
         statusContentWordCountLbl?.text = "0/140"
         board?.addSubview(statusContentWordCountLbl!)
         statusContentWordCountLbl?.snp_makeConstraints(closure: { (make) -> Void in
@@ -151,7 +151,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             let userSelect = FFSelectController(maxSelectNum: kMaxSelectUserNum, preSelectedUsers: sSelf.informOfUsers, forced: false)
             userSelect.delegate = self
             let nav = BlackBarNavigationController(rootViewController: userSelect)
-            sSelf.presentViewController(nav, animated: true, completion: nil)
+            sSelf.present(nav, animated: true, completion: nil)
         }
         let informOfListView = informOfList?.view
         board?.addSubview(informOfListView!)
@@ -163,9 +163,9 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         })
         //
         informOfListCountLbl = UILabel()
-        informOfListCountLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        informOfListCountLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         informOfListCountLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-        informOfListCountLbl?.textAlignment = .Right
+        informOfListCountLbl?.textAlignment = .right
         informOfListCountLbl?.text = "0/9"
         board?.addSubview(informOfListCountLbl!)
         informOfListCountLbl?.snp_makeConstraints(closure: { (make) -> Void in
@@ -176,7 +176,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         //
         sportCarList = SportCarSelectListController()
         let sportCarListView = sportCarList!.view
-        board?.addSubview(sportCarListView)
+        board?.addSubview(sportCarListView!)
         sportCarListView.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(informOfListView!.snp_bottom).offset(7)
             make.right.equalTo(superview)
@@ -193,7 +193,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             make.height.equalTo(650)
         })
         //
-        let locDesContainer = board!.addSubview(UIView).config(UIColor.whiteColor())
+        let locDesContainer = board!.addSubview(UIView).config(UIColor.white)
             .addShadow()
             .layout { (make) in
                 make.centerX.equalTo(superview)
@@ -224,12 +224,12 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     func autoSetBoardContentSize() {
         self.view.updateConstraints()
         self.view.layoutIfNeeded()
-        var contentRect = CGRectZero
+        var contentRect = CGRect.zero
         for view in board!.subviews {
-            contentRect = CGRectUnion(contentRect, view.frame)
+            contentRect = contentRect.union(view.frame)
         }
-        board?.contentSize = CGSizeMake(self.view.frame.width, contentRect.height - 250)
-        UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+        board?.contentSize = CGSize(width: self.view.frame.width, height: contentRect.height - 250)
+        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.view.layoutIfNeeded()
             }, completion: nil)
     }
@@ -237,15 +237,15 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = LS("发布动态")
-        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: #selector(StatusReleaseController.navLeftBtnPressed))
-        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .plain, target: self, action: #selector(StatusReleaseController.navLeftBtnPressed))
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         self.navigationItem.leftBarButtonItem = leftBtnItem
         
-        let rightBtn = UIButton(frame: CGRectMake(0, 0, 28, 16))
-        rightBtn.setTitle(LS("发布"), forState: .Normal)
-        rightBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-        rightBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        rightBtn.addTarget(self, action: #selector(StatusReleaseController.navRightBtnPressed), forControlEvents: .TouchUpInside)
+        let rightBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 28, height: 16))
+        rightBtn.setTitle(LS("发布"), for: UIControlState())
+        rightBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        rightBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        rightBtn.addTarget(self, action: #selector(StatusReleaseController.navRightBtnPressed), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
     }
     
@@ -260,7 +260,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             showToast(LS("您的动态还差一张图片"), onSelf: true)
             return
         }
-        let content = (firstEditting ? "" : statusContentInput?.text ?? "").stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        let content = (firstEditting ? "" : statusContentInput?.text ?? "").trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         let car_id = sportCarList?.selectedCar?.ssidString
         guard let lat: Double = userLocation?.latitude else {
             showToast(LS("无法获取当前位置"), onSelf: true)
@@ -277,14 +277,14 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         }
         pp_showProgressView()
         requester.postNewStatus(content, image: selectedImage!, car_id: car_id, lat: lat, lon: lon, loc_description: loc_description!, informOf: informUserIds, onSuccess: { (json) -> () in
-            self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+            self.presentingViewController?.dismiss(animated: true, completion: nil)
 //            self.home?.followStatusCtrl.loadLatestData()
             self.hideToast(toast)
             self.pp_hideProgressView()
             self.navLeftBtnPressed()
             self.requesting = false
-            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC))
-            dispatch_after(delay, dispatch_get_main_queue(), {
+            let delay = DispatchTime.now() + Double(Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
+            DispatchQueue.main.asyncAfter(deadline: delay, execute: {
                 AppManager.sharedAppManager.showToast(LS("动态发布成功"))
                 self.home?.followStatusCtrl.loadLatestData()
             })
@@ -296,14 +296,14 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             /*
              注意这里发布Notification，主要是为了让『我的』页面中的动态列表及时进行更新，而『动态』中的列表不会接收这个Notification。
              */
-            NSNotificationCenter.defaultCenter().postNotificationName(kStatusNewNotification, object: nil, userInfo: [kStatusKey: status])
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kStatusNewNotification), object: nil, userInfo: [kStatusKey: status])
             }, onError: { (code) -> () in
                 self.requesting = false
                 self.hideToast(toast)
                 self.showToast(LS("发布失败，请检查网络设置"), onSelf: true)
                 self.pp_hideProgressView()
             }) { (progress) -> () in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     self.pp_updateProgress(progress)
                 })
         }
@@ -319,47 +319,47 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
 extension StatusReleaseController {
     
     func addImageBtnPressed() {
-        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .ActionSheet)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .Default, handler: { (action) -> Void in
-            let sourceType = UIImagePickerControllerSourceType.Camera
+        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.camera
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = sourceType
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .Default, handler: { (action) -> Void in
-            let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.photoLibrary
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = sourceType
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .Cancel, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        self.dismiss(animated: true, completion: nil)
         selectedImage = image
-        addImageBtn?.setImage(image, forState: .Normal)
+        addImageBtn?.setImage(image, for: UIControlState())
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -369,16 +369,16 @@ extension StatusReleaseController {
     
     func userSelectCancelled() {
         // Do nothing
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func userSelected(users: [User]) {
-        informOfUsers.appendContentsOf(users)
+    func userSelected(_ users: [User]) {
+        informOfUsers.append(contentsOf: users)
         informOfUsers = $.uniq(informOfUsers, by: { return $0.ssid })
         informOfList?.users = informOfUsers
         informOfList?.collectionView?.reloadData()
         informOfListCountLbl?.text = "\(informOfUsers.count)/9"
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -386,7 +386,7 @@ extension StatusReleaseController {
 // MARK: - About map
 extension StatusReleaseController {
     
-    func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
+    func didUpdate(_ userLocation: BMKUserLocation!) {
         locationService?.stopUserLocationService()
         locationService?.delegate = nil
         // 只需要获取当前的数据
@@ -405,13 +405,13 @@ extension StatusReleaseController {
         }
     }
     
-    func mapView(mapView: BMKMapView!, viewForAnnotation annotation: BMKAnnotation!) -> BMKAnnotationView! {
+    func mapView(_ mapView: BMKMapView!, viewFor annotation: BMKAnnotation!) -> BMKAnnotationView! {
         let view = UserSelectAnnotationView(annotation: annotation, reuseIdentifier: "user_location")
-        view.annotation = annotation
+        view?.annotation = annotation
         return view
     }
     
-    func onGetReverseGeoCodeResult(searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
+    func onGetReverseGeoCodeResult(_ searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
         if error == BMK_SEARCH_NO_ERROR {
             locInput!.text = result.address
         } else {
@@ -422,18 +422,18 @@ extension StatusReleaseController {
     func locationSelectBtnPressed() {
         let locationSelect = LocationSelectController(currentLocation: self.userLocation, des: self.locInput.text)
         locationSelect.delegate = self
-        self.presentViewController(locationSelect.toNavWrapper(), animated: true, completion: nil)
+        self.present(locationSelect.toNavWrapper(), animated: true, completion: nil)
     }
     
     func locationSelectDidCancel() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func locationSelectDidSelect(location: Location) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func locationSelectDidSelect(_ location: Location) {
+        self.dismiss(animated: true, completion: nil)
         self.userLocation = location.location
         locInput.text = location.description
-        mapView.setCenterCoordinate(location.location, animated: true)
+        mapView.setCenter(location.location, animated: true)
     }
     
 }
@@ -442,7 +442,7 @@ extension StatusReleaseController {
 // MARK: - About content input
 extension StatusReleaseController {
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         
         if textView.textInputMode?.primaryLanguage == "zh-Hans" {
             let selectedRange = textView.markedTextRange
@@ -451,14 +451,14 @@ extension StatusReleaseController {
             }
         }
         let curText = statusContentInput!.text! as NSString
-        let newText = curText.stringByReplacingCharactersInRange(range, withString: text) as String
+        let newText = curText.replacingCharacters(in: range, with: text) as String
         if newText.length > 140 {
             return false
         }
         return true
     }
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         
         if textView.textInputMode?.primaryLanguage == "zh-Hans" {
             let selectedRange = textView.markedTextRange
@@ -474,21 +474,21 @@ extension StatusReleaseController {
         statusContentWordCountLbl?.text = "\(min(text.length, 140))/140"
     }
     
-    func textViewDidBeginEditing(textView: UITextView) {
+    func textViewDidBeginEditing(_ textView: UITextView) {
 
         if firstEditting {
             statusContentInput?.text = ""
-            statusContentInput?.textColor = UIColor.blackColor()
+            statusContentInput?.textColor = UIColor.black
             firstEditting = false
-            statusContentInput?.font = UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)
+            statusContentInput?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
         }
     }
     
-    func changeLayoutWhenKeyboardAppears(notif: NSNotification) {
-        let userInfo = notif.userInfo!
-        let keyboardFrame = userInfo[UIKeyboardFrameBeginUserInfoKey]!.CGRectValue
-        if !locInput!.editing {
-            if statusContentInput!.frame.origin.y < keyboardFrame.height {
+    func changeLayoutWhenKeyboardAppears(_ notif: Foundation.Notification) {
+        let userInfo = (notif as NSNotification).userInfo!
+        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue
+        if !locInput!.isEditing {
+            if statusContentInput!.frame.origin.y < (keyboardFrame?.height)! {
                 return
             }
         }
@@ -500,7 +500,7 @@ extension StatusReleaseController {
         self.view.layoutIfNeeded()
     }
     
-    func changeLayoutWhenKeyboardDisappears(notif: NSNotification) {
+    func changeLayoutWhenKeyboardDisappears(_ notif: Foundation.Notification) {
         board?.snp_updateConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(self.view).offset(0)
         })

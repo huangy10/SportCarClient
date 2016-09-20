@@ -12,7 +12,7 @@ import Spring
 
 protocol CustomDatePickerDelegate: class {
     
-    func dateDidPicked(date: NSDate)
+    func dateDidPicked(_ date: Date)
     
     func datePickCancel()
 }
@@ -40,7 +40,7 @@ class CustomDatePicker: UIView {
     
     func createSubview() {
         let superview = self
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.white
         //
         header = UIView()
         header.backgroundColor = UIColor(white: 0.92, alpha: 1)
@@ -53,8 +53,8 @@ class CustomDatePicker: UIView {
         }
         //
         pickerTitleLbl = UILabel()
-        pickerTitleLbl.font = UIFont.systemFontOfSize(14)
-        pickerTitleLbl.textColor = UIColor.blackColor()
+        pickerTitleLbl.font = UIFont.systemFont(ofSize: 14)
+        pickerTitleLbl.textColor = UIColor.black
         header.addSubview(pickerTitleLbl)
         pickerTitleLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(header).offset(20)
@@ -63,10 +63,10 @@ class CustomDatePicker: UIView {
         }
         //
         doneBtn = UIButton()
-        doneBtn.setTitle(LS("完成"), forState: .Normal)
-        doneBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-        doneBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
-        doneBtn.addTarget(self, action: #selector(CustomDatePicker.doneBtnPressed), forControlEvents: .TouchUpInside)
+        doneBtn.setTitle(LS("完成"), for: UIControlState())
+        doneBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        doneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        doneBtn.addTarget(self, action: #selector(CustomDatePicker.doneBtnPressed), for: .touchUpInside)
         superview.addSubview(doneBtn)
         doneBtn.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(header).offset(-20)
@@ -76,9 +76,9 @@ class CustomDatePicker: UIView {
         }
         //
         picker = UIDatePicker()
-        picker.datePickerMode = .DateAndTime
-        picker.minimumDate = NSDate()
-        picker.setDate(NSDate(), animated: true)
+        picker.datePickerMode = .dateAndTime
+        picker.minimumDate = Date()
+        picker.setDate(Date(), animated: true)
         superview.addSubview(picker)
         picker.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
@@ -93,12 +93,12 @@ class CustomDatePicker: UIView {
     }
     
     func reset() {
-        let now = NSDate()
+        let now = Date()
         picker.minimumDate = now
         picker.setDate(now, animated: false)
     }
     
-    func show(date: NSDate? = nil) {
+    func show(_ date: Date? = nil) {
         self.snp_remakeConstraints { (make) in
             make.right.equalTo(self.superview!)
             make.left.equalTo(self.superview!)

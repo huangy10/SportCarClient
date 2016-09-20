@@ -24,16 +24,16 @@ class StatusDeleteController: PresentTemplateViewController, LoadingProtocol {
     
     override func createContent() {
         deleteBtn = UIButton()
-        deleteBtn.setTitle(LS("删除"), forState: .Normal)
-        deleteBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-        deleteBtn.titleLabel?.font = UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)
+        deleteBtn.setTitle(LS("删除"), for: UIControlState())
+        deleteBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        deleteBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
         container.addSubview(deleteBtn)
         deleteBtn.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
             make.top.equalTo(sepLine).offset(45)
-            make.size.equalTo(CGSizeMake(40, 25))
+            make.size.equalTo(CGSize(width: 40, height: 25))
         }
-        deleteBtn.addTarget(self, action: #selector(StatusDeleteController.deleteBtnPressed), forControlEvents: .TouchUpInside)
+        deleteBtn.addTarget(self, action: #selector(StatusDeleteController.deleteBtnPressed), for: .touchUpInside)
     }
     
     func deleteBtnPressed() {
@@ -44,17 +44,17 @@ class StatusDeleteController: PresentTemplateViewController, LoadingProtocol {
     
     func deleteConfirmed() {
         let requester = StatusRequester.sharedInstance
-        let waitSignal = dispatch_semaphore_create(0)
+        let waitSignal = DispatchSemaphore(value: 0)
         lp_start()
         requester.deleteStatus(status.ssidString, onSuccess: { (json) -> () in
             self.lp_stop()
             // 删除成功以后发送一个notification
-            NSNotificationCenter.defaultCenter().postNotificationName(kStatusDidDeletedNotification, object: nil, userInfo: [kStatusDidDeletedStatusIDKey: self.status.ssidString, kStatusKey: self.status])
-            dispatch_semaphore_signal(waitSignal)
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kStatusDidDeletedNotification), object: nil, userInfo: [kStatusDidDeletedStatusIDKey: self.status.ssidString, kStatusKey: self.status])
+            waitSignal.signal()
             
             self.delegate?.statusDidDeleted()
             self.hideAnimated({ [weak self] in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self?.delegate?.statusDidDeleted()
                 })
                 })

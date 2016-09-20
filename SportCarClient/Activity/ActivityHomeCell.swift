@@ -36,7 +36,7 @@ class ActivityCell: UICollectionViewCell {
     }
     
     func createSubviews() {
-        self.contentView.backgroundColor = UIColor.clearColor()
+        self.contentView.backgroundColor = UIColor.clear
         
         container = self.contentView.addSubview(UIView.self)
             .layout({ (make) in
@@ -46,7 +46,7 @@ class ActivityCell: UICollectionViewCell {
             .layout({ (make) in
                 make.edges.equalTo(container)
             })
-        cover.contentMode = .ScaleAspectFill
+        cover.contentMode = .scaleAspectFill
         coverMask = container.addSubview(UIImageView).config(UIImage(named: "activityMask"))
             .layout({ (make) in
                 make.bottom.equalTo(cover)
@@ -61,13 +61,13 @@ class ActivityCell: UICollectionViewCell {
                 make.bottom.equalTo(cover).offset(-10)
             }).toRound(8)
         actStartDateLbl = container.addSubview(UILabel)
-            .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 1, alpha: 0.7), textAlignment: .Left, text: "", multiLine: false)
+            .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 1, alpha: 0.7), textAlignment: .left, text: "", multiLine: false)
             .layout({ (make) in
                 make.left.equalTo(avatar.snp_right).offset(5)
                 make.centerY.equalTo(avatar)
             })
         actNameLbl = container.addSubview(UILabel)
-            .config(16, fontWeight: UIFontWeightSemibold, textColor: UIColor.whiteColor(), textAlignment: .Left, text: "", multiLine: false)
+            .config(16, fontWeight: UIFontWeightSemibold, textColor: UIColor.white, textAlignment: .left, text: "", multiLine: false)
             .layout({ (make) in
                 make.left.equalTo(avatar)
                 make.right.equalTo(container).offset(-15)
@@ -77,10 +77,10 @@ class ActivityCell: UICollectionViewCell {
             .layout({ (make) in
                 make.top.equalTo(cover).offset(10)
                 make.right.equalTo(cover).offset(-13)
-                make.size.equalTo(CGSizeMake(44, 18.5))
+                make.size.equalTo(CGSize(width: 44, height: 18.5))
             })
         self.contentView.clipsToBounds = false
-        self.contentView.addShadow(3, color: UIColor.blackColor(), opacity: 0.4, offset: CGSizeMake(0, 2.5))
+        self.contentView.addShadow(3, color: UIColor.black, opacity: 0.4, offset: CGSize(width: 0, height: 2.5))
     }
 //    
 //    func createSubviews() {
@@ -127,15 +127,15 @@ class ActivityCell: UICollectionViewCell {
 //        self.addShadow()
 //    }
 //    
-    private func loadDataAndUpdateUI() {
+    fileprivate func loadDataAndUpdateUI() {
         cover.kf_setImageWithURL(act.posterURL!)
         avatar.kf_setImageWithURL(act.user!.avatarURL!)
         actNameLbl.text = act.name
         actStartDateLbl.text = act.startAt?.stringDisplay()
-        if act.endAt!.compare(NSDate()) == .OrderedAscending{
-            doneMark.hidden = false
+        if act.endAt!.compare(Date()) == .orderedAscending{
+            doneMark.isHidden = false
         }else{
-            doneMark.hidden = true
+            doneMark.isHidden = true
         }
     }
 }

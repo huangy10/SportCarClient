@@ -72,7 +72,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     var likeRequesting: Bool = false
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         newsDetailPanelView.removeObserver(self, forKeyPath: "scrollView.contentSize", context: &newsContext)
     }
     
@@ -87,7 +87,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         print(navigationController?.delegate)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
     
@@ -98,10 +98,10 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         newsCover.snp_updateConstraints { (make) -> Void in
             make.top.equalTo(board).offset(0)
         }
-        UIView.animateWithDuration(0.5, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+        UIView.animate(withDuration: 0.5, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.view.layoutIfNeeded()
             self.initBg.layer.opacity = 0.1
-            self.initBg.transform = CGAffineTransformMakeScale(0.9, 0.9)
+            self.initBg.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             }, completion: { _ in
                 self.newsTitle.snp_remakeConstraints(closure: { (make) -> Void in
                     make.left.equalTo(self.view).offset(40)
@@ -111,11 +111,11 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
                 self.newsTitleFake.snp_remakeConstraints(closure: { (make) -> Void in
                     make.edges.equalTo(self.newsTitle)
                 })
-                UIView.animateWithDuration(0.4, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+                UIView.animate(withDuration: 0.4, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                     self.newsTitle.layer.opacity = 1
                     self.newsTitleFake.layer.opacity = 0
-                    self.newsTitle.transform = CGAffineTransformMakeScale(1.23, 1.23)
-                    self.newsTitleFake.transform = CGAffineTransformMakeScale(1.23, 1.23)
+                    self.newsTitle.transform = CGAffineTransform(scaleX: 1.23, y: 1.23)
+                    self.newsTitleFake.transform = CGAffineTransform(scaleX: 1.23, y: 1.23)
                     self.view.layoutIfNeeded()
                     self.showNewsContentViews()
                     }, completion: { _ in
@@ -125,8 +125,8 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         bg.snp_remakeConstraints { (make) -> Void in
             make.edges.equalTo(self.view)
         }
-        bg.hidden = false
-        UIView.animateWithDuration(0.4, delay: 0.3, options: .CurveEaseInOut, animations: { () -> Void in
+        bg.isHidden = false
+        UIView.animate(withDuration: 0.4, delay: 0.3, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.view.layoutIfNeeded()
             }, completion: nil)
         // 弹出评论栏
@@ -134,7 +134,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         commentPanel.snp_updateConstraints { (make) -> Void in
             make.bottom.equalTo(self.view).offset(0)
         }
-        UIView.animateWithDuration(0.2, delay: 0.7, options: .CurveEaseInOut, animations: { () -> Void in
+        UIView.animate(withDuration: 0.2, delay: 0.7, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.view.layoutIfNeeded()
             }, completion: nil)
     }
@@ -147,16 +147,16 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             make.bottom.equalTo(self.view).offset(45)
             self.hideNewsContentViews()
         }
-        UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.view.layoutIfNeeded()
             }, completion: nil)
         bg.snp_remakeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.top.equalTo(superview).offset(UIScreen.mainScreen().bounds.width * 0.573)
+            make.top.equalTo(superview).offset(UIScreen.main.bounds.width * 0.573)
             make.height.equalTo(0)
         }
-        UIView.animateWithDuration(0.4, delay: 0.4, options: .CurveEaseInOut, animations: { () -> Void in
+        UIView.animate(withDuration: 0.4, delay: 0.4, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.view.layoutIfNeeded()
             }, completion: nil)
         //
@@ -168,22 +168,22 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         self.newsTitleFake.snp_remakeConstraints { (make) -> Void in
             make.edges.equalTo(newsTitle)
         }
-        UIView.animateWithDuration(0.4, delay: 0.3, options: .CurveEaseInOut, animations: { () -> Void in
+        UIView.animate(withDuration: 0.4, delay: 0.3, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.view.layoutIfNeeded()
             self.newsTitle.layer.opacity = 0
             self.newsTitleFake.layer.opacity = 1
-            self.newsTitle.transform = CGAffineTransformIdentity
-            self.newsTitleFake.transform = CGAffineTransformIdentity
+            self.newsTitle.transform = CGAffineTransform.identity
+            self.newsTitleFake.transform = CGAffineTransform.identity
             }) { (_) -> Void in
                 self.newsCover.snp_updateConstraints(closure: { (make) -> Void in
                     make.top.equalTo(self.board).offset(self.initPos)
                 })
-                UIView.animateWithDuration(0.9, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+                UIView.animate(withDuration: 0.9, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                     self.view.layoutIfNeeded()
                     self.initBg.layer.opacity = 1
-                    self.initBg.transform = CGAffineTransformIdentity
+                    self.initBg.transform = CGAffineTransform.identity
                     }, completion: { _ in
-                        self.navigationController?.popViewControllerAnimated(false)
+                        self.navigationController?.popViewController(animated: false)
                 })
         }
     }
@@ -204,9 +204,9 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         }
         sepLine.layer.opacity = 0
         newsDetailPanelView = UIWebView()
-        newsDetailPanelView.addObserver(self, forKeyPath: "scrollView.contentSize", options: .New, context: &newsContext)
+        newsDetailPanelView.addObserver(self, forKeyPath: "scrollView.contentSize", options: .new, context: &newsContext)
         newsDetailPanelView?.delegate = self
-        newsDetailPanelView?.paginationMode = .Unpaginated
+        newsDetailPanelView?.paginationMode = .unpaginated
         board?.addSubview(newsDetailPanelView!)
         newsDetailPanelView?.snp_makeConstraints(closure: { (make) -> Void in
             make.top.equalTo(sepLine.snp_bottom).offset(15)
@@ -214,10 +214,10 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             make.left.equalTo(superview).offset(20)
             make.height.equalTo(200)
         })
-        newsDetailPanelView?.scrollView.scrollEnabled = false
+        newsDetailPanelView?.scrollView.isScrollEnabled = false
         newsDetailPanelView.layer.opacity = 0
         //
-        newsDetailLoading = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        newsDetailLoading = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         newsDetailPanelView?.addSubview(newsDetailLoading!)
         newsDetailLoading?.snp_makeConstraints(closure: { (make) -> Void in
             make.center.equalTo(newsDetailPanelView)
@@ -234,7 +234,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             make.left.equalTo(newsDetailPanelView!)
             make.top.equalTo(newsDetailPanelView!.snp_bottom).offset(35)
         })
-        likeInfoIcon.hidden = true
+        likeInfoIcon.isHidden = true
         //
         likeDescriptionLbl = UILabel()
         board?.addSubview(likeDescriptionLbl!)
@@ -257,10 +257,10 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         sepLine2.layer.opacity = 0
         
         let commentStaticLbl = UILabel()
-        commentStaticLbl.backgroundColor = UIColor.whiteColor()
+        commentStaticLbl.backgroundColor = UIColor.white
         commentStaticLbl.text = LS("评论")
-        commentStaticLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        commentStaticLbl.textAlignment = .Center
+        commentStaticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        commentStaticLbl.textAlignment = .center
         commentStaticLbl.textColor = UIColor(white: 0.72, alpha: 1)
         board?.addSubview(commentStaticLbl)
         commentStaticLbl.snp_makeConstraints { (make) -> Void in
@@ -270,12 +270,12 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         }
         commentStaticLbl.layer.opacity = 0
         //
-        commentTableView = UITableView(frame: CGRect.zero, style: .Plain)
+        commentTableView = UITableView(frame: CGRect.zero, style: .plain)
         commentTableView?.delegate = self
         commentTableView?.dataSource = self
-        commentTableView?.separatorStyle = .None
-        commentTableView?.registerClass(NewsDetailCommentCell.self, forCellReuseIdentifier: NewsDetailCommentCell.reuseIdentifier)
-        commentTableView.registerClass(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty_cell")
+        commentTableView?.separatorStyle = .none
+        commentTableView?.register(NewsDetailCommentCell.self, forCellReuseIdentifier: NewsDetailCommentCell.reuseIdentifier)
+        commentTableView.register(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty_cell")
         board?.addSubview(commentTableView!)
         commentTableView?.snp_makeConstraints(closure: { (make) -> Void in
             make.top.equalTo(sepLine2.snp_bottom).offset(27)
@@ -283,10 +283,10 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             make.left.equalTo(superview)
             make.height.equalTo(100)
         })
-        commentTableView?.scrollEnabled = false
+        commentTableView?.isScrollEnabled = false
         commentTableView.layer.opacity = 0
         //
-        commentTableLoading = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        commentTableLoading = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         commentTableView?.addSubview(commentTableLoading!)
         commentTableLoading?.hidesWhenStopped = true
         commentTableLoading?.startAnimating()
@@ -310,15 +310,15 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     internal override func createSubviews() {
         super.createSubviews()
         let superview = self.view
-        superview.backgroundColor = UIColor.whiteColor()
+        superview?.backgroundColor = UIColor.white
         //
         board = UIScrollView()
-        superview.addSubview(board)
+        superview?.addSubview(board)
         board.delegate = self
         board.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
-        board.backgroundColor = UIColor.blackColor()
+        board.backgroundColor = UIColor.black
         //
         initBg = UIImageView(image: initBgImg)
         board.addSubview(initBg)
@@ -326,16 +326,16 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.bottom.equalTo(superview)
-            make.height.equalTo(UIScreen.mainScreen().bounds.height)
+            make.height.equalTo(UIScreen.main.bounds.height)
         }//
         bg = UIView()
         board.addSubview(bg)
-        bg.backgroundColor = UIColor.whiteColor()
-        bg.hidden = true
+        bg.backgroundColor = UIColor.white
+        bg.isHidden = true
         bg.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.top.equalTo(superview).offset(UIScreen.mainScreen().bounds.width * 0.573)
+            make.top.equalTo(superview).offset(UIScreen.main.bounds.width * 0.573)
             make.height.equalTo(0)
         }
         //
@@ -357,10 +357,10 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         }
         // 创建like， comment和share标签
         shareNumLbl = UILabel()
-        shareNumLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        shareNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         shareNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
         shareNumLbl.text = "0"
-        superview.addSubview(shareNumLbl)
+        superview?.addSubview(shareNumLbl)
         shareNumLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(newsCover).offset(-10)
             make.right.equalTo(superview).offset(-15)
@@ -368,7 +368,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             make.width.lessThanOrEqualTo(30)
         })
         shareIcon = UIImageView(image: UIImage(named: "news_share_white"))
-        superview.addSubview(shareIcon)
+        superview?.addSubview(shareIcon)
         shareIcon.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(shareNumLbl.snp_left).offset(-3)
             make.bottom.equalTo(shareNumLbl)
@@ -376,17 +376,17 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         })
         //
         commentNumLbl = UILabel()
-        commentNumLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        commentNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         commentNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
         commentNumLbl.text = "0"
-        superview.addSubview(commentNumLbl)
+        superview?.addSubview(commentNumLbl)
         commentNumLbl.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(shareIcon.snp_left)
             make.bottom.equalTo(shareIcon)
             make.size.equalTo(CGSize(width: 30, height: 15))
         })
         commentIcon = UIImageView(image: UIImage(named: "news_comment"))
-        superview.addSubview(commentIcon)
+        superview?.addSubview(commentIcon)
         commentIcon.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(commentNumLbl.snp_left).offset(-3)
             make.bottom.equalTo(commentNumLbl)
@@ -394,17 +394,17 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         })
         //
         likeNumLbl = UILabel()
-        likeNumLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        likeNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         likeNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        superview.addSubview(likeNumLbl)
+        superview?.addSubview(likeNumLbl)
         likeNumLbl.text = "0"
         likeNumLbl.snp_makeConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(commentIcon)
             make.right.equalTo(commentIcon.snp_left)
-            make.size.equalTo(CGSizeMake(30, 15))
+            make.size.equalTo(CGSize(width: 30, height: 15))
         })
         likeIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
-        superview.addSubview(likeIcon)
+        superview?.addSubview(likeIcon)
         likeIcon.snp_makeConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(commentIcon)
             make.right.equalTo(likeNumLbl.snp_left).offset(-3)
@@ -412,8 +412,8 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         })
         //
         newsTitleFake = UILabel()
-        newsTitleFake.font = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
-        newsTitleFake.textColor = UIColor.whiteColor()
+        newsTitleFake.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightBlack)
+        newsTitleFake.textColor = UIColor.white
         newsTitleFake.numberOfLines = 0
         board.addSubview(newsTitleFake)
         newsTitleFake.snp_makeConstraints { (make) -> Void in
@@ -422,8 +422,8 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             make.bottom.equalTo(newsCover).offset(-10)
         }
         newsTitle = UILabel()
-        newsTitle.font = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
-        newsTitle.textColor = UIColor.blackColor()
+        newsTitle.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightBlack)
+        newsTitle.textColor = UIColor.black
         newsTitle.numberOfLines = 0
         board.addSubview(newsTitle)
         newsTitle.snp_makeConstraints { (make) -> Void in
@@ -439,7 +439,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         let superview = self.view
         commentPanel?.contentInput?.delegate = self
         self.inputFields.append(commentPanel?.contentInput)
-        superview.addSubview(commentPanel!)
+        superview?.addSubview(commentPanel!)
         commentPanel?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(superview)
             make.bottom.equalTo(superview).offset(45)
@@ -447,12 +447,12 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             make.height.equalTo(commentPanel!.barheight)
         })
         
-        commentPanel.likeBtn?.addTarget(self, action: #selector(NewsDetailController.likePressed), forControlEvents: .TouchUpInside)
-        commentPanel.shareBtn?.addTarget(self, action: #selector(NewsDetailController.sharePressed), forControlEvents: .TouchUpInside)
+        commentPanel.likeBtn?.addTarget(self, action: #selector(NewsDetailController.likePressed), for: .touchUpInside)
+        commentPanel.shareBtn?.addTarget(self, action: #selector(NewsDetailController.sharePressed), for: .touchUpInside)
         
         // 添加键盘出现时时间的监听
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NewsDetailController.changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NewsDetailController.changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NewsDetailController.changeLayoutWhenKeyboardAppears(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NewsDetailController.changeLayoutWhenKeyboardDisappears(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func navSetting() {
@@ -461,20 +461,20 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         let backBtn = UIButton().config(
             self, selector: #selector(backBtnPressed),
             image: UIImage(named: "account_header_back_btn"))
-            .setFrame(CGRectMake(0, 0, 10.5, 18))
+            .setFrame(CGRect(x: 0, y: 0, width: 10.5, height: 18))
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
         //
         let shareBtn = UIButton().config(
             self, selector: #selector(shareBtnPressed),
             image: UIImage(named: "news_share"))
-            .setFrame(CGRectMake(0, 0, 24, 21))
+            .setFrame(CGRect(x: 0, y: 0, width: 24, height: 21))
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareBtn)
         //
         hideBarGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(hideNavBar(_:)))
     }
     
-    func hideNavBar(gestureRecognizer: UIPanGestureRecognizer) {
-        let panMove = gestureRecognizer.translationInView(board)
+    func hideNavBar(_ gestureRecognizer: UIPanGestureRecognizer) {
+        let panMove = gestureRecognizer.translation(in: board)
         if panMove.y > 20 {
             navigationController?.setNavigationBarHidden(true, animated: true)
         }else if panMove.y < -20 {
@@ -496,16 +496,16 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
 // MARK: - 下方评论操作栏目涉及的功能
 extension NewsDetailController{
     
-    func avatarPressed(cell: DetailCommentCell) {
+    func avatarPressed(_ cell: DetailCommentCell) {
         
     }
     
-    func replyPressed(cell: DetailCommentCell) {
+    func replyPressed(_ cell: DetailCommentCell) {
         // 调用原来的commentPresse函数
         commentPressed(cell.replyBtn!)
     }
     
-    func checkImageDetail(cell: DetailCommentCell) {
+    func checkImageDetail(_ cell: DetailCommentCell) {
         
     }
     
@@ -514,7 +514,7 @@ extension NewsDetailController{
      
      - parameter sender: 被按下的按钮
      */
-    func commentPressed(sender: UIButton) {
+    func commentPressed(_ sender: UIButton) {
         responseToRow = sender.tag
         // 取出改行的用户信息并在评论内容输入框里面填入『回复 某人：』字样
         let targetComment = comments[responseToRow!]
@@ -531,11 +531,11 @@ extension NewsDetailController{
         let share = ShareController()
         share.delegate = self
         share.bgImg = self.getScreenShotBlurred(false)
-        self.presentViewController(share, animated: false, completion: nil)
+        self.present(share, animated: false, completion: nil)
     }
     
     func shareControllerFinished() {
-        self.dismissViewControllerAnimated(false, completion: nil)
+        self.dismiss(animated: false, completion: nil)
     }
     
     func likePressed() {
@@ -562,7 +562,7 @@ extension NewsDetailController{
         }
     }
     
-    func commentCanceled(commentString: String, image: UIImage?) {
+    func commentCanceled(_ commentString: String, image: UIImage?) {
         // 目前来看取消评论以后不做任何事情
     }
     
@@ -572,7 +572,7 @@ extension NewsDetailController{
      - parameter commentString: 评论的内容
      - parameter image:         评论的图片，目前取消了的这个功能，故这里image总是nil
      */
-    func commentConfirmed(commentString: String?, image: UIImage?) {
+    func commentConfirmed(_ commentString: String?, image: UIImage?) {
         var responseToComment: NewsComment? = nil
         if responseToRow != nil {
             responseToComment = comments[responseToRow!]
@@ -584,7 +584,7 @@ extension NewsDetailController{
         newComment.responseTo = responseToComment
         newComment.sent = false
         newComment.user = MainManager.sharedManager.hostUser
-        newComment.createdAt = NSDate()
+        newComment.createdAt = Date()
         //
         let requester = NewsRequester.sharedInstance
         requester.postCommentToNews(news.ssidString, content: commentString, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (data) -> () in
@@ -605,11 +605,11 @@ extension NewsDetailController{
         
         commentTableView.beginUpdates()
         // 将这个新建的commnet添加在列表的头部
-        comments.insert(newComment, atIndex: 0)
+        comments.insert(newComment, at: 0)
         if comments.count == 1 {
-            commentTableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+            commentTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         } else {
-            commentTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+            commentTableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
         commentTableView.endUpdates()
         commentPanel?.contentInput?.text = ""
@@ -629,12 +629,12 @@ extension NewsDetailController{
     func getScreenShot() -> UIImage {
         UIGraphicsBeginImageContext(self.view.frame.size)
         if let ctx = UIGraphicsGetCurrentContext(){
-            self.view.layer.renderInContext(ctx)
+            self.view.layer.render(in: ctx)
         }
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return image
+        return image!
     }
     
     
@@ -654,7 +654,7 @@ extension NewsDetailController {
      
      这个函数在web载入完成以后自动调用
      */
-    private func reArrageWebViewFrames() {
+    fileprivate func reArrageWebViewFrames() {
 
         newsDetailPanelView?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(newsDetailPanelView!.scrollView.contentSize.height)
@@ -665,7 +665,7 @@ extension NewsDetailController {
     /**
      重整评论列表的长度，在reload之后调用
      */
-    private func reArrangeCommentTableFrame() {
+    fileprivate func reArrangeCommentTableFrame() {
         let tableContentSize = commentTableView?.contentSize
         commentTableView?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(tableContentSize!.height)
@@ -673,12 +673,12 @@ extension NewsDetailController {
         reArrageBoardContentSize()
     }
     
-    private func reArrageBoardContentSize() {
+    fileprivate func reArrageBoardContentSize() {
         self.view.updateConstraints()
         self.view.layoutIfNeeded()
         var contentRect = CGRect.zero
         for view in board!.subviews {
-            contentRect = CGRectUnion(contentRect, view.frame)
+            contentRect = contentRect.union(view.frame)
         }
         board?.contentSize = CGSize(width: self.view.bounds.width, height: contentRect.height + 45)
         self.view.layoutIfNeeded()
@@ -687,7 +687,7 @@ extension NewsDetailController {
     /**
      载入数据并刷新UI
      */
-    private func loadDataAndUpdateUI() {
+    fileprivate func loadDataAndUpdateUI() {
         likeDescriptionLbl?.attributedText = news.getLikeDescription()
         let imageURL = SFURL(news.cover)!
         newsCover?.kf_setImageWithURL(imageURL)
@@ -698,7 +698,7 @@ extension NewsDetailController {
         if news.isVideo {
             newsDetailPanelView.loadHTMLString(news.content, baseURL: nil)
         } else {
-            let request = NSURLRequest(URL: news.contentURL!)
+            let request = URLRequest(url: news.contentURL! as URL)
             newsDetailPanelView?.loadRequest(request)
         }
         loadMoreCommentData()
@@ -719,9 +719,9 @@ extension NewsDetailController {
             return
         }
         let requester = NewsRequester.sharedInstance
-        var dateThreshold = NSDate()
+        var dateThreshold = Date()
         if let lastComment = comments.last {
-            dateThreshold  = lastComment.createdAt ?? dateThreshold
+            dateThreshold  = lastComment.createdAt as Date? ?? dateThreshold
         }
         requestingCommentData = true
         requester.getMoreNewsComment(dateThreshold, newsID: news.ssidString, onSuccess: { (json) -> () in
@@ -750,9 +750,9 @@ extension NewsDetailController {
         // 去冗余
         comments = $.uniq(comments, by: {return $0.ssid})
         // 排序
-        comments.sortInPlace { (comment1, comment2) -> Bool in
-            switch comment1.createdAt!.compare(comment2.createdAt!) {
-            case .OrderedDescending:
+        comments.sort { (comment1, comment2) -> Bool in
+            switch comment1.createdAt!.compare(comment2.createdAt! as Date) {
+            case .orderedDescending:
                 return true
             default:
                 return false
@@ -764,50 +764,50 @@ extension NewsDetailController {
 
 // MARK: - Table 相关
 extension NewsDetailController {
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 88
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if comments.count == 0 {
             return 100
         }
-        return NewsDetailCommentCell.heightForComment(comments[indexPath.row].content!)
+        return NewsDetailCommentCell.heightForComment(comments[(indexPath as NSIndexPath).row].content!)
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if comments.count == 0 {
             return 1
         }
         return comments.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if comments.count == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("empty_cell", forIndexPath: indexPath) as! SSEmptyListHintCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "empty_cell", for: indexPath) as! SSEmptyListHintCell
             cell.titleLbl.text = LS("还没有评论")
             return cell
         }
-        let cell = tableView.dequeueReusableCellWithIdentifier(NewsDetailCommentCell.reuseIdentifier, forIndexPath: indexPath) as! NewsDetailCommentCell
-        cell.comment = comments[indexPath.row]
-        cell.replyBtn?.tag = indexPath.row
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewsDetailCommentCell.reuseIdentifier, for: indexPath) as! NewsDetailCommentCell
+        cell.comment = comments[(indexPath as NSIndexPath).row]
+        cell.replyBtn?.tag = (indexPath as NSIndexPath).row
         cell.delegate = self
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if comments.count == 0 {
             return
         }
-        let comment = comments[indexPath.row]
+        let comment = comments[(indexPath as NSIndexPath).row]
         if comment.user.isHost {
             return
         } else {
-            responseToRow = indexPath.row
+            responseToRow = (indexPath as NSIndexPath).row
             let responseToName = comment.user.nickName!
             responseToPrefixStr = LS("回复 ") + responseToName + ": "
             commentPanel?.contentInput?.text = responseToPrefixStr
@@ -826,29 +826,29 @@ extension NewsDetailController {
         guard let url = news.contentURL else{
             return
         }
-        let request = NSURLRequest(URL: url)
+        let request = URLRequest(url: url as URL)
         newsDetailPanelView?.loadRequest(request)
     }
 
-    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         newsDetailLoading?.startAnimating()
         print(request)
         return true
     }
     
-    func webViewDidFinishLoad(webView: UIWebView) {
+    func webViewDidFinishLoad(_ webView: UIWebView) {
         newsDetailLoading?.stopAnimating()
 //        reArrageWebViewFrames()
     }
     
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
+    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
         if error != nil {
             // TODO: 错误处理，目前遇到redirect的情况的话，运作错误，暂时取消报错
 //            showToast(LS("无法获取资讯详情"))
         }
     }
     
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "scrollView.contentSize" {
             reArrageWebViewFrames()
         }
@@ -856,7 +856,7 @@ extension NewsDetailController {
 }
 
 extension NewsDetailController {
-    func scrollViewDidScroll(scrollView: UIScrollView){
+    func scrollViewDidScroll(_ scrollView: UIScrollView){
         if scrollView != self.board {
             return
         }
@@ -870,7 +870,7 @@ extension NewsDetailController {
                 make.height.equalTo(newsCover.snp_width).multipliedBy(0.573)
             })
         }else if curOffsetY < 0 {
-            let basicHeight = superview.frame.width * 0.573
+            let basicHeight = (superview?.frame.width)! * 0.573
             let scaleFactor = (-curOffsetY) / basicHeight + 1
             newsCover?.snp_remakeConstraints(closure: { (make) -> Void in
                 make.top.equalTo(superview)
@@ -882,7 +882,7 @@ extension NewsDetailController {
         self.view.layoutIfNeeded()
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y + scrollView.frame.height > scrollView.contentSize.height - 1 {
             loadMoreCommentData()
         }
@@ -898,10 +898,10 @@ extension NewsDetailController {
      
      - parameter textView: 目标textview
      */
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         let textView = commentPanel?.contentInput
         let fixedWidth = textView?.bounds.width
-        let newSize = textView?.sizeThatFits(CGSize(width: fixedWidth!, height: CGFloat.max))
+        let newSize = textView?.sizeThatFits(CGSize(width: fixedWidth!, height: CGFloat.greatestFiniteMagnitude))
         // 注：参见 CommentPanel 内部的布局设置，输入框的边缘总是距离下面的Bar的上下边界5个Point
         commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(max(newSize!.height  + 10 , commentPanel!.barheight))
@@ -909,7 +909,7 @@ extension NewsDetailController {
         self.view.layoutIfNeeded()
     }
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             let commentText = textView.text ?? ""
             if commentText.length > 0 {
@@ -931,9 +931,9 @@ extension NewsDetailController {
         return true
     }
     
-    func changeLayoutWhenKeyboardAppears(notif: NSNotification) {
-        let userInfo = notif.userInfo!
-        let keyboardFrame = userInfo[UIKeyboardFrameBeginUserInfoKey]!.CGRectValue
+    func changeLayoutWhenKeyboardAppears(_ notif: Foundation.Notification) {
+        let userInfo = (notif as NSNotification).userInfo!
+        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue
         board?.snp_updateConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(self.view).offset(-(commentPanel!.barheight + keyboardFrame.height) )
         })
@@ -943,7 +943,7 @@ extension NewsDetailController {
         self.view.layoutIfNeeded()
     }
     
-    func changeLayoutWhenKeyboardDisappears(notif: NSNotification) {
+    func changeLayoutWhenKeyboardDisappears(_ notif: Foundation.Notification) {
         board?.snp_updateConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(self.view).offset(-(commentPanel!.barheight) )
         })
@@ -964,12 +964,12 @@ extension NewsDetailController {
     
     func thumbnailForShare() -> UIImage {
         let image = newsCover.image!
-        let thumbnail = RBSquareImageTo(image, size: CGSizeMake(100, 100))
+        let thumbnail = RBSquareImageTo(image, size: CGSize(width: 100, height: 100))
         return thumbnail
     }
     
     func linkForShare() -> String {
-        return news.contentURL!.absoluteString
+        return news.contentURL!.absoluteString!
     }
 
 }

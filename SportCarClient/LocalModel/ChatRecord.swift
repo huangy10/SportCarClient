@@ -29,12 +29,12 @@ class ChatRecord: BaseModel {
         }
     }
     
-    private var _cachedWaveData: [Float]?
+    fileprivate var _cachedWaveData: [Float]?
     var cachedWaveData: [Float]? {
         get {
             if _cachedWaveData == nil {
                 if let cache = self.audioCaches {
-                    let data = JSON(data: cache.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!).arrayValue
+                    let data = JSON(data: cache.data(using: String.Encoding.utf8, allowLossyConversion: false)!).arrayValue
                     _cachedWaveData = data.map { $0.floatValue }
                 } else {
                     _cachedWaveData = nil
@@ -48,7 +48,7 @@ class ChatRecord: BaseModel {
     }
     var displayTimeMark: Bool = false
     
-    private var _senderUser: User?
+    fileprivate var _senderUser: User?
     
     var senderUser : User? {
         if mine {
@@ -56,28 +56,28 @@ class ChatRecord: BaseModel {
         }
         assert(sender != nil, "No sender for chat")
         if _senderUser == nil {
-            let json = JSON(data: sender!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+            let json = JSON(data: sender!.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
             _senderUser = try! manager.getOrCreate(json, detailLevel: 0) as User
         }
         return _senderUser
     }
     
     var imageSize: CGSize! {
-        return CGSizeMake(CGFloat(imageWidth), CGFloat(imageHeight))
+        return CGSize(width: CGFloat(imageWidth), height: CGFloat(imageHeight))
     }
     
-    var imageURL: NSURL! {
+    var imageURL: URL! {
         return SFURL(image!)!
     }
     
     var contentImage: UIImage?
     
-    private var _targetUser: User?
+    fileprivate var _targetUser: User?
     var targetUser: User? {
         get {
             assert(relatedUser != nil, "")
             if _targetUser == nil {
-                let json = JSON(data: relatedUser!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+                let json = JSON(data: relatedUser!.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
                 _targetUser = try! manager.getOrCreate(json) as User
             }
             return _targetUser
@@ -88,12 +88,12 @@ class ChatRecord: BaseModel {
         }
     }
     
-    private var _targetClub: Club?
+    fileprivate var _targetClub: Club?
     var targetClub: Club? {
         get {
             assert(relatedClub != nil, "")
             if _targetClub == nil {
-                let json = JSON(data: relatedClub!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+                let json = JSON(data: relatedClub!.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
                 _targetClub = try! manager.getOrCreate(json) as Club
             }
             return _targetClub
@@ -119,7 +119,7 @@ class ChatRecord: BaseModel {
         }
     }
 
-    override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> ChatRecord {
+    override func loadDataFromJSON(_ data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> ChatRecord {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         rosterID = data["roster"]["ssid"].int32Value
         createdAt = DateSTR(data["created_at"].stringValue)
@@ -143,32 +143,32 @@ class ChatRecord: BaseModel {
         read = data["read"].boolValue
         if chatType == "user" {
             let userJSON = data["target_user"]
-            relatedUser =  String(data: try! userJSON.rawData(), encoding: NSUTF8StringEncoding)
+            relatedUser =  String(data: try! userJSON.rawData(), encoding: String.Encoding.utf8)
             _targetUser = try manager.getOrCreate(userJSON) as User
             targetID = _targetUser!.ssid
         } else if chatType == "club" {
             let clubJSON = data["target_club"]
-            relatedClub = String(data: try! clubJSON.rawData(), encoding: NSUTF8StringEncoding)
+            relatedClub = String(data: try! clubJSON.rawData(), encoding: String.Encoding.utf8)
             _targetClub = try! manager.getOrCreate(clubJSON) as Club
             targetID = _targetClub!.ssid
         } else {
-            throw SSModelError.InvalidJSON
+            throw SSModelError.invalidJSON
         }
         return self
     }
     
-    func initForPost(messageType: String, textContent: String?, image: UIImage?, audio: NSURL?, relatedID: String? = nil) -> ChatRecord {
+    func initForPost(_ messageType: String, textContent: String?, image: UIImage?, audio: URL?, relatedID: String? = nil) -> ChatRecord {
         self.messageType = messageType
         self.textContent = textContent
         self.mine = true
-        self.createdAt = NSDate()
+        self.createdAt = Date()
         contentImage = image
         imageWidth = Int32(image?.size.width ?? 0)
         imageHeight = Int32(image?.size.height ?? 0)
         return self
     }
     
-    func confirmSent(newID: Int32, image: String?, audio: String?) -> Self{
+    func confirmSent(_ newID: Int32, image: String?, audio: String?) -> Self{
         ssid = newID
         self.image = image
         self.audio = audio

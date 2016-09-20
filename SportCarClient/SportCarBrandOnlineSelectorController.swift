@@ -11,7 +11,7 @@ import Dollar
 
 
 protocol SportCarBrandOnlineSelectorDelegate: class {
-    func sportCarBrandOnlineSelectorDidSelect(manufacture: String, carName: String, subName: String)
+    func sportCarBrandOnlineSelectorDidSelect(_ manufacture: String, carName: String, subName: String)
     
     func sportCarBrandOnlineSelectorDidCancel()
 }
@@ -20,10 +20,10 @@ protocol SportCarBrandOnlineSelectorDelegate: class {
 class ManufacturerOnlineSelectorController: UITableViewController, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating {
     var data: [String: [String]] = [:] {
         didSet {
-            keys = ((data as NSDictionary).allKeys as! [String]).sort()
+            keys = ((data as NSDictionary).allKeys as! [String]).sorted()
         }
     }
-    private var keys: [String] = []
+    fileprivate var keys: [String] = []
     var delegate: SportCarBrandOnlineSelectorDelegate!
     
     var filter: String?
@@ -41,8 +41,8 @@ class ManufacturerOnlineSelectorController: UITableViewController, UISearchBarDe
     
     func configureNavigationBar() {
         navigationItem.title = LS("品牌型号")
-        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Done, target: self, action: #selector(navLeftBtnPressed))
-        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightRed], forState: .Normal)
+        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .done, target: self, action: #selector(navLeftBtnPressed))
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightRed], for: UIControlState())
         navigationItem.leftBarButtonItem = leftBtnItem
     }
     
@@ -51,11 +51,11 @@ class ManufacturerOnlineSelectorController: UITableViewController, UISearchBarDe
     }
     
     func configureTableView() {
-        tableView.registerClass(SportCarBrandSelectCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(SportCarBrandSelectCell.self, forCellReuseIdentifier: "cell")
         
         refreshControl = UIRefreshControl()
         tableView.addSubview(refreshControl!)
-        refreshControl?.addTarget(self, action: #selector(loadManufactuers), forControlEvents: .ValueChanged)
+        refreshControl?.addTarget(self, action: #selector(loadManufactuers), for: .valueChanged)
     }
     
     func configureSearchView() {
@@ -72,33 +72,33 @@ class ManufacturerOnlineSelectorController: UITableViewController, UISearchBarDe
         
         tapper = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapper)
-        tapper.enabled = false
+        tapper.isEnabled = false
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return keys.count
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let key = keys[section]
         return data[key]!.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! SportCarBrandSelectCell
-        let key = keys[indexPath.section]
-        let name = data[key]![indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! SportCarBrandSelectCell
+        let key = keys[(indexPath as NSIndexPath).section]
+        let name = data[key]![(indexPath as NSIndexPath).row]
         cell.nameLbl?.text = name
         return cell
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return keys[section]
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let index = keys[indexPath.section]
-        let manufacturer = data[index]![indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let index = keys[(indexPath as NSIndexPath).section]
+        let manufacturer = data[index]![(indexPath as NSIndexPath).row]
         
         let detail = SportCarBrandOnlineSelectorController()
         detail.pickedCarInfo = [manufacturer]
@@ -124,16 +124,16 @@ class ManufacturerOnlineSelectorController: UITableViewController, UISearchBarDe
     }
     
     func dismissKeyboard() {
-        tapper.enabled = false
+        tapper.isEnabled = false
         searchController.searchBar.resignFirstResponder()
     }
     
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    func updateSearchResults(for searchController: UISearchController) {
         loadManufactuers()
     }
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
-        tapper.enabled = true
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        tapper.isEnabled = true
     }
 }
 
@@ -156,21 +156,21 @@ class SportCarBrandOnlineSelectorController: UITableViewController, UISearchBarD
     }
     
     func configureTableView() {
-        tableView.registerClass(SportCarBrandSelectCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(SportCarBrandSelectCell.self, forCellReuseIdentifier: "cell")
     }
     
     func configureNavigationBar() {
-        navigationItem.title = pickedCarInfo.last()
+        navigationItem.title = pickedCarInfo.last
         let leftBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed))
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        leftBtn.frame = CGRectMake(0, 0, 15, 15)
-        leftBtn.contentMode = .ScaleAspectFit
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.frame = CGRect(x: 0, y: 0, width: 15, height: 15)
+        leftBtn.contentMode = .scaleAspectFit
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     }
     
     func navLeftBtnPressed() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
 
     func loadCarData() {
@@ -182,7 +182,7 @@ class SportCarBrandOnlineSelectorController: UITableViewController, UISearchBarD
         }
     }
     
-    func loadCarNamesByManufacturer(manufacturer: String) {
+    func loadCarNamesByManufacturer(_ manufacturer: String) {
         SportCarRequester.sharedInstance.carList("car_name", manufacturer: manufacturer, onSuccess: { (json) in
             self.data.removeAll()
             self.data = $.map(json!.arrayValue, transform: { $0.stringValue })
@@ -192,7 +192,7 @@ class SportCarBrandOnlineSelectorController: UITableViewController, UISearchBarD
         }
     }
     
-    func loadSubNamesBy(manufactuer: String, carName: String) {
+    func loadSubNamesBy(_ manufactuer: String, carName: String) {
         SportCarRequester.sharedInstance.carList("sub_name", manufacturer: manufactuer, carName: carName, onSuccess: { (json) in
             self.data.removeAll()
             self.data = $.map(json!.arrayValue, transform: { $0.stringValue })
@@ -202,29 +202,29 @@ class SportCarBrandOnlineSelectorController: UITableViewController, UISearchBarD
         }
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! SportCarBrandSelectCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! SportCarBrandSelectCell
         if curLevel == 1 {
-            cell.nameLbl?.text = data[indexPath.row]
+            cell.nameLbl?.text = data[(indexPath as NSIndexPath).row]
         } else {
             let carName = pickedCarInfo[0]
-            cell.nameLbl?.text = "\(carName) \(data[indexPath.row])"
+            cell.nameLbl?.text = "\(carName) \(data[(indexPath as NSIndexPath).row])"
         }
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let level = curLevel
         if level == 1 {
-            let carName = data[indexPath.row]
+            let carName = data[(indexPath as NSIndexPath).row]
             var nextLevelPickedInfo = pickedCarInfo
             nextLevelPickedInfo.append(carName)
             let detail = SportCarBrandOnlineSelectorController()
@@ -234,7 +234,7 @@ class SportCarBrandOnlineSelectorController: UITableViewController, UISearchBarD
         } else if level == 2 {
             let manufacturer = pickedCarInfo[0]
             let carName = pickedCarInfo[1]
-            let subName = data[indexPath.row]
+            let subName = data[(indexPath as NSIndexPath).row]
             delegate.sportCarBrandOnlineSelectorDidSelect(manufacturer, carName: carName, subName: subName)
         }
     }
@@ -249,8 +249,8 @@ class SportCarBrandSelectCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         //
         nameLbl = UILabel()
-        nameLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
-        nameLbl?.textColor = UIColor.blackColor()
+        nameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        nameLbl?.textColor = UIColor.black
         self.contentView.addSubview(nameLbl!)
         nameLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.edges.equalTo(self.contentView).inset(UIEdgeInsets(top: 2, left: 15, bottom: 2, right: 15))

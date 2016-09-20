@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 func ss_createLabel(
-    font: UIFont,
+    _ font: UIFont,
     textColor: UIColor,
     textAlignment: NSTextAlignment,
     text: String? = nil
@@ -33,73 +33,77 @@ func ss_createLabel(
  - returns: the factory function
  */
 func ss_labelFactory(
-    font: UIFont,
+    _ font: UIFont,
     textColor: UIColor,
     textAlignment: NSTextAlignment
     ) -> ((String)->UILabel) {
-        func wrapped(text: String) -> UILabel {
+        func wrapped(_ text: String) -> UILabel {
             return ss_createLabel(font, textColor: textColor, textAlignment: textAlignment, text: text)
         }
         return wrapped
 }
 
 extension UIColor {
-    class func RGB(red: CGFloat, _ green: CGFloat, _ blue: CGFloat, alpha: CGFloat = 1) -> UIColor {
+    class func RGB(_ red: CGFloat, _ green: CGFloat, _ blue: CGFloat, alpha: CGFloat = 1) -> UIColor {
         return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: alpha)
     }
 }
 
 extension UIView {
     
-    @nonobjc func addSubview<T: UIView>(type: T.Type) -> T {
+    @nonobjc func addSubview<T: UIView>(_ type: T.Type) -> T {
         let subview = type.self.init()
         addSubview(subview)
+        if let imageView = subview as? UIImageView {
+            imageView.contentMode = .scaleAspectFill
+            imageView.clipsToBounds = true
+        }
         return subview
     }
     
     @nonobjc func config(
-        backgroundColor: UIColor = UIColor.whiteColor()
+        _ backgroundColor: UIColor = UIColor.white
         ) -> Self {
         self.backgroundColor = backgroundColor
         return self
     }
     
-    @nonobjc func layout(@noescape closurer: ConstraintMaker -> Void) -> Self {
+    @nonobjc func layout(@noescape _ closurer: (ConstraintMaker) -> Void) -> Self {
         self.snp_makeConstraints(closure: closurer)
         return self
     }
     
     @nonobjc func addShadow(
-        blur: CGFloat = 2,
-        color: UIColor = UIColor.blackColor(),
+        _ blur: CGFloat = 2,
+        color: UIColor = UIColor.black,
         opacity: Float = 0.12,
-        offset: CGSize = CGSizeMake(0, 1)
+        offset: CGSize = CGSize(width: 0, height: 1)
         ) -> Self {
-        self.layer.shadowColor = color.CGColor
+        self.layer.shadowColor = color.cgColor
         self.layer.shadowOffset = offset
         self.layer.shadowOpacity = opacity
         self.layer.shadowRadius = blur
         return self
     }
     
-    @nonobjc func setFrame(frame: CGRect) -> Self {
+    @nonobjc func setFrame(_ frame: CGRect) -> Self {
         self.frame = frame
         return self
     }
     
-    @nonobjc func toRound(corner: CGFloat, clipsToBound: Bool = true) -> Self {
+    @nonobjc func toRound(_ corner: CGFloat, clipsToBound: Bool = true) -> Self {
         self.layer.cornerRadius = corner
         self.clipsToBounds = clipsToBounds
         return self
     }
     
-    @nonobjc func toRound(clipsToBounds: Bool = true) -> Self {
+    @nonobjc func toRound(_ clipsToBounds: Bool = true) -> Self {
         self.layer.cornerRadius = self.frame.width / 2
         self.clipsToBounds = clipsToBounds
         return self
     }
     
-    @nonobjc func customize(config: UIView->Void) -> Self {
+    @nonobjc func customize(_ config: (UIView)->Void) -> Self {
         config(self)
         return self
     }
@@ -108,14 +112,14 @@ extension UIView {
 
 extension UILabel {
     @nonobjc func config(
-        fontSize: CGFloat               = 14,
+        _ fontSize: CGFloat               = 14,
         fontWeight: CGFloat             = UIFontWeightUltraLight,
-        textColor: UIColor              = UIColor.blackColor(),
-        textAlignment: NSTextAlignment  = .Left,
+        textColor: UIColor              = UIColor.black,
+        textAlignment: NSTextAlignment  = .left,
         text: String?                   = nil,
         multiLine: Bool                 = false
         ) -> UILabel {
-        self.font = UIFont.systemFontOfSize(fontSize, weight: fontWeight)
+        self.font = UIFont.systemFont(ofSize: fontSize, weight: fontWeight)
         self.textColor = textColor
         self.textAlignment = textAlignment
         self.text = text
@@ -128,7 +132,7 @@ extension UILabel {
     }
     
     
-    @nonobjc func styleCopy(lbl: UILabel, text: String? = nil) -> Self {
+    @nonobjc func styleCopy(_ lbl: UILabel, text: String? = nil) -> Self {
         font = lbl.font
         textColor = lbl.textColor
         textAlignment = lbl.textAlignment
@@ -138,12 +142,12 @@ extension UILabel {
     }
     
     class func facotry(
-        fontSize: CGFloat               = 14,
+        _ fontSize: CGFloat               = 14,
         fontWeight: CGFloat             = UIFontWeightUltraLight,
-        textColor: UIColor              = UIColor.blackColor(),
-        textAlignment: NSTextAlignment  = .Left
-        ) -> String -> UILabel {
-        func _factory(text: String) -> UILabel {
+        textColor: UIColor              = UIColor.black,
+        textAlignment: NSTextAlignment  = .left
+        ) -> (String) -> UILabel {
+        func _factory(_ text: String) -> UILabel {
             return UILabel().config(fontSize, fontWeight: fontWeight, textColor: textColor, textAlignment: textAlignment, text: text)
         }
         return _factory
@@ -152,14 +156,14 @@ extension UILabel {
 
 extension UITextField {
     @nonobjc func config(
-        fontSize: CGFloat               = 14,
+        _ fontSize: CGFloat               = 14,
         fontWeight: CGFloat             = UIFontWeightUltraLight,
-        textColor: UIColor              = UIColor.blackColor(),
-        textAlignment: NSTextAlignment  = .Left,
+        textColor: UIColor              = UIColor.black,
+        textAlignment: NSTextAlignment  = .left,
         placeholder: String?            = nil,
         text: String?                   = nil
         ) -> UITextField {
-        self.font = UIFont.systemFontOfSize(fontSize, weight: fontWeight)
+        self.font = UIFont.systemFont(ofSize: fontSize, weight: fontWeight)
         self.textColor = textColor
         self.textAlignment = textAlignment
         self.placeholder = placeholder
@@ -167,7 +171,7 @@ extension UITextField {
         return self
     }
     
-    @nonobjc func addToInputable(inputable: InputableViewController) -> Self {
+    @nonobjc func addToInputable(_ inputable: InputableViewController) -> Self {
         self.delegate = inputable
         inputable.inputFields.append(self)
         return self
@@ -176,20 +180,20 @@ extension UITextField {
 
 extension UITextView {
     @nonobjc func config(
-        fontSize: CGFloat               = 14,
+        _ fontSize: CGFloat               = 14,
         fontWeight: CGFloat             = UIFontWeightUltraLight,
-        textColor: UIColor              = UIColor.blackColor(),
-        textAlignment: NSTextAlignment  = .Left,
+        textColor: UIColor              = UIColor.black,
+        textAlignment: NSTextAlignment  = .left,
         text: String?                   = nil
         ) -> UITextView {
-        self.font = UIFont.systemFontOfSize(fontSize, weight: fontWeight)
+        self.font = UIFont.systemFont(ofSize: fontSize, weight: fontWeight)
         self.textColor = textColor
         self.textAlignment = textAlignment
         self.text = text
         return self
     }
     
-    @nonobjc func addToInputable(inputable: InputableViewController) -> UITextView {
+    @nonobjc func addToInputable(_ inputable: InputableViewController) -> UITextView {
         self.delegate = inputable
         inputable.inputFields.append(self)
         return self
@@ -198,8 +202,8 @@ extension UITextView {
 
 extension UIImageView {
     @nonobjc func config(
-        image: UIImage? = nil,
-        contentMode: UIViewContentMode = .ScaleAspectFill
+        _ image: UIImage? = nil,
+        contentMode: UIViewContentMode = .scaleAspectFill
         ) -> Self {
         self.image = image
         self.contentMode = contentMode
@@ -208,8 +212,8 @@ extension UIImageView {
     }
     
     @nonobjc func layout(
-        cornerRadius: CGFloat,
-        @noescape closurer: ConstraintMaker -> Void
+        _ cornerRadius: CGFloat,
+        @noescape closurer: (ConstraintMaker) -> Void
         ) -> Self {
         self.layer.cornerRadius = cornerRadius
         self.snp_makeConstraints(closure: closurer)
@@ -219,35 +223,35 @@ extension UIImageView {
 
 extension UIRefreshControl {
     @nonobjc func config(
-        target: AnyObject,
+        _ target: AnyObject,
         selector: Selector
         ) -> Self {
-        self.addTarget(target, action: selector, forControlEvents: .ValueChanged)
+        self.addTarget(target, action: selector, for: .valueChanged)
         return self
     }
 }
 
 extension UIButton {
     @nonobjc func config(
-        target: AnyObject,
+        _ target: AnyObject,
         selector: Selector,
         title: String? = nil,
         titleColor: UIColor? = kHighlightedRedTextColor,
         titleSize: CGFloat = 14,
         titleWeight: CGFloat = UIFontWeightUltraLight,
         image: UIImage? = nil,
-        contentMode: UIViewContentMode = .ScaleAspectFill
+        contentMode: UIViewContentMode = .scaleAspectFill
         ) -> UIButton {
-        self.setTitle(title, forState: .Normal)
-        self.setImage(image, forState: .Normal)
+        self.setTitle(title, for: UIControlState())
+        self.setImage(image, for: UIControlState())
         self.imageView?.contentMode = contentMode
-        self.setTitleColor(titleColor, forState: .Normal)
-        self.titleLabel?.font = UIFont.systemFontOfSize(titleSize, weight: titleWeight)
-        self.addTarget(target, action: selector, forControlEvents: .TouchUpInside)
+        self.setTitleColor(titleColor, for: UIControlState())
+        self.titleLabel?.font = UIFont.systemFont(ofSize: titleSize, weight: titleWeight)
+        self.addTarget(target, action: selector, for: .touchUpInside)
         return self
     }
     
-    @nonobjc func toRoundButton(corner: CGFloat) -> UIButton {
+    @nonobjc func toRoundButton(_ corner: CGFloat) -> UIButton {
         imageView?.layer.cornerRadius = corner
         return self
     }
@@ -255,7 +259,7 @@ extension UIButton {
 
 extension UISwitch {
     @nonobjc func config(
-        target: AnyObject,
+        _ target: AnyObject,
         selector: Selector,
         tintColor: UIColor = UIColor(white: 0.72, alpha: 1),
         onTintColor: UIColor = kHighlightedRedTextColor,
@@ -266,14 +270,14 @@ extension UISwitch {
         self.onTintColor = onTintColor
         self.backgroundColor = backgroundColor
         self.layer.cornerRadius = cornerRadius
-        self.addTarget(target, action: selector, forControlEvents: .ValueChanged)
+        self.addTarget(target, action: selector, for: .valueChanged)
         return self
     }
 }
 
 extension UIScrollView {
     @nonobjc func config(
-        contentSize: CGSize
+        _ contentSize: CGSize
         ) -> Self {
         return self
     }

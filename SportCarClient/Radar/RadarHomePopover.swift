@@ -17,10 +17,10 @@ class RadarHomePopoverController: UIViewController {
     
     func createSubviews() {
         let superview = self.view
-        superview.backgroundColor = UIColor.whiteColor()
+        superview?.backgroundColor = UIColor.white
         //
         newStatusBtn = UIButton()
-        superview.addSubview(newStatusBtn)
+        superview?.addSubview(newStatusBtn)
         newStatusBtn.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(superview)
             make.left.equalTo(superview)
@@ -36,8 +36,8 @@ class RadarHomePopoverController: UIViewController {
             make.centerY.equalTo(newStatusBtn)
         }
         let statusLbl = UILabel()
-        statusLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        statusLbl.textColor = UIColor.blackColor()
+        statusLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        statusLbl.textColor = UIColor.black
         statusLbl.text = LS("发布动态")
         newStatusBtn.addSubview(statusLbl)
         statusLbl.snp_makeConstraints { (make) -> Void in
@@ -55,7 +55,7 @@ class RadarHomePopoverController: UIViewController {
         }
         //
         newChatBtn = UIButton()
-        superview.addSubview(newChatBtn)
+        superview?.addSubview(newChatBtn)
         newChatBtn.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -72,8 +72,8 @@ class RadarHomePopoverController: UIViewController {
         }
         //
         let chatLbl = UILabel()
-        chatLbl.textColor = UIColor.blackColor()
-        chatLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        chatLbl.textColor = UIColor.black
+        chatLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         chatLbl.text = LS("新建聊天")
         newChatBtn.addSubview(chatLbl)
         chatLbl.snp_makeConstraints { (make) -> Void in
@@ -92,7 +92,7 @@ class RadarHomePopoverController: UIViewController {
         }
         //
         newActivityBtn = UIButton()
-        superview.addSubview(newActivityBtn)
+        superview?.addSubview(newActivityBtn)
         newActivityBtn.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
@@ -109,7 +109,7 @@ class RadarHomePopoverController: UIViewController {
         }
         //
         let actLbl = UILabel()
-        actLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        actLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         actLbl.textColor = UIColor(white: 0.945, alpha: 1)
         actLbl.text = LS("发起活动")
         newActivityBtn.addSubview(actLbl)

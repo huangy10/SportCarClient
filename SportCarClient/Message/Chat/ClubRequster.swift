@@ -18,7 +18,7 @@ class ClubRequester: BasicRequester {
     
     static let sharedInstance = ClubRequester()
     
-    private let _urpMap: [String: String] = [
+    fileprivate let _urpMap: [String: String] = [
         "info": "<clubID>/info",
         "discover": "discover",
         "create": "create",
@@ -41,20 +41,20 @@ class ClubRequester: BasicRequester {
         return "club"
     }
     
-    var privateQueue: dispatch_queue_t {
+    var privateQueue: DispatchQueue {
         return ChatModelManger.sharedManager.workQueue
     }
     
     // MARK: - requests
     
-    func getClubInfo(clubID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func getClubInfo(_ clubID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return get(
             urlForName("info", param: ["clubID": clubID]),
             responseDataField: "data",
             onSuccess: onSuccess, onError: onError)
     }
     
-    func discoverClub(queryType: String, cityLimit: String, extraParam: [String: AnyObject]? = nil, skip: Int, limit: Int, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func discoverClub(_ queryType: String, cityLimit: String, extraParam: [String: AnyObject]? = nil, skip: Int, limit: Int, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         var param: [String: AnyObject] = extraParam ?? [:]
         param["query_type"] = queryType
         param["skip"] = skip
@@ -67,12 +67,12 @@ class ClubRequester: BasicRequester {
             onSuccess: onSuccess, onError: onError)
     }
     
-    func createNewClub(clubName: String, clubLogo: UIImage, members: [String], description: String, onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()) {
+    func createNewClub(_ clubName: String, clubLogo: UIImage, members: [String], description: String, onSuccess: (JSON?)->(), onProgress: (_ progress: Float)->(), onError: (_ code: String?)->()) {
         let param: [String: AnyObject] = [
-            "name": clubName,
+            "name": clubName as AnyObject,
             "logo": clubLogo,
-            "members": members,
-            "description": description
+            "members": members as AnyObject,
+            "description": description as AnyObject
         ]
         upload(
             urlForName("create"),
@@ -82,7 +82,7 @@ class ClubRequester: BasicRequester {
         )
     }
     
-    func getClubList(onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func getClubList(_ onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return get(
             urlForName("list"),
             responseDataField: "clubs",
@@ -90,7 +90,7 @@ class ClubRequester: BasicRequester {
         )
     }
     
-    func clubAuth(clubID: String, district: String, description: String, onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()) -> Request {
+    func clubAuth(_ clubID: String, district: String, description: String, onSuccess: (JSON?)->(), onProgress: (_ progress: Float)->(), onError: (_ code: String?)->()) -> Request {
         return post(
             urlForName("auth", param: ["clubID": clubID]),
             parameters: ["city": district, "description": description],
@@ -100,8 +100,8 @@ class ClubRequester: BasicRequester {
     
     // update club settings
     func updateClubSettings(
-        club: Club,
-        onSuccess: (JSON?)->(), onError: (code: String?)->()
+        _ club: Club,
+        onSuccess: (JSON?)->(), onError: (_ code: String?)->()
         ) -> Request {
         let params: [String: AnyObject] = [
             "only_host_can_invite": club.onlyHostCanInvite,
@@ -120,7 +120,7 @@ class ClubRequester: BasicRequester {
         )
     }
     
-    func updateClubLogo(club: Club, newLogo: UIImage, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+    func updateClubLogo(_ club: Club, newLogo: UIImage, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) {
         upload(
             urlForName("update", param: ["clubID": club.ssidString]),
             parameters: ["logo": newLogo],
@@ -129,16 +129,16 @@ class ClubRequester: BasicRequester {
     }
     
     // update club memebers
-    func updateClubMembers(clubID: String, members: [String], opType: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func updateClubMembers(_ clubID: String, members: [String], opType: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return post(
             urlForName("update_members", param: ["clubID": clubID]),
-            encoding: .JSON,
+            encoding: .json,
             parameters: ["op_type": opType, "target_users": members],
             onSuccess: onSuccess, onError: onError
         )
     }
     
-    func getClubMembers(clubID: String, skip: Int, limit: Int, searchText: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func getClubMembers(_ clubID: String, skip: Int, limit: Int, searchText: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return get(
             urlForName("update_members", param: ["clubID": clubID]),
             parameters: ["limit": limit, "skip": skip, "filter": searchText],
@@ -147,15 +147,15 @@ class ClubRequester: BasicRequester {
     }
     
     // club quit
-    func clubQuit(clubID: String, newHostID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request{
+    func clubQuit(_ clubID: String, newHostID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request{
         return post(
             urlForName("quit", param: ["clubID": clubID]),
-            parameters: ["new_host": newHostID], encoding: .JSON,
+            parameters: ["new_host": newHostID], encoding: .json,
             responseQueue: self.privateQueue,
             onSuccess: onSuccess, onError: onError)
     }
     
-    func getClubListAuthed(onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func getClubListAuthed(_ onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         
         return get(
             urlForName("list"),
@@ -164,14 +164,14 @@ class ClubRequester: BasicRequester {
             onSuccess: onSuccess, onError: onError)
     }
     
-    func applyForAClub(clubID: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func applyForAClub(_ clubID: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return post(
             urlForName("apply", param: ["clubID": clubID]),
             onSuccess: onSuccess, onError: onError)
     }
     
     func clubOperation(
-        clubID: String,
+        _ clubID: String,
         targetUserID: String,
         opType: String,
         onSuccess: SSSuccessCallback,
@@ -186,7 +186,7 @@ class ClubRequester: BasicRequester {
     }
     
     func clubBillboard(
-        skip: Int,
+        _ skip: Int,
         limit: Int,
         scope: String,
         filterType: String,
@@ -201,7 +201,7 @@ class ClubRequester: BasicRequester {
             ], responseDataField: "data", onSuccess: onSuccess, onError: onError)
     }
     
-    func clubPopularCities(onSuccess: SSSuccessCallback,
+    func clubPopularCities(_ onSuccess: SSSuccessCallback,
                            onError: SSFailureCallback) -> Request {
         return get(urlForName("cities"), responseDataField: "data", onSuccess: onSuccess, onError: onError)
     }

@@ -22,8 +22,8 @@ class SSPropertyCell: SSPropertyBaseCell {
     
     var editable: Bool = false {
         didSet {
-            arrowIcon.hidden = !editable
-            if arrowIcon.hidden {
+            arrowIcon.isHidden = !editable
+            if arrowIcon.isHidden {
                 infoLbl.snp_remakeConstraints(closure: { (make) in
                     make.centerY.equalTo(staticLbl)
                     make.right.equalTo(arrowIcon)
@@ -41,7 +41,7 @@ class SSPropertyCell: SSPropertyBaseCell {
         super.createSubviews()
         let superview = self.contentView
         infoLbl = superview.addSubview(UILabel.self)
-            .config(14, textColor: UIColor.blackColor())
+            .config(14, textColor: UIColor.black)
             .layout({ (make) in
                 make.centerY.equalTo(staticLbl)
                 make.right.equalTo(arrowIcon.snp_left).offset(-15)
@@ -66,9 +66,9 @@ class SSPropertyCell: SSPropertyBaseCell {
      - returns: 返回获取Image的task
      */
     func setData(
-        propertyName: String,
+        _ propertyName: String,
         propertyValue: String?,
-        propertyImageURL: NSURL? = nil,
+        propertyImageURL: URL? = nil,
         propertyEmptyPlaceHolder: String? = nil,
         editable: Bool = true) -> Self {
             staticLbl.text = propertyName

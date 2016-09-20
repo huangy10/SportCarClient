@@ -22,14 +22,14 @@ class ChatListCell: UITableViewCell {
             if data.alwaysOnTop {
                 contentView.backgroundColor = UIColor(white: 0, alpha: 0.04)
             } else {
-                contentView.backgroundColor = UIColor.whiteColor()
+                contentView.backgroundColor = UIColor.white
             }
             switch data.data! {
-            case .USER(let user):
-                avatarBtn.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
+            case .user(let user):
+                avatarBtn.kf_setImageWithURL(user.avatarURL!, forState: UIControlState())
                 nickNameLbl.text = user.chatName
-            case .CLUB(let club):
-                avatarBtn.kf_setImageWithURL(club.logoURL!, forState: .Normal)
+            case .club(let club):
+                avatarBtn.kf_setImageWithURL(club.logoURL!, forState: UIControlState())
                 nickNameLbl.text = club.name! + "(\(club.memberNum))"
             }
         }
@@ -43,7 +43,7 @@ class ChatListCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
-        self.selectionStyle = .None
+        self.selectionStyle = .none
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -52,7 +52,7 @@ class ChatListCell: UITableViewCell {
     
     func createSubviews() {
         let superview = self.contentView
-        superview.backgroundColor = UIColor.whiteColor()
+        superview.backgroundColor = UIColor.white
         //
         avatarBtn = UIButton()
         avatarBtn.layer.cornerRadius = 45 / 2
@@ -65,13 +65,13 @@ class ChatListCell: UITableViewCell {
         }
         //
         unreadLbl = UILabel()
-        unreadLbl.font = UIFont.systemFontOfSize(9, weight: UIFontWeightUltraLight)
-        unreadLbl.textColor = UIColor.whiteColor()
+        unreadLbl.font = UIFont.systemFont(ofSize: 9, weight: UIFontWeightUltraLight)
+        unreadLbl.textColor = UIColor.white
         unreadLbl.backgroundColor = kHighlightedRedTextColor
         unreadLbl.layer.cornerRadius = 9
         unreadLbl.clipsToBounds = true
-        unreadLbl.textAlignment = .Center
-        unreadLbl.hidden = true
+        unreadLbl.textAlignment = .center
+        unreadLbl.isHidden = true
         superview.addSubview(unreadLbl)
         unreadLbl.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(avatarBtn)
@@ -80,8 +80,8 @@ class ChatListCell: UITableViewCell {
         }
         //
         nickNameLbl = UILabel()
-        nickNameLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightBlack)
-        nickNameLbl.textColor = UIColor.blackColor()
+        nickNameLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBlack)
+        nickNameLbl.textColor = UIColor.black
         superview.addSubview(nickNameLbl)
         nickNameLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(avatarBtn.snp_right).offset(15)
@@ -89,7 +89,7 @@ class ChatListCell: UITableViewCell {
         }
         //
         recentTalkLbl = UILabel()
-        recentTalkLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        recentTalkLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         recentTalkLbl.textColor = UIColor(white: 0, alpha: 0.58)
         superview.addSubview(recentTalkLbl)
         recentTalkLbl.snp_makeConstraints { (make) -> Void in
@@ -99,7 +99,7 @@ class ChatListCell: UITableViewCell {
         }
         //
         recentTalkTimeLbl = UILabel()
-        recentTalkTimeLbl.font = UIFont.systemFontOfSize(10, weight: UIFontWeightUltraLight)
+        recentTalkTimeLbl.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightUltraLight)
         recentTalkTimeLbl.textColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(recentTalkTimeLbl)
         recentTalkTimeLbl.snp_makeConstraints { (make) -> Void in
@@ -118,12 +118,12 @@ class ChatListCell: UITableViewCell {
         }
     }
     
-    func setUnreadNumber(num: Int) {
+    func setUnreadNumber(_ num: Int) {
         if num > 0 {
             unreadLbl.text = "\(num)"
-            unreadLbl.hidden = false
+            unreadLbl.isHidden = false
         }else {
-            unreadLbl.hidden = true
+            unreadLbl.isHidden = true
         }
     }
 }

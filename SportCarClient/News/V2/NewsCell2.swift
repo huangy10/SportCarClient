@@ -30,7 +30,7 @@ class NewsCell2: UITableViewCell {
         configureLikeNumDisplay()
         configureTitleLbl()
         
-        selectionStyle = .None
+        selectionStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -53,7 +53,7 @@ class NewsCell2: UITableViewCell {
     
     func configureTitleLbl() {
         titleLbl = contentView.addSubview(UILabel)
-            .config(17, fontWeight: UIFontWeightBlack, textColor: UIColor.whiteColor())
+            .config(17, fontWeight: UIFontWeightBlack, textColor: UIColor.white)
             .layout({ (make) in
                 make.left.equalTo(contentView) .offset(15)
                 make.bottom.equalTo(contentView).offset(-10)
@@ -113,7 +113,7 @@ class NewsCell2: UITableViewCell {
             })
     }
     
-    func setData(coverImage: NSURL, title: String, likeNum: Int, commentNum: Int, shareNum: Int, liked: Bool) {
+    func setData(_ coverImage: URL, title: String, likeNum: Int, commentNum: Int, shareNum: Int, liked: Bool) {
         cover.kf_setImageWithURL(coverImage)
         titleLbl.text = title
         if likeNum > 99 {

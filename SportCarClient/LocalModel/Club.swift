@@ -20,26 +20,26 @@ class Club: BaseModel {
         return "id"
     }
     
-    var logoURL: NSURL? {
+    var logoURL: URL? {
         if logo == nil {
             return nil
         }
         return SFURL(logo!)
     }
     
-    private var _founderUser: User?
+    fileprivate var _founderUser: User?
     var founderUser: User? {
         if founder == nil {
             return nil
         }
         if _founderUser == nil {
-            let founderJSON = JSON(data: founder!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+            let founderJSON = JSON(data: founder!.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
             _founderUser = try! manager.getOrCreate(founderJSON) as User
         }
         return _founderUser
     }
     
-    private var _rosterItem: RosterItem?
+    fileprivate var _rosterItem: RosterItem?
     var rosterItem: RosterItem? {
         get {
             if let roster = _rosterItem {
@@ -62,10 +62,10 @@ class Club: BaseModel {
         }
     }
     
-    @available(*, deprecated=1)
+    @available(*, deprecated: 1)
     var recentActivity: Activity? = nil
 
-    override func loadDataFromJSON(data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Self {
+    override func loadDataFromJSON(_ data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Self {
         var data = data
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         data = Club.reorganizeJSON(data)
@@ -114,7 +114,7 @@ class Club: BaseModel {
         return self
     }
     
-    func updateClubSettings(data: JSON) -> Self {
+    func updateClubSettings(_ data: JSON) -> Self {
         let showMembersJSON = data["show_members_to_public"]
         if showMembersJSON.exists() {
             showMembers = showMembersJSON.boolValue
@@ -138,7 +138,7 @@ class Club: BaseModel {
         return self
     }
     
-    override func toJSONObject(detailLevel: Int) throws -> JSON {
+    override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         var json = [
             Club.idField: ssidString,
             "club_logo": logo!,
@@ -151,7 +151,7 @@ class Club: BaseModel {
         return json
     }
     
-    class func reorganizeJSON(json: JSON) -> JSON{
+    class func reorganizeJSON(_ json: JSON) -> JSON{
         var temp = json["club"]
         if temp.exists() {
             for (key, value) in json {
@@ -166,11 +166,11 @@ class Club: BaseModel {
         }
     }
     
-    func addMember(user: User) {
+    func addMember(_ user: User) {
         self.members.append(user)
     }
     
-    func removeMember(user: User) {
+    func removeMember(_ user: User) {
         members = $.remove(members, callback: { $0.ssid == user.ssid })
     }
 }

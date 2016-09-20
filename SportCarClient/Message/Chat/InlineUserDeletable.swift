@@ -25,22 +25,22 @@ class InlineUserSelectDeletable: InlineUserSelectController {
      */
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.registerClass(InlineUserSelectDeletableCell.self, forCellWithReuseIdentifier: "deletable_cell")
+        collectionView?.register(InlineUserSelectDeletableCell.self, forCellWithReuseIdentifier: "deletable_cell")
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        if indexPath.row >= users.count {
-            return super.collectionView(collectionView, cellForItemAtIndexPath: indexPath)
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if (indexPath as NSIndexPath).row >= users.count {
+            return super.collectionView(collectionView, cellForItemAt: indexPath)
         }
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("deletable_cell", forIndexPath: indexPath) as! InlineUserSelectDeletableCell
-        let user = users[indexPath.row]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "deletable_cell", for: indexPath) as! InlineUserSelectDeletableCell
+        let user = users[(indexPath as NSIndexPath).row]
         if relatedClub != nil && relatedClub?.founderUser?.ssid == user.ssid {
             // Owner of this club/group chat
             cell.nameLbl.textColor = kHighlightedRedTextColor
             cell.showDeleteBtn = false
         } else {
             // Normal members
-            cell.nameLbl.textColor = UIColor.blackColor()
+            cell.nameLbl.textColor = UIColor.black
             cell.showDeleteBtn = showCellDeleteBtn
             cell.onDeletion = { () -> () in
                 self.delegate?.inlineUserSelectShouldDeleteUser(user)
@@ -57,14 +57,14 @@ class InlineUserSelectDeletable: InlineUserSelectController {
         return cell
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == users.count + 1 {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).row == users.count + 1 {
             showCellDeleteBtn = !showCellDeleteBtn
             collectionView.reloadData()
-        } else if indexPath.row == users.count {
+        } else if (indexPath as NSIndexPath).row == users.count {
             delegate?.inlineUserSelectNeedAddMembers()
         } else {
-            let user = users[indexPath.row]
+            let user = users[(indexPath as NSIndexPath).row]
             if user.isHost {
                 let detail = PersonBasicController(user: user)
                 parentController?.navigationController?.pushViewController(detail, animated: true)
@@ -82,7 +82,7 @@ class InlineUserSelectDeletableCell: InlineUserSelectCell {
     var deleteBtn: UIButton!
     var showDeleteBtn: Bool = true {
         didSet {
-            deleteBtn.hidden = !showDeleteBtn
+            deleteBtn.isHidden = !showDeleteBtn
         }
     }
     
@@ -93,8 +93,8 @@ class InlineUserSelectDeletableCell: InlineUserSelectCell {
         let superview = self.contentView
         
         deleteBtn = UIButton()
-        deleteBtn.setImage(UIImage(named: "status_delete_image_btn"), forState: .Normal)
-        deleteBtn.addTarget(self, action: #selector(InlineUserSelectDeletableCell.deleteBtnPressed), forControlEvents: .TouchUpInside)
+        deleteBtn.setImage(UIImage(named: "status_delete_image_btn"), for: UIControlState())
+        deleteBtn.addTarget(self, action: #selector(InlineUserSelectDeletableCell.deleteBtnPressed), for: .touchUpInside)
         superview.addSubview(deleteBtn)
         deleteBtn.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(avatarImg)

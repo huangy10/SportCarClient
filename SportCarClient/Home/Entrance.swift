@@ -39,11 +39,11 @@ class HomeController2: UIViewController, HomeDelegate {
     var invokeBtn: UIButton!
     var curControllerIndex: Int = 0
     
-    private var initFrame: CGRect!
-    private var hideFrame: CGRect!
+    fileprivate var initFrame: CGRect!
+    fileprivate var hideFrame: CGRect!
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -51,10 +51,10 @@ class HomeController2: UIViewController, HomeDelegate {
         createSidebar()
         navigationController?.setNavigationBarHidden(true, animated: false)
         
-        initFrame = CGRectMake(view.bounds.width, 0, view.bounds.width, view.bounds.height)
-        hideFrame = CGRectMake(-view.bounds.width, 0, view.bounds.width, view.bounds.height)
+        initFrame = CGRect(x: view.bounds.width, y: 0, width: view.bounds.width, height: view.bounds.height)
+        hideFrame = CGRect(x: -view.bounds.width, y: 0, width: view.bounds.width, height: view.bounds.height)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUnreadNumberChange(_:)), name: kUnreadNumberDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onUnreadNumberChange(_:)), name: NSNotification.Name(rawValue: kUnreadNumberDidChangeNotification), object: nil)
         
         setUnreadNum(MessageManager.defaultManager.unreadNum)
     }
@@ -64,18 +64,18 @@ class HomeController2: UIViewController, HomeDelegate {
         
         setInitContentController()
         
-        invokeBtn = superview.addSubview(UIButton).config(self, selector: #selector(hideSidebar)).layout({ (make) in
+        invokeBtn = superview?.addSubview(UIButton).config(self, selector: #selector(hideSidebar)).layout({ (make) in
             make.edges.equalTo(superview)
         }).config(UIColor(white: 0, alpha: 0.2))
-        invokeBtn.layer.hidden = true
+        invokeBtn.layer.isHidden = true
         
-        sideBar = superview.addSubview(UIView)
+        sideBar = superview?.addSubview(UIView)
             .config(UIColor.RGB(23, 19, 19)).layout({ (make) in
                 make.top.equalTo(superview)
                 make.right.equalTo(superview.snp_left).offset(-10)
                 make.bottom.equalTo(superview)
                 make.width.equalTo(superview).multipliedBy(0.667)
-            }).addShadow(offset: CGSizeMake(2, 0))
+            }).addShadow(offset: CGSize(width: 2, height: 0))
         
         avatarBtn = sideBar.addSubview(UIButton)
             .config(self, selector: #selector(avatarPressed))
@@ -86,10 +86,10 @@ class HomeController2: UIViewController, HomeDelegate {
                 make.size.equalTo(50)
             })
 //        avatarBtn.enabled = false
-        avatarBtn.kf_setImageWithURL(hostUser.avatarURL!, forState: .Normal)
+        avatarBtn.kf_setImageWithURL(hostUser.avatarURL!, forState: UIControlState())
         
         nameLbl = sideBar.addSubview(UILabel)
-            .config(20, fontWeight: UIFontWeightRegular, textColor: UIColor.whiteColor())
+            .config(20, fontWeight: UIFontWeightRegular, textColor: UIColor.white)
             .layout({ (make) in
                 make.centerY.equalTo(avatarBtn)
                 make.left.equalTo(avatarBtn.snp_right).offset(12)
@@ -121,14 +121,14 @@ class HomeController2: UIViewController, HomeDelegate {
             sideBtns.append(container)
             container.tag = index
             let icon = container.addSubview(UIImageView)
-                .config(UIImage(named: icons[index]), contentMode: .ScaleAspectFit)
+                .config(UIImage(named: icons[index]), contentMode: .scaleAspectFit)
                 .layout({ (make) in
                     make.centerY.equalTo(container)
                     make.left.equalTo(container).offset(20)
                     make.size.equalTo(17)
                 })
             container.addSubview(UILabel)
-                .config(17, fontWeight: UIFontWeightRegular, textColor: UIColor.whiteColor(), text: titles[index])
+                .config(17, fontWeight: UIFontWeightRegular, textColor: UIColor.white, text: titles[index])
                 .layout({ (make) in
                     make.centerY.equalTo(icon)
                     make.left.equalTo(icon.snp_right).offset(20)
@@ -167,9 +167,9 @@ class HomeController2: UIViewController, HomeDelegate {
             .layout({ (make) in
                 make.edges.equalTo(sideBtns[0])
             })
-        sideBar.sendSubviewToBack(marker)
+        sideBar.sendSubview(toBack: marker)
         marker.addSubview(UIView).config(kHighlightRed)
-            .addShadow(4, color: kHighlightRed, opacity: 0.4, offset: CGSizeMake(1, 0))
+            .addShadow(4, color: kHighlightRed, opacity: 0.4, offset: CGSize(width: 1, height: 0))
             .layout { (make) in
                 make.left.equalTo(marker)
                 make.top.equalTo(marker)
@@ -178,7 +178,7 @@ class HomeController2: UIViewController, HomeDelegate {
         }
         
         unreadLbl = sideBar.addSubview(UILabel)
-            .config(9, textColor: UIColor.whiteColor(), textAlignment: .Center)
+            .config(9, textColor: UIColor.white, textAlignment: .center)
             .config(kHighlightedRedTextColor)
             .layout({ (make) in
                 let messageBtn = self.sideBtns[4]
@@ -188,16 +188,16 @@ class HomeController2: UIViewController, HomeDelegate {
             })
         unreadLbl.layer.cornerRadius = 9
         unreadLbl.clipsToBounds = true
-        unreadLbl.hidden = true
+        unreadLbl.isHidden = true
     }
     
     func avatarPressed() {
-        sideBarBtnPressed(sideBtns.last()!)
+        sideBarBtnPressed(sideBtns.last!)
 //        switchController(curControllerIndex, to: 6)
 //        curControllerIndex = 6
     }
     
-    func sideBarBtnPressed(sender: UIButton) {
+    func sideBarBtnPressed(_ sender: UIButton) {
         switchController(curControllerIndex, to: sender.tag)
         curControllerIndex = sender.tag
     }
@@ -206,12 +206,12 @@ class HomeController2: UIViewController, HomeDelegate {
         // set radar as the controller
         let target = getControllerForIndex(0)
         self.addChildViewController(target)
-        self.view.insertSubview(target.view, atIndex: 0)
+        self.view.insertSubview(target.view, at: 0)
         target.view.frame = self.view.bounds
 //        target.view.snp_makeConstraints { (make) in
 //            make.edges.equalTo(self.view)
 //        }
-        target.didMoveToParentViewController(self)
+        target.didMove(toParentViewController: self)
     }
     
     // MARK: - Animation
@@ -235,25 +235,25 @@ class HomeController2: UIViewController, HomeDelegate {
         adviceBtn.snp_updateConstraints { (make) in
             make.left.equalTo(superview).offset(-self.view.bounds.width)
         }
-        UIView.animateWithDuration(0.3) {
+        UIView.animate(withDuration: 0.3, animations: {
             self.view.layoutIfNeeded()
             
-        }
-        UIView.animateWithDuration(0.3, animations: { 
+        }) 
+        UIView.animate(withDuration: 0.3, animations: { 
             self.view.layoutIfNeeded()
             self.invokeBtn.layer.opacity = 0
-            }) { (_) in
-                self.invokeBtn.hidden = true
-        }
+            }, completion: { (_) in
+                self.invokeBtn.isHidden = true
+        }) 
     }
     
     func showSidebar() {
         
-        avatarBtn.kf_setImageWithURL(hostUser.avatarURL!, forState: .Normal)
+        avatarBtn.kf_setImageWithURL(hostUser.avatarURL!, forState: UIControlState())
         nameLbl.text = hostUser.nickName
         
         var temp: [UIView] = []
-        temp.appendContentsOf(sideBtns as [UIView])
+        temp.append(contentsOf: sideBtns as [UIView])
         temp.append(sepLine)
         temp.append(adviceBtn)
         let superview = view
@@ -263,27 +263,27 @@ class HomeController2: UIViewController, HomeDelegate {
             make.bottom.equalTo(superview)
             make.width.equalTo(superview).multipliedBy(0.667)
         }
-        invokeBtn.hidden = false
-        UIView.animateWithDuration(0.3) {
+        invokeBtn.isHidden = false
+        UIView.animate(withDuration: 0.3, animations: {
             self.view.layoutIfNeeded()
             self.invokeBtn.layer.opacity = 1
-        }
+        }) 
         var timeOffset: Int64 = 40
         for v in temp {
-            let t = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_MSEC) * timeOffset)
-            dispatch_after(t, dispatch_get_main_queue(), { 
+            let t = DispatchTime.now() + Double(Int64(NSEC_PER_MSEC) * timeOffset) / Double(NSEC_PER_SEC)
+            DispatchQueue.main.asyncAfter(deadline: t, execute: { 
         
 //                UIView.animateWithDuration(0.4, delay: 0, options: .CurveEaseOut, animations: {
 //                    self.view.layoutIfNeeded()
 //                    }, completion: nil)
-                UIView.animateKeyframesWithDuration(0.5, delay: 0, options: .CalculationModeCubicPaced, animations: {
-                        UIView.addKeyframeWithRelativeStartTime(0, relativeDuration: 0.1, animations: { 
+                UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: .calculationModeCubicPaced, animations: {
+                        UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.1, animations: { 
                             v.snp_updateConstraints(closure: { (make) in
                                 make.left.equalTo(superview).offset(-self.view.bounds.width * 0.9)
                             })
                             self.view.layoutIfNeeded()
                         })
-                        UIView.addKeyframeWithRelativeStartTime(0.1, relativeDuration: 0.4, animations: {
+                        UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.4, animations: {
                             v.snp_updateConstraints(closure: { (make) in
                                 make.left.equalTo(superview).offset(v == self.sepLine! ? 20 : 0)
                             })
@@ -297,17 +297,17 @@ class HomeController2: UIViewController, HomeDelegate {
     
     // MARK: - Home delegate
     
-    func backToHome(onComplete: (() -> ())?) {
-        invokeBtn.hidden = false
+    func backToHome(_ onComplete: (() -> ())?) {
+        invokeBtn.isHidden = false
         showSidebar()
     }
     
     func adviceBtnPressed() {
         let detail = SuggestionController(parent: self)
-        presentViewController(detail, animated: false, completion: nil)
+        present(detail, animated: false, completion: nil)
     }
     
-    func switchController(from: Int, to: Int) {
+    func switchController(_ from: Int, to: Int) {
         // Hide side bar anyway
         hideSidebar()
         if from == to {
@@ -320,26 +320,26 @@ class HomeController2: UIViewController, HomeDelegate {
         }
         let oldVC = getControllerForIndex(from)
         let newVC = getControllerForIndex(to)
-        oldVC.willMoveToParentViewController(nil)
+        oldVC.willMove(toParentViewController: nil)
         addChildViewController(newVC)
-        self.view.insertSubview(newVC.view, atIndex: 0)
+        self.view.insertSubview(newVC.view, at: 0)
         newVC.view.frame = self.view.bounds
         newVC.view.layer.opacity = 0
         
-        UIView.animateWithDuration(0.25, animations: {
+        UIView.animate(withDuration: 0.25, animations: {
             newVC.view.layer.opacity = 1
             oldVC.view.layer.opacity = 0
             self.sideBar.layoutIfNeeded()
-            }) { (_) in
+            }, completion: { (_) in
                 oldVC.view.removeFromSuperview()
-                newVC.didMoveToParentViewController(self)
+                newVC.didMove(toParentViewController: self)
                 oldVC.removeFromParentViewController()
-                self.view.bringSubviewToFront(self.invokeBtn)
-                self.view.bringSubviewToFront(self.sideBar)
-        }
+                self.view.bringSubview(toFront: self.invokeBtn)
+                self.view.bringSubview(toFront: self.sideBar)
+        }) 
     }
     
-    func getControllerForIndex(index: Int) -> BlackBarNavigationController {
+    func getControllerForIndex(_ index: Int) -> BlackBarNavigationController {
         switch index {
         case 0:
             if radar == nil {
@@ -355,7 +355,7 @@ class HomeController2: UIViewController, HomeDelegate {
             }
         case 2:
             if news == nil {
-                news = NewsController2(style: .Plain)
+                news = NewsController2(style: .plain)
                 news?.homeDelegate = self
                 wrappedControllers[index] = news?.toNavWrapper()
             }
@@ -393,18 +393,18 @@ class HomeController2: UIViewController, HomeDelegate {
     
     // MARK: - Unread number display
     
-    func onUnreadNumberChange(notification: Notification) {
-        dispatch_async(dispatch_get_main_queue()) { 
+    func onUnreadNumberChange(_ notification: Notification) {
+        DispatchQueue.main.async { 
             self.setUnreadNum(MessageManager.defaultManager.unreadNum)
         }
     }
     
-    func setUnreadNum(num: Int) {
+    func setUnreadNum(_ num: Int) {
         if num == 0 {
-            unreadLbl.hidden = true
+            unreadLbl.isHidden = true
         } else {
             unreadLbl.text = "\(num)"
-            unreadLbl.hidden = false
+            unreadLbl.isHidden = false
         }
     }
 }

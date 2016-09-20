@@ -31,31 +31,31 @@ class PersonMineSettings: UITableViewController {
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
-        tableView.registerClass(PersonMineSettingsBtnsCell.self, forCellReuseIdentifier: PersonMineSettingsBtnsCell.reuseIdentifier)
+        tableView.register(PersonMineSettingsBtnsCell.self, forCellReuseIdentifier: PersonMineSettingsBtnsCell.reuseIdentifier)
         // 复用这个cell
         SSPropertyCell.registerTableView(tableView)
-        tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
+        tableView.register(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
         
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         //
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonMineSettings.dataSourceDidFinishUpdating(_:)), name: PMUpdateFinishedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PersonMineSettings.dataSourceUpateError(_:)), name: PMUpdateErrorNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PersonMineSettings.dataSourceDidFinishUpdating(_:)), name: NSNotification.Name(rawValue: PMUpdateFinishedNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PersonMineSettings.dataSourceUpateError(_:)), name: NSNotification.Name(rawValue: PMUpdateErrorNotification), object: nil)
         let dataSource = PersonMineSettingsDataSource.sharedDataSource
         dataSource.update()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
     }
     
@@ -64,9 +64,9 @@ class PersonMineSettings: UITableViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: #selector(PersonMineSettings.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
+        navLeftBtn.addTarget(self, action: #selector(PersonMineSettings.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
     }
     
@@ -75,15 +75,15 @@ class PersonMineSettings: UITableViewController {
         if let delegate = homeDelegate {
             delegate.backToHome(nil)
         } else {
-            self.navigationController?.popViewControllerAnimated(true)
+            self.navigationController?.popViewController(animated: true)
         }
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0{
             return kMineSettingsStaticLabelString.count
         }else{
@@ -91,42 +91,42 @@ class PersonMineSettings: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if (indexPath as NSIndexPath).section == 0 {
             let cell =  tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
-            cell.staticLbl.text = kMineSettingsStaticLabelString[indexPath.row]
-            switch indexPath.row {
+            cell.staticLbl.text = kMineSettingsStaticLabelString[(indexPath as NSIndexPath).row]
+            switch (indexPath as NSIndexPath).row {
             case 2:
-                return cell.setData(kMineSettingsStaticLabelString[indexPath.row], propertyValue: locationVisible)
+                return cell.setData(kMineSettingsStaticLabelString[(indexPath as NSIndexPath).row], propertyValue: locationVisible)
             case 3:
-                return cell.setData(kMineSettingsStaticLabelString[indexPath.row], propertyValue: acceptInvitation)
+                return cell.setData(kMineSettingsStaticLabelString[(indexPath as NSIndexPath).row], propertyValue: acceptInvitation)
             case 4:
-                return cell.setData(kMineSettingsStaticLabelString[indexPath.row], propertyValue: cacheSizeRepre)
+                return cell.setData(kMineSettingsStaticLabelString[(indexPath as NSIndexPath).row], propertyValue: cacheSizeRepre)
             default:
-                return cell.setData(kMineSettingsStaticLabelString[indexPath.row], propertyValue: nil)
+                return cell.setData(kMineSettingsStaticLabelString[(indexPath as NSIndexPath).row], propertyValue: nil)
             }
         }else{
-            let cell = tableView.dequeueReusableCellWithIdentifier(PersonMineSettingsBtnsCell.reuseIdentifier,
-                forIndexPath: indexPath) as! PersonMineSettingsBtnsCell
-            cell.quitBtn.addTarget(self, action: #selector(PersonMineSettings.quitBtnPressed), forControlEvents: .TouchUpInside)
-            cell.selectionStyle = .None
+            let cell = tableView.dequeueReusableCell(withIdentifier: PersonMineSettingsBtnsCell.reuseIdentifier,
+                for: indexPath) as! PersonMineSettingsBtnsCell
+            cell.quitBtn.addTarget(self, action: #selector(PersonMineSettings.quitBtnPressed), for: .touchUpInside)
+            cell.selectionStyle = .none
             return cell
         }
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath as NSIndexPath).section == 0 {
             return 50
         }else {
             return 138
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 1 {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).section == 1 {
             return
         }
-        switch indexPath.row {
+        switch (indexPath as NSIndexPath).row {
         case 0:
             let detail = PersonMineSettingsNewsMessageNotificationController()
             self.navigationController?.pushViewController(detail, animated: true)
@@ -147,11 +147,11 @@ class PersonMineSettings: UITableViewController {
 //            self.presentViewController(detail, animated: false, completion: nil)
             break
         case 5:
-            let url = NSURL(string: "https://itunes.apple.com/us/app/pao-che-fan/id1100110084?l=zh&ls=1&mt=8")
-            UIApplication.sharedApplication().openURL(url!)
+            let url = URL(string: "https://itunes.apple.com/us/app/pao-che-fan/id1100110084?l=zh&ls=1&mt=8")
+            UIApplication.shared.openURL(url!)
         case 6:
             let detail = SuggestionController(parent: self)
-            self.presentViewController(detail, animated: false, completion: nil)
+            self.present(detail, animated: false, completion: nil)
             break
         case 7:
             let detail = AgreementController()
@@ -166,11 +166,11 @@ class PersonMineSettings: UITableViewController {
         }
     }
     
-    func dataSourceDidFinishUpdating(notif: Notification) {
+    func dataSourceDidFinishUpdating(_ notif: Notification) {
         tableView.reloadData()
     }
     
-    func dataSourceUpateError(notif: Notification) {
+    func dataSourceUpateError(_ notif: Notification) {
          
     }
     
@@ -208,21 +208,21 @@ class PersonMineSettingsBtnsCell: UITableViewCell {
     
     func createSubviews() {
         let superview = self.contentView
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.white
         //
         quitBtn = UIButton()
-        quitBtn.setImage(UIImage(named: "person_logout"), forState: .Normal)
+        quitBtn.setImage(UIImage(named: "person_logout"), for: UIControlState())
         superview.addSubview(quitBtn)
         quitBtn.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(3)
-            make.size.equalTo(CGSizeMake(150, 50))
+            make.size.equalTo(CGSize(width: 150, height: 50))
         }
         //
         changePassword = UIButton()
-        changePassword.setTitle(LS("修改密码"), forState: .Normal)
-        changePassword.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        changePassword.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        changePassword.setTitle(LS("修改密码"), for: UIControlState())
+        changePassword.setTitleColor(UIColor.black, for: UIControlState())
+        changePassword.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(changePassword)
         changePassword.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(quitBtn)
@@ -231,7 +231,7 @@ class PersonMineSettingsBtnsCell: UITableViewCell {
             make.width.equalTo(quitBtn)
         }
         //
-        changePassword.hidden = true
+        changePassword.isHidden = true
     }
 }
 

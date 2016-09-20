@@ -33,8 +33,8 @@ class ClubMembersController: UserSelectController {
         searchBar?.snp_makeConstraints(closure: { (make) in
             make.right.equalTo(superview).offset(0)
         })
-        selectedUserList?.hidden = true
-        userTableView?.registerClass(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
+        selectedUserList?.isHidden = true
+        userTableView?.register(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
     }
     
     override func navTitle() -> String {
@@ -42,12 +42,12 @@ class ClubMembersController: UserSelectController {
     }
     
     override func navLeftBtnPressed() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UserSelectCellUnselectable
-        let user = users[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserSelectCellUnselectable
+        let user = users[(indexPath as NSIndexPath).row]
         cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
@@ -60,7 +60,7 @@ class ClubMembersController: UserSelectController {
         getMoreUserData()
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.height {
             getMoreUserData()
         }

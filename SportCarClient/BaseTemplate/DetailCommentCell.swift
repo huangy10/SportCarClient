@@ -10,9 +10,9 @@ import UIKit
 
 
 protocol DetailCommentCellDelegate2: class {
-    func detailCommentCellAvatarPressed(cell: DetailCommentCell2)
+    func detailCommentCellAvatarPressed(_ cell: DetailCommentCell2)
     
-    func detailCommentCellReplyPressed(cell: DetailCommentCell2)
+    func detailCommentCellReplyPressed(_ cell: DetailCommentCell2)
 }
 
 
@@ -37,7 +37,7 @@ class DetailCommentCell2: UITableViewCell {
         configureContent()
         configureReplyBtn()
         
-        selectionStyle = .None
+        selectionStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -57,7 +57,7 @@ class DetailCommentCell2: UITableViewCell {
     
     func configureNameLbl() {
         nameLbl = contentView.addSubview(UILabel)
-            .config(14, fontWeight: UIFontWeightBold, textColor: UIColor.blackColor())
+            .config(14, fontWeight: UIFontWeightBold, textColor: UIColor.black)
             .layout({ (make) in
                 make.left.equalTo(avatarBtn.snp_right).offset(11)
                 make.top.equalTo(contentView)
@@ -72,7 +72,7 @@ class DetailCommentCell2: UITableViewCell {
                 make.bottom.equalTo(nameLbl)
             })
         responseLbl = contentView.addSubview(UILabel)
-            .config(14, fontWeight: UIFontWeightBold, textColor: UIColor.blackColor())
+            .config(14, fontWeight: UIFontWeightBold, textColor: UIColor.black)
             .layout({ (make) in
                 make.left.equalTo(responseStaticLbl.snp_right).offset(2)
                 make.bottom.equalTo(nameLbl)

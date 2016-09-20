@@ -11,9 +11,9 @@ import UIKit
 import SwiftDate
 import SwiftyJSON
 // Type define
-typealias SSSuccessCallback = (json: JSON?) -> Void
-typealias SSFailureCallback = (code: String?) -> Void
-typealias SSProgressCallback = (progress: Float) -> Void
+typealias SSSuccessCallback = (_ json: JSON?) -> Void
+typealias SSFailureCallback = (_ code: String?) -> Void
+typealias SSProgressCallback = (_ progress: Float) -> Void
 
 // Colors
 let kBarBgColor = UIColor(red: 0.09, green: 0.075, blue: 0.075, alpha: 1)
@@ -26,37 +26,37 @@ let kNotificationHintColor = UIColor(white: 0.42, alpha: 1)
 let kHighlightRed = UIColor.RGB(255, 21, 21)
 
 // Fonts
-let kBarTextFont = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-let kBarTitleFont = UIFont.systemFontOfSize(17, weight: UIFontWeightBlack)
-let kTextInputFont = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
+let kBarTextFont = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+let kBarTitleFont = UIFont.systemFont(ofSize: 17, weight: UIFontWeightBlack)
+let kTextInputFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
 
 // Network
-let kHostName = "166.111.17.104"
-//let kHostName = "paochefan.com"
+//let kHostName = "166.111.17.86"
+let kHostName = "paochefan.com"
 let kPortName = "80"
 let kChatPortName = "8888"
 let kProtocalName = "http"
 // 在跑车雷达中，当前显示用户最长维持的时间，即如果在这个时间内（秒）没有获取新的数据，则下次打开发现页面是，会清空原来的结果
-let kMaxRadarKeptTime: NSTimeInterval = 600
+let kMaxRadarKeptTime: TimeInterval = 600
 //
 let kMaxPhotoSelect: Int = 9    // 最大可以选择的照片的数量
 let kLoadingAppearDelay: Int64 = 300
 
 // video html template
 
-let VIDEO_HTML_TEMPLATE: String = "<body style=\"margin:0;\"><iframe style=\"width:\(UIScreen.mainScreen().bounds.width)px; height:\(UIScreen.mainScreen().bounds.width / 375 * 220)px; border:0px; margin:0; padding: 0;\" src='%@' frameborder=0 'allowfullscreen'></iframe></body>"
+let VIDEO_HTML_TEMPLATE: String = "<body style=\"margin:0;\"><iframe style=\"width:\(UIScreen.main.bounds.width)px; height:\(UIScreen.main.bounds.width / 375 * 220)px; border:0px; margin:0; padding: 0;\" src='%@' frameborder=0 'allowfullscreen'></iframe></body>"
 
 // Macro
-func LS(str: String, comment: String="") -> String{
+func LS(_ str: String, comment: String="") -> String{
     return NSLocalizedString(str, comment: "")
 }
 
 /**
- 这个宏在静态文件地址前方加上域名
+ 这个宏在静态文件地址前方加上域ORada
  
  - parameter urlStr: 返回的完整的路径
  */ 
-func SF(urlStr: String?)->String?{
+func SF(_ urlStr: String?)->String?{
     if urlStr == nil {
         return nil
     }
@@ -70,9 +70,9 @@ func SF(urlStr: String?)->String?{
  
  - returns: NSURL的下载地址
  */
-func SFURL(urlString: String) -> NSURL? {
+func SFURL(_ urlString: String) -> URL? {
     let fullURLString = SF(urlString)!
-    return NSURL(string: fullURLString)
+    return URL(string: fullURLString)
 }
 
 
@@ -83,14 +83,14 @@ func SFURL(urlString: String) -> NSURL? {
  
  - returns:
  */
-func DateSTR(str: String?) -> NSDate? {
+func DateSTR(_ str: String?) -> Date? {
     if str == nil {
         return nil
     }
-    let formatter = NSDateFormatter()
-    formatter.timeZone = NSTimeZone(abbreviation: "UTC")
+    let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
     formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSSSS Z"
-    return formatter.dateFromString(str!)
+    return formatter.date(from: str!)
 }
 
 /**
@@ -100,18 +100,18 @@ func DateSTR(str: String?) -> NSDate? {
  
  - returns: -
  */
-func STRDate(date: NSDate) -> String {
-    let formatter = NSDateFormatter()
+func STRDate(_ date: Date) -> String {
+    let formatter = DateFormatter()
     formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSSSS z"
-    formatter.timeZone = NSTimeZone(abbreviation: "UTC")
-    return formatter.stringFromDate(date)
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
+    return formatter.string(from: date)
 }
 
-func dateDisplay(date: NSDate) -> String {
+func dateDisplay(_ date: Date) -> String {
     // 到现在的时间
     let timeDelta = -(date.timeIntervalSinceNow)
     var result: String = ""
-    let timeRegion = Region(calType: CalendarType.Gregorian)
+    let timeRegion = Region(calType: CalendarType.gregorian)
     if timeDelta < 300 {
         // 五分钟显示『刚刚』
         result = LS("刚刚")
@@ -120,27 +120,27 @@ func dateDisplay(date: NSDate) -> String {
         result = "\(Int(timeDelta / 60))" + LS("分钟前")
     }else if timeDelta < 86400 {
         // 一天内显示小时
-        result = date.toString(DateFormat.Custom("HH:mm"), inRegion: timeRegion)!
+        result = date.toString(DateFormat.custom("HH:mm"), inRegion: timeRegion)!
     }else if timeDelta < 172800 {
-        result = LS("昨天") + date.toString(DateFormat.Custom("HH:mm"), inRegion: timeRegion)!
+        result = LS("昨天") + date.toString(DateFormat.custom("HH:mm"), inRegion: timeRegion)!
     }else {
-        result = date.toString(DateFormat.Custom("MM\(LS("月"))dd\(LS("日")) HH:mm"), inRegion: timeRegion)!
+        result = date.toString(DateFormat.custom("MM\(LS("月"))dd\(LS("日")) HH:mm"), inRegion: timeRegion)!
     }
     return result
 }
 
-func dateDisplayExact(date: NSDate?) -> String? {
+func dateDisplayExact(_ date: Date?) -> String? {
     if date == nil {
         return nil
     }
-    let timeRegion = Region(calType: CalendarType.Gregorian)
-    return date!.toString(DateFormat.Custom("MM\(LS("月"))dd\(LS("日")) HH:mm"), inRegion: timeRegion)!
+    let timeRegion = Region(calType: CalendarType.gregorian)
+    return date!.toString(DateFormat.custom("MM\(LS("月"))dd\(LS("日")) HH:mm"), inRegion: timeRegion)!
 }
 
-func dateDisplayHHMM(date: NSDate?) -> String! {
+func dateDisplayHHMM(_ date: Date?) -> String! {
     if date == nil {
         return nil
     }
-    let timeRegion = Region(calType: CalendarType.Gregorian)
-    return date!.toString(DateFormat.Custom("HH:mm"), inRegion: timeRegion)!
+    let timeRegion = Region(calType: CalendarType.gregorian)
+    return date!.toString(DateFormat.custom("HH:mm"), inRegion: timeRegion)!
 }

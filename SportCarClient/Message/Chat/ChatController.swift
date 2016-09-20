@@ -11,16 +11,16 @@ import SnapKit
 import Kingfisher
 
 protocol ChatRoomDataSource {
-    func willEnter(room: ChatRoomController)
+    func willEnter(_ room: ChatRoomController)
     
     func numberOfChats() -> Int
     
-    func chatAt(index: Int) -> ChatRecord
+    func chatAt(_ index: Int) -> ChatRecord
 }
 
 enum ChatRoomType {
-    case Club
-    case Private
+    case club
+    case `private`
 }
 
 
@@ -37,10 +37,10 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
             }
             chatCreated = true
             switch rosterItem!.data! {
-            case .USER(let user):
+            case .user(let user):
                 targetUser = user
                 targetClub = nil
-            case .CLUB(let club):
+            case .club(let club):
                 targetClub = club
                 targetUser = nil
             }
@@ -50,7 +50,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     var targetUser: User?
     var targetClub: Club?
     
-    @available(*, deprecated=1)
+    @available(*, deprecated: 1)
     var distinct_identifier: String!
     
     var chats: [ChatRecord] = []
@@ -60,9 +60,9 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
             return targetUser?.nickName ?? targetClub?.name
         }
         switch rosterItem.data! {
-        case .USER(let chater):
+        case .user(let chater):
             return chater.chatName
-        case .CLUB(let  club):
+        case .club(let  club):
             return club.name
         }
     }
@@ -94,7 +94,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     var firstShowFlag: Bool = false
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -102,14 +102,14 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         super.viewDidLoad()
         //
         ChatCell.registerCellForTableView(talkBoard!)
-        talkBoard?.registerClass(UITableViewCell.self, forCellReuseIdentifier: "invisible_cell")
+        talkBoard?.register(UITableViewCell.self, forCellReuseIdentifier: "invisible_cell")
         // 添加键盘出现时时间的监听
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatRoomController.changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatRoomController.changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onChatHostoryCleared(_:)), name: kMessageChatHistoryCleared, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ChatRoomController.changeLayoutWhenKeyboardAppears(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ChatRoomController.changeLayoutWhenKeyboardDisappears(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onChatHostoryCleared(_:)), name: NSNotification.Name(rawValue: kMessageChatHistoryCleared), object: nil)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 //        ChatRecordDataSource.sharedDataSource.curRoom = self
         MessageManager.defaultManager.enterRoom(self)
@@ -118,14 +118,14 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         self.navigationItem.title = navTitle
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         MessageManager.defaultManager.leaveRoom()
         
-        NSNotificationCenter.defaultCenter().postNotificationName(kMessageStopAllVoicePlayNotification, object: nil)
+        NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kMessageStopAllVoicePlayNotification), object: nil)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 //        if chatRecords?.unread > 0 && firstShowFlag {
 //            self.talkBoard?.reloadData()
@@ -136,10 +136,10 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     override func createSubviews() {
         super.createSubviews()
         let superview = self.view
-        superview.backgroundColor = UIColor.whiteColor()
+        superview?.backgroundColor = UIColor.white
         //
         chatOpPanelController = ChatOpPanelController()
-        superview.addSubview(chatOpPanelController!.view)
+        superview?.addSubview(chatOpPanelController!.view)
         chatOpPanelController?.view.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -151,9 +151,9 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         chatOpPanelController?.delegate = self
         chatOpPanelController?.contentInput?.delegate = self
         //
-        talkBoard = UITableView(frame: CGRectZero, style: .Plain)
-        talkBoard?.separatorStyle = .None
-        superview.addSubview(talkBoard!)
+        talkBoard = UITableView(frame: CGRect.zero, style: .plain)
+        talkBoard?.separatorStyle = .none
+        superview?.addSubview(talkBoard!)
         talkBoard?.dataSource = self
         talkBoard?.delegate = self
         talkBoard?.contentInset = UIEdgeInsetsMake(0, 0, 15, 0)
@@ -164,44 +164,44 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
             make.top.equalTo(superview)
         })
         refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(ChatRoomController.loadChatHistory as (ChatRoomController) -> () -> ()), forControlEvents: .ValueChanged)
+        refresh.addTarget(self, action: #selector(ChatRoomController.loadChatHistory as (ChatRoomController) -> () -> ()), for: .valueChanged)
         talkBoard?.addSubview(refresh)
         
-        self.view.bringSubviewToFront(opPanelView!)
+        self.view.bringSubview(toFront: opPanelView!)
     }
     
     func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = navTitle
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        navLeftBtn.frame = CGRectMake(0, 0, 10.5, 18)
-        navLeftBtn.addTarget(self, action: #selector(ChatRoomController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
+        navLeftBtn.addTarget(self, action: #selector(ChatRoomController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         
         let navRightBtn = UIButton()
         let navRightBtnIconURLStr = navRightBtnImageURLStr
-        navRightBtn.kf_setImageWithURL(SFURL(navRightBtnIconURLStr!)!, forState: .Normal)
-        navRightBtn.addTarget(self, action: #selector(ChatRoomController.navRightBtnPressed), forControlEvents: .TouchUpInside)
+        navRightBtn.kf_setImageWithURL(SFURL(navRightBtnIconURLStr!)!, forState: UIControlState())
+        navRightBtn.addTarget(self, action: #selector(ChatRoomController.navRightBtnPressed), for: .touchUpInside)
         navRightBtn.layer.cornerRadius = 17.5
         navRightBtn.clipsToBounds = true
-        navRightBtn.frame = CGRectMake(0, 0, 35, 35)
+        navRightBtn.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navRightBtn)
     }
     
     func navLeftBtnPressed() {
 //        ChatRecordDataSource.sharedDataSource.curRoom = nil
 //        chatList?.needUpdate()
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
         if let rosterItem = rosterItem {
             switch rosterItem.data! {
-            case .USER(_):
+            case .user(_):
                 let detail = PrivateChatSettingController(rosterItem: rosterItem)
                 self.navigationController?.pushViewController(detail, animated: true)
-            case .CLUB(_):
+            case .club(_):
                 if targetClub!.founderUser!.isHost {
                     let detail = GroupChatSettingHostController(targetClub: targetClub!)
                     self.navigationController?.pushViewController(detail, animated: true)
@@ -236,13 +236,13 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         }
         self.talkBoard?.reloadData()
         if needScrollToBottom {
-            talkBoard!.setContentOffset(CGPointMake(0, talkBoard!.contentSize.height - talkBoard!.frame.height), animated: true)
+            talkBoard!.setContentOffset(CGPoint(x: 0, y: talkBoard!.contentSize.height - talkBoard!.frame.height), animated: true)
         }
     }
     
-    func onChatHostoryCleared(notification: NSNotification) {
-        if let relatedRoster = notification.userInfo?[kRosterItemKey] as? RosterItem where relatedRoster == rosterItem {
-            dispatch_async(dispatch_get_main_queue(), { 
+    func onChatHostoryCleared(_ notification: Foundation.Notification) {
+        if let relatedRoster = (notification as NSNotification).userInfo?[kRosterItemKey] as? RosterItem , relatedRoster == rosterItem {
+            DispatchQueue.main.async(execute: { 
                 self.chats.removeAll()
                 self.talkBoard?.reloadData()
             })
@@ -257,18 +257,18 @@ extension ChatRoomController {
         loadChatHistoryMannually(false)
     }
     
-    func loadChatHistoryMannually(autoScrollToBottom: Bool = false) {
+    func loadChatHistoryMannually(_ autoScrollToBottom: Bool = false) {
         MessageManager.defaultManager.loadHistory(self) { (chats) in
             if let chats = chats {
-                self.chats.insertContentsOf(chats, at: 0)
+                self.chats.insert(contentsOf: chats, at: 0)
                 self.talkBoard?.beginUpdates()
-                let indexes = (0..<chats.count).map { NSIndexPath(forRow: $0, inSection: 0)}
-                self.talkBoard?.insertRowsAtIndexPaths(indexes, withRowAnimation: .Automatic)
+                let indexes = (0..<chats.count).map { IndexPath(row: $0, section: 0)}
+                self.talkBoard?.insertRows(at: indexes, with: .automatic)
                 self.talkBoard?.reloadData()
                 self.talkBoard?.endUpdates()
                 if autoScrollToBottom {
-                    self.talkBoard?.scrollToRowAtIndexPath(NSIndexPath(forRow: self.chats.count - 1, inSection: 0)
-                        , atScrollPosition: .Top, animated: false)
+                    self.talkBoard?.scrollToRow(at: IndexPath(row: self.chats.count - 1, section: 0)
+                        , at: .top, animated: false)
                 }
             }
             self.refresh.endRefreshing()
@@ -279,42 +279,42 @@ extension ChatRoomController {
 
 // MARK: - tableView代理
 extension ChatRoomController {
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chats.count
 //        return chatRecords!.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let record = chats[indexPath.row]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let record = chats[(indexPath as NSIndexPath).row]
         record.read = true
         let messageType = record.messageType!
-        let cell = tableView.dequeueReusableCellWithIdentifier(messageType, forIndexPath: indexPath) as! ChatCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: messageType, for: indexPath) as! ChatCell
         cell.delegate = self
         let displayTimeMark: Bool = {
-            if indexPath.row == 0 {
+            if (indexPath as NSIndexPath).row == 0 {
                 return true
             }else{
 //                let formerRecord = chatRecords![indexPath.row - 1]
-                let formerRecord = chats[indexPath.row - 1]
-                let timedelta = record.createdAt!.timeIntervalSinceDate(formerRecord.createdAt!)
+                let formerRecord = chats[(indexPath as NSIndexPath).row - 1]
+                let timedelta = record.createdAt!.timeIntervalSince(formerRecord.createdAt!)
                 return timedelta > 600
             }
         }()
         record.displayTimeMark = displayTimeMark
         cell.displayTimeMarker = displayTimeMark
         cell.chat = record
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
         cell.loadDataAndUpdateUI()
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //        let record = chatRecords![indexPath.row]
-        let record = chats[indexPath.row]
+        let record = chats[(indexPath as NSIndexPath).row]
 //        if record.messageType == "placeholder" {
 //            return 0
 //        }
@@ -324,7 +324,7 @@ extension ChatRoomController {
 
 extension ChatRoomController {
     
-    func confirmSendChatMessage(text: String? = nil, image: UIImage? = nil, audio: NSURL? = nil, messageType: String="text") {
+    func confirmSendChatMessage(_ text: String? = nil, image: UIImage? = nil, audio: URL? = nil, messageType: String="text") {
         
         guard self.chatCreated else {
             self.showToast(LS("无法连接到服务器"))
@@ -334,12 +334,12 @@ extension ChatRoomController {
         newChat.initForPost(messageType, textContent: text, image: image, audio: audio)
         newChat.rosterID = rosterItem.ssid
         switch rosterItem.data! {
-        case .USER(_):
+        case .user(_):
             newChat.targetID = targetUser!.ssid
             
             newChat.targetUser = targetUser!
             newChat.chatType = "user"
-        case .CLUB(_):
+        case .club(_):
             newChat.targetID = targetClub!.ssid
             if let club = targetClub!.toContext(ChatModelManger.sharedManager.getOperationContext()) as? Club {
                 newChat.targetClub = club
@@ -383,10 +383,10 @@ extension ChatRoomController {
 //        talkBoard?.insertRowsAtIndexPaths([NSIndexPath(forRow: chatRecords!.count-1, inSection: 0)], withRowAnimation: .Fade)
 //        talkBoard?.endUpdates()
 //        let targetPath = NSIndexPath(forRow: self.chatRecords!.count - 1, inSection: 0)
-        talkBoard?.insertRowsAtIndexPaths([NSIndexPath(forRow: chats.count-1, inSection: 0)], withRowAnimation: .Fade)
+        talkBoard?.insertRows(at: [IndexPath(row: chats.count-1, section: 0)], with: .fade)
         talkBoard?.endUpdates()
-        let targetPath = NSIndexPath(forRow: self.chats.count - 1, inSection: 0)
-        talkBoard?.scrollToRowAtIndexPath(targetPath, atScrollPosition: .Top, animated: false)
+        let targetPath = IndexPath(row: self.chats.count - 1, section: 0)
+        talkBoard?.scrollToRow(at: targetPath, at: .top, animated: false)
         self.chatOpPanelController?.contentInput?.text = ""
         ChatRequester2.sharedInstance.postNewChatRecord(newChat.chatType!, messageType: messageType, targetID: newChat.targetIDString, image: image, audio: audio, textContent: text, onSuccess: { (json) -> () in
             let newID = json!["chatID"].int32Value
@@ -410,18 +410,18 @@ extension ChatRoomController {
         
     }
     
-    func opPanelDidSwitchInputModel(opPanel: ChatOpPanelController) {
+    func opPanelDidSwitchInputModel(_ opPanel: ChatOpPanelController) {
 
     }
     
-    func opPanelWillSwitchInputMode(opPanel: ChatOpPanelController) {
+    func opPanelWillSwitchInputMode(_ opPanel: ChatOpPanelController) {
         opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(45)
         })
     }
     
     func needInvokeAccessoryView() {
-        let accessoryBoardHeight = UIScreen.mainScreen().bounds.width * kChatAccessoryBoardSizeRatio
+        let accessoryBoardHeight = UIScreen.main.bounds.width * kChatAccessoryBoardSizeRatio
         if accessoryBoard == nil {
             accessoryBoard = ChatAccessoryBoard()
             accessoryBoard?.chatRoomController = self
@@ -449,7 +449,7 @@ extension ChatRoomController {
         }else {
             displayAccessoryBoard = true
             // 显示accessory面板
-            self.tapper?.enabled = true
+            self.tapper?.isEnabled = true
             accessoryBoard?.snp_updateConstraints(closure: { (make) -> Void in
                 make.top.equalTo(self.view.snp_bottom).offset(-accessoryBoardHeight)
             })
@@ -457,7 +457,7 @@ extension ChatRoomController {
                 make.bottom.equalTo(self.view).offset(-accessoryBoardHeight)
             })
         }
-        UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.view.layoutIfNeeded()
             }, completion: nil)
     }
@@ -466,7 +466,7 @@ extension ChatRoomController {
         
     }
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         
         if text == "\n" {
             let commentText = textView.text
@@ -486,7 +486,7 @@ extension ChatRoomController {
             }
         }
         let curText = textView.text as NSString
-        let newText = curText.stringByReplacingCharactersInRange(range, withString: text) as String
+        let newText = curText.replacingCharacters(in: range, with: text) as String
         if newText.length > 140 {
             // 当输入的长度超过了140时禁止修改
             return false
@@ -495,9 +495,9 @@ extension ChatRoomController {
     }
     
     // 动态调整输入框的高度
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         let fixedWidth = textView.frame.width
-        let newSize = textView.sizeThatFits(CGSizeMake(fixedWidth, CGFloat.max))
+        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
         opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(max(45, newSize.height))
         })
@@ -520,9 +520,9 @@ extension ChatRoomController {
      
      - parameter notif:
      */
-    func changeLayoutWhenKeyboardAppears(notif: NSNotification) {
-        let userInfo = notif.userInfo!
-        let keyboardFrame = userInfo[UIKeyboardFrameBeginUserInfoKey]!.CGRectValue
+    func changeLayoutWhenKeyboardAppears(_ notif: Foundation.Notification) {
+        let userInfo = (notif as NSNotification).userInfo!
+        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue
         opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(self.view).offset(-keyboardFrame.height)
         })
@@ -530,8 +530,8 @@ extension ChatRoomController {
 //        let allChatRecordCount = chatRecords!.count
         let allChatRecordCount = chats.count
         if allChatRecordCount > 0 {
-            let targetPath = NSIndexPath(forRow: allChatRecordCount - 1, inSection: 0)
-            talkBoard?.scrollToRowAtIndexPath(targetPath, atScrollPosition: .Top, animated: true)
+            let targetPath = IndexPath(row: allChatRecordCount - 1, section: 0)
+            talkBoard?.scrollToRow(at: targetPath, at: .top, animated: true)
         }
         // talkBoard?.setContentOffset(CGPointMake(0, CGFloat.max), animated: true)
         
@@ -543,7 +543,7 @@ extension ChatRoomController {
         })
     }
     
-    func changeLayoutWhenKeyboardDisappears(notif: NSNotification) {
+    func changeLayoutWhenKeyboardDisappears(_ notif: Foundation.Notification) {
         opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(self.view).offset(0)
         })
@@ -560,7 +560,7 @@ extension ChatRoomController {
                 make.bottom.equalTo(self.view).offset(0)
             })
             displayAccessoryBoard = false
-            UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.view.layoutIfNeeded()
                 }, completion: nil)
         }
@@ -570,14 +570,14 @@ extension ChatRoomController {
 // MARK: - 图片选择器的代理
 extension ChatRoomController {
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        self.dismiss(animated: true, completion: nil)
         self.confirmSendChatMessage(nil, image: image, audio: nil, messageType: "image")
     }
     
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
         // Do nothing when cancelled
     }
 }
@@ -589,7 +589,7 @@ extension ChatRoomController {
         
     }
     
-    func audioDidFinishRecording(audioURL: NSURL?) {
+    func audioDidFinishRecording(_ audioURL: URL?) {
         if audioURL != nil {
             confirmSendChatMessage(nil, image: nil, audio: audioURL, messageType: "audio")
         }else {
@@ -597,7 +597,7 @@ extension ChatRoomController {
         }
     }
     
-    func audioFailToRecord(errorMessage: String) {
+    func audioFailToRecord(_ errorMessage: String) {
         
     }
     
@@ -607,7 +607,7 @@ extension ChatRoomController {
 }
 
 extension ChatRoomController {
-    func avatarPressed(chatRecord: ChatRecord) {
+    func avatarPressed(_ chatRecord: ChatRecord) {
         if let user = chatRecord.senderUser {
             if user.isHost {
                 let detail = PersonBasicController(user: user)

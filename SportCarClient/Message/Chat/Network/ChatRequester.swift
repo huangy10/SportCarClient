@@ -15,7 +15,7 @@ class ChatRequester2: BasicRequester {
     
     static let sharedInstance = ChatRequester2()
     
-    private let _urlMap: [String: String] = [
+    fileprivate let _urlMap: [String: String] = [
         "chatlist": "list",
         "update": "update",
         "history": "history",
@@ -32,11 +32,11 @@ class ChatRequester2: BasicRequester {
         return "chat"
     }
     
-    var privateQueue: dispatch_queue_t {
+    var privateQueue: DispatchQueue {
         return ChatModelManger.sharedManager.workQueue
     }
     
-    override func urlForName(name: String, param: [String : String]? = nil) -> String {
+    override func urlForName(_ name: String, param: [String : String]? = nil) -> String {
         if name == "new" {
             return "\(kProtocalName)://\(kHostName):\(kChatPortName)/chat/speak"
         } else {
@@ -44,8 +44,8 @@ class ChatRequester2: BasicRequester {
         }
     }
     
-    override func internalErrorHandler(error: NSError) -> NSError? {
-        if let url = error.userInfo[NSURLErrorFailingURLErrorKey]?.absoluteString where url.hasSuffix("/chat/update") {
+    override func internalErrorHandler(_ error: NSError) -> NSError? {
+        if let url = (error.userInfo[NSURLErrorFailingURLErrorKey] as AnyObject).absoluteString , (url?.hasSuffix("/chat/update"))! {
             if error.code == -999 {
                 return nil
             } else {
@@ -56,8 +56,8 @@ class ChatRequester2: BasicRequester {
         }
     }
     
-    @available(*, deprecated=1)
-    func download_audio_file_async(chatRecord: ChatRecord, onComplete:(record: ChatRecord, localURL: NSURL)->(), onError: (record: ChatRecord)->()) {
+    @available(*, deprecated: 1)
+    func download_audio_file_async(_ chatRecord: ChatRecord, onComplete:(_ record: ChatRecord, _ localURL: URL)->(), onError: (_ record: ChatRecord)->()) {
         // 首先查看是否已经有local副本存在
 //        if let local = chatRecord.audioLocal {
 //            if let localPath = NSURL(string: local)?.path {
@@ -89,12 +89,12 @@ class ChatRequester2: BasicRequester {
     }
     
     func getCachedAudioDirectory() -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
-        let cacheDirectory: AnyObject = paths[0]
-        let targetFolder = cacheDirectory.stringByAppendingPathComponent("record_audio_cache")
+        let paths = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
+        let cacheDirectory: AnyObject = paths[0] as AnyObject
+        let targetFolder = cacheDirectory.appendingPathComponent("record_audio_cache")
         do {
-            if !NSFileManager.defaultManager().fileExistsAtPath(targetFolder) {
-                try NSFileManager.defaultManager().createDirectoryAtPath(targetFolder, withIntermediateDirectories: false, attributes: nil)
+            if !FileManager.default.fileExists(atPath: targetFolder) {
+                try FileManager.default.createDirectory(atPath: targetFolder, withIntermediateDirectories: false, attributes: nil)
             }
         }catch{
             return cacheDirectory as! String
@@ -102,18 +102,18 @@ class ChatRequester2: BasicRequester {
         return targetFolder
     }
     
-    func postNewChatRecord(chatType: String, messageType: String, targetID: String, image: UIImage?=nil, audio: NSURL?=nil, textContent: String? = nil, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+    func postNewChatRecord(_ chatType: String, messageType: String, targetID: String, image: UIImage?=nil, audio: URL?=nil, textContent: String? = nil, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) {
         var param: [String: AnyObject] = [
-            "chat_type": chatType,
-            "message_type": messageType,
-            "target_id": targetID
+            "chat_type": chatType as AnyObject,
+            "message_type": messageType as AnyObject,
+            "target_id": targetID as AnyObject
         ]
         if messageType == "image" {
             param["image"] = image!
         } else if messageType == "audio" {
-            param["audio"] = audio!
+            param["audio"] = audio! as AnyObject?
         } else if messageType == "text" {
-            param["text_content"] = textContent!
+            param["text_content"] = textContent! as AnyObject?
         }
         upload(
             urlForName("new"),
@@ -123,7 +123,7 @@ class ChatRequester2: BasicRequester {
         )
     }
     
-    func getChatList(onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func getChatList(_ onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return get(
             urlForName("chatlist"),
             responseDataField: "data",
@@ -132,14 +132,14 @@ class ChatRequester2: BasicRequester {
     }
     
     lazy var listenManager: Alamofire.Manager = {
-       let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+       let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = 3600
         return Alamofire.Manager(configuration: configuration)
     }()
     
-    func listen(queue: dispatch_queue_t, unread: Int = 0, curFocusedChat: Int32 = 0, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func listen(_ queue: DispatchQueue, unread: Int = 0, curFocusedChat: Int32 = 0, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         let url = "\(kProtocalName)://\(kHostName):\(kChatPortName)/chat/update"
-        let mutableRequest = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let mutableRequest = NSMutableURLRequest(url: URL(string: url)!)
         mutableRequest.timeoutInterval = 3600
         var param: [String: AnyObject] = ["unread": unread]
         if curFocusedChat > 0 {
@@ -155,7 +155,7 @@ class ChatRequester2: BasicRequester {
         )
     }
     
-    func getChatHistories(rosterItemID: Int32, skips: Int, limit: Int, onSucces: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func getChatHistories(_ rosterItemID: Int32, skips: Int, limit: Int, onSucces: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return get(
             urlForName("history"),
             parameters: ["roster": "\(rosterItemID)", "skips": "\(skips)", "limit": "\(limit)"],
@@ -165,7 +165,7 @@ class ChatRequester2: BasicRequester {
         )
     }
     
-    func startChat(targetID: String, chatType: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func startChat(_ targetID: String, chatType: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return post(
             urlForName("start"),
             parameters: ["target_id": targetID, "chat_type": chatType],
@@ -175,7 +175,7 @@ class ChatRequester2: BasicRequester {
         )
     }
     
-    func postUpdateUserRelationSettings(rosterID: String, remark_name: String, alwaysOnTop: Bool, noDisturbing: Bool, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func postUpdateUserRelationSettings(_ rosterID: String, remark_name: String, alwaysOnTop: Bool, noDisturbing: Bool, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return post(
             urlForName("roster_update", param: ["rosterID": rosterID]),
             parameters: ["nick_name": remark_name, "always_on_top": alwaysOnTop, "no_disturbing": noDisturbing],

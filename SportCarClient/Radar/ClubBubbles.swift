@@ -11,7 +11,7 @@ import UIKit
 
 protocol ClubBubbleViewDelegate: class {
     
-    func clubBubbleDidClickOn(club: Club)
+    func clubBubbleDidClickOn(_ club: Club)
     
 }
 
@@ -33,16 +33,16 @@ class ClubBubbleView: UIView {
     
         for club in clubs {
             let bubble = ClubBubbleCell()
-            bubble.addTarget(self, action: #selector(ClubBubbleView.bubblePressed(_:)), forControlEvents: .TouchUpInside)
+            bubble.addTarget(self, action: #selector(ClubBubbleView.bubblePressed(_:)), for: .touchUpInside)
             bubble.borderLimit = self.bounds
             bubble.club = club
             bubbles.append(bubble)
             self.addSubview(bubble)
             
-            let displayCenter = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds))
+            let displayCenter = CGPoint(x: bounds.midX, y: bounds.midY)
             let initAngle = CGFloat(arc4random_uniform(360)) / 360 * 3.141592 * 2
-            bubble.center = CGPointMake(displayCenter.x + 500 * cos(initAngle), displayCenter.y + 500 * sin(initAngle))
-            bubble.speed = CGPointMake(-cos(initAngle) * 3, -sin(initAngle) * 3)
+            bubble.center = CGPoint(x: displayCenter.x + 500 * cos(initAngle), y: displayCenter.y + 500 * sin(initAngle))
+            bubble.speed = CGPoint(x: -cos(initAngle) * 3, y: -sin(initAngle) * 3)
             
             self.bubbles.append(bubble)
         }
@@ -52,11 +52,11 @@ class ClubBubbleView: UIView {
         updator?.invalidate()
         updator = CADisplayLink(target: self, selector: #selector(ClubBubbleView.update))
         updator?.frameInterval = 0
-        updator?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
+        updator?.add(to: RunLoop.current, forMode: RunLoopMode.defaultRunLoopMode)
     }
     
     func endUpdate() {
-        updator?.paused = true
+        updator?.isPaused = true
         updator?.invalidate()
         updator = nil
     }
@@ -76,7 +76,7 @@ class ClubBubbleView: UIView {
         }
     }
     
-    func bubblePressed(sender: ClubBubbleCell) {
+    func bubblePressed(_ sender: ClubBubbleCell) {
         delegate?.clubBubbleDidClickOn(sender.club!)
     }
 }
@@ -88,7 +88,7 @@ class ClubBubbleCell: UIButton {
         didSet {
             if club != nil {
                 let logoURL = club!.logoURL!
-                self.kf_setImageWithURL(logoURL, forState: .Normal)
+                self.kf_setImageWithURL(logoURL, forState: UIControlState())
                 switch club!.memberNum {
                 case 0..<30:
                     radius = 30
@@ -106,7 +106,7 @@ class ClubBubbleCell: UIButton {
     
     var radius: CGFloat = 10 {
         didSet {
-            self.bounds = CGRectMake(0, 0, radius * 2, radius * 2)
+            self.bounds = CGRect(x: 0, y: 0, width: radius * 2, height: radius * 2)
             self.layer.cornerRadius = radius
             self.clipsToBounds = true
         }
@@ -116,9 +116,9 @@ class ClubBubbleCell: UIButton {
         return radius * radius
     }
     // speed of the bubble
-    var speed: CGPoint = CGPointMake(0, 0)
+    var speed: CGPoint = CGPoint(x: 0, y: 0)
     var slowDownRate: CGFloat = 0.995
-    var borderLimit: CGRect = CGRectZero
+    var borderLimit: CGRect = CGRect.zero
     
     func update() {
         if borderCheckEnabled {
@@ -132,14 +132,14 @@ class ClubBubbleCell: UIButton {
         center = newCenter
     }
     
-    private func slowDown() {
+    fileprivate func slowDown() {
         speed.x *= slowDownRate
         speed.y *= slowDownRate
     }
     
-    private func borderCheck() {
+    fileprivate func borderCheck() {
         if !borderCheckEnabled {
-            if CGRectContainsRect(borderLimit, bounds) {
+            if borderLimit.contains(bounds) {
                 borderCheckEnabled = true
             } else {
                 return
@@ -164,19 +164,19 @@ class ClubBubbleCell: UIButton {
         }
     }
     
-    private func gravity() {
+    fileprivate func gravity() {
         let centerX = borderLimit.origin.x + borderLimit.width / 2
         let centerY = borderLimit.origin.y + borderLimit.height / 2
         //
         let x = (centerX - center.x) / 100 * abs(speed.x) * 0.5
         let y = (centerY - center.y) / 100 * abs(speed.x) * 0.5
-        center = CGPointMake(center.x + x, center.y + y)
+        center = CGPoint(x: center.x + x, y: center.y + y)
     }
     
     // collison between bubbles
-    class func collide(b1: ClubBubbleCell, b2: ClubBubbleCell) {
+    class func collide(_ b1: ClubBubbleCell, b2: ClubBubbleCell) {
         let dist1 = CGPointDistance(b1.center, p2: b2.center)
-        let dist2 = CGPointDistance(CGPointMake(b1.center.x + b1.speed.x, b1.center.y + b1.speed.y), p2: CGPointMake(b2.center.x + b2.speed.x, b2.center.y + b2.speed.y))
+        let dist2 = CGPointDistance(CGPoint(x: b1.center.x + b1.speed.x, y: b1.center.y + b1.speed.y), p2: CGPoint(x: b2.center.x + b2.speed.x, y: b2.center.y + b2.speed.y))
         if dist1 <= dist2 {
             // if the two bubble are leaving, do not exchange their speed vector
             return

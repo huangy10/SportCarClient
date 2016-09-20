@@ -16,9 +16,9 @@ class ClearCacheController: PresentTemplateViewController {
     
     override func createContent() {
         cacheSizeInfoLabl = UILabel()
-        cacheSizeInfoLabl.font = UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)
-        cacheSizeInfoLabl.textColor = UIColor.whiteColor()
-        cacheSizeInfoLabl.textAlignment = .Center
+        cacheSizeInfoLabl.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
+        cacheSizeInfoLabl.textColor = UIColor.white
+        cacheSizeInfoLabl.textAlignment = .center
         // 由于这个页面只能由mine setting调出，而mine settng出现时，缓存描述符已经可用
         cacheSizeInfoLabl.text = LS("清除全部缓存") + PersonMineSettingsDataSource.sharedDataSource.cacheSizeDes! + "?"
         container.addSubview(cacheSizeInfoLabl)
@@ -28,13 +28,13 @@ class ClearCacheController: PresentTemplateViewController {
         }
         //
         clearBtn = UIButton()
-        clearBtn.setImage(UIImage(named: "clear_cache_confirm"), forState: .Normal)
-        clearBtn.addTarget(self, action: #selector(ClearCacheController.clearBtnPressed), forControlEvents: .TouchUpInside)
+        clearBtn.setImage(UIImage(named: "clear_cache_confirm"), for: UIControlState())
+        clearBtn.addTarget(self, action: #selector(ClearCacheController.clearBtnPressed), for: .touchUpInside)
         container.addSubview(clearBtn)
         clearBtn.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
             make.top.equalTo(cacheSizeInfoLabl.snp_bottom).offset(45)
-            make.size.equalTo(CGSizeMake(105, 50))
+            make.size.equalTo(CGSize(width: 105, height: 50))
         }
     }
     

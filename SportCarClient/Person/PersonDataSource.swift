@@ -28,7 +28,7 @@ class PersonDataSource {
      
      - parameter json: json数据包，已经剔除了success
      */
-    func handleAuthedCarsJSONResponse(json: JSON, user: User = MainManager.sharedManager.hostUser!) {
+    func handleAuthedCarsJSONResponse(_ json: JSON, user: User = MainManager.sharedManager.hostUser!) {
         // 认证汽车的获取不存在分页获取的问题，故每次获取的json数据包含的都是所有的认证汽车，故此处需要将原有的数据删除
         cars.removeAll()
         let data = json.arrayValue
@@ -49,7 +49,7 @@ class PersonDataSource {
      - parameter json: json数据
      - parameter car:  对应的car
      */
-    func handleStatusListResponse(json: JSON, car: SportCar?) {
+    func handleStatusListResponse(_ json: JSON, car: SportCar?) {
         let data = json.arrayValue
         var targetStatusList: [Status]
         if car == nil {
@@ -72,23 +72,23 @@ class PersonDataSource {
         }
     }
     
-    func addCar(car: SportCar) {
+    func addCar(_ car: SportCar) {
         cars.append(car)
         if statusDict[car.ssidString] == nil {
             statusDict[car.ssidString] = []
         }
     }
     
-    func deleteCar(car: SportCar) {
+    func deleteCar(_ car: SportCar) {
         self.cars = $.remove(self.cars, callback: { $0.ssid == car.ssid })
-        statusDict.removeValueForKey(car.ssidString)
+        statusDict.removeValue(forKey: car.ssidString)
     }
     
-    func newStatus(status: Status) {
-        statusList.insert(status, atIndex: 0)
+    func newStatus(_ status: Status) {
+        statusList.insert(status, at: 0)
         if let car = status.car {
             if var list = self.statusDict[car.ssidString] {
-                list.insert(status, atIndex: 0)
+                list.insert(status, at: 0)
                 statusDict[car.ssidString] = list
             } else {
                 self.statusDict[car.ssidString] = [status]
@@ -96,7 +96,7 @@ class PersonDataSource {
         }
     }
     
-    func deleteStatus(status: Status) {
+    func deleteStatus(_ status: Status) {
         //
         statusList.remove(status)
         if let car = status.car, var list = statusDict[car.ssidString] {

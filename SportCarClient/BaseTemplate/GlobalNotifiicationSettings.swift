@@ -13,7 +13,7 @@ import Foundation
 // Notifications
 let kUnreadNumberDidChangeNotification = "unread_number_did_change_notification"
 func ss_sendUnreadNumberDidChangeNotification() {
-    NSNotificationCenter.defaultCenter().postNotificationName(kUnreadNumberDidChangeNotification, object: nil)
+    NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kUnreadNumberDidChangeNotification), object: nil)
 }
 let kNotificationUnreadClearNotification = "unread_notif_clear"
 
@@ -51,7 +51,7 @@ let kAccountBlacklistChange = "black_list_change"
 let kAccountBlackStatusKey = "block_status"
 let kAccountBlackStatusDefault = "default"
 let kAccountBlackStatusBlocked = "blocked"
-
+let kAccountInfoChanged = "info_changed"
 
 // MARK: Car
 

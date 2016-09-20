@@ -15,7 +15,7 @@ import AlecrimCoreData
 class NotificationRequester: BasicRequester {
     static let sharedInstance = NotificationRequester()
     
-    private let _urlMap: [String: String]  = [
+    fileprivate let _urlMap: [String: String]  = [
         "get": "list",
         "mark_read": "<notifID>",
     ]
@@ -28,11 +28,11 @@ class NotificationRequester: BasicRequester {
         return "notification"
     }
     
-    var privateQueue: dispatch_queue_t {
+    var privateQueue: DispatchQueue {
         return ChatModelManger.sharedManager.workQueue
     }
     
-    func getNotifications(skips: Int, limit: Int = 20, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request{
+    func getNotifications(_ skips: Int, limit: Int = 20, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request{
         
         let params: [String : AnyObject] = [
             "limit": limit,
@@ -47,7 +47,7 @@ class NotificationRequester: BasicRequester {
         )
     }
     
-    func notifMarkRead(notifID:String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func notifMarkRead(_ notifID:String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return post(
             urlForName("mark_read", param: ["notifID": notifID]),
             onSuccess: onSuccess, onError: onError)

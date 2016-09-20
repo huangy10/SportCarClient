@@ -23,8 +23,8 @@ class PrivateChatSettingsHeader: UITableViewHeaderFooterView {
     
     func createSubviews() {
         titleLbl = UILabel()
-        titleLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold)
-        titleLbl.textColor = UIColor.blackColor()
+        titleLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        titleLbl.textColor = UIColor.black
         self.addSubview(titleLbl)
         titleLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(self).offset(15)
@@ -59,7 +59,7 @@ class PrivateChatSettingsAvatarCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
-        selectionStyle = .None
+        selectionStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -71,7 +71,7 @@ class PrivateChatSettingsAvatarCell: UITableViewCell {
         avatarImage = UIImageView()
         avatarImage.clipsToBounds = true
         avatarImage.layer.cornerRadius = 37
-        avatarImage.contentMode = .ScaleAspectFill
+        avatarImage.contentMode = .scaleAspectFill
         self.contentView.addSubview(avatarImage)
         avatarImage.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(self.contentView)
@@ -92,7 +92,7 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
     var editable: Bool = true {
         didSet  {
             if editable {
-                infoLbl.textColor = UIColor.blackColor()
+                infoLbl.textColor = UIColor.black
             }else {
                 infoLbl.textColor = UIColor(white: 0.72, alpha: 1)
             }
@@ -102,13 +102,13 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
     var useAsMark: Bool = false {
         didSet {
             if useAsMark {
-                infoLbl.hidden = true
-                icon.hidden = true
-                boolSelect.hidden = true
+                infoLbl.isHidden = true
+                icon.isHidden = true
+                boolSelect.isHidden = true
             }else {
-                infoLbl.hidden = false
-                icon.hidden = false
-                boolSelect.hidden = false
+                infoLbl.isHidden = false
+                icon.isHidden = false
+                boolSelect.isHidden = false
             }
         }
     }
@@ -116,13 +116,13 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
     var arrowHidden: Bool = false {
         didSet {
             if arrowHidden {
-                icon.hidden = true
+                icon.isHidden = true
                 infoLbl.snp_remakeConstraints(closure: { (make) in
                     make.centerY.equalTo(staticLbl)
                     make.right.equalTo(icon)
                 })
             } else {
-                icon.hidden = false
+                icon.isHidden = false
                 infoLbl.snp_makeConstraints { (make) -> Void in
                     make.centerY.equalTo(staticLbl)
                     make.right.equalTo(icon.snp_left).offset(-15)
@@ -135,7 +135,7 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
-        self.selectionStyle = .None
+        self.selectionStyle = .none
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -147,7 +147,7 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         //
         staticLbl = UILabel()
         staticLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        staticLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        staticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(staticLbl)
         staticLbl.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(superview)
@@ -159,12 +159,12 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         icon.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(staticLbl)
             make.right.equalTo(superview).offset(-15)
-            make.size.equalTo(CGSizeMake(9, 15))
+            make.size.equalTo(CGSize(width: 9, height: 15))
         }
         //
         infoLbl = UILabel()
-        infoLbl.textColor = UIColor.blackColor()
-        infoLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        infoLbl.textColor = UIColor.black
+        infoLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(infoLbl)
         infoLbl.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(staticLbl)
@@ -180,7 +180,7 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         boolSelect.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(staticLbl)
-            make.size.equalTo(CGSizeMake(51, 31))
+            make.size.equalTo(CGSize(width: 51, height: 31))
         }
         //
         let sepLine = UIView()
@@ -199,8 +199,8 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         markIcon.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.top.equalTo(staticLbl)
-            make.size.equalTo(CGSizeMake(17, 12))
+            make.size.equalTo(CGSize(width: 17, height: 12))
         }
-        markIcon.hidden = true
+        markIcon.isHidden = true
     }
 }

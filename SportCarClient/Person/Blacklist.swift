@@ -17,7 +17,7 @@ class BlacklistController: UserSelectController {
     weak var ongoingRequest: Request?
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override var users: [User] {
@@ -31,7 +31,7 @@ class BlacklistController: UserSelectController {
     }
     
     override func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     override func createSubviews() {
@@ -42,13 +42,13 @@ class BlacklistController: UserSelectController {
             make.right.equalTo(superview).offset(0)
         })
         //
-        selectedUserList?.hidden = true
-        userTableView?.registerClass(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
+        selectedUserList?.isHidden = true
+        userTableView?.register(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UserSelectCellUnselectable
-        let user = users[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserSelectCellUnselectable
+        let user = users[(indexPath as NSIndexPath).row]
         cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
@@ -57,7 +57,7 @@ class BlacklistController: UserSelectController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onBlacklistChanged(_:)), name: kAccountBlacklistChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onBlacklistChanged(_:)), name: NSNotification.Name(rawValue: kAccountBlacklistChange), object: nil)
         getMoreBlockedUser()
     }
     
@@ -96,26 +96,26 @@ class BlacklistController: UserSelectController {
         }
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.height {
             getMoreBlockedUser()
         }
     }
     
-    func onBlacklistChanged(notification: NSNotification) {
-        let user = notification.userInfo![kUserKey] as! User
-        let blockStatus = notification.userInfo![kAccountBlackStatusKey] as! String
+    func onBlacklistChanged(_ notification: Foundation.Notification) {
+        let user = (notification as NSNotification).userInfo![kUserKey] as! User
+        let blockStatus = (notification as NSNotification).userInfo![kAccountBlackStatusKey] as! String
         
         if blockStatus == kAccountBlackStatusBlocked {
             if $.find(blockedUsers, callback: { $0.ssid == user.ssid }) == nil {
-                blockedUsers.insert(user, atIndex: 0)
+                blockedUsers.insert(user, at: 0)
             }
         } else {
             if let _ = $.find(blockedUsers, callback: { $0.ssid == user.ssid }) {
                 blockedUsers = $.remove(blockedUsers, callback: { $0.ssid == user.ssid})
             }
         }
-        dispatch_async(dispatch_get_main_queue()) { 
+        DispatchQueue.main.async { 
             self.userTableView?.reloadData()
         }
         

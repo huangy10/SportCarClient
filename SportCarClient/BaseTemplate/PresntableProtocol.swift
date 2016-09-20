@@ -11,9 +11,9 @@ import UIKit
 
 protocol PresentableProtocol: class {
     
-    func pp_presentFromController(parent: UIViewController)
+    func pp_presentFromController(_ parent: UIViewController)
     
-    func pp_presentWithWrapperFromController(parent: UIViewController)
+    func pp_presentWithWrapperFromController(_ parent: UIViewController)
     
     func pp_dismissSelf()
     
@@ -22,18 +22,18 @@ protocol PresentableProtocol: class {
 
 extension PresentableProtocol where Self: UIViewController{
     
-    func pp_presentFromController(parent: UIViewController) {
+    func pp_presentFromController(_ parent: UIViewController) {
         self.presenter = parent
-        parent.presentViewController(self, animated: true, completion: nil)
+        parent.present(self, animated: true, completion: nil)
     }
     
-    func pp_presentWithWrapperFromController(parent: UIViewController) {
+    func pp_presentWithWrapperFromController(_ parent: UIViewController) {
         self.presenter = parent
         let wrapper = BlackBarNavigationController(rootViewController: self)
-        parent.presentViewController(wrapper, animated: true, completion: nil)
+        parent.present(wrapper, animated: true, completion: nil)
     }
     
     func pp_dismissSelf() {
-        self.presenter?.dismissViewControllerAnimated(true, completion: nil)
+        self.presenter?.dismiss(animated: true, completion: nil)
     }
 }

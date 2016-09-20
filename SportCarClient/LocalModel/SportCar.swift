@@ -18,16 +18,16 @@ class SportCar: BaseModel{
         return "carID"
     }
     
-    var logoURL: NSURL? {
+    var logoURL: URL? {
         if logo == nil {
             return nil
         }
         return SFURL(logo!)
     }
     
-    var imageArray: [NSURL]!
+    var imageArray: [URL]!
 //    var videoURL: NSURL?
-    var audioURL: NSURL?
+    var audioURL: URL?
     
     var fullName: String {
         get {
@@ -37,7 +37,7 @@ class SportCar: BaseModel{
     
     override func awakeFromFetch() {
         super.awakeFromFetch()
-        let imagesRaw = JSON(data: images!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+        let imagesRaw = JSON(data: images!.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
         imageArray = $.map(imagesRaw.arrayValue, transform: { SFURL($0.stringValue)!})
         
 //        if let video = video {
@@ -48,7 +48,7 @@ class SportCar: BaseModel{
         }
     }
 
-    override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool) throws -> Self {
+    override func loadDataFromJSON(_ data: JSON, detailLevel: Int, forceMainThread: Bool) throws -> Self {
         var json = data
         if data["car"].exists() {
             json = SportCar.reorgnaizeJSON(data)
@@ -57,7 +57,7 @@ class SportCar: BaseModel{
         let media = json["medias"]
         let imagesRaw = media["image"]
         if imagesRaw.exists() {
-            images = String(data: try! imagesRaw.rawData(), encoding: NSUTF8StringEncoding)
+            images = String(data: try! imagesRaw.rawData(), encoding: String.Encoding.utf8)
             imageArray = $.map(imagesRaw.arrayValue, transform: { SFURL($0.stringValue)! })
         }
         let audioRaw = media["audio"].arrayValue
@@ -86,7 +86,7 @@ class SportCar: BaseModel{
         return self
     }
     
-    override func toJSONObject(detailLevel: Int) throws -> JSON {
+    override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         let json: NSMutableDictionary = [
             SportCar.idField: ssidString,
             "name": name!,
@@ -105,7 +105,7 @@ class SportCar: BaseModel{
         return JSON(json)
     }
     
-    class func reorgnaizeJSON(json: JSON) -> JSON {
+    class func reorgnaizeJSON(_ json: JSON) -> JSON {
         var tempJSON = json["car"]
         for (key, value) in json {
             if key == "car" {

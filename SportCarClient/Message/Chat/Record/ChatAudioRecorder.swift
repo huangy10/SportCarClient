@@ -11,9 +11,9 @@ import AVFoundation
 
 protocol ChatAudioRecordDelegate: class {
     func audioWillStartRecording()
-    func audioDidFinishRecording(audioURL: NSURL?)
+    func audioDidFinishRecording(_ audioURL: URL?)
     func audioDidCancelRecording()
-    func audioFailToRecord(errorMessage: String)
+    func audioFailToRecord(_ errorMessage: String)
 }
 
 
@@ -21,13 +21,13 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
     // 代理
     weak var delegate: ChatAudioRecordDelegate?
     /// An audio session to manage recording.
-    private var recordingSession: AVAudioSession!
+    fileprivate var recordingSession: AVAudioSession!
     /// An audio recorder to handle the actual reading and saving of data.
-    private var audioRecorder: AVAudioRecorder!
+    fileprivate var audioRecorder: AVAudioRecorder!
     
-    var audioURL: NSURL!
+    var audioURL: URL!
     
-    var startTime: NSDate!
+    var startTime: Date!
     
     var isRecording: Bool {
         return audioRecorder == nil
@@ -42,7 +42,7 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
             try recordingSession.setActive(true)
             recordingSession.requestRecordPermission({ (allowed: Bool) -> Void in
                 if !allowed {
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    DispatchQueue.main.async(execute: { () -> Void in
                         self.delegate?.audioFailToRecord("Fail to get permisssion")
                     })
                 }
@@ -53,39 +53,39 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
         }
     }
     
-    func startRecording(filename: String?) {
+    func startRecording(_ filename: String?) {
         UniversalAudioPlayer.sharedPlayer.stop()
         
-        let cacheFilename = filename ?? (NSUUID().UUIDString + ".m4a")
-        let cacheFilePath = (getCachedAudioDirectory() as AnyObject).stringByAppendingPathComponent(cacheFilename)
-        let cacheFileURL = NSURL(fileURLWithPath: cacheFilePath)
+        let cacheFilename = filename ?? (UUID().uuidString + ".m4a")
+        let cacheFilePath = (getCachedAudioDirectory() as AnyObject).appendingPathComponent(cacheFilename)
+        let cacheFileURL = URL(fileURLWithPath: cacheFilePath)
         audioURL = cacheFileURL
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 44100.0,
             AVNumberOfChannelsKey: 1 as NSNumber,
-            AVEncoderAudioQualityKey: AVAudioQuality.High.rawValue
-        ]
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ] as [String : Any]
         
         do {
-            audioRecorder = try AVAudioRecorder(URL: cacheFileURL, settings: settings)
+            audioRecorder = try AVAudioRecorder(url: cacheFileURL, settings: settings)
             audioRecorder.delegate = self
             audioRecorder.record()
-            startTime = NSDate()
+            startTime = Date()
         } catch {
             finishRecording(false)
         }
     }
     
-    func finishRecording(success: Bool) {
+    func finishRecording(_ success: Bool) {
         audioRecorder.stop()
         audioRecorder = nil
         do {
             try recordingSession.setActive(false)
         } catch {}
         if success {
-            let now = NSDate()
-            let interval = now.timeIntervalSinceDate(startTime)
+            let now = Date()
+            let interval = now.timeIntervalSince(startTime)
             if interval < 1 {
                 delegate?.audioDidFinishRecording(nil)
             }else{
@@ -93,9 +93,9 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
             }
         }else{
             // 失败时开始尝试删除已经创建的缓存文件
-            let fileManager = NSFileManager.defaultManager()
+            let fileManager = FileManager.default
             do{
-                try fileManager.removeItemAtURL(audioURL)
+                try fileManager.removeItem(at: audioURL)
             }catch {
             }
             delegate?.audioDidCancelRecording()
@@ -103,12 +103,12 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
     }
     
     func getCachedAudioDirectory() -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
-        let cacheDirectory: AnyObject = paths[0]
-        let targetFolder = cacheDirectory.stringByAppendingPathComponent("record_audio_cache")
+        let paths = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
+        let cacheDirectory: AnyObject = paths[0] as AnyObject
+        let targetFolder = cacheDirectory.appendingPathComponent("record_audio_cache")
         do {
-            if !NSFileManager.defaultManager().fileExistsAtPath(targetFolder) {
-                try NSFileManager.defaultManager().createDirectoryAtPath(targetFolder, withIntermediateDirectories: false, attributes: nil)
+            if !FileManager.default.fileExists(atPath: targetFolder) {
+                try FileManager.default.createDirectory(atPath: targetFolder, withIntermediateDirectories: false, attributes: nil)
             }
         }catch{
             return cacheDirectory as! String
@@ -117,7 +117,7 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
     }
     
     
-    func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if !flag {
             finishRecording(false)
         }

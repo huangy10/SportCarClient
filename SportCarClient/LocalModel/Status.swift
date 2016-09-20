@@ -17,7 +17,7 @@ class Status: BaseModel {
         return "statusID"
     }
     
-    private var _location: LocationModel?
+    fileprivate var _location: LocationModel?
     var location: LocationModel? {
         if loc == nil {
             return nil
@@ -31,33 +31,33 @@ class Status: BaseModel {
         return _location
     }
     
-    var coverURL: NSURL? {
+    var coverURL: URL? {
         if image == nil {
             return nil
         }
         return SFURL(image!)
     }
     
-    var thumbnailURL: NSURL? {
+    var thumbnailURL: URL? {
         if thumbnail == nil {
             return nil
         }
         return SFURL(thumbnail!)
     }
     
-    private var _car: SportCar?
+    fileprivate var _car: SportCar?
     var car: SportCar? {
         if carInfo == nil {
             return nil
         }
         if _car == nil {
-            let carJSON = JSON(data: carInfo!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+            let carJSON = JSON(data: carInfo!.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
             _car = try! manager.getOrCreate(carJSON) as SportCar
         }
         return _car
     }
 
-    override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool) throws -> Self {
+    override func loadDataFromJSON(_ data: JSON, detailLevel: Int, forceMainThread: Bool) throws -> Self {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         content = data["content"].stringValue
         createdAt = DateSTR(data["created_at"].stringValue)
@@ -88,9 +88,9 @@ class Status: BaseModel {
         return self
     }
     
-    override func toJSONObject(detailLevel: Int) throws -> JSON {
+    override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         if detailLevel > 1 {
-            throw SSModelError.NotSupported
+            throw SSModelError.notSupported
         }
         var json = [
             Status.idField: ssidString,

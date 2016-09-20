@@ -35,15 +35,15 @@ class BlockUserController: UIViewController {
         animateEntry()
     }
     
-    private func createSubviews() {
+    fileprivate func createSubviews() {
         let superview = self.view
         
-        container = superview.addSubview(UIView).config(UIColor.clearColor())
+        container = superview?.addSubview(UIView).config(UIColor.clear)
             .layout({ (make) in
                 make.edges.equalTo(superview)
             })
         container.layer.opacity = 0
-        let blurEffect = UIBlurEffect(style: .Dark)
+        let blurEffect = UIBlurEffect(style: .dark)
         let blurMask = UIVisualEffectView(effect: blurEffect)
 //        blurMask.layer.opacity = 0.9
         container.addSubview(blurMask)
@@ -65,7 +65,7 @@ class BlockUserController: UIViewController {
                 make.size.equalTo(21)
         }
         
-        sepLine = container.addSubview(UIView).config(UIColor.whiteColor())
+        sepLine = container.addSubview(UIView).config(UIColor.white)
             .layout({ (make) in
                 make.centerX.equalTo(closeBtn)
                 make.top.equalTo(closeBtn.snp_bottom).offset(30)
@@ -73,7 +73,7 @@ class BlockUserController: UIViewController {
                 make.width.equalTo(220)
             })
         blockLbl = container.addSubview(UILabel)
-            .config(14, fontWeight: UIFontWeightUltraLight, textColor: UIColor.whiteColor(), textAlignment: .Center, text: LS("屏蔽"))
+            .config(14, fontWeight: UIFontWeightUltraLight, textColor: UIColor.white, textAlignment: .center, text: LS("屏蔽"))
             .layout({ (make) in
                 make.centerX.equalTo(closeBtn)
                 make.top.equalTo(sepLine.snp_bottom).offset(30)
@@ -81,16 +81,16 @@ class BlockUserController: UIViewController {
         blockSwitch = container.addSubview(UISwitch).config(self, selector: #selector(switchPressed))
             .layout({ (make) in
                 make.centerX.equalTo(closeBtn)
-                make.size.equalTo(CGSizeMake(51, 31))
+                make.size.equalTo(CGSize(width: 51, height: 31))
                 make.top.equalTo(blockLbl.snp_bottom).offset(10)
             })
-        blockSwitch.on = user.blacklisted
+        blockSwitch.isOn = user.blacklisted
     }
     
     func animateEntry() {
-        UIView.animateWithDuration(0.5) { 
+        UIView.animate(withDuration: 0.5, animations: { 
             self.container.layer.opacity = 1
-        }
+        }) 
     }
 
     func closeBtnPressed() {
@@ -98,34 +98,34 @@ class BlockUserController: UIViewController {
     }
     
     func dismissSelf() {
-        if dirty && blockSwitch.on != user.blacklisted {
-            AccountRequester2.sharedInstance.block(user, flag: blockSwitch.on, onSuccess: { (json) in
+        if dirty && blockSwitch.isOn != user.blacklisted {
+            AccountRequester2.sharedInstance.block(user, flag: blockSwitch.isOn, onSuccess: { (json) in
                 let blocked = json!.boolValue
                 self.user.blacklisted = blocked
                 let blockStatus = blocked ? kAccountBlackStatusBlocked : kAccountBlackStatusDefault
-                NSNotificationCenter.defaultCenter().postNotificationName(kAccountBlacklistChange, object: nil, userInfo: [kUserKey: self.user, kAccountBlackStatusKey: blockStatus])
+                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kAccountBlacklistChange), object: nil, userInfo: [kUserKey: self.user, kAccountBlackStatusKey: blockStatus])
                 }, onError: { (code) in
-                    UIApplication.sharedApplication().keyWindow?.rootViewController?.showToast(LS("操作失败"))
+                    UIApplication.shared.keyWindow?.rootViewController?.showToast(LS("操作失败"))
             })
         }
-        UIView.animateWithDuration(0.5, animations: { 
+        UIView.animate(withDuration: 0.5, animations: { 
             self.container.layer.opacity = 0
-            }) { (_) in
-                self.willMoveToParentViewController(nil)
+            }, completion: { (_) in
+                self.willMove(toParentViewController: nil)
                 self.view.removeFromSuperview()
                 self.removeFromParentViewController()
-        }
+        }) 
     }
     
-    func presentFrom(viewController: UIViewController) {
-        willMoveToParentViewController(viewController)
+    func presentFrom(_ viewController: UIViewController) {
+        willMove(toParentViewController: viewController)
         viewController.view.addSubview(view)
         viewController.addChildViewController(self)
-        didMoveToParentViewController(viewController)
+        didMove(toParentViewController: viewController)
     }
     
     func presentFromRootViewController() {
-        let viewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
+        let viewController = UIApplication.shared.keyWindow!.rootViewController!
         presentFrom(viewController)
     }
     

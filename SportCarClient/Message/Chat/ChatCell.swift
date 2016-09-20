@@ -11,16 +11,16 @@ import UIKit
 let kChatCellTimeMarkSpaceHeight: CGFloat = 25      // 上方的时间标签栏显示时需要占用的高度
 
 protocol ChatCellDelegate: class {
-    func avatarPressed(chatRecord: ChatRecord)
+    func avatarPressed(_ chatRecord: ChatRecord)
 }
 
 
 class ChatCell: UITableViewCell {
     
-    class func registerCellForTableView(tableView: UITableView) {
-        tableView.registerClass(self, forCellReuseIdentifier: "text")
-        tableView.registerClass(self, forCellReuseIdentifier: "image")
-        tableView.registerClass(self, forCellReuseIdentifier: "audio")
+    class func registerCellForTableView(_ tableView: UITableView) {
+        tableView.register(self, forCellReuseIdentifier: "text")
+        tableView.register(self, forCellReuseIdentifier: "image")
+        tableView.register(self, forCellReuseIdentifier: "audio")
     }
     
     weak var delegate: ChatCellDelegate? {
@@ -81,14 +81,14 @@ class ChatCell: UITableViewCell {
     
     func createSubViews() {
         let superview = self.contentView
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
         //
         timeMarkerLbL = UILabel()
-        timeMarkerLbL?.font = UIFont.systemFontOfSize(10, weight: UIFontWeightLight)
+        timeMarkerLbL?.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightLight)
         timeMarkerLbL?.textColor = UIColor(white: 0.72, alpha: 1)
-        timeMarkerLbL?.textAlignment = .Center
-        timeMarkerLbL?.backgroundColor = UIColor.whiteColor()
-        timeMarkerLbL?.hidden = true
+        timeMarkerLbL?.textAlignment = .center
+        timeMarkerLbL?.backgroundColor = UIColor.white
+        timeMarkerLbL?.isHidden = true
         superview.addSubview(timeMarkerLbL!)
         timeMarkerLbL?.snp_makeConstraints(closure: { (make) -> Void in
             make.centerX.equalTo(superview)
@@ -99,21 +99,21 @@ class ChatCell: UITableViewCell {
         timeMarkerLine = UIView()
         timeMarkerLine?.backgroundColor = UIColor(white: 0.92, alpha: 1)
         superview.addSubview(timeMarkerLine!)
-        timeMarkerLine?.hidden = true
+        timeMarkerLine?.isHidden = true
         timeMarkerLine?.snp_makeConstraints(closure: { (make) -> Void in
             make.top.equalTo(superview).offset(15)
             make.centerX.equalTo(superview)
             make.width.equalTo(145)
             make.height.equalTo(0.5)
         })
-        superview.sendSubviewToBack(timeMarkerLine!)
+        superview.sendSubview(toBack: timeMarkerLine!)
         //
         avatarBtn = UIButton()
         avatarBtn?.layer.cornerRadius = 17.5
         avatarBtn?.clipsToBounds = true
         avatarBtn?.backgroundColor = UIColor(white: 0.92, alpha: 1)
         superview.addSubview(avatarBtn!)
-        avatarBtn?.addTarget(self, action: #selector(ChatCell.avatarBtnPressed), forControlEvents: .TouchUpInside)
+        avatarBtn?.addTarget(self, action: #selector(ChatCell.avatarBtnPressed), for: .touchUpInside)
         //
         triangle = UIImageView()
         superview.addSubview(triangle!)
@@ -126,11 +126,11 @@ class ChatCell: UITableViewCell {
         //
         if self.reuseIdentifier == "text" {
             let templbl = UILabel()
-            templbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-            templbl.textColor = UIColor.blackColor()
-            templbl.textAlignment = .Left
+            templbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+            templbl.textColor = UIColor.black
+            templbl.textAlignment = .left
             templbl.numberOfLines = 0
-            templbl.lineBreakMode = .ByWordWrapping
+            templbl.lineBreakMode = .byWordWrapping
             bubbleContentView = templbl
             bubbleView?.addSubview(templbl)
         }else if self.reuseIdentifier == "image" {
@@ -146,7 +146,7 @@ class ChatCell: UITableViewCell {
             make.edges.equalTo(bubbleView!).inset(bubbleContentInset)
         })
         //
-        loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: .White)
+        loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
         bubbleView?.addSubview(loadingIndicator!)
         loadingIndicator?.snp_makeConstraints(closure: { (make) -> Void in
             make.center.equalTo(bubbleView!)
@@ -169,18 +169,18 @@ class ChatCell: UITableViewCell {
         }
         let superview = self.contentView
         // Maximum width of every bubble (not including the tiny triangle)
-        let maxBubbleWidth = UIScreen.mainScreen().bounds.width - 100
+        let maxBubbleWidth = UIScreen.main.bounds.width - 100
         let isMine = self.isMineBubble
         var timeMarkHeight: CGFloat = 10
         if displayTimeMarker {
             timeMarkHeight = kChatCellTimeMarkSpaceHeight + 10
             // display the timemark
-            timeMarkerLine?.hidden = false
-            timeMarkerLbL?.hidden = false
+            timeMarkerLine?.isHidden = false
+            timeMarkerLbL?.isHidden = false
             timeMarkerLbL?.text = dateDisplay(self.chat!.createdAt!)
         }else{
-            timeMarkerLbL?.hidden = true
-            timeMarkerLine?.hidden = true
+            timeMarkerLbL?.isHidden = true
+            timeMarkerLine?.isHidden = true
         }
         
         if isMine {
@@ -196,7 +196,7 @@ class ChatCell: UITableViewCell {
             })
             bubbleView?.backgroundColor = UIColor(red: 0.329, green: 0.361, blue: 0.384, alpha: 1)
             triangle?.image = UIImage(named: "chat_triangle_gray")
-            bubbleLbL?.textColor = UIColor.whiteColor()
+            bubbleLbL?.textColor = UIColor.white
         }else {
             avatarBtn?.snp_remakeConstraints(closure: { (make) -> Void in
                 make.top.equalTo(superview).offset(7.5 + timeMarkHeight)
@@ -212,16 +212,16 @@ class ChatCell: UITableViewCell {
             triangle?.image = UIImage(named: "chat_triangle_light_gray")
             bubbleLbL?.textColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         }
-        avatarBtn?.kf_setImageWithURL(chat!.senderUser!.avatarURL!, forState: .Normal)
-        var bubbleContentSize = CGSizeZero
+        avatarBtn?.kf_setImageWithURL(chat!.senderUser!.avatarURL!, forState: UIControlState())
+        var bubbleContentSize = CGSize.zero
         if reuseIdentifier == "text"{
             bubbleLbL?.text = chat?.textContent
-            let textSize = bubbleLbL!.sizeThatFits(CGSizeMake(maxBubbleWidth - 30, CGFloat.max))
+            let textSize = bubbleLbL!.sizeThatFits(CGSize(width: maxBubbleWidth - 30, height: CGFloat.greatestFiniteMagnitude))
             bubbleContentSize = textSize
         }else if reuseIdentifier == "image" {
             if chat?.image == nil {
                 bubbleImg?.image = chat?.contentImage
-                bubbleImg?.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+                bubbleImg?.setupForImageViewer(nil, backgroundColor: UIColor.black)
             } else {
                 guard let imageURL = SFURL(chat!.image!) else {
                     assertionFailure()
@@ -229,32 +229,32 @@ class ChatCell: UITableViewCell {
                 }
                 bubbleImg?.kf_setImageWithURL(imageURL, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
                     if error == nil {
-                    self.bubbleImg?.setupForImageViewer(imageURL, backgroundColor: UIColor.blackColor())
+                    self.bubbleImg?.setupForImageViewer(imageURL, backgroundColor: UIColor.black)
                     }
                 })
             }
             let imageSize = chat?.imageSize
-            var contentSize = CGSizeMake(88 / imageSize!.height * imageSize!.width, 88)
+            var contentSize = CGSize(width: 88 / imageSize!.height * imageSize!.width, height: 88)
             if contentSize.width > maxBubbleWidth - 30 {
-                contentSize = CGSizeMake(maxBubbleWidth - 30, (maxBubbleWidth - 30) / imageSize!.width * imageSize!.height)
+                contentSize = CGSize(width: maxBubbleWidth - 30, height: (maxBubbleWidth - 30) / imageSize!.width * imageSize!.height)
             }
             bubbleContentSize = contentSize
         }else{
             bubbleAudio?.chatRecord = chat
-            bubbleAudio?.remainingTimeLbl?.textColor = isMine ? UIColor.whiteColor() : UIColor.blackColor()
-            bubbleContentSize = CGSizeMake(maxBubbleWidth - 30, 30)
+            bubbleAudio?.remainingTimeLbl?.textColor = isMine ? UIColor.white : UIColor.black
+            bubbleContentSize = CGSize(width: maxBubbleWidth - 30, height: 30)
         }
         if isMine {
             bubbleView?.snp_remakeConstraints(closure: { (make) -> Void in
                 make.right.equalTo(triangle!.snp_left).offset(1)
                 make.top.equalTo(superview).offset(timeMarkHeight)
-                make.size.equalTo(CGSizeMake(bubbleContentSize.width + bubbleContentInset.left + bubbleContentInset.right, bubbleContentSize.height + bubbleContentInset.top + bubbleContentInset.bottom))
+                make.size.equalTo(CGSize(width: bubbleContentSize.width + bubbleContentInset.left + bubbleContentInset.right, height: bubbleContentSize.height + bubbleContentInset.top + bubbleContentInset.bottom))
             })
         }else{
             bubbleView?.snp_remakeConstraints(closure: { (make) -> Void in
                 make.left.equalTo(triangle!.snp_right).offset(-1)
                 make.top.equalTo(superview).offset(timeMarkHeight)
-                make.size.equalTo(CGSizeMake(bubbleContentSize.width + bubbleContentInset.left + bubbleContentInset.right, bubbleContentSize.height + bubbleContentInset.top + bubbleContentInset.bottom))
+                make.size.equalTo(CGSize(width: bubbleContentSize.width + bubbleContentInset.left + bubbleContentInset.right, height: bubbleContentSize.height + bubbleContentInset.top + bubbleContentInset.bottom))
             })
         }
         // 这一句要放在bubbleView的布局确定之后，否则autolayout会报warning
@@ -265,12 +265,12 @@ class ChatCell: UITableViewCell {
         delegate?.avatarPressed(chat!)
     }
     
-    class func getContentHeightForChatRecord(chat: ChatRecord) -> CGFloat {
+    class func getContentHeightForChatRecord(_ chat: ChatRecord) -> CGFloat {
         let messageType = chat.messageType
-        let maxBubbleContentWidth = UIScreen.mainScreen().bounds.width - 100 - 30
+        let maxBubbleContentWidth = UIScreen.main.bounds.width - 100 - 30
         let timeMarkHeight = chat.displayTimeMark ? kChatCellTimeMarkSpaceHeight : 0
         if messageType == "text" {
-            if let textSize = chat.textContent?.boundingRectWithSize(CGSizeMake(maxBubbleContentWidth, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)], context: nil).size {
+            if let textSize = chat.textContent?.boundingRect(with: CGSize(width: maxBubbleContentWidth, height: CGFloat.max), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)], context: nil).size {
                 return textSize.height + 32 + 10 + timeMarkHeight
             }else {
                 assertionFailure()
@@ -281,9 +281,9 @@ class ChatCell: UITableViewCell {
                 assertionFailure()
             }
             let imageSize = chat.imageSize
-            var contentSize = CGSizeMake(88 / imageSize.height * imageSize.width, 88)
+            var contentSize = CGSize(width: 88 / (imageSize?.height)! * (imageSize?.width)!, height: 88)
             if contentSize.width > maxBubbleContentWidth{
-                contentSize = CGSizeMake(maxBubbleContentWidth , maxBubbleContentWidth / imageSize.width * imageSize.height)
+                contentSize = CGSize(width: maxBubbleContentWidth , height: maxBubbleContentWidth / (imageSize?.width)! * (imageSize?.height)!)
             }
             return contentSize.height + 32 + 10 + timeMarkHeight
         }else {

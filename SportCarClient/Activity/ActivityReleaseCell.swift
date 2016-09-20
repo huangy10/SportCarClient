@@ -35,11 +35,11 @@ class ActivityReleaseCell: UITableViewCell {
     var editable: Bool = true{
         didSet {
             if editable {
-                wrapper.hidden = false
-                staticInfoLabel.hidden = true
+                wrapper.isHidden = false
+                staticInfoLabel.isHidden = true
             }else {
-                wrapper.hidden = true
-                staticInfoLabel.hidden = false
+                wrapper.isHidden = true
+                staticInfoLabel.isHidden = false
             }
         }
     }
@@ -47,7 +47,7 @@ class ActivityReleaseCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
-        self.selectionStyle = .None
+        self.selectionStyle = .none
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -56,11 +56,11 @@ class ActivityReleaseCell: UITableViewCell {
     
     func createSubviews() {
         let superview = self.contentView
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.white
         //
         staticLbl = UILabel()
         staticLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        staticLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        staticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(staticLbl)
         staticLbl.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(superview)
@@ -69,7 +69,7 @@ class ActivityReleaseCell: UITableViewCell {
         //
         arrowIcon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         superview.addSubview(arrowIcon)
-        arrowIcon.contentMode = .ScaleAspectFit
+        arrowIcon.contentMode = .scaleAspectFit
         arrowIcon.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(superview)
@@ -84,20 +84,20 @@ class ActivityReleaseCell: UITableViewCell {
             make.left.equalTo(staticLbl.snp_right)
             make.height.equalTo(staticLbl)
         }
-        wrapper.userInteractionEnabled = false
+        wrapper.isUserInteractionEnabled = false
         //
         infoInput = UITextField()
-        infoInput.textColor = UIColor.blackColor()
-        infoInput.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        infoInput.textColor = UIColor.black
+        infoInput.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         wrapper.addSubview(infoInput)
-        infoInput.textAlignment = .Right
+        infoInput.textAlignment = .right
         infoInput.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(wrapper)
             make.size.equalTo(wrapper)
         }
         
         staticInfoLabel = UILabel()
-        staticInfoLabel.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        staticInfoLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         staticInfoLabel.textColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(staticInfoLabel)
         staticInfoLabel.snp_makeConstraints { (make) -> Void in

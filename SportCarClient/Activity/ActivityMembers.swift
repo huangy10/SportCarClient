@@ -17,7 +17,7 @@ protocol ActivityMemberCellDelegate: class {
 }
 
 protocol  ActivityMemberDelegate: class {
-    func activityMemberControllerDidRemove(user: User)
+    func activityMemberControllerDidRemove(_ user: User)
 }
 
 
@@ -32,7 +32,7 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
     weak var delegate: ActivityMemberDelegate!
     var indexToDelete: Int?
     
-    var delayTask: dispatch_block_t?
+    var delayTask: ()->()?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,36 +42,36 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
     
     func configureTableView() {
         tableView.separatorColor = UIColor(white: 0, alpha: 0.12)
-        tableView.separatorStyle = .SingleLine
+        tableView.separatorStyle = .singleLine
         tableView.rowHeight = 90
         
-        tableView.registerClass(ActivityMemberCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(ActivityMemberCell.self, forCellReuseIdentifier: "cell")
     }
     
     func configureNavigationBar() {
         navigationItem.title = LS("已报名")
         let leftBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed))
-        leftBtn.frame = CGRectMake(0, 0, 15, 15)
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        leftBtn.contentMode = .ScaleAspectFit
+        leftBtn.frame = CGRect(x: 0, y: 0, width: 15, height: 15)
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.contentMode = .scaleAspectFit
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     }
     
     func navLeftBtnPressed() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return act.applicants.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ActivityMemberCell
-        let member = act.applicants[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ActivityMemberCell
+        let member = act.applicants[(indexPath as NSIndexPath).row]
         cell.delegate = self
         cell.setData(
             member.nickName!,
@@ -83,15 +83,15 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let user = act.applicants[indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = act.applicants[(indexPath as NSIndexPath).row]
         navigationController?.pushViewController(user.showDetailController(), animated: true)
     }
     
     func activityMemberKickoutPressed(at cell: ActivityMemberCell) {
-        if let indexPath = tableView.indexPathForCell(cell) {
-            indexToDelete = indexPath.row
-            let user = act.applicants[indexPath.row]
+        if let indexPath = tableView.indexPath(for: cell) {
+            indexToDelete = (indexPath as NSIndexPath).row
+            let user = act.applicants[(indexPath as NSIndexPath).row]
             let message = String(format: LS("确认将 %@ 从活动 %@ 中请出？"), user.nickName!, act.name!)
             showConfirmToast(LS("请出成员"), message: message, target: self, onConfirm: #selector(confirmKickoutUser))
         } else {
@@ -108,8 +108,8 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
         ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: user.ssidString, opType: "kick_out", onSuccess: { (json) in
             self.lp_stop()
             self.delegate.activityMemberControllerDidRemove(user)
-            self.act.applicants.removeAtIndex(userIndex)
-            self.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: userIndex, inSection: 0)], withRowAnimation: .Automatic)
+            self.act.applicants.remove(at: userIndex)
+            self.tableView.deleteRows(at: [IndexPath(row: userIndex, section: 0)], with: .automatic)
             }) { (code) in
                 self.lp_stop()
                 self.showToast(LS("删除失败"))
@@ -137,7 +137,7 @@ class ActivityMemberCell: UITableViewCell {
     }
     
     func createSubviews() {
-        selectionStyle = .None
+        selectionStyle = .none
         
         configureAvatar()
         configureNameLbl()
@@ -159,7 +159,7 @@ class ActivityMemberCell: UITableViewCell {
     
     func configureNameLbl() {
         nameLbl = contentView.addSubview(UILabel)
-            .config(14, fontWeight: UIFontWeightSemibold, textColor: UIColor.blackColor())
+            .config(14, fontWeight: UIFontWeightSemibold, textColor: UIColor.black)
             .layout({ (make) in
                 make.left.equalTo(avatar.snp_right).offset(12)
                 make.top.equalTo(avatar)
@@ -180,7 +180,7 @@ class ActivityMemberCell: UITableViewCell {
             .layout({ (make) in
                 make.bottom.equalTo(avatar)
                 make.left.equalTo(avatarCarLbl.snp_right).offset(5)
-                make.size.equalTo(CGSizeMake(40, 15))
+                make.size.equalTo(CGSize(width: 40, height: 15))
             })
     }
     
@@ -190,13 +190,13 @@ class ActivityMemberCell: UITableViewCell {
             .layout({ (make) in
                 make.centerY.equalTo(contentView)
                 make.right.equalTo(contentView).offset(-15)
-                make.size.equalTo(CGSizeMake(75, 30))
+                make.size.equalTo(CGSize(width: 75, height: 30))
             })
-        kickoutBtn.setTitle(LS("请出"), forState: .Normal)
-        kickoutBtn.setTitleColor(kHighlightRed, forState: .Normal)
-        kickoutBtn.titleLabel?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        kickoutBtn.setTitle(LS("请出"), for: UIControlState())
+        kickoutBtn.setTitleColor(kHighlightRed, for: UIControlState())
+        kickoutBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         kickoutBtn.layer.cornerRadius = 2
-        kickoutBtn.layer.borderColor = kHighlightRed.CGColor
+        kickoutBtn.layer.borderColor = kHighlightRed.cgColor
         kickoutBtn.layer.borderWidth = 0.5
     }
     
@@ -204,11 +204,11 @@ class ActivityMemberCell: UITableViewCell {
         delegate.activityMemberKickoutPressed(at: self)
     }
     
-    func setData(username: String, avatarURL: NSURL, avatarCarName: String?, authed: Bool, showKickoutBtn: Bool) {
+    func setData(_ username: String, avatarURL: URL, avatarCarName: String?, authed: Bool, showKickoutBtn: Bool) {
         nameLbl.text = username
         avatarCarLbl.text = avatarCarName ?? "奥迪"
         avatar.kf_setImageWithURL(avatarURL)
         authIcon.image = authed ? UIImage(named: "auth_status_authed") : UIImage(named: "auth_status_unauthed")
-        kickoutBtn.hidden = !showKickoutBtn
+        kickoutBtn.isHidden = !showKickoutBtn
     }
 }

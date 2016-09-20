@@ -36,56 +36,56 @@ class PersonMineSettingsAuthController: AuthThreeImagesController, ProgressProto
         AccountRequester2.sharedInstance.postCorporationUserApplication(uploadImages, onSuccess: { (data) -> () in
             self.pp_hideProgressView()
             self.showToast(LS("认证请求已发送"))
-            }, onProgress: { (let progress) in
+            }, onProgress: { (progress) in
                 self.pp_updateProgress(progress)
             }) { (code) -> () in
                 self.pp_hideProgressView()
                 self.showToast(LS("认证请求发送失败"))
         }
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
-    override func getStaticLabelContentForIndex(index: Int) -> String {
+    override func getStaticLabelContentForIndex(_ index: Int) -> String {
         return [LS("上传营业执照"), LS("上传身份证"), LS("上传补充材料")][index]
     }
     
     override func createPrivilegeBoard() -> UIView {
         let container = UIView()
-        let image1 = container.addSubview(UIImageView.self).config(UIImage(named: "privilege_show_avatar_logo"), contentMode: .ScaleAspectFit)
+        let image1 = container.addSubview(UIImageView.self).config(UIImage(named: "privilege_show_avatar_logo"), contentMode: .scaleAspectFit)
             .layout { (make) in
                 make.centerX.equalTo(container)
                 make.top.equalTo(container).offset(22)
                 make.size.equalTo(37)
         }
         container.addSubview(UILabel.self)
-            .config(12, textAlignment: .Center, text: LS("头像旁企业标志"))
+            .config(12, textAlignment: .center, text: LS("头像旁企业标志"))
             .layout { (make) in
                 make.centerX.equalTo(image1)
                 make.top.equalTo(image1.snp_bottom).offset(11)
         }
         let image2 = container.addSubview(UIImageView.self)
-            .config(UIImage(named: "privilege_show_on_map"), contentMode: .ScaleAspectFit)
+            .config(UIImage(named: "privilege_show_on_map"), contentMode: .scaleAspectFit)
             .layout { (make) in
                 make.right.equalTo(image1.snp_left).offset(-78.5)
                 make.top.equalTo(container).offset(22)
                 make.size.equalTo(37)
         }
         container.addSubview(UILabel.self)
-            .config(12, textAlignment: .Center, text: LS("在雷达上显示"))
+            .config(12, textAlignment: .center, text: LS("在雷达上显示"))
             .layout { (make) in
                 make.centerX.equalTo(image2)
                 make.top.equalTo(image2.snp_bottom).offset(11)
         }
         //
         let image3 = container.addSubview(UIImageView.self)
-            .config(UIImage(named: "privilege_allow_start_activity"), contentMode: .ScaleAspectFit)
+            .config(UIImage(named: "privilege_allow_start_activity"), contentMode: .scaleAspectFit)
             .layout { (make) in
                 make.left.equalTo(image1.snp_right).offset(78.5)
                 make.top.equalTo(container).offset(22)
                 make.size.equalTo(37)
         }
         container.addSubview(UILabel.self)
-            .config(12, textAlignment: .Center, text: LS("允许发布活动"))
+            .config(12, textAlignment: .center, text: LS("允许发布活动"))
             .layout { (make) in
                 make.centerX.equalTo(image3)
                 make.top.equalTo(image3.snp_bottom).offset(11)
@@ -100,11 +100,11 @@ class PersonMineSettingsAuthController: AuthThreeImagesController, ProgressProto
     let descriptionText = "1. 头像应为企业商标/标识或品牌Logo\n2.昵称应为企业/品牌的全称或无歧义简称；若昵称为代理品牌，需体现代理区域n.昵称不能仅包含一个通用性描述词语，且不可使用过度修饰性词语\n4.企业提供完成有效年检的《企业法人营业执照》/《个体工商户营业执照》等资料\n5.微博昵称与营业执照登记名称不一致需提供相关补充材料，如《商标注册证》、《代理授权书》等"
     
     override func createDescriptionLabel() -> UIView {
-        return UILabel().config(12, textColor: UIColor(white: 0.72, alpha: 1), multiLine: true, text: descriptionText)
+        return UILabel().config(12, textColor: UIColor(white: 0.72, alpha: 1), text: descriptionText, multiLine: true)
     }
     
     override func getHeightForDescriptionLable() -> CGFloat {
-        let width = UIScreen.mainScreen().bounds.width - 30
-        return descriptionText.boundingRectWithSize(CGSizeMake(width, CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)], context: nil).size.height
+        let width = UIScreen.main.bounds.width - 30
+        return descriptionText.boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)], context: nil).size.height
     }
 }

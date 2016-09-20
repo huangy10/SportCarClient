@@ -17,7 +17,7 @@ import AlecrimCoreData
 extension Notification {
 
     @NSManaged var checked: Bool // cannot mark as optional because Objective-C compatibility issues
-    @NSManaged var createdAt: NSDate?
+    @NSManaged var createdAt: Date?
     @NSManaged var flag: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var image: String?
     @NSManaged var messageBody: String?
@@ -53,7 +53,7 @@ extension Notification {
 extension AlecrimCoreData.AttributeType where Self.ValueType: Notification {
 
     var checked: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("checked", self) }
-    var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
+    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
     var flag: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("flag", self) }
     var image: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("image", self) }
     var messageBody: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("messageBody", self) }

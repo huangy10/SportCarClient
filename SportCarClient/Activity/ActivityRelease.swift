@@ -30,8 +30,8 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     var maxAttendCell: SSPropertyInputableCell!
     
     var poster: UIImage?
-    var startAt: NSDate?
-    var endAt: NSDate?
+    var startAt: Date?
+    var endAt: Date?
     var authedUserOnly: Bool = false
     var maxAttend: Int = 10
     var selectedUser: [User] = []
@@ -55,7 +55,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         geoSearch = BMKGeoCodeSearch()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         mapView.viewWillAppear()
         locationService.delegate = self
@@ -69,7 +69,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         mapView.viewWillDisappear()
         locationService.delegate = nil
@@ -82,25 +82,25 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         super.createSubviews()
         let superview = self.view
         
-        tableView = UITableView(frame: CGRectZero, style: .Grouped)
-        tableView.backgroundColor = UIColor.whiteColor()
+        tableView = UITableView(frame: CGRect.zero, style: .grouped)
+        tableView.backgroundColor = UIColor.white
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorStyle = .None
-        superview.addSubview(tableView)
+        tableView.separatorStyle = .none
+        superview?.addSubview(tableView)
         tableView.snp_makeConstraints { (make) in
             make.edges.equalTo(self.view)
         }
         tableView.contentInset = UIEdgeInsetsMake(275, 0, 0, 0)
-        tableView.setContentOffset(CGPointMake(0, -275), animated: false)
+        tableView.setContentOffset(CGPoint(x: 0, y: -275), animated: false)
         SSPropertyCell.registerTableView(tableView)
         SSPropertyInputableCell.registerTableView(tableView)
         SSCommonHeader.registerTableView(tableView)
         SSPropertySwitcherCell.registerTableView(tableView)
         
         let container = tableView.addSubview(UIView)
-            .setFrame(CGRectMake(0, -275, superview.frame.width, 275))
-            .config(UIColor.whiteColor())
+            .setFrame(CGRect(x: 0, y: -275, width: superview.frame.width, height: 275))
+            .config(UIColor.white)
         imagePickerBtn = container.addSubview(UIButton)
             .config(self, selector: #selector(needPickPoster), image: UIImage(named: "status_add_image"))
             .layout({ (make) in
@@ -114,7 +114,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 make.left.equalTo(imagePickerBtn.snp_right).offset(18)
                 make.top.equalTo(imagePickerBtn)
         }
-        let wrapper = container.addSubview(UIScrollView).config(UIColor.whiteColor())
+        let wrapper = container.addSubview(UIScrollView).config(UIColor.white)
             .layout { (make) in
                 make.left.equalTo(static1)
                 make.top.equalTo(static1.snp_bottom).offset(14)
@@ -135,12 +135,12 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 make.height.equalTo(100)
             }).addToInputable(self)
         desWordCountLbl = container.addSubview(UILabel)
-            .config(12, textAlignment: .Right, text: "0/\(actDescriptionWordLimit)", textColor: UIColor(white: 0.72, alpha: 1)).layout({ (make) in
+            .config(12, textAlignment: .right, text: "0/\(actDescriptionWordLimit)", textColor: UIColor(white: 0.72, alpha: 1)).layout({ (make) in
                 make.right.equalTo(container).offset(-15)
                 make.bottom.equalTo(desInput)
             })
         let atBtn = container.addSubview(UIButton)
-            .config(self, selector: #selector(needAtSomeone), title: LS("@提醒谁看"), titleColor: UIColor.blackColor())
+            .config(self, selector: #selector(needAtSomeone), title: LS("@提醒谁看"), titleColor: UIColor.black)
             .layout { (make) in
                 make.left.equalTo(container).offset(15)
                 make.top.equalTo(desInput.snp_bottom)
@@ -148,11 +148,11 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 make.width.equalTo(80)
         }
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .Horizontal
-        layout.itemSize = CGSizeMake(35, 35)
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 35, height: 35)
         layout.minimumInteritemSpacing = 5
         layout.minimumLineSpacing = 5
-        inlineMiniUserSelectView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout).config(UIColor.whiteColor())
+        inlineMiniUserSelectView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout).config(UIColor.white)
         inlineMiniUserSelectView.delegate = self
         inlineMiniUserSelectView.dataSource = self
         container.addSubview(inlineMiniUserSelectView)
@@ -162,7 +162,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             make.top.equalTo(desInput.snp_bottom)
             make.bottom.equalTo(container)
         }
-        inlineMiniUserSelectView.registerClass(InlineUserSelectMiniCell.self, forCellWithReuseIdentifier: InlineUserSelectMiniCell.reuseIdentifier)
+        inlineMiniUserSelectView.register(InlineUserSelectMiniCell.self, forCellWithReuseIdentifier: InlineUserSelectMiniCell.reuseIdentifier)
         
         //
         mapCell = ActivityReleaseMapCell(trailingHeight: 100)
@@ -173,15 +173,15 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             }
             let locationSelect = LocationSelectController(currentLocation: self?.userLocation, des: self?.mapCell.locDisplay.text)
             locationSelect.delegate = sSelf
-            sSelf.presentViewController(locationSelect.toNavWrapper(), animated: true, completion: nil)
+            sSelf.present(locationSelect.toNavWrapper(), animated: true, completion: nil)
         }
         
-        maxAttendCell = SSPropertyInputableCell(style: .Default, reuseIdentifier: "inputable")
+        maxAttendCell = SSPropertyInputableCell(style: .default, reuseIdentifier: "inputable")
         maxAttendCell.contentInput.addToInputable(self)
         //
         datePicker = CustomDatePicker()
         datePicker.delegate = self
-        superview.addSubview(datePicker)
+        superview?.addSubview(datePicker)
         datePicker.snp_makeConstraints { (make) in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
@@ -201,18 +201,18 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = LS("发布活动")
         //
-        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .Plain, target: self, action: #selector(ActivityReleaseController.navLeftBtnPressed))
-        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .plain, target: self, action: #selector(ActivityReleaseController.navLeftBtnPressed))
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         self.navigationItem.leftBarButtonItem = leftBtnItem
         //
-        let rightItem = UIBarButtonItem(title: LS("发布"), style: .Done, target: self, action: #selector(ActivityReleaseController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let rightItem = UIBarButtonItem(title: LS("发布"), style: .done, target: self, action: #selector(ActivityReleaseController.navRightBtnPressed))
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
     func navLeftBtnPressed() {
 //        self.navigationController?.popViewControllerAnimated(true)
-        presenter?.dismissViewControllerAnimated(true, completion: nil)
+        presenter?.dismiss(animated: true, completion: nil)
     }
     
     func navRightBtnPressed() {
@@ -221,11 +221,11 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             view?.resignFirstResponder()
         }
         // check integrity of the data
-        guard let actName = nameInput.text where actName.length > 0 else {
+        guard let actName = nameInput.text , actName.length > 0 else {
             showToast(LS("请填写活动名称"), onSelf: true)
             return
         }
-        guard let actDes = desInput.text where actDes.length > 0 else {
+        guard let actDes = desInput.text , actDes.length > 0 else {
             showToast(LS("请填写活动描述"), onSelf: true)
             return
         }
@@ -241,7 +241,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             showToast(LS("请设置活动时间"), onSelf: true)
             return
         }
-        if startAtDate.compare(endAtDate) == .OrderedDescending {
+        if startAtDate.compare(endAtDate) == .orderedDescending {
             showToast(LS("开始时间不能晚于结束时间"))
             return
         }
@@ -252,7 +252,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         let toast = showStaticToast(LS("发布中..."))
         pp_showProgressView()
         ActivityRequester.sharedInstance.createNewActivity(actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, authedUserOnly: authedUserOnly, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", city: city ?? "", onSuccess: { (json) in
-            self.presenter?.dismissViewControllerAnimated(true, completion: {
+            self.presenter?.dismiss(animated: true, completion: {
                 self.presenter?.showToast(LS("发布成功"))
             })
             if let mine = self.actHomeController?.mine {
@@ -264,7 +264,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
             }, onProgress: { (progress) in
                 self.pp_updateProgress(progress)
         }) { (code) in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 self.hideToast(toast)
                 self.pp_hideProgressView()
                 if code == "no permission" {
@@ -337,76 +337,76 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     }
     
     func needPickPoster() {
-        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .ActionSheet)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .Default, handler: { (action) -> Void in
-            let sourceType = UIImagePickerControllerSourceType.Camera
+        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.camera
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = sourceType
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .Default, handler: { (action) -> Void in
-            let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.photoLibrary
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = sourceType
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .Cancel, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func needAtSomeone() {
         let select = FFSelectController(maxSelectNum: 0, preSelectedUsers: selectedUser, preSelect: true, forced: false)
         select.delegate = self
-        self.presentViewController(select.toNavWrapper(), animated: true, completion: nil)
+        self.present(select.toNavWrapper(), animated: true, completion: nil)
     }
     
     // MARK: tableView
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.ss_reusableHeader(SSCommonHeader)
         header.titleLbl.text = LS("基本设置")
         return header
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.row < 4 {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath as NSIndexPath).row < 4 {
             return 50
         } else {
             return 450
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.row < 4 {
-            switch indexPath.row {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if (indexPath as NSIndexPath).row < 4 {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 maxAttendCell.staticLbl.text = LS("人数要求")
                 maxAttendCell.extraSettings(nil, text: "\(maxAttend)", placeholder: LS("活动最大人数"))
@@ -426,15 +426,15 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        switch indexPath.row {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch (indexPath as NSIndexPath).row {
         case 1:
             datePicker.tag = 0
-            self.tapper?.enabled = true
+            self.tapper?.isEnabled = true
             datePicker.show()
         case 2:
             datePicker.tag = 1
-            self.tapper?.enabled = true
+            self.tapper?.isEnabled = true
             datePicker.show()
 //        case 3:
 //            let detail = AvatarClubSelectController()
@@ -449,47 +449,47 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     
     // MARK: Collection
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return selectedUser.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(InlineUserSelectMiniCell.reuseIdentifier, forIndexPath: indexPath) as! InlineUserSelectMiniCell
-        cell.user = selectedUser[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InlineUserSelectMiniCell.reuseIdentifier, for: indexPath) as! InlineUserSelectMiniCell
+        cell.user = selectedUser[(indexPath as NSIndexPath).row]
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let user = selectedUser[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let user = selectedUser[(indexPath as NSIndexPath).row]
         self.navigationController?.pushViewController(user.showDetailController(), animated: true)
     }
     
     // MARK: user select
     
     func userSelectCancelled() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func userSelected(users: [User]) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func userSelected(_ users: [User]) {
+        self.dismiss(animated: true, completion: nil)
         selectedUser = users
         inlineMiniUserSelectView.reloadData()
     }
     
     // MARK: image select
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        dismissViewControllerAnimated(false, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        dismiss(animated: false, completion: nil)
         poster = image
-        imagePickerBtn.setImage(image, forState: .Normal)
+        imagePickerBtn.setImage(image, for: UIControlState())
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(false, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: false, completion: nil)
     }
     
 //    func avatarClubSelectDidFinish(selectedClub: Club) {
@@ -510,15 +510,15 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         datePicker.tag = -1
     }
     
-    func dateDidPicked(date: NSDate) {
+    func dateDidPicked(_ date: Date) {
         datePicker.hide()
         if datePicker.tag == 0 {
             startAt = date
             endAt = nil
-            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: .Automatic)
+            tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
         } else if datePicker.tag == 1 {
             endAt = date
-            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 2, inSection: 0)], withRowAnimation: .Automatic)
+            tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
         } else {
             assertionFailure()
         }
@@ -527,17 +527,17 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     
     // MARK: map
     
-    func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
+    func didUpdate(_ userLocation: BMKUserLocation!) {
         locationService.stopUserLocationService()
         locationService.delegate = nil
         self.userLocation = userLocation.location.coordinate
-        mapView.setCenterCoordinate(self.userLocation!, animated: true)
+        mapView.setCenter(self.userLocation!, animated: true)
         mapView.zoomLevel = 16
         mapView.delegate = self
         getLocationDescription(self.userLocation!)
     }
     
-    func getLocationDescription(location: CLLocationCoordinate2D) {
+    func getLocationDescription(_ location: CLLocationCoordinate2D) {
         let option = BMKReverseGeoCodeOption()
         option.reverseGeoPoint = location
         let res = geoSearch!.reverseGeoCode(option)
@@ -546,7 +546,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         }
     }
     
-    func onGetReverseGeoCodeResult(searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
+    func onGetReverseGeoCodeResult(_ searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
         if error == BMK_SEARCH_NO_ERROR {
             locDescription = result.address
             city = result.addressDetail.city
@@ -558,19 +558,19 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     
     // MARK: textfield and textview
     
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == nameInput {
-            tableView.setContentOffset(CGPointMake(0, -275), animated: true)
+            tableView.setContentOffset(CGPoint(x: 0, y: -275), animated: true)
         } else {
             if textField.tag == 0 {
-                tableView.setContentOffset(CGPointMake(0, 0), animated: true)
+                tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
             } else {
-                tableView.setContentOffset(CGPointMake(0, 100), animated: true)
+                tableView.setContentOffset(CGPoint(x: 0, y: 100), animated: true)
             }
         }
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == nameInput {
             return
         }
@@ -581,17 +581,17 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         }
     }
     
-    func textViewDidBeginEditing(textView: UITextView) {
+    func textViewDidBeginEditing(_ textView: UITextView) {
         // clear the placeholder content before first edit
         if didBeginEditActDes {
             return
         }
-        desInput.textColor = UIColor.blackColor()
+        desInput.textColor = UIColor.black
         didBeginEditActDes = true
         desInput.text = ""
     }
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         // word count
         if textView.textInputMode?.primaryLanguage == "zh-Hans" {
             let selectedRange = textView.markedTextRange
@@ -601,7 +601,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         }
         let text = textView.text
         if text.length > actDescriptionWordLimit {
-            textView.text = text[0..<actDescriptionWordLimit]
+            textView.text = text?[0..<actDescriptionWordLimit]
         }
         desWordCountLbl.text = "\(min(text.length, actDescriptionWordLimit))/\(actDescriptionWordLimit)"
     }
@@ -609,24 +609,24 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     // MARK: - Location Select Delegate
     
     func locationSelectDidCancel() {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
-    func locationSelectDidSelect(location: Location) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func locationSelectDidSelect(_ location: Location) {
+        dismiss(animated: true, completion: nil)
         self.userLocation = location.location
         self.locDescription = location.description
         self.city = location.city
         
         mapCell.locDisplay.text = location.description
-        mapView.setCenterCoordinate(location.location, animated: true)
+        mapView.setCenter(location.location, animated: true)
         
 //        self.tableView.reloadData()
     }
     
-    func presentFrom(controller: UIViewController) {
+    func presentFrom(_ controller: UIViewController) {
         presenter = controller
-        controller.presentViewController(self.toNavWrapper(), animated: true, completion: nil)
+        controller.present(self.toNavWrapper(), animated: true, completion: nil)
     }
 }
 

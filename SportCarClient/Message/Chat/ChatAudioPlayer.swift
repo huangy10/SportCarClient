@@ -18,7 +18,7 @@ protocol UniversalAudioPlayerDelegate: class {
     // 即将开始播放
     func willStartPlaying()
     
-    func playProcessUpdate(process: Double)
+    func playProcessUpdate(_ process: Double)
     
     func playDidFinished()
     
@@ -40,22 +40,22 @@ class UniversalAudioPlayer: NSObject, AVAudioPlayerDelegate {
         }
     }
     // 正在播放的音频的url
-    var audioURL: NSURL?
+    var audioURL: URL?
     
     var player: AVAudioPlayer?
     
     var playing: Bool? {
         get {
-            return player?.playing
+            return player?.isPlaying
         }
     }
     
-    var playProccessListener: NSTimer?
+    var playProccessListener: Timer?
     
-    func play(audioURL: NSURL, newDelegate: UniversalAudioPlayerDelegate) {
+    func play(_ audioURL: URL, newDelegate: UniversalAudioPlayerDelegate) {
         self.audioURL = audioURL
         delegate = newDelegate
-        guard let soundData = NSData(contentsOfURL: audioURL) else {
+        guard let soundData = try? Data(contentsOf: audioURL) else {
             delegate?.failToPlay()
             return
         }
@@ -65,7 +65,7 @@ class UniversalAudioPlayer: NSObject, AVAudioPlayerDelegate {
             player = try AVAudioPlayer(data: soundData)
             
             player?.delegate = self
-            playProccessListener = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(UniversalAudioPlayer.audioPlayerProcessUpdate), userInfo: nil, repeats: true)
+            playProccessListener = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(UniversalAudioPlayer.audioPlayerProcessUpdate), userInfo: nil, repeats: true)
             delegate?.willStartPlaying()
             player?.prepareToPlay()
             player?.play()
@@ -79,24 +79,24 @@ class UniversalAudioPlayer: NSObject, AVAudioPlayerDelegate {
         player?.stop()
     }
     
-    func isPlayingURLStr(audioURLStr: String) -> Bool{
-        if player != nil && player!.playing && audioURL?.absoluteString == audioURLStr {
+    func isPlayingURLStr(_ audioURLStr: String) -> Bool{
+        if player != nil && player!.isPlaying && audioURL?.absoluteString == audioURLStr {
             return true
         }else {
             return false
         }
     }
     
-    func audioPlayerBeginInterruption(player: AVAudioPlayer) {
+    func audioPlayerBeginInterruption(_ player: AVAudioPlayer) {
         // 当播放被打断时视为播放成功
         self.player?.pause()
     }
     
-    func audioPlayerEndInterruption(player: AVAudioPlayer) {
+    func audioPlayerEndInterruption(_ player: AVAudioPlayer) {
         self.player?.play()
     }
     
-    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         playProccessListener?.invalidate()
         self.player = nil
         self.delegate?.playDidFinished()
@@ -123,12 +123,12 @@ class UniversalAudioPlayer: NSObject, AVAudioPlayerDelegate {
     func setPlayFromSpeaker() throws {
         let session = AVAudioSession.sharedInstance()
         try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
-        try session.overrideOutputAudioPort(.Speaker)
+        try session.overrideOutputAudioPort(.speaker)
     }
     
     func setToUseDefaultOutputType() throws {
         let session = AVAudioSession.sharedInstance()
         try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
-        try session.overrideOutputAudioPort(.None)
+        try session.overrideOutputAudioPort(.none)
     }
 }

@@ -20,7 +20,7 @@ class FollowSelectController: UserSelectController {
         }
     }
     
-    var followsDateThreshold: NSDate?
+    var followsDateThreshold: Date?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,8 +35,8 @@ class FollowSelectController: UserSelectController {
             make.right.equalTo(superview).offset(0)
         })
         //
-        selectedUserList?.hidden = true
-        userTableView?.registerClass(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
+        selectedUserList?.isHidden = true
+        userTableView?.register(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
     }
     
     override func navTitle() -> String {
@@ -45,12 +45,12 @@ class FollowSelectController: UserSelectController {
     
     override func navLeftBtnPressed() {
         // dismiss self
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UserSelectCellUnselectable
-        let user = users[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserSelectCellUnselectable
+        let user = users[(indexPath as NSIndexPath).row]
         cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
@@ -60,14 +60,14 @@ class FollowSelectController: UserSelectController {
     override func searchUserUsingSearchText() {
         follows.removeAll()
         userTableView?.reloadData()
-        followsDateThreshold = NSDate()
+        followsDateThreshold = Date()
         getMoreUserData()
     }
     
     func getMoreUserData() {
-        let threshold: NSDate = followsDateThreshold ?? NSDate()
+        let threshold: Date = followsDateThreshold ?? Date()
         let requester = AccountRequester2.sharedInstance
-        requester.getFollowList(targetUser!.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
+        requester.getFollowList(targetUser!.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (data) -> () in
             
             if let fansJSONData = data?.arrayValue {
                 for json in fansJSONData {
@@ -85,7 +85,7 @@ class FollowSelectController: UserSelectController {
         }
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.height {
             getMoreUserData()
         }

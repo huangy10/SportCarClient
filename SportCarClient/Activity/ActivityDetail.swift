@@ -36,26 +36,27 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
         mapCell.map.viewWillAppear()
 //        infoView.loadDataAndUpdateUI()
-        tableView.setContentOffset(CGPointMake(0, -infoView.preferedHeight), animated: false)
+        tableView.setContentOffset(CGPoint(x: 0, y: -infoView.preferedHeight), animated: false)
         
         if needReloadActInfo {
             loadActInfo()
+            needReloadActInfo = false
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         mapCell.map.viewWillDisappear()
     }
@@ -69,15 +70,15 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         loadMoreComments()
         
         //
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onActivityInfoChanged(_:)), name: kActivityInfoChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardAppears(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardDisappears(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onActivityInfoChanged(_:)), name: NSNotification.Name(rawValue: kActivityInfoChanged), object: nil)
         
     }
     
-    func onActivityInfoChanged(notification: NSNotification) {
-        if let act = notification.userInfo?[kActivityKey] as? Activity where act == self.act{
-            dispatch_async(dispatch_get_main_queue(), { 
+    func onActivityInfoChanged(_ notification: Foundation.Notification) {
+        if let act = (notification as NSNotification).userInfo?[kActivityKey] as? Activity , act == self.act{
+            DispatchQueue.main.async(execute: { 
                 self.loadActInfo()
             })
         }
@@ -85,21 +86,21 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     override func createSubviews() {
         super.createSubviews()
-        let superview = self.view.config(UIColor.whiteColor())
+        let superview = self.view.config(UIColor.white)
         
-        tableView = UITableView(frame: CGRectZero, style: .Plain)
+        tableView = UITableView(frame: CGRect.zero, style: .plain)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         self.view.addSubview(tableView)
         tableView.layout { (make) in
             make.edges.equalTo(superview)
         }
-        tableView.registerClass(ActivityCommentCell.self, forCellReuseIdentifier: ActivityCommentCell.reuseIdentifier)
-        tableView.registerClass(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty_cell")
+        tableView.register(ActivityCommentCell.self, forCellReuseIdentifier: ActivityCommentCell.reuseIdentifier)
+        tableView.register(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty_cell")
         
         infoView = ActivityDetailHeaderView(act: act)
-        infoView.likeBtn.addTarget(self, action: #selector(likeBtnPressed), forControlEvents: .TouchUpInside)
+        infoView.likeBtn.addTarget(self, action: #selector(likeBtnPressed), for: .touchUpInside)
         infoView.parentController = self
         tableView.addSubview(infoView)
         infoView.snp_makeConstraints { (make) in
@@ -113,7 +114,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         inputFields.append(commentPanel.contentInput)
         commentPanel.contentInput?.delegate = self
         superview.addSubview(commentPanel)
-        commentPanel.likeBtn?.addTarget(self, action: #selector(likeBtnPressed), forControlEvents: .TouchUpInside)
+        commentPanel.likeBtn?.addTarget(self, action: #selector(likeBtnPressed), for: .touchUpInside)
         commentPanel.setLikedAnimated(act.liked, flag: false)
         commentPanel.snp_makeConstraints { (make) in
             make.left.equalTo(superview)
@@ -123,45 +124,45 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
         
         tableView.contentInset = UIEdgeInsetsMake(infoView.preferedHeight, 0, commentPanel.barheight, 0)
-        tableView.setContentOffset(CGPointMake(0, -infoView.preferedHeight), animated: false)
+        tableView.setContentOffset(CGPoint(x: 0, y: -infoView.preferedHeight), animated: false)
         
         mapCell = MapCell(trailingHeight: 100)
-        mapCell.locBtn.addTarget(self, action: #selector(ActivityDetailController.needNavigation), forControlEvents: .TouchUpInside)
+        mapCell.locBtn.addTarget(self, action: #selector(ActivityDetailController.needNavigation), for: .touchUpInside)
         mapCell.locLbl.text = LS("导航至 ") + (act.location?.descr ?? LS("未知地点"))
         mapCell.locDesIcon.image = UIImage(named: "location_mark_black")
-        mapCell.locDesIcon.transform = CGAffineTransformMakeScale(0.8, 0.8)
+        mapCell.locDesIcon.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
     }
     
-    private func navSettings() {
+    fileprivate func navSettings() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationItem.title = LS("活动详情")
         
         let navLeftBtn = UIButton()
-            .config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "account_header_back_btn"), contentMode: .ScaleAspectFit)
-            .setFrame(CGRectMake(0, 0, 15, 15))
+            .config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "account_header_back_btn"), contentMode: .scaleAspectFit)
+            .setFrame(CGRect(x: 0, y: 0, width: 15, height: 15))
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
     }
     
-    private func setNavRightBtn() {
+    fileprivate func setNavRightBtn() {
         if act.user!.isHost {
             if act.finished {
-                let rightImage = UIImageView().config(UIImage(named: "activity_done"), contentMode: .ScaleAspectFit)
-                    .setFrame(CGRectMake(0, 0, 44, 18.5))
+                let rightImage = UIImageView().config(UIImage(named: "activity_done"), contentMode: .scaleAspectFit)
+                    .setFrame(CGRect(x: 0, y: 0, width: 44, height: 18.5))
                 navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightImage)
             } else {
-                let rightItem = UIBarButtonItem(title: LS("关闭活动"), style: .Done, target: self, action: #selector(ActivityDetailController.navRightBtnPressed))
-                rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+                let rightItem = UIBarButtonItem(title: LS("关闭活动"), style: .done, target: self, action: #selector(ActivityDetailController.navRightBtnPressed))
+                rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
                 navigationItem.rightBarButtonItem = rightItem
             }
         } else {
-            let rightItem = UIBarButtonItem(title: act.applied ? LS("已报名") : LS("报名"), style: .Done, target: self, action: #selector(ActivityDetailController.navRightBtnPressed))
-            rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+            let rightItem = UIBarButtonItem(title: act.applied ? LS("已报名") : LS("报名"), style: .done, target: self, action: #selector(ActivityDetailController.navRightBtnPressed))
+            rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
             self.navigationItem.rightBarButtonItem = rightItem
         }
     }
     
     func navLeftBtnPressed() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
@@ -240,13 +241,13 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     func closeActivity() {
         if !act.finished {
-            act.endAt = NSDate()
+            act.endAt = Foundation.Date()
             setNavRightBtn()
             lp_start()
             ActivityRequester.sharedInstance.closeActivty(act.ssidString, onSuccess: { (json) in
                 self.lp_stop()
                 self.parentCollectionView?.reloadData()
-                NSNotificationCenter.defaultCenter().postNotificationName(kActivityManualEndedNotification, object: nil, userInfo: [kActivityKey: self.act])
+                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kActivityManualEndedNotification), object: nil, userInfo: [kActivityKey: self.act])
                 self.showToast(LS("活动已关闭报名"))
                 }, onError: { (code) in
                     self.showToast(LS("Access Error: \(code)"))
@@ -274,11 +275,11 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             if comments.count == 0 {
                 return 1
@@ -289,28 +290,28 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath as NSIndexPath).section == 0 {
             if comments.count == 0 {
                 // empty info cell
                 return 100
             }
-            return ActivityCommentCell.heightForComment(comments[indexPath.row].content!)
+            return ActivityCommentCell.heightForComment(comments[(indexPath as NSIndexPath).row].content!)
         } else {
             return 250
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if (indexPath as NSIndexPath).section == 0 {
             if comments.count == 0 {
-                let cell = tableView.dequeueReusableCellWithIdentifier("empty_cell", forIndexPath: indexPath) as! SSEmptyListHintCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "empty_cell", for: indexPath) as! SSEmptyListHintCell
                 cell.titleLbl.text = LS("还没有评论")
                 return cell
             }
-            let cell = tableView.dequeueReusableCellWithIdentifier(ActivityCommentCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityCommentCell
-            cell.comment = comments[indexPath.row]
-            cell.replyBtn?.tag = indexPath.row
+            let cell = tableView.dequeueReusableCell(withIdentifier: ActivityCommentCell.reuseIdentifier, for: indexPath) as! ActivityCommentCell
+            cell.comment = comments[(indexPath as NSIndexPath).row]
+            cell.replyBtn?.tag = (indexPath as NSIndexPath).row
             cell.delegate = self
             cell.loadDataAndUpdateUI()
             return cell
@@ -323,15 +324,15 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if comments.count == 0 {
             return
         }
-        let comment = comments[indexPath.row]
+        let comment = comments[(indexPath as NSIndexPath).row]
         if comment.user.isHost {
             return
         } else {
-            responseToRow = indexPath.row
+            responseToRow = (indexPath as NSIndexPath).row
             let responseToName = comment.user.nickName!
             responseToPrefixStr = LS("回复 ") + responseToName + ": "
             commentPanel?.contentInput?.text = responseToPrefixStr
@@ -340,11 +341,11 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         infoView.adjustCoverScaleAccordingToTableOffset(scrollView.contentOffset.y + infoView.preferedHeight)
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y + scrollView.frame.height > scrollView.contentSize.height - 1 {
             loadMoreComments()
         }
@@ -355,7 +356,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     /**
      Fetch the latest information about the act
      */
-    func loadActInfo(showLoading: Bool = true) {
+    func loadActInfo(_ showLoading: Bool = true) {
         if showLoading {
             lp_start()
         }
@@ -364,11 +365,11 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
                 try! self.act.loadDataFromJSON(data, detailLevel: 1)
                 self.infoView.act = self.act
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.setNavRightBtn()
                     self.infoView.loadDataAndUpdateUI() // the preferedHeight udpated
                     self.commentPanel.setLikedAnimated(self.act.liked, flag: false)
-                    self.tableView.contentOffset = CGPointMake(0, -self.infoView.preferedHeight)
+                    self.tableView.contentOffset = CGPoint(x: 0, y: -self.infoView.preferedHeight)
                     self.tableView.contentInset = UIEdgeInsetsMake(self.infoView.preferedHeight, 0, self.commentPanel.barheight, 0)
 //                    UIView.animateWithDuration(0.3, animations: {
 //                        self.tableView.contentInset = UIEdgeInsetsMake(self.infoView.preferedHeight, 0, self.commentPanel.barheight, 0)
@@ -387,7 +388,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     }
     
     func loadMoreComments() {
-        let dateThreshold = comments.last()?.createdAt ?? NSDate()
+        let dateThreshold = comments.last?.createdAt ?? Foundation.Date()
         ActivityRequester.sharedInstance.getActivityComments(act.ssidString, dateThreshold: dateThreshold, limit: 20, onSuccess: { (json) in
             if let datas = json?.arrayValue {
                 for data in datas {
@@ -410,7 +411,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     /**
      send comments to the server
      */
-    func commentConfirmed(content: String) {
+    func commentConfirmed(_ content: String) {
         var responseToComment: ActivityComment? = nil
         if responseToRow >= 0 {
             responseToComment = comments[responseToRow]
@@ -420,11 +421,11 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         infoView.commentNumLbl.text = "\(act.commentNum)"
         
         tableView.beginUpdates()
-        comments.insert(newComment, atIndex: 0)
+        comments.insert(newComment, at: 0)
         if comments.count > 1 {
-            tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Top)
+            tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
         } else {
-            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+            tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
         tableView.endUpdates()
         commentPanel.contentInput?.text = ""
@@ -452,18 +453,18 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
     }
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         let fixedWidth = textView.bounds.width
-        let newSize = textView.sizeThatFits(CGSizeMake(fixedWidth, CGFloat.max))
+        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
         commentPanel.snp_updateConstraints { (make) in
             make.height.equalTo(max(newSize.height, commentPanel.barheight))
         }
         self.view.layoutIfNeeded()
     }
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
-            if let commentText = textView.text where commentText.length > 0 {
+            if let commentText = textView.text , commentText.length > 0 {
                 commentConfirmed(commentText)
             }
             dismissKeyboard()
@@ -482,7 +483,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     func userSelectCancelled() {
         // just dismiss the presented user selector
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     /**
@@ -490,11 +491,11 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
      
      - parameter users: 被邀请的用户的list
      */
-    func userSelected(users: [User]) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func userSelected(_ users: [User]) {
+        self.dismiss(animated: true, completion: nil)
         let userIDs = users.map { $0.ssidString }
         let userIDData = try! JSON(userIDs).rawData()
-        let userJSONString = String(data: userIDData, encoding: NSUTF8StringEncoding)
+        let userJSONString = String(data: userIDData, encoding: String.Encoding.utf8)
         self.lp_start()
         ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: userJSONString!, opType: "invite", onSuccess: { (json) in
             self.showToast(LS("邀请已发送"))
@@ -505,19 +506,19 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
     }
     
-    func avatarPressed(cell: DetailCommentCell) {
+    func avatarPressed(_ cell: DetailCommentCell) {
         // 评论列表的代理
         if let commentCell = cell as? ActivityCommentCell {
             let comment = commentCell.comment
-            navigationController?.pushViewController(comment.user.showDetailController(), animated: true)
+            navigationController?.pushViewController((comment?.user.showDetailController())!, animated: true)
         }
     }
     
-    func replyPressed(cell: DetailCommentCell) {
+    func replyPressed(_ cell: DetailCommentCell) {
         commentPressed(cell.replyBtn!)
     }
     
-    func commentPressed(sender: UIButton) {
+    func commentPressed(_ sender: UIButton) {
         responseToRow = sender.tag
         let targetComment = comments[responseToRow]
         if let responseToName = targetComment.user.nickName {
@@ -550,21 +551,21 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             // 如果没有安装百度地图，则打开自带地图
             let target = MKMapItem(placemark: MKPlacemark(coordinate: center, addressDictionary: nil))
             target.name = targetName
-            let options: [String: AnyObject] = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
-                                                MKLaunchOptionsMapTypeKey: NSNumber(unsignedInteger: MKMapType.Standard.rawValue)]
-            MKMapItem.openMapsWithItems([target], launchOptions: options)
+            let options: [String: AnyObject] = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving as AnyObject,
+                                                MKLaunchOptionsMapTypeKey: NSNumber(value: MKMapType.standard.rawValue as UInt)]
+            MKMapItem.openMaps(with: [target], launchOptions: options)
         }
     }
     
     // MARK: adjust layout when keyboard appears
     
-    func changeLayoutWhenKeyboardAppears(notification: NSNotification) {
-        if let userInfo = notification.userInfo {
-            if let keyboardFrame = userInfo[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue() {
+    func changeLayoutWhenKeyboardAppears(_ notification: Foundation.Notification) {
+        if let userInfo = (notification as NSNotification).userInfo {
+            if let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as AnyObject).cgRectValue {
                 var inset = tableView.contentInset
                 inset.bottom += keyboardFrame.height
                 tableView.contentInset = inset
-                tableView.setContentOffset(CGPointMake(0, -50), animated: true)
+                tableView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
                 commentPanel.snp_remakeConstraints(closure: { (make) in
                     make.left.equalTo(self.view)
                     make.right.equalTo(self.view)
@@ -576,7 +577,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
     }
     
-    func changeLayoutWhenKeyboardDisappears(notification: NSNotification) {
+    func changeLayoutWhenKeyboardDisappears(_ notification: Foundation.Notification) {
         var inset = tableView.contentInset
         inset.bottom = commentPanel.barheight
         tableView.contentInset = inset
@@ -590,8 +591,8 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     }
     
     // MARK: loading
-    @available(*, deprecated=1)
-    func checkImageDetail(cell: DetailCommentCell) {
+    @available(*, deprecated: 1)
+    func checkImageDetail(_ cell: DetailCommentCell) {
         
     }
 }

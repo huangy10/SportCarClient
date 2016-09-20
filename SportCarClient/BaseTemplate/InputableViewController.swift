@@ -12,7 +12,7 @@ import UIKit
 class InputableViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     var tapper: UITapGestureRecognizer?
     var inputFields: [UIView?] = []
-    var delayTask: dispatch_block_t?
+    var delayTask: ()->()?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +21,7 @@ class InputableViewController: UIViewController, UITextFieldDelegate, UITextView
     
     func createSubviews(){
         self.tapper = UITapGestureRecognizer(target: self, action: #selector(InputableViewController.dismissKeyboard))
-        tapper?.enabled = false
+        tapper?.isEnabled = false
         self.view.addGestureRecognizer(tapper!)
         
     }
@@ -30,16 +30,16 @@ class InputableViewController: UIViewController, UITextFieldDelegate, UITextView
         for inputer in self.inputFields{
             inputer?.resignFirstResponder()
         }
-        tapper?.enabled = false
+        tapper?.isEnabled = false
     }
     
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-        self.tapper?.enabled = true
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        self.tapper?.isEnabled = true
         return true
     }
     
-    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
-        self.tapper?.enabled = true
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        self.tapper?.isEnabled = true
         return true
     }
 }

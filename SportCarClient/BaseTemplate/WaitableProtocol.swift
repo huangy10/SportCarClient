@@ -43,32 +43,32 @@ extension WaitableProtocol where Self: UIViewController {
         }
         
         let superview = self.view
-        wp_waitingContainer = superview.addSubview(UIView).config(UIColor.clearColor())
+        wp_waitingContainer = superview?.addSubview(UIView).config(UIColor.clear)
             .layout({ (make) in
                 make.edges.equalTo(superview)
             })
-        let activityView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        let activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         wp_waitingContainer?.addSubview(activityView)
         activityView.snp_makeConstraints { (make) in
             make.center.equalTo(wp_waitingContainer!)
             make.size.equalTo(60)
         }
         wp_waitingContainer?.layer.opacity = 0
-        UIView.animateWithDuration(0.3) { 
+        UIView.animate(withDuration: 0.3, animations: { 
             self.wp_waitingContainer?.layer.opacity = 1
-        }
+        }) 
     }
     
     func wp_stopWaiting() {
         if wp_waitingContainer == nil {
             assertionFailure()
         }
-        UIView.animateWithDuration(0.3, animations: { 
+        UIView.animate(withDuration: 0.3, animations: { 
             self.wp_waitingContainer?.layer.opacity = 0
-            }) { (_) in
+            }, completion: { (_) in
                 self.wp_waitingContainer?.removeFromSuperview()
                 self.wp_waitingContainer = nil
-        }
+        }) 
     }
     
     func wp_abortWaiting() {

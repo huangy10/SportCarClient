@@ -35,7 +35,7 @@ class LoginRegisterController: InputableViewController {
     var authCodeBtn: AuthCodeBtnView?
     var loginBtn: UIButton?
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.view.updateConstraints()
         self.view.layoutIfNeeded()
@@ -45,7 +45,7 @@ class LoginRegisterController: InputableViewController {
             make.bottom.equalTo(self.view)
             make.width.equalTo(bgImgView.snp_height).multipliedBy(0.807)
         }
-        UIView.animateWithDuration(10, delay: 0, options: .CurveEaseIn, animations: { () -> Void in
+        UIView.animate(withDuration: 10, delay: 0, options: .curveEaseIn, animations: { () -> Void in
             self.view.layoutIfNeeded()
             }, completion: nil)
     }
@@ -57,7 +57,7 @@ class LoginRegisterController: InputableViewController {
         self.navigationItem.leftBarButtonItem = self.leftBarBtn()
         //
         let superview = self.view!
-        superview.backgroundColor = UIColor.blackColor()
+        superview.backgroundColor = UIColor.black
         //
         bgImgView = UIImageView(image: UIImage(named: "account_bg_image"))
         superview.addSubview(bgImgView)
@@ -71,9 +71,9 @@ class LoginRegisterController: InputableViewController {
         titleLbl = UILabel()
         titleLbl?.clipsToBounds = true
 //        titleLbl?.text = "跑车范"
-        titleLbl?.font = UIFont.systemFontOfSize(30, weight: UIFontWeightBold)
-        titleLbl?.textColor = UIColor.whiteColor()
-        titleLbl?.textAlignment = NSTextAlignment.Center
+        titleLbl?.font = UIFont.systemFont(ofSize: 30, weight: UIFontWeightBold)
+        titleLbl?.textColor = UIColor.white
+        titleLbl?.textAlignment = NSTextAlignment.center
         superview.addSubview(titleLbl!)
         titleLbl!.snp_makeConstraints { (make) -> Void in
             make.width.equalTo(superview)
@@ -91,8 +91,8 @@ class LoginRegisterController: InputableViewController {
         }
         //
         board = UIScrollView()
-        board?.backgroundColor = UIColor.clearColor()
-        board?.pagingEnabled = true
+        board?.backgroundColor = UIColor.clear
+        board?.isPagingEnabled = true
         superview.addSubview(board!)
         board?.snp_makeConstraints(closure: { (make) -> Void in
             make.top.equalTo(titleLogo.snp_bottom).offset(43)
@@ -103,7 +103,7 @@ class LoginRegisterController: InputableViewController {
         board?.contentSize = CGSize(width: superview.frame.size.width * 2, height: 300)
         //
         let register = self.registerView()
-        board!.addSubview(register)
+        board!.addSubview(register!)
         register.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(board!)
             make.left.equalTo(board!)
@@ -114,7 +114,7 @@ class LoginRegisterController: InputableViewController {
         board?.delegate = self
         //
         let login = self.loginView()
-        board!.addSubview(login)
+        board!.addSubview(login!)
         login.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(board!)
             make.left.equalTo(register.snp_right)
@@ -130,7 +130,7 @@ class LoginRegisterController: InputableViewController {
         let container = UIView()
         //
         let inputContainer = UIView()
-        inputContainer.backgroundColor = UIColor.whiteColor()
+        inputContainer.backgroundColor = UIColor.white
         inputContainer.layer.cornerRadius = 4
         container.addSubview(inputContainer)
         inputContainer.snp_makeConstraints { (make) -> Void in
@@ -153,8 +153,8 @@ class LoginRegisterController: InputableViewController {
         loginPhoneInput = TextFieldWithLeadingIconView()
         loginPhoneInput?.delegate = self
         loginPhoneInput?.placeholder = NSLocalizedString("请输入您的手机号", comment: "")
-        loginPhoneInput?.font = UIFont.systemFontOfSize(14)
-        loginPhoneInput?.leftViewMode = UITextFieldViewMode.Always
+        loginPhoneInput?.font = UIFont.systemFont(ofSize: 14)
+        loginPhoneInput?.leftViewMode = UITextFieldViewMode.always
         let loginPhoneInputIcon = UIImageView(image: UIImage(named: "account_phone_input"))
         loginPhoneInput?.leftView = loginPhoneInputIcon
         inputContainer.addSubview(loginPhoneInput!)
@@ -168,9 +168,9 @@ class LoginRegisterController: InputableViewController {
         loginPasswordInput = TextFieldWithLeadingIconView()
         loginPasswordInput?.delegate = self
         loginPasswordInput?.placeholder = NSLocalizedString("请输入密码", comment: "")
-        loginPasswordInput?.secureTextEntry = true
-        loginPasswordInput?.leftViewMode = UITextFieldViewMode.Always
-        loginPasswordInput?.font = UIFont.systemFontOfSize(14)
+        loginPasswordInput?.isSecureTextEntry = true
+        loginPasswordInput?.leftViewMode = UITextFieldViewMode.always
+        loginPasswordInput?.font = UIFont.systemFont(ofSize: 14)
         let loginPasswordInputIcon =  UIImageView(image: UIImage(named: "account_password_input"))
         loginPasswordInput?.leftView = loginPasswordInputIcon
         container.addSubview(loginPasswordInput!)
@@ -182,9 +182,9 @@ class LoginRegisterController: InputableViewController {
         }
         //
         let forgetBtn = UIButton()
-        forgetBtn.setTitle(NSLocalizedString("忘记密码?", comment: ""), forState: .Normal)
+        forgetBtn.setTitle(NSLocalizedString("忘记密码?", comment: ""), for: UIControlState())
         forgetBtn.titleLabel?.adjustsFontSizeToFitWidth = true
-        forgetBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), forState: .Normal)
+        forgetBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
         container.addSubview(forgetBtn)
         forgetBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(17)
@@ -192,11 +192,11 @@ class LoginRegisterController: InputableViewController {
             make.top.equalTo(inputContainer.snp_bottom).offset(15)
             make.right.equalTo(inputContainer)
         }
-        forgetBtn.addTarget(self, action: #selector(LoginRegisterController.forgetBtnPressed), forControlEvents: .TouchUpInside)
+        forgetBtn.addTarget(self, action: #selector(LoginRegisterController.forgetBtnPressed), for: .touchUpInside)
         //
         let login = UIButton()
-        login.setBackgroundImage(UIImage(named: "account_login_btn"), forState: .Normal)
-        login.layer.shadowColor = UIColor(red: 0.95, green: 0.21, blue: 0.21, alpha: 1).CGColor
+        login.setBackgroundImage(UIImage(named: "account_login_btn"), for: UIControlState())
+        login.layer.shadowColor = UIColor(red: 0.95, green: 0.21, blue: 0.21, alpha: 1).cgColor
         login.layer.shadowOffset = CGSize(width: 0, height: 3)
         login.layer.shadowRadius = 7
         login.layer.shadowOpacity = 1
@@ -207,7 +207,7 @@ class LoginRegisterController: InputableViewController {
             make.top.equalTo(inputContainer.snp_bottom).offset(75)
             make.centerX.equalTo(container)
         }
-        login.addTarget(self, action: #selector(LoginRegisterController.loginPressed), forControlEvents: .TouchUpInside)
+        login.addTarget(self, action: #selector(LoginRegisterController.loginPressed), for: .touchUpInside)
         self.loginBtn = login
         return container
     }
@@ -216,7 +216,7 @@ class LoginRegisterController: InputableViewController {
         let container = UIView()
         //
         let inputContainer = UIView()
-        inputContainer.backgroundColor = UIColor.whiteColor()
+        inputContainer.backgroundColor = UIColor.white
         inputContainer.layer.cornerRadius = 4
         container.addSubview(inputContainer)
         inputContainer.snp_makeConstraints { (make) -> Void in
@@ -248,8 +248,8 @@ class LoginRegisterController: InputableViewController {
         registerPhoneInput = TextFieldWithLeadingIconView()
         registerPhoneInput?.delegate = self
         registerPhoneInput?.placeholder = NSLocalizedString("请输入您的手机号", comment: "")
-        registerPhoneInput?.font = UIFont.systemFontOfSize(14)
-        registerPhoneInput?.leftViewMode = UITextFieldViewMode.Always
+        registerPhoneInput?.font = UIFont.systemFont(ofSize: 14)
+        registerPhoneInput?.leftViewMode = UITextFieldViewMode.always
         let registerPhoneInputIcon = UIImageView(image: UIImage(named: "account_phone_input"))
         registerPhoneInput?.leftView = registerPhoneInputIcon
         inputContainer.addSubview(registerPhoneInput!)
@@ -261,10 +261,10 @@ class LoginRegisterController: InputableViewController {
         })
         //
         let sendCodeBtn = AuthCodeBtnView()
-        sendCodeBtn.setTitle(NSLocalizedString("获取验证码", comment: ""), forState: .Normal)
+        sendCodeBtn.setTitle(NSLocalizedString("获取验证码", comment: ""), for: UIControlState())
         sendCodeBtn.displayText = NSLocalizedString("获取验证码", comment: "")
-        sendCodeBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-        sendCodeBtn.titleLabel?.font = UIFont.systemFontOfSize(14)
+        sendCodeBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        sendCodeBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         inputContainer.addSubview(sendCodeBtn)
         sendCodeBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(registerPhoneInput!)
@@ -272,14 +272,14 @@ class LoginRegisterController: InputableViewController {
             make.right.equalTo(inputContainer).offset(-13)
             make.centerY.equalTo(registerPhoneInput!)
         }
-        sendCodeBtn.addTarget(self, action: #selector(LoginRegisterController.sendAuthCodePressed), forControlEvents: .TouchUpInside)
+        sendCodeBtn.addTarget(self, action: #selector(LoginRegisterController.sendAuthCodePressed), for: .touchUpInside)
         authCodeBtn = sendCodeBtn
         //
         registerAuthCode = TextFieldWithLeadingIconView()
         registerAuthCode?.delegate = self
         registerAuthCode?.placeholder = NSLocalizedString("请输入验证码", comment: "")
-        registerAuthCode?.font = UIFont.systemFontOfSize(14)
-        registerAuthCode?.leftViewMode = UITextFieldViewMode.Always
+        registerAuthCode?.font = UIFont.systemFont(ofSize: 14)
+        registerAuthCode?.leftViewMode = UITextFieldViewMode.always
         let registerAuthCodeIcon = UIImageView(image: UIImage(named: "account_auth_code"))
         registerAuthCode?.leftView = registerAuthCodeIcon
         inputContainer.addSubview(registerAuthCode!)
@@ -293,9 +293,9 @@ class LoginRegisterController: InputableViewController {
         registerPasswordInput = TextFieldWithLeadingIconView()
         registerPasswordInput?.delegate = self
         registerPasswordInput?.placeholder = NSLocalizedString("请输入密码", comment: "")
-        registerPasswordInput?.secureTextEntry = true
-        registerPasswordInput?.font = UIFont.systemFontOfSize(14)
-        registerPasswordInput?.leftViewMode = UITextFieldViewMode.Always
+        registerPasswordInput?.isSecureTextEntry = true
+        registerPasswordInput?.font = UIFont.systemFont(ofSize: 14)
+        registerPasswordInput?.leftViewMode = UITextFieldViewMode.always
         let registerPasswordInputIcon = UIImageView(image: UIImage(named: "account_password_input"))
         registerPasswordInput?.leftView = registerPasswordInputIcon
         inputContainer.addSubview(registerPasswordInput!)
@@ -307,9 +307,9 @@ class LoginRegisterController: InputableViewController {
         })
         // 
         let agreementBtn = UIButton()
-        agreementBtn.setTitle(NSLocalizedString("用户协议", comment: ""), forState: .Normal)
+        agreementBtn.setTitle(NSLocalizedString("用户协议", comment: ""), for: UIControlState())
         agreementBtn.titleLabel?.adjustsFontSizeToFitWidth = true
-        agreementBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
+        agreementBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
         container.addSubview(agreementBtn)
         agreementBtn.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(17)
@@ -317,7 +317,7 @@ class LoginRegisterController: InputableViewController {
             make.top.equalTo(inputContainer.snp_bottom).offset(15)
             make.right.equalTo(inputContainer)
         }
-        agreementBtn.addTarget(self, action: #selector(LoginRegisterController.checkAgreement), forControlEvents: .TouchUpInside)
+        agreementBtn.addTarget(self, action: #selector(LoginRegisterController.checkAgreement), for: .touchUpInside)
         
         let agreementCheckIcon = UIImageView(image: UIImage(named: "account_agreement_check"))
         container.addSubview(agreementCheckIcon)
@@ -329,8 +329,8 @@ class LoginRegisterController: InputableViewController {
         }
         
         let registerBtn = UIButton()
-        registerBtn.setBackgroundImage(UIImage(named: "account_register_btn"), forState: .Normal)
-        registerBtn.layer.shadowColor = UIColor(red: 0.95, green: 0.21, blue: 0.21, alpha: 1).CGColor
+        registerBtn.setBackgroundImage(UIImage(named: "account_register_btn"), for: UIControlState())
+        registerBtn.layer.shadowColor = UIColor(red: 0.95, green: 0.21, blue: 0.21, alpha: 1).cgColor
         registerBtn.layer.shadowOffset = CGSize(width: 0, height: 3)
         registerBtn.layer.shadowRadius = 7
         registerBtn.layer.shadowOpacity = 1
@@ -341,7 +341,7 @@ class LoginRegisterController: InputableViewController {
             make.top.equalTo(inputContainer.snp_bottom).offset(75)
             make.centerX.equalTo(container)
         }
-        registerBtn.addTarget(self, action: #selector(LoginRegisterController.registerPressed), forControlEvents: .TouchUpInside)
+        registerBtn.addTarget(self, action: #selector(LoginRegisterController.registerPressed), for: .touchUpInside)
         return container
     }
     /**
@@ -357,8 +357,8 @@ class LoginRegisterController: InputableViewController {
         // 创建登录按钮
         titleLoginBtn = UIButton()
         // loginBtn.setBackgroundImage(UIImage(named: "account_header_button"), forState: .Normal)
-        titleLoginBtn?.setTitleColor(kBarBgColor, forState: .Normal)
-        titleLoginBtn?.setTitle(NSLocalizedString("登录", comment: ""), forState: .Normal)
+        titleLoginBtn?.setTitleColor(kBarBgColor, for: UIControlState())
+        titleLoginBtn?.setTitle(NSLocalizedString("登录", comment: ""), for: UIControlState())
         titleLoginBtn?.titleLabel?.font = kBarTextFont
         container.addSubview(titleLoginBtn!)
         titleLoginBtn?.snp_makeConstraints { (make) -> Void in
@@ -367,12 +367,12 @@ class LoginRegisterController: InputableViewController {
             make.centerY.equalTo(container)
             make.left.equalTo(container.snp_centerX).offset(9)
         }
-        titleLoginBtn?.addTarget(self, action: #selector(LoginRegisterController.barTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        titleLoginBtn?.addTarget(self, action: #selector(LoginRegisterController.barTitleBtnPressed(_:)), for: .touchUpInside)
         
         // 创建注册按钮
         titleRegisterBtn = UIButton()
-        titleRegisterBtn?.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        titleRegisterBtn?.setTitle(NSLocalizedString("注册", comment: ""), forState: .Normal)
+        titleRegisterBtn?.setTitleColor(UIColor.white, for: UIControlState())
+        titleRegisterBtn?.setTitle(NSLocalizedString("注册", comment: ""), for: UIControlState())
         titleRegisterBtn?.titleLabel?.font = kBarTextFont
         container.addSubview(titleRegisterBtn!)
         titleRegisterBtn?.snp_makeConstraints { (make) -> Void in
@@ -381,12 +381,12 @@ class LoginRegisterController: InputableViewController {
             make.centerY.equalTo(container)
             make.right.equalTo(container.snp_centerX).offset(9)
         }
-        titleRegisterBtn?.addTarget(self, action: #selector(LoginRegisterController.barTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        titleRegisterBtn?.addTarget(self, action: #selector(LoginRegisterController.barTitleBtnPressed(_:)), for: .touchUpInside)
 
         // 创建背景ICON
         titleBtnIcon = UIImageView(image: UIImage(named: "account_header_button"))
         container.addSubview(titleBtnIcon!)
-        container.sendSubviewToBack(titleBtnIcon!)
+        container.sendSubview(toBack: titleBtnIcon!)
         titleBtnIcon?.snp_makeConstraints(closure: { (make) -> Void in
             make.edges.equalTo(titleLoginBtn!)
         })
@@ -396,62 +396,62 @@ class LoginRegisterController: InputableViewController {
     func leftBarBtn() -> UIBarButtonItem! {
         let backBtn = UIButton()
 //        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        backBtn.addTarget(self, action: #selector(LoginRegisterController.backBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        backBtn.addTarget(self, action: #selector(LoginRegisterController.backBtnPressed(_:)), for: .touchUpInside)
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
         
         let leftBtnItem = UIBarButtonItem(customView: backBtn)
         return leftBtnItem
     }
     
-    func barTitleBtnPressed(sender: UIButton) {
+    func barTitleBtnPressed(_ sender: UIButton) {
         if sender.titleLabel?.text == "注册" && board?.contentOffset.x != 0{
             titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
                 make.edges.equalTo(titleRegisterBtn!)
             })
-            UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.titleBtnIcon?.superview?.layoutIfNeeded()
-                self.titleRegisterBtn?.setTitleColor(kBarBgColor, forState: .Normal)
-                self.titleLoginBtn?.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                self.titleRegisterBtn?.setTitleColor(kBarBgColor, for: UIControlState())
+                self.titleLoginBtn?.setTitleColor(UIColor.white, for: UIControlState())
                 self.board?.contentOffset = CGPoint(x: 0, y: 0)
                 }, completion: nil)
         }else if sender.titleLabel?.text == "登录" && board?.contentOffset.x == 0{
             titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
                 make.edges.equalTo(titleLoginBtn!)
             })
-            UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.titleBtnIcon?.superview?.layoutIfNeeded()
-                self.titleLoginBtn?.setTitleColor(kBarBgColor, forState: .Normal)
-                self.titleRegisterBtn?.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                self.titleLoginBtn?.setTitleColor(kBarBgColor, for: UIControlState())
+                self.titleRegisterBtn?.setTitleColor(UIColor.white, for: UIControlState())
                 self.board?.contentOffset = CGPoint(x: self.view.frame.size.width, y: 0)
                 }, completion: nil)
         }
     }
     // MARK: 按钮响应
     
-    func backBtnPressed(sender: UIButton) {
+    func backBtnPressed(_ sender: UIButton) {
 //        print("haha")
     }
     
     func loginPressed() {
         // 首先确保手机号码和密码都已经填入了数据
-        guard let username = loginPhoneInput?.text where username.characters.count > 0 else{
+        guard let username = loginPhoneInput?.text , username.characters.count > 0 else{
             showToast(LS("请输入手机号码"), onSelf: true)
             return
         }
         
-        guard let password = loginPasswordInput?.text where password.characters.count > 0 else{
+        guard let password = loginPasswordInput?.text , password.characters.count > 0 else{
             showToast(LS("请输入密码"), onSelf: true)
             return
         }
-        loginBtn?.enabled = false
+        loginBtn?.isEnabled = false
         self.requester.postToLogin(username, password: password, onSuccess: { (json) -> (Void) in
-            self.loginBtn?.enabled = true
+            self.loginBtn?.isEnabled = true
             let user: User = try! MainManager.sharedManager.getOrCreate(json!)
             MainManager.sharedManager.login(user, jwtToken: json!["jwt_token"].stringValue)
             let app = AppManager.sharedAppManager
             app.guideToContent()
             }) { (code) -> (Void) in
-                self.loginBtn?.enabled = true
+                self.loginBtn?.isEnabled = true
                 // 显示错误信息
                 var errorMessage = ""
                 if let errorCode = code {
@@ -512,7 +512,7 @@ class LoginRegisterController: InputableViewController {
     func forgetBtnPressed() {
         let ctrl = ResetPasswordController()
         let nav = BlackBarNavigationController(rootViewController: ctrl, blackNavTitle: true)
-        self.presentViewController(nav, animated: true, completion: nil)
+        self.present(nav, animated: true, completion: nil)
         //
 //        self.navigationController?.pushViewController(ctrl, animated: true)
     }
@@ -520,20 +520,20 @@ class LoginRegisterController: InputableViewController {
     func checkAgreement() {
         let agreementCtrl = AgreementController()
 //        self.navigationController?.pushViewController(agreementCtrl, animated: true)
-        presentViewController(agreementCtrl.toNavWrapper(), animated: true, completion: nil)
+        present(agreementCtrl.toNavWrapper(), animated: true, completion: nil)
     }
     
     func sendAuthCodePressed() {
-        guard let phone = registerPhoneInput?.text where phone.characters.count > 0 else{
+        guard let phone = registerPhoneInput?.text , phone.characters.count > 0 else{
             showToast(LS("请输入手机号"), onSelf: true)
             return
         }
-        authCodeBtn?.status = AuthCodeBtnViewStatus.Pending
+        authCodeBtn?.status = AuthCodeBtnViewStatus.pending
         self.requester.requestAuthCode(registerPhoneInput!.text!, onSuccess: { () -> (Void) in
-            self.authCodeBtn?.status = AuthCodeBtnViewStatus.CountDown
+            self.authCodeBtn?.status = AuthCodeBtnViewStatus.countDown
             }) { () -> (Void) in
                 // 弹窗
-                self.authCodeBtn?.status = AuthCodeBtnViewStatus.Normal
+                self.authCodeBtn?.status = AuthCodeBtnViewStatus.normal
                 self.showToast(LS("获取验证码失败"), onSelf: true)
         }
     }
@@ -550,63 +550,63 @@ class LoginRegisterController: InputableViewController {
         self.titleLbl?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(125)
         })
-        UIView.animateWithDuration(0.2) { () -> Void in
+        UIView.animate(withDuration: 0.2, animations: { () -> Void in
             self.view.layoutIfNeeded()
-        }
+        }) 
     }
     
-    override func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+    override func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         super.textFieldShouldBeginEditing(textField)
-        self.tapper?.enabled = true
+        self.tapper?.isEnabled = true
         self.titleLbl?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(0)
         })
-        UIView.animateWithDuration(0.2) { () -> Void in
+        UIView.animate(withDuration: 0.2, animations: { () -> Void in
             self.view.layoutIfNeeded()
-        }
+        }) 
         return true
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.x < self.view.frame.width/2 {
             titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
                 make.edges.equalTo(titleRegisterBtn!)
             })
-            UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.titleBtnIcon?.superview?.layoutIfNeeded()
-                self.titleRegisterBtn?.setTitleColor(kBarBgColor, forState: .Normal)
-                self.titleLoginBtn?.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                self.titleRegisterBtn?.setTitleColor(kBarBgColor, for: UIControlState())
+                self.titleLoginBtn?.setTitleColor(UIColor.white, for: UIControlState())
                 }, completion: nil)
         }else{
             titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
                 make.edges.equalTo(titleLoginBtn!)
             })
-            UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.titleBtnIcon?.superview?.layoutIfNeeded()
-                self.titleLoginBtn?.setTitleColor(kBarBgColor, forState: .Normal)
-                self.titleRegisterBtn?.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                self.titleLoginBtn?.setTitleColor(kBarBgColor, for: UIControlState())
+                self.titleRegisterBtn?.setTitleColor(UIColor.white, for: UIControlState())
                 }, completion: nil)
         }
     }
 }
 
 class TextFieldWithLeadingIconView : UITextField {
-    override func leftViewRectForBounds(bounds: CGRect) -> CGRect {
-        var frame = super.leftViewRectForBounds(bounds)
+    override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
+        var frame = super.leftViewRect(forBounds: bounds)
         let size = CGSize(width: 16, height: 16)
         frame.size = size
         frame.origin.y = 3 + bounds.size.height / 4
         return frame
     }
     
-    override func textRectForBounds(bounds: CGRect) -> CGRect {
-        var frame = super.textRectForBounds(bounds)
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        var frame = super.textRect(forBounds: bounds)
         frame.origin.x = 30
         return frame
     }
     
-    override func editingRectForBounds(bounds: CGRect) -> CGRect {
-        var frame = super.textRectForBounds(bounds)
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        var frame = super.textRect(forBounds: bounds)
         frame.origin.x = 30
         return frame
     }

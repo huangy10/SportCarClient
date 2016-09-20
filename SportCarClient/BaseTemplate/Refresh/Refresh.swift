@@ -15,35 +15,35 @@ class SSPullToRefresh: UIView {
     var actIndicator: UIActivityIndicatorView!
     
     var action: (()->())?
-    var hideDelay: NSTimeInterval = 0
+    var hideDelay: TimeInterval = 0
     var refreshing: Bool = false
     deinit {
         removeScrollViewObserving()
     }
     
-    private var state: State = .Inital {
+    fileprivate var state: State = .inital {
         didSet {
             refreshing = false
             switch state {
-            case .Loading:
+            case .loading:
                 refreshing = true
                 pullingLbl.layer.opacity = 0
                 confirmingLabl.layer.opacity = 0
-                actIndicator.hidden = false
+                actIndicator.isHidden = false
                 actIndicator.startAnimating()
-                if let scrollView = scrollView where oldValue != .Loading {
+                if let scrollView = scrollView , oldValue != .loading {
                     scrollView.contentOffset = previousScrollViewOffset
                     scrollView.bounces = false
-                    UIView.animateWithDuration(0.3, animations: { 
+                    UIView.animate(withDuration: 0.3, animations: { 
                         let insets = self.frame.height + self.scrollViewDefaultInsets.top
                         scrollView.contentInset.top = insets
-                        scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, -insets)
+                        scrollView.contentOffset = CGPoint(x: scrollView.contentOffset.x, y: -insets)
                         }, completion: { _ in
                             scrollView.bounces = true
                     })
                 }
                 action?()
-            case .Finished:
+            case .finished:
                 removeScrollViewObserving()
                 SpringAnimation.springWithCompletion(1, animations: { 
                     self.scrollView?.contentInset = self.scrollViewDefaultInsets
@@ -51,11 +51,11 @@ class SSPullToRefresh: UIView {
                     self.actIndicator.layer.opacity = 0
                     }, completion: { (_) in
                         self.addScrollViewObserving()
-                        self.state = .Inital
+                        self.state = .inital
                         self.actIndicator.layer.opacity = 1
-                        self.actIndicator.hidden = true
+                        self.actIndicator.isHidden = true
                 })
-            case .Releasing(let progress):
+            case .releasing(let progress):
                 pullingLbl.layer.opacity = max(Float(1 - (progress-0.5) * 2), 0)
                 confirmingLabl.layer.opacity = max(Float((progress - 0.5) * 2), 0)
             default: break
@@ -72,36 +72,36 @@ class SSPullToRefresh: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addToSrollView(scrollView: UIScrollView, action: ()->()) {
+    func addToSrollView(_ scrollView: UIScrollView, action: @escaping ()->()) {
         self.scrollView = scrollView
         self.action = action
         scrollView.addSubview(self)
-        self.frame  = CGRectMake(0, scrollView.contentInset.top - 80, UIScreen.mainScreen().bounds.width, 80)
+        self.frame  = CGRect(x: 0, y: scrollView.contentInset.top - 80, width: UIScreen.main.bounds.width, height: 80)
     }
     
     func createSubviews() {
-        pullingLbl = self.addSubview(UILabel).config(textColor: kTextBlack, textAlignment: .Center)
+        pullingLbl = self.addSubview(UILabel).config(textColor: kTextBlack, textAlignment: .center)
             .layout({ (make) in
                 make.center.equalTo(self)
             })
         
-        confirmingLabl = self.addSubview(UILabel).config(textColor: kTextBlack, textAlignment: .Center)
+        confirmingLabl = self.addSubview(UILabel).config(textColor: kTextBlack, textAlignment: .center)
             .layout({ (make) in
                 make.center.equalTo(self)
             })
         confirmingLabl.text = LS("放开切换到当前地点")
         confirmingLabl.layer.opacity = 0
         
-        actIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        actIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         self.addSubview(actIndicator)
         actIndicator.layout({ (make) in
             make.center.equalTo(self)
             make.size.equalTo(40)
         })
-        actIndicator.hidden = true
+        actIndicator.isHidden = true
     }
     
-    private var scrollViewDefaultInsets = UIEdgeInsetsZero
+    fileprivate var scrollViewDefaultInsets = UIEdgeInsets.zero
     weak var scrollView: UIScrollView? {
         willSet {
             removeScrollViewObserving()
@@ -114,81 +114,81 @@ class SSPullToRefresh: UIView {
         }
     }
     
-    private func addScrollViewObserving() {
-        scrollView?.addObserver(self, forKeyPath: "contentOffset", options: .Initial, context: &KVOContext)
+    fileprivate func addScrollViewObserving() {
+        scrollView?.addObserver(self, forKeyPath: "contentOffset", options: .initial, context: &KVOContext)
     }
     
-    private func removeScrollViewObserving() {
+    fileprivate func removeScrollViewObserving() {
         scrollView?.removeObserver(self, forKeyPath: "contentOffset", context: &KVOContext)
     }
     
     // MARK: - KVO
-    private var KVOContext = "PullToRefreshKVOContext"
-    private var previousScrollViewOffset: CGPoint = CGPointZero
+    fileprivate var KVOContext = "PullToRefreshKVOContext"
+    fileprivate var previousScrollViewOffset: CGPoint = CGPoint.zero
     
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if (context == &KVOContext && keyPath == "contentOffset" && object as? UIScrollView == scrollView) {
             let offset = previousScrollViewOffset.y + scrollViewDefaultInsets.top
             let refreshViewHeight = self.frame.height
         
             switch offset {
-            case 0 where (state != .Loading): state = .Inital
-            case -refreshViewHeight...0 where (state != .Loading && state != .Finished):
-                state = .Releasing(progress: -offset / refreshViewHeight)
+            case 0 where (state != .loading): state = .inital
+            case -refreshViewHeight...0 where (state != .loading && state != .finished):
+                state = .releasing(progress: -offset / refreshViewHeight)
             case -1000...(-refreshViewHeight):
-                if state == State.Releasing(progress: 1) && scrollView?.dragging == false {
-                    state = .Loading
-                } else if state != State.Loading && state != State.Finished {
-                    state = .Releasing(progress: 1)
+                if state == State.releasing(progress: 1) && scrollView?.isDragging == false {
+                    state = .loading
+                } else if state != State.loading && state != State.finished {
+                    state = .releasing(progress: 1)
                 }
             default: break
             }
         } else {
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
         
         previousScrollViewOffset.y = scrollView!.contentOffset.y
     }
     
     func startRefreshing() {
-        if self.state != State.Inital {
+        if self.state != State.inital {
             return
         }
-        scrollView?.setContentOffset(CGPointMake(0, -self.frame.height - scrollViewDefaultInsets.top), animated: true)
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.27 * Double(NSEC_PER_SEC)))
-        dispatch_after(delayTime, dispatch_get_main_queue()) { 
-            self.state = State.Loading
+        scrollView?.setContentOffset(CGPoint(x: 0, y: -self.frame.height - scrollViewDefaultInsets.top), animated: true)
+        let delayTime = DispatchTime.now() + Double(Int64(0.27 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: delayTime) { 
+            self.state = State.loading
         }
         
     }
     
     func endRefreshing() {
-        if state == .Loading {
-            state = .Finished
+        if state == .loading {
+            state = .finished
         }
     }
 }
 
 public enum State:Equatable, CustomStringConvertible {
-    case Inital, Loading, Finished
-    case Releasing(progress: CGFloat)
+    case inital, loading, finished
+    case releasing(progress: CGFloat)
     
     public var description: String {
         switch self {
-        case .Inital: return "Inital"
-        case .Releasing(let progress): return "Releasing:\(progress)"
-        case .Loading: return "Loading"
-        case .Finished: return "Finished"
+        case .inital: return "Inital"
+        case .releasing(let progress): return "Releasing:\(progress)"
+        case .loading: return "Loading"
+        case .finished: return "Finished"
         }
     }
 }
 
 public func ==(a: State, b: State) -> Bool {
     switch (a, b) {
-    case (.Inital, .Inital): return true
-    case (.Loading, .Loading): return true
-    case (.Finished, .Finished): return true
-    case (.Releasing, .Releasing): return true
+    case (.inital, .inital): return true
+    case (.loading, .loading): return true
+    case (.finished, .finished): return true
+    case (.releasing, .releasing): return true
     default: return false
     }
 }

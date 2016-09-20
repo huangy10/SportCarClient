@@ -15,7 +15,7 @@ class SSPropertyInputableCell: SSPropertyBaseCell {
     
     var inputable: Bool = true {
         didSet {
-            wrapper.userInteractionEnabled = inputable
+            wrapper.isUserInteractionEnabled = inputable
         }
     }
     
@@ -27,16 +27,16 @@ class SSPropertyInputableCell: SSPropertyBaseCell {
         super.createSubviews()
         let superview = self.contentView
         // You should put the textfield into an UIScrollView to avoid the auto offset adjustment, which could not be closed. Stupid apple!
-        wrapper = superview.addSubview(UIScrollView).config(UIColor.whiteColor()).layout({ (make) in
+        wrapper = superview.addSubview(UIScrollView).config(UIColor.white).layout({ (make) in
             make.centerY.equalTo(staticLbl)
             make.right.equalTo(arrowIcon.snp_left).offset(-8)
             make.height.equalTo(superview)
             make.left.equalTo(staticLbl.snp_right).offset(30)
         })
 
-        wrapper.scrollEnabled = false
+        wrapper.isScrollEnabled = false
         contentInput = wrapper.addSubview(UITextField)
-            .config(textAlignment: .Right)
+            .config(textAlignment: .right)
             .layout({ (make) in
                 make.centerY.equalTo(staticLbl)
                 make.right.equalTo(arrowIcon.snp_left).offset(-8)
@@ -46,7 +46,7 @@ class SSPropertyInputableCell: SSPropertyBaseCell {
     }
     
     func extraSettings(
-        delegate: UITextFieldDelegate?,
+        _ delegate: UITextFieldDelegate?,
         text: String? = nil,
         placeholder: String? = nil
         ) {
@@ -59,10 +59,10 @@ class SSPropertyInputableCell: SSPropertyBaseCell {
     }
     
     func hideArrowIcon() {
-        if arrowIcon.hidden {
+        if arrowIcon.isHidden {
             return
         }
-        arrowIcon.hidden = true
+        arrowIcon.isHidden = true
         wrapper.snp_remakeConstraints(closure: { (make) in
             make.centerY.equalTo(staticLbl)
             make.right.equalTo(arrowIcon)

@@ -12,7 +12,7 @@ import Kingfisher
 
 
 protocol SportCarSelectDetailProtocol: class {
-    func sportCarSelectDeatilDidAddCar(car: SportCar)
+    func sportCarSelectDeatilDidAddCar(_ car: SportCar)
 }
 
 
@@ -27,7 +27,7 @@ class SportCarSelectParamCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.createSubviews()
-        self.selectionStyle = .None
+        self.selectionStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -36,15 +36,15 @@ class SportCarSelectParamCell: UITableViewCell {
     
     func createSubviews() {
         content = UILabel()
-        content?.font = UIFont.systemFontOfSize(14)
-        content?.textColor = UIColor.blackColor()
-        content?.textAlignment = .Right
+        content?.font = UIFont.systemFont(ofSize: 14)
+        content?.textColor = UIColor.black
+        content?.textAlignment = .right
         self.contentView.addSubview(content!)
         
         header = UILabel()
-        header?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
+        header?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         header?.textColor = UIColor(white: 0.72, alpha: 1)
-        header?.textAlignment = .Left
+        header?.textAlignment = .left
         self.contentView.addSubview(header!)
         
 //        icon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
@@ -80,15 +80,15 @@ class SportCarSelectParamEditableCell: SportCarSelectParamCell {
     override func createSubviews() {
         super.createSubviews()
         contentInput = UITextField()
-        contentInput.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
-        contentInput.textColor = UIColor.blackColor()
-        contentInput.textAlignment = .Right
+        contentInput.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        contentInput.textColor = UIColor.black
+        contentInput.textAlignment = .right
         self.contentView.addSubview(contentInput)
         contentInput.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(content!)
         }
         content?.text = ""
-        content?.userInteractionEnabled = false
+        content?.isUserInteractionEnabled = false
         self.contentView.addSubview(contentInput)
     }
 }
@@ -99,7 +99,7 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
     var contents: [String?]?
     
     var carType: String?
-    var carDisplayURL: NSURL?
+    var carDisplayURL: URL?
     
     var carId: String?
     
@@ -122,8 +122,8 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
     
     func navBarLeftBtn() -> UIBarButtonItem! {
         let backBtn = UIButton()
-        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        backBtn.addTarget(self, action: #selector(SportCarSelectDetailController.backBtnPressed), forControlEvents: .TouchUpInside)
+        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        backBtn.addTarget(self, action: #selector(SportCarSelectDetailController.backBtnPressed), for: .touchUpInside)
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.2, height: 18)
         
         let leftBtnItem = UIBarButtonItem(customView: backBtn)
@@ -132,16 +132,16 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
     
     func navBarRigthBtn() -> UIBarButtonItem! {
         let nextStepBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 42, height: 16))
-        nextStepBtn.setTitle(NSLocalizedString("下一步", comment: ""), forState: .Normal)
-        nextStepBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
+        nextStepBtn.setTitle(NSLocalizedString("下一步", comment: ""), for: UIControlState())
+        nextStepBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
         nextStepBtn.titleLabel?.font = kBarTextFont
-        nextStepBtn.addTarget(self, action: #selector(SportCarSelectDetailController.nextBtnPressed), forControlEvents: .TouchUpInside)
+        nextStepBtn.addTarget(self, action: #selector(SportCarSelectDetailController.nextBtnPressed), for: .touchUpInside)
         let rightBtnItem = UIBarButtonItem(customView: nextStepBtn)
         return rightBtnItem
     }
     
     func backBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     /**
@@ -153,8 +153,8 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
         SportCarRequester.sharedInstance.postToFollow(signature, carId: carId!, onSuccess: { (json) -> () in
             // add this car to current users
             let car: SportCar = try! MainManager.sharedManager.getOrCreate(SportCar.reorgnaizeJSON(json!))
-            if AppManager.sharedAppManager.state != AppManagerState.LoginRegister {
-                self.navigationController?.popViewControllerAnimated(true)
+            if AppManager.sharedAppManager.state != AppManagerState.loginRegister {
+                self.navigationController?.popViewController(animated: true)
             } else {
                 let app = AppManager.sharedAppManager
                 app.guideToContent()
@@ -171,21 +171,21 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
     
     func createSubviews() {
         let superview = self.view
-        superview.backgroundColor = UIColor.whiteColor()
-        tableView.registerClass(SportCarSelectParamCell.self, forCellReuseIdentifier: SportCarSelectParamCell.reuseIdentifier)
-        tableView.registerClass(SportCarSelectParamEditableCell.self, forCellReuseIdentifier: "edit")
-        tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
+        superview?.backgroundColor = UIColor.white
+        tableView.register(SportCarSelectParamCell.self, forCellReuseIdentifier: SportCarSelectParamCell.reuseIdentifier)
+        tableView.register(SportCarSelectParamEditableCell.self, forCellReuseIdentifier: "edit")
+        tableView.register(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.separatorColor = UIColor(white: 0.92, alpha: 1)
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         if headers == nil {
             return 0
         }
         return 2
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if headers == nil {
             return 0
         }
@@ -195,41 +195,41 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
         return headers!.count - 2
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 && indexPath.row == 1 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("edit", forIndexPath: indexPath) as! SportCarSelectParamEditableCell
-            cell.header?.text = LS(headers![indexPath.row])
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if (indexPath as NSIndexPath).section == 0 && (indexPath as NSIndexPath).row == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "edit", for: indexPath) as! SportCarSelectParamEditableCell
+            cell.header?.text = LS(headers![(indexPath as NSIndexPath).row])
             cell.contentInput.placeholder = LS("为爱车写一段签名吧(选填)")
             self.contentInput = cell.contentInput
             return cell
         }
-        let cell = tableView.dequeueReusableCellWithIdentifier(SportCarSelectParamCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarSelectParamCell
-        if indexPath.section == 0 {
-            cell.header?.text = LS(headers![indexPath.row])
-            cell.content?.text = contents![indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: SportCarSelectParamCell.reuseIdentifier, for: indexPath) as! SportCarSelectParamCell
+        if (indexPath as NSIndexPath).section == 0 {
+            cell.header?.text = LS(headers![(indexPath as NSIndexPath).row])
+            cell.content?.text = contents![(indexPath as NSIndexPath).row]
         }else{
-            cell.header?.text = LS(headers![indexPath.row + 2])
-            cell.content?.text = contents![indexPath.row + 2]
+            cell.header?.text = LS(headers![(indexPath as NSIndexPath).row + 2])
+            cell.content?.text = contents![(indexPath as NSIndexPath).row + 2]
         }
         return cell
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! PrivateChatSettingsHeader
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! PrivateChatSettingsHeader
         header.titleLbl.text = [LS("爱车型号"), LS("性能参数")][section]
         return header
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 53
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 0 && indexPath.row == 0 {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).section == 0 && (indexPath as NSIndexPath).row == 0 {
             selectSportCarBrandPressed()
         }
     }
@@ -238,7 +238,7 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
         let select = ManufacturerOnlineSelectorController()
         select.delegate = self
         let nav = BlackBarNavigationController(rootViewController: select)
-        self.presentViewController(nav, animated: true, completion: nil)
+        self.present(nav, animated: true, completion: nil)
     }
     
 //    func brandSelected(manufacturer: String?, carType: String?) {
@@ -261,14 +261,14 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
 //        }
 //    }
     
-    func sportCarBrandOnlineSelectorDidSelect(manufacture: String, carName: String, subName: String) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func sportCarBrandOnlineSelectorDidSelect(_ manufacture: String, carName: String, subName: String) {
+        dismiss(animated: true, completion: nil)
         SportCarRequester.sharedInstance.querySportCarWith(manufacture, carName: carName, subName: subName, onSuccess: { (json) in
             guard let data = json else {
                 return
             }
             let carImgURL = SF(data["image_url"].stringValue)
-            self.carDisplayURL = NSURL(string: carImgURL ?? "")
+            self.carDisplayURL = URL(string: carImgURL ?? "")
             self.carId = data["carID"].stringValue
             self.contents = [carName, self.contents![1], data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
             self.tableView?.reloadData()
@@ -279,7 +279,7 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
     }
     
     func sportCarBrandOnlineSelectorDidCancel() {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 

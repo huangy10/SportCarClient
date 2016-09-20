@@ -32,17 +32,17 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     var startGroupChatBtn: UIButton?
     var startChat: UIButton?
     
-    @available(*, deprecated=1)
+    @available(*, deprecated: 1)
     init(targetUser: User) {
-        super.init(style: .Plain)
+        super.init(style: .plain)
 //        self.targetUser = targetUser
     }
     
     init(rosterItem: RosterItem) {
-        super.init(style: .Plain)
+        super.init(style: .plain)
         self.rosterItem = rosterItem
         switch rosterItem.data! {
-        case .USER(let user):
+        case .user(let user):
             self.user = user
             break
         default:
@@ -62,12 +62,12 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         super.viewDidLoad()
         navSettings()
         
-        tableView.separatorStyle = .None
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "start_group_chat_cell")
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "start_chat_cell")
-        tableView.registerClass(PrivateChatSettingsAvatarCell.self, forCellReuseIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier)
-        tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
-        tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
+        tableView.separatorStyle = .none
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "start_group_chat_cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "start_chat_cell")
+        tableView.register(PrivateChatSettingsAvatarCell.self, forCellReuseIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier)
+        tableView.register(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
+        tableView.register(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
         // 从网络获取配置数据
 //        let requester = ChatRequester.requester
 //        requester.getUserRelationSettings(chater.ssidString, onSuccess: { (data) -> () in
@@ -82,9 +82,9 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     func navSettings() {
         self.navigationItem.title = user.chatName
         let leftBtn = UIButton()
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        leftBtn.frame = CGRectMake(0, 0, 9, 15)
-        leftBtn.addTarget(self, action: #selector(PrivateChatSettingController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
+        leftBtn.addTarget(self, action: #selector(PrivateChatSettingController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
 //        let rightBtn = UIButton()
 //        rightBtn.setImage(UIImage(named: "status_detail_other_operation"), forState: .Normal)
@@ -96,11 +96,11 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     
     func navRightBtnPressed() {
         let report = ReportBlacklistViewController(userID: user.ssid, parent: self)
-        self.presentViewController(report, animated: false, completion: nil)
+        self.present(report, animated: false, completion: nil)
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
         if dirty {
             ChatRequester2.sharedInstance.postUpdateUserRelationSettings(rosterItem.ssidString, remark_name: user.noteName ?? "", alwaysOnTop: false, noDisturbing: false, onSuccess: { (_) in
                 // do nothing
@@ -117,11 +117,11 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
 //        }
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
             return 1
@@ -134,7 +134,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         }
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0{
             return 0.01
         }else {
@@ -142,41 +142,41 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         }
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             return nil
         }
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("reuse_header") as! PrivateChatSettingsHeader
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "reuse_header") as! PrivateChatSettingsHeader
         header.titleLbl.text = kPrivateChatSettingSectionTitles[section]
         return header
     }
     
 
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch indexPath.section {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch (indexPath as NSIndexPath).section {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsAvatarCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsAvatarCell
-            cell.selectionStyle = .None
+            let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsAvatarCell
+            cell.selectionStyle = .none
             cell.avatarImage.kf_setImageWithURL(user.avatarURL!)
             return cell
         case 1:
-            if indexPath.row < 1 {
-                let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-                cell.selectionStyle = .None
+            if (indexPath as NSIndexPath).row < 1 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsCommonCell
+                cell.selectionStyle = .none
                 cell.staticLbl.text = LS("备注")
-                cell.boolSelect.hidden = true
-                if indexPath.row == 0 {
+                cell.boolSelect.isHidden = true
+                if (indexPath as NSIndexPath).row == 0 {
                     cell.infoLbl.text = user.chatName
                 }
                 return cell
             }else {
-                let cell = tableView.dequeueReusableCellWithIdentifier("start_group_chat_cell", forIndexPath: indexPath)
-                cell.selectionStyle = .None
+                let cell = tableView.dequeueReusableCell(withIdentifier: "start_group_chat_cell", for: indexPath)
+                cell.selectionStyle = .none
                 if startGroupChatBtn == nil {
                     startGroupChatBtn = UIButton()
-                    startGroupChatBtn?.addTarget(self, action: #selector(PrivateChatSettingController.startGroupChatPressed), forControlEvents: .TouchUpInside)
-                    startGroupChatBtn?.setImage(UIImage(named: "chat_settings_add_person"), forState: .Normal)
+                    startGroupChatBtn?.addTarget(self, action: #selector(PrivateChatSettingController.startGroupChatPressed), for: .touchUpInside)
+                    startGroupChatBtn?.setImage(UIImage(named: "chat_settings_add_person"), for: UIControlState())
                     cell.contentView.addSubview(startGroupChatBtn!)
                     startGroupChatBtn?.snp_makeConstraints(closure: { (make) -> Void in
                         make.left.equalTo(cell.contentView).offset(15)
@@ -184,7 +184,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                         make.size.equalTo(65)
                     })
                     let staticLbl = UILabel()
-                    staticLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+                    staticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
                     staticLbl.textColor = UIColor(white: 0.72, alpha: 1)
                     staticLbl.text = LS("发起一个群聊")
                     cell.contentView.addSubview(staticLbl)
@@ -211,25 +211,25 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
 //            }
 //            return cell
         default:
-            if indexPath.row < 2 {
-                let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-                cell.selectionStyle = .None
-                cell.staticLbl.text = [LS("清空聊天内容"), LS("举报")][indexPath.row]
+            if (indexPath as NSIndexPath).row < 2 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsCommonCell
+                cell.selectionStyle = .none
+                cell.staticLbl.text = [LS("清空聊天内容"), LS("举报")][(indexPath as NSIndexPath).row]
                 cell.detailTextLabel?.text = ""
-                cell.boolSelect.hidden = true
+                cell.boolSelect.isHidden = true
                 return cell
             }else {
-                let cell = tableView.dequeueReusableCellWithIdentifier("start_chat_cell", forIndexPath: indexPath)
-                cell.selectionStyle = .None
+                let cell = tableView.dequeueReusableCell(withIdentifier: "start_chat_cell", for: indexPath)
+                cell.selectionStyle = .none
                 if startChat == nil {
                     startChat = UIButton()
-                    startChat?.setImage(UIImage(named: "chat_setting_start_chat"), forState: .Normal)
-                    startChat?.addTarget(self, action: #selector(startChatBtnPressed), forControlEvents: .TouchUpInside)
+                    startChat?.setImage(UIImage(named: "chat_setting_start_chat"), for: UIControlState())
+                    startChat?.addTarget(self, action: #selector(startChatBtnPressed), for: .touchUpInside)
                     cell.contentView.addSubview(startChat!)
                     startChat?.snp_makeConstraints(closure: { (make) -> Void in
                         make.centerX.equalTo(cell.contentView)
                         make.top.equalTo(cell.contentView).offset(15)
-                        make.size.equalTo(CGSizeMake(150, 50))
+                        make.size.equalTo(CGSize(width: 150, height: 50))
                     })
                 }
                 return cell
@@ -237,12 +237,12 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         }
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.section {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch (indexPath as NSIndexPath).section {
         case 0:
             return 114
         case 1:
-            if indexPath.row < 1 {
+            if (indexPath as NSIndexPath).row < 1 {
                 return 50
             }else {
                 return 105
@@ -250,7 +250,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         case 2:
             return 50
         case 3:
-            if indexPath.row < 2 {
+            if (indexPath as NSIndexPath).row < 2 {
                 return 50
             }else {
                 return 128
@@ -269,17 +269,17 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         let selector = FFSelectController(maxSelectNum: 100, preSelectedUsers: [user])
         let nav = BlackBarNavigationController(rootViewController: selector)
         selector.delegate = self
-        self.presentViewController(nav, animated: true, completion: nil)
+        self.present(nav, animated: true, completion: nil)
     }
     
-    func seeHisStatusSwitchPressed(sender: UISwitch) {
+    func seeHisStatusSwitchPressed(_ sender: UISwitch) {
         dirty = true
-        seeHisStatus = !sender.on
+        seeHisStatus = !sender.isOn
     }
     
-    func allowSeeStatusSwitchPressed(sender: UISwitch) {
+    func allowSeeStatusSwitchPressed(_ sender: UISwitch) {
         dirty = true
-        allowSeeStatus = !sender.on
+        allowSeeStatus = !sender.isOn
     }
 }
 
@@ -287,9 +287,9 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
 // MARK: - 各个cell的功能的具体实现
 extension PrivateChatSettingController {
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        switch indexPath.section {
+        switch (indexPath as NSIndexPath).section {
         case 0:
             // 点击头像进入个人详情
 //            guard let user = chater.toUser() else {
@@ -308,11 +308,11 @@ extension PrivateChatSettingController {
             detail.initValue = user.chatName
             self.navigationController?.pushViewController(detail, animated: true)
         case 2:
-            if indexPath.row == 0 {
+            if (indexPath as NSIndexPath).row == 0 {
                 showConfirmToast(LS("清除聊天信息"), message: LS("确定要清除聊天信息吗？"), target: self, onConfirm: #selector(clearChatContent))
-            } else if indexPath.row == 1 {
+            } else if (indexPath as NSIndexPath).row == 1 {
                 let report = ReportBlacklistViewController(userID: user.ssid, parent: self)
-                self.presentViewController(report, animated: false, completion: nil)
+                self.present(report, animated: false, completion: nil)
             }
             break
         default:
@@ -320,12 +320,12 @@ extension PrivateChatSettingController {
         }
     }
     
-    func didModify(newValue: String?, indexPath: NSIndexPath) {
+    func didModify(_ newValue: String?, indexPath: IndexPath) {
         dirty = true
         
-        switch indexPath.section {
+        switch (indexPath as NSIndexPath).section {
         case 1:
-            if indexPath.row == 0 {
+            if (indexPath as NSIndexPath).row == 0 {
                 user.noteName = newValue
             }
             break
@@ -333,7 +333,7 @@ extension PrivateChatSettingController {
             break
         }
         
-        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        self.tableView.reloadRows(at: [indexPath], with: .automatic)
     }
     
     func modificationCancelled() {
@@ -347,19 +347,19 @@ extension PrivateChatSettingController {
         let selector = FFSelectController()
         let nav = BlackBarNavigationController(rootViewController: selector)
         selector.delegate = self
-        self.presentViewController(nav, animated: true, completion: nil)
+        self.present(nav, animated: true, completion: nil)
     }
     
     func userSelectCancelled() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func userSelected(users: [User]) {
+    func userSelected(_ users: [User]) {
         var users = users
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
         if userSelectPurpose == "group_chat" {
             if users.findIndex({ $0.ssid == self.user.ssid}) == nil {
-                users.insert(user, atIndex: 0)
+                users.insert(user, at: 0)
             }
             if users.count <= 1 {
                 assertionFailure()
@@ -371,8 +371,8 @@ extension PrivateChatSettingController {
         }
     }
     
-    func groupChatSetupControllerDidSuccessCreatingClub(newClub: Club) {
-        self.navigationController?.popViewControllerAnimated(true)
+    func groupChatSetupControllerDidSuccessCreatingClub(_ newClub: Club) {
+        self.navigationController?.popViewController(animated: true)
         let chatRoom = ChatRoomController()
         chatRoom.chatCreated = false
         chatRoom.targetClub = newClub
@@ -395,6 +395,6 @@ extension PrivateChatSettingController {
     }
     
     func startChatBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
 }

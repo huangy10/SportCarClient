@@ -12,7 +12,7 @@ import SwiftyJSON
 
 class ChatParser {
     
-    func parse(data: JSON) throws -> (ChatRecord, RosterItem?) {
+    func parse(_ data: JSON) throws -> (ChatRecord, RosterItem?) {
         let newRecrod = try ChatModelManger.sharedManager.getOrCreate(data) as ChatRecord
         let roster = data["roster"]
         if roster.exists() {

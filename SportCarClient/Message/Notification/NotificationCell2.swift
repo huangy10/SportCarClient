@@ -303,19 +303,19 @@ protocol NotificationCellDelegate: class {
 
 class NotificationCell: UITableViewCell {
     weak var delegate: NotificationCellDelegate!
-    var displayMode: DisplayMode = .Minimal {
+    var displayMode: DisplayMode = .minimal {
         didSet {
             let raw = displayMode.rawValue
-            cover.hidden = raw < 1
-            detailLbl.hidden = raw < 1
-            agreeBtn.hidden = raw < 2
-            denyBtn.hidden = raw < 2
-            resultLbl.hidden = raw < 2
+            cover.isHidden = raw < 1
+            detailLbl.isHidden = raw < 1
+            agreeBtn.isHidden = raw < 2
+            denyBtn.isHidden = raw < 2
+            resultLbl.isHidden = raw < 2
             
             titleLbl.snp_remakeConstraints { (make) in
                 make.left.equalTo(avatarBtn.snp_right).offset(15)
                 make.top.equalTo(avatarBtn).offset(5)
-                make.width.equalTo(self.dynamicType.titleMaxWidthForCurrentScreen(displayMode))
+                make.width.equalTo(type(of: self).titleMaxWidthForCurrentScreen(displayMode))
             }
             contentView.layoutIfNeeded()
         }
@@ -337,7 +337,7 @@ class NotificationCell: UITableViewCell {
     }
     
     enum DisplayMode: Int {
-        case Minimal = 0, WithCover, Interact
+        case minimal = 0, withCover, interact
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -350,8 +350,8 @@ class NotificationCell: UITableViewCell {
     }
     
     func createSubviews() {
-        contentView.backgroundColor = UIColor.whiteColor()
-        selectionStyle = .None
+        contentView.backgroundColor = UIColor.white
+        selectionStyle = .none
         
         configureAvatarBtn()
         configureTitleLbl()
@@ -383,10 +383,10 @@ class NotificationCell: UITableViewCell {
             .layout({ (make) in
                 make.left.equalTo(avatarBtn.snp_right).offset(15)
                 make.top.equalTo(avatarBtn).offset(5)
-                make.width.equalTo(self.dynamicType.titleMaxWidthForCurrentScreen(displayMode))
+                make.width.equalTo(type(of: self).titleMaxWidthForCurrentScreen(displayMode))
             })
         titleLbl.numberOfLines = 0
-        titleLbl.lineBreakMode = .ByCharWrapping
+        titleLbl.lineBreakMode = .byCharWrapping
     }
     
     func configureDateLbl() {
@@ -414,7 +414,7 @@ class NotificationCell: UITableViewCell {
                 make.centerY.equalTo(avatarBtn)
                 make.size.equalTo(avatarBtn)
             })
-        contentView.bringSubviewToFront(readDot)
+        contentView.bringSubview(toFront: readDot)
     }
     
     func configureDetailLbl() {
@@ -433,7 +433,7 @@ class NotificationCell: UITableViewCell {
             .layout({ (make) in
                 make.centerX.equalTo(contentView.snp_right).offset(-45)
                 make.bottom.equalTo(contentView).offset(-15)
-                make.size.equalTo(CGSizeMake(44, 20))
+                make.size.equalTo(CGSize(width: 44, height: 20))
             })
     }
     
@@ -449,12 +449,12 @@ class NotificationCell: UITableViewCell {
     
     func configureResultLbl() {
         resultLbl = contentView.addSubview(UILabel)
-            .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor.blackColor(), textAlignment: .Right)
+            .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor.black, textAlignment: .right)
             .layout({ (make) in
                 make.centerY.equalTo(agreeBtn)
                 make.right.equalTo(cover)
             })
-        resultLbl.hidden = true
+        resultLbl.isHidden = true
     }
     
     func avatarBtnPressed() {
@@ -469,14 +469,14 @@ class NotificationCell: UITableViewCell {
         delegate.notificationCellOperationInvoked(atCell: self, operationType: .Deny)
     }
     
-    class func cellHeightForTitle(phrases: [String], detailDescription: String, displayMode: DisplayMode) -> CGFloat {
+    class func cellHeightForTitle(_ phrases: [String], detailDescription: String, displayMode: DisplayMode) -> CGFloat {
         // 75 是设计图纸中的单行标题时cell的高度，14是单行标题本身的高度
         let staticPartHeight: CGFloat = 75 - 14
         let title = self.makeTitleLblContent(phrases)
-        let titleHeight = title.boundingRectWithSize(CGSizeMake(titleMaxWidthForCurrentScreen(displayMode), CGFloat.max), options: .UsesLineFragmentOrigin, context: nil).height
+        let titleHeight = title.boundingRect(with: CGSize(width: titleMaxWidthForCurrentScreen(displayMode), height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil).height
         
         let minimalHeight = staticPartHeight + titleHeight
-        if displayMode == .Minimal {
+        if displayMode == .minimal {
             return minimalHeight
         }
         
@@ -484,11 +484,11 @@ class NotificationCell: UITableViewCell {
         if detailDescription == "" {
             withCoverHeight = minimalHeight
         } else {
-            let detailLblHeight = (detailDescription as NSString).boundingRectWithSize(CGSizeMake(titleMaxWidthForCurrentScreen(displayMode), CGFloat.max), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)], context: nil).height
+            let detailLblHeight = (detailDescription as NSString).boundingRect(with: CGSize(width: titleMaxWidthForCurrentScreen(displayMode), height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)], context: nil).height
             withCoverHeight = minimalHeight + detailLblHeight + 15
         }
         
-        if displayMode == .WithCover {
+        if displayMode == .withCover {
             return withCoverHeight
         }
         
@@ -496,11 +496,11 @@ class NotificationCell: UITableViewCell {
         return interactHeight
     }
     
-    class func titleMaxWidthForCurrentScreen(displayMode: DisplayMode) -> CGFloat {
+    class func titleMaxWidthForCurrentScreen(_ displayMode: DisplayMode) -> CGFloat {
         // 减去的四个个常数分别为：头像距离画面左侧的距离，头像的宽度, 标题离头像的距离，标题离画面右侧的距离
-        let widthForMinmal = UIScreen.mainScreen().bounds.width - 15 - 45 - 15 - 15
+        let widthForMinmal = UIScreen.main.bounds.width - 15 - 45 - 15 - 15
         switch displayMode {
-        case .Minimal:
+        case .minimal:
             return widthForMinmal
         default:
             // 这里减去的45是右侧封面的宽度，15则是右侧封面和标题之间的距离
@@ -510,14 +510,14 @@ class NotificationCell: UITableViewCell {
     
     class func detailMaxWidthForCurrentScreen() -> CGFloat {
         // 这里减去的两个15是详情栏距离屏幕两端的距离
-        return UIScreen.mainScreen().bounds.width - 15 - 15
+        return UIScreen.main.bounds.width - 15 - 15
     }
     
     
-    class func makeTitleLblContent(args: [String]) -> NSAttributedString {
+    class func makeTitleLblContent(_ args: [String]) -> NSAttributedString {
         // 利用一组数量可变的参数来构造一定格式的标题，格式的规则是  粗体-细体-粗体-细体... 等粗细交替
         // 返回一个AttributedString
-        let wholeSentence = args.joinWithSeparator(" ")
+        let wholeSentence = args.joined(separator: " ")
         let result = NSMutableAttributedString(string: wholeSentence)
         var scanLoc: Int = 0
         var index: Int = 0
@@ -534,47 +534,47 @@ class NotificationCell: UITableViewCell {
         return result
     }
     
-    class func getFontForArgsAt(index: Int) -> UIFont {
+    class func getFontForArgsAt(_ index: Int) -> UIFont {
         if index % 2 == 0 {
-            return UIFont.systemFontOfSize(14, weight: UIFontWeightBlack)
+            return UIFont.systemFont(ofSize: 14, weight: UIFontWeightBlack)
         } else {
-            return UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+            return UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         }
     }
     
-    class func getTextColorForArgsAt(index: Int) -> UIColor {
+    class func getTextColorForArgsAt(_ index: Int) -> UIColor {
         if index % 2 == 0 {
-            return UIColor.blackColor()
+            return UIColor.black
         } else {
             return kNotificationHintColor
         }
     }
     
     func setData(
-        avatarURL: NSURL,
-        date: NSDate,
+        _ avatarURL: URL,
+        date: Date,
         read: Bool,
         titleContents: [String],
-        displayMode: DisplayMode = .Minimal
+        displayMode: DisplayMode = .minimal
         ) {
         self.displayMode = displayMode
-        avatarBtn.kf_setImageWithURL(avatarURL, forState: .Normal)
+        avatarBtn.kf_setImageWithURL(avatarURL, forState: UIControlState())
         dateLbl.text = dateDisplay(date)
-        titleLbl.attributedText = self.dynamicType.makeTitleLblContent(titleContents)
-        readDot.hidden = read
+        titleLbl.attributedText = type(of: self).makeTitleLblContent(titleContents)
+        readDot.isHidden = read
     }
     
     func setData(
-        avatarURL: NSURL,
-        date: NSDate,
+        _ avatarURL: URL,
+        date: Date,
         read: Bool,
         titleContents: [String],
-        coverURL: NSURL?,
+        coverURL: URL?,
         detailDescription: String,
-        displayMode: DisplayMode = .WithCover
+        displayMode: DisplayMode = .withCover
         ) {
         setData(avatarURL, date: date, read: read, titleContents: titleContents, displayMode: displayMode)
-        if displayMode.rawValue < DisplayMode.WithCover.rawValue {
+        if displayMode.rawValue < DisplayMode.withCover.rawValue {
             return
         }
         if let url = coverURL {
@@ -584,23 +584,23 @@ class NotificationCell: UITableViewCell {
     }
     
     func setData(
-        avatarURL: NSURL,
-        date: NSDate,
+        _ avatarURL: URL,
+        date: Date,
         read: Bool,
         titleContents: [String],
-        coverURL: NSURL?,
+        coverURL: URL?,
         detailDescription: String,
         checked: Bool,
         flag: Bool,
-        displayMode: DisplayMode = .Interact
+        displayMode: DisplayMode = .interact
         ) {
         setData(avatarURL, date: date, read: read, titleContents: titleContents, coverURL: coverURL, detailDescription: detailDescription, displayMode: displayMode)
-        if displayMode.rawValue < DisplayMode.Interact.rawValue {
+        if displayMode.rawValue < DisplayMode.interact.rawValue {
             return
         }
-        resultLbl.hidden = !checked
-        agreeBtn.hidden = checked
-        denyBtn.hidden = checked
+        resultLbl.isHidden = !checked
+        agreeBtn.isHidden = checked
+        denyBtn.isHidden = checked
         if checked {
             resultLbl.text = flag ? LS("已同意") : LS("已拒绝")
         }

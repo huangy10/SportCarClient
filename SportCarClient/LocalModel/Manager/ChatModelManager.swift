@@ -13,11 +13,11 @@ import SwiftyJSON
 import Dollar
 
 class ChatModelManger: MainManager {
-    private static let _sharedClubModelManager = ChatModelManger()
+    fileprivate static let _sharedClubModelManager = ChatModelManger()
     
-    override var workQueue: dispatch_queue_t {
+    override var workQueue: DispatchQueue {
         if _workQueue == nil {
-            _workQueue = dispatch_queue_create("chat_update", DISPATCH_QUEUE_SERIAL)
+            _workQueue = DispatchQueue(label: "chat_update", attributes: [])
         }
         return _workQueue!
     }
@@ -44,7 +44,7 @@ class ChatModelManger: MainManager {
         return _sharedClubModelManager
     }
     
-    private var chatContext: DataContext!
+    fileprivate var chatContext: DataContext!
     
     override init() {
         super.init()
@@ -58,7 +58,7 @@ class ChatModelManger: MainManager {
     /**
      返回的chats按照createdAt升序
      */
-    func loadCachedChats(rosterID: Int32, skips: Int, limit: Int) -> [ChatRecord] {
+    func loadCachedChats(_ rosterID: Int32, skips: Int, limit: Int) -> [ChatRecord] {
         do {
             // make sure all the changes has been saved, or the skips below will not work properly
             try self.save()
@@ -73,14 +73,14 @@ class ChatModelManger: MainManager {
             .skip(skips)
             .take(limit)
             .toArray()
-            .reverse()
+            .reversed()
         chats.each { $0.manager = self }
         return chats
     }
     /**
      返回的notifs按照createdAt降序排列
      */
-    func loadCachedNotifications(skips: Int, limit: Int) -> [Notification] {
+    func loadCachedNotifications(_ skips: Int, limit: Int) -> [Notification] {
         do {
             try self.save()
         } catch {
@@ -98,8 +98,8 @@ class ChatModelManger: MainManager {
     }
     
     override func save() throws {
-        if NSThread.isMainThread() {
-            dispatch_async(workQueue) { () -> Void in
+        if Thread.isMainThread {
+            workQueue.async { () -> Void in
                 try! self.chatContext.save()
             }
         } else {

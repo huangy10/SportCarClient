@@ -13,7 +13,7 @@ import Kingfisher
 protocol InlineUserSelectDelegate: class {
     func inlineUserSelectNeedAddMembers()
     
-    func inlineUserSelectShouldDeleteUser(user: User)
+    func inlineUserSelectShouldDeleteUser(_ user: User)
 }
 
 class InlineUserSelectController: UICollectionViewController {
@@ -32,15 +32,15 @@ class InlineUserSelectController: UICollectionViewController {
     
     convenience init() {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .Vertical
+        layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
-        let screenWidth = UIScreen.mainScreen().bounds.width
-        layout.itemSize = CGSizeMake(screenWidth / 4, screenWidth / 4)
+        let screenWidth = UIScreen.main.bounds.width
+        layout.itemSize = CGSize(width: screenWidth / 4, height: screenWidth / 4)
         self.init(collectionViewLayout: layout)
         
         collectionView?.contentInset = UIEdgeInsetsMake(15, 0, 0, 0)
-        collectionView?.scrollEnabled = false
+        collectionView?.isScrollEnabled = false
     }
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
@@ -55,9 +55,9 @@ class InlineUserSelectController: UICollectionViewController {
     var users: [User] = [] {
         didSet {
             if users.count >= maxDispalyNum {
-                showAllMembersBtn.hidden = false
+                showAllMembersBtn.isHidden = false
             } else {
-                showAllMembersBtn.hidden = true
+                showAllMembersBtn.isHidden = true
             }
         }
     }
@@ -75,13 +75,13 @@ class InlineUserSelectController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.backgroundColor = UIColor.whiteColor()
-        collectionView?.registerClass(InlineUserSelectBtnCell.self, forCellWithReuseIdentifier: InlineUserSelectBtnCell.reuseIdentifier)
-        collectionView?.registerClass(InlineUserSelectCell.self, forCellWithReuseIdentifier: InlineUserSelectCell.reuseIdentifier)
+        collectionView?.backgroundColor = UIColor.white
+        collectionView?.register(InlineUserSelectBtnCell.self, forCellWithReuseIdentifier: InlineUserSelectBtnCell.reuseIdentifier)
+        collectionView?.register(InlineUserSelectCell.self, forCellWithReuseIdentifier: InlineUserSelectCell.reuseIdentifier)
     }
     
-    class func preferedHeightFor(userNum: Int, showAddBtn: Bool, showDeleteBtn: Bool) -> CGFloat {
-        let cellHeight = UIScreen.mainScreen().bounds.width / 4
+    class func preferedHeightFor(_ userNum: Int, showAddBtn: Bool, showDeleteBtn: Bool) -> CGFloat {
+        let cellHeight = UIScreen.main.bounds.width / 4
         let cellNum = userNum + (showAddBtn ? 1 : 0) + (showDeleteBtn ? 1 : 0)
         let height = CGFloat((cellNum - 1) / 4 + 1) * cellHeight + 15
         if userNum >= 12 && !showAddBtn && !showDeleteBtn {
@@ -91,11 +91,11 @@ class InlineUserSelectController: UICollectionViewController {
         }
     }
     
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if showDeleteBtn && showAddBtn {
             return users.count + 2
         }else if showAddBtn{
@@ -104,14 +104,14 @@ class InlineUserSelectController: UICollectionViewController {
         return users.count
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        if indexPath.row < users.count {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(InlineUserSelectCell.reuseIdentifier, forIndexPath: indexPath) as! InlineUserSelectCell
-            let user = users[indexPath.row]
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if (indexPath as NSIndexPath).row < users.count {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InlineUserSelectCell.reuseIdentifier, for: indexPath) as! InlineUserSelectCell
+            let user = users[(indexPath as NSIndexPath).row]
             if relatedClub != nil && relatedClub?.founderUser?.ssid == user.ssid {
                 cell.nameLbl.textColor = kHighlightedRedTextColor
             } else {
-                cell.nameLbl.textColor = UIColor.blackColor()
+                cell.nameLbl.textColor = UIColor.black
             }
             cell.avatarImg.kf_setImageWithURL(user.avatarURL!)
             if let carURL = user.avatarCarModel?.logoURL {
@@ -125,22 +125,22 @@ class InlineUserSelectController: UICollectionViewController {
             }
             cell.nameLbl.text = userNickName
             return cell
-        }else if indexPath.row == users.count{
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(InlineUserSelectBtnCell.reuseIdentifier, forIndexPath: indexPath) as! InlineUserSelectBtnCell
+        }else if (indexPath as NSIndexPath).row == users.count{
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InlineUserSelectBtnCell.reuseIdentifier, for: indexPath) as! InlineUserSelectBtnCell
             cell.type = "add"
             return cell
         }else{
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(InlineUserSelectBtnCell.reuseIdentifier, forIndexPath: indexPath) as! InlineUserSelectBtnCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InlineUserSelectBtnCell.reuseIdentifier, for: indexPath) as! InlineUserSelectBtnCell
             cell.type = "remove"
             return cell
         }
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == users.count {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).row == users.count {
             delegate?.inlineUserSelectNeedAddMembers()
-        } else if indexPath.row < users.count{
-            let user = users[indexPath.row]
+        } else if (indexPath as NSIndexPath).row < users.count{
+            let user = users[(indexPath as NSIndexPath).row]
             if user.isHost {
                 let detail = PersonBasicController(user: user)
                 parentController?.navigationController?.pushViewController(detail, animated: true)
@@ -159,9 +159,9 @@ class InlineUserSelectController: UICollectionViewController {
             .layout({ (make) in
                 make.right.equalTo(self.view).offset(-15)
                 make.bottom.equalTo(self.view)
-                make.size.equalTo(CGSizeMake(100, 44))
+                make.size.equalTo(CGSize(width: 100, height: 44))
             })
-        showAllMembersBtn.hidden = true
+        showAllMembersBtn.isHidden = true
     }
     
     func showAllMembersBtnPressed() {
@@ -226,10 +226,10 @@ class InlineUserSelectCell: UICollectionViewCell {
             }
             avatarImg.kf_setImageWithURL(user!.avatarURL!)
             if let avatarCarURL = user?.avatarCarModel?.logoURL {
-                avatarCarLogo.hidden = false
+                avatarCarLogo.isHidden = false
                 avatarCarLogo.kf_setImageWithURL(avatarCarURL)
             } else {
-                avatarCarLogo.hidden = true
+                avatarCarLogo.isHidden = true
                 avatarCarLogo.image = nil
             }
             let name = user?.nickName
@@ -252,7 +252,7 @@ class InlineUserSelectCell: UICollectionViewCell {
     
     func createSubviews() {
         let superview = self.contentView
-        superview.backgroundColor = UIColor.whiteColor()
+        superview.backgroundColor = UIColor.white
         //
         avatarImg = UIImageView()
         superview.addSubview(avatarImg)
@@ -277,9 +277,9 @@ class InlineUserSelectCell: UICollectionViewCell {
         avatarCarLogo.clipsToBounds = true
         //
         nameLbl = UILabel()
-        nameLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        nameLbl.textColor = UIColor.blackColor()
-        nameLbl.textAlignment = .Center
+        nameLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        nameLbl.textColor = UIColor.black
+        nameLbl.textAlignment = .center
         superview.addSubview(nameLbl)
         nameLbl.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(avatarImg)

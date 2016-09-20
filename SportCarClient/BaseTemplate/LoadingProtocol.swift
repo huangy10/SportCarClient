@@ -22,8 +22,8 @@ protocol LoadingProtocol: class {
     
     var lp_container: UIView! { get set }
     var lp_loadingView: UIImageView! { get set }
-    var lp_timer: NSTimer! {set get}
-    var delayTask: dispatch_block_t? { get set }
+    var lp_timer: Timer! {set get}
+    var delayTask: ()->()? { get set }
 }
 
 
@@ -37,17 +37,17 @@ extension LoadingProtocol where Self: UIViewController {
             } else {
                 let superview = self.view
                 let container: UIView
-                if superview.isKindOfClass(UITableView.self) {
-                    container = superview.addSubview(UIView).config(UIColor(white: 0, alpha: 0.2))
-                    container.frame = UIScreen.mainScreen().bounds
+                if (superview?.isKind(of: UITableView.self))! {
+                    container = superview?.addSubview(UIView).config(UIColor(white: 0, alpha: 0.2))
+                    container.frame = UIScreen.main.bounds
                 } else {
-                    container = superview.addSubview(UIView).config(UIColor(white: 0, alpha: 0.2))
+                    container = superview?.addSubview(UIView).config(UIColor(white: 0, alpha: 0.2))
                         .layout({ (make) in
                             make.edges.equalTo(superview)
                         })
                 }
                 
-                let rect = container.addSubview(UIView).config(UIColor.whiteColor())
+                let rect = container.addSubview(UIView).config(UIColor.white)
                     .toRound(6)
                     .layout({ (make) in
                         make.centerX.equalTo(container)
@@ -55,18 +55,18 @@ extension LoadingProtocol where Self: UIViewController {
                         make.top.equalTo(container).offset(150)
                     })
                 rect.layer.opacity = 0
-                rect.transform = CGAffineTransformMakeScale(1.28, 1.28)
+                rect.transform = CGAffineTransform(scaleX: 1.28, y: 1.28)
                 let loading = UIImageView(image: UIImage(named: "loading"))
                 rect.addSubview(loading)
-                loading.frame = CGRectMake(0, 0, 37.5, 37.5)
-                loading.contentMode = .ScaleAspectFit
-                loading.center = CGPointMake(35, 35)
+                loading.frame = CGRect(x: 0, y: 0, width: 37.5, height: 37.5)
+                loading.contentMode = .scaleAspectFit
+                loading.center = CGPoint(x: 35, y: 35)
                 loading.layer.opacity = 0
                 self.lp_loadingView = loading
                 
-                UIView.animateWithDuration(0.3, animations: { 
+                UIView.animate(withDuration: 0.3, animations: { 
                     rect.layer.opacity = 1
-                    rect.transform = CGAffineTransformIdentity
+                    rect.transform = CGAffineTransform.identity
                     loading.layer.opacity = 1
                 })
                 objc_setAssociatedObject(self, &containerHandle, container, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -93,13 +93,13 @@ extension LoadingProtocol where Self: UIViewController {
         }
     }
     
-    var lp_timer: NSTimer! {
+    var lp_timer: Timer! {
         set {
             objc_setAssociatedObject(self, &timerHandle, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         
         get {
-            return objc_getAssociatedObject(self, &timerHandle) as? NSTimer
+            return objc_getAssociatedObject(self, &timerHandle) as? Timer
         }
     }
     
@@ -107,11 +107,11 @@ extension LoadingProtocol where Self: UIViewController {
         if lp_timer != nil {
             lp_timer.invalidate()
             lp_timer = nil
-            lp_container.hidden = true
+            lp_container.isHidden = true
             lp_container.removeFromSuperview()
             lp_container = nil
         } else if self.delayTask != nil {
-            dispatch_block_cancel(delayTask!)
+            dispatch_block_cancel(delayTask as! () -> Void)
         } else {
             assertionFailure()
         }
@@ -119,20 +119,20 @@ extension LoadingProtocol where Self: UIViewController {
     }
     
     func lp_start() {
-        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_MSEC) * kLoadingAppearDelay)
+        let delay = DispatchTime.now() + Double(Int64(NSEC_PER_MSEC) * kLoadingAppearDelay) / Double(NSEC_PER_SEC)
         lp_timer = nil
         delayTask = dispatch_block_create(DISPATCH_BLOCK_INHERIT_QOS_CLASS, { [weak self] in
             guard let sSelf = self else {
                 return
             }
-            let timer = NSTimer.schedule(repeatInterval: 0.05, handler: { (_) in
+            let timer = Timer.schedule(repeatInterval: 0.05, handler: { (_) in
                 let curTrans = sSelf.lp_loadingView.transform
-                let newTrans = CGAffineTransformRotate(curTrans, 0.4)
+                let newTrans = curTrans.rotated(by: 0.4)
                 sSelf.lp_loadingView.transform = newTrans
             })
             sSelf.lp_timer = timer
         })
-        dispatch_after(delay, dispatch_get_main_queue(), delayTask!)
+        DispatchQueue.main.asyncAfter(deadline: delay, execute: delayTask as! @convention(block) () -> Void)
 
     }
 }

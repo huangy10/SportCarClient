@@ -25,7 +25,7 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         SSPropertyCell.registerTableView(tableView)
         SSPropertyInputableCell.registerTableView(tableView)
         
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         tableView.rowHeight = 50
     }
     
@@ -34,18 +34,18 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         self.navigationItem.title = LS("跑车详情")
         //
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: #selector(SportCarInfoDetailController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
+        navLeftBtn.addTarget(self, action: #selector(SportCarInfoDetailController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: LS("删除"), style: .Done, target: self, action: #selector(SportCarInfoDetailController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let rightItem = UIBarButtonItem(title: LS("删除"), style: .done, target: self, action: #selector(SportCarInfoDetailController.navRightBtnPressed))
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
@@ -59,11 +59,11 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         showConfirmToast(LS("删除"), message: LS("确认删除爱车？"), target: self, onConfirm: #selector(confirmDelete))
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return kSportsCarInfoDetailStaticLabelString1.count
         }else{
@@ -71,16 +71,16 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         }
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             let header = tableView.ss_reusableHeader(SportCarAuthHeader)
             header.titleLbl.text = LS("爱车型号")
             header.authed = car.identified
-            header.authBtn.addTarget(self, action: #selector(SportCarInfoDetailController.carAuthBtnPressed), forControlEvents: .TouchUpInside)
+            header.authBtn.addTarget(self, action: #selector(SportCarInfoDetailController.carAuthBtnPressed), for: .touchUpInside)
             return header
         }else{
             let header = tableView.ss_reusableHeader(SSCommonHeader.self)
@@ -89,8 +89,8 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 && indexPath.row == 1 {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if (indexPath as NSIndexPath).section == 0 && (indexPath as NSIndexPath).row == 1 {
             let cell = tableView.ss_reuseablePropertyCell(SSPropertyInputableCell.self, forIndexPath: indexPath)
             cell.staticLbl.text = LS("爱车签名")
             cell.hideArrowIcon()
@@ -99,9 +99,9 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         }
         let cell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
         cell.editable = false
-        if indexPath.section == 0 {
-            cell.staticLbl.text = kSportsCarInfoDetailStaticLabelString1[indexPath.row]
-            switch indexPath.row {
+        if (indexPath as NSIndexPath).section == 0 {
+            cell.staticLbl.text = kSportsCarInfoDetailStaticLabelString1[(indexPath as NSIndexPath).row]
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 cell.infoLbl.text = car.name
             case 1:
@@ -110,8 +110,8 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
                 assertionFailure()
             }
         } else {
-            cell.staticLbl.text = kSportsCarInfoDetailStaticLabelString2[indexPath.row]
-            switch  indexPath.row {
+            cell.staticLbl.text = kSportsCarInfoDetailStaticLabelString2[(indexPath as NSIndexPath).row]
+            switch  (indexPath as NSIndexPath).row {
             case 0:
                 cell.infoLbl.text = car.price
                 break
@@ -134,7 +134,7 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        if indexPath.row == 1 && indexPath.section == 0 {
 //            SinglePropertyModifierController(propertyName: LS("爱车签名"), delegate: self, forcusedIndexPath: indexPath).pushFromViewController(self)
 //        }
@@ -154,8 +154,8 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
 //        hideConfirmToast()
         SportCarRequester.sharedInstance.deleteCar(car.ssidString, onSuccess: { (json) in
             self.showToast(LS("删除成功"))
-            NSNotificationCenter.defaultCenter().postNotificationName(kCarDeletedNotification, object: nil, userInfo: [kSportcarKey: self.car])
-            self.navigationController?.popViewControllerAnimated(true)
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kCarDeletedNotification), object: nil, userInfo: [kSportcarKey: self.car])
+            self.navigationController?.popViewController(animated: true)
             }) { (code) in
                 self.showToast(LS("删除失败"))
         }
@@ -173,22 +173,22 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         // 
     }
     
-    func singlePropertyModifierDidModify(newValue: String?, forIndexPath indexPath: NSIndexPath) {
+    func singlePropertyModifierDidModify(_ newValue: String?, forIndexPath indexPath: IndexPath) {
         SportCarRequester.sharedInstance.updateCarSignature(car.ssidString, signature: newValue ?? "", onSuccess: { (json) in
             self.showToast(LS("修改成功"))
             self.car.signature = newValue
-            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            self.tableView.reloadRows(at: [indexPath], with: .automatic)
             }) { (code) in
                 self.showToast(LS("修改失败"))
         }
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         let newValue = textField.text
         SportCarRequester.sharedInstance.updateCarSignature(car.ssidString, signature: newValue ?? "", onSuccess: { (json) in
             self.showToast(LS("修改成功"))
             self.car.signature = newValue
-            self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 0)], withRowAnimation: .Automatic)
+            self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
         }) { (code) in
             self.showToast(LS("修改失败"))
         }
@@ -215,11 +215,11 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
     
     func createSubViews() {
         let superview = self.contentView
-        superview.backgroundColor = UIColor.whiteColor()
+        superview.backgroundColor = UIColor.white
         //
         carImage = UIImageView()
         superview.addSubview(carImage)
-        carImage.contentMode = .ScaleAspectFill
+        carImage.contentMode = .scaleAspectFill
         carImage.clipsToBounds = true
         carImage.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
@@ -229,8 +229,8 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
         }
         //
         carNameLbl = UILabel()
-        carNameLbl.textColor = UIColor.blackColor()
-        carNameLbl.font = UIFont.systemFontOfSize(19, weight: UIFontWeightSemibold)
+        carNameLbl.textColor = UIColor.black
+        carNameLbl.font = UIFont.systemFont(ofSize: 19, weight: UIFontWeightSemibold)
         superview.addSubview(carNameLbl)
         carNameLbl.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(carImage.snp_right).offset(15)
@@ -242,12 +242,12 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
         carAuthStatusIcon.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(carNameLbl)
             make.top.equalTo(carNameLbl.snp_bottom).offset(10)
-            make.size.equalTo(CGSizeMake(44, 18.5))
+            make.size.equalTo(CGSize(width: 44, height: 18.5))
         }
         //
         statementLbl = UILabel()
         statementLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        statementLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        statementLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         statementLbl.text = LS("认证可以获得什么？")
         superview.addSubview(statementLbl)
         statementLbl.snp_makeConstraints { (make) -> Void in
@@ -260,7 +260,7 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
         arrowIcon.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(superview)
-            make.size.equalTo(CGSizeMake(9, 15))
+            make.size.equalTo(CGSize(width: 9, height: 15))
         }
         //
         authBtn = UIButton()

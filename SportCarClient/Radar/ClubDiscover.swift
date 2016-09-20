@@ -46,21 +46,21 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         clubList.reloadData()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
 
     func createSubviews() {
         let superview = self.view
-        superview.clipsToBounds = true
+        superview?.clipsToBounds = true
 
-        clubList = UITableView(frame: CGRectZero, style: .Plain)
-        clubList.separatorStyle = .None
+        clubList = UITableView(frame: CGRect.zero, style: .plain)
+        clubList.separatorStyle = .none
         clubList.rowHeight = 90
         clubList.delegate = self
         clubList.dataSource = self
@@ -68,7 +68,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         clubList.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
-        clubList.registerClass(ClubDiscoverCell.self, forCellReuseIdentifier: "cell")
+        clubList.register(ClubDiscoverCell.self, forCellReuseIdentifier: "cell")
 
         clubFilter = ClubFilterController()
         clubFilter.selectedRow = 0
@@ -80,30 +80,30 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         clubFilterView = clubWrapper.view.addShadow().layout({ (make) in
             make.bottom.equalTo(superview).offset(-25)
             make.right.equalTo(superview).offset(-20)
-            make.size.equalTo(CGSizeMake(115, 40))
+            make.size.equalTo(CGSize(width: 115, height: 40))
         })
         self.view.addSubview(UIButton.self).config(self, selector: #selector(toggleMapFilter))
             .layout { (make) in
                 make.top.equalTo(clubFilterView)
                 make.left.equalTo(clubFilterView)
-                make.size.equalTo(CGSizeMake(115, 40))
+                make.size.equalTo(CGSize(width: 115, height: 40))
         }
         
         cityFilter = self.view.addSubview(UIButton)
             .config(self, selector: #selector(cityFilterPressed))
-            .config(UIColor.whiteColor())
+            .config(UIColor.white)
             .toRound(20).addShadow()
             .layout({ (make) in
                 make.right.equalTo(clubFilterView.snp_left).offset(-10)
                 make.bottom.equalTo(clubFilterView)
-                make.size.equalTo(CGSizeMake(120, 40))
+                make.size.equalTo(CGSize(width: 120, height: 40))
             })
         let icon = cityFilter.addSubview(UIImageView)
             .config(UIImage(named: "up_arrow"))
             .layout { (make) in
                 make.centerY.equalTo(cityFilter)
                 make.right.equalTo(cityFilter).offset(-20)
-                make.size.equalTo(CGSizeMake(13, 9))
+                make.size.equalTo(CGSize(width: 13, height: 9))
         }
         cityFilterLbl = cityFilter.addSubview(UILabel)
             .config(14, textColor: UIColor(white: 0, alpha: 0.87), text: LS("全国"))
@@ -114,23 +114,23 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             })
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return clubs.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! ClubDiscoverCell
-        cell.club = clubs[indexPath.row]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ClubDiscoverCell
+        cell.club = clubs[(indexPath as NSIndexPath).row]
         cell.loadDataAndUpdateUI()
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let club = clubs[indexPath.row]
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let club = clubs[(indexPath as NSIndexPath).row]
         if club.attended {
             if club.founderUser!.isHost {
                 let detail = GroupChatSettingHostController(targetClub: club)
@@ -146,13 +146,13 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y + scrollView.bounds.height >= scrollView.contentSize.height {
             sendRequest()
         }
     }
     
-    func clubBubbleDidClickOn(club: Club) {
+    func clubBubbleDidClickOn(_ club: Club) {
         if club.attended {
             if club.founderUser!.isHost {
                 let detail = GroupChatSettingHostController(targetClub: club)
@@ -174,29 +174,29 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
             clubFilterView.snp_remakeConstraints(closure: { (make) -> Void in
                 make.bottom.equalTo(self.view).offset(-25)
                 make.right.equalTo(self.view).offset(-20)
-                make.size.equalTo(CGSizeMake(115, 40))
+                make.size.equalTo(CGSize(width: 115, height: 40))
             })
-            UIView.animateWithDuration(0.3) { () -> Void in
+            UIView.animate(withDuration: 0.3, animations: { () -> Void in
                 self.clubFilter.view.toRound(20)
                 self.view.layoutIfNeeded()
-                self.clubFilter.marker.transform = CGAffineTransformIdentity
-            }
+                self.clubFilter.marker.transform = CGAffineTransform.identity
+            }) 
         }else {
             clubFilterView.snp_remakeConstraints(closure: { (make) -> Void in
                 make.bottom.equalTo(self.view).offset(-25)
                 make.right.equalTo(self.view).offset(-20)
-                make.size.equalTo(CGSizeMake(115, 40 * 6))
+                make.size.equalTo(CGSize(width: 115, height: 40 * 6))
             })
-            UIView.animateWithDuration(0.3) { () -> Void in
+            UIView.animate(withDuration: 0.3, animations: { () -> Void in
                 self.clubFilter.view.toRound(5)
                 self.view.layoutIfNeeded()
-                self.clubFilter.marker.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
-            }
+                self.clubFilter.marker.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI))
+            }) 
         }
         clubFilter.expanded = !clubFilter.expanded
     }
     
-    func sendRequest(reload: Bool = false) {
+    func sendRequest(_ reload: Bool = false) {
         let opType = ["value", "average", "members", "beauty", "recent"][clubFilter.selectedRow]
         ClubRequester.sharedInstance.discoverClub(opType, cityLimit: self.cityFilterType, skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
             if reload {
@@ -229,19 +229,19 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         select.maxLevel = 1
         select.showAllContry = true
         select.delegate = self
-        self.radarHome?.presentViewController(select.toNavWrapper(), animated: true, completion: nil)
+        self.radarHome?.present(select.toNavWrapper(), animated: true, completion: nil)
     }
     
     // MARK: City Element Select
     
-    func cityElementSelectDidSelect(dataSource: CityElementSelectDataSource) {
-        self.radarHome?.dismissViewControllerAnimated(true, completion: nil)
+    func cityElementSelectDidSelect(_ dataSource: CityElementSelectDataSource) {
+        self.radarHome?.dismiss(animated: true, completion: nil)
         cityFilterType = dataSource.selectedCity ?? "全国"
         cityFilterLbl.text = cityFilterType
         sendRequest(true)
     }
     
     func cityElementSelectDidCancel() {
-        self.radarHome?.dismissViewControllerAnimated(true, completion: nil)
+        self.radarHome?.dismiss(animated: true, completion: nil)
     }
 }

@@ -18,7 +18,7 @@ protocol SportCarViewListDelegate: class {
      
      - parameter car: 选中的车辆
      */
-    func didSelectSportCar(car: SportCar?)
+    func didSelectSportCar(_ car: SportCar?)
     
     /**
      按下了最后的添加按钮
@@ -43,34 +43,34 @@ class SportsCarViewListController: UICollectionViewController, UICollectionViewD
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsetsMake(0, 9, 0, 9)
         layout.minimumInteritemSpacing = 9
-        layout.scrollDirection = .Horizontal
+        layout.scrollDirection = .horizontal
         self.init(collectionViewLayout: layout)
         collectionView?.showsHorizontalScrollIndicator = false
         collectionView?.backgroundColor = UIColor(white: 0.945, alpha: 1)
-        collectionView?.registerClass(SportCarViewListTextCell.self, forCellWithReuseIdentifier: SportCarViewListTextCell.reuseIdentifier)
-        collectionView?.registerClass(SportCarViewListAddBtnCell.self, forCellWithReuseIdentifier: SportCarViewListAddBtnCell.reuseIdentifier)
-        collectionView?.registerClass(SportCarViewListTextCell.self, forCellWithReuseIdentifier: "all_status")
+        collectionView?.register(SportCarViewListTextCell.self, forCellWithReuseIdentifier: SportCarViewListTextCell.reuseIdentifier)
+        collectionView?.register(SportCarViewListAddBtnCell.self, forCellWithReuseIdentifier: SportCarViewListAddBtnCell.reuseIdentifier)
+        collectionView?.register(SportCarViewListTextCell.self, forCellWithReuseIdentifier: "all_status")
     }
     
-    func selectAllStatus(pulse: Bool) {
-        collectionView?.setContentOffset(CGPointMake(0, 0), animated: true)
+    func selectAllStatus(_ pulse: Bool) {
+        collectionView?.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         allStatusCell?.setCellSelected(true)
         if pulse {
             allStatusCell?.pulse()
         }
     }
     
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cars.count + (showAddBtn ? 2 : 1)
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        if indexPath.row == 0 {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("all_status", forIndexPath: indexPath) as! SportCarViewListTextCell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if (indexPath as NSIndexPath).row == 0 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "all_status", for: indexPath) as! SportCarViewListTextCell
             cell.titleLbl.text = LS("动态")
             allStatusCell = cell
             if selectedCar == nil {
@@ -79,13 +79,13 @@ class SportsCarViewListController: UICollectionViewController, UICollectionViewD
                 cell.setCellSelected(false)
             }
             return cell
-        } else if indexPath.row < cars.count + 1 {
+        } else if (indexPath as NSIndexPath).row < cars.count + 1 {
             
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(SportCarViewListTextCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarViewListTextCell
-            if indexPath.row == 0{
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SportCarViewListTextCell.reuseIdentifier, for: indexPath) as! SportCarViewListTextCell
+            if (indexPath as NSIndexPath).row == 0{
                 cell.titleLbl.text = LS("动态")
             }else {
-                let car = cars[indexPath.row - 1]
+                let car = cars[(indexPath as NSIndexPath).row - 1]
                 cell.titleLbl.text = car.name
                 if car.ssid == selectedCar?.ssid {
                     cell.setCellSelected(true)
@@ -95,17 +95,17 @@ class SportsCarViewListController: UICollectionViewController, UICollectionViewD
             }
             return cell
         }else {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(SportCarViewListAddBtnCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarViewListAddBtnCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SportCarViewListAddBtnCell.reuseIdentifier, for: indexPath) as! SportCarViewListAddBtnCell
             return cell
         }
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 0 {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).row == 0 {
             selectedCar = nil
             delegate?.didSelectSportCar(selectedCar)
-        } else if indexPath.row < cars.count + 1 {
-            selectedCar = cars[indexPath.row - 1]
+        } else if (indexPath as NSIndexPath).row < cars.count + 1 {
+            selectedCar = cars[(indexPath as NSIndexPath).row - 1]
             delegate?.didSelectSportCar(selectedCar)
         } else {
             delegate?.needAddSportCar()
@@ -113,17 +113,17 @@ class SportsCarViewListController: UICollectionViewController, UICollectionViewD
         collectionView.reloadData()
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        if indexPath.row >= cars.count + 1 || indexPath.row == 0 {
-            return CGSizeMake(120, 62)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if (indexPath as NSIndexPath).row >= cars.count + 1 || (indexPath as NSIndexPath).row == 0 {
+            return CGSize(width: 120, height: 62)
         }
-        let car = cars[indexPath.row - 1]
+        let car = cars[(indexPath as NSIndexPath).row - 1]
         let name = car.name!
-        let size = name.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold), boundingSize: CGSizeMake(CGFloat.max, CGFloat.max))
+        let size = name.sizeWithFont(UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold), boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max))
         if size.width > 80 {
-            return CGSizeMake(size.width + 40, 62)
+            return CGSize(width: size.width + 40, height: 62)
         } else {
-            return CGSizeMake(120, 62)
+            return CGSize(width: 120, height: 62)
         }
     }
     
@@ -158,24 +158,24 @@ class SportCarViewListTextCell: UICollectionViewCell {
         }
         //
         titleLbl = UILabel()
-        titleLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold)
+        titleLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         titleLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        titleLbl.textAlignment = .Center
+        titleLbl.textAlignment = .center
         superview.addSubview(titleLbl)
         titleLbl.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(superview)
         }
     }
     
-    func setCellSelected(flag: Bool) {
-        selectedBg.hidden = !flag
-        titleLbl.textColor = flag ? UIColor.blackColor() : UIColor(white: 0.72, alpha: 1)
+    func setCellSelected(_ flag: Bool) {
+        selectedBg.isHidden = !flag
+        titleLbl.textColor = flag ? UIColor.black : UIColor(white: 0.72, alpha: 1)
     }
     
     func pulse() {
-        selectedBg.transform = CGAffineTransformMakeScale(0.8, 0.8)
+        selectedBg.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         SpringAnimation.spring(0.3) { 
-            self.selectedBg.transform = CGAffineTransformIdentity
+            self.selectedBg.transform = CGAffineTransform.identity
         }
     }
 }

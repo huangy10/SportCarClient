@@ -9,13 +9,13 @@
 import Foundation
 
 
-enum SSModelError: ErrorType {
-    case NotImplemented
-    case InvalidJSON
-    case InvalidJSONString
-    case SaveFailure
-    case EmptyID
-    case IntegrityError
-    case NotSupported
-    case Unknown
+enum SSModelError: Error {
+    case notImplemented
+    case invalidJSON
+    case invalidJSONString
+    case saveFailure
+    case emptyID
+    case integrityError
+    case notSupported
+    case unknown
 }

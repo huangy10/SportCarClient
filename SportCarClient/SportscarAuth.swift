@@ -34,7 +34,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
                 return
             }
         }
-        guard let carLicenseNum = carLicense.text where carLicenseNum.length > 0 else {
+        guard let carLicenseNum = carLicense.text , carLicenseNum.length > 0 else {
             self.showToast(LS("请完整提供要求的信息"))
             return
         }
@@ -48,10 +48,10 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
                 self.pp_hideProgressView()
                 self.showToast(LS("认证申请发送失败"))
         }
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
-    override func getStaticLabelContentForIndex(index: Int) -> String {
+    override func getStaticLabelContentForIndex(_ index: Int) -> String {
         return [LS("上传驾驶证"), LS("上传身份证"), LS("上传带牌照的人车合影")][index]
     }
     
@@ -83,7 +83,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
     override func createDescriptionLabel() -> UIView {
         let container = UIView()
         let districtStaticLbl = UILabel()
-        districtStaticLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        districtStaticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         districtStaticLbl.textColor = UIColor(white: 0.72, alpha: 1)
         districtStaticLbl.text = LS("车牌地区")
         container.addSubview(districtStaticLbl)
@@ -96,12 +96,12 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         arrow.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(container)
             make.centerY.equalTo(districtStaticLbl)
-            make.size.equalTo(CGSizeMake(15, 9))
+            make.size.equalTo(CGSize(width: 15, height: 9))
         }
         districtLabel = UILabel()
-        districtLabel.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        districtLabel.textColor = UIColor.blackColor()
-        districtLabel.textAlignment = .Right
+        districtLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        districtLabel.textColor = UIColor.black
+        districtLabel.textAlignment = .right
         districtLabel.text = "京"
         container.addSubview(districtLabel)
         districtLabel.snp_makeConstraints { (make) -> Void in
@@ -126,10 +126,10 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
             make.right.equalTo(container)
             make.bottom.equalTo(sepLine1)
         }
-        districtBtn.addTarget(self, action: #selector(SportscarAuthController.showDistrictPicker), forControlEvents: .TouchUpInside)
+        districtBtn.addTarget(self, action: #selector(SportscarAuthController.showDistrictPicker), for: .touchUpInside)
         //
         let licenseStaticLbl = UILabel()
-        licenseStaticLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        licenseStaticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         licenseStaticLbl.textColor = UIColor(white: 0.72, alpha: 1)
         licenseStaticLbl.text = LS("车牌号")
         container.addSubview(licenseStaticLbl)
@@ -142,13 +142,13 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         arrow2.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(arrow)
             make.centerY.equalTo(licenseStaticLbl)
-            make.size.equalTo(CGSizeMake(9, 15))
+            make.size.equalTo(CGSize(width: 9, height: 15))
         }
         carLicense = UITextField()
-        carLicense.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        carLicense.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         carLicense.placeholder = LS("请填写车牌号")
-        carLicense.textColor = UIColor.blackColor()
-        carLicense.textAlignment = .Right
+        carLicense.textColor = UIColor.black
+        carLicense.textAlignment = .right
         carLicense.delegate = self
         inputFields.append(carLicense)
         container.addSubview(carLicense)
@@ -174,7 +174,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         let superview = self.view
         districtPickerContainer = UIView()
         districtPickerContainer.backgroundColor = UIColor(white: 0.945, alpha: 1)
-        superview.addSubview(districtPickerContainer)
+        superview?.addSubview(districtPickerContainer)
         districtPickerContainer.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(superview.snp_bottom)
             make.right.equalTo(superview)
@@ -194,7 +194,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         //
         let pickerTitle = UILabel()
         pickerTitle.text = LS("选择车牌地区")
-        pickerTitle.font = UIFont.systemFontOfSize(14)
+        pickerTitle.font = UIFont.systemFont(ofSize: 14)
         pickerHeader.addSubview(pickerTitle)
         pickerTitle.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(pickerHeader).offset(20)
@@ -202,11 +202,11 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         }
         //
         let doneBtn = UIButton()
-        doneBtn.setTitle(LS("完成"), forState: .Normal)
-        doneBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
-        doneBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
+        doneBtn.setTitle(LS("完成"), for: UIControlState())
+        doneBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        doneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         pickerHeader.addSubview(doneBtn)
-        doneBtn.addTarget(self, action: #selector(SportscarAuthController.donePickDistrictBtnPressed), forControlEvents: .TouchUpInside)
+        doneBtn.addTarget(self, action: #selector(SportscarAuthController.donePickDistrictBtnPressed), for: .touchUpInside)
         doneBtn.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(pickerHeader).offset(-20)
             make.centerY.equalTo(pickerHeader)
@@ -227,14 +227,14 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
     }
     
     func donePickDistrictBtnPressed() {
-        let index = districtPicker.selectedRowInComponent(0)
+        let index = districtPicker.selectedRow(inComponent: 0)
         districtLabel.text = kDistrictSet[index]
         hideDistrictPicker()
     }
     
     func showDistrictPicker() {
-        districtBtn.enabled = false
-        tapper?.enabled = true
+        districtBtn.isEnabled = false
+        tapper?.isEnabled = true
         districtPickerContainer.snp_remakeConstraints { (make) -> Void in
             make.right.equalTo(self.view)
             make.left.equalTo(self.view)
@@ -247,8 +247,8 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
     }
     
     func hideDistrictPicker() {
-        districtBtn.enabled = true
-        tapper?.enabled = false
+        districtBtn.isEnabled = true
+        tapper?.isEnabled = false
         districtPickerContainer.snp_remakeConstraints { (make) -> Void in
             make.right.equalTo(self.view)
             make.left.equalTo(self.view)
@@ -270,24 +270,24 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
 // MARK: - privide data for district picker
 extension SportscarAuthController {
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return kDistrictSet.count
     }
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let titleLabel = UILabel()
-        titleLabel.font = UIFont.systemFontOfSize(15, weight: UIFontWeightLight)
-        titleLabel.textAlignment = .Center
+        titleLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightLight)
+        titleLabel.textAlignment = .center
         titleLabel.text = kDistrictSet[row]
-        titleLabel.textColor = UIColor.blackColor()
+        titleLabel.textColor = UIColor.black
         return titleLabel
     }
     
-    func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 30
     }
 }

@@ -21,7 +21,7 @@ class Activity: BaseModel {
     
     var applicants: [User] = []
     
-    private var _location: LocationModel?
+    fileprivate var _location: LocationModel?
     var location: LocationModel? {
         if loc == nil {
             return nil
@@ -35,7 +35,7 @@ class Activity: BaseModel {
         return _location
     }
     
-    var posterURL: NSURL? {
+    var posterURL: URL? {
         if poster == nil {
             return nil
         }
@@ -56,10 +56,10 @@ class Activity: BaseModel {
     }
     
     var finished: Bool {
-        return endAt!.compare(NSDate()) == .OrderedAscending
+        return endAt!.compare(Date()) == .orderedAscending
     }
     
-    private var _clubLimit: Club?
+    fileprivate var _clubLimit: Club?
     var clubLimit: Club? {
         if _clubLimit != nil {
             return _clubLimit
@@ -70,7 +70,7 @@ class Activity: BaseModel {
         return nil
     }
 
-    override func loadDataFromJSON(data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Activity {
+    override func loadDataFromJSON(_ data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Activity {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         actDescription = data["description"].stringValue
         createdAt = DateSTR(data["created_at"].stringValue)
@@ -101,7 +101,7 @@ class Activity: BaseModel {
         let clubJSON = data["club_limit"]
         if clubJSON.exists() {
             _clubLimit = try manager.getOrCreate(clubJSON) as Club
-            clubLimitStr = String(data: try clubJSON.rawData(), encoding: NSUTF8StringEncoding)
+            clubLimitStr = String(data: try clubJSON.rawData(), encoding: String.Encoding.utf8)
         }
         if detailLevel >= 1 {
             let applicantsJSON = data["apply_list"].arrayValue
@@ -116,7 +116,7 @@ class Activity: BaseModel {
         return self
     }
     
-    override func toJSONObject(detailLevel: Int) throws -> JSON {
+    override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         var json = [
             Activity.idField: ssidString,
             "description": actDescription!,
@@ -149,7 +149,7 @@ class Activity: BaseModel {
         return self
     }
     
-    func removeApplicant(user: User) -> Self {
+    func removeApplicant(_ user: User) -> Self {
         applicants = $.remove(applicants, callback: {return $0.ssid == user.ssid})
         return self
     }

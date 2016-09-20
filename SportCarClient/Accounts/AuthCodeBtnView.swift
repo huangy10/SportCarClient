@@ -10,37 +10,37 @@ import UIKit
 import SnapKit
 
 enum AuthCodeBtnViewStatus {
-    case Normal
-    case Pending
-    case CountDown
+    case normal
+    case pending
+    case countDown
 }
 
 
 class AuthCodeBtnView: UIButton {
-    var status = AuthCodeBtnViewStatus.Normal {
+    var status = AuthCodeBtnViewStatus.normal {
         didSet {
             switch status{
-            case .Normal:
+            case .normal:
                 self.updateTimer?.invalidate()
-                self.setTitle(displayText, forState: .Normal)
+                self.setTitle(displayText, for: UIControlState())
                 self.indicator.stopAnimating()
-                self.userInteractionEnabled = true
+                self.isUserInteractionEnabled = true
                 break
-            case .Pending:
-                self.setTitle("", forState: .Normal)
+            case .pending:
+                self.setTitle("", for: UIControlState())
                 self.indicator.startAnimating()
-                self.userInteractionEnabled = false
+                self.isUserInteractionEnabled = false
                 break
-            case .CountDown:
+            case .countDown:
                 self.indicator.stopAnimating()
-                self.setTitle("\(maxCD)", forState: .Normal)
-                updateTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(AuthCodeBtnView.countDownUpdater), userInfo: nil, repeats: true)
-                self.userInteractionEnabled = false
+                self.setTitle("\(maxCD)", for: UIControlState())
+                updateTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(AuthCodeBtnView.countDownUpdater), userInfo: nil, repeats: true)
+                self.isUserInteractionEnabled = false
                 break
             }
         }
         willSet(newStatus) {
-            if cdTime != maxCD && newStatus != .CountDown{
+            if cdTime != maxCD && newStatus != .countDown{
                 assertionFailure()
             }
         }
@@ -49,13 +49,13 @@ class AuthCodeBtnView: UIButton {
     var displayText: String?
     let maxCD = 60
     
-    let indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-    var updateTimer: NSTimer?
+    let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    var updateTimer: Timer?
     
     convenience init() {
         self.init(frame: CGRect.zero)
         createSubviews()
-        self.titleLabel?.textAlignment = .Right
+        self.titleLabel?.textAlignment = .right
     }
     
     override init(frame: CGRect) {
@@ -66,7 +66,7 @@ class AuthCodeBtnView: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func createSubviews() {
+    fileprivate func createSubviews() {
         self.addSubview(indicator)
         indicator.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(self)
@@ -78,10 +78,10 @@ class AuthCodeBtnView: UIButton {
         cdTime -= 1
         if cdTime < 0 {
             cdTime = maxCD
-            status = .Normal
+            status = .normal
             return
         }
-        self.setTitle("\(cdTime)", forState: .Normal)
+        self.setTitle("\(cdTime)", for: UIControlState())
     }
     
 }

@@ -24,13 +24,13 @@ class AuthBasicController: InputableViewController {
         self.navigationItem.title = navTitle()
         //
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: #selector(AuthBasicController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
+        navLeftBtn.addTarget(self, action: #selector(AuthBasicController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: titleForRightNavBtn(), style: .Done, target: self, action: #selector(AuthBasicController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let rightItem = UIBarButtonItem(title: titleForRightNavBtn(), style: .done, target: self, action: #selector(AuthBasicController.navRightBtnPressed))
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         self.navigationItem.rightBarButtonItem = rightItem
 
     }
@@ -45,7 +45,7 @@ class AuthBasicController: InputableViewController {
     }
     
     func navLeftBtnPressed(){
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func titleForRightNavBtn() -> String{
@@ -55,7 +55,7 @@ class AuthBasicController: InputableViewController {
     
     override func createSubviews() {
         super.createSubviews()
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
         board = UIScrollView()
         board.showsVerticalScrollIndicator = false
         self.view.addSubview(board)
@@ -74,7 +74,7 @@ class AuthBasicController: InputableViewController {
         }
         //
         descriptionLabel = createDescriptionLabel()
-        superview.addSubview(descriptionLabel)
+        superview?.addSubview(descriptionLabel)
         descriptionLabel.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(self.view).offset(15)
             make.right.equalTo(self.view).offset(-15)
@@ -83,14 +83,14 @@ class AuthBasicController: InputableViewController {
         }
         //
         imagesInputPanel = createImagesImputPanel()
-        superview.addSubview(imagesInputPanel)
+        superview?.addSubview(imagesInputPanel)
         imagesInputPanel.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(self.view).offset(15)
             make.right.equalTo(self.view).offset(-15)
             make.top.equalTo(descriptionLabel.snp_bottom).offset(35)
             make.height.equalTo(getHeightForImageInputPanel())
         }
-        board.contentSize = CGSizeMake(UIScreen.mainScreen().bounds.width, getHeightForDescriptionLable() + getHeightForImageInputPanel() + getHeightForPrivilegeBoard() + 35)
+        board.contentSize = CGSize(width: UIScreen.main.bounds.width, height: getHeightForDescriptionLable() + getHeightForImageInputPanel() + getHeightForPrivilegeBoard() + 35)
     }
     
     func createPrivilegeBoard() -> UIView{

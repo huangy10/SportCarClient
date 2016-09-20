@@ -15,15 +15,15 @@ protocol SportCarGallaryDataSource: class {
     
     func itemSize() -> CGSize
     
-    func itemForPage(pageNum: Int) -> SportCargallaryItem
+    func itemForPage(_ pageNum: Int) -> SportCargallaryItem
 }
 
 
 struct SportCargallaryItem {
     let itemType: String
-    var resource: NSURL? {
+    var resource: URL? {
         get {
-            return NSURL(string: resourceString)
+            return URL(string: resourceString)
         }
     }
     let resourceString: String
@@ -38,9 +38,9 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
     weak var dataSource: SportCarGallaryDataSource! {
         didSet {
             if dataSource.numberOfItems() == 1 {
-                pageMarker.hidden = true
+                pageMarker.isHidden = true
             } else {
-                pageMarker.hidden = false
+                pageMarker.isHidden = false
             }
         }
     }
@@ -53,7 +53,7 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
     var collectionView: UICollectionView!
     
     init(dataSource: SportCarGallaryDataSource) {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         self.dataSource = dataSource
         configCollectionView()
         configPageMarker()
@@ -65,8 +65,8 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
     }
     
     func configCells() {
-        collectionView.registerClass(SportCarGallaryImageCell.self, forCellWithReuseIdentifier: "image")
-        collectionView.registerClass(SportCarGallaryVideoCell.self, forCellWithReuseIdentifier: "video")
+        collectionView.register(SportCarGallaryImageCell.self, forCellWithReuseIdentifier: "image")
+        collectionView.register(SportCarGallaryVideoCell.self, forCellWithReuseIdentifier: "video")
     }
     
     func configCollectionView() {
@@ -75,16 +75,16 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
         layout.itemSize = size
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        layout.scrollDirection = .Horizontal
+        layout.scrollDirection = .horizontal
         
-        collectionView = UICollectionView(frame: CGRectMake(0, 0, size.width, size.height), collectionViewLayout: layout)
-        collectionView.backgroundColor = UIColor.whiteColor()
+        collectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height), collectionViewLayout: layout)
+        collectionView.backgroundColor = UIColor.white
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.pagingEnabled = true
+        collectionView.isPagingEnabled = true
         addSubview(collectionView)
-        collectionView.frame = CGRectMake(0, 0, size.width, size.height)
+        collectionView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
     }
     
     func configPageMarker() {
@@ -96,30 +96,30 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
         }
     }
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataSource.numberOfItems()
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let item = dataSource.itemForPage(indexPath.row)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let item = dataSource.itemForPage((indexPath as NSIndexPath).row)
         if item.itemType == "image" {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("image", forIndexPath: indexPath) as! SportCarGallaryImageCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "image", for: indexPath) as! SportCarGallaryImageCell
             cell.imageView.kf_setImageWithURL(item.resource!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) in
-                cell.imageView.setupForImageViewer(item.resource!, backgroundColor: UIColor.blackColor(), fadeToHide: false)
+                cell.imageView.setupForImageViewer(item.resource!, backgroundColor: UIColor.black, fadeToHide: false)
             })
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("video", forIndexPath: indexPath) as! SportCarGallaryVideoCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "video", for: indexPath) as! SportCarGallaryVideoCell
             cell.play(String(format: VIDEO_HTML_TEMPLATE, item.resourceString))
             return cell
         }
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let width = scrollView.bounds.width
         let x = scrollView.contentOffset.x
         pageMarker.currentPage = Int(x/width)
@@ -148,7 +148,7 @@ class SportCarGallaryImageCell: UICollectionViewCell {
             .layout({ (make) in
                 make.edges.equalTo(contentView)
             })
-        imageView.contentMode = .ScaleAspectFill
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
     }
 }
@@ -175,28 +175,28 @@ class SportCarGallaryVideoCell: UICollectionViewCell {
         videoPlayer.showsPlaybackControls = false
         
         webPlayer = UIWebView()
-        webPlayer.scrollView.scrollEnabled = false
+        webPlayer.scrollView.isScrollEnabled = false
         contentView.addSubview(webPlayer)
         webPlayer.snp_makeConstraints { (make) in
             make.edges.equalTo(contentView)
         }
-        webPlayer.hidden = true
+        webPlayer.isHidden = true
     }
     
-    func play(content: String) {
+    func play(_ content: String) {
         // <iframe height=498 width=510 src='http://player.youku.com/embed/XMTcwMTIxODgxMg==' frameborder=0 'allowfullscreen'></iframe>
-        if let url = NSURL(string: content) {
-            videoPlayer.view.hidden = false
-            let player = AVPlayer(URL: url)
+        if let url = URL(string: content) {
+            videoPlayer.view.isHidden = false
+            let player = AVPlayer(url: url)
             videoPlayer.player = player
             player.play()
             
-            webPlayer.hidden = true
+            webPlayer.isHidden = true
         } else {
-            webPlayer.hidden = false
+            webPlayer.isHidden = false
             webPlayer.loadHTMLString(content, baseURL: nil)
             
-            videoPlayer.view.hidden = true
+            videoPlayer.view.isHidden = true
         }
     }
 }

@@ -24,11 +24,11 @@ class ClubBriefInfoController: UITableViewController {
         super.viewDidLoad()
         navSettings()
         configureInlineUserSelect()
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         SSPropertyCell.registerTableView(tableView)
         SSAvatarCell.registerTableView(tableView)
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select")
-        tableView.registerClass(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select")
+        tableView.register(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
         // Request data for the club
         let requester = ClubRequester.sharedInstance
         requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
@@ -36,8 +36,8 @@ class ClubBriefInfoController: UITableViewController {
             if json!["id"].exists() {
                 try! self.targetClub.loadDataFromJSON(json!)
                 clubJson = json!
-                let barBtnItem = UIBarButtonItem(title: LS("申请加入"), style: .Plain, target: self, action: #selector(ClubBriefInfoController.navRightBtnPressed))
-                barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+                let barBtnItem = UIBarButtonItem(title: LS("申请加入"), style: .plain, target: self, action: #selector(ClubBriefInfoController.navRightBtnPressed))
+                barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
                 self.navigationItem.rightBarButtonItem = barBtnItem
             }else {
                 try! self.targetClub.loadDataFromJSON(json!["club"])
@@ -56,14 +56,14 @@ class ClubBriefInfoController: UITableViewController {
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     func configureInlineUserSelect() {
-        let cell = UITableViewCell(style: .Default, reuseIdentifier: "inline_user_select")
-        cell.selectionStyle = .None
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "inline_user_select")
+        cell.selectionStyle = .none
         inlineUserSelect = InlineUserSelectController()
         cell.contentView.addSubview(inlineUserSelect!.view)
         inlineUserSelect?.view.snp_makeConstraints(closure: { (make) in
@@ -79,9 +79,9 @@ class ClubBriefInfoController: UITableViewController {
         // Override this method to enable "release activity" button
         self.navigationItem.title = targetClub.name
         let leftBtn = UIButton()
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        leftBtn.frame = CGRectMake(0, 0, 9, 15)
-        leftBtn.addTarget(self, action: #selector(ClubBriefInfoController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
+        leftBtn.addTarget(self, action: #selector(ClubBriefInfoController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     }
     
@@ -105,14 +105,14 @@ class ClubBriefInfoController: UITableViewController {
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
             return 1
@@ -123,12 +123,12 @@ class ClubBriefInfoController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if (indexPath as NSIndexPath).section == 0 {
             return tableView.ss_reuseablePropertyCell(SSAvatarCell.self, forIndexPath: indexPath)
                 .setData(targetClub.logoURL!, showArrow: false, zoomable: true)
         }
-        switch indexPath.row {
+        switch (indexPath as NSIndexPath).row {
         case 0:
             return tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
                 .setData(LS("群聊名称"), propertyValue: targetClub.name ?? LS("正在获取数据..."), editable: false)
@@ -155,10 +155,10 @@ class ClubBriefInfoController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath as NSIndexPath).section == 0 {
             return 114
-        }else if indexPath.row < 2 {
+        }else if (indexPath as NSIndexPath).row < 2 {
             return 50
         }else {
             let userNum = targetClub.members.count
@@ -167,7 +167,7 @@ class ClubBriefInfoController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
             return 0
         }else {
@@ -175,11 +175,11 @@ class ClubBriefInfoController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0{
             return nil
         }
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("reuse_header") as! PrivateChatSettingsHeader
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "reuse_header") as! PrivateChatSettingsHeader
         header.titleLbl.text = LS("信息")
         return header
     }

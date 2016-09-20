@@ -12,16 +12,16 @@ import Alamofire
 protocol RequestManageProtocol: class {
     var onGoingRequest: [String: Request] { set get }
     
-    func registerReqeust(req: Request, forKey key: String)
+    func registerReqeust(_ req: Request, forKey key: String)
     
     func clearAllRequest()
     
-    func clearRequestForKey(key: String)
+    func clearRequestForKey(_ key: String)
 }
 
 extension RequestManageProtocol where Self: UIViewController {
 
-    func registerReqeust(req: Request, forKey key: String) {
+    func registerReqeust(_ req: Request, forKey key: String) {
         clearRequestForKey(key)
         onGoingRequest[key] = req
     }
@@ -34,7 +34,7 @@ extension RequestManageProtocol where Self: UIViewController {
         onGoingRequest.removeAll()
     }
     
-    func clearRequestForKey(key: String) {
+    func clearRequestForKey(_ key: String) {
         if let r = onGoingRequest[key] {
             r.cancel()
         }
@@ -43,7 +43,7 @@ extension RequestManageProtocol where Self: UIViewController {
 }
 
 extension Request {
-    func registerForRequestManage(manage: RequestManageProtocol, forKey key: String) {
+    func registerForRequestManage(_ manage: RequestManageProtocol, forKey key: String) {
         manage.registerReqeust(self, forKey: key)
     }
 }

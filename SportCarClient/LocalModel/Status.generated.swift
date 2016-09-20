@@ -20,7 +20,7 @@ extension Status {
     @NSManaged var carInfo: String?
     @NSManaged var commentNum: Int32 // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var content: String?
-    @NSManaged var createdAt: NSDate?
+    @NSManaged var createdAt: Date?
     @NSManaged var fromFollow: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var fromHot: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var fromPerson: Bool // cannot mark as optional because Objective-C compatibility issues
@@ -68,7 +68,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: Status {
     var carInfo: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("carInfo", self) }
     var commentNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("commentNum", self) }
     var content: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("content", self) }
-    var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
+    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
     var fromFollow: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("fromFollow", self) }
     var fromHot: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("fromHot", self) }
     var fromPerson: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("fromPerson", self) }

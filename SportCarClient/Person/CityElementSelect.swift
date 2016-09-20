@@ -10,7 +10,7 @@ import UIKit
 
 
 protocol CityElementSelectDelegate: class {
-    func cityElementSelectDidSelect(dataSource: CityElementSelectDataSource)
+    func cityElementSelectDidSelect(_ dataSource: CityElementSelectDataSource)
     func cityElementSelectDidCancel()
 }
 
@@ -27,7 +27,7 @@ class CityElementSelectDataSource {
     
     init() {
         // read from plist file
-        let path = NSBundle.mainBundle().pathForResource("ChineseSubdivisions", ofType: "plist")
+        let path = Bundle.main.path(forResource: "ChineseSubdivisions", ofType: "plist")
         let data = NSDictionary(contentsOfFile: path!)
         if data == nil {
             assertionFailure()
@@ -35,12 +35,12 @@ class CityElementSelectDataSource {
         self.data = data!
     }
     
-    func citiesForProvince(prov: String) -> [String]{
+    func citiesForProvince(_ prov: String) -> [String]{
         let cities = (data[prov] as! NSArray)[0] as! NSDictionary
         return cities.allKeys as! [String]
     }
     
-    func districtForProvince(prov: String, forCity city: String) -> [String]{
+    func districtForProvince(_ prov: String, forCity city: String) -> [String]{
         let cities = (data[prov] as! NSArray)[0] as! NSDictionary
         return cities[city] as! [String]
     }
@@ -73,15 +73,15 @@ class CityElementSelectController: UITableViewController {
         default:
             assertionFailure()
         }
-        tableView.registerClass(SportCarBrandSelectCell.self, forCellReuseIdentifier: SportCarBrandSelectCell.reuseIdentifier)
+        tableView.register(SportCarBrandSelectCell.self, forCellReuseIdentifier: SportCarBrandSelectCell.reuseIdentifier)
         
         assert(showAllContry || maxLevel > 0)
     }
     
     func navSettings() {
         self.navigationItem.title = LS("活跃地区")
-        let backBtn = UIBarButtonItem(title: LS("取消"), style: .Done, target: self, action: #selector(navLeftBtnPressed))
-        backBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let backBtn = UIBarButtonItem(title: LS("取消"), style: .done, target: self, action: #selector(navLeftBtnPressed))
+        backBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         navigationItem.leftBarButtonItem = backBtn
     }
     
@@ -89,49 +89,49 @@ class CityElementSelectController: UITableViewController {
         delegate?.cityElementSelectDidCancel()
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if showAllContry {
             return data.count + 1
         }
         return data.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(SportCarBrandSelectCell.reuseIdentifier, forIndexPath: indexPath) as! SportCarBrandSelectCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: SportCarBrandSelectCell.reuseIdentifier, for: indexPath) as! SportCarBrandSelectCell
         if showAllContry {
-            if indexPath.row == 0  {
+            if (indexPath as NSIndexPath).row == 0  {
                 cell.nameLbl?.text = LS("全国")
             } else {
-                cell.nameLbl?.text = data[indexPath.row - 1]
+                cell.nameLbl?.text = data[(indexPath as NSIndexPath).row - 1]
             }
         } else {
-            cell.nameLbl?.text = data[indexPath.row]
+            cell.nameLbl?.text = data[(indexPath as NSIndexPath).row]
         }
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch level {
         case 0:
             if showAllContry {
-                if indexPath.row > 0 {
-                    dataSource.selectedProv = data[indexPath.row - 1]
+                if (indexPath as NSIndexPath).row > 0 {
+                    dataSource.selectedProv = data[(indexPath as NSIndexPath).row - 1]
                 } else {
                     dataSource.selectedProv = "全国"
                     dataSource.selectedCity = nil
                     delegate?.cityElementSelectDidSelect(dataSource)
                 }
             } else {
-                dataSource.selectedProv = data[indexPath.row]
+                dataSource.selectedProv = data[(indexPath as NSIndexPath).row]
             }
         case 1:
-            dataSource.selectedCity = data[indexPath.row]
+            dataSource.selectedCity = data[(indexPath as NSIndexPath).row]
         case 2:
-            dataSource.selectedDistrict = data[indexPath.row]
+            dataSource.selectedDistrict = data[(indexPath as NSIndexPath).row]
         default:
             break
         }

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol RadarClubFilterDelegate: class {
-    func radarClubFilterDidChange(controller: RadarClubFilterController)
+    func radarClubFilterDidChange(_ controller: RadarClubFilterController)
 }
 
 
@@ -23,13 +23,13 @@ class RadarClubFilterController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.view.backgroundColor = UIColor.clearColor()
-        tableView.separatorStyle = .None
+        self.view.backgroundColor = UIColor.clear
+        tableView.separatorStyle = .none
         tableView.layer.cornerRadius = 4
-        tableView.registerClass(RadarClubFilterHeader.self, forHeaderFooterViewReuseIdentifier: "header")
-        tableView.registerClass(RadarFilterCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(RadarClubFilterHeader.self, forHeaderFooterViewReuseIdentifier: "header")
+        tableView.register(RadarFilterCell.self, forCellReuseIdentifier: "cell")
         tableView.rowHeight = 42
-        tableView.backgroundColor = UIColor.whiteColor()
+        tableView.backgroundColor = UIColor.white
         self.getClubList()
     }
     
@@ -45,16 +45,16 @@ class RadarClubFilterController: UITableViewController {
         }
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return clubs.count
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let club = clubs[indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let club = clubs[(indexPath as NSIndexPath).row]
         if club.ssid != selectdClubID {
             selectdClubID = club.ssid
             selectdClub = club.name
@@ -62,20 +62,20 @@ class RadarClubFilterController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! RadarFilterCell
-        cell.titleLbl.text = clubs[indexPath.row].name
-        cell.marker.hidden = clubs[indexPath.row].ssid != selectdClubID
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! RadarFilterCell
+        cell.titleLbl.text = clubs[(indexPath as NSIndexPath).row].name
+        cell.marker.isHidden = clubs[(indexPath as NSIndexPath).row].ssid != selectdClubID
         return cell
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! RadarClubFilterHeader
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! RadarClubFilterHeader
         header.titleLbl.text = LS("返回")
         return header
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 42
     }
 }
@@ -85,18 +85,18 @@ class RadarClubFilterHeader: RadarFilterHeader {
     
     override func createSubviews() {
         let superview = self.contentView
-        superview.backgroundColor = UIColor.whiteColor()
+        superview.backgroundColor = UIColor.white
         //
         marker = UIImageView(image: UIImage(named: "account_header_back_btn"))
         superview.addSubview(marker)
         marker.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(superview)
-            make.size.equalTo(CGSizeMake(6, 13))
+            make.size.equalTo(CGSize(width: 6, height: 13))
             make.left.equalTo(superview).offset(25)
         }
         //
         titleLbl = UILabel()
-        titleLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        titleLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         titleLbl.textColor = UIColor(white: 0, alpha: 0.87)
         superview.addSubview(titleLbl)
         titleLbl.snp_makeConstraints { (make) -> Void in

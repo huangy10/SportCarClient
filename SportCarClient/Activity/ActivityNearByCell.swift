@@ -32,10 +32,10 @@ class ActivityNearByCell: UICollectionViewCell {
     //
     func createSubviews() {
         var superview = self.contentView
-        superview.backgroundColor = UIColor.clearColor()
+        superview.backgroundColor = UIColor.clear
         //
         container = UIView()
-        container.backgroundColor = UIColor.whiteColor()
+        container.backgroundColor = UIColor.white
         superview.addSubview(container)
         container.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
@@ -43,7 +43,7 @@ class ActivityNearByCell: UICollectionViewCell {
          superview = container
         //
         cover = UIImageView()
-        cover.contentMode = .ScaleAspectFill
+        cover.contentMode = .scaleAspectFill
         cover.clipsToBounds = true
         superview.addSubview(cover)
         cover.snp_makeConstraints { (make) -> Void in
@@ -54,8 +54,8 @@ class ActivityNearByCell: UICollectionViewCell {
         }
         //
         actNameLbl = UILabel()
-        actNameLbl.textColor = UIColor.blackColor()
-        actNameLbl.font = UIFont.systemFontOfSize(17, weight: UIFontWeightSemibold)
+        actNameLbl.textColor = UIColor.black
+        actNameLbl.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightSemibold)
         actNameLbl.numberOfLines = 0
         superview.addSubview(actNameLbl)
         actNameLbl.snp_makeConstraints { (make) -> Void in
@@ -65,7 +65,7 @@ class ActivityNearByCell: UICollectionViewCell {
         }
         //
         let sepLine = UIView()
-        sepLine.backgroundColor = UIColor.blackColor()
+        sepLine.backgroundColor = UIColor.black
         superview.addSubview(sepLine)
         sepLine.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(actNameLbl)
@@ -75,7 +75,7 @@ class ActivityNearByCell: UICollectionViewCell {
         }
         //
         actStartDateLbl = UILabel()
-        actStartDateLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        actStartDateLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         actStartDateLbl.textColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(actStartDateLbl)
         actStartDateLbl.snp_makeConstraints { (make) -> Void in

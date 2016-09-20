@@ -21,7 +21,7 @@ protocol HomeDelegate: class {
      
      - parameter onComplete: 完成后将会执行这一个closure
      */
-    func backToHome(onComplete: (()->())?)
+    func backToHome(_ onComplete: (()->())?)
     
     /**
      切换各个功能模块
@@ -29,7 +29,7 @@ protocol HomeDelegate: class {
      - parameter from: 当前的功能模块
      - parameter to:   目标功能模块
      */
-    func switchController(from: Int, to: Int)
+    func switchController(_ from: Int, to: Int)
 }
 
 class HomeController: UIViewController, HomeDelegate {
@@ -53,7 +53,7 @@ class HomeController: UIViewController, HomeDelegate {
         self.init(nibName: nil, bundle: nil)
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         sideBarCtl = SideBarController()
         board = UIButton()
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -86,14 +86,14 @@ class HomeController: UIViewController, HomeDelegate {
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         // 更新页面数据
         self.sideBarCtl.viewWillAppear(animated)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.sideBarCtl.viewWillDisappear(animated)
     }
@@ -101,17 +101,17 @@ class HomeController: UIViewController, HomeDelegate {
     func createSubviews() {
         self.navigationController?.setNavigationBarHidden(true, animated:false)
         let superview = self.view
-        superview.backgroundColor = UIColor.greenColor()
+        superview?.backgroundColor = UIColor.green
         // 
-        superview.addSubview(self.sideBarCtl.view)
+        superview?.addSubview(self.sideBarCtl.view)
         sideBarCtl.delegate = self
         // 
-        board.backgroundColor = UIColor.whiteColor()
-        board.addTarget(self, action: #selector(HomeController.boardPressed), forControlEvents: .TouchUpInside)
-        superview.addSubview(board)
+        board.backgroundColor = UIColor.white
+        board.addTarget(self, action: #selector(HomeController.boardPressed), for: .touchUpInside)
+        superview?.addSubview(board)
         board.tag = 1
         self.board.layer.anchorPoint = CGPoint(x: 0, y: 0.5)
-        board.frame = superview.bounds
+        board.frame = (superview?.bounds)!
         self.showSideBar(false)
     }
     
@@ -137,7 +137,7 @@ extension HomeController {
     /**
      显示边栏
      */
-    func showSideBar(animated:Bool) {
+    func showSideBar(_ animated:Bool) {
         sideBarCtl.reloadUserData()
         let screenWidth = view.frame.width
         var move = CATransform3DTranslate(CATransform3DIdentity, 0.876 * screenWidth, 0, 0)
@@ -159,7 +159,7 @@ extension HomeController {
     
     /**
     */
-    func hideSideBar(animated: Bool = false) {
+    func hideSideBar(_ animated: Bool = false) {
         SpringAnimation.springWithCompletion(0.5, animations: { () -> Void in
             let screenWidth = self.view.frame.width
             var move = CATransform3DTranslate(CATransform3DIdentity, 0 * screenWidth, 0, 0)
@@ -178,14 +178,14 @@ extension HomeController {
 // MARK: - Sidebar的代理
 extension HomeController {
     
-    func backToHome(onComplete: (()->())?) {
+    func backToHome(_ onComplete: (()->())?) {
         board.layer.transform = CATransform3DIdentity
 //        board.setImage(screenShot, forState: .Normal)
-        self.navigationController?.popViewControllerAnimated(false)
+        self.navigationController?.popViewController(animated: false)
         showSideBar(true)
     }
     
-    func switchController(from: Int, to: Int) {
+    func switchController(_ from: Int, to: Int) {
         board.tag = to
         switch to {
         case 0:
@@ -212,7 +212,7 @@ extension HomeController {
             break
         case 3:
             if news == nil {
-                news = NewsController(style: .Plain)
+                news = NewsController(style: .plain)
                 news?.homeDelegate = self
             }
             self.navigationController?.pushViewController(news!, animated: true)

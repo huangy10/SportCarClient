@@ -30,7 +30,7 @@ class SideBarController: UIViewController {
     weak var delegate: HomeDelegate?
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -38,15 +38,15 @@ class SideBarController: UIViewController {
         createSubviews()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadUserData()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SideBarController.unreadMessageNumDidChange), name: kUnreadNumberDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SideBarController.unreadMessageNumDidChange), name: NSNotification.Name(rawValue: kUnreadNumberDidChangeNotification), object: nil)
     }
     
     func createSubviews() {
@@ -61,7 +61,7 @@ class SideBarController: UIViewController {
         }
         //
         bgImg = UIImageView(image: UIImage(named: "home_bg"))
-        superview.addSubview(bgImg!)
+        superview?.addSubview(bgImg!)
         bgImg?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview)
             make.height.equalTo(superview)
@@ -73,21 +73,21 @@ class SideBarController: UIViewController {
         avatarBtn?.clipsToBounds = true
         avatarBtn?.loadImageFromURL(host.avatarURL!, placeholderImage: UIImage(named: "account_profile_avatar_btn"))
         avatarBtn?.tag = 0
-        superview.addSubview(avatarBtn!)
-        let screenWidth = superview.frame.width
+        superview?.addSubview(avatarBtn!)
+        let screenWidth = superview?.frame.width
         avatarBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.size.equalTo(CGSize(width: 125, height: 125))
             make.centerX.equalTo(superview.snp_left).offset(screenWidth * 0.45)
             make.top.equalTo(superview).offset(40)
         })
-        avatarBtn?.addTarget(self, action: #selector(SideBarController.sideBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        avatarBtn?.addTarget(self, action: #selector(SideBarController.sideBtnPressed(_:)), for: .touchUpInside)
         // 姓名
         nameLbl = UILabel()
-        nameLbl?.font = UIFont.systemFontOfSize(24)
-        nameLbl?.textColor = UIColor.whiteColor()
-        nameLbl?.textAlignment = .Center
+        nameLbl?.font = UIFont.systemFont(ofSize: 24)
+        nameLbl?.textColor = UIColor.white
+        nameLbl?.textAlignment = .center
         nameLbl?.text = host.nickName ?? LS("正在获取数据")
-        superview.addSubview(nameLbl!)
+        superview?.addSubview(nameLbl!)
         nameLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.centerX.equalTo(avatarBtn!)
             make.top.equalTo(avatarBtn!.snp_bottom).offset(11)
@@ -96,11 +96,11 @@ class SideBarController: UIViewController {
         })
         if let car = host.avatarCarModel {
             carNameLbl = UILabel()
-            carNameLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
+            carNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
             carNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
             carNameLbl?.text = car.name
-            superview.addSubview(carNameLbl!)
-            let size = carNameLbl?.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max))
+            superview?.addSubview(carNameLbl!)
+            let size = carNameLbl?.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
             carNameLbl?.translatesAutoresizingMaskIntoConstraints = true
             carNameLbl?.snp_makeConstraints(closure: { (make) -> Void in
                 make.left.equalTo(avatarBtn!.snp_centerX).offset((25 - size!.width) / 2)
@@ -111,7 +111,7 @@ class SideBarController: UIViewController {
             carIcon?.layer.cornerRadius = 10.5
             carIcon?.clipsToBounds = true
             carIcon?.kf_setImageWithURL(car.logoURL!)
-            superview.addSubview(carIcon!)
+            superview?.addSubview(carIcon!)
             carIcon?.snp_makeConstraints(closure: { (make) -> Void in
                 make.right.equalTo(carNameLbl!.snp_left).offset(-5)
                 make.centerY.equalTo(carNameLbl!)
@@ -125,14 +125,14 @@ class SideBarController: UIViewController {
         var preView: UIView = nameLbl!
         for i in 0..<5 {
             let btn = UIButton()
-            btn.setTitle(titles[i], forState: .Normal)
-            btn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            btn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
-            btn.contentHorizontalAlignment = .Left
-            btn.addTarget(self, action: #selector(SideBarController.sideBtnPressed(_:)), forControlEvents: .TouchUpInside)
+            btn.setTitle(titles[i], for: UIControlState())
+            btn.setTitleColor(UIColor.white, for: UIControlState())
+            btn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+            btn.contentHorizontalAlignment = .left
+            btn.addTarget(self, action: #selector(SideBarController.sideBtnPressed(_:)), for: .touchUpInside)
             btn.tag = i + 1
             btnArray.append(btn)
-            superview.addSubview(btn)
+            superview?.addSubview(btn)
             btn.snp_makeConstraints(closure: { (make) -> Void in
                 make.centerY.equalTo(preView).offset({ ()-> Int in
                     if i == 0 {
@@ -152,13 +152,13 @@ class SideBarController: UIViewController {
         
         // 创建未读消息数量
         unreadMessagesLbl = UILabel()
-        unreadMessagesLbl.textColor = UIColor.whiteColor()
+        unreadMessagesLbl.textColor = UIColor.white
         unreadMessagesLbl.backgroundColor = kHighlightedRedTextColor
-        unreadMessagesLbl.font = UIFont.systemFontOfSize(9, weight: UIFontWeightUltraLight)
+        unreadMessagesLbl.font = UIFont.systemFont(ofSize: 9, weight: UIFontWeightUltraLight)
         unreadMessagesLbl.layer.cornerRadius = 9
         unreadMessagesLbl.clipsToBounds = true
-        unreadMessagesLbl.textAlignment = .Center
-        superview.addSubview(unreadMessagesLbl)
+        unreadMessagesLbl.textAlignment = .center
+        superview?.addSubview(unreadMessagesLbl)
         unreadMessagesLbl.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(btnArray[4])
             make.left.equalTo(superview).offset(125)
@@ -168,14 +168,14 @@ class SideBarController: UIViewController {
         let radarBtn = btnArray[0]
         let marker = UIImage(named: "home_slct_marker")
         btnMarker = UIImageView(image: marker)
-        superview.addSubview(btnMarker!)
+        superview?.addSubview(btnMarker!)
         btnMarker?.snp_makeConstraints(closure: { (make) -> Void in
             make.size.equalTo(CGSize(width: 243, height: 36))
             make.centerY.equalTo(radarBtn)
             make.left.equalTo(superview).offset(34)
         })
-        superview.sendSubviewToBack(btnMarker!)
-        superview.sendSubviewToBack(bgImg!)
+        superview?.sendSubview(toBack: btnMarker!)
+        superview?.sendSubview(toBack: bgImg!)
         
         self.selectedBtn = radarBtn
     }
@@ -188,16 +188,16 @@ class SideBarController: UIViewController {
             make.height.equalTo(superview)
             make.width.equalTo(bgImg!.snp_height).multipliedBy(0.75)
         })
-        superview.updateConstraints()
-        superview.layoutIfNeeded()
+        superview?.updateConstraints()
+        superview?.layoutIfNeeded()
         bgImg?.snp_remakeConstraints(closure: { (make) -> Void in
             make.right.equalTo(superview)
             make.height.equalTo(superview)
             make.width.equalTo(bgImg!.snp_height).multipliedBy(0.75)
         })
-        UIView.animateWithDuration(10) { () -> Void in
-            superview.layoutIfNeeded()
-        }
+        UIView.animate(withDuration: 10, animations: { () -> Void in
+            superview?.layoutIfNeeded()
+        }) 
     }
 }
 
@@ -216,7 +216,7 @@ extension SideBarController {
         nameLbl?.text = user.nickName ?? LS("离线用户")
         if let car = user.avatarCarModel {
             carNameLbl?.text = car.name
-            let size = carNameLbl?.sizeThatFits(CGSizeMake(CGFloat.max, CGFloat.max))
+            let size = carNameLbl?.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
             carNameLbl?.translatesAutoresizingMaskIntoConstraints = true
             carNameLbl?.snp_remakeConstraints(closure: { (make) -> Void in
                 make.left.equalTo(avatarBtn!.snp_centerX).offset((25 - size!.width) / 2)
@@ -234,21 +234,21 @@ extension SideBarController {
         }
         let unreadNum = MessageManager.defaultManager.unreadNum
         if unreadNum > 0 {
-            unreadMessagesLbl.hidden = false
+            unreadMessagesLbl.isHidden = false
             unreadMessagesLbl.text = "\(unreadNum)"
         }else {
-            unreadMessagesLbl.hidden = true
+            unreadMessagesLbl.isHidden = true
         }
     }
     
     func unreadMessageNumDidChange() {
         let unreadNum = MessageManager.defaultManager.unreadNum
-        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+        DispatchQueue.main.async { () -> Void in
             if unreadNum > 0 {
-                self.unreadMessagesLbl.hidden = false
+                self.unreadMessagesLbl.isHidden = false
                 self.unreadMessagesLbl.text = "\(unreadNum)"
             }else {
-                self.unreadMessagesLbl.hidden = true
+                self.unreadMessagesLbl.isHidden = true
             }   
         }
     }
@@ -256,7 +256,7 @@ extension SideBarController {
 
 // MARK: - 这个extension解决边栏按钮的响应处理
 extension SideBarController {
-    func sideBtnPressed(sender: UIButton) {
+    func sideBtnPressed(_ sender: UIButton) {
         delegate?.switchController(selectedBtn!.tag, to: sender.tag)
         if selectedBtn!.tag != sender.tag && sender.tag != 0 {
             switchBtnMarker(sender)
@@ -264,7 +264,7 @@ extension SideBarController {
         selectedBtn = sender
     }
     
-    func switchBtnMarker(nextBtn: UIButton, animated: Bool=true) {
+    func switchBtnMarker(_ nextBtn: UIButton, animated: Bool=true) {
         btnMarker?.snp_remakeConstraints(closure: { (make) -> Void in
             make.size.equalTo(CGSize(width: 243, height: 36))
             make.centerY.equalTo(selectedBtn!)

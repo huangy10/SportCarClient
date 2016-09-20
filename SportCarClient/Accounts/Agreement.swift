@@ -13,7 +13,7 @@ import SnapKit
 class AgreementController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
         let board = UIScrollView()
         self.view.addSubview(board)
         board.snp_makeConstraints { (make) -> Void in
@@ -21,10 +21,10 @@ class AgreementController: UIViewController {
         }
         
         let screenFrame = self.view.frame
-        let agreementLbl = UILabel(frame: CGRect(x: 0, y: 0, width: screenFrame.width - 23 * 2, height: CGFloat.max))
+        let agreementLbl = UILabel(frame: CGRect(x: 0, y: 0, width: screenFrame.width - 23 * 2, height: CGFloat.greatestFiniteMagnitude))
         agreementLbl.numberOfLines = 0
-        agreementLbl.lineBreakMode = NSLineBreakMode.ByWordWrapping
-        agreementLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
+        agreementLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
+        agreementLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         agreementLbl.attributedText = readAgreementFromFile()
         agreementLbl.sizeToFit()
         board.addSubview(agreementLbl)
@@ -36,9 +36,9 @@ class AgreementController: UIViewController {
     
     func readAgreementFromFile() -> NSAttributedString?{
         let filename = "agreement"
-        let fileURL = NSBundle.mainBundle().URLForResource(filename, withExtension: "rtf")
+        let fileURL = Bundle.main.url(forResource: filename, withExtension: "rtf")
         do{
-            let text = try NSAttributedString(URL: fileURL!, options: [NSDocumentTypeDocumentAttribute: NSRTFTextDocumentType], documentAttributes: nil)
+            let text = try NSAttributedString(url: fileURL!, options: [NSDocumentTypeDocumentAttribute: NSRTFTextDocumentType], documentAttributes: nil)
             return text
         }
         catch{
@@ -54,17 +54,17 @@ class AgreementController: UIViewController {
 //        
 //        let leftBtnItem = UIBarButtonItem(customView: backBtn)
         
-        let leftBtn = UIBarButtonItem(title: LS("取消"), style: .Done, target: self, action: #selector(backBtnPressed))
-        leftBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let leftBtn = UIBarButtonItem(title: LS("取消"), style: .done, target: self, action: #selector(backBtnPressed))
+        leftBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         return leftBtn
     }
     
     func backBtnPressed() {
 //        self.navigationController?.popViewControllerAnimated(true)
         if let nav = navigationController {
-            nav.popViewControllerAnimated(true)
+            nav.popViewController(animated: true)
         } else {
-            dismissViewControllerAnimated(true, completion: nil)
+            dismiss(animated: true, completion: nil)
         }
     }
 }

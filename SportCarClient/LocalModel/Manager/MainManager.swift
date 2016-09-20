@@ -14,7 +14,7 @@ import SwiftyJSON
 
 class MainManager {
     
-    private static let _sharedMainManager = MainManager()
+    fileprivate static let _sharedMainManager = MainManager()
     
     class var sharedManager: MainManager {
         return _sharedMainManager
@@ -25,11 +25,11 @@ class MainManager {
     internal var _hostUser: User?
     internal var _hostUserID: Int32?
     
-    internal var _workQueue: dispatch_queue_t?
+    internal var _workQueue: DispatchQueue?
     
-    var workQueue: dispatch_queue_t {
+    var workQueue: DispatchQueue {
         if _workQueue == nil {
-            _workQueue = dispatch_get_main_queue()
+            _workQueue = DispatchQueue.main
         }
         return _workQueue!
     }
@@ -70,11 +70,11 @@ class MainManager {
         return mainContext
     }
     
-    func getOrCreate<T where T : BaseModel>(data: JSON, detailLevel: Int = 0, ctx: DataContext? = nil, overwrite: Bool = true) throws -> T {
+    func getOrCreate<T>(_ data: JSON, detailLevel: Int = 0, ctx: DataContext? = nil, overwrite: Bool = true) throws -> T where T : BaseModel {
         let context = ctx ?? getOperationContext()
         let table = AlecrimCoreData.Table<T>(dataContext: context)
         let id = data[T.idField].int32Value
-        if T.isKindOfClass(User.self) && id == hostUserID {
+        if T.isKind(of: User.self) && id == hostUserID {
             let obj = hostUser!
             if !overwrite {
                 return obj as! T
@@ -96,7 +96,7 @@ class MainManager {
         return obj
     }
     
-    func createNew<T: BaseModel>(initial: JSON? = nil, ctx: DataContext? = nil) throws -> T {
+    func createNew<T: BaseModel>(_ initial: JSON? = nil, ctx: DataContext? = nil) throws -> T {
         let context = ctx ?? getOperationContext()
         let table = AlecrimCoreData.Table<T>(dataContext: context)
         let newObj = table.createEntity()
@@ -108,7 +108,7 @@ class MainManager {
         return newObj
     }
     
-    func objectWithSSID<T: BaseModel>(ssid: Int32?, ctx: DataContext? = nil) -> T? {
+    func objectWithSSID<T: BaseModel>(_ ssid: Int32?, ctx: DataContext? = nil) -> T? {
         if ssid == nil {
             return nil
         }
@@ -124,12 +124,12 @@ class MainManager {
         try mainContext.save()
     }
     
-    func login(user: User, jwtToken: String) {
+    func login(_ user: User, jwtToken: String) {
         if _hostUser != nil || user.managedObjectContext != getOperationContext() {
             assertionFailure()
         }
-        NSUserDefaults.standardUserDefaults().setObject(user.ssidString, forKey: "host_user_id")
-        NSUserDefaults.standardUserDefaults().setObject(jwtToken, forKey: "\(user.ssidString)_jwt_token")
+        UserDefaults.standard.set(user.ssidString, forKey: "host_user_id")
+        UserDefaults.standard.set(jwtToken, forKey: "\(user.ssidString)_jwt_token")
         _hostUser = user
         _hostUserID = user.ssid
         self.jwtToken = jwtToken
@@ -141,15 +141,15 @@ class MainManager {
     }
     
     func logout() {
-        NSUserDefaults.standardUserDefaults().removeObjectForKey("host_user_id")
+        UserDefaults.standard.removeObject(forKey: "host_user_id")
         _hostUser = nil
         _hostUserID = nil
         MessageManager.defaultManager.disconnect()
     }
     
     func resumeLoginStatus() -> MainManager {
-        if let userIDString = NSUserDefaults.standardUserDefaults().stringForKey("host_user_id") {
-            guard let jwtToken = NSUserDefaults.standardUserDefaults().stringForKey("\(userIDString)_jwt_token") else {
+        if let userIDString = UserDefaults.standard.string(forKey: "host_user_id") {
+            guard let jwtToken = UserDefaults.standard.string(forKey: "\(userIDString)_jwt_token") else {
                 return self
             }
             self.jwtToken = jwtToken

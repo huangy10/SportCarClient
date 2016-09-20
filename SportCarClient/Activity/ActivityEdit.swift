@@ -16,14 +16,14 @@ class ActivityEditController: ActivityReleaseController {
         setInitial()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         geoSearch?.delegate = self
         mapView.viewWillAppear()
         mapView.zoomLevel = 16
-        mapView.setCenterCoordinate(userLocation!, animated: true)
+        mapView.setCenter(userLocation!, animated: true)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         geoSearch?.delegate = nil
         mapView.delegate = nil
         mapView.viewWillDisappear()
@@ -36,20 +36,20 @@ class ActivityEditController: ActivityReleaseController {
         desInput.text = act.actDescription
         maxAttend = Int(act.maxAttend)
         desWordCountLbl.text = "\(act.actDescription!.length)/40"
-        imagePickerBtn.kf_setImageWithURL(act.posterURL!, forState: .Normal, placeholderImage: nil)
-        imagePickerBtn.kf_setImageWithURL(act.posterURL!, forState: .Normal, placeholderImage: nil, optionsInfo: nil, progressBlock: nil) { (image, error, cacheType, imageURL) in
+        imagePickerBtn.kf_setImageWithURL(act.posterURL!, forState: UIControlState(), placeholderImage: nil)
+        imagePickerBtn.kf_setImageWithURL(act.posterURL!, forState: UIControlState(), placeholderImage: nil, optionsInfo: nil, progressBlock: nil) { (image, error, cacheType, imageURL) in
             self.poster = image
         }
         userLocation = act.location?.coordinate
         locDescription = act.location?.descr
         city = act.location?.city
         mapCell.locDisplay.text = act.location?.descr
-        desInput.textColor = UIColor.blackColor()
+        desInput.textColor = UIColor.black
         self.tableView.reloadData()
     }
     
     override func navLeftBtnPressed() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
     }
 
     override func navRightBtnPressed() {
@@ -57,11 +57,11 @@ class ActivityEditController: ActivityReleaseController {
             view?.resignFirstResponder()
         }
         // check integrity of the data
-        guard let actName = nameInput.text where actName.length > 0 else {
+        guard let actName = nameInput.text , actName.length > 0 else {
             showToast(LS("请填写活动名称"), onSelf: true)
             return
         }
-        guard let actDes = desInput.text where actDes.length > 0 else {
+        guard let actDes = desInput.text , actDes.length > 0 else {
             showToast(LS("请填写活动描述"), onSelf: true)
             return
         }
@@ -77,7 +77,7 @@ class ActivityEditController: ActivityReleaseController {
             showToast(LS("请设置活动时间"), onSelf: true)
             return
         }
-        if startAtDate.compare(endAtDate) == .OrderedDescending {
+        if startAtDate.compare(endAtDate as Date) == .orderedDescending {
             showToast(LS("开始时间不能晚于结束时间"))
             return
         }
@@ -88,7 +88,7 @@ class ActivityEditController: ActivityReleaseController {
         let toast = showStaticToast(LS("发布中..."))
         pp_showProgressView()
         ActivityRequester.sharedInstance.activityEdit(act.ssidString, name: actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, authedUserOnly: authedUserOnly, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", city: city ?? "", onSuccess: { (json) in
-            self.navigationController?.popViewControllerAnimated(true)
+            self.navigationController?.popViewController(animated: true)
             if let mine = self.actHomeController?.mine {
                 mine.refreshControl.beginRefreshing()
                 mine.getLatestActData()
@@ -100,13 +100,13 @@ class ActivityEditController: ActivityReleaseController {
             } else {
                 self.showToast(LS("修改成功!"))
             }
-            NSNotificationCenter.defaultCenter().postNotificationName(kActivityInfoChanged, object: nil, userInfo: [kActivityKey: self.act])
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kActivityInfoChanged), object: nil, userInfo: [kActivityKey: self.act])
             }, onProgress: { (progress) in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.pp_updateProgress(progress)
                 })
             }) { (code) in
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.hideToast(toast)
                     self.showToast(LS("修改失败，请检查网络设置"), onSelf: true)
                     self.pp_hideProgressView()

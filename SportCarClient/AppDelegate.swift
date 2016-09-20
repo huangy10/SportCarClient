@@ -16,9 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
     var window: UIWindow?
     var mapManager: BMKMapManager?
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        window = UIWindow(frame: UIScreen.main.bounds)
         mapManager = BMKMapManager()
         let ret = mapManager?.start("WFZ49PN014ukXD2S4Guqxja2", generalDelegate: self)
         assert(ret!)
@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
     }
     
     func customizeMap() {
-        let path = NSBundle.mainBundle().pathForResource("custom_config_黑夜", ofType: "")
+        let path = Bundle.main.path(forResource: "custom_config_黑夜", ofType: "")
         BMKMapView.customMapStyle(path)
     }
     
@@ -49,59 +49,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
         WeiboSDK.registerApp("2005077014")
     }
 
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game
         MessageManager.defaultManager.disconnect()
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        MessageManager.defaultManager.disconnect()
         try! ChatModelManger.sharedManager.save()
         try! MainManager.sharedManager.save()
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         MessageManager.defaultManager.connect()
+        if MainManager.sharedManager.hostUser != nil {
+            PersonMineSettingsDataSource.sharedDataSource.update()
+        }
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         try! ChatModelManger.sharedManager.save()
         try! MainManager.sharedManager.save()
     }
     
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
         // handle real time notification
-        AppManager.sharedAppManager.onReceiveNewRemoteNotificaiton()
+//        AppManager.sharedAppManager.onReceiveNewRemoteNotificaiton(userInfo)
     }
     
-    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
-        if notificationSettings.types != .None {
+    func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
+        if notificationSettings.types != UIUserNotificationType() {
             application.registerForRemoteNotifications()
         } else {
             AppManager.sharedAppManager.deviceTokenString = "UnauthorizedDevice"
         }
     }
     
-    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        let tokenChars = UnsafePointer<CChar>(deviceToken.bytes)
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let tokenChars = (deviceToken as NSData).bytes.bindMemory(to: CChar.self, capacity: deviceToken.count)
         var tokenString = ""
-        for i in 0..<deviceToken.length {
+        for i in 0..<deviceToken.count {
             tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
         }
         AppManager.sharedAppManager.deviceTokenString = tokenString
     }
     
-    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         
     }
 
@@ -168,36 +172,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
 //        }
 //    }
     
-    func onGetNetworkState(iError: Int32) {
+    func onGetNetworkState(_ iError: Int32) {
         
     }
     
-    func onGetPermissionState(iError: Int32) {
+    func onGetPermissionState(_ iError: Int32) {
         
     }
     
     
     // MARK: - Delegate for Share
     
-    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+    func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
         let urlStr = url.absoluteString
         if urlStr.hasPrefix("wx") {
-            return WXApi.handleOpenURL(url, delegate: self);
+            return WXApi.handleOpen(url, delegate: self);
         } else if urlStr.hasSuffix("wb") {
-            return WeiboSDK.handleOpenURL(url, delegate: self)
+            return WeiboSDK.handleOpen(url, delegate: self)
         } else {
             return false
         }
     }
     
-    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
         let urlStr = url.absoluteString
         if urlStr.hasPrefix("wx") {
-            return WXApi.handleOpenURL(url, delegate: self);
+            return WXApi.handleOpen(url, delegate: self);
         } else if urlStr.hasSuffix("wb") {
-            return WeiboSDK.handleOpenURL(url, delegate: self)
+            return WeiboSDK.handleOpen(url, delegate: self)
         } else if urlStr.hasSuffix("mqq"){
-            return TencentOAuth.HandleOpenURL(url)
+            return TencentOAuth.handleOpen(url)
         } else {
             return false
         }
@@ -205,21 +209,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
     
     // MARK: Wechat
     
-    func onReq(req: BaseReq!) {
+    func onReq(_ req: BaseReq!) {
         
     }
     
-    func onResp(resp: BaseResp!) {
+    func onResp(_ resp: BaseResp!) {
         
     }
     
     // MARK: Sina Weibo
     
-    func didReceiveWeiboRequest(request: WBBaseRequest!) {
+    func didReceiveWeiboRequest(_ request: WBBaseRequest!) {
         print(request)
     }
     
-    func didReceiveWeiboResponse(response: WBBaseResponse!) {
+    func didReceiveWeiboResponse(_ response: WBBaseResponse!) {
         print(response)
     }
 

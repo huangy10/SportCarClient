@@ -18,12 +18,12 @@ extension Activity {
 
     @NSManaged var actDescription: String?
     @NSManaged var applied: Bool // cannot mark as optional because Objective-C compatibility issues
-    @NSManaged var applyAt: NSDate?
+    @NSManaged var applyAt: Date?
     @NSManaged var authedUserOnly: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var clubLimitStr: String?
     @NSManaged var commentNum: Int32 // cannot mark as optional because Objective-C compatibility issues
-    @NSManaged var createdAt: NSDate?
-    @NSManaged var endAt: NSDate?
+    @NSManaged var createdAt: Date?
+    @NSManaged var endAt: Date?
     @NSManaged var likeNum: Int32 // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var liked: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var loc: String?
@@ -31,8 +31,8 @@ extension Activity {
     @NSManaged var mine: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var name: String?
     @NSManaged var poster: String?
-    @NSManaged var sent: NSDate?
-    @NSManaged var startAt: NSDate?
+    @NSManaged var sent: Date?
+    @NSManaged var startAt: Date?
 
     @NSManaged var user: User?
 
@@ -70,12 +70,12 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: Activity {
 
     var actDescription: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("actDescription", self) }
     var applied: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("applied", self) }
-    var applyAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("applyAt", self) }
+    var applyAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("applyAt", self) }
     var authedUserOnly: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("authedUserOnly", self) }
     var clubLimitStr: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("clubLimitStr", self) }
     var commentNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("commentNum", self) }
-    var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
-    var endAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("endAt", self) }
+    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
+    var endAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("endAt", self) }
     var likeNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("likeNum", self) }
     var liked: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("liked", self) }
     var loc: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("loc", self) }
@@ -83,8 +83,8 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: Activity {
     var mine: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("mine", self) }
     var name: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("name", self) }
     var poster: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("poster", self) }
-    var sent: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("sent", self) }
-    var startAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("startAt", self) }
+    var sent: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("sent", self) }
+    var startAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("startAt", self) }
 
     var user: AlecrimCoreData.NullableAttribute<User> { return AlecrimCoreData.NullableAttribute<User>("user", self) }
 

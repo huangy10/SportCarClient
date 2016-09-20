@@ -19,7 +19,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
     var locationService: BMKLocationService!
     var userLocation: BMKUserLocation?
     var userAnnos: MyOrderedDict<String, UserAnnotation> = MyOrderedDict()
-    var timer: NSTimer?
+    var timer: Timer?
     
     var userList: UITableView!
     var showUserListBtn: UIButton!
@@ -34,13 +34,13 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
     weak var locationUpdatingRequest: Request?
     
     // Added by Woody Huang 2016.07.10
-    var lastUpdate: NSDate = NSDate()
+    var lastUpdate: Date = Date()
     var showOnMap: Bool = false
     weak var toast: UIView?
     
     deinit {
         timer?.invalidate()
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -48,7 +48,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         createSubviews()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUserBlocked(_:)), name: kAccountBlacklistChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onUserBlocked(_:)), name: NSNotification.Name(rawValue: kAccountBlacklistChange), object: nil)
         
         locationService = BMKLocationService()
         locationService.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
@@ -58,17 +58,17 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
     func confirmShowOnMap() {
         showOnMap = true
         toast = showStaticToast(LS("正在定位..."))
-        timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(RadarDriverMapController.getLocationData), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(RadarDriverMapController.getLocationData), userInfo: nil, repeats: true)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         map.viewWillAppear()
         map.delegate = self
         locationService.delegate = self
         if showOnMap {
-            let now = NSDate()
-            let timeDelta = now.timeIntervalSinceDate(self.lastUpdate)
+            let now = Date()
+            let timeDelta = now.timeIntervalSince(self.lastUpdate)
             if timeDelta > kMaxRadarKeptTime {
                 userLocation = nil
                 map.removeAnnotations(map.annotations)
@@ -77,13 +77,13 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
                     userList.reloadData()
                 }
             }
-            timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(RadarDriverMapController.getLocationData), userInfo: nil, repeats: true)
+            timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(RadarDriverMapController.getLocationData), userInfo: nil, repeats: true)
         } else {
             showConfirmToast(LS("跑车雷达"), message: LS("这里会将您的实时位置共享给周围用户，确认继续？"), target: self, onConfirm: #selector(confirmShowOnMap))
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         map.viewWillDisappear()
         map.delegate = nil
@@ -93,18 +93,18 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
     }
     
     func createSubviews() {
-        self.view.backgroundColor = UIColor.blackColor()
+        self.view.backgroundColor = UIColor.black
         map = BMKMapView()
         self.view.addSubview(map)
         map.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(self.view)
         }
         tapper = UITapGestureRecognizer(target: self, action: #selector(mapTapped))
-        tapper.enabled = false
+        tapper.isEnabled = false
         map.addGestureRecognizer(tapper)
         //
-        userList = UITableView(frame: CGRectZero, style: .Plain)
-        userList.separatorStyle = .None
+        userList = UITableView(frame: CGRect.zero, style: .plain)
+        userList.separatorStyle = .none
         userList.rowHeight = 90
         userList.delegate = self
         userList.dataSource = self
@@ -115,26 +115,26 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
             make.height.equalTo(self.view.frame.height - 100)
             make.top.equalTo(self.view.snp_bottom)
         }
-        userList.registerClass(DriverMapUserCell.self, forCellReuseIdentifier: "cell")
+        userList.register(DriverMapUserCell.self, forCellReuseIdentifier: "cell")
         self.view.addSubview(UIView)
-            .config(UIColor.whiteColor())
-            .addShadow(3, color: UIColor.blackColor(), opacity: 0.1, offset: CGSizeMake(0, -2))
+            .config(UIColor.white)
+            .addShadow(3, color: UIColor.black, opacity: 0.1, offset: CGSize(width: 0, height: -2))
             .layout { (make) in
                 make.edges.equalTo(userList)
         }
-        self.view.bringSubviewToFront(userList)
+        self.view.bringSubview(toFront: userList)
         //
         showUserListBtn = self.view.addSubview(UIButton.self)
-            .config(UIColor.whiteColor())
+            .config(UIColor.white)
             .config(self, selector: #selector(showUserBtnPressed))
             .toRound(20)
             .addShadow().layout({ (make) in
                 make.bottom.equalTo(userList.snp_top).offset(-25)
                 make.right.equalTo(self.view).offset(-20)
-                make.size.equalTo(CGSizeMake(40, 40))
+                make.size.equalTo(CGSize(width: 40, height: 40))
             })
         showUserListBtn.addSubview(UIImageView)
-            .config(UIImage(named: "view_list"), contentMode: .ScaleAspectFit)
+            .config(UIImage(named: "view_list"), contentMode: .scaleAspectFit)
             .layout { (make) in
                 make.center.equalTo(showUserListBtn)
                 make.size.equalTo(showUserListBtn).dividedBy(2)
@@ -158,7 +158,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
             .layout { (make) in
                 make.top.equalTo(mapFilterView)
                 make.left.equalTo(mapFilterView)
-                make.size.equalTo(CGSizeMake(115, 40))
+                make.size.equalTo(CGSize(width: 115, height: 40))
         }
     }
 }
@@ -175,7 +175,7 @@ extension RadarDriverMapController {
         }
     }
     
-    func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
+    func didUpdate(_ userLocation: BMKUserLocation!) {
         locationService.stopUserLocationService()
         if self.userLocation == nil {
             let annotate = UserAnnotation()
@@ -192,15 +192,15 @@ extension RadarDriverMapController {
         updateUserLocationToServer()
     }
     
-    func mapView(mapView: BMKMapView!, viewForAnnotation annotation: BMKAnnotation!) -> BMKAnnotationView! {
+    func mapView(_ mapView: BMKMapView!, viewFor annotation: BMKAnnotation!) -> BMKAnnotationView! {
         if let userAnno = annotation as? UserAnnotation {
             let user = userAnno.user
-            if user.isHost {
+            if (user?.isHost)! {
                 let cell = HostUserOnRadarAnnotationView(annotation: annotation, reuseIdentifier: "host")
-                cell.startScan()
+                cell?.startScan()
                 return cell
             } else {
-                var cell = mapView.dequeueReusableAnnotationViewWithIdentifier("user") as? UserAnnotationView
+                var cell = mapView.dequeueReusableAnnotationView(withIdentifier: "user") as? UserAnnotationView
                 
                 if cell == nil {
                     cell = UserAnnotationView(annotation: userAnno, reuseIdentifier: "user")
@@ -215,7 +215,7 @@ extension RadarDriverMapController {
         return nil
     }
     
-    func mapView(mapView: BMKMapView!, didSelectAnnotationView view: BMKAnnotationView!) {
+    func mapView(_ mapView: BMKMapView!, didSelect view: BMKAnnotationView!) {
         if let user = view.annotation as? UserAnnotation {
             radarHome?.navigationController?.pushViewController(user.user.showDetailController(), animated: true)
         }
@@ -244,7 +244,7 @@ extension RadarDriverMapController {
         
         let loc1 = CLLocation(latitude: mapBounds.center.latitude, longitude: mapBounds.center.longitude)
         let loc2 = CLLocation(latitude: mapBounds.center.latitude + mapBounds.span.latitudeDelta, longitude: mapBounds.center.longitude + mapBounds.span.longitudeDelta)
-        let distance = loc1.distanceFromLocation(loc2)
+        let distance = loc1.distance(from: loc2)
         
         let filterType = mapFilter.getFitlerTypeString()
         let filterParam = mapFilter.getFilterParam()
@@ -252,13 +252,19 @@ extension RadarDriverMapController {
         
         locationUpdatingRequest = requester.getRadarDataWithFilter(userLocation!.location.coordinate, scanCenter: scanCenter, filterDistance: distance, filterType: filterType, filterParam: filterParam, onSuccess: { (json) in
             // 当前正在显示的用户
+            var usersIDs: [String] = []
             for data in json!.arrayValue {
+                let onlyOnList = data["only_on_list"].boolValue
                 // 创建用户对象
                 let user: User = try! MainManager.sharedManager.getOrCreate(data)
                 let userID = user.ssidString
+                usersIDs.append(user.ssidString)
                 if let anno = self.userAnnos[userID] {
                     let loc = data["loc"]
                     anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
+                    if onlyOnList {
+                        self.map.removeAnnotation(anno)
+                    }
                 } else {
                     let anno = UserAnnotation()
                     anno.user = user
@@ -266,13 +272,22 @@ extension RadarDriverMapController {
                     let loc = data["loc"]
                     anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
                     self.userAnnos[userID] = anno
-                    self.map.addAnnotation(anno)
+                    if !onlyOnList {
+                        self.map.addAnnotation(anno)
+                    }
+                }
+            }
+            for oldUser in self.userAnnos.keys {
+                if !usersIDs.contains(oldUser) {
+                    let anno = self.userAnnos[oldUser]!
+                    self.map.removeAnnotation(anno)
+                    self.userAnnos[oldUser] = nil
                 }
             }
             self.locationUpdatingRequest = nil
-            self.lastUpdate = NSDate()
+            self.lastUpdate = Date()
             if self.showUserListBtn.tag == 1 {
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.userList.reloadData()
                 })
             }
@@ -312,19 +327,19 @@ extension RadarDriverMapController {
 //        }
     }
     
-    func onUserBlocked(notification: NSNotification) {
+    func onUserBlocked(_ notification: Foundation.Notification) {
 //        guard let user = notification.userInfo?[kUserKey] as? User else {
 //            assertionFailure()
 //            return
 //        }
-        let user = notification.userInfo![kUserKey] as! User
-        let blockStatus = notification.userInfo![kAccountBlackStatusKey] as! String
+        let user = (notification as NSNotification).userInfo![kUserKey] as! User
+        let blockStatus = (notification as NSNotification).userInfo![kAccountBlackStatusKey] as! String
         if blockStatus == kAccountBlackStatusBlocked {
             if let anno = userAnnos[user.ssidString] {
                 userAnnos[user.ssidString] = nil
                 map.removeAnnotation(anno)
                 if showUserListBtn.tag == 1 {
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         self.userList.reloadData()
                     })
                 }
@@ -335,17 +350,17 @@ extension RadarDriverMapController {
 
 // MARK: - 关于用户列表显示
 extension RadarDriverMapController {
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userAnnos.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! DriverMapUserCell
-        let anno = userAnnos.valueForIndex(indexPath.row)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DriverMapUserCell
+        let anno = userAnnos.valueForIndex((indexPath as NSIndexPath).row)
         cell.user = anno?.user
         cell.hostLoc = CLLocation(latitude: userAnnotate.coordinate.latitude, longitude: userAnnotate.coordinate.longitude)
         cell.userLoc = CLLocation(latitude: anno!.coordinate.latitude, longitude: anno!.coordinate.longitude)
@@ -353,8 +368,8 @@ extension RadarDriverMapController {
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let anno = userAnnos.valueForIndex(indexPath.row)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let anno = userAnnos.valueForIndex((indexPath as NSIndexPath).row)
         guard let user = anno?.user else {
             assertionFailure()
             return
@@ -381,7 +396,7 @@ extension RadarDriverMapController {
             }
             userList.reloadData()
             showUserListBtn.tag = 1
-            tapper.enabled = true
+            tapper.isEnabled = true
         }else {
             userList.snp_remakeConstraints { (make) -> Void in
                 make.right.equalTo(self.view)
@@ -393,7 +408,7 @@ extension RadarDriverMapController {
                 self.view.layoutIfNeeded()
             })
             showUserListBtn.tag = 0
-            tapper.enabled = false
+            tapper.isEnabled = false
         }
         
     }
@@ -403,7 +418,7 @@ extension RadarDriverMapController {
     func toggleMapFilter() {
         
         if mapNav.viewControllers.count > 1 {
-            mapNav.popToRootViewControllerAnimated(true)
+            mapNav.popToRootViewController(animated: true)
             return
         }
         
@@ -415,11 +430,11 @@ extension RadarDriverMapController {
                 make.width.equalTo(115)
                 make.height.equalTo(40)
             })
-            UIView.animateWithDuration(0.3) { () -> Void in
+            UIView.animate(withDuration: 0.3, animations: { () -> Void in
                 self.view.layoutIfNeeded()
                 self.mapFilter.view.toRound(20)
-                self.mapFilter.marker.transform = CGAffineTransformIdentity
-            }
+                self.mapFilter.marker.transform = CGAffineTransform.identity
+            }) 
         }else {
             // dispaly the list
             mapFilterView.snp_remakeConstraints(closure: { (make) -> Void in
@@ -429,11 +444,11 @@ extension RadarDriverMapController {
                 make.height.equalTo(40 * 6)
             })
             
-            UIView.animateWithDuration(0.3) { () -> Void in
+            UIView.animate(withDuration: 0.3, animations: { () -> Void in
                 self.view.layoutIfNeeded()
                 self.mapFilter.view.toRound(5)
-                self.mapFilter.marker.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
-            }
+                self.mapFilter.marker.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI))
+            }) 
         }
         mapFilter.expanded = !mapFilter.expanded
         

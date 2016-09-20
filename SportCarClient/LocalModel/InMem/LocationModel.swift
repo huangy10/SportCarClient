@@ -20,31 +20,31 @@ class LocationModel: BaseInMemModel {
         return CLLocationCoordinate2DMake(latitude, longitude)
     }
     
-    override func fromJSONString(string: String, detailLevel: Int) throws -> LocationModel{
-        if let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+    override func fromJSONString(_ string: String, detailLevel: Int) throws -> LocationModel{
+        if let data = string.data(using: String.Encoding.utf8, allowLossyConversion: false) {
             let json = JSON(data: data)
             // Location does not have a id, so just leave it a positive value
             ssid = 1
             try loadDataFromJSON(json)
             return self
         } else {
-            throw SSModelError.InvalidJSONString
+            throw SSModelError.invalidJSONString
         }
     }
     
-    override func loadDataFromJSON(data: JSON) throws -> LocationModel {
+    override func loadDataFromJSON(_ data: JSON) throws -> LocationModel {
         try super.loadDataFromJSON(data)
         latitude = data["lat"].doubleValue
         longitude = data["lon"].doubleValue
         descr = data["description"].stringValue
         city = data["city"].stringValue
         if latitude == 0 && longitude == 0 {
-            throw SSModelError.InvalidJSON
+            throw SSModelError.invalidJSON
         }
         return self
     }
     
-    override func toJSONObject(detailLevel: Int) throws -> JSON {
+    override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         return [
             "lat": latitude,
             "lon": longitude,

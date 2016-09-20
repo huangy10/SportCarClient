@@ -12,7 +12,7 @@ import UIKit
 
 
 protocol AvatarClubSelectDelegate: class {
-    func avatarClubSelectDidFinish(selectedClub: Club)
+    func avatarClubSelectDidFinish(_ selectedClub: Club)
     func avatarClubSelectDidCancel()
 }
 
@@ -22,7 +22,7 @@ class AvatarClubSelectController: AvatarItemSelectController {
     weak var delegate: AvatarClubSelectDelegate?
     
     var clubs: [Club] = []
-    private var user: User = MainManager.sharedManager.hostUser!
+    fileprivate var user: User = MainManager.sharedManager.hostUser!
     var preSelectID: Int32? = nil
     
     var selectedRow: Int = -1
@@ -51,19 +51,19 @@ class AvatarClubSelectController: AvatarItemSelectController {
     
     func createSubviews() {
         let superview = self.view
-        superview.backgroundColor = UIColor.whiteColor()
+        superview?.backgroundColor = UIColor.white
         
         noClubLbl = UILabel()
-        noClubLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        noClubLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         noClubLbl.textColor = UIColor(white: 0.72, alpha: 1)
         noClubLbl.text = LS("暂未加入认证俱乐部，在群聊中申请认证")
-        superview.addSubview(noClubLbl)
+        superview?.addSubview(noClubLbl)
         noClubLbl.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(100)
         }
         if clubs.count == 0 {
-            noClubLbl.hidden = true
+            noClubLbl.isHidden = true
         }
     }
     
@@ -86,26 +86,26 @@ class AvatarClubSelectController: AvatarItemSelectController {
         }
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        noClubLbl.hidden = clubs.count != 0
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        noClubLbl.isHidden = clubs.count != 0
         return clubs.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(AvatarItemSelectCell.reuseIdentifier, forIndexPath: indexPath) as! AvatarItemSelectCell
-        let club = clubs[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: AvatarItemSelectCell.reuseIdentifier, for: indexPath) as! AvatarItemSelectCell
+        let club = clubs[(indexPath as NSIndexPath).row]
         cell.avatarImg?.kf_setImageWithURL(club.logoURL!, placeholderImage: nil)
-        cell.selectBtn?.tag = indexPath.row
+        cell.selectBtn?.tag = (indexPath as NSIndexPath).row
         cell.nickNameLbl?.text = club.name
-        cell.authIcon.hidden = true
-        cell.selectBtn?.selected = selectedRow == indexPath.row
+        cell.authIcon.isHidden = true
+        cell.selectBtn?.isSelected = selectedRow == (indexPath as NSIndexPath).row
         cell.onSelect = { [weak self] (sender: UIButton) in
             let row = sender.tag
-            if sender.selected {
+            if sender.isSelected {
                 self?.selectedRow = -1
             }else{
                 self?.selectedRow = row

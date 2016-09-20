@@ -21,7 +21,7 @@ class UserAnnotationView: BMKAnnotationView {
     weak var parent: UIViewController!
     var user: User! {
         didSet {
-            avatar.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
+            avatar.kf_setImageWithURL(user.avatarURL!, forState: UIControlState())
             if let avatarCarURL = user.avatarCarModel?.logoURL {
                 avatarCar.kf_setImageWithURL(avatarCarURL)
             }
@@ -32,14 +32,14 @@ class UserAnnotationView: BMKAnnotationView {
     
     override init!(annotation: BMKAnnotation!, reuseIdentifier: String!) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        self.bounds = CGRectMake(0, 0, 65, 65)
+        self.bounds = CGRect(x: 0, y: 0, width: 65, height: 65)
         avatar = self.addSubview(UIButton.self)
             .config(self, selector: #selector(avatarPressed))
-            .setFrame(CGRectMake(0, 0, 65, 65))
+            .setFrame(CGRect(x: 0, y: 0, width: 65, height: 65))
             .toRound()
         avatarCar = self.addSubview(UIImageView.self)
             .config(nil)
-            .setFrame(CGRectMake(40, 40, 25, 25))
+            .setFrame(CGRect(x: 40, y: 40, width: 25, height: 25))
             .toRound()
         self.addShadow()
     }
@@ -59,29 +59,29 @@ class HostUserOnRadarAnnotationView: BMKAnnotationView {
     var centerIcon: UIImageView!
     var scan: UIImageView!
     
-    private var _curAngle: CGFloat = 0
-    private var updator: CADisplayLink?
+    fileprivate var _curAngle: CGFloat = 0
+    fileprivate var updator: CADisplayLink?
     
     override init!(annotation: BMKAnnotation!, reuseIdentifier: String!) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        self.bounds = CGRectMake(0, 0, 400, 400)
-        self.userInteractionEnabled = false
+        self.bounds = CGRect(x: 0, y: 0, width: 400, height: 400)
+        self.isUserInteractionEnabled = false
         
         centerIcon = UIImageView(image: UIImage(named: "location_mark"))
         self.addSubview(centerIcon)
-        centerIcon.center = CGPointMake(200, 200)
-        centerIcon.bounds = CGRectMake(0, 0, 27.5, 30)
+        centerIcon.center = CGPoint(x: 200, y: 200)
+        centerIcon.bounds = CGRect(x: 0, y: 0, width: 27.5, height: 30)
         
         scan = UIImageView(image: UIImage(named: "location_radar_scan"))
         scan.frame = self.bounds
         self.addSubview(scan)
         
         updator = CADisplayLink(target: self, selector: #selector(HostUserOnRadarAnnotationView.scanUpdate))
-        updator?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
+        updator?.add(to: RunLoop.current, forMode: RunLoopMode.defaultRunLoopMode)
         updator?.frameInterval = 1
-        updator?.paused = true
+        updator?.isPaused = true
         
-        self.userInteractionEnabled = false
+        self.isUserInteractionEnabled = false
     }
     
     deinit {
@@ -93,11 +93,11 @@ class HostUserOnRadarAnnotationView: BMKAnnotationView {
     }
     
     func startScan() {
-        updator?.paused = false
+        updator?.isPaused = false
     }
     
     func scanUpdate() {
-        let trans = CGAffineTransformMakeRotation(_curAngle)
+        let trans = CGAffineTransform(rotationAngle: _curAngle)
         scan.transform = trans
         _curAngle += 0.03
         self.setNeedsDisplay()

@@ -10,12 +10,12 @@ import Foundation
 import Dollar
 
 public extension String {
-//    
-//    public var length: Int {
-//        get {
-//            return self.characters.count
-//        }
-//    }
+    
+    public var length: Int {
+        get {
+            return self.characters.count
+        }
+    }
   
     public var camelCase: String {
         get {
@@ -79,7 +79,7 @@ public extension String {
     public subscript(range: Range<Int>) -> String {
         let start = startIndex.advancedBy(range.startIndex)
         let end = startIndex.advancedBy(range.endIndex)
-        return self.substringWithRange(Range(start: start, end: end))
+        return self.substringWithRange(start..<end)
     }
     
     /// Get the start index of Character

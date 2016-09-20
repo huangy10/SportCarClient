@@ -22,9 +22,9 @@ class PersonMineSettingsLocationVisiblityController: UITableViewController {
         //
         navSettings()
         //
-        tableView.registerClass(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
-        tableView.registerClass(PersonMineSettingsLocationVisiblityCell.self, forCellReuseIdentifier: PersonMineSettingsLocationVisiblityCell.reuseIdentifier)
-        tableView.separatorStyle = .None
+        tableView.register(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
+        tableView.register(PersonMineSettingsLocationVisiblityCell.self, forCellReuseIdentifier: PersonMineSettingsLocationVisiblityCell.reuseIdentifier)
+        tableView.separatorStyle = .none
         tableView.rowHeight = 50
         //
         let dataSource = PersonMineSettingsDataSource.sharedDataSource
@@ -37,22 +37,22 @@ class PersonMineSettingsLocationVisiblityController: UITableViewController {
         self.navigationItem.title = LS("定位可见")
         //
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: #selector(PersonMineSettingsLocationVisiblityController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
+        navLeftBtn.addTarget(self, action: #selector(PersonMineSettingsLocationVisiblityController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: #selector(PersonMineSettingsLocationVisiblityController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let rightItem = UIBarButtonItem(title: LS("确定"), style: .done, target: self, action: #selector(PersonMineSettingsLocationVisiblityController.navRightBtnPressed))
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
         if dirty {
             let dataSource = PersonMineSettingsDataSource.sharedDataSource
             dataSource.locationVisible = self.selectedType
@@ -61,51 +61,51 @@ class PersonMineSettingsLocationVisiblityController: UITableViewController {
         }
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return kPersonMineSettingsLocationVisiblityStaticLabelString.count + 1
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.row < kPersonMineSettingsLocationVisiblityStaticLabelString.count {
-            let cell = tableView.dequeueReusableCellWithIdentifier(PrivateChatSettingsCommonCell.reuseIdentifier, forIndexPath: indexPath) as! PrivateChatSettingsCommonCell
-            cell.selectionStyle = .None
-            cell.staticLbl.text = kPersonMineSettingsLocationVisiblityStaticLabelString[indexPath.row]
-            if indexPath.row == 0 {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if (indexPath as NSIndexPath).row < kPersonMineSettingsLocationVisiblityStaticLabelString.count {
+            let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsCommonCell
+            cell.selectionStyle = .none
+            cell.staticLbl.text = kPersonMineSettingsLocationVisiblityStaticLabelString[(indexPath as NSIndexPath).row]
+            if (indexPath as NSIndexPath).row == 0 {
                 cell.useAsMark = false
-                cell.boolSelect.hidden = false
-                cell.boolSelect.on = !showOnMap
-                cell.boolSelect.addTarget(self, action: #selector(PersonMineSettingsLocationVisiblityController.switchBtnPressed(_:)), forControlEvents: .ValueChanged)
+                cell.boolSelect.isHidden = false
+                cell.boolSelect.isOn = !showOnMap
+                cell.boolSelect.addTarget(self, action: #selector(PersonMineSettingsLocationVisiblityController.switchBtnPressed(_:)), for: .valueChanged)
             }else{
                 cell.useAsMark = true
                 if cell.staticLbl.text == kPersonMineSettingsLocationVisibleMapping[selectedType!] {
-                    cell.markIcon.hidden = false
+                    cell.markIcon.isHidden = false
                 }else {
-                    cell.markIcon.hidden = true
+                    cell.markIcon.isHidden = true
                 }
             }
             return cell
         }else {
-            let cell = tableView.dequeueReusableCellWithIdentifier(PersonMineSettingsLocationVisiblityCell.reuseIdentifier, forIndexPath: indexPath) as! PersonMineSettingsLocationVisiblityCell
-            cell.selectionStyle = .None
+            let cell = tableView.dequeueReusableCell(withIdentifier: PersonMineSettingsLocationVisiblityCell.reuseIdentifier, for: indexPath) as! PersonMineSettingsLocationVisiblityCell
+            cell.selectionStyle = .none
             return cell
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 0 {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).row == 0 {
             return
         }
         dirty = true
-        selectedType = kPersonMineSettingsLocationVisibilityList[indexPath.row - 1]
+        selectedType = kPersonMineSettingsLocationVisibilityList[(indexPath as NSIndexPath).row - 1]
         tableView.reloadData()
     }
     
-    func switchBtnPressed(sender: UISwitch) {
-        showOnMap = sender.on
+    func switchBtnPressed(_ sender: UISwitch) {
+        showOnMap = !sender.isOn
         dirty = true
     }
 }
@@ -119,11 +119,11 @@ class PersonMineSettingsLocationVisiblityCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         titleLbl = UILabel()
-        titleLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        titleLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         titleLbl.textColor = UIColor(white: 0.72, alpha: 1)
         titleLbl.text = LS("请开启定位可见以发现跑车地图上的车主并在系统设置中开启定位功能")
         titleLbl.numberOfLines = 0
-        titleLbl.textAlignment = .Center
+        titleLbl.textAlignment = .center
         self.contentView.addSubview(titleLbl)
         titleLbl.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(self.contentView)

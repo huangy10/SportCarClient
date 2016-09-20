@@ -17,8 +17,8 @@ class StatusHotController: UICollectionViewController {
     
     convenience init () {
         let layout = UICollectionViewFlowLayout()
-        let screenWidth = UIScreen.mainScreen().bounds.width
-        layout.itemSize = CGSizeMake(screenWidth / 3 - 5, screenWidth/3 - 5)
+        let screenWidth = UIScreen.main.bounds.width
+        layout.itemSize = CGSize(width: screenWidth / 3 - 5, height: screenWidth/3 - 5)
         layout.minimumLineSpacing = 2.5
         layout.minimumInteritemSpacing = 2.5
         self.init(collectionViewLayout: layout)
@@ -28,17 +28,17 @@ class StatusHotController: UICollectionViewController {
         super.viewDidLoad()
         collectionView?.alwaysBounceVertical = true
         collectionView?.contentInset = UIEdgeInsetsMake(5, 5, 5, 5)
-        collectionView?.registerClass(StatusHotCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView?.register(StatusHotCell.self, forCellWithReuseIdentifier: "cell")
         collectionView?.backgroundColor = kGeneralTableViewBGColor
         myRefreshControl = UIRefreshControl()
-        myRefreshControl?.addTarget(self, action: #selector(loadLatestStatusData), forControlEvents: .ValueChanged)
+        myRefreshControl?.addTarget(self, action: #selector(loadLatestStatusData), for: .valueChanged)
         collectionView?.addSubview(myRefreshControl!)
         loadMoreStatusData()
     }
     
     // MARK: Data Fetching
-    func loadMoreStatusData(limit: Int = 12) {
-        let threshold = status.last()?.createdAt ?? NSDate()
+    func loadMoreStatusData(_ limit: Int = 12) {
+        let threshold = status.last?.createdAt ?? Date()
         StatusRequester.sharedInstance.getMoreStatusList(threshold, queryType: "hot", onSuccess: { (json) -> () in
             if self.jsonDataHandler(json!) > 0 {
                 self.collectionView?.reloadData()
@@ -48,7 +48,7 @@ class StatusHotController: UICollectionViewController {
     }
     
     func loadLatestStatusData() {
-        let threshold = status.first()?.createdAt ?? NSDate()
+        let threshold = status.first?.createdAt ?? Date()
         StatusRequester.sharedInstance.getLatestStatusList(threshold, queryType: "hot", onSuccess: { (json) -> () in
             if self.jsonDataHandler(json!) > 0 {
                 self.collectionView?.reloadData()
@@ -63,9 +63,9 @@ class StatusHotController: UICollectionViewController {
      将状态数据按照时间顺序进行排序，最近发的在最前面
      */
     func statusDataSort() {
-        status.sortInPlace { (s1, s2) -> Bool in
+        status.sort { (s1, s2) -> Bool in
             switch s1.createdAt!.compare(s2.createdAt!) {
-            case .OrderedAscending:
+            case .orderedAscending:
                 return false
             default:
                 return true
@@ -80,7 +80,7 @@ class StatusHotController: UICollectionViewController {
      
      - return: 返回生成的status的数量
      */
-    func jsonDataHandler(json: JSON) -> Int{
+    func jsonDataHandler(_ json: JSON) -> Int{
         let statusJSONData = json.arrayValue
         for statusJSON in statusJSONData {
             let newStatus = try! MainManager.sharedManager.getOrCreate(statusJSON) as Status
@@ -92,22 +92,22 @@ class StatusHotController: UICollectionViewController {
     }
     
     // MARK: Delegate function of collections
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return status.count
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! StatusHotCell
-        cell.status = status[indexPath.row]
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! StatusHotCell
+        cell.status = status[(indexPath as NSIndexPath).row]
         return cell
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let s = status[indexPath.row]
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let s = status[(indexPath as NSIndexPath).row]
         let detail = StatusDetailController(status: s)
         detail.loadAnimated = false
         self.homeController?.navigationController?.pushViewController(detail, animated: true)
@@ -137,7 +137,7 @@ class StatusHotCell: UICollectionViewCell {
         let superview = self.contentView
         cover = UIImageView()
         superview.addSubview(cover)
-        cover.contentMode = .ScaleAspectFill
+        cover.contentMode = .scaleAspectFill
         cover.clipsToBounds = true
         cover.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)

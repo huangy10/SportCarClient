@@ -19,7 +19,7 @@ class FansSelectController: UserSelectController {
         }
     }
     
-    var fansDateThreshold: NSDate?
+    var fansDateThreshold: Date?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,8 +34,8 @@ class FansSelectController: UserSelectController {
             make.right.equalTo(superview).offset(0)
         })
         //
-        selectedUserList?.hidden = true
-        userTableView?.registerClass(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
+        selectedUserList?.isHidden = true
+        userTableView?.register(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
     }
     
     override func navTitle() -> String {
@@ -44,12 +44,12 @@ class FansSelectController: UserSelectController {
     
     override func navLeftBtnPressed() {
         // dismiss self
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UserSelectCellUnselectable
-        let user = users[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserSelectCellUnselectable
+        let user = users[(indexPath as NSIndexPath).row]
         cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
@@ -59,14 +59,14 @@ class FansSelectController: UserSelectController {
     override func searchUserUsingSearchText() {
         fans.removeAll()
         userTableView?.reloadData()
-        fansDateThreshold = NSDate()
+        fansDateThreshold = Date()
         getMoreUserData()
     }
     
     func getMoreUserData() {
-        let threshold: NSDate = fansDateThreshold ?? NSDate()
+        let threshold: Date = fansDateThreshold ?? Date()
         let requester = AccountRequester2.sharedInstance
-        requester.getFansList(targetUser!.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (let data) -> () in
+        requester.getFansList(targetUser!.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (data) -> () in
             if let fansJSONData = data?.arrayValue {
                 for json in fansJSONData {
                     let user: User = try! MainManager.sharedManager.getOrCreate(json["user"])
@@ -83,7 +83,7 @@ class FansSelectController: UserSelectController {
         }
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.height {
             getMoreUserData()
         }
@@ -95,7 +95,7 @@ class UserSelectCellUnselectable: UserSelectCell {
     
     override func createSubviews() {
         super.createSubviews()
-        selectBtn?.hidden = true
+        selectBtn?.isHidden = true
         avatarImg?.snp_remakeConstraints(closure: { (make) -> Void in
             make.centerY.equalTo(self.contentView)
             make.size.equalTo(35)

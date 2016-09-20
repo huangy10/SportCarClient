@@ -21,7 +21,7 @@ class CommentBarView: UIView {
     var shareBtnHidden: Bool = false{
         didSet {
             if shareBtnHidden {
-                shareBtn?.hidden = true
+                shareBtn?.isHidden = true
                 likeBtn?.snp_remakeConstraints(closure: { (make) -> Void in
                     make.size.equalTo(barheight * 0.76)
                     make.bottom.equalTo(self).offset(-5)
@@ -37,7 +37,7 @@ class CommentBarView: UIView {
     
     let barheight: CGFloat = 45
     
-    private var frameFirstSet: Bool = true
+    fileprivate var frameFirstSet: Bool = true
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,17 +52,17 @@ class CommentBarView: UIView {
         self.init(frame: CGRect.zero)
     }
     
-    func setOriginY(y: CGFloat) {
+    func setOriginY(_ y: CGFloat) {
         if frameFirstSet {
-            frame = CGRectMake(0, y, UIScreen.mainScreen().bounds.width, barheight)
+            frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: barheight)
         } else {
             let oldFrame = frame
-            frame = CGRectMake(0, y, UIScreen.mainScreen().bounds.width, oldFrame.height)
+            frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: oldFrame.height)
             frameFirstSet = false
         }
     }
     
-    func setBarHeight(height: CGFloat) {
+    func setBarHeight(_ height: CGFloat) {
         var oldFrame = frame
         let validHeight = max(height, barheight)
         oldFrame.origin.y = oldFrame.origin.y + oldFrame.height - validHeight
@@ -81,7 +81,7 @@ class CommentBarView: UIView {
         //
         let contentHeight = barheight * 0.76
         shareBtn = UIButton()
-        shareBtn?.backgroundColor = UIColor.whiteColor()
+        shareBtn?.backgroundColor = UIColor.white
         shareBtn?.layer.cornerRadius = contentHeight * 0.5
         self.addSubview(shareBtn!)
         shareBtn?.snp_makeConstraints(closure: { (make) -> Void in
@@ -91,7 +91,7 @@ class CommentBarView: UIView {
         })
         //
         let shareBtnIcon = UIImageView(image: UIImage(named: "news_share"))
-        shareBtnIcon.contentMode = .ScaleAspectFit
+        shareBtnIcon.contentMode = .scaleAspectFit
         shareBtn?.addSubview(shareBtnIcon)
         shareBtnIcon.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(15)
@@ -100,7 +100,7 @@ class CommentBarView: UIView {
         //
         likeBtn = UIButton()
         likeBtn?.layer.cornerRadius = contentHeight * 0.5
-        likeBtn?.backgroundColor = UIColor.whiteColor()
+        likeBtn?.backgroundColor = UIColor.white
         self.addSubview(likeBtn!)
         likeBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.size.equalTo(contentHeight)
@@ -116,7 +116,7 @@ class CommentBarView: UIView {
         }
         //
         let roundCornerContainer = UIView()
-        roundCornerContainer.backgroundColor = UIColor.whiteColor()
+        roundCornerContainer.backgroundColor = UIColor.white
         roundCornerContainer.layer.cornerRadius = contentHeight / 2
         self.addSubview(roundCornerContainer)
         roundCornerContainer.snp_makeConstraints { (make) -> Void in
@@ -135,9 +135,9 @@ class CommentBarView: UIView {
         })
         //
         contentInput = UITextView()
-        contentInput?.returnKeyType = .Done
-        contentInput?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        contentInput?.textColor = UIColor.blackColor()
+        contentInput?.returnKeyType = .done
+        contentInput?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        contentInput?.textColor = UIColor.black
         roundCornerContainer.addSubview(contentInput!)
         contentInput?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(commentIcon!.snp_right).offset(10)
@@ -147,13 +147,13 @@ class CommentBarView: UIView {
         })
     }
     
-    func setLikedAnimated(liked: Bool, flag: Bool = true) {
+    func setLikedAnimated(_ liked: Bool, flag: Bool = true) {
         if liked {
             likeBtnIcon.image = UIImage(named: "news_like_liked")
             if flag {
-                likeBtnIcon.transform = CGAffineTransformIdentity
-                UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 140, options: .CurveEaseInOut, animations: { () -> Void in
-                    self.likeBtnIcon.transform = CGAffineTransformMakeScale(1.1, 1.1)
+                likeBtnIcon.transform = CGAffineTransform.identity
+                UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 140, options: UIViewAnimationOptions(), animations: { () -> Void in
+                    self.likeBtnIcon.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
                     }, completion: nil)
             }
         }else {

@@ -11,14 +11,14 @@ import UIKit
 
 class PersonOtherInfoController: PersonMineInfoController {
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch indexPath.section {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch (indexPath as NSIndexPath).section {
         case 0:
             return tableView.ss_reuseablePropertyCell(SSAvatarCell.self, forIndexPath: indexPath)
                 .setData(user.avatarURL!, zoomable: true)
         case 1:
             let rawCell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 return rawCell.setData(LS("昵称"), propertyValue: user.nickName, editable: false)
             case 1:
@@ -43,7 +43,7 @@ class PersonOtherInfoController: PersonMineInfoController {
             }
         default:
             let rawCell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 return rawCell.setData(LS("星座"), propertyValue: user.starSign, editable: false)
             case 1:
@@ -56,9 +56,9 @@ class PersonOtherInfoController: PersonMineInfoController {
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 1 {
-            switch indexPath.row {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).section == 1 {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 break
             case 2:

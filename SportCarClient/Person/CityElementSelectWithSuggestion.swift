@@ -15,7 +15,7 @@ class CityElementSelectWithSuggestionsController: CityElementSelectController, U
     var curSelected: String!
     var popularCities: [String] = []
     
-    var delayTask: dispatch_block_t?
+    var delayTask: ()->()?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,13 +39,13 @@ class CityElementSelectWithSuggestionsController: CityElementSelectController, U
     }
     
     func configureTableView() {
-        tableView.registerClass(CityElementSelectPopularCitiesCell.self, forCellReuseIdentifier: "popular")
-        tableView.registerClass(CityEelementSelectCurrentCell.self, forCellReuseIdentifier: "cur")
-        tableView.registerClass(CityElementSelectPopularCitiesHeader.self, forHeaderFooterViewReuseIdentifier: "header")
+        tableView.register(CityElementSelectPopularCitiesCell.self, forCellReuseIdentifier: "popular")
+        tableView.register(CityEelementSelectCurrentCell.self, forCellReuseIdentifier: "cur")
+        tableView.register(CityElementSelectPopularCitiesHeader.self, forHeaderFooterViewReuseIdentifier: "header")
         tableView.backgroundColor = UIColor(white: 0.94, alpha: 1)
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         if popularCities.count == 0 {
             return 2
         } else {
@@ -53,7 +53,7 @@ class CityElementSelectWithSuggestionsController: CityElementSelectController, U
         }
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1
         } else if section == 1 && popularCities.count > 0 {
@@ -63,12 +63,12 @@ class CityElementSelectWithSuggestionsController: CityElementSelectController, U
         }
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier("header") as! CityElementSelectPopularCitiesHeader
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! CityElementSelectPopularCitiesHeader
         if section == 0 {
             header.titleLbl.text = LS("当前")
         } else if section == 1 && popularCities.count > 0 {
@@ -79,60 +79,60 @@ class CityElementSelectWithSuggestionsController: CityElementSelectController, U
         return header
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath as NSIndexPath).section == 0 {
             return 35
-        } else if indexPath.section == 1 && popularCities.count > 0 {
+        } else if (indexPath as NSIndexPath).section == 1 && popularCities.count > 0 {
             let citiesNum = popularCities.count
             let rowsNum = (citiesNum - 1) / 3 + 1
             return CGFloat(rowsNum) * 35 + CGFloat(rowsNum - 1) * 10
         } else {
-            return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+            return super.tableView(tableView, heightForRowAt: indexPath)
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 0 {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (indexPath as NSIndexPath).section == 0 {
             delegate?.cityElementSelectDidCancel()
-        } else if indexPath.section == 2 || popularCities.count == 0 {
-            super.tableView(tableView, didSelectRowAtIndexPath: indexPath)
+        } else if (indexPath as NSIndexPath).section == 2 || popularCities.count == 0 {
+            super.tableView(tableView, didSelectRowAt: indexPath)
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("cur", forIndexPath: indexPath) as! CityEelementSelectCurrentCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if (indexPath as NSIndexPath).section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cur", for: indexPath) as! CityEelementSelectCurrentCell
             cell.nameLbl.text = curSelected
             return cell
-        } else if indexPath.section == 1 && popularCities.count > 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("popular", forIndexPath: indexPath) as! CityElementSelectPopularCitiesCell
+        } else if (indexPath as NSIndexPath).section == 1 && popularCities.count > 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "popular", for: indexPath) as! CityElementSelectPopularCitiesCell
             cell.citiesMatrix.delegate = self
             cell.citiesMatrix.dataSource = self
             cell.citiesMatrix.reloadData()
             return cell
         } else {
-            return super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+            return super.tableView(tableView, cellForRowAt: indexPath)
         }
     }
     
     // ======================================
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return popularCities.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! CityElementPopularCityCell
-        cell.nameLbl.text = popularCities[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CityElementPopularCityCell
+        cell.nameLbl.text = popularCities[(indexPath as NSIndexPath).row]
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        dataSource.selectedCity = popularCities[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        dataSource.selectedCity = popularCities[(indexPath as NSIndexPath).row]
         delegate?.cityElementSelectDidSelect(dataSource)
     }
 }
@@ -145,7 +145,7 @@ class CityEelementSelectCurrentCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureNameLbl()
         backgroundColor = UIColor(white: 0.94, alpha: 1)
-        selectionStyle = .None
+        selectionStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -153,16 +153,16 @@ class CityEelementSelectCurrentCell: UITableViewCell {
     }
     
     func configureNameLbl() {
-        let itemWidth = (UIScreen.mainScreen().bounds.width - 30 - 45) / 3
+        let itemWidth = (UIScreen.main.bounds.width - 30 - 45) / 3
         nameLbl = contentView.addSubview(UILabel)
-            .config(15, fontWeight: UIFontWeightRegular, textColor: kHighlightRed, textAlignment: .Center)
+            .config(15, fontWeight: UIFontWeightRegular, textColor: kHighlightRed, textAlignment: .center)
             .layout({ (make) in
                 make.left.equalTo(contentView).offset(15)
                 make.width.equalTo(itemWidth)
                 make.height.equalTo(35)
                 make.top.equalTo(contentView)
             })
-        nameLbl.backgroundColor = UIColor.whiteColor()
+        nameLbl.backgroundColor = UIColor.white
     }
 }
 
@@ -184,7 +184,7 @@ class CityElementSelectPopularCitiesHeader: UITableViewHeaderFooterView {
     
     func configureTitleLbl() {
         titleLbl = contentView.addSubview(UILabel)
-            .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.58), textAlignment: .Left)
+            .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.58), textAlignment: .left)
             .layout({ (make) in
                 make.left.equalTo(contentView).offset(15)
                 make.bottom.equalTo(contentView).offset(-16)
@@ -200,7 +200,7 @@ class CityElementSelectPopularCitiesCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureCitiesMatrix()
         backgroundColor = UIColor(white: 0.94, alpha: 1)
-        selectionStyle = .None
+        selectionStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -211,18 +211,18 @@ class CityElementSelectPopularCitiesCell: UITableViewCell {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 22.5
-        let itemWidth = (UIScreen.mainScreen().bounds.width - 30 - 45) / 3
+        let itemWidth = (UIScreen.main.bounds.width - 30 - 45) / 3
         let itemHeight = 35 as CGFloat
-        layout.itemSize = CGSizeMake(itemWidth, itemHeight)
+        layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
         
-        citiesMatrix = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
+        citiesMatrix = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         citiesMatrix.backgroundColor = UIColor(white: 0.94, alpha: 1)
         contentView.addSubview(citiesMatrix)
         citiesMatrix.layout { (make) in
             make.edges.equalTo(contentView).inset(UIEdgeInsetsMake(0, 15, 0, 15))
         }
         
-        citiesMatrix.registerClass(CityElementPopularCityCell.self, forCellWithReuseIdentifier: "cell")
+        citiesMatrix.register(CityElementPopularCityCell.self, forCellWithReuseIdentifier: "cell")
     }
 }
 
@@ -240,10 +240,10 @@ class CityElementPopularCityCell: UICollectionViewCell {
     
     func configureNameLbl() {
         nameLbl = contentView.addSubview(UILabel)
-            .config(15, fontWeight: UIFontWeightRegular, textColor: UIColor.blackColor(), textAlignment: .Center)
+            .config(15, fontWeight: UIFontWeightRegular, textColor: UIColor.black, textAlignment: .center)
             .layout({ (make) in
                 make.edges.equalTo(contentView)
             })
-        contentView.backgroundColor = UIColor.whiteColor()
+        contentView.backgroundColor = UIColor.white
     }
 }

@@ -12,6 +12,26 @@ import Spring
 import Alamofire
 import SwiftyJSON
 import Dollar
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
 
 //
 //class StatusDetailController2: InputableViewController, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol {
@@ -29,7 +49,7 @@ import Dollar
 class StatusDetailController: InputableViewController, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol, LoadingProtocol {
     
     var list: UITableView?
-    var indexPath: NSIndexPath?
+    var indexPath: IndexPath?
     
     var status: Status?
     var statusImages: [String] = []
@@ -87,7 +107,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     
     // MARK: init
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
 
@@ -109,7 +129,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: view load
@@ -120,11 +140,11 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         board = UIScrollView()
         board?.delegate = self
         board?.contentSize = self.view.bounds.size
-        board?.backgroundColor = UIColor.whiteColor()
+        board?.backgroundColor = UIColor.white
         self.view.addSubview(board!)
         let superview = self.view
         board?.snp_makeConstraints(closure: { (make) -> Void in
-            make.height.equalTo(superview.bounds.height - self.navigationController!.navigationBar.frame.height - UIApplication.sharedApplication().statusBarFrame.height)
+            make.height.equalTo(superview.bounds.height - self.navigationController!.navigationBar.frame.height - UIApplication.shared.statusBarFrame.height)
             make.right.equalTo(superview)
             make.left.equalTo(superview)
             make.bottom.equalTo(superview).offset(0)
@@ -142,7 +162,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         }
         
         statusContainer = UIView()
-        statusContainer?.backgroundColor = UIColor.whiteColor()
+        statusContainer?.backgroundColor = UIColor.white
         board?.addSubview(statusContainer!)
         if loadAnimated {
             statusContainer?.snp_makeConstraints(closure: { (make) -> Void in
@@ -162,8 +182,8 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         createStatusBoard()
         createOtherSubivews()
         loadDataAndUpdateUI()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusDetailController.changeLayoutWhenKeyboardAppears(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusDetailController.changeLayoutWhenKeyboardDisappears(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StatusDetailController.changeLayoutWhenKeyboardAppears(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StatusDetailController.changeLayoutWhenKeyboardDisappears(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         // load the detail data
         StatusRequester.sharedInstance.getStatusDetail(status!.ssidString, onSuccess: { (json) in
@@ -174,14 +194,14 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
             }) { (code) in
                 if code == "status not found" {
                     self.showToast(LS("动态不存在或者已经被删除"))
-                    self.navigationController?.popViewControllerAnimated(true)
+                    self.navigationController?.popViewController(animated: true)
                 } else {
                     self.showToast(LS("网络访问错误:\(code)"))
                 }
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if loadAnimated {
             self.view.updateConstraints()
@@ -192,10 +212,10 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
                 make.top.equalTo(board!)
                 make.height.equalTo(board!)
             })
-            UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseOut, animations: { () -> Void in
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: { () -> Void in
                 self.view.layoutIfNeeded()
                 }) { (_) -> Void in
-                    self.tmpBackgroundImg?.hidden = true
+                    self.tmpBackgroundImg?.isHidden = true
                     self.animateOtherSubViews()
                     self.autoSetBoardContentSize(true)
                     self.loadMoreCommentData()
@@ -210,22 +230,22 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         navigationItem.title = LS("动态详情")
         //
         let backBtn = UIButton()
-        backBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
+        backBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
-        backBtn.addTarget(self, action: #selector(StatusDetailController.backBtnPressed), forControlEvents: .TouchUpInside)
+        backBtn.addTarget(self, action: #selector(StatusDetailController.backBtnPressed), for: .touchUpInside)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
         //
         let shareBtn = UIButton()
-        shareBtn.setImage(UIImage(named: "status_detail_other_operation"), forState: .Normal)
-        shareBtn.imageView?.contentMode = .ScaleAspectFit
+        shareBtn.setImage(UIImage(named: "status_detail_other_operation"), for: UIControlState())
+        shareBtn.imageView?.contentMode = .scaleAspectFit
         shareBtn.frame = CGRect(x: 0, y: 0, width: 24, height: 214)
-        shareBtn.addTarget(self, action: #selector(StatusDetailController.navRightBtnPressed), forControlEvents: .TouchUpInside)
+        shareBtn.addTarget(self, action: #selector(StatusDetailController.navRightBtnPressed), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareBtn)
         //
     }
     
     func backBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
         wp_abortWaiting()
     }
     
@@ -236,11 +256,11 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
             let delete = StatusDeleteController(parent: self)
             delete.delegate = self
             delete.status = status!
-            self.presentViewController(delete, animated: false, completion: nil)
+            self.present(delete, animated: false, completion: nil)
         }else {
             // 否则弹出举报
             let report = ReportBlacklistViewController(userID: status!.ssid, reportType: "status", parent: self)
-            self.presentViewController(report, animated: false, completion: nil)
+            self.present(report, animated: false, completion: nil)
         }
     }
     
@@ -275,10 +295,10 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         }
         //
         let commentStaticLbl = UILabel()
-        commentStaticLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        commentStaticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         commentStaticLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        commentStaticLbl.backgroundColor = UIColor.whiteColor()
-        commentStaticLbl.textAlignment = .Center
+        commentStaticLbl.backgroundColor = UIColor.white
+        commentStaticLbl.textAlignment = .center
         commentStaticLbl.text = LS("评论")
         board?.addSubview(commentStaticLbl)
         commentStaticLbl.snp_makeConstraints { (make) -> Void in
@@ -286,12 +306,12 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
             make.width.equalTo(70)
         }
         //
-        commentList = UITableView(frame: CGRectZero, style: .Plain)
+        commentList = UITableView(frame: CGRect.zero, style: .plain)
         commentList?.dataSource = self
         commentList?.delegate = self
-        commentList?.separatorStyle = .None
-        commentList?.scrollEnabled = false
-        commentList?.backgroundColor = UIColor.whiteColor()
+        commentList?.separatorStyle = .none
+        commentList?.isScrollEnabled = false
+        commentList?.backgroundColor = UIColor.white
         board?.addSubview(commentList!)
         commentList?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(superview)
@@ -299,13 +319,13 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
             make.top.equalTo(commentStaticLbl.snp_bottom).offset(20)
             make.height.equalTo(64)
         })
-        commentList?.registerClass(StatusDetailCommentCell.self, forCellReuseIdentifier: StatusDetailCommentCell.reuseIdentifier)
-        commentList?.registerClass(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty_cell")
+        commentList?.register(StatusDetailCommentCell.self, forCellReuseIdentifier: StatusDetailCommentCell.reuseIdentifier)
+        commentList?.register(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty_cell")
         //
         
         commentPanel = CommentBarView()
         commentPanel?.shareBtnHidden = true
-        commentPanel?.likeBtn?.addTarget(self, action: #selector(StatusDetailController.likeBtnPressed), forControlEvents: .TouchUpInside)
+        commentPanel?.likeBtn?.addTarget(self, action: #selector(StatusDetailController.likeBtnPressed), for: .touchUpInside)
         self.view?.addSubview(commentPanel!)
         if loadAnimated {
             commentPanel?.snp_makeConstraints(closure: { (make) -> Void in
@@ -331,7 +351,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(self.view).offset(0)
         })
-        UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.view.layoutIfNeeded()
             }, completion: nil)
     }
@@ -341,19 +361,19 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
      
       - parameter   animated: 是否动态调整
      */
-    func autoSetBoardContentSize(animated: Bool) {
+    func autoSetBoardContentSize(_ animated: Bool) {
         commentList?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(max(commentList!.contentSize.height, 88))
         })
         self.view.updateConstraints()
         self.view.layoutIfNeeded()
-        var contentRect = CGRectZero
+        var contentRect = CGRect.zero
         for view in board!.subviews[0..<(board!.subviews.count - 2)] {
-            contentRect = CGRectUnion(contentRect, view.frame)
+            contentRect = contentRect.union(view.frame)
         }
         if animated {
-            UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
-                self.board?.contentSize = CGSizeMake(self.board!.frame.width, contentRect.height + self.commentPanel!.frame.height)
+            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
+                self.board?.contentSize = CGSize(width: self.board!.frame.width, height: contentRect.height + self.commentPanel!.frame.height)
                 }, completion: nil)
         }else{
             self.view.layoutIfNeeded()
@@ -382,7 +402,7 @@ extension StatusDetailController {
         headerContainer?.addSubview(avatarBtn!)
         avatarBtn?.layer.cornerRadius = 35 / 2.0
         avatarBtn?.clipsToBounds = true
-        avatarBtn?.addTarget(self, action: #selector(StatusDetailController.statusHostAvatarPressed), forControlEvents: .TouchUpInside)
+        avatarBtn?.addTarget(self, action: #selector(StatusDetailController.statusHostAvatarPressed), for: .touchUpInside)
         avatarBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(headerContainer!).offset(15)
             make.centerY.equalTo(headerContainer!)
@@ -390,8 +410,8 @@ extension StatusDetailController {
         })
         //
         nameLbl = UILabel()
-        nameLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightBlack)
-        nameLbl?.textColor = UIColor.blackColor()
+        nameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBlack)
+        nameLbl?.textColor = UIColor.black
         headerContainer?.addSubview(nameLbl!)
         nameLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(avatarBtn!.snp_right).offset(10)
@@ -410,7 +430,7 @@ extension StatusDetailController {
         })
         //
         releaseDateLbl = UILabel()
-        releaseDateLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        releaseDateLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         releaseDateLbl?.textColor = UIColor(white: 0.72, alpha: 1)
         headerContainer?.addSubview(releaseDateLbl!)
         releaseDateLbl?.snp_makeConstraints(closure: { (make) -> Void in
@@ -420,8 +440,8 @@ extension StatusDetailController {
         })
         //
         avatarCarNameLbl = UILabel()
-        avatarCarNameLbl?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
-        avatarCarNameLbl?.textAlignment = .Right
+        avatarCarNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        avatarCarNameLbl?.textAlignment = .right
         avatarCarNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
         headerContainer?.addSubview(avatarCarNameLbl!)
         avatarCarNameLbl?.snp_makeConstraints(closure: { (make) -> Void in
@@ -430,7 +450,7 @@ extension StatusDetailController {
         })
         //
         avatarCarLogoIcon = UIImageView()
-        avatarCarLogoIcon?.contentMode = .ScaleAspectFit
+        avatarCarLogoIcon?.contentMode = .scaleAspectFit
         avatarCarLogoIcon?.layer.cornerRadius = 10.5
         avatarCarLogoIcon?.clipsToBounds = true
         superview.addSubview(avatarCarLogoIcon!)
@@ -443,7 +463,7 @@ extension StatusDetailController {
         中间内容区域
         */
         mainCover = UIImageView()
-        mainCover?.contentMode = .ScaleAspectFill
+        mainCover?.contentMode = .scaleAspectFill
         mainCover?.clipsToBounds = true
         superview.addSubview(mainCover!)
         mainCover?.snp_makeConstraints(closure: { (make) -> Void in
@@ -454,23 +474,23 @@ extension StatusDetailController {
         })
         //
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .Horizontal
-        flowLayout.itemSize = CGSizeMake(100, 100)
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.itemSize = CGSize(width: 100, height: 100)
         flowLayout.minimumInteritemSpacing = 10
-        otherImgList = UICollectionView(frame: CGRectZero, collectionViewLayout: flowLayout)
+        otherImgList = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
         otherImgList?.dataSource = self
         superview.addSubview(otherImgList!)
-        otherImgList?.backgroundColor = UIColor.whiteColor()
+        otherImgList?.backgroundColor = UIColor.white
         otherImgList?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
             make.top.equalTo(mainCover!.snp_bottom).offset(6)
             make.height.equalTo(0)
         })
-        otherImgList?.registerClass(StatusCellImageDisplayCell.self, forCellWithReuseIdentifier: StatusCellImageDisplayCell.reuseIdentifier)
+        otherImgList?.register(StatusCellImageDisplayCell.self, forCellWithReuseIdentifier: StatusCellImageDisplayCell.reuseIdentifier)
         //
         contentLbl = UILabel()
-        contentLbl?.textColor = UIColor.blackColor()
+        contentLbl?.textColor = UIColor.black
         contentLbl?.numberOfLines = 0
         superview.addSubview(contentLbl!)
         contentLbl?.snp_makeConstraints(closure: { (make) -> Void in
@@ -486,14 +506,14 @@ extension StatusDetailController {
         locationIcon.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(contentLbl!)
             make.top.equalTo(contentLbl!.snp_bottom).offset(15)
-            make.size.equalTo(CGSizeMake(13.5, 18))
+            make.size.equalTo(CGSize(width: 13.5, height: 18))
         }
         //
         locationLbL = UILabel()
-        locationLbL?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        locationLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         locationLbL?.textColor = UIColor(white: 0.72, alpha: 1)
         locationLbL?.numberOfLines = 0
-        locationLbL?.lineBreakMode = .ByWordWrapping
+        locationLbL?.lineBreakMode = .byWordWrapping
         superview.addSubview(locationLbL!)
         locationLbL?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(locationIcon.snp_right).offset(10)
@@ -503,8 +523,8 @@ extension StatusDetailController {
         //
         commentNumLbL = UILabel()
         commentNumLbL?.textColor = UIColor(white: 0.72, alpha: 1)
-        commentNumLbL?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        commentNumLbL?.textAlignment = .Right
+        commentNumLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        commentNumLbL?.textAlignment = .right
         superview.addSubview(commentNumLbL!)
         commentNumLbL?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
@@ -522,8 +542,8 @@ extension StatusDetailController {
         //
         likeNumLbl = UILabel()
         likeNumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-        likeNumLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
-        likeNumLbl?.textAlignment = .Right
+        likeNumLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        likeNumLbl?.textAlignment = .right
         superview.addSubview(likeNumLbl!)
         likeNumLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(commentIcon!.snp_left).offset(-30)
@@ -561,24 +581,24 @@ extension StatusDetailController {
         header区域的数据
         */
         let user: User = status!.user!
-        avatarBtn?.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
+        avatarBtn?.kf_setImageWithURL(user.avatarURL!, forState: UIControlState())
         nameLbl?.text = user.nickName
         releaseDateLbl?.text = dateDisplay(status!.createdAt!)
         if let club = user.avatarClubModel {
-            avatarClubBtn?.hidden = false
-            avatarClubBtn?.kf_setImageWithURL(club.logoURL!, forState: .Normal)
+            avatarClubBtn?.isHidden = false
+            avatarClubBtn?.kf_setImageWithURL(club.logoURL!, forState: UIControlState())
         }else{
-            avatarClubBtn?.hidden = true
-            avatarClubBtn?.setImage(nil, forState: .Normal)
+            avatarClubBtn?.isHidden = true
+            avatarClubBtn?.setImage(nil, for: UIControlState())
         }
         if let car = user.avatarCarModel {
-            avatarCarNameLbl?.hidden = false
+            avatarCarNameLbl?.isHidden = false
             avatarCarNameLbl?.text = car.name
-            avatarCarLogoIcon?.hidden = false
+            avatarCarLogoIcon?.isHidden = false
             avatarCarLogoIcon?.kf_setImageWithURL(car.logoURL!)
         }else{
-            avatarCarLogoIcon?.hidden = true
-            avatarCarNameLbl?.hidden = true
+            avatarCarLogoIcon?.isHidden = true
+            avatarCarNameLbl?.isHidden = true
             avatarCarLogoIcon?.image = nil
         }
         /*
@@ -589,7 +609,7 @@ extension StatusDetailController {
         mainCover?.kf_setImageWithURL(SFURL(statusImages[0])!)
         mainCover?.kf_setImageWithURL(status!.coverURL!, placeholderImage: mainCover?.image, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) in
             if error == nil {
-                self.mainCover?.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+                self.mainCover?.setupForImageViewer(nil, backgroundColor: UIColor.black)
             }
         })
         if statusImages.count <= 1 {
@@ -603,7 +623,7 @@ extension StatusDetailController {
                 make.height.equalTo(100)
             })
         }
-        contentLbl?.attributedText = self.dynamicType.makeAttributedContentText(status!.content!)
+        contentLbl?.attributedText = type(of: self).makeAttributedContentText(status!.content!)
         /*
         底部区域数据
         */
@@ -619,33 +639,33 @@ extension StatusDetailController {
         self.view.layoutIfNeeded()
     }
     
-    class func makeAttributedContentText(content: String) -> NSAttributedString {
+    class func makeAttributedContentText(_ content: String) -> NSAttributedString {
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 3
-        style.lineBreakMode = .ByCharWrapping
-        return NSAttributedString(string: content, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.58), NSParagraphStyleAttributeName: style])
+        style.lineBreakMode = .byCharWrapping
+        return NSAttributedString(string: content, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.58), NSParagraphStyleAttributeName: style])
     }
     
-    class func heightForStatusContent(content: String) -> CGFloat {
+    class func heightForStatusContent(_ content: String) -> CGFloat {
         let attributedContent = makeAttributedContentText(content)
-        let maxWidth = UIScreen.mainScreen().bounds.width - 30
-        return attributedContent.boundingRectWithSize(CGSizeMake(maxWidth, CGFloat.max), options: .UsesLineFragmentOrigin, context: nil).height
+        let maxWidth = UIScreen.main.bounds.width - 30
+        return attributedContent.boundingRect(with: CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil).height
     }
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return statusImages.count - 1
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StatusCellImageDisplayCell.reuseIdentifier, forIndexPath: indexPath) as! StatusCellImageDisplayCell
-        cell.imageView?.kf_setImageWithURL(SFURL(statusImages[indexPath.row + 1])!)
-        cell.imageView?.kf_setImageWithURL(SFURL(statusImages[indexPath.row + 1])!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StatusCellImageDisplayCell.reuseIdentifier, for: indexPath) as! StatusCellImageDisplayCell
+        cell.imageView?.kf_setImageWithURL(SFURL(statusImages[(indexPath as NSIndexPath).row + 1])!)
+        cell.imageView?.kf_setImageWithURL(SFURL(statusImages[(indexPath as NSIndexPath).row + 1])!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
             if error == nil {
-                cell.imageView?.setupForImageViewer(nil, backgroundColor: UIColor.blackColor())
+                cell.imageView?.setupForImageViewer(nil, backgroundColor: UIColor.black)
             }
         })
         return cell
@@ -661,7 +681,7 @@ extension StatusDetailController {
         }
         requestingCommentData = true
         let requester = StatusRequester.sharedInstance
-        let dateThreshold = comments.last()?.createdAt ?? NSDate()
+        let dateThreshold = comments.last?.createdAt ?? Date()
         requester.getMoreStatusComment(dateThreshold, statusID: status!.ssidString, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
                 let newComment = try! StatusComment(status: self.status!).loadDataFromJSON(data)
@@ -678,9 +698,9 @@ extension StatusDetailController {
     }
     
     func reorgnizeComments() {
-        comments.sortInPlace { (comment1, comment2) -> Bool in
-            switch comment1.createdAt!.compare(comment2.createdAt!) {
-            case .OrderedDescending:
+        comments.sort { (comment1, comment2) -> Bool in
+            switch comment1.createdAt!.compare(comment2.createdAt! as Date) {
+            case .orderedDescending:
                 return true
             default:
                 return false
@@ -688,39 +708,39 @@ extension StatusDetailController {
         }
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if comments.count == 0 {
             return 1
         }
         return comments.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if comments.count == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("empty_cell", forIndexPath: indexPath) as! SSEmptyListHintCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "empty_cell", for: indexPath) as! SSEmptyListHintCell
             cell.titleLbl.text = LS("还没有评论")
             return cell
         }
-        let cell = tableView.dequeueReusableCellWithIdentifier(DetailCommentCell.reuseIdentifier, forIndexPath: indexPath) as! StatusDetailCommentCell
-        cell.comment = comments[indexPath.row]
-        cell.replyBtn?.tag = indexPath.row
+        let cell = tableView.dequeueReusableCell(withIdentifier: DetailCommentCell.reuseIdentifier, for: indexPath) as! StatusDetailCommentCell
+        cell.comment = comments[(indexPath as NSIndexPath).row]
+        cell.replyBtn?.tag = (indexPath as NSIndexPath).row
         cell.delegate = self
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if comments.count == 0 {
             return
         }
-        let comment = comments[indexPath.row]
+        let comment = comments[(indexPath as NSIndexPath).row]
         if comment.user.isHost {
             return
         } else {
-            responseToRow = indexPath.row
+            responseToRow = (indexPath as NSIndexPath).row
             let responseToName = comment.user.nickName!
             responseToPrefixStr = LS("回复 ") + responseToName + ": "
             commentPanel?.contentInput?.text = responseToPrefixStr
@@ -729,24 +749,24 @@ extension StatusDetailController {
         }
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 88
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if comments.count == 0 {
             return 100
         }
-        return StatusDetailCommentCell.heightForComment(comments[indexPath.row].content!)
+        return StatusDetailCommentCell.heightForComment(comments[(indexPath as NSIndexPath).row].content!)
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView == board && board?.contentOffset.y >= board!.contentSize.height - board!.frame.height - 1 {
             loadMoreCommentData()
         }
     }
     
-    func avatarPressed(cell: DetailCommentCell) {
+    func avatarPressed(_ cell: DetailCommentCell) {
         if let cell = cell as? StatusDetailCommentCell {
             if let user = cell.comment?.user {
                 navigationController?.pushViewController(user.showDetailController(), animated: true)
@@ -759,7 +779,7 @@ extension StatusDetailController {
      
      - parameter cell: 被评论的cell
      */
-    func replyPressed(cell: DetailCommentCell) {
+    func replyPressed(_ cell: DetailCommentCell) {
         responseToRow = cell.replyBtn?.tag
         let responseToName = cell.nameLbl!.text!
         responseToPrefixStr = LS("回复 ") + responseToName + ": "
@@ -768,7 +788,7 @@ extension StatusDetailController {
         commentPanel?.contentInput?.becomeFirstResponder()
     }
     
-    func checkImageDetail(cell: DetailCommentCell) {
+    func checkImageDetail(_ cell: DetailCommentCell) {
         
     }
 }
@@ -803,13 +823,13 @@ extension StatusDetailController {
      - parameter commentString: 评论文字内容
      - parameter image:         图片内容，现在图片已经取消
      */
-    func commentConfirmed(commentString: String, image: UIImage?) {
+    func commentConfirmed(_ commentString: String, image: UIImage?) {
         var responseToComment: StatusComment? = nil
         if responseToRow != nil {
             responseToComment = comments[responseToRow!]
         }
         let newComment = StatusComment(status: status!).initForPost(commentString, responseTo: responseToComment)
-        comments.insert(newComment, atIndex: 0)
+        comments.insert(newComment, at: 0)
         let requester = StatusRequester.sharedInstance
         self.lp_start()
         requester.postCommentToStatus(self.status!.ssidString, content: commentString, responseTo: responseToComment?.ssidString, informOf: atUser, onSuccess: { (data) -> () in
@@ -830,9 +850,9 @@ extension StatusDetailController {
 
         commentList?.beginUpdates()
         if comments.count > 1 {
-            commentList?.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Top)
+            commentList?.insertRows(at: [IndexPath(row: 0, section: 0)], with: .top)
         } else {
-            commentList?.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+            commentList?.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
         commentList?.endUpdates()
     
@@ -844,7 +864,7 @@ extension StatusDetailController {
         autoSetBoardContentSize(true)
     }
     
-    func commentCanceled(commentString: String, image: UIImage?) {
+    func commentCanceled(_ commentString: String, image: UIImage?) {
         
     }
     
@@ -853,10 +873,10 @@ extension StatusDetailController {
      
      - parameter textView: 目标textview
      */
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         let textView = commentPanel?.contentInput
         let fixedWidth = textView?.bounds.width
-        let newSize = textView?.sizeThatFits(CGSize(width: fixedWidth!, height: CGFloat.max))
+        let newSize = textView?.sizeThatFits(CGSize(width: fixedWidth!, height: CGFloat.greatestFiniteMagnitude))
         // 注：参见 CommentPanel 内部的布局设置，输入框的边缘总是距离下面的Bar的上下边界5个Point
         commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
             make.height.equalTo(max(newSize!.height  + 10 , commentPanel!.barheight))
@@ -864,7 +884,7 @@ extension StatusDetailController {
         self.view.layoutIfNeeded()
     }
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             let commentText = textView.text ?? ""
             if commentText.length > 0 {
@@ -886,9 +906,9 @@ extension StatusDetailController {
         return true
     }
     
-    func changeLayoutWhenKeyboardAppears(notif: NSNotification) {
-        let userInfo = notif.userInfo!
-        let keyboardFrame = userInfo[UIKeyboardFrameBeginUserInfoKey]!.CGRectValue
+    func changeLayoutWhenKeyboardAppears(_ notif: Foundation.Notification) {
+        let userInfo = (notif as NSNotification).userInfo!
+        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue
         board?.snp_updateConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(self.view).offset(-(keyboardFrame.height) )
         })
@@ -898,7 +918,7 @@ extension StatusDetailController {
         self.view.layoutIfNeeded()
     }
     
-    func changeLayoutWhenKeyboardDisappears(notif: NSNotification) {
+    func changeLayoutWhenKeyboardDisappears(_ notif: Foundation.Notification) {
         board?.snp_updateConstraints(closure: { (make) -> Void in
             make.bottom.equalTo(self.view).offset(0)
         })

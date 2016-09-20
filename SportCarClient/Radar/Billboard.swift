@@ -42,7 +42,7 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
         configureTableView()
         configureClubFilter()
         configureCityFilter()
@@ -51,7 +51,7 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
         loadMoreClubData(0, limit: limitPerRequest, scope: "全国", filterType: "total")
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         homeBtn.unreadStatusChanged()
     }
@@ -59,7 +59,7 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
     func configureRefreshControl() {
         refreshControl = UIRefreshControl()
         tableView.addSubview(refreshControl)
-        refreshControl.addTarget(self, action: #selector(refresh), forControlEvents: .ValueChanged)
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
     func refresh() {
@@ -70,7 +70,7 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
     func configureNavigationBar() {
         navigationItem.title = LS("排行榜")
         homeBtn = BackToHomeBtn()
-        homeBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        homeBtn.addTarget(self, action: #selector(navLeftBtnPressed), for: .touchUpInside)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: homeBtn)
     }
     
@@ -79,34 +79,34 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
     }
     
     func configureTableView() {
-        tableView = UITableView(frame: view.bounds, style: .Plain)
+        tableView = UITableView(frame: view.bounds, style: .plain)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         tableView.backgroundColor = UIColor(white: 0, alpha: 0.06)
         tableView.contentInset = UIEdgeInsetsMake(8, 0, 8, 0)
         view.addSubview(tableView)
-        tableView.registerClass(BillboardCell.self, forCellReuseIdentifier: "cell")
-        tableView.registerClass(BillboardFirstThree.self, forCellReuseIdentifier: "first_three")
-        tableView.separatorStyle = .None
+        tableView.register(BillboardCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(BillboardFirstThree.self, forCellReuseIdentifier: "first_three")
+        tableView.separatorStyle = .none
     }
     
     func configureCityFilter() {
         cityFilter = self.view.addSubview(UIButton)
             .config(self, selector: #selector(cityFilterPressed))
-            .config(UIColor.whiteColor())
+            .config(UIColor.white)
             .toRound(20).addShadow()
             .layout({ (make) in
                 make.right.equalTo(clubFilterView.snp_left).offset(-10)
                 make.bottom.equalTo(clubFilterView)
-                make.size.equalTo(CGSizeMake(120, 40))
+                make.size.equalTo(CGSize(width: 120, height: 40))
             })
         let icon = cityFilter.addSubview(UIImageView)
             .config(UIImage(named: "up_arrow"))
             .layout { (make) in
                 make.centerY.equalTo(cityFilter)
                 make.right.equalTo(cityFilter).offset(-20)
-                make.size.equalTo(CGSizeMake(13, 9))
+                make.size.equalTo(CGSize(width: 13, height: 9))
         }
         cityFilterLbl = cityFilter.addSubview(UILabel)
             .config(14, textColor: UIColor(white: 0, alpha: 0.87), text: LS("全国"))
@@ -130,13 +130,13 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
         clubFilterView.snp_makeConstraints { (make) in
             make.bottom.equalTo(superview).offset(-25)
             make.right.equalTo(superview).offset(-20)
-            make.size.equalTo(CGSizeMake(115, 40))
+            make.size.equalTo(CGSize(width: 115, height: 40))
         }
         self.view.addSubview(UIButton.self).config(self, selector: #selector(clubFilterPressed))
             .layout { (make) in
                 make.top.equalTo(clubFilterView)
                 make.left.equalTo(clubFilterView)
-                make.size.equalTo(CGSizeMake(115, 40))
+                make.size.equalTo(CGSize(width: 115, height: 40))
         }
     }
     
@@ -145,24 +145,24 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
             clubFilterView.snp_remakeConstraints(closure: { (make) -> Void in
                 make.bottom.equalTo(self.view).offset(-25)
                 make.right.equalTo(self.view).offset(-20)
-                make.size.equalTo(CGSizeMake(115, 40))
+                make.size.equalTo(CGSize(width: 115, height: 40))
             })
-            UIView.animateWithDuration(0.3) { () -> Void in
+            UIView.animate(withDuration: 0.3, animations: { () -> Void in
                 self.clubFilter.view.toRound(20)
                 self.view.layoutIfNeeded()
-                self.clubFilter.marker.transform = CGAffineTransformIdentity
-            }
+                self.clubFilter.marker.transform = CGAffineTransform.identity
+            }) 
         }else {
             clubFilterView.snp_remakeConstraints(closure: { (make) -> Void in
                 make.bottom.equalTo(self.view).offset(-25)
                 make.right.equalTo(self.view).offset(-20)
-                make.size.equalTo(CGSizeMake(115, 40 * 5))
+                make.size.equalTo(CGSize(width: 115, height: 40 * 5))
             })
-            UIView.animateWithDuration(0.3) { () -> Void in
+            UIView.animate(withDuration: 0.3, animations: { () -> Void in
                 self.clubFilter.view.toRound(5)
                 self.view.layoutIfNeeded()
-                self.clubFilter.marker.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
-            }
+                self.clubFilter.marker.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI))
+            }) 
         }
         clubFilter.expanded = !clubFilter.expanded
     }
@@ -173,10 +173,10 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
         cityPicker.showAllContry = true
         cityPicker.delegate = self
         cityPicker.curSelected = cityFilterLbl.text
-        presentViewController(cityPicker.toNavWrapper(), animated: true, completion: nil)
+        present(cityPicker.toNavWrapper(), animated: true, completion: nil)
     }
     
-    func loadMoreClubData(skip: Int, limit: Int, scope: String, filterType: String, alwaysReload: Bool = false) {
+    func loadMoreClubData(_ skip: Int, limit: Int, scope: String, filterType: String, alwaysReload: Bool = false) {
         if let req = ongoingRequest {
             req.cancel()
         }
@@ -189,7 +189,7 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
         }
     }
     
-    func parseServerData(data: [JSON], alwaysReload: Bool) {
+    func parseServerData(_ data: [JSON], alwaysReload: Bool) {
         for item in data {
             let clubJson = item["club"]
             let club = try! MainManager.sharedManager.getOrCreate(clubJson) as Club
@@ -205,30 +205,30 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
         }
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let row = indexPath.row
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let row = (indexPath as NSIndexPath).row
         let item = data[row]
         if row >= 3 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! BillboardCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BillboardCell
             cell.setData(item.club, order: item.order, orderChange: item.orderChange, new: item.newToList)
             return cell
         } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier("first_three", forIndexPath: indexPath) as! BillboardFirstThree
+            let cell = tableView.dequeueReusableCell(withIdentifier: "first_three", for: indexPath) as! BillboardFirstThree
             cell.setData(item.club, order: item.order, orderChange: item.orderChange, new: item.newToList)
             return cell
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let row = indexPath.row
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let row = (indexPath as NSIndexPath).row
         if row >= 3 {
             return 80
         } else {
@@ -236,14 +236,14 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let club = data[indexPath.row].club
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let club = data[(indexPath as NSIndexPath).row].club
         if club.attended {
-            if club.founderUser!.isHost {
-                let detail = GroupChatSettingHostController(targetClub: club)
+            if (club?.founderUser!.isHost)! {
+                let detail = GroupChatSettingHostController(targetClub: club!)
                 navigationController?.pushViewController(detail, animated: true)
             } else {
-                let detail = GroupChatSettingController(targetClub: club)
+                let detail = GroupChatSettingController(targetClub: club!)
                 navigationController?.pushViewController(detail, animated: true)
             }
         } else {
@@ -253,7 +253,7 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
         }
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let height = scrollView.contentSize.height
         let y = scrollView.contentOffset.y
         if height + y >= height {
@@ -275,8 +275,8 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
         loadMoreClubData(0, limit: limitPerRequest, scope: scope, filterType: filterType, alwaysReload: true)
     }
     
-    func cityElementSelectDidSelect(dataSource: CityElementSelectDataSource) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func cityElementSelectDidSelect(_ dataSource: CityElementSelectDataSource) {
+        dismiss(animated: true, completion: nil)
         scope = dataSource.selectedCity ?? "全国"
         cityFilterLbl.text = scope
         data.removeAll()
@@ -284,6 +284,6 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
     }
     
     func cityElementSelectDidCancel() {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }

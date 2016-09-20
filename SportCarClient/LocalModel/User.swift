@@ -17,21 +17,21 @@ class User: BaseModel {
         return "ssid"
     }
     
-    var avatarURL: NSURL? {
+    var avatarURL: URL? {
         if avatar == nil {
             return nil
         }
         return SFURL(avatar!)
     }
     
-    private var _avatarCarModel: SportCar?
+    fileprivate var _avatarCarModel: SportCar?
     var avatarCarModel: SportCar? {
         get {
             if avatarCar == nil {
                 return nil
             }
             if _avatarCarModel == nil {
-                let carJSON = JSON(data: avatarCar!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+                let carJSON = JSON(data: avatarCar!.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
                 _avatarCarModel = try! manager.getOrCreate(carJSON) as SportCar
             }
             return _avatarCarModel
@@ -42,14 +42,14 @@ class User: BaseModel {
         }
     }
     
-    private var _avatarClubModel: Club?
+    fileprivate var _avatarClubModel: Club?
     var avatarClubModel: Club? {
         get {
             if avatarClub == nil {
                 return nil
             }
             if _avatarClubModel == nil {
-                let clubJSON = JSON(data: avatarClub!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+                let clubJSON = JSON(data: avatarClub!.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
                 _avatarClubModel = try! manager.getOrCreate(clubJSON) as Club
             }
             return _avatarClubModel
@@ -74,7 +74,7 @@ class User: BaseModel {
 //        return _chater!
 //    }
     
-    private var _rosterItem: RosterItem?
+    fileprivate var _rosterItem: RosterItem?
     var rosterItem: RosterItem? {
         if let roster = _rosterItem {
             return roster
@@ -88,20 +88,20 @@ class User: BaseModel {
     }
     
     var chatName: String {
-        if let noteName = noteName where noteName != "" {
+        if let noteName = noteName , noteName != "" {
             return noteName
         } else {
             return nickName!
         }
     }
     
-    private var _clubNickName: String?
+    fileprivate var _clubNickName: String?
     var clubNickName: String {
         set {
             _clubNickName = clubNickName
         }
         get {
-            if let name = _clubNickName where name != "" {
+            if let name = _clubNickName , name != "" {
                 return name
             } else {
                 return nickName!
@@ -109,7 +109,7 @@ class User: BaseModel {
         }
     }
 
-    override func loadDataFromJSON(data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> Self {
+    override func loadDataFromJSON(_ data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> Self {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         nickName = data["nick_name"].stringValue
         avatar = data["avatar"].stringValue
@@ -164,7 +164,7 @@ class User: BaseModel {
         return self
     }
     
-    override func toJSONObject(detailLevel: Int) throws -> JSON {
+    override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         if detailLevel > 0 {
             assertionFailure("Not supported")
         }
@@ -176,7 +176,7 @@ class User: BaseModel {
         return ssid == MainManager.sharedManager.hostUserID!
     }
     
-    class func reorganizeJSON(json: JSON) -> JSON {
+    class func reorganizeJSON(_ json: JSON) -> JSON {
         var tempJSON = json["user"]
         for (key, value) in json {
             if key == "user" {

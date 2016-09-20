@@ -21,7 +21,7 @@ extension ChatRecord {
     @NSManaged var audioLength: Double // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var audioReady: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var chatType: String?
-    @NSManaged var createdAt: NSDate?
+    @NSManaged var createdAt: Date?
     @NSManaged var draft: String?
     @NSManaged var hidden: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var image: String?
@@ -37,7 +37,7 @@ extension ChatRecord {
     @NSManaged var sent: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var targetID: Int32 // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var textContent: String?
-    @NSManaged var updatedAt: NSDate?
+    @NSManaged var updatedAt: Date?
 
 }
 
@@ -79,7 +79,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: ChatRecord {
     var audioLength: AlecrimCoreData.NullableAttribute<Double> { return AlecrimCoreData.NullableAttribute<Double>("audioLength", self) }
     var audioReady: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("audioReady", self) }
     var chatType: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("chatType", self) }
-    var createdAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
+    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
     var draft: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("draft", self) }
     var hidden: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("hidden", self) }
     var image: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("image", self) }
@@ -95,7 +95,7 @@ extension AlecrimCoreData.AttributeType where Self.ValueType: ChatRecord {
     var sent: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("sent", self) }
     var targetID: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("targetID", self) }
     var textContent: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("textContent", self) }
-    var updatedAt: AlecrimCoreData.NullableAttribute<NSDate> { return AlecrimCoreData.NullableAttribute<NSDate>("updatedAt", self) }
+    var updatedAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("updatedAt", self) }
 
 }
 

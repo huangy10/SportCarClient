@@ -39,7 +39,7 @@ class PresentTemplateViewController: InputableViewController {
         super.viewDidLoad()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         showAnimated()
     }
@@ -49,13 +49,13 @@ class PresentTemplateViewController: InputableViewController {
         let superview = self.view
         //
         bg = UIImageView(image: bgImage)
-        superview.addSubview(bg)
+        superview?.addSubview(bg)
         bg.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         //
         bgBlurred = UIImageView(image: self.blurImageUsingCoreImage(bgImage))
-        superview.addSubview(bgBlurred)
+        superview?.addSubview(bgBlurred)
         bgBlurred.layer.opacity = 0
         bgBlurred.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(bg)
@@ -63,20 +63,20 @@ class PresentTemplateViewController: InputableViewController {
         //
         bgMask = UIView()
         bgMask.backgroundColor = UIColor(white: 1, alpha: 0.7)
-        superview.addSubview(bgMask)
+        superview?.addSubview(bgMask)
         bgMask.layer.opacity = 0
         //
         container = UIView()
-        container.backgroundColor = UIColor.clearColor()
-        superview.addSubview(container)
+        container.backgroundColor = UIColor.clear
+        superview?.addSubview(container)
         container.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         container.layer.opacity = 0
         //
         cancelBtn = UIButton()
-        cancelBtn.addTarget(self, action: #selector(PresentTemplateViewController.cancelBtnPressed), forControlEvents: .TouchUpInside)
-        superview.addSubview(cancelBtn)
+        cancelBtn.addTarget(self, action: #selector(PresentTemplateViewController.cancelBtnPressed), for: .touchUpInside)
+        superview?.addSubview(cancelBtn)
         cancelBtn.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
             make.top.equalTo(container).offset(80)
@@ -89,8 +89,8 @@ class PresentTemplateViewController: InputableViewController {
         }
         //
         sepLine = UIView()
-        superview.addSubview(sepLine)
-        sepLine.backgroundColor = UIColor.whiteColor()
+        superview?.addSubview(sepLine)
+        sepLine.backgroundColor = UIColor.white
         sepLine.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(cancelBtn)
             make.top.equalTo(cancelBtn.snp_bottom).offset(30)
@@ -108,23 +108,23 @@ class PresentTemplateViewController: InputableViewController {
     }
     
     func showAnimated() {
-        UIView.animateWithDuration(0.5) { () -> Void in
+        UIView.animate(withDuration: 0.5, animations: { () -> Void in
             self.bg.layer.opacity = 0
             self.bgBlurred.layer.opacity = 1
             self.bgMask.layer.opacity = 1
             self.container.layer.opacity = 1
-        }
+        }) 
     }
     
-    func hideAnimated(completion: (()->())? = nil) {
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
+    func hideAnimated(_ completion: (()->())? = nil) {
+        UIView.animate(withDuration: 0.5, animations: { () -> Void in
             self.bg.layer.opacity = 1
             self.bgBlurred.layer.opacity = 0
             self.bgMask.layer.opacity = 0
             self.container.layer.opacity = 0
-            }) { (_) -> Void in
-                self.presentingViewController?.dismissViewControllerAnimated(false, completion: completion)
-        }
+            }, completion: { (_) -> Void in
+                self.presentingViewController?.dismiss(animated: false, completion: completion)
+        }) 
     }
     
     func cancelBtnPressed() {

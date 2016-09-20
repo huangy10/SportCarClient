@@ -35,14 +35,14 @@ class ActivityHomeController: UIViewController {
         createSubviews()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         controllers[curTag].viewWillAppear(animated)
         navLeftBtn.unreadStatusChanged()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
         controllers[curTag].viewWillDisappear(animated)
     }
@@ -51,33 +51,33 @@ class ActivityHomeController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         // 导航栏左侧按钮
         navLeftBtn = BackToHomeBtn()
-        navLeftBtn.addTarget(self, action: #selector(navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        navLeftBtn.addTarget(self, action: #selector(navLeftBtnPressed), for: .touchUpInside)
         navigationItem.leftBarButtonItem = navLeftBtn.wrapToBarBtn()
         // 导航栏右侧按钮
         let navRightBtn = UIButton()
-        navRightBtn.setImage(UIImage(named: "status_add_btn_white"), forState: .Normal)
-        navRightBtn.frame = CGRectMake(0, 0, 18, 18)
-        navRightBtn.addTarget(self, action: #selector(ActivityHomeController.navRightBtnPressed), forControlEvents: .TouchUpInside)
+        navRightBtn.setImage(UIImage(named: "status_add_btn_white"), for: UIControlState())
+        navRightBtn.frame = CGRect(x: 0, y: 0, width: 18, height: 18)
+        navRightBtn.addTarget(self, action: #selector(ActivityHomeController.navRightBtnPressed), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navRightBtn)
         // 导航栏内容
         let barHeight = self.navigationController!.navigationBar.frame.height
         let containerWidth = self.view.frame.width * 0.8
-        let container = UIView(frame: CGRectMake(0, 0, containerWidth, barHeight))
-        container.backgroundColor = UIColor.clearColor()
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: containerWidth, height: barHeight))
+        container.backgroundColor = UIColor.clear
         
         let titleMineBtn = container.addSubview(UIButton)
             .config(self, selector: #selector(navTitleBtnPressed(_:)))
             .layout({ (make) in
                 make.right.equalTo(container.snp_centerX)
                 make.centerY.equalTo(container)
-                make.size.equalTo(CGSizeMake(70, 30))
+                make.size.equalTo(CGSize(width: 70, height: 30))
             })
         titleMineBtn.tag = 0
         titleMineLbl = titleMineBtn.addSubview(UILabel)
-            .config(15, textColor: kTextBlack, textAlignment: .Center, text: LS("已发布"), fontWeight: UIFontWeightBold)
+            .config(15, textColor: kTextBlack, textAlignment: .center, text: LS("已发布"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleMineBtn)
-                make.size.equalTo(LS(" 已发布 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+                make.size.equalTo(LS(" 已发布 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
             })
         
         let titleAppliedBtn = container.addSubview(UIButton)
@@ -85,14 +85,14 @@ class ActivityHomeController: UIViewController {
             .layout({ (make) in
                 make.left.equalTo(container.snp_centerX)
                 make.centerY.equalTo(container)
-                make.size.equalTo(CGSizeMake(70, 30))
+                make.size.equalTo(CGSize(width: 70, height: 30))
             })
         titleAppliedBtn.tag = 1
         titleAppliedLbl = titleAppliedBtn.addSubview(UILabel)
-            .config(15, textColor: kTextGray, textAlignment: .Center, text: LS("已报名"), fontWeight: UIFontWeightBold)
+            .config(15, textColor: kTextGray, textAlignment: .center, text: LS("已报名"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleAppliedBtn)
-                make.size.equalTo(LS(" 已报名 ").sizeWithFont(kBarTextFont, boundingSize: CGSizeMake(CGFloat.max, CGFloat.max)))
+                make.size.equalTo(LS(" 已报名 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
             })
 //        //
 //        titleMineBtn = UIButton()
@@ -142,12 +142,12 @@ class ActivityHomeController: UIViewController {
             make.right.equalTo(titleMineLbl)
             make.height.equalTo(2.5)
         }
-        container.sendSubviewToBack(titleBtnIcon)
+        container.sendSubview(toBack: titleBtnIcon)
         //
         self.navigationItem.titleView = container
     }
     
-    func navTitleBtnPressed(sender: UIButton) {
+    func navTitleBtnPressed(_ sender: UIButton) {
         if sender.tag == curTag {
             return
         }
@@ -157,8 +157,8 @@ class ActivityHomeController: UIViewController {
         let lbls = [titleMineLbl, titleAppliedLbl]
         let targetLbl = lbls[sender.tag]
         let sourceLbl = lbls[curTag]
-        targetLbl.textColor = kTextBlack
-        sourceLbl.textColor = kTextGray
+        targetLbl?.textColor = kTextBlack
+        sourceLbl?.textColor = kTextGray
         
         titleBtnIcon.snp_remakeConstraints { (make) -> Void in
             make.bottom.equalTo(titleBtnIcon.superview!)
@@ -166,10 +166,10 @@ class ActivityHomeController: UIViewController {
             make.right.equalTo(targetLbl)
             make.height.equalTo(2.5)
         }
-        UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.titleBtnIcon.superview?.layoutIfNeeded()
             }, completion: nil)
-        board.setContentOffset(CGPointMake(self.view.frame.width * CGFloat(sender.tag), 0), animated: true)
+        board.setContentOffset(CGPoint(x: self.view.frame.width * CGFloat(sender.tag), y: 0), animated: true)
         curTag = sender.tag
     }
     
@@ -188,15 +188,15 @@ class ActivityHomeController: UIViewController {
     
     func createSubviews() {
         let superview = self.view
-        superview.backgroundColor = UIColor.whiteColor()
+        superview?.backgroundColor = UIColor.white
         
         board = UIScrollView()
-        board.pagingEnabled = true
-        board.scrollEnabled = false
-        let width = superview.frame.width
-        let height = superview.frame.height
-        board.contentSize = CGSizeMake(width * 2, height)
-        superview.addSubview(board)
+        board.isPagingEnabled = true
+        board.isScrollEnabled = false
+        let width = superview?.frame.width
+        let height = superview?.frame.height
+        board.contentSize = CGSize(width: width! * 2, height: height!)
+        superview?.addSubview(board)
         board.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
@@ -204,14 +204,14 @@ class ActivityHomeController: UIViewController {
         mine = ActivityHomeMineListController()
         addChildViewController(mine)
         let mineView = mine.view
-        board.addSubview(mineView)
+        board.addSubview(mineView!)
         mineView.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(superview)
             make.top.equalTo(superview)
             make.left.equalTo(board)
         }
         mine.home = self
-        mine.didMoveToParentViewController(self)
+        mine.didMove(toParentViewController: self)
 //        
 //        nearBy = ActivityNearByController()
 //        let nearByView = nearBy.view
@@ -226,14 +226,14 @@ class ActivityHomeController: UIViewController {
         applied = ActivityAppliedController()
         addChildViewController(applied)
         let appliedView = applied.view
-        board.addSubview(appliedView)
+        board.addSubview(appliedView!)
         appliedView.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(superview)
             make.top.equalTo(superview)
             make.left.equalTo(board).offset(width)
         }
         applied.home = self
-        applied.didMoveToParentViewController(self)
+        applied.didMove(toParentViewController: self)
         
         controllers = [mine, applied]
     }

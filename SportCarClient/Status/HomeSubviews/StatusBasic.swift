@@ -11,6 +11,26 @@ import SnapKit
 import SwiftyJSON
 import Alamofire
 import Dollar
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func <= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l <= r
+  default:
+    return !(rhs < lhs)
+  }
+}
+
 
 
 class StatusBasicController: UITableViewController {
@@ -27,10 +47,10 @@ class StatusBasicController: UITableViewController {
     weak var requestOnFly: Request?
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
@@ -46,40 +66,40 @@ class StatusBasicController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StatusBasicController.onStatusDelete(_:)), name: kStatusDidDeletedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUserBlacklisted(_:)), name: kUserBlacklistedNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUserBlacklisted(_:)), name: kUserUnBlacklistedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(StatusBasicController.onStatusDelete(_:)), name: NSNotification.Name(rawValue: kStatusDidDeletedNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onUserBlacklisted(_:)), name: NSNotification.Name(rawValue: kUserBlacklistedNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onUserBlacklisted(_:)), name: NSNotification.Name(rawValue: kUserUnBlacklistedNotification), object: nil)
         
-        tableView.registerClass(StatusCell.self, forCellReuseIdentifier: StatusCell.reuseIdentifier)
+        tableView.register(StatusCell.self, forCellReuseIdentifier: StatusCell.reuseIdentifier)
         myRefreshControl = UIRefreshControl()
         tableView.addSubview(myRefreshControl!)
         tableView.contentInset = UIEdgeInsetsMake(5, 0, 5, 0)
-        myRefreshControl?.addTarget(self, action: #selector(StatusBasicController.loadLatestData), forControlEvents: .ValueChanged)
+        myRefreshControl?.addTarget(self, action: #selector(StatusBasicController.loadLatestData), for: .valueChanged)
         
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         tableView.backgroundColor = kGeneralTableViewBGColor
         loadMoreData()
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return status.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(StatusCell.reuseIdentifier, forIndexPath: indexPath) as! StatusCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: StatusCell.reuseIdentifier, for: indexPath) as! StatusCell
         cell.parent = homeController
-        cell.status = status[indexPath.row]
-        cell.selectionStyle = .None
+        cell.status = status[(indexPath as NSIndexPath).row]
+        cell.selectionStyle = .none
         cell.loadDataAndUpdateUI()
         return cell
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let curStatus = status[indexPath.row]
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        let curStatus = status[(indexPath as NSIndexPath).row]
         if curStatus.image?.split(";").count <= 1{
             return 420
         }else{
@@ -87,11 +107,11 @@ class StatusBasicController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return StatusCell.heightForStatus(status[indexPath.row])
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return StatusCell.heightForStatus(status[(indexPath as NSIndexPath).row])
     }
     
-    override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.height) - 1 {
             loadMoreData()
         }
@@ -109,9 +129,9 @@ extension StatusBasicController {
      将状态数据按照时间顺序进行排序，最近发的在最前面
      */
     func statusDataSort() {
-        status.sortInPlace { (s1, s2) -> Bool in
+        status.sort { (s1, s2) -> Bool in
             switch s1.createdAt!.compare(s2.createdAt!) {
-            case .OrderedAscending:
+            case .orderedAscending:
                 return false
             default:
                 return true
@@ -126,7 +146,7 @@ extension StatusBasicController {
      
      - return: 返回生成的status的数量
      */
-    func jsonDataHandler(json: JSON) -> Int{
+    func jsonDataHandler(_ json: JSON) -> Int{
         let statusJSONData = json.arrayValue
         for statusJSON in statusJSONData {
             let newStatus: Status = try! MainManager.sharedManager.getOrCreate(statusJSON)
@@ -137,10 +157,10 @@ extension StatusBasicController {
         return statusJSONData.count
     }
     
-    func onStatusDelete(notification: NSNotification) {
-        if let statusID = notification.userInfo![kStatusDidDeletedStatusIDKey] as? String{
+    func onStatusDelete(_ notification: Foundation.Notification) {
+        if let statusID = (notification as NSNotification).userInfo![kStatusDidDeletedStatusIDKey] as? String{
             if let index = status.findIndex({$0.ssidString == statusID}) {
-                status.removeAtIndex(index)
+                status.remove(at: index)
                 tableView.reloadData()
             }
         } else {
@@ -148,14 +168,14 @@ extension StatusBasicController {
         }
     }
     
-    func onUserBlacklisted(notification: NSNotification) {
+    func onUserBlacklisted(_ notification: Foundation.Notification) {
         let name  = notification.name
-        if let user = notification.userInfo?[kUserKey] as? User {
+        if let user = (notification as NSNotification).userInfo?[kUserKey] as? User {
             if name == kUserBlacklistedNotification {
                 status = status.filter({$0.user!.ssid != user.ssid})
                 tableView.reloadData()
             }
-        } else if let users = notification.userInfo?[kUserListKey] as? [User] {
+        } else if let users = (notification as NSNotification).userInfo?[kUserListKey] as? [User] {
             if name == kUserBlacklistedNotification {
                 let blIDs = users.map { $0.ssid }
                 status = status.filter { !blIDs.contains($0.ssid) }

@@ -18,7 +18,7 @@ class StatusComment: BaseInMemModel {
     var status: Status
     
     var content: String!
-    var createdAt: NSDate!
+    var createdAt: Date!
     var sent: Bool!
     var responseTo: StatusComment?
     var user: User!
@@ -28,7 +28,7 @@ class StatusComment: BaseInMemModel {
         super.init()
     }
     
-    override func loadDataFromJSON(data: JSON) throws -> Self {
+    override func loadDataFromJSON(_ data: JSON) throws -> Self {
         try super.loadDataFromJSON(data)
         ssid = data["commentID"].int32Value
         content = data["content"].stringValue
@@ -43,22 +43,22 @@ class StatusComment: BaseInMemModel {
         return self
     }
     
-    func initForPost(content: String, responseTo: StatusComment?) -> Self {
+    func initForPost(_ content: String, responseTo: StatusComment?) -> Self {
         self.content = content
         self.responseTo = responseTo
         self.user = MainManager.sharedManager.hostUser
-        self.createdAt = NSDate()
+        self.createdAt = Date()
         self.sent = false
         return self
     }
     
-    func confirmSent(newID: Int32) -> Self {
+    func confirmSent(_ newID: Int32) -> Self {
         self.sent = true
         self.ssid = newID
         return self
     }
     
-    override func toJSONObject(detailLevel: Int) throws -> JSON {
+    override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         var json = [
             StatusComment.idField: ssidString,
             "content": content,
@@ -71,25 +71,25 @@ class StatusComment: BaseInMemModel {
         }
         return json
     }
-    override func fromJSONString(string: String, detailLevel: Int) throws -> StatusComment {
-        if let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+    override func fromJSONString(_ string: String, detailLevel: Int) throws -> StatusComment {
+        if let data = string.data(using: String.Encoding.utf8, allowLossyConversion: false) {
             let json = JSON(data: data)
 //            ssid = json["statusID"].int32Value
             try self.loadDataFromJSON(json)
             return self
         } else {
-            throw SSModelError.InvalidJSONString
+            throw SSModelError.invalidJSONString
         }
     }
     
-    class override func fromJSONString(string: String, detailLevel: Int) throws -> StatusComment {
-        if let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+    class override func fromJSONString(_ string: String, detailLevel: Int) throws -> StatusComment {
+        if let data = string.data(using: String.Encoding.utf8, allowLossyConversion: false) {
             let json = JSON(data: data)
             let status = try MainManager.sharedManager.getOrCreate(json["status"]) as Status
             let obj = try StatusComment(status: status).loadDataFromJSON(json)
             return obj
         } else {
-            throw SSModelError.InvalidJSONString
+            throw SSModelError.invalidJSONString
         }
     }
 }

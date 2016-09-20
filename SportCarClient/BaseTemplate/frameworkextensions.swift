@@ -12,37 +12,37 @@ import UIKit
 
 
 extension String {
-    func insert(string: String, atIndex ind: Int) -> String {
+    func insert(_ string: String, atIndex ind: Int) -> String {
         return String(self.characters.prefix(ind)) + string + String(self.characters.suffix(self.characters
             .count - ind))
     }
     
-    func sizeWithFont(font: UIFont, boundingSize: CGSize) -> CGSize {
-        return self.boundingRectWithSize(boundingSize, options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil).size
+    func sizeWithFont(_ font: UIFont, boundingSize: CGSize) -> CGSize {
+        return self.boundingRect(with: boundingSize, options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil).size
     }
 }
 
 
-extension NSDate {
+extension Date {
     func stringDisplay() -> String? {
         return dateDisplayExact(self)
     }
     
-    func isSameDayWith(date: NSDate) -> Bool {
-        let calendar = NSCalendar.currentCalendar()
-        let comps1 = calendar.components([NSCalendarUnit.Month , NSCalendarUnit.Year , NSCalendarUnit.Day], fromDate:self)
-        let comps2 = calendar.components([NSCalendarUnit.Month , NSCalendarUnit.Year , NSCalendarUnit.Day], fromDate:date)
+    func isSameDayWith(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        let comps1 = (calendar as NSCalendar).components([NSCalendar.Unit.month , NSCalendar.Unit.year , NSCalendar.Unit.day], from:self)
+        let comps2 = (calendar as NSCalendar).components([NSCalendar.Unit.month , NSCalendar.Unit.year , NSCalendar.Unit.day], from:date)
         return (comps1.day == comps2.day) && (comps1.month == comps2.month) && (comps1.year == comps2.year)
     }
 }
 
-func CGPointDistance(p1: CGPoint, p2: CGPoint) -> CGFloat {
+func CGPointDistance(_ p1: CGPoint, p2: CGPoint) -> CGFloat {
     let dx = p1.x - p2.x
     let dy = p1.y - p2.y
     return sqrt(dx * dx + dy * dy)
 }
 
-extension NSTimer {
+extension Timer {
     /**
      Creates and schedules a one-time `NSTimer` instance.
      
@@ -52,10 +52,10 @@ extension NSTimer {
      
      - Returns: The newly-created `NSTimer` instance.
      */
-    class func schedule(delay delay: NSTimeInterval, handler: NSTimer! -> Void) -> NSTimer {
+    class func schedule(delay: TimeInterval, handler: @escaping (Timer!) -> Void) -> Timer {
         let fireDate = delay + CFAbsoluteTimeGetCurrent()
         let timer = CFRunLoopTimerCreateWithHandler(kCFAllocatorDefault, fireDate, 0, 0, 0, handler)
-        CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, kCFRunLoopCommonModes)
+        CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, CFRunLoopMode.commonModes)
         return timer
     }
     
@@ -70,10 +70,10 @@ extension NSTimer {
      
      - Returns: The newly-created `NSTimer` instance.
      */
-    class func schedule(repeatInterval interval: NSTimeInterval, handler: NSTimer! -> Void) -> NSTimer {
+    class func schedule(repeatInterval interval: TimeInterval, handler: @escaping (Timer!) -> Void) -> Timer {
         let fireDate = interval + CFAbsoluteTimeGetCurrent()
         let timer = CFRunLoopTimerCreateWithHandler(kCFAllocatorDefault, fireDate, interval, 0, 0, handler)
-        CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, kCFRunLoopCommonModes)
+        CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, CFRunLoopMode.commonModes)
         return timer
     }
     

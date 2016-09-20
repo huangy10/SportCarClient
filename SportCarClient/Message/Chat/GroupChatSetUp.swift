@@ -12,7 +12,7 @@ import Alamofire
 
 
 protocol GroupChatSetupDelegate: class {
-    func groupChatSetupControllerDidSuccessCreatingClub(newClub: Club)
+    func groupChatSetupControllerDidSuccessCreatingClub(_ newClub: Club)
 }
 
 
@@ -34,14 +34,14 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
         navSettings()
         super.createSubviews()
         let superview = self.view
-        superview.backgroundColor = UIColor.whiteColor()
+        superview?.backgroundColor = UIColor.white
         //
         let logoLbl = UILabel()
         logoLbl.text = LS("请选择一个标识")
-        logoLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold)
-        logoLbl.textColor = UIColor.blackColor()
-        logoLbl.textAlignment = .Center
-        superview.addSubview(logoLbl)
+        logoLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        logoLbl.textColor = UIColor.black
+        logoLbl.textAlignment = .center
+        superview?.addSubview(logoLbl)
         logoLbl.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(25)
@@ -50,32 +50,32 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
         logo = UIButton()
         logo.layer.cornerRadius = 45
         logo.clipsToBounds = true
-        logo.setImage(UIImage(named: "account_profile_avatar_btn"), forState: .Normal)
-        superview.addSubview(logo)
+        logo.setImage(UIImage(named: "account_profile_avatar_btn"), for: UIControlState())
+        superview?.addSubview(logo)
         logo.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(logoLbl.snp_bottom).offset(20)
             make.size.equalTo(90)
         }
-        logo.addTarget(self, action: #selector(GroupChatSetupController.logoBtnPressed), forControlEvents: .TouchUpInside)
+        logo.addTarget(self, action: #selector(GroupChatSetupController.logoBtnPressed), for: .touchUpInside)
         //
         nameInput = UITextField()
         nameInput.delegate = self
         inputFields.append(nameInput)
-        nameInput.textColor = UIColor.blackColor()
-        nameInput.font = UIFont.systemFontOfSize(15, weight: UIFontWeightUltraLight)
-        nameInput.textAlignment = .Center
+        nameInput.textColor = UIColor.black
+        nameInput.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightUltraLight)
+        nameInput.textAlignment = .center
         nameInput.placeholder = LS("请输入群聊名称")
-        superview.addSubview(nameInput)
+        superview?.addSubview(nameInput)
         nameInput.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(logo.snp_bottom).offset(30)
-            make.size.equalTo(CGSizeMake(250, 27.5))
+            make.size.equalTo(CGSize(width: 250, height: 27.5))
         }
         //
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.945, alpha: 1)
-        superview.addSubview(sepLine)
+        superview?.addSubview(sepLine)
         sepLine.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(nameInput.snp_bottom).offset(3)
             make.width.equalTo(273)
@@ -89,25 +89,25 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
         self.navigationItem.title = LS("聊天信息") + "(\(users.count))"
         //
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        navLeftBtn.frame = CGRectMake(0, 0, 9, 15)
-        navLeftBtn.addTarget(self, action: #selector(GroupChatSetupController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
+        navLeftBtn.addTarget(self, action: #selector(GroupChatSetupController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
-        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: #selector(GroupChatSetupController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let rightItem = UIBarButtonItem(title: LS("确定"), style: .done, target: self, action: #selector(GroupChatSetupController.navRightBtnPressed))
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
         if requesting { return }
         nameInput.resignFirstResponder()
         // Check the data
-        guard let clubName = nameInput.text where clubName.length > 0 else {
+        guard let clubName = nameInput.text , clubName.length > 0 else {
             showToast(LS("请填写俱乐部名称"))
             return
         }
@@ -121,17 +121,17 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
         requesting = true
         ClubRequester.sharedInstance.createNewClub(clubName, clubLogo: logoImage!, members: userIDs, description: "Description", onSuccess: { (json) in
             var club: Club! = nil
-            let waiter: dispatch_semaphore_t = dispatch_semaphore_create(0)
-            dispatch_async(ChatModelManger.sharedManager.workQueue, {
+            let waiter: DispatchSemaphore = DispatchSemaphore(value: 0)
+            ChatModelManger.sharedManager.workQueue.async(execute: {
                 club = try! ChatModelManger.sharedManager.getOrCreate(json!) as Club
                 let rosterItem = RosterManager.defaultManager.getOrCreateNewRoster(json!["roster"], autoBringToFront: true)
                 try! ChatModelManger.sharedManager.save()
                 club.rosterItem = rosterItem
-                dispatch_semaphore_signal(waiter)
+                waiter.signal()
             })
-            let waitUntil = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC))
+            let waitUntil = DispatchTime.now() + Double(Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
             // only wait for one second
-            dispatch_semaphore_wait(waiter, waitUntil)
+            waiter.wait(timeout: waitUntil)
             club = MainManager.sharedManager.objectWithSSID(club.ssid) as Club?
             club.rosterItem?.loadData()
             let kingfisherCache = KingfisherManager.sharedManager.cache
@@ -165,50 +165,50 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
     }
     
     func logoBtnPressed() {
-        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .ActionSheet)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .Default, handler: { (action) -> Void in
-            let sourceType = UIImagePickerControllerSourceType.Camera
+        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.camera
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = sourceType
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .Default, handler: { (action) -> Void in
-            let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.photoLibrary
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = sourceType
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .Cancel, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }
 
 extension GroupChatSetupController {
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        self.dismiss(animated: true, completion: nil)
         logoImage = image
-        logo.setImage(logoImage!, forState: .Normal)
+        logo.setImage(logoImage!, for: UIControlState())
     }
     
 }

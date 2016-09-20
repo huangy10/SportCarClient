@@ -13,7 +13,7 @@ import SwiftyJSON
 class NewsRequester: BasicRequester {
     static let sharedInstance = NewsRequester()
     
-    private let _urlMap: [String: String] = [
+    fileprivate let _urlMap: [String: String] = [
         "get": "",
         "comments": "<newsID>/comments",
         "new_comment": "<newsID>/post_comments",
@@ -28,7 +28,7 @@ class NewsRequester: BasicRequester {
         return "news"
     }
     
-    func getLatestNewsList(dateThreshold: NSDate, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func getLatestNewsList(_ dateThreshold: Date, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return get(
             urlForName("get"),
             parameters: ["op_type": "latest", "date_threshold": STRDate(dateThreshold), "limit": "20"],
@@ -37,7 +37,7 @@ class NewsRequester: BasicRequester {
         )
     }
     
-    func getMoreNewsList(dateThreshold: NSDate, onSuccess: SSSuccessCallback,
+    func getMoreNewsList(_ dateThreshold: Date, onSuccess: SSSuccessCallback,
                          onError: SSFailureCallback) -> Request {
         return get(
             urlForName("get"),
@@ -47,7 +47,7 @@ class NewsRequester: BasicRequester {
         )
     }
     
-    func getMoreNewsComment(dateThreshold: NSDate, newsID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func getMoreNewsComment(_ dateThreshold: Date, newsID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return get(
             urlForName("comments", param: ["newsID": newsID]),
             parameters: ["op_type": "more", "date_threshold": STRDate(dateThreshold), "limit": "20"],
@@ -56,14 +56,14 @@ class NewsRequester: BasicRequester {
         )
     }
     
-    func postCommentToNews(newsID: String, content: String?, responseTo: String?, informOf: [String]?, onSuccess: (JSON?)->(), onError: (code: String?)->()) {
+    func postCommentToNews(_ newsID: String, content: String?, responseTo: String?, informOf: [String]?, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) {
         assert(content != nil)
-        var param: [String: AnyObject] = ["content": content!]
+        var param: [String: AnyObject] = ["content": content! as AnyObject]
         if let responseTo = responseTo {
-            param["response_to"] = responseTo
+            param["response_to"] = responseTo as AnyObject?
         }
         if let informOf = informOf {
-            param["inform_of"] = informOf
+            param["inform_of"] = informOf as AnyObject?
         }
         upload(
             urlForName("new_comment", param: ["newsID": newsID]),
@@ -73,7 +73,7 @@ class NewsRequester: BasicRequester {
         )
     }
     
-    func likeNews(newsID: String, onSuccess: (JSON?)->(), onError: (code: String?)->()) -> Request {
+    func likeNews(_ newsID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
         return post(urlForName("operation", param: ["newsID": newsID]),
                     parameters: ["op_type": "like"],
                     responseDataField: "like_info",

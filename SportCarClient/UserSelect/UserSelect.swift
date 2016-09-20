@@ -41,32 +41,32 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
     override func createSubviews() {
         super.createSubviews()
         let superview = self.view
-        superview.backgroundColor = UIColor.whiteColor()
+        superview?.backgroundColor = UIColor.white
         //
         searchBar = UISearchBar()
-        superview.addSubview(searchBar!)
+        superview?.addSubview(searchBar!)
         searchBar?.delegate = self
-        searchBar?.searchBarStyle = .Minimal
-        searchBar?.translucent = true
+        searchBar?.searchBarStyle = .minimal
+        searchBar?.isTranslucent = true
         searchBar?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.top.equalTo(superview)
             make.height.equalTo(44)
         })
-        searchBar?.returnKeyType = .Search
+        searchBar?.returnKeyType = .search
         self.inputFields.append(searchBar)
         //
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSizeMake(35, 35)
+        layout.itemSize = CGSize(width: 35, height: 35)
         layout.minimumInteritemSpacing = 5
-        layout.scrollDirection = .Horizontal
+        layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsetsMake(0, 15, 0, 15)
-        selectedUserList = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
-        selectedUserList?.registerClass(UserSelectedcell.self, forCellWithReuseIdentifier: UserSelectedcell.reuseIdentifier)
-        selectedUserList?.backgroundColor = UIColor.whiteColor()
+        selectedUserList = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        selectedUserList?.register(UserSelectedcell.self, forCellWithReuseIdentifier: UserSelectedcell.reuseIdentifier)
+        selectedUserList?.backgroundColor = UIColor.white
         selectedUserList?.dataSource = self
-        superview.addSubview(selectedUserList!)
+        superview?.addSubview(selectedUserList!)
         selectedUserList?.snp_makeConstraints(closure: { (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
@@ -74,27 +74,27 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
             make.top.equalTo(searchBar!.snp_bottom)
         })
         //
-        userTableView = UITableView(frame: CGRectZero, style: .Plain)
+        userTableView = UITableView(frame: CGRect.zero, style: .plain)
         userTableView?.delegate = self
         userTableView?.dataSource = self
-        userTableView?.separatorStyle = .None
-        superview.addSubview(userTableView!)
+        userTableView?.separatorStyle = .none
+        superview?.addSubview(userTableView!)
         userTableView?.snp_makeConstraints(closure: { (make) -> Void in
             make.top.equalTo(selectedUserList!.snp_bottom)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.bottom.equalTo(superview)
         })
-        userTableView?.registerClass(UserSelectCell.self, forCellReuseIdentifier: UserSelectCell.reuseIdentifier)
+        userTableView?.register(UserSelectCell.self, forCellReuseIdentifier: UserSelectCell.reuseIdentifier)
     }
     
     internal func navSettings() {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = self.navTitle()
         let leftBtn = UIButton()
-        leftBtn.frame = CGRectMake(0, 0, 10.5, 18)
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        leftBtn.addTarget(self, action: #selector(UserSelectController.navLeftBtnPressed), forControlEvents: .TouchUpInside)
+        leftBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.addTarget(self, action: #selector(UserSelectController.navLeftBtnPressed), for: .touchUpInside)
         let leftBtnItem = UIBarButtonItem(customView: leftBtn)
         self.navigationItem.leftBarButtonItem = leftBtnItem
     }
@@ -112,12 +112,12 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
         
     }
     
-    func setSelectedUserListHiddenAnimated(hidden: Bool){
+    func setSelectedUserListHiddenAnimated(_ hidden: Bool){
         if hidden {
             selectedUserList?.snp_updateConstraints(closure: { (make) -> Void in
                 make.height.equalTo(0)
             })
-            UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.view.layoutIfNeeded()
                 }, completion: { (_) -> Void in
 //                    self.selectedUserList?.hidden = true
@@ -127,7 +127,7 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
             selectedUserList?.snp_updateConstraints(closure: { (make) -> Void in
                 make.height.equalTo(65)
             })
-            UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.view.layoutIfNeeded()
                 }, completion: { (_) -> Void in
                     self.selectedUserList?.reloadData()
@@ -150,7 +150,7 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
      
      - returns: 选择是否生效
      */
-    func userSelectionShouldChange(user: User, addOrDelete: Bool) -> Bool{
+    func userSelectionShouldChange(_ user: User, addOrDelete: Bool) -> Bool{
         return true
     }
 }
@@ -158,45 +158,45 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
 // MARK: - TableView和SearchBar的代理
 extension UserSelectController {
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(UserSelectCell.reuseIdentifier, forIndexPath: indexPath) as! UserSelectCell
-        let user = users[indexPath.row]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: UserSelectCell.reuseIdentifier, for: indexPath) as! UserSelectCell
+        let user = users[(indexPath as NSIndexPath).row]
         cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
         
-        cell.selectBtn?.tag = indexPath.row
+        cell.selectBtn?.tag = (indexPath as NSIndexPath).row
         if forceSelectedUsers.findIndex({$0.ssid == user.ssid}) != nil {
             cell.forceSelected = true
-            cell.selectBtn?.selected = true
+            cell.selectBtn?.isSelected = true
         } else {
             cell.forceSelected = false
             if selectedUsers.filter({$0.ssid == user.ssid}).count > 0 {
-                cell.selectBtn?.selected = true
+                cell.selectBtn?.isSelected = true
             } else {
-                cell.selectBtn?.selected = false
+                cell.selectBtn?.isSelected = false
             }
         }
-        cell.onSelect = { [weak self] (let sender) -> Bool in
+        cell.onSelect = { [weak self] (sender) -> Bool in
             guard let sSelf = self else {
                 return false
             }
             let row = sender.tag
             let targetUser = sSelf.users.fetch(row)
             
-            if !sSelf.userSelectionShouldChange(targetUser, addOrDelete: !sender.selected) {
+            if !sSelf.userSelectionShouldChange(targetUser, addOrDelete: !sender.isSelected) {
                 return false
             }
             
-            if sender.selected {
+            if sender.isSelected {
                 sSelf.selectedUsers.remove(targetUser)
                 if sSelf.selectedUsers.count == 0 {
                     sSelf.selectedUserList?.reloadData()
@@ -217,13 +217,13 @@ extension UserSelectController {
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // cell的高度固定为90
         return 90
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let user = self.users[indexPath.row]
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = self.users[(indexPath as NSIndexPath).row]
         if user.isHost {
             let detail = PersonBasicController(user: user)
             navigationController?.pushViewController(detail, animated: true)
@@ -233,19 +233,19 @@ extension UserSelectController {
         }
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if searchText != searchBar.text {
             searchText = searchBar.text
             searchUserUsingSearchText()
         }
     }
     
-    func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
-        self.tapper?.enabled = true
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        self.tapper?.isEnabled = true
         return true
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if self.searchText != searchText {
             self.searchText = searchText
             searchUserUsingSearchText()
@@ -257,17 +257,17 @@ extension UserSelectController {
 // MARK: - Collection Delegate functions
 extension UserSelectController {
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return selectedUsers.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(UserSelectedcell.reuseIdentifier, forIndexPath: indexPath) as! UserSelectedcell
-        let user = selectedUsers[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserSelectedcell.reuseIdentifier, for: indexPath) as! UserSelectedcell
+        let user = selectedUsers[(indexPath as NSIndexPath).row]
         cell.imageView?.kf_setImageWithURL(user.avatarURL!)
         return cell
     }
@@ -285,7 +285,7 @@ class UserSelectCell: UITableViewCell {
     static let reuseIdentifier = "user_select_cell"
     /// 选择按钮
     var selectBtn: UIButton?
-    var onSelect: ((sender: UIButton)->Bool)?
+    var onSelect: ((_ sender: UIButton)->Bool)?
     /// 用户头像
     var avatarImg: UIImageView?
     /// 昵称
@@ -296,9 +296,9 @@ class UserSelectCell: UITableViewCell {
     var forceSelected: Bool = false {
         didSet {
             if forceSelected {
-                selectBtn?.setImage(UIImage(named: "status_photo_selected_forced"), forState: .Selected)
+                selectBtn?.setImage(UIImage(named: "status_photo_selected_forced"), for: .selected)
             } else {
-                selectBtn?.setImage(UIImage(named: "status_photo_selected_small"), forState: .Selected)
+                selectBtn?.setImage(UIImage(named: "status_photo_selected_small"), for: .selected)
             }
         }
     }
@@ -306,7 +306,7 @@ class UserSelectCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         createSubviews()
-        self.selectionStyle = .None
+        self.selectionStyle = .none
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -316,11 +316,11 @@ class UserSelectCell: UITableViewCell {
     func createSubviews() {
         let superview = self.contentView
         selectBtn = UIButton()
-        selectBtn?.setImage(UIImage(named: "status_photo_unselected_small"), forState: .Normal)
-        selectBtn?.setImage(UIImage(named: "status_photo_selected_small"), forState: .Selected)
-        selectBtn?.addTarget(self, action: #selector(UserSelectCell.selectBtnPressed), forControlEvents: .TouchUpInside)
+        selectBtn?.setImage(UIImage(named: "status_photo_unselected_small"), for: UIControlState())
+        selectBtn?.setImage(UIImage(named: "status_photo_selected_small"), for: .selected)
+        selectBtn?.addTarget(self, action: #selector(UserSelectCell.selectBtnPressed), for: .touchUpInside)
         selectBtn?.contentEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5)
-        selectBtn?.selected = false
+        selectBtn?.isSelected = false
         superview.addSubview(selectBtn!)
         selectBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.centerY.equalTo(superview)
@@ -340,8 +340,8 @@ class UserSelectCell: UITableViewCell {
         })
         //
         nickNameLbl = UILabel()
-        nickNameLbl?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold)
-        nickNameLbl?.textColor = UIColor.blackColor()
+        nickNameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        nickNameLbl?.textColor = UIColor.black
         superview.addSubview(nickNameLbl!)
         nickNameLbl?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(avatarImg!.snp_right).offset(12)
@@ -351,7 +351,7 @@ class UserSelectCell: UITableViewCell {
         //
         recentStatusLbL = UILabel()
         recentStatusLbL?.textColor = UIColor(white: 0.72, alpha: 1)
-        recentStatusLbL?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        recentStatusLbL?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(recentStatusLbL!)
         recentStatusLbL?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(nickNameLbl!)
@@ -364,7 +364,7 @@ class UserSelectCell: UITableViewCell {
         rightArrowImg.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(superview)
-            make.size.equalTo(CGSizeMake(9, 15))
+            make.size.equalTo(CGSize(width: 9, height: 15))
         }
         //
         let sepLine = UIView()
@@ -384,8 +384,8 @@ class UserSelectCell: UITableViewCell {
             return
         }
         if let handler = onSelect {
-            if handler(sender: selectBtn!) {
-                selectBtn?.selected = !selectBtn!.selected
+            if handler(selectBtn!) {
+                selectBtn?.isSelected = !selectBtn!.isSelected
             }
         }else{
             assertionFailure()

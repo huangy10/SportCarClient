@@ -12,34 +12,36 @@ import Alamofire
 
 class BasicRequester {
     
-    var manager: Alamofire.Manager {
-        let m = Alamofire.Manager.sharedInstance
-        var onceToken: dispatch_once_t = 0
-        dispatch_once(&onceToken) {
+    private lazy var __once: () = {
             
             m.delegate.taskWillPerformHTTPRedirectionWithCompletion = {
-                (session: NSURLSession, task: NSURLSessionTask, response: NSHTTPURLResponse,
-                newRequest: NSURLRequest, completionHandler: NSURLRequest? -> Void) in
+                (session: URLSession, task: URLSessionTask, response: HTTPURLResponse,
+                newRequest: URLRequest, completionHandler: (URLRequest?) -> Void) in
                 
-                if let requestWithHeader: NSMutableURLRequest = newRequest.mutableCopy() as? NSMutableURLRequest {
-                    requestWithHeader.setValue(self.jwtToken, forHTTPHeaderField: "Authorization")
+                if let requestWithHeader: NSMutableURLRequest = (newRequest as NSURLRequest).mutableCopy() as? NSMutableURLRequest {
+                    requestWithHeader.setValue(BasicRequester.jwtToken, forHTTPHeaderField: "Authorization")
                     completionHandler(requestWithHeader)
                 } else {
                     completionHandler(newRequest)
                 }
             }
-        }
+        }()
+    
+    var manager: Alamofire.Manager {
+        let m = Alamofire.Manager.sharedInstance
+        var onceToken: Int = 0
+        _ = self.__once
         return m
     }
     
-    private var jwtToken: String {
+    fileprivate var jwtToken: String {
         if MainManager.sharedManager.hostUser == nil {
             return ""
         }
         return MainManager.sharedManager.jwtToken
     }
     
-    private var defaultHeader: [String: String] {
+    fileprivate var defaultHeader: [String: String] {
         return ["Authorization": jwtToken]
     }
     
@@ -53,14 +55,14 @@ class BasicRequester {
         return ""
     }
     
-    func urlForName(name: String, param: [String: String]? = nil) -> String {
+    func urlForName(_ name: String, param: [String: String]? = nil) -> String {
         guard var url = urlMap[name] else {
             assertionFailure("URL mapping not defined")
             return ""
         }
         if let param = param {
             for (key, value) in param {
-                url = (url as NSString).stringByReplacingOccurrencesOfString("<\(key)>", withString: value)
+                url = (url as NSString).replacingOccurrences(of: "<\(key)>", with: value)
             }
         }
         url = "\(kProtocalName)://\(kHostName):\(kPortName)/\(namespace)/\(url)"
@@ -72,14 +74,14 @@ class BasicRequester {
     }
     
     func responseChecker(
-        requestURL: URLStringConvertible,
+        _ requestURL: URLStringConvertible,
         _ response: Alamofire.Response<AnyObject, NSError>,
         dataField: String,
         onSuccess: SSSuccessCallback,
         onError: SSFailureCallback
         ) {
         switch response.result {
-        case .Failure(let err):
+        case .failure(let err):
 //            print(requestURL)
 //            print(err)
             if let newError = self.internalErrorHandler(err) {
@@ -87,7 +89,7 @@ class BasicRequester {
             } else {
                 onSuccess(json: nil)
             }
-        case .Success(let value):
+        case .success(let value):
             let json = JSON(value)
             if json["success"].boolValue {
                 let result = json[dataField]
@@ -95,24 +97,24 @@ class BasicRequester {
             } else {
                 let code = json["code"].string ?? json["message"].string
                 if code == "1402" {
-                    NSNotificationCenter.defaultCenter().postNotificationName(kAccontNolongerLogin, object: nil)
+                    NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kAccontNolongerLogin), object: nil)
                 }
                 onError(code: code)
             }
         }
     }
     
-    func internalErrorHandler(error: NSError) -> NSError? {
+    func internalErrorHandler(_ error: NSError) -> NSError? {
         return error
     }
     
     func post(
-        URLString: URLStringConvertible,
+        _ URLString: URLStringConvertible,
         parameters: [String: AnyObject]? = nil,
         withManager: Alamofire.Manager? = nil,
-        encoding: ParameterEncoding = .URL,
+        encoding: ParameterEncoding = .url,
         headers: [String: String]? = nil,
-        responseQueue: dispatch_queue_t = dispatch_get_main_queue(),
+        responseQueue: DispatchQueue = DispatchQueue.main,
         responseDataField: String = "",
         onSuccess: SSSuccessCallback!,
         onProgress: SSProgressCallback? = nil,
@@ -136,11 +138,11 @@ class BasicRequester {
     }
     
     func get(
-        URLString: URLStringConvertible,
+        _ URLString: URLStringConvertible,
         parameters: [String: AnyObject]? = nil,
-        encoding: ParameterEncoding = .URL,
+        encoding: ParameterEncoding = .url,
         headers: [String: String]? = nil,
-        responseQueue: dispatch_queue_t = dispatch_get_main_queue(),
+        responseQueue: DispatchQueue = DispatchQueue.main,
         responseDataField: String = "",
         onSuccess: SSSuccessCallback!,
         onProgress: SSProgressCallback? = nil,
@@ -164,11 +166,11 @@ class BasicRequester {
     }
     
     func upload(
-        URLString: URLStringConvertible,
+        _ URLString: URLStringConvertible,
         parameters: [String: AnyObject]? = nil,
-        encoding: ParameterEncoding = .URL,
+        encoding: ParameterEncoding = .url,
         headers: [String: String]? = nil,
-        responseQueue: dispatch_queue_t = dispatch_get_main_queue(),
+        responseQueue: DispatchQueue = DispatchQueue.main,
         responseDataField: String = "",
         onSuccess: SSSuccessCallback!,
         onProgress: SSProgressCallback? = nil,
@@ -186,16 +188,16 @@ class BasicRequester {
         manager.upload(.POST, URLString, headers: defaultHeader, multipartFormData: { (form) in
             for (key, value) in parameters {
                 if let text = value as? String {
-                    form.appendBodyPart(data: text.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: key)
+                    form.appendBodyPart(data: text.data(using: String.Encoding.utf8, allowLossyConversion: false)!, name: key)
                 } else if let image = value as? UIImage {
                     form.appendBodyPart(data: UIImagePNGRepresentation(image)!, name: key, fileName: "\(key).png", mimeType: "image/png")
-                } else if let fileURL = value as? NSURL {
+                } else if let fileURL = value as? URL {
                     form.appendBodyPart(fileURL: fileURL, name: key, fileName: "key.m4a", mimeType: "audio/mp4")
                 } else if let number = value as? Int {
-                    form.appendBodyPart(data: "\(number)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: key)
+                    form.appendBodyPart(data: "\(number)".data(using: String.Encoding.utf8, allowLossyConversion: false)!, name: key)
                     
                 } else if let double = value as? Double {
-                    form.appendBodyPart(data: "\(double)".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: key)
+                    form.appendBodyPart(data: "\(double)".data(using: String.Encoding.utf8, allowLossyConversion: false)!, name: key)
                 } else {
                     do {
                         let data = try JSON(value).rawData()
@@ -207,7 +209,7 @@ class BasicRequester {
             }
             }) { (result) in
                 switch result {
-                case .Success(let request, _, _):
+                case .success(let request, _, _):
                     if let progressClosure = onProgress {
                         request.progress({ (_, written, total) in
                             let progress = Float(written) / Float(total)
@@ -217,8 +219,8 @@ class BasicRequester {
                     request.responseJSON(responseQueue, completionHandler: { (response) in
                         self.responseChecker(URLString, response, dataField: responseDataField, onSuccess: onSuccess, onError: onError)
                     })
-                case .Failure(_):
-                    dispatch_async(responseQueue, {
+                case .failure(_):
+                    responseQueue.async(execute: {
                         onError(code: "Form Data Encode Error")
                     })
                 }

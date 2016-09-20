@@ -12,9 +12,9 @@ import SnapKit
 protocol NotificationDataSource: class {
     func numberOfNotifications() -> Int
     
-    func notificationAt(index: Int) -> Notification
+    func notificationAt(_ index: Int) -> Notification
     
-    func markNotificationAsReadAt(index: Int)
+    func markNotificationAsReadAt(_ index: Int)
 }
 
 class NotificationController: UITableViewController, NotificationCellDelegate, LoadingProtocol {
@@ -23,7 +23,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
     
     var data: [Notification] = []
     
-    var delayTask: dispatch_block_t?
+    var delayTask: ()->()?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +34,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
 //        tableView.registerClass(NotificationBaseCell2.self, forCellReuseIdentifier: "cell2")
 //        tableView.registerClass(NotificationDetailedCell.self, forCellReuseIdentifier: "detail")
 //        tableView.registerClass(NotificationInteractCell.self, forCellReuseIdentifier: "interact")
-        tableView.registerClass(NotificationCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(NotificationCell.self, forCellReuseIdentifier: "cell")
         tableView.separatorColor = UIColor(white: 0.945, alpha: 1)
         MessageManager.defaultManager.enterNotificationList(self)
     }
@@ -43,26 +43,26 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
         MessageManager.defaultManager.leaveNotificationList()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         MessageManager.defaultManager.unreadNotifNum = 0
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let notification = data[indexPath.row]
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! NotificationCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let notification = data[(indexPath as NSIndexPath).row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! NotificationCell
         cell.delegate = self
         cell.setData(
             notification.user!.avatarURL!,
@@ -319,8 +319,8 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
  */
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let notification = data[indexPath.row]
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let notification = data[(indexPath as NSIndexPath).row]
         return NotificationCell.cellHeightForTitle(notification.makeDisplayTitlePhrases(), detailDescription: notification.messageBody ?? "", displayMode: notification.getDisplayMode())
 //        let messageType = notification.messageType!
 //        if messageType == "relation_follow" {
@@ -348,18 +348,18 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
 //        }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let notification = data[indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let notification = data[(indexPath as NSIndexPath).row]
         if !notification.read {
             NotificationRequester.sharedInstance.notifMarkRead(notification.ssidString, onSuccess: { (json) in
                 //
                 notification.read = true
-                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                self.tableView.reloadRows(at: [indexPath], with: .automatic)
                 }, onError: { (code) in
                 
             })
         }
-        messageHome?.navigationController?.pushViewController(getDetailController(forRow: indexPath.row), animated: true)
+        messageHome?.navigationController?.pushViewController(getDetailController(forRow: (indexPath as NSIndexPath).row), animated: true)
 //        let messageType = notification.messageType!
 //        switch messageType {
 //        case "status_like", "status_inform":
@@ -401,8 +401,8 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
 //        }
     }
     
-    lazy var detailControllerMap: [String: Notification->UIViewController] = {
-        func user(notification: Notification) -> UIViewController {
+    lazy var detailControllerMap: [String: (Notification)->UIViewController] = {
+        func user(_ notification: Notification) -> UIViewController {
             let user = notification.user!
             if user.isHost {
                 return PersonBasicController(user: user)
@@ -411,14 +411,14 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
             }
         }
         
-        func status(notification: Notification) -> UIViewController {
+        func status(_ notification: Notification) -> UIViewController {
             let status = try! notification.getRelatedObj()! as Status
             let detail = StatusDetailController(status: status)
             detail.loadAnimated = false
             return detail
         }
         
-        func statusComment(notification: Notification) -> UIViewController {
+        func statusComment(_ notification: Notification) -> UIViewController {
             let status =  (try! notification.getRelatedObj()! as StatusComment).status
             let detail = StatusDetailController(status: status)
             detail.loadAnimated = false
@@ -426,17 +426,17 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
         }
 
         
-        func activity(notification: Notification) -> UIViewController {
-            let act = try! notification.getRelatedObj()! as  Activity
+        func activity(_ notification: Notification) -> UIViewController {
+            let act = try! notification.getRelatedObj()! as Activity
             return ActivityDetailController(act: act)
         }
         
-        func activityComment(notification: Notification) -> UIViewController {
+        func activityComment(_ notification: Notification) -> UIViewController {
             let act = (try! notification.getRelatedObj()! as ActivityComment).act
             return ActivityDetailController(act: act)
         }
         
-        func club(notification: Notification) -> UIViewController {
+        func club(_ notification: Notification) -> UIViewController {
             let club: Club = try! notification.getRelatedObj()!
             if club.attended {
 //                if club.founderUser!.isHost {
@@ -457,7 +457,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
             }
         }
         
-        return ["User": user, "Status": status, "StatusComment": statusComment, "Activity": activity, "ActivityComment": activity, "ActivityJoin": activity, "Club": club, "ClubJoining": club]
+        return ["User": user, "Status": status, "StatusComment" : statusComment, "Activity": activity, "ActivityComment": activityComment, "ActivityJoin": activity, "Club": club, "ClubJoining": club]
     }()
     
     func getDetailController(forRow row: Int) -> UIViewController {
@@ -468,22 +468,22 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
         return detail
     }
     
-    override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height - 1 {
             MessageManager.defaultManager.loadHistory(self, onFinish: { (notifs) in
                 guard let notifs = notifs else {
                     return
                 }
-                self.data.appendContentsOf(notifs)
+                self.data.append(contentsOf: notifs)
                 self.tableView.reloadData()
             })
         }
     }
     
     func notificationCellAvatarBtnPressed(atCell cell: NotificationCell) {
-        if let indexPath = tableView.indexPathForCell(cell) {
-            let notification = data[indexPath.row]
-            if let user = notification.user, nav = messageHome?.navigationController {
+        if let indexPath = tableView.indexPath(for: cell) {
+            let notification = data[(indexPath as NSIndexPath).row]
+            if let user = notification.user, let nav = messageHome?.navigationController {
                 if user.isHost {
                     let detail = PersonBasicController(user: user)
                     nav.pushViewController(detail, animated: true)
@@ -500,8 +500,8 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
     }
     
     func notificationCellOperationInvoked(atCell cell: NotificationCell, operationType: NotificationCell.OperationType) {
-        if let indexPath = tableView.indexPathForCell(cell) {
-            let notification = data[indexPath.row]
+        if let indexPath = tableView.indexPath(for: cell) {
+            let notification = data[(indexPath as NSIndexPath).row]
             let messageType = notification.simplifiedMessageType
             
             switch messageType {
@@ -512,7 +512,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
                 ActivityRequester.sharedInstance.activityOperation(activity.ssidString, targetUserID: notification.user!.ssidString, opType: opType, onSuccess: { (json) in
                     notification.flag = operationType == .Agree
                     notification.checked = true
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     self.lp_stop()
                     }, onError: { (code) in
                         self.lp_stop()
@@ -525,7 +525,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
                 ClubRequester.sharedInstance.clubOperation(club.ssidString, targetUserID: notification.user!.ssidString, opType: opType, onSuccess: { (json) in
                     notification.checked = true
                     notification.flag = operationType == .Agree
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     self.lp_stop()
                     }, onError: { (code) in
                         self.lp_stop()

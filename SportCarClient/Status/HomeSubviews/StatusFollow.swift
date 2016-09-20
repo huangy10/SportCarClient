@@ -13,9 +13,9 @@ class StatusFollowController: StatusBasicController {
     
     override func loadMoreData() {
         // 获取关注对象的状态（自己的状态也会返回）
-        let dateThreshold = (status.last?.createdAt ?? NSDate())
+        let dateThreshold = (status.last?.createdAt ?? Date())
         let requester = StatusRequester.sharedInstance
-        requester.getMoreStatusList(dateThreshold, queryType: "follow", onSuccess: { (let data) -> () in
+        requester.getMoreStatusList(dateThreshold, queryType: "follow", onSuccess: { (data) -> () in
             if self.jsonDataHandler(data!) > 0{
                 self.tableView.reloadData()
             }
@@ -24,9 +24,9 @@ class StatusFollowController: StatusBasicController {
     }
     
     override func loadLatestData() {
-        let dateThreshold = status.first?.createdAt ?? NSDate()
+        let dateThreshold = status.first?.createdAt ?? Date()
         let requester = StatusRequester.sharedInstance
-        requester.getLatestStatusList(dateThreshold, queryType: "follow", onSuccess: { (let data) -> () in
+        requester.getLatestStatusList(dateThreshold, queryType: "follow", onSuccess: { (data) -> () in
             self.myRefreshControl?.endRefreshing()
             if self.jsonDataHandler(data!) > 0 {
                 self.tableView.reloadData()
@@ -35,9 +35,9 @@ class StatusFollowController: StatusBasicController {
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let s = self.status[indexPath.row]
-        let cell =  tableView.cellForRowAtIndexPath(indexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let s = self.status[(indexPath as NSIndexPath).row]
+        let cell =  tableView.cellForRow(at: indexPath)
         let pos = cell!.frame.origin.y - tableView.contentOffset.y + 10
         let detail = StatusDetailController(status: s, background: getScreenShot(), initPos: pos, initHeight: cell!.frame.height)
         detail.list = tableView
@@ -46,13 +46,13 @@ class StatusFollowController: StatusBasicController {
     }
     
     func getScreenShot() -> UIImage{
-        UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, true, UIScreen.mainScreen().scale)
+        UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, true, UIScreen.main.scale)
         let context = UIGraphicsGetCurrentContext()!
-        CGContextTranslateCTM(context, 0, -self.tableView.contentOffset.y)
-        self.view.layer.renderInContext(context)
+        context.translateBy(x: 0, y: -self.tableView.contentOffset.y)
+        self.view.layer.render(in: context)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
 
-        return image
+        return image!
     }
 }

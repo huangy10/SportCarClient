@@ -15,7 +15,7 @@ class NewsComment: BaseInMemModel {
     }
     
     var content: String!
-    var createdAt: NSDate!
+    var createdAt: Date!
     var sent: Bool!
     var responseTo: NewsComment?
     var user: User!
@@ -27,8 +27,8 @@ class NewsComment: BaseInMemModel {
         super.init()
     }
     
-    override func fromJSONString(string: String, detailLevel: Int) throws -> NewsComment {
-        let json = JSON(data: string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+    override func fromJSONString(_ string: String, detailLevel: Int) throws -> NewsComment {
+        let json = JSON(data: string.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
         try loadDataFromJSON(json)
         return self
     }
@@ -44,7 +44,7 @@ class NewsComment: BaseInMemModel {
 //        }
 //    }
 //    
-    override func loadDataFromJSON(data: JSON) throws -> NewsComment {
+    override func loadDataFromJSON(_ data: JSON) throws -> NewsComment {
         try super.loadDataFromJSON(data)
         ssid = data["commentID"].int32Value
         content = data["content"].stringValue
@@ -59,7 +59,7 @@ class NewsComment: BaseInMemModel {
         return self
     }
     
-    override func toJSONObject(detailLevel: Int) throws -> JSON {
+    override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         return [] as JSON
     }
 }

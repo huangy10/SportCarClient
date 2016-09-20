@@ -28,8 +28,8 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
     
     func navBarLeftBtn() -> UIBarButtonItem! {
         let backBtn = UIButton()
-        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), forState: .Normal)
-        backBtn.addTarget(self, action: #selector(SportCarSelectController.backBtnPressed), forControlEvents: .TouchUpInside)
+        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        backBtn.addTarget(self, action: #selector(SportCarSelectController.backBtnPressed), for: .touchUpInside)
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.2, height: 18)
         
         let leftBtnItem = UIBarButtonItem(customView: backBtn)
@@ -38,16 +38,16 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
     
     func navBarRigthBtn() -> UIBarButtonItem! {
         let nextStepBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 42, height: 16))
-        nextStepBtn.setTitle(NSLocalizedString("下一步", comment: ""), forState: .Normal)
-        nextStepBtn.setTitleColor(kHighlightedRedTextColor, forState: .Normal)
+        nextStepBtn.setTitle(NSLocalizedString("下一步", comment: ""), for: UIControlState())
+        nextStepBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
         nextStepBtn.titleLabel?.font = kBarTextFont
-        nextStepBtn.addTarget(self, action: #selector(SportCarSelectController.nextBtnPressed), forControlEvents: .TouchUpInside)
+        nextStepBtn.addTarget(self, action: #selector(SportCarSelectController.nextBtnPressed), for: .touchUpInside)
         let rightBtnItem = UIBarButtonItem(customView: nextStepBtn)
         return rightBtnItem
     }
     
     func backBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     func nextBtnPressed() {
@@ -59,10 +59,10 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         super.createSubviews()
         navigationBarSettings()
         let superview = self.view
-        superview.backgroundColor = UIColor.whiteColor()
+        superview?.backgroundColor = UIColor.white
         //
         sportCarDisplay = UIImageView(image: UIImage(named: "account_car_select_placeholder"))
-        superview.addSubview(sportCarDisplay!)
+        superview?.addSubview(sportCarDisplay!)
         sportCarDisplay?.snp_makeConstraints(closure: { (make) -> Void in
             make.width.equalTo(superview).multipliedBy(0.5)
             make.left.equalTo(superview)
@@ -71,18 +71,18 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         })
         //
         let selectBtn = UIButton()
-        selectBtn.setTitle(NSLocalizedString("请选择品牌型号", comment: ""), forState: .Normal)
-        selectBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), forState: .Normal)
-        selectBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
-        selectBtn.titleLabel?.textAlignment = .Center
-        superview.addSubview(selectBtn)
+        selectBtn.setTitle(NSLocalizedString("请选择品牌型号", comment: ""), for: UIControlState())
+        selectBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
+        selectBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        selectBtn.titleLabel?.textAlignment = .center
+        superview?.addSubview(selectBtn)
         selectBtn.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(sportCarDisplay!.snp_right)
             make.right.equalTo(superview)
             make.centerY.equalTo(sportCarDisplay!)
             make.height.equalTo(44)
         }
-        selectBtn.addTarget(self, action: #selector(SportCarSelectController.selectSportCarBrandPressed), forControlEvents: .TouchUpInside)
+        selectBtn.addTarget(self, action: #selector(SportCarSelectController.selectSportCarBrandPressed), for: .touchUpInside)
         brandSelectBtn = selectBtn
         //
         let btnIcon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
@@ -96,9 +96,9 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         let signatureLbl = UILabel()
         signatureLbl.text = NSLocalizedString("跑车签名", comment: "")
         signatureLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        signatureLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
-        signatureLbl.textAlignment = .Left
-        superview.addSubview(signatureLbl)
+        signatureLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
+        signatureLbl.textAlignment = .left
+        superview?.addSubview(signatureLbl)
         signatureLbl.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(sportCarDisplay!.snp_bottom).offset(22)
             make.height.equalTo(34)
@@ -109,9 +109,9 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         signatureInput = UITextField()
         signatureInput?.delegate = self
         signatureInput?.placeholder = NSLocalizedString("为爱车写一段签名吧(选填)", comment: "")
-        signatureInput?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
+        signatureInput?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         self.inputFields.append(signatureInput)
-        superview.addSubview(signatureInput!)
+        superview?.addSubview(signatureInput!)
         signatureInput?.snp_makeConstraints(closure: { (make) -> Void in
             make.centerY.equalTo(signatureLbl)
             make.left.equalTo(signatureLbl.snp_right)
@@ -129,7 +129,7 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.92, alpha: 1)
-        superview.addSubview(sepLine)
+        superview?.addSubview(sepLine)
         sepLine.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(signatureLbl)
             make.right.equalTo(signatureInput!)
@@ -139,10 +139,10 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         
         let plzSelectLbl = UILabel()
         plzSelectLbl.text = NSLocalizedString("请选择一辆您拥有或者关注的跑车", comment: "")
-        plzSelectLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightLight)
-        plzSelectLbl.textAlignment = .Center
+        plzSelectLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
+        plzSelectLbl.textAlignment = .center
         plzSelectLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        superview.addSubview(plzSelectLbl)
+        superview?.addSubview(plzSelectLbl)
         plzSelectLbl.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.centerY.equalTo(superview)
@@ -158,17 +158,17 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         let select = ManufacturerOnlineSelectorController()
         select.delegate = self
         let nav = BlackBarNavigationController(rootViewController: select)
-        self.presentViewController(nav, animated: true, completion: nil)
+        self.present(nav, animated: true, completion: nil)
     }
     
     // MARK: 弹出的跑车选择列表的代理
-    func brandSelected(manufacturer: String?, carType: String?) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func brandSelected(_ manufacturer: String?, carType: String?) {
+        self.dismiss(animated: true, completion: nil)
         if manufacturer == nil || carType == nil {
             return
         }
-        brandSelectBtn?.setTitle(LS("获取跑车资料中..."), forState: .Normal)
-        brandSelectBtn?.enabled = false
+        brandSelectBtn?.setTitle(LS("获取跑车资料中..."), for: UIControlState())
+        brandSelectBtn?.isEnabled = false
 //        reqOnfly = SportCarRequester.sharedInstance.querySportCarWith(manufacturer!, carName: carType!, onSuccess: { (data) -> () in
 //            guard let data = data else {
 //                return
@@ -196,20 +196,20 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
     }
     
     func sportCarBrandOnlineSelectorDidCancel() {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
-    func sportCarBrandOnlineSelectorDidSelect(manufacture: String, carName: String, subName: String) {
-        dismissViewControllerAnimated(true, completion: nil)
-        brandSelectBtn?.setTitle(LS("获取跑车资料中"), forState: .Normal)
-        brandSelectBtn?.enabled = false
+    func sportCarBrandOnlineSelectorDidSelect(_ manufacture: String, carName: String, subName: String) {
+        dismiss(animated: true, completion: nil)
+        brandSelectBtn?.setTitle(LS("获取跑车资料中"), for: UIControlState())
+        brandSelectBtn?.isEnabled = false
         
         reqOnfly = SportCarRequester.sharedInstance.querySportCarWith(manufacture, carName: carName, subName: subName, onSuccess: { (json) in
             guard let data = json else {
                 return
             }
-            self.brandSelectBtn?.setTitle(LS("请选择品牌型号"), forState: .Normal)
-            self.brandSelectBtn?.enabled = true
+            self.brandSelectBtn?.setTitle(LS("请选择品牌型号"), for: UIControlState())
+            self.brandSelectBtn?.isEnabled = true
             
             let carImgURL = SF(data["image_url"].stringValue)
             let headers = [LS("具体型号"), LS("跑车签名"), LS("价格"), LS("发动机"), LS("扭矩"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
@@ -219,19 +219,19 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
             detail.carId = data["carID"].stringValue
             detail.contents = contents
             detail.carType = carName
-            detail.carDisplayURL = NSURL(string: carImgURL ?? "")
+            detail.carDisplayURL = URL(string: carImgURL ?? "")
             
             self.navigationController?.pushViewController(detail, animated: true)
-            self.brandSelectBtn?.enabled = true
+            self.brandSelectBtn?.isEnabled = true
             }, onError: { (code) in
-                self.brandSelectBtn?.setTitle(LS("请选择品牌型号"), forState: .Normal)
-                self.brandSelectBtn?.enabled = true
+                self.brandSelectBtn?.setTitle(LS("请选择品牌型号"), for: UIControlState())
+                self.brandSelectBtn?.isEnabled = true
                 
-                let alert = UIAlertController(title: LS("载入跑车数据失败"), message: nil, preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: LS("取消"), style: .Cancel, handler: { (action) -> Void in
-                    self.brandSelectBtn?.setTitle(LS("重选跑车"), forState: .Normal)
+                let alert = UIAlertController(title: LS("载入跑车数据失败"), message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: LS("取消"), style: .cancel, handler: { (action) -> Void in
+                    self.brandSelectBtn?.setTitle(LS("重选跑车"), for: UIControlState())
                 }))
-                self.brandSelectBtn?.enabled = true
+                self.brandSelectBtn?.isEnabled = true
         })
     }
 }

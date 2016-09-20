@@ -15,7 +15,7 @@ class SportCarRequester: BasicRequester {
     
     static let sharedInstance = SportCarRequester()
     
-    private let _urlMap: [String: String] = [
+    fileprivate let _urlMap: [String: String] = [
         "query_car": "querybyname",
         "follow": "<carID>/follow",
         "auth": "auth",
@@ -32,11 +32,11 @@ class SportCarRequester: BasicRequester {
         return "cars"
     }
     
-    func carList(scope: String, manufacturer: String? = nil, carName: String? = nil, filter: String? = nil, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func carList(_ scope: String, manufacturer: String? = nil, carName: String? = nil, filter: String? = nil, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         var param = ["scope": scope]
         switch scope {
         case "manufacturer":
-            if let filter = filter where filter != "" {
+            if let filter = filter , filter != "" {
                 param["filter"] = filter
             }
         case "car_name":
@@ -51,7 +51,7 @@ class SportCarRequester: BasicRequester {
     }
     
     func querySportCarWith(
-        manufacturer: String,
+        _ manufacturer: String,
         carName: String,
         subName: String,
         onSuccess: SSSuccessCallback,
@@ -70,7 +70,7 @@ class SportCarRequester: BasicRequester {
     }
     
     func postToFollow(
-        signature:String?,
+        _ signature:String?,
         carId: String,
         onSuccess: SSSuccessCallback,
         onError: SSFailureCallback) -> Request {
@@ -81,7 +81,7 @@ class SportCarRequester: BasicRequester {
         )
     }
     
-    func authenticateSportscar(carID: String, driveLicense: UIImage, photo: UIImage, idCard: UIImage, licenseNum: String, onSuccess: (JSON?)->(), onProgress: (progress: Float)->(), onError: (code: String?)->()) {
+    func authenticateSportscar(_ carID: String, driveLicense: UIImage, photo: UIImage, idCard: UIImage, licenseNum: String, onSuccess: (JSON?)->(), onProgress: (_ progress: Float)->(), onError: (_ code: String?)->()) {
         upload(urlForName("auth"),
                parameters: ["car_id": carID, "drive_license": driveLicense, "photo": photo, "id_card": idCard, "license": licenseNum],
                onSuccess: onSuccess,
@@ -90,11 +90,11 @@ class SportCarRequester: BasicRequester {
         )
     }
     
-    func deleteCar(carID: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func deleteCar(_ carID: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return post(urlForName("delete", param: ["carID": carID]), onSuccess: onSuccess, onError: onError)
     }
     
-    func updateCarSignature(carID: String, signature: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func updateCarSignature(_ carID: String, signature: String, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
         return post(urlForName("signature", param: ["carID": carID]),
                     parameters: ["signature": signature],
                     onSuccess: onSuccess, onError: onError)

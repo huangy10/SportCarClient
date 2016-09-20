@@ -38,7 +38,7 @@ class NewsController2: UITableViewController, UINavigationControllerDelegate {
     func configureNavigationBar() {
         navigationItem.title = LS("资讯")
         homeBtn = BackToHomeBtn()
-        homeBtn.addTarget(self, action: #selector(backToHomeBtnPressed), forControlEvents: .TouchUpInside)
+        homeBtn.addTarget(self, action: #selector(backToHomeBtnPressed), for: .touchUpInside)
         navigationItem.leftBarButtonItem = homeBtn.wrapToBarBtn()
     }
     
@@ -47,18 +47,18 @@ class NewsController2: UITableViewController, UINavigationControllerDelegate {
     }
     
     func configureTableView() {
-        tableView.registerClass(NewsCell2.self, forCellReuseIdentifier: "cell")
+        tableView.register(NewsCell2.self, forCellReuseIdentifier: "cell")
         tableView.backgroundColor = kGeneralTableViewBGColor
-        tableView.separatorStyle = .None
-        tableView.rowHeight = UIScreen.mainScreen().bounds.width * 0.573
+        tableView.separatorStyle = .none
+        tableView.rowHeight = UIScreen.main.bounds.width * 0.573
         refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(pullToRefresh), forControlEvents: .TouchUpInside)
+        refreshControl?.addTarget(self, action: #selector(pullToRefresh), for: .touchUpInside)
         tableView.addSubview(refreshControl!)
-        refreshControl?.enabled = true
+        refreshControl?.isEnabled = true
     }
     
     func pullToRefresh() {
-        guard let firstNews = news.first() else {
+        guard let firstNews = news.first else {
             loadMoreNews()
             return
         }
@@ -73,7 +73,7 @@ class NewsController2: UITableViewController, UINavigationControllerDelegate {
                 newNews.append(try! News().loadDataFromJSON(newsJSON))
             }
             
-            self.news.appendContentsOf(newNews)
+            self.news.append(contentsOf: newNews)
             self.reorganizeNews()
             self.refreshControl?.endRefreshing()
             self.tableView.reloadData()
@@ -87,7 +87,7 @@ class NewsController2: UITableViewController, UINavigationControllerDelegate {
         if let req = onGoingRequest {
             req.cancel()
         }
-        let lastNewsDate = news.last()?.createdAt ?? NSDate()
+        let lastNewsDate = news.last?.createdAt ?? Date()
         onGoingRequest = NewsRequester.sharedInstance.getMoreNewsList(lastNewsDate, onSuccess: { (json) -> () in
             guard let data = json else{
                 self.refreshControl?.endRefreshing()
@@ -97,7 +97,7 @@ class NewsController2: UITableViewController, UINavigationControllerDelegate {
             for newsJSON in data.arrayValue {
                 newNews.append(try! News().loadDataFromJSON(newsJSON))
             }
-            self.news.appendContentsOf(newNews)
+            self.news.append(contentsOf: newNews)
             self.reorganizeNews()
             self.refreshControl?.endRefreshing()
             if newNews.count > 0{
@@ -111,9 +111,9 @@ class NewsController2: UITableViewController, UINavigationControllerDelegate {
     
     func reorganizeNews() {
         news = $.uniq(news, by: {return $0.ssidString})
-        news.sortInPlace { (news1 , news2) -> Bool in
-            switch news1.createdAt!.compare(news2.createdAt!) {
-            case .OrderedDescending:
+        news.sort { (news1 , news2) -> Bool in
+            switch news1.createdAt!.compare(news2.createdAt! as Date) {
+            case .orderedDescending:
                 return true
             default:
                 return false
@@ -121,45 +121,45 @@ class NewsController2: UITableViewController, UINavigationControllerDelegate {
         }
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return news.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! NewsCell2
-        let data = news[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! NewsCell2
+        let data = news[(indexPath as NSIndexPath).row]
         cell.setData(data.coverURL!, title: data.title, likeNum: Int(data.likeNum), commentNum: Int(data.commentNum), shareNum: Int(data.shareNum), liked: data.liked)
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let data = news[indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let data = news[(indexPath as NSIndexPath).row]
         let detail = NewsDetailController2()
         detail.news = data
         
-        selectedCell = tableView.cellForRowAtIndexPath(indexPath) as? NewsCell2
+        selectedCell = tableView.cellForRow(at: indexPath) as? NewsCell2
         navigationController?.pushViewController(detail, animated: true)
     }
     
-    override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y + scrollView.frame.height >= scrollView.contentSize.height {
             loadMoreNews()
         }
     }
     
-    func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         switch operation {
-        case .Pop:
+        case .pop:
             if toVC == self {
                 return dismissAnimation
             } else{
                 return nil
             }
-        case .Push:
+        case .push:
             if fromVC == self {
                 return entryAnimation
             } else {
@@ -172,11 +172,11 @@ class NewsController2: UITableViewController, UINavigationControllerDelegate {
     
     func getSelectedNewsCellFrame() -> CGRect{
         if let cell = selectedCell {
-            let result = cell.convertRect(cell.bounds, toView: navigationController!.view)
+            let result = cell.convert(cell.bounds, to: navigationController!.view)
             return result
         } else {
             assertionFailure()
-            return CGRectZero
+            return CGRect.zero
         }
     }
     

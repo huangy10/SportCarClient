@@ -14,7 +14,7 @@ private var associateObjectHandle: UInt8 = 0
 protocol ProgressProtocol: class {
     func pp_createProgressView()
     
-    func pp_updateProgress(progress: Float)
+    func pp_updateProgress(_ progress: Float)
     
     func pp_hideProgressView()
     
@@ -40,7 +40,7 @@ extension ProgressProtocol where Self: UIViewController {
     func pp_createProgressView() {
         let progress = UIProgressView()
         progress.tintColor = kHighlightedRedTextColor
-        progress.backgroundColor = UIColor.clearColor()
+        progress.backgroundColor = UIColor.clear
         self.view.addSubview(progress)
         self.pp_progressView = progress
         pp_layoutProgressView()
@@ -56,12 +56,12 @@ extension ProgressProtocol where Self: UIViewController {
         })
     }
     
-    func pp_updateProgress(progress: Float) {
+    func pp_updateProgress(_ progress: Float) {
         pp_progressView?.setProgress(progress, animated: false)
     }
     
     func pp_hideProgressView() {
-        pp_progressView?.hidden = true
+        pp_progressView?.isHidden = true
         pp_progressView?.setProgress(0, animated: false)
     }
     
@@ -69,6 +69,6 @@ extension ProgressProtocol where Self: UIViewController {
         if pp_progressView == nil {
             pp_createProgressView()
         }
-        pp_progressView?.hidden = false
+        pp_progressView?.isHidden = false
     }
 }

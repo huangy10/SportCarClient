@@ -11,7 +11,7 @@ import Alamofire
 
 
 extension Request {
-    func responseJSON(queue: dispatch_queue_t, completionHandler: Response<AnyObject, NSError> -> Void) -> Request {
-        return self.response(queue: queue, responseSerializer: Request.JSONResponseSerializer(options: .AllowFragments), completionHandler: completionHandler)
+    func responseJSON(_ queue: DispatchQueue, completionHandler: (Response<AnyObject, NSError>) -> Void) -> Request {
+        return self.response(queue: queue, responseSerializer: Request.JSONResponseSerializer(options: .allowFragments), completionHandler: completionHandler)
     }
 }

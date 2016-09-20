@@ -11,7 +11,7 @@ import CoreLocation
 
 protocol LocationSelectDelegate: class {
     
-    func locationSelectDidSelect(location: Location)
+    func locationSelectDidSelect(_ location: Location)
     
     func locationSelectDidCancel()
     
@@ -27,12 +27,12 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
     var confirmBtn: UIButton!
     var tableView: UITableView!
     
-    private var locationService: BMKLocationService!
-    private var geoSearch: BMKGeoCodeSearch!
-    private var searcher: BMKPoiSearch!
+    fileprivate var locationService: BMKLocationService!
+    fileprivate var geoSearch: BMKGeoCodeSearch!
+    fileprivate var searcher: BMKPoiSearch!
     
-    private var data: [BMKPoiInfo] = []
-    private var selectedPoi: BMKPoiInfo? {
+    fileprivate var data: [BMKPoiInfo] = []
+    fileprivate var selectedPoi: BMKPoiInfo? {
         didSet {
             location = selectedPoi?.pt
             locDescription = selectedPoi?.name
@@ -42,7 +42,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
     
     var location: CLLocationCoordinate2D?
     var city: String?
-    private var userLocation: BMKUserLocation? {
+    fileprivate var userLocation: BMKUserLocation? {
         didSet {
             self.location = userLocation?.location.coordinate
         }
@@ -72,7 +72,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         navSettings()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         mapView.viewWillAppear()
         mapView.delegate = self
@@ -82,7 +82,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         locationService.startUserLocationService()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         mapView.viewWillDisappear()
         mapView.delegate = nil
@@ -91,7 +91,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         locationService.delegate = nil
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         keywordInput.becomeFirstResponder()
     }
@@ -102,17 +102,17 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         
         mapView = BMKMapView()
         mapView.zoomLevel = 16
-        superview.addSubview(mapView)
+        superview?.addSubview(mapView)
         mapView.snp_makeConstraints { (make) in
             make.edges.equalTo(superview)
         }
         
         if let loc = self.location {
-            mapView.setCenterCoordinate(loc, animated: false)
+            mapView.setCenter(loc, animated: false)
         }
         
-        let container = superview.addSubview(UIView)
-            .config(UIColor.whiteColor())
+        let container = superview?.addSubview(UIView)
+            .config(UIColor.white)
             .addShadow()
             .layout { (make) in
                 make.top.equalTo(superview).offset(40)
@@ -129,18 +129,18 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         keywordInput.delegate = self
         self.inputFields.append(keywordInput)
         
-        tableView = UITableView(frame: CGRectZero, style: .Plain)
+        tableView = UITableView(frame: CGRect.zero, style: .plain)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.registerClass(LocationSelectCell.self, forCellReuseIdentifier: "cell")
-        superview.addSubview(tableView)
+        tableView.register(LocationSelectCell.self, forCellReuseIdentifier: "cell")
+        superview?.addSubview(tableView)
         tableView.snp_makeConstraints { (make) in
             make.left.equalTo(container)
             make.right.equalTo(container)
             make.top.equalTo(container.snp_bottom).offset(15)
             make.bottom.equalTo(superview).offset(-30)
         }
-        tableView.hidden = true
+        tableView.isHidden = true
     }
     
     func navSettings() {
@@ -149,12 +149,12 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
 //            .config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "account_header_back_btn"), contentMode: .ScaleAspectFit)
 //            .setFrame(CGRectMake(0, 0, 15, 15))
 //        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
-        let navLeftBtn = UIBarButtonItem(title: LS("取消"), style: .Done, target: self, action: #selector(navLeftBtnPressed))
-        navLeftBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let navLeftBtn = UIBarButtonItem(title: LS("取消"), style: .done, target: self, action: #selector(navLeftBtnPressed))
+        navLeftBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         navigationItem.leftBarButtonItem = navLeftBtn
         
-        let navRightBtn = UIBarButtonItem(title: LS("确认"), style: .Done, target: self, action: #selector(navRightBtnPressed))
-        navRightBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let navRightBtn = UIBarButtonItem(title: LS("确认"), style: .done, target: self, action: #selector(navRightBtnPressed))
+        navRightBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         navigationItem.rightBarButtonItem = navRightBtn
     }
     
@@ -185,7 +185,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
 //        return true
 //    }
 //
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         if textField.textInputMode?.primaryLanguage == "zh-Hans" {
             let selectedRange = textField.markedTextRange
             if selectedRange != nil {
@@ -193,23 +193,23 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
             }
         }
         let curText = (textField.text ?? "") as NSString
-        let newText = curText.stringByReplacingCharactersInRange(range, withString: string) as String
+        let newText = curText.replacingCharacters(in: range, with: string) as String
         searchLocName(newText)
         return true
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchLocName(textField.text!)
         return true
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         searchLocName(textField.text!)
     }
     
     // MARK: - Map utilities
     
-    func searchForLocation(loc: CLLocationCoordinate2D) {
+    func searchForLocation(_ loc: CLLocationCoordinate2D) {
         let option = BMKReverseGeoCodeOption()
         option.reverseGeoPoint = loc
         let res = geoSearch.reverseGeoCode(option)
@@ -218,7 +218,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         }
     }
     
-    func searchLocName(name: String) {
+    func searchLocName(_ name: String) {
         locDescription = name
         if name.length == 0 {
             return
@@ -230,7 +230,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         if let loc = self.location {
             option.location = loc
         }
-        let res = searcher.poiSearchNearBy(option)
+        let res = searcher.poiSearchNear(by: option)
         if !res {
             showToast(LS("检索失败"))
         }
@@ -238,11 +238,11 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
     
     // MARK: - BMK delegates
     
-    func didUpdateBMKUserLocation(userLocation: BMKUserLocation!) {
+    func didUpdate(_ userLocation: BMKUserLocation!) {
         locationService.stopUserLocationService()
         locationService.delegate = nil
         self.userLocation = userLocation
-        mapView.setCenterCoordinate(userLocation.location.coordinate, animated: true)
+        mapView.setCenter(userLocation.location.coordinate, animated: true)
         mapView.zoomLevel = 16
         mapView.delegate = self
         
@@ -253,8 +253,8 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         searchForLocation(userLocation.location.coordinate)
     }
     
-    func mapView(mapView: BMKMapView!, viewForAnnotation annotation: BMKAnnotation!) -> BMKAnnotationView! {
-        guard let anno = mapView.dequeueReusableAnnotationViewWithIdentifier("anno") as? UserSelectAnnotationView else {
+    func mapView(_ mapView: BMKMapView!, viewFor annotation: BMKAnnotation!) -> BMKAnnotationView! {
+        guard let anno = mapView.dequeueReusableAnnotationView(withIdentifier: "anno") as? UserSelectAnnotationView else {
             let anno = UserSelectAnnotationView(annotation: annotation, reuseIdentifier: "anno")
             return anno
         }
@@ -262,22 +262,22 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         return anno
     }
     
-    func onGetGeoCodeResult(searcher: BMKGeoCodeSearch!, result: BMKGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
+    func onGetGeoCodeResult(_ searcher: BMKGeoCodeSearch!, result: BMKGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
         print(error)
         print(result.address)
         print(result.location)
     }
     
-    func onGetReverseGeoCodeResult(searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
+    func onGetReverseGeoCodeResult(_ searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
         
     }
     
-    func onGetPoiResult(searcher: BMKPoiSearch!, result poiResult: BMKPoiResult!, errorCode: BMKSearchErrorCode) {
+    func onGetPoiResult(_ searcher: BMKPoiSearch!, result poiResult: BMKPoiResult!, errorCode: BMKSearchErrorCode) {
         if errorCode == BMK_SEARCH_NO_ERROR {
-            if let data = poiResult.poiInfoList as? [BMKPoiInfo] where data.count > 0{
+            if let data = poiResult.poiInfoList as? [BMKPoiInfo] , data.count > 0{
                 self.data = data
                 
-                self.tableView.hidden = false
+                self.tableView.isHidden = false
                 self.tableView.reloadData()
             }
         } else if errorCode == BMK_SEARCH_RESULT_NOT_FOUND {
@@ -289,32 +289,32 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
     
     // MARK: - TableView
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! LocationSelectCell
-        let d = data[indexPath.row]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! LocationSelectCell
+        let d = data[(indexPath as NSIndexPath).row]
         cell.titleLbl.text = d.name
         cell.detailLbl.text = d.address
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         mapView.removeAnnotations(mapView.annotations)
 
-        let d = data[indexPath.row]
+        let d = data[(indexPath as NSIndexPath).row]
         keywordInput.text = d.name
-        mapView.setCenterCoordinate(d.pt, animated: true)
+        mapView.setCenter(d.pt, animated: true)
         let anno = BMKPointAnnotation()
         anno.coordinate = d.pt
         mapView.addAnnotation(anno)
         selectedPoi = d
-        tableView.hidden = true
+        tableView.isHidden = true
     }
 }

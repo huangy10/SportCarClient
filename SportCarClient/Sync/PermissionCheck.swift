@@ -24,14 +24,14 @@ class PermissionCheck: Syncable {
     
     static let sharedInstance = PermissionCheck()
     
-    private var requesting: Bool = false
-    private var _synced: Bool = false
-    private var _infered: Bool = false
-    private var anonymous: Bool {
+    fileprivate var requesting: Bool = false
+    fileprivate var _synced: Bool = false
+    fileprivate var _infered: Bool = false
+    fileprivate var anonymous: Bool {
         return MainManager.sharedManager.hostUser == nil
     }
     
-    private var _releaseActivity: Bool = false
+    fileprivate var _releaseActivity: Bool = false
     
     var releaseActivity: Bool {
         get {
@@ -85,7 +85,7 @@ class PermissionCheck: Syncable {
     }
     
     func getAlecrimCoreDataContext() -> DataContext {
-        if NSThread.isMainThread() {
+        if Thread.isMainThread {
             return MainManager.sharedManager.getOperationContext()
         } else {
             return ChatModelManger.sharedManager.getOperationContext()

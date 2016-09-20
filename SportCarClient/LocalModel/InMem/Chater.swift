@@ -11,7 +11,7 @@ import SwiftyJSON
 import AlecrimCoreData
 
 
-@available(*, deprecated=1)
+@available(*, deprecated: 1)
 class Chater: BaseInMemModel {
     
     weak var chat: ChatRecord?
@@ -20,7 +20,7 @@ class Chater: BaseInMemModel {
         return ssid == MainManager.sharedManager.hostUserID
     }
     
-    var avatarURL: NSURL? {
+    var avatarURL: URL? {
         if avatar == nil {
             return nil
         }
@@ -30,7 +30,7 @@ class Chater: BaseInMemModel {
     var avatar: String!
     var nickName: String!
     
-    override func loadDataFromJSON(data: JSON) throws -> Self {
+    override func loadDataFromJSON(_ data: JSON) throws -> Self {
 //        try super.loadDataFromJSON(data)
         ssid = data[User.idField].int32Value
         nickName = data["nick_name"].stringValue
@@ -38,7 +38,7 @@ class Chater: BaseInMemModel {
         return self
     }
     
-    override func toJSONObject(detailLevel: Int) throws -> JSON {
+    override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         return [
             User.idField: ssidString,
             "nick_name": nickName!,
@@ -46,14 +46,14 @@ class Chater: BaseInMemModel {
         ]
     }
     
-    override func fromJSONString(string: String, detailLevel: Int) throws -> Chater {
-        let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+    override func fromJSONString(_ string: String, detailLevel: Int) throws -> Chater {
+        let data = string.data(using: String.Encoding.utf8, allowLossyConversion: false)!
         let json = JSON(data: data)
         try self.loadDataFromJSON(json)
         return self
     }
     
-    private var _user: User?
+    fileprivate var _user: User?
     func toUser() -> User? {
         if let user = _user {
             return user
@@ -62,7 +62,7 @@ class Chater: BaseInMemModel {
             _user = try! manager.getOrCreate(try! toJSONObject(0), detailLevel: 0) as User
             return _user
         } else {
-            if NSThread.isMainThread() {
+            if Thread.isMainThread {
                 _user = try! MainManager.sharedManager.getOrCreate(try! toJSONObject(0), detailLevel: 0) as User
                 return _user
             } else {
@@ -76,7 +76,7 @@ class Chater: BaseInMemModel {
         var context: DataContext! = nil
         if self.chat != nil {
             context = self.chat?.manager.getOperationContext()
-        } else if NSThread.isMainThread() {
+        } else if Thread.isMainThread {
             context = MainManager.sharedManager.getOperationContext()
         } else {
             context = ChatModelManger.sharedManager.getOperationContext()

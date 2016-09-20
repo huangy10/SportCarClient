@@ -14,8 +14,8 @@ class SSCommonHeader: UITableViewHeaderFooterView {
         return "common_header"
     }
     
-    class func registerTableView(tableView: UITableView) {
-        tableView.registerClass(self.self, forHeaderFooterViewReuseIdentifier: reuseIdentifier)
+    class func registerTableView(_ tableView: UITableView) {
+        tableView.register(self.self, forHeaderFooterViewReuseIdentifier: reuseIdentifier)
     }
     
     var titleLbl: UILabel!
@@ -42,7 +42,7 @@ class SSCommonHeader: UITableViewHeaderFooterView {
 
 
 extension UITableView {
-    func ss_reusableHeader<T: SSCommonHeader>(type: T.Type) -> T {
-        return self.dequeueReusableHeaderFooterViewWithIdentifier(T.reuseIdentifier) as! T
+    func ss_reusableHeader<T: SSCommonHeader>(_ type: T.Type) -> T {
+        return self.dequeueReusableHeaderFooterView(withIdentifier: T.reuseIdentifier) as! T
     }
 }

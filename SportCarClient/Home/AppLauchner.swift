@@ -12,7 +12,7 @@ import AudioToolbox
 let kAppManagerNotificationLogout = "app_manager_notification_logout"
 
 enum AppManagerState {
-    case Init, LoginRegister, Normal
+    case `init`, loginRegister, normal
 }
 
 /// 这个类的作用是以全局的角度来调度主要功能模块
@@ -22,24 +22,24 @@ class AppManager: UIViewController {
     static let sharedAppManager = AppManager()
     var deviceTokenString: String? = "Unauthorized_Device"
     
-    var state: AppManagerState = .Init
+    var state: AppManagerState = .init
     
     weak var homeController: HomeController2?
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         launch()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(unreadChange(_:)), name: kUnreadNumberDidChangeNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onUserForceOffline(_:)), name: kAccontNolongerLogin, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(unreadChange(_:)), name: NSNotification.Name(rawValue: kUnreadNumberDidChangeNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onUserForceOffline(_:)), name: NSNotification.Name(rawValue: kAccontNolongerLogin), object: nil)
     }
     
-    func unreadChange(notification: NSNotification) {
+    func unreadChange(_ notification: Foundation.Notification) {
         let unreadNum = MessageManager.defaultManager.unreadNum
-        UIApplication.sharedApplication().applicationIconBadgeNumber = unreadNum
+        UIApplication.shared.applicationIconBadgeNumber = unreadNum
         // sync to the backend
     }
     
@@ -49,25 +49,25 @@ class AppManager: UIViewController {
     func launch() {
         if let _ = MainManager.sharedManager.resumeLoginStatus().hostUser {
             // 当获取到了非nil的hostUser时，直接进入Home界面
-            state = .Normal
+            state = .normal
             let ctl = HomeController2()
             self.navigationController?.pushViewController(ctl, animated: false)
             return
         }
-        state = .LoginRegister
+        state = .loginRegister
         let ctl = AccountController()
         let wrapper = BlackBarNavigationController(rootViewController: ctl, blackNavTitle: true)
-        self.presentViewController(wrapper, animated: false, completion: nil)
+        self.present(wrapper, animated: false, completion: nil)
     }
     
     func guideToContent() {
-        state = .Normal
+        state = .normal
         if let _ = MainManager.sharedManager.hostUser {
             let ctl = HomeController2()
             homeController = ctl
 //            NotificationDataSource.sharedDataSource.start()
             self.navigationController?.pushViewController(ctl, animated: false)
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }else {
             assertionFailure()
         }
@@ -76,8 +76,8 @@ class AppManager: UIViewController {
     /**
      推出当前所有的展示内容回到登陆页面
      */
-    func logout(forced: Bool = false) {
-        state = .LoginRegister
+    func logout(_ forced: Bool = false) {
+        state = .loginRegister
         if !forced {
             AccountRequester2.sharedInstance.logout({ (json) -> (Void) in
                 print("logout")
@@ -98,39 +98,56 @@ class AppManager: UIViewController {
         
         let ctrl = AccountController()
         let nav = BlackBarNavigationController(rootViewController: ctrl, blackNavTitle: true)
-        self.presentViewController(nav, animated: true, completion: {
+        self.present(nav, animated: true, completion: {
             if forced {
                 ctrl.showToast(LS("您的账号在其他设备上登陆了"))
             }
         })
-        self.navigationController?.popToRootViewControllerAnimated(false)
-        NSNotificationCenter.defaultCenter().postNotificationName(kAppManagerNotificationLogout, object: nil)
+        self.navigationController?.popToRootViewController(animated: false)
+        NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kAppManagerNotificationLogout), object: nil)
     }
     
     func login() {
         // TODO: 将登陆功能放到这里来
-        state = .Normal
+        state = .normal
     }
     
     // push notifications
     
-    func registerForPushNotifications(application: UIApplication) {
-        let notificationSettings = UIUserNotificationSettings(forTypes: [.Sound, .Alert, .Badge], categories: nil)
+    func registerForPushNotifications(_ application: UIApplication) {
+        let notificationSettings = UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil)
         application.registerUserNotificationSettings(notificationSettings)
     }
     
-    func loadHistoricalNotifications(launchOptions: [NSObject: AnyObject]?) {
-        if let notification = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? [String: AnyObject] {
+    func loadHistoricalNotifications(_ launchOptions: [AnyHashable: Any]?) {
+        if let notification = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? [String: AnyObject] {
             print(notification)
         }
     }
     
-    func onReceiveNewRemoteNotificaiton() {
-        let setting = PersonMineSettingsDataSource.sharedDataSource
-        if setting.newMessageNotificationSound {
-            playRemoteNotificaitonSound()
-        } else {
-            shakeWhenRemoteNotificationComes()
+    @available(*, deprecated: 1)
+    func onReceiveNewRemoteNotificaiton(_ userInfo: [AnyHashable: Any]) {
+        let state = UIApplication.shared.applicationState
+        switch state {
+        case .active:
+            return
+        default:
+            break
+        }
+        if let aps = userInfo["aps"] as? NSDictionary {
+            if let soundType = aps["sound"] as? String {
+                switch soundType {
+                case "default":
+                    playRemoteNotificaitonSound()
+                    shakeWhenRemoteNotificationComes()
+                case "no_sound":
+                    shakeWhenRemoteNotificationComes()
+                case "no_shake":
+                    playRemoteNotificaitonSound()
+                default:
+                    break
+                }
+            }
         }
     }
     
@@ -145,9 +162,9 @@ class AppManager: UIViewController {
     /**
      强制用户下线重新登录
      */
-    func onUserForceOffline(notif: NSNotification) {
+    func onUserForceOffline(_ notif: Foundation.Notification) {
         // logout the user
-        dispatch_async(dispatch_get_main_queue()) { 
+        DispatchQueue.main.async { 
             self.logout(true)
         }
     }

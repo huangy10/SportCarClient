@@ -28,7 +28,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         let container = UIView()
         //
         let defaultCover = UIImage(named: "auth_image_Input_btn")
-        let btnSize = CGSizeMake(187.5, 108.5)
+        let btnSize = CGSize(width: 187.5, height: 108.5)
         //
         staticLabel1 = getStaticLabel()
         staticLabel1.text = getStaticLabelContentForIndex(0)
@@ -40,15 +40,15 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         //
         imageBtn1 = UIButton()
         imageBtn1.tag = 0
-        imageBtn1.imageView?.contentMode = .ScaleAspectFill
-        imageBtn1.setImage(defaultCover, forState: .Normal)
+        imageBtn1.imageView?.contentMode = .scaleAspectFill
+        imageBtn1.setImage(defaultCover, for: UIControlState())
         container.addSubview(imageBtn1)
         imageBtn1.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(container)
             make.top.equalTo(container)
             make.size.equalTo(btnSize)
         }
-        imageBtn1.addTarget(self, action: #selector(AuthThreeImagesController.imageInputBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        imageBtn1.addTarget(self, action: #selector(AuthThreeImagesController.imageInputBtnPressed(_:)), for: .touchUpInside)
         //
         staticLabel2 = getStaticLabel()
         staticLabel2.text = getStaticLabelContentForIndex(1)
@@ -60,15 +60,15 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         //
         imageBtn2 = UIButton()
         imageBtn2.tag = 1
-        imageBtn2.setImage(defaultCover, forState: .Normal)
-        imageBtn2.imageView?.contentMode = .ScaleAspectFill
+        imageBtn2.setImage(defaultCover, for: UIControlState())
+        imageBtn2.imageView?.contentMode = .scaleAspectFill
         container.addSubview(imageBtn2)
         imageBtn2.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(container)
             make.top.equalTo(staticLabel2)
             make.size.equalTo(btnSize)
         }
-        imageBtn2.addTarget(self, action: #selector(AuthThreeImagesController.imageInputBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        imageBtn2.addTarget(self, action: #selector(AuthThreeImagesController.imageInputBtnPressed(_:)), for: .touchUpInside)
         //
         staticLabel3 = getStaticLabel()
         staticLabel3.text = getStaticLabelContentForIndex(2)
@@ -80,15 +80,15 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         //
         imageBtn3 = UIButton()
         imageBtn3.tag = 2
-        imageBtn3.setImage(defaultCover, forState: .Normal)
-        imageBtn3.imageView?.contentMode = .ScaleAspectFill
+        imageBtn3.setImage(defaultCover, for: UIControlState())
+        imageBtn3.imageView?.contentMode = .scaleAspectFill
         container.addSubview(imageBtn3)
         imageBtn3.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(container)
             make.top.equalTo(staticLabel3)
             make.size.equalTo(btnSize)
         }
-        imageBtn3.addTarget(self, action: #selector(AuthThreeImagesController.imageInputBtnPressed(_:)), forControlEvents: .TouchUpInside)
+        imageBtn3.addTarget(self, action: #selector(AuthThreeImagesController.imageInputBtnPressed(_:)), for: .touchUpInside)
         //
 //        quitBtn = UIButton()
 //        quitBtn.setImage(UIImage(named: "auth_not_now_btn"), forState: .Normal)
@@ -104,11 +104,11 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
     func getStaticLabel() -> UILabel{
         let lbl = UILabel()
         lbl.textColor = UIColor(white: 0.72, alpha: 1)
-        lbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        lbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         return lbl
     }
     
-    func getStaticLabelContentForIndex(index: Int) -> String{
+    func getStaticLabelContentForIndex(_ index: Int) -> String{
         assertionFailure()
         return ""
     }
@@ -117,51 +117,51 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         return 600
     }
     
-    func imageInputBtnPressed(sender: UIButton) {
+    func imageInputBtnPressed(_ sender: UIButton) {
         activeBtn = sender
-        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .ActionSheet)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .Default, handler: { (action) -> Void in
-            let sourceType = UIImagePickerControllerSourceType.Camera
+        let alert = UIAlertController(title: NSLocalizedString("选择图片", comment: ""), message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("拍照", comment: ""), style: .default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.camera
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "错误", message: "无法打开相机", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = sourceType
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .Default, handler: { (action) -> Void in
-            let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        alert.addAction(UIAlertAction(title: NSLocalizedString("从相册中选择", comment: ""), style: .default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.photoLibrary
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "取消", style: .Cancel, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "错误", message: "无法打开相册", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = sourceType
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .Cancel, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("取消", comment: ""), style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         if activeBtn == nil {
             assertionFailure()
         }
-        self.dismissViewControllerAnimated(true, completion: nil)
-        activeBtn?.setImage(image, forState: .Normal)
+        self.dismiss(animated: true, completion: nil)
+        activeBtn?.setImage(image, for: UIControlState())
         selectedImages[activeBtn!.tag] = image
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
     }
 }

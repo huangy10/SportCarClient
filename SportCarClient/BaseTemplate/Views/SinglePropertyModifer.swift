@@ -10,7 +10,7 @@ import UIKit
 
 protocol SinglePropertyModifierDelegate: class {
     
-    func singlePropertyModifierDidModify(newValue: String?, forIndexPath indexPath: NSIndexPath)
+    func singlePropertyModifierDidModify(_ newValue: String?, forIndexPath indexPath: IndexPath)
     
     func singlePropertyModifierDidCancelled()
 }
@@ -18,16 +18,16 @@ protocol SinglePropertyModifierDelegate: class {
 
 class SinglePropertyModifierController: InputableViewController {
     weak var delegate: SinglePropertyModifierDelegate?
-    private var placeholder: String?
-    private var text: String?
-    private var propertyName: String!
-    private var contentInput: UITextField!
-    private var forcusedIndexPath: NSIndexPath!
+    fileprivate var placeholder: String?
+    fileprivate var text: String?
+    fileprivate var propertyName: String!
+    fileprivate var contentInput: UITextField!
+    fileprivate var forcusedIndexPath: IndexPath!
     
     init (
         propertyName: String,
         delegate: SinglePropertyModifierDelegate,
-        forcusedIndexPath: NSIndexPath!,
+        forcusedIndexPath: IndexPath!,
         placeholder: String? = nil,
         text: String? = nil
         ) {
@@ -52,24 +52,24 @@ class SinglePropertyModifierController: InputableViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationItem.title = propertyName
         let navLeftBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "account_header_back_btn"))
-            .setFrame(CGRectMake(0, 0, 9, 15))
+            .setFrame(CGRect(x: 0, y: 0, width: 9, height: 15))
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
-        let rightItem = UIBarButtonItem(title: LS("确定"), style: .Done, target: self, action: #selector(navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], forState: .Normal)
+        let rightItem = UIBarButtonItem(title: LS("确定"), style: .done, target: self, action: #selector(navRightBtnPressed))
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
         navigationItem.rightBarButtonItem = rightItem
     }
     
     func navLeftBtnPressed() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
         delegate?.singlePropertyModifierDidCancelled()
     }
     
     func navRightBtnPressed() {
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
         delegate?.singlePropertyModifierDidModify(contentInput.text, forIndexPath: forcusedIndexPath)
     }
     
-    func pushFromViewController(viewController: UIViewController) {
+    func pushFromViewController(_ viewController: UIViewController) {
         assert(viewController.navigationController != nil)
         viewController.navigationController?.pushViewController(self, animated: true)
     }
@@ -77,8 +77,8 @@ class SinglePropertyModifierController: InputableViewController {
     override func createSubviews() {
         super.createSubviews()
         let superview = self.view
-        superview.backgroundColor = UIColor.whiteColor()
-        contentInput = superview.addSubview(UITextField.self)
+        superview?.backgroundColor = UIColor.white
+        contentInput = superview?.addSubview(UITextField.self)
             .config(placeholder: placeholder, text: text)
             .addToInputable(self)
             .layout({ (make) in
@@ -87,7 +87,7 @@ class SinglePropertyModifierController: InputableViewController {
                 make.top.equalTo(superview).offset(22)
                 make.height.equalTo(17)
             })
-        superview.addSubview(UIView.self).config(UIColor(white: 0.92, alpha: 1))
+        superview?.addSubview(UIView.self).config(UIColor(white: 0.92, alpha: 1))
             .layout { (make) in
                 make.left.equalTo(contentInput)
                 make.right.equalTo(contentInput)

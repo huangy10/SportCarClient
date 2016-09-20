@@ -20,52 +20,52 @@ class ActivityHomeMineListController: UICollectionViewController {
     
     convenience init() {
         let layout = UICollectionViewFlowLayout()
-        let screenWidth = UIScreen.mainScreen().bounds.width
-        layout.itemSize = CGSizeMake(screenWidth / 2 - 17.5, 200)
-        layout.scrollDirection = .Vertical
+        let screenWidth = UIScreen.main.bounds.width
+        layout.itemSize = CGSize(width: screenWidth / 2 - 17.5, height: 200)
+        layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
         self.init(collectionViewLayout: layout)
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onActivityManuallyEnded(_:)), name: kActivityManualEndedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onActivityManuallyEnded(_:)), name: NSNotification.Name(rawValue: kActivityManualEndedNotification), object: nil)
         //
         collectionView?.alwaysBounceVertical = true
         collectionView?.contentInset = UIEdgeInsetsMake(10, 12.5, 10, 12.5)
-        collectionView?.registerClass(ActivityCell.self, forCellWithReuseIdentifier: ActivityCell.reuseIdentifier)
+        collectionView?.register(ActivityCell.self, forCellWithReuseIdentifier: ActivityCell.reuseIdentifier)
         collectionView?.backgroundColor = kGeneralTableViewBGColor
         refreshControl = collectionView?.addSubview(UIRefreshControl.self)
             .config(self, selector: #selector(getLatestActData))
         getMoreActData()
     }
     
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return data.count
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ActivityCell.reuseIdentifier, forIndexPath: indexPath) as! ActivityCell
-        cell.act = data[indexPath.row]
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ActivityCell.reuseIdentifier, for: indexPath) as! ActivityCell
+        cell.act = data[(indexPath as NSIndexPath).row]
         return cell
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let detail = ActivityDetailController(act: data[indexPath.row])
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let detail = ActivityDetailController(act: data[(indexPath as NSIndexPath).row])
         detail.parentCollectionView = self.collectionView
         home.navigationController?.pushViewController(detail, animated: true)
     }
     
-    override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.height {
             getMoreActData()
         }
@@ -78,7 +78,7 @@ class ActivityHomeMineListController: UICollectionViewController {
         }
         loading = true
         let requester = ActivityRequester.sharedInstance
-        let dateThreshold = data.first()?.createdAt ?? NSDate()
+        let dateThreshold = data.first?.createdAt ?? Date()
         requester.getMineActivityList(dateThreshold, op_type: "latest", limit: 10, onSuccess: { (json) -> () in
             var i = 0
             let curIdList = self.data.map({return $0.ssid})
@@ -88,7 +88,7 @@ class ActivityHomeMineListController: UICollectionViewController {
                     continue
                 }
                 let act: Activity = try! MainManager.sharedManager.getOrCreate(data)
-                self.data.insert(act, atIndex: i)
+                self.data.insert(act, at: i)
                 i += 1
             }
             if json!.arrayValue.count > 0 {
@@ -109,7 +109,7 @@ class ActivityHomeMineListController: UICollectionViewController {
         }
         loading = true
         let requester = ActivityRequester.sharedInstance
-        let dateThreshold = data.last()?.createdAt ?? NSDate()
+        let dateThreshold = data.last?.createdAt ?? Date()
 
         requester.getMineActivityList(dateThreshold, op_type: "more", limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
@@ -126,13 +126,13 @@ class ActivityHomeMineListController: UICollectionViewController {
         }
     }
     
-    func onActivityManuallyEnded(notification: NSNotification) {
+    func onActivityManuallyEnded(_ notification: Foundation.Notification) {
         let name = notification.name
         if name == kActivityManualEndedNotification {
-            if let act = notification.userInfo?[kActivityKey] as? Activity,
+            if let act = (notification as NSNotification).userInfo?[kActivityKey] as? Activity,
                 let targetIndex = data.findIndex({ $0.ssid == act.ssid}) {
                 // reload the specific cell
-                collectionView?.reloadItemsAtIndexPaths([NSIndexPath(forRow: targetIndex, inSection: 0)])
+                collectionView?.reloadItems(at: [IndexPath(row: targetIndex, section: 0)])
             }
         }
     }

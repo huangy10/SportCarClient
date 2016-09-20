@@ -8,8 +8,8 @@
 
 class SSPropertySwitcherCell: SSPropertyBaseCell {
     
-    private weak var bindObj: AnyObject?
-    private var bindPropertyName: String?
+    fileprivate weak var bindObj: AnyObject?
+    fileprivate var bindPropertyName: String?
     
     class override var reuseIdentifier: String {
         return "switcher_cell"
@@ -25,31 +25,31 @@ class SSPropertySwitcherCell: SSPropertyBaseCell {
             .layout({ (make) in
                 make.right.equalTo(superview).offset(-15)
                 make.centerY.equalTo(staticLbl)
-                make.size.equalTo(CGSizeMake(51, 31))
+                make.size.equalTo(CGSize(width: 51, height: 31))
             })
     }
     
-    @objc private func switcherPressed(sender: UISwitch) {
+    @objc fileprivate func switcherPressed(_ sender: UISwitch) {
         if bindPropertyName == nil || bindObj == nil {
             // Not binded
             assertionFailure()
         }
-        if let obj = bindObj as? NSObject, keypath = bindPropertyName {
-            obj.setValue(sender.on, forKeyPath: keypath)
+        if let obj = bindObj as? NSObject, let keypath = bindPropertyName {
+            obj.setValue(sender.isOn, forKeyPath: keypath)
         }
 //        bindObj?.setBool(sender.on, forKey: bindPropertyName!)
     }
     
     func setData(
-        propertyName: String,
+        _ propertyName: String,
         propertyValue: Bool,
         bindObj: AnyObject?,
         bindPropertyName: String,
         showArrow: Bool = false
         ) -> Self {
         staticLbl.text = propertyName
-        switcher.on = propertyValue
-        arrowIcon.hidden = !showArrow
+        switcher.isOn = propertyValue
+        arrowIcon.isHidden = !showArrow
         self.bindObj = bindObj
         self.bindPropertyName = bindPropertyName
         return self

@@ -15,30 +15,30 @@ class ActivityCommentCell: DetailCommentCell {
     override func loadDataAndUpdateUI() {
         let user = comment.user!
         //
-        replyBtn?.hidden = user.isHost
+        replyBtn?.isHidden = user.isHost
         //
-        avatarBtn?.kf_setImageWithURL(user.avatarURL!, forState: .Normal)
+        avatarBtn?.kf_setImageWithURL(user.avatarURL!, forState: UIControlState())
         //
         nameLbl?.text = user.nickName
         //
         if let targetComment = comment.responseTo {
-            responseLbl?.hidden = false
-            responseStaticLbl?.hidden = false
+            responseLbl?.isHidden = false
+            responseStaticLbl?.isHidden = false
             responseLbl?.text = targetComment.user?.nickName
         }else{
-            responseLbl?.hidden = true
-            responseStaticLbl?.hidden = true
+            responseLbl?.isHidden = true
+            responseStaticLbl?.isHidden = true
         }
         //
         commentDateLbl?.text = dateDisplay(comment.createdAt!)
         // 设置评论内容
         if let content = comment.content {
-            commentContentLbl?.hidden = false
+            commentContentLbl?.isHidden = false
             commentContentLbl?.text = content
         }else {
-            commentContentLbl?.hidden = true
+            commentContentLbl?.isHidden = true
         }
         // 设置评论图片
-        commentImage?.hidden = true
+        commentImage?.isHidden = true
     }
 }

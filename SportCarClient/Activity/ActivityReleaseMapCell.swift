@@ -23,9 +23,9 @@ class ActivityReleaseMapCell: UITableViewCell {
     var onInvokeLocationSelect: (()->())? = nil
     
     init (trailingHeight: CGFloat) {
-        super.init(style: .Default, reuseIdentifier: MapCell.reuseIdentifier)
+        super.init(style: .default, reuseIdentifier: MapCell.reuseIdentifier)
         self.trailingHeight = trailingHeight
-        self.selectionStyle = .None
+        self.selectionStyle = .none
         createSubviews()
     }
     
@@ -35,7 +35,7 @@ class ActivityReleaseMapCell: UITableViewCell {
     
     func createSubviews() {
         let superview = self.contentView
-        superview.backgroundColor = UIColor.whiteColor()
+        superview.backgroundColor = UIColor.white
         //
         map = BMKMapView()
         superview.addSubview(map)
@@ -60,7 +60,7 @@ class ActivityReleaseMapCell: UITableViewCell {
         
         let locInputContainer = superview.addSubview(UIButton)
             .config(self, selector: #selector(contentInputPressed))
-            .config(UIColor.whiteColor())
+            .config(UIColor.white)
             .addShadow()
             .layout { (make) in
                 make.centerX.equalTo(superview)
@@ -87,11 +87,11 @@ class ActivityReleaseMapCell: UITableViewCell {
 //        }
         //
         let marker = UIImageView(image: UIImage(named: "map_default_marker"))
-        marker.contentMode = .ScaleAspectFit
+        marker.contentMode = .scaleAspectFit
         superview.addSubview(marker)
         marker.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(map)
-            make.size.equalTo(CGSizeMake(38, 74))
+            make.size.equalTo(CGSize(width: 38, height: 74))
         }
         //
 //        locInput = UITextField()

@@ -18,7 +18,7 @@ protocol MakeCommentControllerDelegate: class {
      - parameter commentString: 评论的内容。当用户没有输入时返回[图片]
      - parameter image:         评论的图片
      */
-    func commentCanceled(commentString: String, image: UIImage?)
+    func commentCanceled(_ commentString: String, image: UIImage?)
     
     /**
      评论完成，可以发布了
@@ -27,7 +27,7 @@ protocol MakeCommentControllerDelegate: class {
      - parameter commentString: 评论的内容，可以为空
      - parameter image:         评论的图片，可以为空
      */
-    func commentConfirmed(commentString: String?, image: UIImage?)
+    func commentConfirmed(_ commentString: String?, image: UIImage?)
 }
 
 /// 评论器
@@ -68,7 +68,7 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
     
     
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
@@ -85,18 +85,18 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         super.createSubviews()
         //
         let superview = self.view
-        superview.backgroundColor = UIColor.blackColor()
+        superview?.backgroundColor = UIColor.black
         //
         blurBG = UIImageView()
-        superview.addSubview(blurBG!)
+        superview?.addSubview(blurBG!)
         blurBG?.snp_makeConstraints(closure: { (make) -> Void in
             make.edges.equalTo(superview);
         })
         //
         cancelBtn = UIButton()
-        cancelBtn?.setImage(UIImage(named: "news_comment_cancel_btn"), forState: .Normal)
-        cancelBtn?.addTarget(self, action: #selector(MakeCommentController.commentCancelled), forControlEvents: .TouchUpInside)
-        superview.addSubview(cancelBtn!)
+        cancelBtn?.setImage(UIImage(named: "news_comment_cancel_btn"), for: UIControlState())
+        cancelBtn?.addTarget(self, action: #selector(MakeCommentController.commentCancelled), for: .touchUpInside)
+        superview?.addSubview(cancelBtn!)
         cancelBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.size.equalTo(21)
             make.centerX.equalTo(superview)
@@ -104,8 +104,8 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         })
         //
         sepLine = UIView()
-        sepLine?.backgroundColor = UIColor.whiteColor()
-        superview.addSubview(sepLine!)
+        sepLine?.backgroundColor = UIColor.white
+        superview?.addSubview(sepLine!)
         sepLine?.snp_makeConstraints(closure: { (make) -> Void in
             make.height.equalTo(0.5)
             make.width.equalTo(superview).multipliedBy(0.6)
@@ -114,23 +114,23 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         })
         //
         confirmBtn = UIButton()
-        confirmBtn?.setTitle(LS("发布"), forState: .Normal)
-        confirmBtn?.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightBold)
-        confirmBtn?.setTitleColor(UIColor(red: 1, green: 0.29, blue: 0.30, alpha: 1), forState: .Normal)
-        confirmBtn?.titleLabel?.textAlignment = .Center
-        confirmBtn?.layer.borderColor = UIColor(red: 1, green: 0.29, blue: 0.30, alpha: 1).CGColor
+        confirmBtn?.setTitle(LS("发布"), for: UIControlState())
+        confirmBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBold)
+        confirmBtn?.setTitleColor(UIColor(red: 1, green: 0.29, blue: 0.30, alpha: 1), for: UIControlState())
+        confirmBtn?.titleLabel?.textAlignment = .center
+        confirmBtn?.layer.borderColor = UIColor(red: 1, green: 0.29, blue: 0.30, alpha: 1).cgColor
         confirmBtn?.layer.borderWidth = 1.5
-        superview.addSubview(confirmBtn!)
+        superview?.addSubview(confirmBtn!)
         confirmBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.size.equalTo(CGSize(width: 105, height: 50))
             make.centerX.equalTo(superview)
             make.top.equalTo(sepLine!.snp_bottom).offset(33)
         })
-        confirmBtn?.addTarget(self, action: #selector(MakeCommentController.commentConfirmed), forControlEvents: .TouchUpInside)
+        confirmBtn?.addTarget(self, action: #selector(MakeCommentController.commentConfirmed), for: .touchUpInside)
         //
         opPanel = UIView()
         opPanel?.backgroundColor = UIColor(white: 0.92, alpha: 1)
-        superview.addSubview(opPanel!)
+        superview?.addSubview(opPanel!)
         opPanel?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -139,7 +139,7 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         })
         //
         let inputContainer = UIView()
-        inputContainer.backgroundColor = UIColor.whiteColor()
+        inputContainer.backgroundColor = UIColor.white
         opPanel?.addSubview(inputContainer)
         inputContainer.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
@@ -150,9 +150,9 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         inputContainerView = inputContainer
         //
         wordCount = UILabel()
-        wordCount?.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        wordCount?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         wordCount?.textColor = UIColor(white: 0.72, alpha: 1)
-        wordCount?.textAlignment = .Right
+        wordCount?.textAlignment = .right
         wordCount?.text = "0/\(maxWordLimit)"
         inputContainer.addSubview(wordCount!)
         wordCount?.snp_makeConstraints(closure: { (make) -> Void in
@@ -172,17 +172,17 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         })
         //
         attachImageBtn = UIButton()
-        attachImageBtn?.setImage(UIImage(named: "news_comment_attach_image"), forState: .Normal)
+        attachImageBtn?.setImage(UIImage(named: "news_comment_attach_image"), for: UIControlState())
         opPanel?.addSubview(attachImageBtn!)
         attachImageBtn?.snp_makeConstraints(closure: { (make) -> Void in
             make.left.equalTo(inputContainer)
             make.top.equalTo(inputContainer.snp_bottom).offset(9)
             make.size.equalTo(CGSize(width: 75, height: 43))
         })
-        attachImageBtn?.addTarget(self, action: #selector(MakeCommentController.attachImageBtnPressed), forControlEvents: .TouchUpInside)
+        attachImageBtn?.addTarget(self, action: #selector(MakeCommentController.attachImageBtnPressed), for: .touchUpInside)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if row > 0 && responseToName != nil {
             commentPrefix = LS("回复") + " " + responseToName! + ": "
@@ -195,12 +195,12 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
      
      - parameter image: 截取的前一个画面的截图
      */
-    func setBluredBackground(image: UIImage) {
+    func setBluredBackground(_ image: UIImage) {
         bgImage = image
         // blurBG?.image = image
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
     
@@ -226,43 +226,43 @@ extension MakeCommentController {
     }
     
     func attachImageBtnPressed() {
-        let alert = UIAlertController(title: LS("设置评论图片"), message: nil, preferredStyle: .ActionSheet)
-        alert.addAction(UIAlertAction(title: LS("拍照"), style: .Default, handler: { (action) -> Void in
-            let sourceType = UIImagePickerControllerSourceType.Camera
+        let alert = UIAlertController(title: LS("设置评论图片"), message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: LS("拍照"), style: .default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.camera
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-                let alert = UIAlertController(title: LS("错误"), message: LS("无法打开相机"), preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: LS("取消"), style: .Cancel, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: LS("错误"), message: LS("无法打开相机"), preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: LS("取消"), style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = sourceType
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: LS("从相册选择"), style: .Default, handler: { (action) -> Void in
-            let sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        alert.addAction(UIAlertAction(title: LS("从相册选择"), style: .default, handler: { (action) -> Void in
+            let sourceType = UIImagePickerControllerSourceType.photoLibrary
             guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-                let alert = UIAlertController(title: LS("错误"), message: LS("无法打开相册"), preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: LS("取消"), style: .Cancel, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: LS("错误"), message: LS("无法打开相册"), preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: LS("取消"), style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = sourceType
             imagePicker.delegate = self
             imagePicker.allowsEditing = true
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: LS("取消"), style: .Cancel, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        alert.addAction(UIAlertAction(title: LS("取消"), style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        attachImageBtn?.setImage(image, forState: .Normal)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        attachImageBtn?.setImage(image, for: UIControlState())
         commentImage = image
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -270,7 +270,7 @@ extension MakeCommentController {
 // MARK: - TextField输入框的代理
 extension MakeCommentController {
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         
         if textView.textInputMode?.primaryLanguage == "zh-Hans" {
             let selectedRange = textView.markedTextRange
@@ -279,14 +279,14 @@ extension MakeCommentController {
             }
         }
         let curText = input!.text! as NSString
-        let newText = curText.stringByReplacingCharactersInRange(range, withString: text) as String
+        let newText = curText.replacingCharacters(in: range, with: text) as String
         if newText.length > maxWordLimit {
             return false
         }
         return true
     }
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         if textView.textInputMode?.primaryLanguage == "zh-Hans" {
             let selectedRange = textView.markedTextRange
             if selectedRange != nil {
@@ -302,15 +302,15 @@ extension MakeCommentController {
         
     }
     
-    func textView(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange) -> Bool {
+    func textView(_ textView: UITextView, shouldInteractWithURL URL: Foundation.URL, inRange characterRange: NSRange) -> Bool {
         return false
     }
     
-    func textView(textView: UITextView, shouldInteractWithTextAttachment textAttachment: NSTextAttachment, inRange characterRange: NSRange) -> Bool {
+    func textView(_ textView: UITextView, shouldInteractWithTextAttachment textAttachment: NSTextAttachment, inRange characterRange: NSRange) -> Bool {
         return false
     }
     
-    func textViewDidEndEditing(textView: UITextView) {
+    func textViewDidEndEditing(_ textView: UITextView) {
         
     }
     

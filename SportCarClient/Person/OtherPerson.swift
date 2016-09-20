@@ -20,7 +20,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     
     var rp_currentRequest: Request?
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         header.map.delegate = self
     }
@@ -36,7 +36,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
         // do nothing
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         // Override this to disable self.locating
         rp_cancelRequest()
         header.map.delegate = nil
@@ -49,14 +49,14 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
         let backBtn = UIButton().config(
             self, selector: #selector(navLeftBtnPressed),
             image: UIImage(named: "account_header_back_btn"))
-            .setFrame(CGRectMake(0, 0, 10.5, 18))
+            .setFrame(CGRect(x: 0, y: 0, width: 10.5, height: 18))
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
         //
         let shareBtn = UIButton().config(
             self, selector: #selector(navRightBtnPressed),
             image: UIImage(named: "status_detail_other_operation"))
-            .setFrame(CGRectMake(0, 0, 24, 214))
-        shareBtn.imageView?.contentMode = .ScaleAspectFit
+            .setFrame(CGRect(x: 0, y: 0, width: 24, height: 214))
+        shareBtn.imageView?.contentMode = .scaleAspectFit
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareBtn)
         //
     }
@@ -69,7 +69,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     }
     
     override func navLeftBtnPressed() {
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     /*
@@ -79,22 +79,22 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     override func getPersonInfoPanel() -> PersonHeaderMine {
         let panel = PersonHeaderOther()
         totalHeaderHeight = 920 / 750 * self.view.frame.width
-        panel.followBtn.addTarget(self, action: #selector(PersonOtherController.followBtnPressed(_:)), forControlEvents: .TouchUpInside)
-        panel.chatBtn.addTarget(self, action: #selector(PersonOtherController.chatBtnPressed), forControlEvents: .TouchUpInside)
-        panel.locBtn.addTarget(self, action: #selector(PersonOtherController.locateBtnPressed), forControlEvents: .TouchUpInside)
+        panel.followBtn.addTarget(self, action: #selector(PersonOtherController.followBtnPressed(_:)), for: .touchUpInside)
+        panel.chatBtn.addTarget(self, action: #selector(PersonOtherController.chatBtnPressed), for: .touchUpInside)
+        panel.locBtn.addTarget(self, action: #selector(PersonOtherController.locateBtnPressed), for: .touchUpInside)
         //
         if data.user.followed {
-            panel.followBtn.setImage(UIImage(named: "person_followed"), forState: .Normal)
+            panel.followBtn.setImage(UIImage(named: "person_followed"), for: UIControlState())
             panel.followBtnTmpImage.image = UIImage(named: "person_followed")
         }
-        panel.fanslistBtn.addTarget(self, action: #selector(fanslistPressed), forControlEvents: .TouchUpInside)
-        panel.followlistBtn.addTarget(self, action: #selector(followlistPressed), forControlEvents: .TouchUpInside)
-        panel.statuslistBtn.addTarget(self, action: #selector(statuslistPressed), forControlEvents: .TouchUpInside)
-        panel.detailBtn.addTarget(self, action: #selector(PersonBasicController.detailBtnPressed), forControlEvents: .TouchUpInside)
+        panel.fanslistBtn.addTarget(self, action: #selector(fanslistPressed), for: .touchUpInside)
+        panel.followlistBtn.addTarget(self, action: #selector(followlistPressed), for: .touchUpInside)
+        panel.statuslistBtn.addTarget(self, action: #selector(statuslistPressed), for: .touchUpInside)
+        panel.detailBtn.addTarget(self, action: #selector(PersonBasicController.detailBtnPressed), for: .touchUpInside)
         return panel
     }
     
-    func followBtnPressed(sender: UIButton) {
+    func followBtnPressed(_ sender: UIButton) {
         let requester = AccountRequester2.sharedInstance
         lp_start()
         requester.follow(self.data.user.ssidString, onSuccess: { (json) -> () in
@@ -103,17 +103,18 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
             
             if json!.boolValue {
                 board.followBtnTmpImage.image = UIImage(named: "person_add_follow")
-                board.followBtn.setImage(UIImage(named: "person_followed"), forState: .Normal)
+                board.followBtn.setImage(UIImage(named: "person_followed"), for: UIControlState())
             }else{
                 board.followBtnTmpImage.image = UIImage(named: "person_followed")
-                board.followBtn.setImage(UIImage(named: "person_add_follow"), forState: .Normal)
+                board.followBtn.setImage(UIImage(named: "person_add_follow"), for: UIControlState())
             }
-            board.followBtnTmpImage.hidden = false
-            UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+            board.followBtnTmpImage.isHidden = false
+            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 board.followBtnTmpImage.layer.opacity = 0
                 }, completion: { (_) -> Void in
-                    board.followBtnTmpImage.hidden = false
+                    board.followBtnTmpImage.isHidden = false
             })
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kAccountInfoChanged), object: nil)
             }) { (code) -> () in
                 self.lp_stop()
                 self.showToast("Access Error: \(code)")
@@ -121,8 +122,8 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     }
     
     func chatBtnPressed() {
-        if self.navigationController!.viewControllers.count > 3, let room = self.navigationController?.viewControllers.fetch(-3) as? ChatRoomController where room.targetUser == self.data.user{
-            self.navigationController?.popViewControllerAnimated(true)
+        if self.navigationController!.viewControllers.count > 3, let room = self.navigationController?.viewControllers.fetch(-3) as? ChatRoomController , room.targetUser == self.data.user{
+            self.navigationController?.popViewController(animated: true)
             return
         }
         let room = ChatRoomController()
@@ -156,9 +157,9 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
             // 如果没有安装百度地图，则打开自带地图
             let target = MKMapItem(placemark: MKPlacemark(coordinate: center, addressDictionary: nil))
             target.name = targetName
-            let options: [String: AnyObject] = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,
-                MKLaunchOptionsMapTypeKey: NSNumber(unsignedInteger: MKMapType.Standard.rawValue)]
-            MKMapItem.openMapsWithItems([target], launchOptions: options)
+            let options: [String: AnyObject] = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving as AnyObject,
+                MKLaunchOptionsMapTypeKey: NSNumber(value: MKMapType.standard.rawValue as UInt)]
+            MKMapItem.openMaps(with: [target], launchOptions: options)
         }
     }
     
@@ -180,9 +181,9 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
             rp_currentRequest = RadarRequester.sharedInstance.trackUser(data.user.ssidString, onSuccess: { (json) -> () in
                 self.userLoc = Location(latitude: json!["lat"].doubleValue, longitude: json!["lon"].doubleValue, description: json!["description"].stringValue, city: json!["city"].stringValue)
                 self.userAnno.coordinate = self.userLoc!.location
-                let userLocInScreen = self.header.map.convertCoordinate(self.userLoc!.location, toPointToView: self.header.map)
-                let userLocWithOffset = CGPointMake(userLocInScreen.x + self.header.frame.width / 40, userLocInScreen.y - self.header.frame.height / 60)
-                let newCoordinate = self.header.map.convertPoint(userLocWithOffset, toCoordinateFromView: self.header.map)
+                let userLocInScreen = self.header.map.convert(self.userLoc!.location, toPointTo: self.header.map)
+                let userLocWithOffset = CGPoint(x: userLocInScreen.x + self.header.frame.width / 40, y: userLocInScreen.y - self.header.frame.height / 60)
+                let newCoordinate = self.header.map.convert(userLocWithOffset, toCoordinateFrom: self.header.map)
                 let region = BMKCoordinateRegionMakeWithDistance(newCoordinate, 3000, 5000)
 //                let region = BMKCoordinateRegionMakeWithDistance(self.userLoc!.location, 3000, 5000)
                 self.header.map.setRegion(region, animated: true)

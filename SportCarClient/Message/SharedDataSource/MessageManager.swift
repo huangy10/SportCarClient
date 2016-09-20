@@ -25,21 +25,21 @@ class MessageManager {
     static let defaultManager = MessageManager()
     
     /// Current ongoing request to the server
-    private weak var request: Request?
+    fileprivate weak var request: Request?
     
     /// Current status of the manager
-    private var state: State = .IDLE
+    fileprivate var state: State = .idle
     
     /// The working queue of the manager
-    private var queue: dispatch_queue_t! {
+    fileprivate var queue: DispatchQueue! {
         return ChatModelManger.sharedManager.workQueue
     }
     
-    private var manager: Manager {
+    fileprivate var manager: Manager {
         return ChatRequester2.sharedInstance.manager
     }
     
-    private var url: String {
+    fileprivate var url: String {
         return "\(kProtocalName)://\(kHostName):\(kChatPortName)/chat/update"
     }
     
@@ -70,19 +70,19 @@ class MessageManager {
     
     func connect() {
         if anonymous {
-            self.state = .IDLE
+            self.state = .idle
             return
         }
         // start listening on private queue
-        state = .ONGOING
-        dispatch_barrier_async(queue) { self.sync() }
-        dispatch_async(queue) { self.listen() }
+        state = .ongoing
+        queue.async(flags: .barrier, execute: { self.sync() }) 
+        queue.async { self.listen() }
     }
     
     /**
      Synchronous the local storage of messages
      */
-    private func sync() {
+    fileprivate func sync() {
         // Sync the roster
         RosterManager.defaultManager.sync()
     }
@@ -90,20 +90,20 @@ class MessageManager {
     /**
      This function monitor the status of the server and request the realtime chat content
      */
-    private func listen() {
-        guard !NSThread.isMainThread() else {
-            state = .ERROR
+    fileprivate func listen() {
+        guard !Thread.isMainThread else {
+            state = .error
             assertionFailure("Cannot listen the the chat server on main thread")
             return
         }
-        guard state == .ONGOING else {
+        guard state == .ongoing else {
             return
         }
         if let req = request {
             // incase that there is already an ongoing request
             req.cancel()
         }
-        let mutableRequest = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let mutableRequest = NSMutableURLRequest(url: URL(string: url)!)
         // big enough so that it never timeout
         mutableRequest.timeoutInterval = 3600
         // send request to the server
@@ -125,15 +125,15 @@ class MessageManager {
 //                    }
                 } catch let err {
                     print(err)
-                    self.state = .ERROR
+                    self.state = .error
                 }
                 try! ChatModelManger.sharedManager.save()
-                dispatch_async(dispatch_get_main_queue(), { 
+                DispatchQueue.main.async(execute: { 
                     RosterManager.defaultManager.rosterList?.reloadData()
                 })
                 // re-send the request
                 self.request = nil
-                dispatch_async(self.queue) { self.listen() }
+                self.queue.async { self.listen() }
             }, onError: { (code) in
                 if let code = code {
                     self.errorHanlde(code)
@@ -142,8 +142,8 @@ class MessageManager {
 //                try! ChatModelManger.sharedManager.save()
                 // re-send the request
                 self.request = nil
-                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC * 3))
-                dispatch_after(delay, self.queue, { 
+                let delay = DispatchTime.now() + Double(Int64(NSEC_PER_SEC * 3)) / Double(NSEC_PER_SEC)
+                self.queue.asyncAfter(deadline: delay, execute: { 
                     self.listen()
                 })
         })
@@ -154,16 +154,17 @@ class MessageManager {
             // if there is an ongoing request, cancel it
             request.cancel()
         }
-        state = .IDLE
+        state = .idle
     }
     
-    func errorHanlde(message: String) {
+    func errorHanlde(_ message: String) {
         
     }
     
-    func parse(data: [SwiftyJSON.JSON]) throws {
+    func parse(_ data: [SwiftyJSON.JSON]) throws {
         var chatDirty = false
         var notifDirty = false
+        var newNotifications: [Notification] = []
         for json in data {
             if json["chatID"].exists() {
                 let result = try ChatParser().parse(json)
@@ -185,24 +186,25 @@ class MessageManager {
             } else if json["notification_id"].exists() {
                 // 注意从服务器返回的消息是按照createdAt降序排列的
                 let notif = try NotificationParser().parse(json)
-                if let list = _curNotifList {
-                    list.data.insert(notif, atIndex: 0)
-                }
+//                if let list = _curNotifList {
+//                    list.data.insert(notif, atIndex: 0)
+//                }
+                newNotifications.append(notif)
                 
                 self.unreadNotifNum += 1
                 notifDirty = true
             } else if json["ssid"].exists() {
                 // rosterItem change
             } else {
-                throw SSModelError.NotSupported
+                throw SSModelError.notSupported
             }
         }
         if chatDirty {
-            dispatch_async(dispatch_get_main_queue(), { 
+            DispatchQueue.main.async(execute: { 
                 if let room = self._curRoom {
                     if !room.viewingHistory {
                         room.talkBoard?.reloadData()
-                        room.talkBoard?.scrollToRowAtIndexPath(NSIndexPath(forRow: room.chats.count - 1, inSection: 0), atScrollPosition: .Bottom, animated: true)
+                        room.talkBoard?.scrollToRow(at: IndexPath(row: room.chats.count - 1, section: 0), at: .bottom, animated: true)
                     } else {
                         room.talkBoard?.reloadData()
                     }
@@ -210,9 +212,18 @@ class MessageManager {
             })
         }
         if notifDirty {
-            dispatch_async(dispatch_get_main_queue(), { 
+            DispatchQueue.main.async(execute: { 
                 if let list = self._curNotifList {
-                    list.tableView.reloadData()
+                    if list.isBeingPresented {
+                        list.tableView.beginUpdates()
+                        list.data.insert(contentsOf: newNotifications.reversed(), at: 0)
+                        let newRows = (0..<newNotifications.count).map({ IndexPath(row: $0, section: 0)})
+                        list.tableView.insertRows(at: newRows, with: .automatic)
+                        list.tableView.endUpdates()
+                    } else {
+                        list.data.insert(contentsOf: newNotifications.reversed(), at: 0)
+                        list.tableView.reloadData()
+                    }
                 }
             })
         }
@@ -222,10 +233,10 @@ class MessageManager {
      调用这个函数时，意味着client判定和服务器的同步状态出现问题
      */
     func reset() {
-        assert(!NSThread.isMainThread())
+        assert(!Thread.isMainThread)
         assert(!anonymous)
         
-        state = .SYNCING
+        state = .syncing
         // FIRST: 清除本地缓存的信息
         let context = ChatModelManger.sharedManager.getOperationContext()
         do {
@@ -238,33 +249,33 @@ class MessageManager {
                 $0.hostSSID == MainManager.sharedManager.hostUserID!
             }).delete()
         } catch {}
-        NSNotificationCenter.defaultCenter().postNotificationName(kMessageChatResetNotification, object: self)
-        state = .ONGOING
+        NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kMessageChatResetNotification), object: self)
+        state = .ongoing
     }
     
     enum State {
-        case IDLE, ONGOING, ERROR, OFFLINE, SYNCING
+        case idle, ongoing, error, offline, syncing
     }
     
     // MARK: chat room handle
     
     weak var _curRoom: ChatRoomController?
     
-    func enterRoom(room: ChatRoomController) {
+    func enterRoom(_ room: ChatRoomController) {
         
         if room.chats.count > 0 {
             return
         }
         
-        func load(onFinish: (Void -> Void)? = nil) {
-            dispatch_async(queue) {
+        func load(_ onFinish: ((Void) -> Void)? = nil) {
+            queue.async {
                 let chats = ChatModelManger.sharedManager.loadCachedChats(room.rosterItem.ssid, skips: 0, limit: 20)
-                room.chats.appendContentsOf(chats)
+                room.chats.append(contentsOf: chats)
                 if chats.count > 0 {
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         room.talkBoard?.reloadData()
-                        room.talkBoard?.scrollToRowAtIndexPath(NSIndexPath(forRow: room.chats.count - 1, inSection: 0)
-                            , atScrollPosition: .Top, animated: false)
+                        room.talkBoard?.scrollToRow(at: IndexPath(row: room.chats.count - 1, section: 0)
+                            , at: .top, animated: false)
                     })
                 }
                 self.unreadChatNum = max(0, self.unreadChatNum - Int(room.rosterItem.unreadNum))
@@ -323,7 +334,7 @@ class MessageManager {
 //                        room.loadChatHistoryMannually(false)
 //                    })
                 } else {
-                    dispatch_async(dispatch_get_main_queue(), { 
+                    DispatchQueue.main.async(execute: { 
                         room.talkBoard?.reloadData()
                     })
                 }
@@ -334,22 +345,22 @@ class MessageManager {
     func leaveRoom() {
         _curRoom = nil
         // update listening status
-        dispatch_async(queue) { 
+        queue.async { 
             self.listen()
         }
     }
     
-    func newMessageSent(chat: ChatRecord) {
+    func newMessageSent(_ chat: ChatRecord) {
         
     }
     /**
      返回的chats按照createdAt降序排列
      */
-    func loadHistory(room: ChatRoomController, onFinished: (chats: [ChatRecord]?)->()) {
-        if state != .ONGOING {
-            onFinished(chats: nil)
+    func loadHistory(_ room: ChatRoomController, onFinished: @escaping (_ chats: [ChatRecord]?)->()) {
+        if state != .ongoing {
+            onFinished(nil)
         }
-        dispatch_async(queue) {    
+        queue.async {    
             var chats = ChatModelManger.sharedManager.loadCachedChats(room.rosterItem.ssid, skips: room.chats.count, limit: 20)
             if chats.count < 20 {
                 ChatRequester2.sharedInstance.getChatHistories(room.rosterItem.ssid, skips: room.chats.count + chats.count, limit: 20 - chats.count, onSucces: { (json) in
@@ -357,38 +368,38 @@ class MessageManager {
                     for data in json!.arrayValue {
                         let result = try! parser.parse(data).0
                         result.rosterID = room.rosterItem.ssid
-                        chats.insert(result, atIndex: 0)
+                        chats.insert(result, at: 0)
                     }
-                    dispatch_async(dispatch_get_main_queue(), { 
+                    DispatchQueue.main.async(execute: { 
                         onFinished(chats: chats)
                     })
                     }, onError: { (code) in
-                        dispatch_async(dispatch_get_main_queue()) {
+                        DispatchQueue.main.async {
                             onFinished(chats: nil)
                         }
                 })
             } else {
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     onFinished(chats: chats)
                 })
             }
         }
     }
     
-    func clearChatHistory(rosterItem: RosterItem) {
-        func _clear(rosterItem: RosterItem) {
+    func clearChatHistory(_ rosterItem: RosterItem) {
+        func _clear(_ rosterItem: RosterItem) {
             let context = ChatModelManger.sharedManager.getOperationContext()
             do {
                 try context.chatRecords
                     .filter({$0.hostSSID == self.hostUser.ssid})
                     .filter({$0.rosterID == rosterItem.ssid})
                     .delete()
-                NSNotificationCenter.defaultCenter().postNotificationName(kMessageChatHistoryCleared, object: nil, userInfo: [kRosterItemKey: rosterItem])
+                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kMessageChatHistoryCleared), object: nil, userInfo: [kRosterItemKey: rosterItem])
             } catch {}
         }
         
-        if NSThread.isMainThread() {
-            dispatch_async(self.queue, { 
+        if Thread.isMainThread {
+            self.queue.async(execute: { 
                 _clear(rosterItem)
             })
         } else {
@@ -396,7 +407,7 @@ class MessageManager {
         }
     }
     
-    func clearChatHistory(club: Club) {
+    func clearChatHistory(_ club: Club) {
         let context = ChatModelManger.sharedManager.getOperationContext()
         if let roster = context.rosterItems.filter({ $0.hostSSID == self.hostUser.ssid })
             .first({ $0.relatedID == club.ssid && $0.entityType == "club" }) {
@@ -404,7 +415,7 @@ class MessageManager {
         }
     }
     
-    func deleteAndQuit(club: Club) {
+    func deleteAndQuit(_ club: Club) {
         RosterManager.defaultManager.deleteAndQuitClub(club)
     }
     
@@ -412,17 +423,17 @@ class MessageManager {
     
     weak var _curNotifList: NotificationController?
     
-    func enterNotificationList(list: NotificationController) {
+    func enterNotificationList(_ list: NotificationController) {
         _curNotifList = list
         self.unreadNotifNum = 0
         if list.data.count > 0 {
             return
         }
-        dispatch_async(queue) { 
+        queue.async { 
             let notifs = ChatModelManger.sharedManager.loadCachedNotifications(0, limit: 20)
-            list.data.appendContentsOf(notifs)
+            list.data.append(contentsOf: notifs)
             if notifs.count > 0 {
-                dispatch_async(dispatch_get_main_queue(), { 
+                DispatchQueue.main.async(execute: { 
                     list.tableView.reloadData()
                 })
             } else {
@@ -435,7 +446,7 @@ class MessageManager {
                             list.data.append(notif)
                         } catch { continue }
                     }
-                    dispatch_async(dispatch_get_main_queue(), { 
+                    DispatchQueue.main.async(execute: { 
                         list.tableView.reloadData()
                     })
                     }, onError: { (code) in
@@ -449,11 +460,11 @@ class MessageManager {
         
     }
     
-    func loadHistory(list: NotificationController, onFinish: (notifs: [Notification]?) -> ()) {
-        if state != .ONGOING {
-            onFinish(notifs: nil)
+    func loadHistory(_ list: NotificationController, onFinish: @escaping (_ notifs: [Notification]?) -> ()) {
+        if state != .ongoing {
+            onFinish(nil)
         }
-        dispatch_async(queue) { 
+        queue.async { 
             var notifs = ChatModelManger.sharedManager.loadCachedNotifications(list.data.count, limit: 20)
             if notifs.count < 20 {
                 // contact server
@@ -465,16 +476,16 @@ class MessageManager {
                             notifs.append(notif)
                         } catch { continue }
                     }
-                    dispatch_async(dispatch_get_main_queue(), { 
+                    DispatchQueue.main.async(execute: { 
                         onFinish(notifs: notifs)
                     })
                     }, onError: { (code) in
-                        dispatch_async(dispatch_get_main_queue(), { 
+                        DispatchQueue.main.async(execute: { 
                             onFinish(notifs: nil)
                         })
                 })
             } else {
-                dispatch_async(dispatch_get_main_queue(), { 
+                DispatchQueue.main.async(execute: { 
                     onFinish(notifs: notifs)
                 })
             }

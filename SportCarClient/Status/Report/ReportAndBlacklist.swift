@@ -17,8 +17,8 @@ class ReportBlacklistViewController: PresentTemplateViewController {
     var userID: Int32 = 0
     var reportType: String // status or user or club
     
-    private var container1: UIView!
-    private var container2: UIView!
+    fileprivate var container1: UIView!
+    fileprivate var container2: UIView!
     
     init (userID: Int32, reportType: String = "user", parent: UIViewController) {
         self.userID = userID
@@ -52,10 +52,10 @@ class ReportBlacklistViewController: PresentTemplateViewController {
         var index = 0
         for title in kReportTitles {
             let btn = UIButton()
-            btn.setTitle(title, forState: .Normal)
-            btn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            btn.setTitle(title, for: UIControlState())
+            btn.setTitleColor(UIColor.white, for: UIControlState())
             btn.tag = index
-            btn.addTarget(self, action: #selector(ReportBlacklistViewController.reportItemPressed(_:)), forControlEvents: .TouchUpInside)
+            btn.addTarget(self, action: #selector(ReportBlacklistViewController.reportItemPressed(_:)), for: .touchUpInside)
             container2.addSubview(btn)
             btn.snp_makeConstraints(closure: { (make) -> Void in
                 make.centerX.equalTo(container2)
@@ -69,22 +69,22 @@ class ReportBlacklistViewController: PresentTemplateViewController {
     }
     
     func reportBtnPressed() {
-        self.container2.hidden = false
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
+        self.container2.isHidden = false
+        UIView.animate(withDuration: 0.5, animations: { () -> Void in
             self.container1.layer.opacity = 0
             self.container2.layer.opacity = 1
-            }) { (_) -> Void in
-                self.container1.hidden = true
-        }
+            }, completion: { (_) -> Void in
+                self.container1.isHidden = true
+        }) 
     }
     
-    func reportItemPressed(sender: UIButton) {
+    func reportItemPressed(_ sender: UIButton) {
         // TODO: 将举报内容发送给服务器
 //        showToast(LS("举报内容发送成功"), onSelf: false)
         hideAnimated()
-        let delay: dispatch_time_t = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC))
-        dispatch_after(delay, dispatch_get_main_queue()) { 
-            UIApplication.sharedApplication().keyWindow?.rootViewController?.showToast(LS("举报内容发送成功"), onSelf: true)
+        let delay: DispatchTime = DispatchTime.now() + Double(Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: delay) { 
+            UIApplication.shared.keyWindow?.rootViewController?.showToast(LS("举报内容发送成功"), onSelf: true)
         }
         
     }

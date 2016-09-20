@@ -36,12 +36,12 @@ class ActivityReleaseInfoBoard: UIView {
     
     func createSubviews() {
         let superview = self
-        self.backgroundColor = UIColor.whiteColor()
+        self.backgroundColor = UIColor.white
         //
         posterBtn = UIButton()
         superview.addSubview(posterBtn)
-        posterBtn.setImage(UIImage(named: "activity_release_default_cover"), forState: .Normal)
-        posterBtn.imageView?.contentMode = .ScaleAspectFill
+        posterBtn.setImage(UIImage(named: "activity_release_default_cover"), for: UIControlState())
+        posterBtn.imageView?.contentMode = .scaleAspectFill
         posterBtn.clipsToBounds = true
         posterBtn.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
@@ -51,9 +51,9 @@ class ActivityReleaseInfoBoard: UIView {
         }
         
         posterLbl = UILabel()
-        posterLbl.textAlignment = .Center
+        posterLbl.textAlignment = .center
         posterLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        posterLbl.font = UIFont.systemFontOfSize(12)
+        posterLbl.font = UIFont.systemFont(ofSize: 12)
         posterLbl.text = LS("上传一个活动海报")
         posterBtn.addSubview(posterLbl)
         posterLbl.snp_makeConstraints { (make) -> Void in
@@ -61,8 +61,8 @@ class ActivityReleaseInfoBoard: UIView {
         }
         //
         let staticTitleLbl = UILabel()
-        staticTitleLbl.font = UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold)
-        staticTitleLbl.textColor = UIColor.blackColor()
+        staticTitleLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        staticTitleLbl.textColor = UIColor.black
         staticTitleLbl.text = LS("取一个名字")
         superview.addSubview(staticTitleLbl)
         staticTitleLbl.snp_makeConstraints { (make) -> Void in
@@ -78,15 +78,15 @@ class ActivityReleaseInfoBoard: UIView {
             make.height.equalTo(24)
             make.width.equalTo(superview).multipliedBy(0.8)
         }
-        wrapper.contentSize = CGSizeMake(UIScreen.mainScreen().bounds.width * 0.8, 17)
+        wrapper.contentSize = CGSize(width: UIScreen.main.bounds.width * 0.8, height: 17)
         //
         actNameInput = UITextField()
-        actNameInput.font = UIFont.systemFontOfSize(19, weight: UIFontWeightUltraLight)
+        actNameInput.font = UIFont.systemFont(ofSize: 19, weight: UIFontWeightUltraLight)
         actNameInput.textColor = UIColor(white: 0.72, alpha: 1)
         actNameInput.placeholder = LS("为活动取一个名字")
-        actNameInput.textAlignment = .Center
+        actNameInput.textAlignment = .center
         wrapper.addSubview(actNameInput)
-        actNameInput.frame = CGRectMake(0, 0, wrapper.contentSize.width, 24)
+        actNameInput.frame = CGRect(x: 0, y: 0, width: wrapper.contentSize.width, height: 24)
         //
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.933, alpha: 11)
@@ -99,7 +99,7 @@ class ActivityReleaseInfoBoard: UIView {
         }
         //
         actDesInput = UITextView()
-        actDesInput.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+        actDesInput.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         actDesInput.textColor = UIColor(white: 0.72, alpha: 1)
         actDesInput.text = LS("活动描述...")
         superview.addSubview(actDesInput)
@@ -113,7 +113,7 @@ class ActivityReleaseInfoBoard: UIView {
         actDesInputWordCount = UILabel()
         actDesInputWordCount.text = "0/40"
         actDesInputWordCount.textColor = UIColor(white: 0.72, alpha: 1)
-        actDesInputWordCount.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        actDesInputWordCount.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(actDesInputWordCount)
         actDesInputWordCount.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
@@ -125,10 +125,10 @@ class ActivityReleaseInfoBoard: UIView {
             let userSelect = FFSelectController()
             userSelect.delegate = self.releaser
             let nav = BlackBarNavigationController(rootViewController: userSelect)
-            self.releaser.presentViewController(nav, animated: true, completion: nil)
+            self.releaser.present(nav, animated: true, completion: nil)
         }
         let informOfListView = informOfList.view
-        superview.addSubview(informOfListView)
+        superview.addSubview(informOfListView!)
         informOfListView.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
@@ -139,7 +139,7 @@ class ActivityReleaseInfoBoard: UIView {
         informOfListCountLbl = UILabel()
         informOfListCountLbl.textColor = UIColor(white: 0.72, alpha: 1)
         informOfListCountLbl.text = "0/9"
-        informOfListCountLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+        informOfListCountLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(informOfListCountLbl)
         informOfListCountLbl.snp_makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
@@ -155,9 +155,9 @@ class ActivityReleaseInfoBoard: UIView {
      */
     func getRequiredHeight() -> CGFloat{
         self.layoutIfNeeded()
-        var contentRect = CGRectZero
+        var contentRect = CGRect.zero
         for view in self.subviews {
-            contentRect = CGRectUnion(contentRect, view.frame)
+            contentRect = contentRect.union(view.frame)
         }
         return contentRect.height + 10
     }
