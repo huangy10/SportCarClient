@@ -10,7 +10,7 @@ target 'SportCarClient' do
     pod 'Alamofire', '~> 4.0'
     pod 'Kingfisher'
     pod 'SwiftDate'
-    pod 'AlecrimCoreData'
+    pod 'AlecrimCoreData', :git => 'https://github.com/AnthonyMDev/AlecrimCoreData.git', :branch => 'swift-3.0'
     pod 'Dollar', '~> 6.0.0'
     pod 'Cent'
     pod 'SwiftyTimer'
