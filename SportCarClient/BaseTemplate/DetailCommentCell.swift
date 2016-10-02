@@ -45,7 +45,7 @@ class DetailCommentCell2: UITableViewCell {
     }
     
     func configureAvatarBtn() {
-        avatarBtn = contentView.addSubview(UIButton)
+        avatarBtn = contentView.addSubview(UIButton.self)
             .config(self, selector: #selector(avatarBtnPressed))
             .layout({ (make) in
                 make.left.equalTo(contentView).inset(15)
@@ -56,51 +56,51 @@ class DetailCommentCell2: UITableViewCell {
     }
     
     func configureNameLbl() {
-        nameLbl = contentView.addSubview(UILabel)
+        nameLbl = contentView.addSubview(UILabel.self)
             .config(14, fontWeight: UIFontWeightBold, textColor: UIColor.black)
             .layout({ (make) in
-                make.left.equalTo(avatarBtn.snp_right).offset(11)
+                make.left.equalTo(avatarBtn.snp.right).offset(11)
                 make.top.equalTo(contentView)
             })
     }
     
     func configureResponseLbl() {
-        responseStaticLbl = contentView.addSubview(UILabel)
+        responseStaticLbl = contentView.addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1))
             .layout({ (make) in
-                make.left.equalTo(nameLbl.snp_right).offset(2)
+                make.left.equalTo(nameLbl.snp.right).offset(2)
                 make.bottom.equalTo(nameLbl)
             })
-        responseLbl = contentView.addSubview(UILabel)
+        responseLbl = contentView.addSubview(UILabel.self)
             .config(14, fontWeight: UIFontWeightBold, textColor: UIColor.black)
             .layout({ (make) in
-                make.left.equalTo(responseStaticLbl.snp_right).offset(2)
+                make.left.equalTo(responseStaticLbl.snp.right).offset(2)
                 make.bottom.equalTo(nameLbl)
             })
     }
     
     func configureCommentDateLbl() {
-        commentDateLbl = contentView.addSubview(UILabel)
+        commentDateLbl = contentView.addSubview(UILabel.self)
             .config(10, fontWeight: UIFontWeightLight, textColor: UIColor(white: 0.72, alpha: 1))
             .layout({ (make) in
                 make.left.equalTo(nameLbl)
-                make.top.equalTo(nameLbl.snp_bottom).offset(2)
+                make.top.equalTo(nameLbl.snp.bottom).offset(2)
             })
     }
     
     func configureContent() {
-        contentLbl = contentView.addSubview(UILabel)
+        contentLbl = contentView.addSubview(UILabel.self)
             .config(14, fontWeight: UIFontWeightUltraLight, multiLine: true)
             .layout({ (make) in
                 make.left.equalTo(nameLbl)
                 make.right.equalTo(contentView).inset(15)
-                make.top.equalTo(commentDateLbl.snp_bottom).offset(7)
+                make.top.equalTo(commentDateLbl.snp.bottom).offset(7)
                 make.bottom.equalTo(contentView).offset(-15)
             })
     }
     
     func configureReplyBtn() {
-        replyBtn = contentView.addSubview(UIButton)
+        replyBtn = contentView.addSubview(UIButton.self)
             .config(self, selector: #selector(replyBtnPressed), title: LS("回复"), titleColor: UIColor(white: 0.72, alpha: 1), titleSize: 12, titleWeight: UIFontWeightUltraLight)
             .layout({ (make) in
                 make.right.equalTo(contentView).inset(15)

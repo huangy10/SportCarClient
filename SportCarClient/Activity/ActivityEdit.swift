@@ -36,8 +36,11 @@ class ActivityEditController: ActivityReleaseController {
         desInput.text = act.actDescription
         maxAttend = Int(act.maxAttend)
         desWordCountLbl.text = "\(act.actDescription!.length)/40"
-        imagePickerBtn.kf_setImageWithURL(act.posterURL!, forState: UIControlState(), placeholderImage: nil)
-        imagePickerBtn.kf_setImageWithURL(act.posterURL!, forState: UIControlState(), placeholderImage: nil, optionsInfo: nil, progressBlock: nil) { (image, error, cacheType, imageURL) in
+//        imagePickerBtn.kf_setImageWithURL(act.posterURL!, forState: UIControlState(), placeholderImage: nil)
+//        imagePickerBtn.kf_setImageWithURL(act.posterURL!, forState: UIControlState(), placeholderImage: nil, optionsInfo: nil, progressBlock: nil) { (image, error, cacheType, imageURL) in
+//            self.poster = image
+//        }
+        imagePickerBtn.kf.setImage(with: act.posterURL!, for: .normal, placeholder: nil, options: nil, progressBlock: nil) { (image, _, _, _) in
             self.poster = image
         }
         userLocation = act.location?.coordinate
@@ -49,11 +52,11 @@ class ActivityEditController: ActivityReleaseController {
     }
     
     override func navLeftBtnPressed() {
-        navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
     }
 
     override func navRightBtnPressed() {
-        self.inputFields.each { (view) in
+        _ = self.inputFields.each { (view) in
             view?.resignFirstResponder()
         }
         // check integrity of the data
@@ -88,7 +91,7 @@ class ActivityEditController: ActivityReleaseController {
         let toast = showStaticToast(LS("发布中..."))
         pp_showProgressView()
         ActivityRequester.sharedInstance.activityEdit(act.ssidString, name: actName, des: actDes, informUser: selectedUserIDs, maxAttend: maxAttend, startAt: startAtDate, endAt: endAtDate, authedUserOnly: authedUserOnly, poster: posterImage, lat: loc.latitude, lon: loc.longitude, loc_des: locDescription ?? "", city: city ?? "", onSuccess: { (json) in
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
             if let mine = self.actHomeController?.mine {
                 mine.refreshControl.beginRefreshing()
                 mine.getLatestActData()

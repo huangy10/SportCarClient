@@ -91,7 +91,7 @@ class MainManager {
         }()
         obj.manager = self
         if overwrite || created {
-            try obj.loadDataFromJSON(data, detailLevel: detailLevel)
+            _ = try obj.loadDataFromJSON(data, detailLevel: detailLevel)
         }
         return obj
     }
@@ -101,7 +101,7 @@ class MainManager {
         let table = AlecrimCoreData.Table<T>(dataContext: context)
         let newObj = table.createEntity()
         if initial != nil {
-            try newObj.loadInitialFromJSON(initial!)
+            _ = try newObj.loadInitialFromJSON(initial!)
         }
         newObj.manager = self
         newObj.hostSSID = MainManager.sharedManager.hostUserID!

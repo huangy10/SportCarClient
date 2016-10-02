@@ -37,7 +37,7 @@ class ChatAccessoryBoard: UIView {
         takePhotoBtn?.setImage(UIImage(named: "chat_accessory_take_photo"), for: UIControlState())
         takePhotoBtn?.addTarget(self, action: #selector(ChatAccessoryBoard.takePhotoBtnPressed), for: .touchUpInside)
         superview.addSubview(takePhotoBtn!)
-        takePhotoBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        takePhotoBtn?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.top.equalTo(superview).offset(25)
             make.size.equalTo(69)
@@ -48,18 +48,18 @@ class ChatAccessoryBoard: UIView {
         takePhotoLbl.textColor = UIColor(white: 0.72, alpha: 1)
         takePhotoLbl.textAlignment = .center
         superview.addSubview(takePhotoLbl)
-        takePhotoLbl.snp_makeConstraints { (make) -> Void in
+        takePhotoLbl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(takePhotoBtn!)
-            make.top.equalTo(takePhotoBtn!.snp_bottom).offset(10)
+            make.top.equalTo(takePhotoBtn!.snp.bottom).offset(10)
         }
         //
         photoAlbumBtn = UIButton()
         photoAlbumBtn?.setImage(UIImage(named: "chat_accessory_photos"), for: UIControlState())
         photoAlbumBtn?.addTarget(self, action: #selector(ChatAccessoryBoard.photoAlbumBtnPressed), for: .touchUpInside)
         superview.addSubview(photoAlbumBtn!)
-        photoAlbumBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        photoAlbumBtn?.snp.makeConstraints({ (make) -> Void in
             make.top.equalTo(takePhotoBtn!)
-            make.left.equalTo(takePhotoBtn!.snp_right).offset(23)
+            make.left.equalTo(takePhotoBtn!.snp.right).offset(23)
             make.size.equalTo(69)
         })
         let photoAlbumLbl = UILabel()
@@ -68,8 +68,8 @@ class ChatAccessoryBoard: UIView {
         photoAlbumLbl.textAlignment = .center
         photoAlbumLbl.text = LS("照片")
         superview.addSubview(photoAlbumLbl)
-        photoAlbumLbl.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(photoAlbumBtn!.snp_bottom).offset(10)
+        photoAlbumLbl.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(photoAlbumBtn!.snp.bottom).offset(10)
             make.centerX.equalTo(photoAlbumBtn!)
         }
     }

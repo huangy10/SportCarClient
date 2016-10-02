@@ -100,9 +100,9 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
         if dirty {
-            ChatRequester2.sharedInstance.postUpdateUserRelationSettings(rosterItem.ssidString, remark_name: user.noteName ?? "", alwaysOnTop: false, noDisturbing: false, onSuccess: { (_) in
+            _ = ChatRequester2.sharedInstance.postUpdateUserRelationSettings(rosterItem.ssidString, remark_name: user.noteName ?? "", alwaysOnTop: false, noDisturbing: false, onSuccess: { (_) in
                 // do nothing
                 self.showToast(LS("修改成功"))
                 }) { (code) in
@@ -158,7 +158,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsAvatarCell
             cell.selectionStyle = .none
-            cell.avatarImage.kf_setImageWithURL(user.avatarURL!)
+            cell.avatarImage.kf.setImage(with: user.avatarURL!)
             return cell
         case 1:
             if (indexPath as NSIndexPath).row < 1 {
@@ -178,7 +178,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                     startGroupChatBtn?.addTarget(self, action: #selector(PrivateChatSettingController.startGroupChatPressed), for: .touchUpInside)
                     startGroupChatBtn?.setImage(UIImage(named: "chat_settings_add_person"), for: UIControlState())
                     cell.contentView.addSubview(startGroupChatBtn!)
-                    startGroupChatBtn?.snp_makeConstraints(closure: { (make) -> Void in
+                    startGroupChatBtn?.snp.makeConstraints({ (make) -> Void in
                         make.left.equalTo(cell.contentView).offset(15)
                         make.centerY.equalTo(cell.contentView)
                         make.size.equalTo(65)
@@ -188,8 +188,8 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                     staticLbl.textColor = UIColor(white: 0.72, alpha: 1)
                     staticLbl.text = LS("发起一个群聊")
                     cell.contentView.addSubview(staticLbl)
-                    staticLbl.snp_makeConstraints(closure: { (make) -> Void in
-                        make.left.equalTo(startGroupChatBtn!.snp_right).offset(15)
+                    staticLbl.snp.makeConstraints({ (make) -> Void in
+                        make.left.equalTo(startGroupChatBtn!.snp.right).offset(15)
                         make.centerY.equalTo(startGroupChatBtn!)
                     })
                 }
@@ -226,7 +226,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                     startChat?.setImage(UIImage(named: "chat_setting_start_chat"), for: UIControlState())
                     startChat?.addTarget(self, action: #selector(startChatBtnPressed), for: .touchUpInside)
                     cell.contentView.addSubview(startChat!)
-                    startChat?.snp_makeConstraints(closure: { (make) -> Void in
+                    startChat?.snp.makeConstraints({ (make) -> Void in
                         make.centerX.equalTo(cell.contentView)
                         make.top.equalTo(cell.contentView).offset(15)
                         make.size.equalTo(CGSize(width: 150, height: 50))
@@ -358,7 +358,7 @@ extension PrivateChatSettingController {
         var users = users
         self.dismiss(animated: true, completion: nil)
         if userSelectPurpose == "group_chat" {
-            if users.findIndex({ $0.ssid == self.user.ssid}) == nil {
+            if users.findIndex(callback: { $0.ssid == self.user.ssid}) == nil {
                 users.insert(user, at: 0)
             }
             if users.count <= 1 {
@@ -372,7 +372,7 @@ extension PrivateChatSettingController {
     }
     
     func groupChatSetupControllerDidSuccessCreatingClub(_ newClub: Club) {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
         let chatRoom = ChatRoomController()
         chatRoom.chatCreated = false
         chatRoom.targetClub = newClub
@@ -395,6 +395,6 @@ extension PrivateChatSettingController {
     }
     
     func startChatBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
 }

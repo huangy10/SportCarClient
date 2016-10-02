@@ -52,6 +52,15 @@ class UniversalAudioPlayer: NSObject, AVAudioPlayerDelegate {
     
     var playProccessListener: Timer?
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    override init() {
+        super.init()
+        // TODO: Add observer to monitor the audio interruption
+    }
+    
     func play(_ audioURL: URL, newDelegate: UniversalAudioPlayerDelegate) {
         self.audioURL = audioURL
         delegate = newDelegate
@@ -87,14 +96,14 @@ class UniversalAudioPlayer: NSObject, AVAudioPlayerDelegate {
         }
     }
     
-    func audioPlayerBeginInterruption(_ player: AVAudioPlayer) {
-        // 当播放被打断时视为播放成功
-        self.player?.pause()
-    }
-    
-    func audioPlayerEndInterruption(_ player: AVAudioPlayer) {
-        self.player?.play()
-    }
+//    func audioPlayerBeginInterruption(_ player: AVAudioPlayer) {
+//        // 当播放被打断时视为播放成功
+//        self.player?.pause()
+//    }
+//    
+//    func audioPlayerEndInterruption(_ player: AVAudioPlayer) {
+//        self.player?.play()
+//    }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         playProccessListener?.invalidate()

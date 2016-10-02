@@ -66,38 +66,23 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
     */
     var commentImage: UIImage?
     
-    
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    convenience init() {
-        self.init(nibName: nil, bundle: nil)
-        self.createSubviews()
-    }
-    
     override func createSubviews() {
         super.createSubviews()
         //
-        let superview = self.view
-        superview?.backgroundColor = UIColor.black
+        let superview = self.view!
+        superview.backgroundColor = UIColor.black
         //
         blurBG = UIImageView()
-        superview?.addSubview(blurBG!)
-        blurBG?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(blurBG!)
+        blurBG?.snp.makeConstraints({ (make) -> Void in
             make.edges.equalTo(superview);
         })
         //
         cancelBtn = UIButton()
         cancelBtn?.setImage(UIImage(named: "news_comment_cancel_btn"), for: UIControlState())
         cancelBtn?.addTarget(self, action: #selector(MakeCommentController.commentCancelled), for: .touchUpInside)
-        superview?.addSubview(cancelBtn!)
-        cancelBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(cancelBtn!)
+        cancelBtn?.snp.makeConstraints({ (make) -> Void in
             make.size.equalTo(21)
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(35)
@@ -105,12 +90,12 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         //
         sepLine = UIView()
         sepLine?.backgroundColor = UIColor.white
-        superview?.addSubview(sepLine!)
-        sepLine?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(sepLine!)
+        sepLine?.snp.makeConstraints({ (make) -> Void in
             make.height.equalTo(0.5)
             make.width.equalTo(superview).multipliedBy(0.6)
             make.centerX.equalTo(superview)
-            make.top.equalTo(cancelBtn!.snp_bottom).offset(48)
+            make.top.equalTo(cancelBtn!.snp.bottom).offset(48)
         })
         //
         confirmBtn = UIButton()
@@ -120,28 +105,28 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         confirmBtn?.titleLabel?.textAlignment = .center
         confirmBtn?.layer.borderColor = UIColor(red: 1, green: 0.29, blue: 0.30, alpha: 1).cgColor
         confirmBtn?.layer.borderWidth = 1.5
-        superview?.addSubview(confirmBtn!)
-        confirmBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(confirmBtn!)
+        confirmBtn?.snp.makeConstraints({ (make) -> Void in
             make.size.equalTo(CGSize(width: 105, height: 50))
             make.centerX.equalTo(superview)
-            make.top.equalTo(sepLine!.snp_bottom).offset(33)
+            make.top.equalTo(sepLine!.snp.bottom).offset(33)
         })
         confirmBtn?.addTarget(self, action: #selector(MakeCommentController.commentConfirmed), for: .touchUpInside)
         //
         opPanel = UIView()
         opPanel?.backgroundColor = UIColor(white: 0.92, alpha: 1)
-        superview?.addSubview(opPanel!)
-        opPanel?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(opPanel!)
+        opPanel?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.top.equalTo(confirmBtn!.snp_bottom).offset(40)
+            make.top.equalTo(confirmBtn!.snp.bottom).offset(40)
             make.bottom.equalTo(superview)
         })
         //
         let inputContainer = UIView()
         inputContainer.backgroundColor = UIColor.white
         opPanel?.addSubview(inputContainer)
-        inputContainer.snp_makeConstraints { (make) -> Void in
+        inputContainer.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.left.equalTo(superview).offset(15)
             make.top.equalTo(opPanel!).offset(10)
@@ -155,7 +140,7 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         wordCount?.textAlignment = .right
         wordCount?.text = "0/\(maxWordLimit)"
         inputContainer.addSubview(wordCount!)
-        wordCount?.snp_makeConstraints(closure: { (make) -> Void in
+        wordCount?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(inputContainer).inset(8)
             make.bottom.equalTo(inputContainer).inset(5)
         })
@@ -164,19 +149,19 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         self.inputFields.append(input)
         input?.delegate = self
         inputContainer.addSubview(input!)
-        input?.snp_makeConstraints(closure: { (make) -> Void in
+        input?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(inputContainer).inset(25)
             make.left.equalTo(inputContainer).inset(25)
             make.top.equalTo(inputContainer).inset(11)
-            make.bottom.equalTo(wordCount!.snp_top)
+            make.bottom.equalTo(wordCount!.snp.top)
         })
         //
         attachImageBtn = UIButton()
         attachImageBtn?.setImage(UIImage(named: "news_comment_attach_image"), for: UIControlState())
         opPanel?.addSubview(attachImageBtn!)
-        attachImageBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        attachImageBtn?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(inputContainer)
-            make.top.equalTo(inputContainer.snp_bottom).offset(9)
+            make.top.equalTo(inputContainer.snp.bottom).offset(9)
             make.size.equalTo(CGSize(width: 75, height: 43))
         })
         attachImageBtn?.addTarget(self, action: #selector(MakeCommentController.attachImageBtnPressed), for: .touchUpInside)

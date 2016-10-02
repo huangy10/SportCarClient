@@ -47,8 +47,8 @@ extension ProgressProtocol where Self: UIViewController {
     }
     
     func pp_layoutProgressView() {
-        let superview = self.view
-        pp_progressView?.snp_makeConstraints(closure: { (make) -> Void in
+        let superview = self.view!
+        pp_progressView?.snp.makeConstraints({ (make) -> Void in
             make.top.equalTo(superview)
             make.right.equalTo(superview)
             make.left.equalTo(superview)

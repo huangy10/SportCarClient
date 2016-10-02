@@ -39,7 +39,7 @@ class StatusHotController: UICollectionViewController {
     // MARK: Data Fetching
     func loadMoreStatusData(_ limit: Int = 12) {
         let threshold = status.last?.createdAt ?? Date()
-        StatusRequester.sharedInstance.getMoreStatusList(threshold, queryType: "hot", onSuccess: { (json) -> () in
+        _ = StatusRequester.sharedInstance.getMoreStatusList(threshold, queryType: "hot", onSuccess: { (json) -> () in
             if self.jsonDataHandler(json!) > 0 {
                 self.collectionView?.reloadData()
             }
@@ -49,7 +49,7 @@ class StatusHotController: UICollectionViewController {
     
     func loadLatestStatusData() {
         let threshold = status.first?.createdAt ?? Date()
-        StatusRequester.sharedInstance.getLatestStatusList(threshold, queryType: "hot", onSuccess: { (json) -> () in
+        _ = StatusRequester.sharedInstance.getLatestStatusList(threshold, queryType: "hot", onSuccess: { (json) -> () in
             if self.jsonDataHandler(json!) > 0 {
                 self.collectionView?.reloadData()
             }
@@ -118,7 +118,7 @@ class StatusHotController: UICollectionViewController {
 class StatusHotCell: UICollectionViewCell {
     var status: Status! {
         didSet {
-            cover.kf_setImageWithURL(status.coverURL!)
+            cover.kf.setImage(with: status.coverURL!)
         }
     }
     
@@ -139,7 +139,7 @@ class StatusHotCell: UICollectionViewCell {
         superview.addSubview(cover)
         cover.contentMode = .scaleAspectFill
         cover.clipsToBounds = true
-        cover.snp_makeConstraints { (make) -> Void in
+        cover.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
     }

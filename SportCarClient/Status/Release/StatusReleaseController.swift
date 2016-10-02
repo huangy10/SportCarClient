@@ -14,7 +14,7 @@ import Dollar
 import Kingfisher
 
 
-class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate, BMKGeoCodeSearchDelegate, ProgressProtocol, PresentableProtocol, LocationSelectDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKGeoCodeSearchDelegate, ProgressProtocol, PresentableProtocol, LocationSelectDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     /*
     ================================================================================================ 子控件
     */
@@ -48,14 +48,6 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
     var annotation: BMKPointAnnotation!
     
     var requesting = false
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -94,13 +86,13 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         super.createSubviews()
         navSettings()
         self.view.backgroundColor = UIColor.white
-        let superview = self.view
+        let superview = self.view!
         //
         board = UIScrollView()
         board?.backgroundColor = UIColor.white
         board?.contentSize = self.view.bounds.size
-        superview?.addSubview(board!)
-        board?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(board!)
+        board?.snp.makeConstraints({ (make) -> Void in
             make.bottom.equalTo(superview).offset(0)
             make.right.equalTo(superview)
             make.left.equalTo(superview)
@@ -110,7 +102,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         addImageBtn.setImage(UIImage(named: "status_add_image"), for: UIControlState())
         addImageBtn.addTarget(self, action: #selector(StatusReleaseController.addImageBtnPressed), for: .touchUpInside)
         board?.addSubview(addImageBtn)
-        addImageBtn.snp_makeConstraints { (make) -> Void in
+        addImageBtn.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.top.equalTo(board!).offset(20)
             make.size.equalTo(100)
@@ -123,10 +115,10 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         statusContentInput?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
         statusContentInput?.textColor = UIColor(white: 0.72, alpha: 1)
         board?.addSubview(statusContentInput!)
-        statusContentInput?.snp_makeConstraints(closure: { (make) -> Void in
+        statusContentInput?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.right.equalTo(superview).offset(-15)
-            make.top.equalTo(addImageBtn.snp_bottom).offset(15)
+            make.top.equalTo(addImageBtn.snp.bottom).offset(15)
             make.height.equalTo(120)
         })
         // 状态内容的字数统计
@@ -136,9 +128,9 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         statusContentWordCountLbl?.textAlignment = .right
         statusContentWordCountLbl?.text = "0/140"
         board?.addSubview(statusContentWordCountLbl!)
-        statusContentWordCountLbl?.snp_makeConstraints(closure: { (make) -> Void in
+        statusContentWordCountLbl?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview).offset(-15)
-            make.top.equalTo(statusContentInput!.snp_bottom).offset(10)
+            make.top.equalTo(statusContentInput!.snp.bottom).offset(10)
             make.height.equalTo(17)
         })
         //
@@ -155,8 +147,8 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         }
         let informOfListView = informOfList?.view
         board?.addSubview(informOfListView!)
-        informOfListView?.snp_makeConstraints(closure: { (make) -> Void in
-            make.top.equalTo(statusContentWordCountLbl!.snp_bottom).offset(3)
+        informOfListView?.snp.makeConstraints({ (make) -> Void in
+            make.top.equalTo(statusContentWordCountLbl!.snp.bottom).offset(3)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.height.equalTo(35)
@@ -168,7 +160,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         informOfListCountLbl?.textAlignment = .right
         informOfListCountLbl?.text = "0/9"
         board?.addSubview(informOfListCountLbl!)
-        informOfListCountLbl?.snp_makeConstraints(closure: { (make) -> Void in
+        informOfListCountLbl?.snp.makeConstraints({ (make) -> Void in
             make.centerY.equalTo(informOfListView!)
             make.right.equalTo(superview).offset(-15)
             make.height.equalTo(17)
@@ -177,8 +169,8 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         sportCarList = SportCarSelectListController()
         let sportCarListView = sportCarList!.view
         board?.addSubview(sportCarListView!)
-        sportCarListView.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(informOfListView!.snp_bottom).offset(7)
+        sportCarListView?.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(informOfListView!.snp.bottom).offset(7)
             make.right.equalTo(superview)
             make.left.equalTo(superview)
             make.height.equalTo(60)
@@ -186,14 +178,14 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
         //
         mapView = BMKMapView()
         board?.addSubview(mapView!)
-        mapView?.snp_makeConstraints(closure: { (make) -> Void in
+        mapView?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview)
-            make.top.equalTo(sportCarListView.snp_bottom)
+            make.top.equalTo(sportCarListView!.snp.bottom)
             make.left.equalTo(superview)
             make.height.equalTo(650)
         })
         //
-        let locDesContainer = board!.addSubview(UIView).config(UIColor.white)
+        let locDesContainer = board!.addSubview(UIView.self).config(UIColor.white)
             .addShadow()
             .layout { (make) in
                 make.centerX.equalTo(superview)
@@ -201,7 +193,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
                 make.width.equalTo(superview).multipliedBy(0.776)
                 make.top.equalTo(mapView!).offset(22)
         }
-        let locDesIcon = locDesContainer.addSubview(UIImageView)
+        let locDesIcon = locDesContainer.addSubview(UIImageView.self)
             .config(UIImage(named: "news_comment_icon"))
             .layout { (make) in
                 make.size.equalTo(15)
@@ -209,9 +201,9 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
                 make.centerY.equalTo(locDesContainer)
         }
         //
-        locInput = locDesContainer.addSubview(UITextField).config(14)
+        locInput = locDesContainer.addSubview(UITextField.self).config(14)
             .layout({ (make) in
-                make.left.equalTo(locDesIcon.snp_right).offset(25)
+                make.left.equalTo(locDesIcon.snp.right).offset(25)
                 make.height.equalTo(locDesIcon)
                 make.centerY.equalTo(locDesContainer)
                 make.right.equalTo(locDesContainer).offset(-20)
@@ -292,7 +284,8 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKMap
             // send notificaiton to inform the presence of new status
             let status = try! MainManager.sharedManager.getOrCreate(json!) as Status
             // 将图片存入缓存：注意Key应当是包含了域名等部分的完整URL
-            KingfisherManager.sharedManager.cache.storeImage(self.selectedImage!, forKey: SF(status.image!)!)
+//            KingfisherManager.sharedManager.cache.storeImage(self.selectedImage!, forKey: SF(status.image!)!)
+            KingfisherManager.shared.cache.store(self.selectedImage!, forKey: status.coverURL!)
             /*
              注意这里发布Notification，主要是为了让『我的』页面中的动态列表及时进行更新，而『动态』中的列表不会接收这个Notification。
              */
@@ -384,7 +377,7 @@ extension StatusReleaseController {
 
 
 // MARK: - About map
-extension StatusReleaseController {
+extension StatusReleaseController: BMKMapViewDelegate, BMKLocationServiceDelegate {
     
     func didUpdate(_ userLocation: BMKUserLocation!) {
         locationService?.stopUserLocationService()
@@ -486,14 +479,14 @@ extension StatusReleaseController {
     
     func changeLayoutWhenKeyboardAppears(_ notif: Foundation.Notification) {
         let userInfo = (notif as NSNotification).userInfo!
-        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue
+        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue!
         if !locInput!.isEditing {
-            if statusContentInput!.frame.origin.y < (keyboardFrame?.height)! {
+            if statusContentInput!.frame.origin.y < (keyboardFrame.height) {
                 return
             }
         }
 
-            board?.snp_updateConstraints(closure: { (make) -> Void in
+            board?.snp.updateConstraints({ (make) -> Void in
                 make.bottom.equalTo(self.view).offset(-(keyboardFrame.height))
             })
 //        }
@@ -501,7 +494,7 @@ extension StatusReleaseController {
     }
     
     func changeLayoutWhenKeyboardDisappears(_ notif: Foundation.Notification) {
-        board?.snp_updateConstraints(closure: { (make) -> Void in
+        board?.snp.updateConstraints({ (make) -> Void in
             make.bottom.equalTo(self.view).offset(0)
         })
         self.view.layoutIfNeeded()

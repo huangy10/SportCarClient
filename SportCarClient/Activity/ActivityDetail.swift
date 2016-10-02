@@ -31,7 +31,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     var needReloadActInfo: Bool = false
     
     init(act: Activity) {
-        super.init(nibName: nil, bundle: nil)
+        super.init()
         self.act = act
     }
     
@@ -103,8 +103,8 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         infoView.likeBtn.addTarget(self, action: #selector(likeBtnPressed), for: .touchUpInside)
         infoView.parentController = self
         tableView.addSubview(infoView)
-        infoView.snp_makeConstraints { (make) in
-            make.bottom.equalTo(tableView.snp_top)
+        infoView.snp.makeConstraints { (make) in
+            make.bottom.equalTo(tableView.snp.top)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.height.equalTo(infoView.preferedHeight)
@@ -116,7 +116,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         superview.addSubview(commentPanel)
         commentPanel.likeBtn?.addTarget(self, action: #selector(likeBtnPressed), for: .touchUpInside)
         commentPanel.setLikedAnimated(act.liked, flag: false)
-        commentPanel.snp_makeConstraints { (make) in
+        commentPanel.snp.makeConstraints { (make) in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.bottom.equalTo(superview)
@@ -162,7 +162,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     }
     
     func navLeftBtnPressed() {
-        navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
@@ -217,10 +217,10 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         
         lp_start()
         
-        ActivityRequester.sharedInstance.postToApplyActivty(act.ssidString, onSuccess: { (json) in
+        _ = ActivityRequester.sharedInstance.postToApplyActivty(act.ssidString, onSuccess: { (json) in
             self.showToast(LS("报名成功"))
-            self.act.hostApply()
-            self.infoView.loadDataAndUpdateUI()
+            _ = self.act.hostApply()
+            _ = self.infoView.loadDataAndUpdateUI()
             self.setNavRightBtn()
             self.lp_stop()
             }) { (code) in
@@ -244,7 +244,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             act.endAt = Foundation.Date()
             setNavRightBtn()
             lp_start()
-            ActivityRequester.sharedInstance.closeActivty(act.ssidString, onSuccess: { (json) in
+            _ = ActivityRequester.sharedInstance.closeActivty(act.ssidString, onSuccess: { (json) in
                 self.lp_stop()
                 self.parentCollectionView?.reloadData()
                 NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kActivityManualEndedNotification), object: nil, userInfo: [kActivityKey: self.act])
@@ -258,7 +258,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     func likeBtnPressed() {
         lp_start()
-        ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: "", opType: "like", onSuccess: { (json) in
+        _ = ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: "", opType: "like", onSuccess: { (json) in
             self.lp_stop()
             if let data = json {
                 let liked = data["liked"].boolValue
@@ -360,14 +360,14 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         if showLoading {
             lp_start()
         }
-        ActivityRequester.sharedInstance.getActivityDetail(act.ssidString, onSuccess: { (json) in
+        _ = ActivityRequester.sharedInstance.getActivityDetail(act.ssidString, onSuccess: { (json) in
             if let data = json {
-                try! self.act.loadDataFromJSON(data, detailLevel: 1)
+                _ = try! self.act.loadDataFromJSON(data, detailLevel: 1)
                 self.infoView.act = self.act
                 
                 DispatchQueue.main.async(execute: {
                     self.setNavRightBtn()
-                    self.infoView.loadDataAndUpdateUI() // the preferedHeight udpated
+                    _ = self.infoView.loadDataAndUpdateUI() // the preferedHeight udpated
                     self.commentPanel.setLikedAnimated(self.act.liked, flag: false)
                     self.tableView.contentOffset = CGPoint(x: 0, y: -self.infoView.preferedHeight)
                     self.tableView.contentInset = UIEdgeInsetsMake(self.infoView.preferedHeight, 0, self.commentPanel.barheight, 0)
@@ -389,7 +389,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     func loadMoreComments() {
         let dateThreshold = comments.last?.createdAt ?? Foundation.Date()
-        ActivityRequester.sharedInstance.getActivityComments(act.ssidString, dateThreshold: dateThreshold, limit: 20, onSuccess: { (json) in
+        _ = ActivityRequester.sharedInstance.getActivityComments(act.ssidString, dateThreshold: dateThreshold, limit: 20, onSuccess: { (json) in
             if let datas = json?.arrayValue {
                 for data in datas {
                     let comment = try! ActivityComment(act: self.act)
@@ -429,7 +429,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
         tableView.endUpdates()
         commentPanel.contentInput?.text = ""
-        commentPanel.snp_updateConstraints { (make) in
+        commentPanel.snp.updateConstraints { (make) in
             make.height.equalTo(commentPanel.barheight)
         }
         
@@ -437,7 +437,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         ActivityRequester.sharedInstance.sendActivityComment(act.ssidString, content: content, responseTo: responseToComment?.ssidString, informOf: nil, onSuccess: { (json) in
             if let data = json {
                 let newCommentID = data["id"].int32Value
-                newComment.confirmSent(newCommentID)
+                _ = newComment.confirmSent(newCommentID)
                 // update the comment number
                 let commentNum = data["comment_num"].int32Value
                 self.act.commentNum = commentNum
@@ -456,7 +456,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     func textViewDidChange(_ textView: UITextView) {
         let fixedWidth = textView.bounds.width
         let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-        commentPanel.snp_updateConstraints { (make) in
+        commentPanel.snp.updateConstraints { (make) in
             make.height.equalTo(max(newSize.height, commentPanel.barheight))
         }
         self.view.layoutIfNeeded()
@@ -497,7 +497,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         let userIDData = try! JSON(userIDs).rawData()
         let userJSONString = String(data: userIDData, encoding: String.Encoding.utf8)
         self.lp_start()
-        ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: userJSONString!, opType: "invite", onSuccess: { (json) in
+        _ = ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: userJSONString!, opType: "invite", onSuccess: { (json) in
             self.showToast(LS("邀请已发送"))
             self.lp_stop()
             }) { (code) in
@@ -566,7 +566,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
                 inset.bottom += keyboardFrame.height
                 tableView.contentInset = inset
                 tableView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
-                commentPanel.snp_remakeConstraints(closure: { (make) in
+                commentPanel.snp.remakeConstraints({ (make) in
                     make.left.equalTo(self.view)
                     make.right.equalTo(self.view)
                     make.bottom.equalTo(self.view).offset(-keyboardFrame.height)
@@ -581,7 +581,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         var inset = tableView.contentInset
         inset.bottom = commentPanel.barheight
         tableView.contentInset = inset
-        commentPanel.snp_remakeConstraints(closure: { (make) in
+        commentPanel.snp.remakeConstraints({ (make) in
             make.left.equalTo(self.view)
             make.right.equalTo(self.view)
             make.bottom.equalTo(self.view)

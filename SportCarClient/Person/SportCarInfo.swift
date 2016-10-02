@@ -57,19 +57,19 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
 //        carCover.contentMode = .ScaleAspectFill
 //        carCover.clipsToBounds = true
 //        superview.addSubview(carCover)
-//        carCover.snp_makeConstraints { (make) -> Void in
+//        carCover.snp.makeConstraints { (make) -> Void in
 //            make.left.equalTo(superview)
 //            make.right.equalTo(superview)
 //            make.top.equalTo(superview)
-//            make.height.equalTo(carCover.snp_width).multipliedBy(0.588)
+//            make.height.equalTo(carCover.snp.width).multipliedBy(0.588)
 //        }
         carGallary = SportCarGallary(dataSource: self)
         superview.addSubview(carGallary)
-        carGallary.snp_makeConstraints { (make) in
+        carGallary.snp.makeConstraints { (make) in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.top.equalTo(superview)
-            make.height.equalTo(carGallary.snp_width).multipliedBy(0.588)
+            make.height.equalTo(carGallary.snp.width).multipliedBy(0.588)
         }
         //
         carNameLbl = UILabel()
@@ -77,16 +77,16 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         carNameLbl.textColor = UIColor.black
         carNameLbl.numberOfLines = 0
         superview.addSubview(carNameLbl)
-        carNameLbl.snp_makeConstraints { (make) -> Void in
+        carNameLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(20)
-            make.top.equalTo(carGallary.snp_bottom).offset(15)
+            make.top.equalTo(carGallary.snp.bottom).offset(15)
             make.width.equalTo(superview).multipliedBy(0.55)
         }
         //
         carAuthIcon = UIImageView()
         superview.addSubview(carAuthIcon)
-        carAuthIcon.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(carNameLbl.snp_right).offset(5)
+        carAuthIcon.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(carNameLbl.snp.right).offset(5)
             make.top.equalTo(carNameLbl).offset(5)
             make.size.equalTo(CGSize(width: 44, height: 18.5))
         }
@@ -97,7 +97,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         carEditBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         carEditBtn.addTarget(self, action: #selector(carEditBtnPressed), for: .touchUpInside)
         superview.addSubview(carEditBtn)
-        carEditBtn.snp_makeConstraints { (make) -> Void in
+        carEditBtn.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(carAuthIcon)
             make.size.equalTo(CGSize(width: 56, height: 32))
@@ -107,8 +107,8 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
 //        let sepLine = UIView()
 //        sepLine.backgroundColor = sepLineBackgroundColor
 //        superview.addSubview(sepLine)
-//        sepLine.snp_makeConstraints { (make) -> Void in
-//            make.top.equalTo(carNameLbl.snp_bottom).offset(12.5)
+//        sepLine.snp.makeConstraints { (make) -> Void in
+//            make.top.equalTo(carNameLbl.snp.bottom).offset(12.5)
 //            make.left.equalTo(carNameLbl)
 //            make.width.equalTo(carNameLbl)
 //            make.height.equalTo(0.5)
@@ -118,13 +118,13 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
             .config(14, textColor: UIColor(white: 0, alpha: 0.58), multiLine: true)
             .layout({ (make) in
                 make.left.equalTo(superview).offset(20)
-                make.top.equalTo(carNameLbl.snp_bottom).offset(20)
+                make.top.equalTo(carNameLbl.snp.bottom).offset(20)
                 make.width.equalTo(carNameLbl)
             })
         carAudioWave = CarWaveView()
         superview.addSubview(carAudioWave!)
-        carAudioWave!.snp_makeConstraints(closure: { (make) in
-            make.top.equalTo(carSignatureLbl.snp_bottom).offset(22.5)
+        carAudioWave!.snp.makeConstraints({ (make) in
+            make.top.equalTo(carSignatureLbl.snp.bottom).offset(22.5)
             make.left.equalTo(carSignatureLbl)
             make.size.equalTo(CGSize(width: 270, height: 50))
         })
@@ -134,7 +134,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
             .layout({ (make) in
                 make.left.equalTo(superview)
                 make.right.equalTo(superview)
-                make.top.equalTo(carSignatureLbl.snp_bottom).offset(22.5)
+                make.top.equalTo(carSignatureLbl.snp.bottom).offset(22.5)
                 make.height.equalTo(250)
             })
 
@@ -142,37 +142,37 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         let staticCarPriceLbl = getCarParamStaticLabel()
         carParamBoard.addSubview(staticCarPriceLbl)
         staticCarPriceLbl.text = LS("型号")
-        staticCarPriceLbl.snp_makeConstraints { (make) -> Void in
+        staticCarPriceLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(carParamBoard).offset(20)
             make.top.equalTo(carParamBoard).offset(20)
         }
         //
         carSubname = getCarParamContentLbl()
         carParamBoard.addSubview(carSubname)
-        carSubname.snp_makeConstraints { (make) -> Void in
+        carSubname.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(staticCarPriceLbl)
-            make.top.equalTo(staticCarPriceLbl.snp_bottom)
+            make.top.equalTo(staticCarPriceLbl.snp.bottom)
         }
         //
         let staticCarEngineLbl = getCarParamStaticLabel()
         carParamBoard.addSubview(staticCarEngineLbl)
         staticCarEngineLbl.text = LS("发动机")
-        staticCarEngineLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(superview.snp_centerX).offset(20)
+        staticCarEngineLbl.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(superview.snp.centerX).offset(20)
             make.top.equalTo(carParamBoard).offset(20)
         }
         //
         carEngine = getCarParamContentLbl()
         carParamBoard.addSubview(carEngine)
-        carEngine.snp_makeConstraints { (make) -> Void in
+        carEngine.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(staticCarEngineLbl)
-            make.top.equalTo(staticCarEngineLbl.snp_bottom)
+            make.top.equalTo(staticCarEngineLbl.snp.bottom)
         }
         //
         let sepLine2 = UIView()
         sepLine2.backgroundColor = sepLineBackgroundColor
         carParamBoard.addSubview(sepLine2)
-        sepLine2.snp_makeConstraints { (make) -> Void in
+        sepLine2.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(carParamBoard).offset(84)
             make.left.equalTo(carParamBoard)
             make.right.equalTo(carParamBoard)
@@ -182,37 +182,37 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         let staticTransLbl = getCarParamStaticLabel()
         staticTransLbl.text = LS("价格")
         carParamBoard.addSubview(staticTransLbl)
-        staticTransLbl.snp_makeConstraints { (make) -> Void in
+        staticTransLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(carParamBoard).offset(20)
             make.top.equalTo(sepLine2).offset(20)
         }
         //
         carPrice = getCarParamContentLbl()
         carParamBoard.addSubview(carPrice)
-        carPrice.snp_makeConstraints { (make) -> Void in
+        carPrice.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(staticTransLbl)
-            make.top.equalTo(staticTransLbl.snp_bottom)
+            make.top.equalTo(staticTransLbl.snp.bottom)
         }
         //
         let staticCarBody = getCarParamStaticLabel()
         staticCarBody.text = LS("车身结构")
         carParamBoard.addSubview(staticCarBody)
-        staticCarBody.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(carParamBoard.snp_centerX).offset(20)
+        staticCarBody.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(carParamBoard.snp.centerX).offset(20)
             make.top.equalTo(sepLine2).offset(20)
         }
         //
         carBody = getCarParamContentLbl()
         carParamBoard.addSubview(carBody)
-        carBody.snp_makeConstraints { (make) -> Void in
+        carBody.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(staticCarBody)
-            make.top.equalTo(staticCarBody.snp_bottom)
+            make.top.equalTo(staticCarBody.snp.bottom)
         }
         //
         let sepLine3 = UIView()
         sepLine3.backgroundColor = sepLineBackgroundColor
         carParamBoard.addSubview(sepLine3)
-        sepLine3.snp_makeConstraints { (make) -> Void in
+        sepLine3.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(carParamBoard)
             make.right.equalTo(carParamBoard)
             make.top.equalTo(sepLine2).offset(82)
@@ -222,41 +222,41 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         let staticCarSpeed = getCarParamStaticLabel()
         staticCarSpeed.text = LS("最高车速")
         carParamBoard.addSubview(staticCarSpeed)
-        staticCarSpeed.snp_makeConstraints { (make) -> Void in
+        staticCarSpeed.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(carParamBoard).offset(20)
             make.top.equalTo(sepLine3).offset(20)
         }
         //
         carSpeed = getCarParamContentLbl()
         carParamBoard.addSubview(carSpeed)
-        carSpeed.snp_makeConstraints { (make) -> Void in
+        carSpeed.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(staticCarSpeed)
-            make.top.equalTo(staticCarSpeed.snp_bottom)
+            make.top.equalTo(staticCarSpeed.snp.bottom)
         }
         //
         let staticCarAcce = getCarParamStaticLabel()
         staticCarAcce.text = LS("百公里加速")
         carParamBoard.addSubview(staticCarAcce)
-        staticCarAcce.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(carParamBoard.snp_centerX).offset(20)
+        staticCarAcce.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(carParamBoard.snp.centerX).offset(20)
             make.top.equalTo(sepLine3).offset(20)
         }
         // 
         carAcce = getCarParamContentLbl()
         carParamBoard.addSubview(carAcce)
-        carAcce.snp_makeConstraints { (make) -> Void in
+        carAcce.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(staticCarAcce)
-            make.top.equalTo(staticCarAcce.snp_bottom)
+            make.top.equalTo(staticCarAcce.snp.bottom)
         }
     }
     
     func showAudioWave() {
         let superview = self.contentView
         carAudioWave?.isHidden = false
-        carParamBoard.snp_remakeConstraints { (make) in
+        carParamBoard.snp.remakeConstraints { (make) in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.top.equalTo(carAudioWave!.snp_bottom).offset(22.5)
+            make.top.equalTo(carAudioWave!.snp.bottom).offset(22.5)
             make.height.equalTo(250)
         }
         superview.layoutIfNeeded()
@@ -265,10 +265,10 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     func hideAudioWave() {
         let superview = self.contentView
         carAudioWave?.isHidden = true
-        carParamBoard.snp_remakeConstraints { (make) in
+        carParamBoard.snp.remakeConstraints { (make) in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.top.equalTo(carSignatureLbl.snp_bottom).offset(22.5)
+            make.top.equalTo(carSignatureLbl.snp.bottom).offset(22.5)
             make.height.equalTo(250)
         }
     }
@@ -356,7 +356,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         let imageNum = car.imageArray.count
         if pageNum < imageNum {
             let image = car.imageArray[pageNum]
-            return SportCargallaryItem(itemType: "image", resource: image.absoluteString!)
+            return SportCargallaryItem(itemType: "image", resource: image.absoluteString)
         } else {
             return SportCargallaryItem(itemType: "video", resource: car.video!)
         }
@@ -401,7 +401,7 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     }
     
     func configPlayBtn() {
-        playBtn = addSubview(UIButton)
+        playBtn = addSubview(UIButton.self)
             .config(self, selector: #selector(playBtnPressed(_:)), image: UIImage(named: "chat_voice_play"), contentMode: .scaleAspectFit)
             .layout({ (make) in
                 make.left.equalTo(self).offset(15)
@@ -412,8 +412,8 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     }
     
     func configProcessView() {
-        processView = addSubview(WideProcessView).layout({ (make) in
-            make.left.equalTo(playBtn.snp_right).offset(15)
+        processView = addSubview(WideProcessView.self).layout({ (make) in
+            make.left.equalTo(playBtn.snp.right).offset(15)
             make.height.equalTo(self)
             make.centerY.equalTo(self)
             make.width.equalTo(167)
@@ -430,10 +430,10 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     }
     
     func configRemainingTimeLbl() {
-        remainingTimeLbl = addSubview(UILabel).config(10, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0.58, alpha: 1), textAlignment: .left, text: "--:--")
+        remainingTimeLbl = addSubview(UILabel.self).config(10, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0.58, alpha: 1), textAlignment: .left, text: "--:--")
             .layout({ (make) in
                 make.centerY.equalTo(self)
-                make.left.equalTo(processView.snp_right).offset(10)
+                make.left.equalTo(processView.snp.right).offset(10)
             })
     }
     
@@ -477,14 +477,14 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
         controller.preferredContentSize = CGSize(width: 100, height: 44)
         let player = UniversalAudioPlayer.sharedPlayer
         if player.isOnSpeaker() {
-            let btn = controller.view.addSubview(UIButton)
+            let btn = controller.view.addSubview(UIButton.self)
                 .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("听筒播放"), titleColor: UIColor.white, titleSize: 14, titleWeight: UIFontWeightRegular)
                 .layout({ (make) in
                     make.edges.equalTo(controller.view)
                 })
             btn.tag = 0
         } else {
-            let btn = controller.view.addSubview(UIButton)
+            let btn = controller.view.addSubview(UIButton.self)
                 .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("扬声器播放"), titleColor: UIColor.white, titleSize: 14, titleWeight: UIFontWeightRegular)
                 .layout({ (make) in
                     make.edges.equalTo(controller.view)

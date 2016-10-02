@@ -48,7 +48,7 @@ class ChatModelManger: MainManager {
     
     override init() {
         super.init()
-        chatContext = DataContext(parentDataContext: mainContext)
+        chatContext = DataContext(parent: mainContext)
     }
     
     override func getOperationContext() -> DataContext {
@@ -69,13 +69,13 @@ class ChatModelManger: MainManager {
         let chats: [ChatRecord] = context.chatRecords.filter({
             $0.hostSSID == self.hostUserID! &&
             $0.rosterID == rosterID
-        }).orderByDescending({$0.createdAt})
+        }).orderBy(ascending: false, orderingClosure: { $0.createdAt })
             .skip(skips)
             .take(limit)
             .toArray()
             .reversed()
-        chats.each { $0.manager = self }
-        return chats
+        return chats.each { $0.manager = self }
+//        return chats
     }
     /**
      返回的notifs按照createdAt降序排列
@@ -89,12 +89,11 @@ class ChatModelManger: MainManager {
         let context = self.getOperationContext()
         let notifs: [Notification] = context.notifications.filter({
             $0.hostSSID == self.hostUserID!
-        }).orderByDescending({$0.createdAt})
+        }).orderBy(ascending: false, orderingClosure: { $0.createdAt })
             .skip(skips)
             .take(limit)
             .toArray()
-        notifs.each { $0.manager = self }
-        return notifs
+        return notifs.each { $0.manager = self }
     }
     
     override func save() throws {

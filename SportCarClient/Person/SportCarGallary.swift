@@ -108,7 +108,7 @@ class SportCarGallary: UIView, UIScrollViewDelegate, UICollectionViewDataSource,
         let item = dataSource.itemForPage((indexPath as NSIndexPath).row)
         if item.itemType == "image" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "image", for: indexPath) as! SportCarGallaryImageCell
-            cell.imageView.kf_setImageWithURL(item.resource!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) in
+            cell.imageView.kf.setImage(with: item.resource!, placeholder: nil, options: nil, progressBlock:nil, completionHandler: { (image, _, _, _) in
                 cell.imageView.setupForImageViewer(item.resource!, backgroundColor: UIColor.black, fadeToHide: false)
             })
             return cell
@@ -144,7 +144,7 @@ class SportCarGallaryImageCell: UICollectionViewCell {
     }
     
     func configImageView() {
-        imageView = contentView.addSubview(UIImageView)
+        imageView = contentView.addSubview(UIImageView.self)
             .layout({ (make) in
                 make.edges.equalTo(contentView)
             })
@@ -177,7 +177,7 @@ class SportCarGallaryVideoCell: UICollectionViewCell {
         webPlayer = UIWebView()
         webPlayer.scrollView.isScrollEnabled = false
         contentView.addSubview(webPlayer)
-        webPlayer.snp_makeConstraints { (make) in
+        webPlayer.snp.makeConstraints { (make) in
             make.edges.equalTo(contentView)
         }
         webPlayer.isHidden = true

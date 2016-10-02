@@ -35,7 +35,7 @@ class RadarClubFilterController: UITableViewController {
     
     func getClubList() {
         let requester = ClubRequester.sharedInstance
-        requester.getClubList({ (json) -> () in
+        _ = requester.getClubList({ (json) -> () in
             for data in json!.arrayValue {
                 let club: Club = try! MainManager.sharedManager.getOrCreate(data["club"])
                 self.clubs.append(club)
@@ -89,7 +89,7 @@ class RadarClubFilterHeader: RadarFilterHeader {
         //
         marker = UIImageView(image: UIImage(named: "account_header_back_btn"))
         superview.addSubview(marker)
-        marker.snp_makeConstraints { (make) -> Void in
+        marker.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(superview)
             make.size.equalTo(CGSize(width: 6, height: 13))
             make.left.equalTo(superview).offset(25)
@@ -99,13 +99,13 @@ class RadarClubFilterHeader: RadarFilterHeader {
         titleLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         titleLbl.textColor = UIColor(white: 0, alpha: 0.87)
         superview.addSubview(titleLbl)
-        titleLbl.snp_makeConstraints { (make) -> Void in
+        titleLbl.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(superview)
         }
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0, alpha: 0.12)
         superview.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(10)
             make.right.equalTo(superview).offset(-10)
             make.height.equalTo(1)

@@ -51,6 +51,7 @@ extension UIColor {
 
 extension UIView {
     
+    @discardableResult
     @nonobjc func addSubview<T: UIView>(_ type: T.Type) -> T {
         let subview = type.self.init()
         addSubview(subview)
@@ -61,6 +62,7 @@ extension UIView {
         return subview
     }
     
+    @discardableResult
     @nonobjc func config(
         _ backgroundColor: UIColor = UIColor.white
         ) -> Self {
@@ -68,11 +70,13 @@ extension UIView {
         return self
     }
     
-    @nonobjc func layout(@noescape _ closurer: (ConstraintMaker) -> Void) -> Self {
-        self.snp_makeConstraints(closure: closurer)
+    @discardableResult
+    @nonobjc func layout( _ closurer: (ConstraintMaker) -> Void) -> Self {
+        self.snp.makeConstraints(closurer)
         return self
     }
     
+    @discardableResult
     @nonobjc func addShadow(
         _ blur: CGFloat = 2,
         color: UIColor = UIColor.black,
@@ -86,23 +90,27 @@ extension UIView {
         return self
     }
     
+    @discardableResult
     @nonobjc func setFrame(_ frame: CGRect) -> Self {
         self.frame = frame
         return self
     }
     
+    @discardableResult
     @nonobjc func toRound(_ corner: CGFloat, clipsToBound: Bool = true) -> Self {
         self.layer.cornerRadius = corner
         self.clipsToBounds = clipsToBounds
         return self
     }
     
+    @discardableResult
     @nonobjc func toRound(_ clipsToBounds: Bool = true) -> Self {
         self.layer.cornerRadius = self.frame.width / 2
         self.clipsToBounds = clipsToBounds
         return self
     }
     
+    @discardableResult
     @nonobjc func customize(_ config: (UIView)->Void) -> Self {
         config(self)
         return self
@@ -111,6 +119,8 @@ extension UIView {
 
 
 extension UILabel {
+    
+    @discardableResult
     @nonobjc func config(
         _ fontSize: CGFloat               = 14,
         fontWeight: CGFloat             = UIFontWeightUltraLight,
@@ -131,7 +141,7 @@ extension UILabel {
         return self
     }
     
-    
+    @discardableResult
     @nonobjc func styleCopy(_ lbl: UILabel, text: String? = nil) -> Self {
         font = lbl.font
         textColor = lbl.textColor
@@ -155,6 +165,8 @@ extension UILabel {
 }
 
 extension UITextField {
+    
+    @discardableResult
     @nonobjc func config(
         _ fontSize: CGFloat               = 14,
         fontWeight: CGFloat             = UIFontWeightUltraLight,
@@ -171,6 +183,7 @@ extension UITextField {
         return self
     }
     
+    @discardableResult
     @nonobjc func addToInputable(_ inputable: InputableViewController) -> Self {
         self.delegate = inputable
         inputable.inputFields.append(self)
@@ -179,6 +192,8 @@ extension UITextField {
 }
 
 extension UITextView {
+    
+    @discardableResult
     @nonobjc func config(
         _ fontSize: CGFloat               = 14,
         fontWeight: CGFloat             = UIFontWeightUltraLight,
@@ -193,6 +208,7 @@ extension UITextView {
         return self
     }
     
+    @discardableResult
     @nonobjc func addToInputable(_ inputable: InputableViewController) -> UITextView {
         self.delegate = inputable
         inputable.inputFields.append(self)
@@ -201,6 +217,8 @@ extension UITextView {
 }
 
 extension UIImageView {
+    
+    @discardableResult
     @nonobjc func config(
         _ image: UIImage? = nil,
         contentMode: UIViewContentMode = .scaleAspectFill
@@ -211,12 +229,13 @@ extension UIImageView {
         return self
     }
     
+    @discardableResult
     @nonobjc func layout(
         _ cornerRadius: CGFloat,
-        @noescape closurer: (ConstraintMaker) -> Void
+        closurer: (ConstraintMaker) -> Void
         ) -> Self {
         self.layer.cornerRadius = cornerRadius
-        self.snp_makeConstraints(closure: closurer)
+        self.snp.makeConstraints(closurer)
         return self
     }
 }
@@ -232,6 +251,8 @@ extension UIRefreshControl {
 }
 
 extension UIButton {
+    
+    @discardableResult
     @nonobjc func config(
         _ target: AnyObject,
         selector: Selector,
@@ -251,6 +272,7 @@ extension UIButton {
         return self
     }
     
+    @discardableResult
     @nonobjc func toRoundButton(_ corner: CGFloat) -> UIButton {
         imageView?.layer.cornerRadius = corner
         return self
@@ -258,6 +280,8 @@ extension UIButton {
 }
 
 extension UISwitch {
+    
+    @discardableResult
     @nonobjc func config(
         _ target: AnyObject,
         selector: Selector,
@@ -276,6 +300,8 @@ extension UISwitch {
 }
 
 extension UIScrollView {
+    
+    @discardableResult
     @nonobjc func config(
         _ contentSize: CGSize
         ) -> Self {

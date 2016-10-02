@@ -13,7 +13,7 @@ let kGroupChatSettingSectionTitles = ["", "信息", "通知", "聊天"]
 
 class GroupChatSettingController: UITableViewController, PersonMineSinglePropertyModifierDelegate, InlineUserSelectDelegate, FFSelectDelegate, LoadingProtocol {
     
-    var delayTask: ()->()?
+    var delayTask: (()->())?
     
     var targetClub: Club!
     // 是否设置发生了更改
@@ -63,9 +63,9 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         
         let requester = ClubRequester.sharedInstance
         lp_start()
-        requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
+        _ = requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
             self.lp_stop()
-            try! self.targetClub.loadDataFromJSON(json!, detailLevel: 0)
+            _ = try! self.targetClub.loadDataFromJSON(json!, detailLevel: 0)
             self.targetClub.members.removeAll()
             for data in json!["club"]["members"].arrayValue {
                 // 添加成员
@@ -96,7 +96,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         inlineUserSelect = InlineUserSelectController()
         inlineUserSelect?.delegate = self
         cell.contentView.addSubview(inlineUserSelect!.view)
-        inlineUserSelect?.view.snp_makeConstraints(closure: { (make) in
+        inlineUserSelect?.view.snp.makeConstraints({ (make) in
             make.edges.equalTo(cell.contentView)
         })
         inlineUserSelect?.relatedClub = targetClub
@@ -120,7 +120,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
         let rightBtn = UIButton()
         let btnText = LS("进入聊天")
-        rightBtn.frame = CGRect(x: 0, y: 0, width: btnText.sizeWithFont(UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), boundingSize: CGSize(width: CGFloat.max, height: 21)).width, height: 21)
+        rightBtn.frame = CGRect(x: 0, y: 0, width: btnText.sizeWithFont(UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 21)).width, height: 21)
         rightBtn.setTitle(btnText, for: UIControlState())
         rightBtn.titleLabel!.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         rightBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
@@ -136,13 +136,13 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         // push modification to the server
         if dirty {
             let requester = ClubRequester.sharedInstance
-            requester.updateClubSettings(targetClub, onSuccess: { (json) -> () in
+            _ = requester.updateClubSettings(targetClub, onSuccess: { (json) -> () in
                 // Do nothing when succeed since modification has already taken effects
                 }, onError: { (code) -> () in
                     self.showToast(LS("网络访问错误:\(code)"))
             })
         }
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -214,7 +214,12 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         switch (indexPath as NSIndexPath).section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsAvatarCell
-            cell.avatarImage.kf_setImageWithURL(targetClub.logoURL!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+//            cell.avatarImage.kf_setImageWithURL(targetClub.logoURL!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+//                if error == nil {
+//                    cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.black)
+//                }
+//            })
+            cell.avatarImage.kf.setImage(with: targetClub.logoURL!, placeholder: nil, options: nil, progressBlock: nil, completionHandler: { (image, error, _, _) in
                 if error == nil {
                     cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.black)
                 }
@@ -248,7 +253,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                     cell.staticLbl.text = LS("显示本群昵称")
                     cell.boolSelect.isHidden = false
                     cell.infoLbl.text = ""
-                    cell.boolSelect.isOn = targetClub.showNickName ?? true
+                    cell.boolSelect.isOn = targetClub.showNickName 
                     cell.tag = 0
                     cell.boolSelect.addTarget(self, action: #selector(GroupChatSettingController.switchBtnPressed(_:)), for: .valueChanged)
                 }
@@ -262,7 +267,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
 //                    inlineUserSelect = InlineUserSelectController()
 //                    inlineUserSelect?.delegate = self
 //                    cell.contentView.addSubview(inlineUserSelect!.view)
-//                    inlineUserSelect?.view.snp_makeConstraints(closure: { (make) -> Void in
+//                    inlineUserSelect?.view.snp.makeConstraints(closure: { (make) -> Void in
 //                        make.edges.equalTo(cell.contentView)
 //                    })
 //                    inlineUserSelect?.relatedClub = targetClub
@@ -312,12 +317,12 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
 //                    deleteQuitBtn?.setImage(UIImage(named: "delete_and_quit_btn"), forState: .Normal)
 //                    deleteQuitBtn?.addTarget(self, action: #selector(GroupChatSettingController.deleteAndQuitBtnPressed), forControlEvents: .TouchUpInside)
 //                    cell.contentView.addSubview(deleteQuitBtn!)
-//                    deleteQuitBtn?.snp_makeConstraints(closure: { (make) -> Void in
+//                    deleteQuitBtn?.snp.makeConstraints(closure: { (make) -> Void in
 //                        make.centerX.equalTo(cell.contentView)
 //                        make.top.equalTo(cell.contentView).offset(15)
 //                        make.size.equalTo(CGSizeMake(150, 50))
 //                    })
-                    deleteQuitBtn = cell.contentView.addSubview(UIButton)
+                    deleteQuitBtn = cell.contentView.addSubview(UIButton.self)
                         .config(self, selector: #selector(deleteAndQuitBtnPressed), title: LS("删除并退出"), titleColor: kHighlightedRedTextColor, titleSize: 15)
                         .layout({ (make) in
                             make.centerX.equalTo(cell.contentView)
@@ -327,11 +332,11 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
                     
                 }
                 if startChatBtn == nil {
-                    startChatBtn = cell.contentView.addSubview(UIButton)
+                    startChatBtn = cell.contentView.addSubview(UIButton.self)
                         .config(self, selector: #selector(startChatBtnPressed), title: LS("进入聊天"), titleColor: kHighlightedRedTextColor, titleSize: 15)
                         .layout({ (make) in
                             make.centerX.equalTo(cell.contentView)
-                            make.top.equalTo(deleteQuitBtn!.snp_bottom)
+                            make.top.equalTo(deleteQuitBtn!.snp.bottom)
                             make.size.equalTo(deleteQuitBtn!)
                         })
                 }
@@ -408,7 +413,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         let targets = userIDs.filter({!originIDs.contains($0)})
         let requester = ClubRequester.sharedInstance
         self.lp_start()
-        requester.updateClubMembers(targetClub.ssidString, members: targets, opType: "add", onSuccess: { (json) -> () in
+        _ = requester.updateClubMembers(targetClub.ssidString, members: targets, opType: "add", onSuccess: { (json) -> () in
             // TODO: 放到请求外面
             self.targetClub.members.append(contentsOf: users)
             self.targetClub.memberNum = Int32(self.targetClub.members.count)
@@ -462,7 +467,7 @@ extension GroupChatSettingController {
         let waiter = DispatchSemaphore(value: 0)
         var success = false
         lp_start()
-        ClubRequester.sharedInstance.clubQuit(targetClub.ssidString, newHostID: "", onSuccess: { (json) -> () in
+        _ = ClubRequester.sharedInstance.clubQuit(targetClub.ssidString, newHostID: "", onSuccess: { (json) -> () in
             success = true
             self.lp_stop()
             waiter.signal()
@@ -470,15 +475,15 @@ extension GroupChatSettingController {
                 self.lp_stop()
                 waiter.signal()
         }
-        waiter.wait(timeout: DispatchTime.distantFuture)
+        _ = waiter.wait(timeout: DispatchTime.distantFuture)
         if success {
             MessageManager.defaultManager.deleteAndQuit(targetClub)
             let nav = self.navigationController!
             let n = nav.viewControllers.count
             if let _ = nav.viewControllers[n-1] as? ChatRoomController {
-                self.navigationController?.popToViewController(nav.viewControllers[n-2], animated: true)
+                _ = self.navigationController?.popToViewController(nav.viewControllers[n-2], animated: true)
             } else {
-                self.navigationController?.popViewController(animated: true)
+                _ = self.navigationController?.popViewController(animated: true)
             }
         } else {
             showToast(LS("删除失败"), onSelf: true)
@@ -491,7 +496,7 @@ extension GroupChatSettingController {
         }
         let controller = controllers[controllers.count - 2]
         if controller.isKind(of: ChatRoomController.self){
-            navigationController?.popViewController(animated: true)
+            _ = navigationController?.popViewController(animated: true)
         } else if let temp = controller as? RadarHomeController {
             let chatRoom = ChatRoomController()
             chatRoom.targetClub = targetClub

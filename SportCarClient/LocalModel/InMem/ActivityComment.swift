@@ -33,7 +33,7 @@ class ActivityComment: BaseInMemModel {
         if let data = string.data(using: String.Encoding.utf8, allowLossyConversion: false) {
             let json = JSON(data: data)
             ssid = json["actID"].int32Value
-            try loadDataFromJSON(json)
+            _ = try loadDataFromJSON(json)
             return self
         } else {
             throw SSModelError.invalidJSONString
@@ -66,7 +66,7 @@ class ActivityComment: BaseInMemModel {
     }
     
     override func loadDataFromJSON(_ data: JSON) throws -> ActivityComment {
-        try super.loadDataFromJSON(data)
+        _ = try super.loadDataFromJSON(data)
         ssid = data["commentID"].int32Value
         content = data["content"].stringValue
         createdAt = DateSTR(data["created_at"].stringValue)

@@ -109,7 +109,7 @@ class ManufacturerOnlineSelectorController: UITableViewController, UISearchBarDe
     
     func loadManufactuers() {
         let filter = searchController.searchBar.text
-        SportCarRequester.sharedInstance.carList("manufacturer", filter: filter, onSuccess: { (json) in
+        _ = SportCarRequester.sharedInstance.carList("manufacturer", filter: filter, onSuccess: { (json) in
             self.data.removeAll()
             let parsedDict = json!.dictionaryValue
             for (key, value) in parsedDict {
@@ -170,7 +170,7 @@ class SportCarBrandOnlineSelectorController: UITableViewController, UISearchBarD
     }
     
     func navLeftBtnPressed() {
-        navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
     }
 
     func loadCarData() {
@@ -183,7 +183,7 @@ class SportCarBrandOnlineSelectorController: UITableViewController, UISearchBarD
     }
     
     func loadCarNamesByManufacturer(_ manufacturer: String) {
-        SportCarRequester.sharedInstance.carList("car_name", manufacturer: manufacturer, onSuccess: { (json) in
+        _ = SportCarRequester.sharedInstance.carList("car_name", manufacturer: manufacturer, onSuccess: { (json) in
             self.data.removeAll()
             self.data = $.map(json!.arrayValue, transform: { $0.stringValue })
             self.tableView.reloadData()
@@ -193,7 +193,7 @@ class SportCarBrandOnlineSelectorController: UITableViewController, UISearchBarD
     }
     
     func loadSubNamesBy(_ manufactuer: String, carName: String) {
-        SportCarRequester.sharedInstance.carList("sub_name", manufacturer: manufactuer, carName: carName, onSuccess: { (json) in
+        _ = SportCarRequester.sharedInstance.carList("sub_name", manufacturer: manufactuer, carName: carName, onSuccess: { (json) in
             self.data.removeAll()
             self.data = $.map(json!.arrayValue, transform: { $0.stringValue })
             self.tableView.reloadData()
@@ -252,13 +252,13 @@ class SportCarBrandSelectCell: UITableViewCell {
         nameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         nameLbl?.textColor = UIColor.black
         self.contentView.addSubview(nameLbl!)
-        nameLbl?.snp_makeConstraints(closure: { (make) -> Void in
+        nameLbl?.snp.makeConstraints({ (make) -> Void in
             make.edges.equalTo(self.contentView).inset(UIEdgeInsets(top: 2, left: 15, bottom: 2, right: 15))
         })
         //
         let rightIcon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         nameLbl?.addSubview(rightIcon)
-        rightIcon.snp_makeConstraints { (make) -> Void in
+        rightIcon.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(nameLbl!)
             make.centerY.equalTo(nameLbl!)
             make.size.equalTo(CGSize(width: 9, height: 15))

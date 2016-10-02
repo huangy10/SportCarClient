@@ -15,7 +15,7 @@ import Kingfisher
 class LoadingButton: UIButton {
     /// loading标识
     var indicator: UIActivityIndicatorView
-    fileprivate var task: Kingfisher.RetrieveImageTask?
+    fileprivate var task: RetrieveImageTask?
     
     /**
      采用这个初始化方法会将按钮自动设置成圆角
@@ -35,7 +35,7 @@ class LoadingButton: UIButton {
         
         indicator.hidesWhenStopped = true
         self.addSubview(indicator)
-        indicator.snp_makeConstraints { (make) -> Void in
+        indicator.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(self)
             make.size.equalTo(CGSize(width: 44, height: 44))
         }
@@ -58,9 +58,9 @@ extension LoadingButton {
             // 取消上一次设置的task
             task!.cancel()
         }
-        task = self.imageView?.kf_setImageWithURL(url, placeholderImage: placeholderImage, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+        task = self.imageView?.kf.setImage(with: url, placeholder: placeholderImage, options: nil, progressBlock: nil, completionHandler: { (image, _, _, _) in
             self.indicator.stopAnimating()
-            self.setImage(image, for: UIControlState())
+            self.setImage(image, for: .normal)
         })
     }
     

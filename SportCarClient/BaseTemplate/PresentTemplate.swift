@@ -26,7 +26,7 @@ class PresentTemplateViewController: InputableViewController {
     
     init(parent: UIViewController) {
         parentController = parent
-        super.init(nibName: nil, bundle: nil)
+        super.init()
         
         self.bgImage = parent.getScreenShotBlurred(false)
     }
@@ -46,54 +46,54 @@ class PresentTemplateViewController: InputableViewController {
     
     override func createSubviews() {
         super.createSubviews()
-        let superview = self.view
+        let superview = self.view!
         //
         bg = UIImageView(image: bgImage)
-        superview?.addSubview(bg)
-        bg.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(bg)
+        bg.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         //
         bgBlurred = UIImageView(image: self.blurImageUsingCoreImage(bgImage))
-        superview?.addSubview(bgBlurred)
+        superview.addSubview(bgBlurred)
         bgBlurred.layer.opacity = 0
-        bgBlurred.snp_makeConstraints { (make) -> Void in
+        bgBlurred.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(bg)
         }
         //
         bgMask = UIView()
         bgMask.backgroundColor = UIColor(white: 1, alpha: 0.7)
-        superview?.addSubview(bgMask)
+        superview.addSubview(bgMask)
         bgMask.layer.opacity = 0
         //
         container = UIView()
         container.backgroundColor = UIColor.clear
-        superview?.addSubview(container)
-        container.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(container)
+        container.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         container.layer.opacity = 0
         //
         cancelBtn = UIButton()
         cancelBtn.addTarget(self, action: #selector(PresentTemplateViewController.cancelBtnPressed), for: .touchUpInside)
-        superview?.addSubview(cancelBtn)
-        cancelBtn.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(cancelBtn)
+        cancelBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
             make.top.equalTo(container).offset(80)
             make.size.equalTo(44)
         }
-        cancelBtn.addSubview(UIImageView).config(UIImage(named: "news_comment_cancel_btn"))
+        cancelBtn.addSubview(UIImageView.self).config(UIImage(named: "news_comment_cancel_btn"))
             .layout { (make) in
                 make.center.equalTo(cancelBtn)
                 make.size.equalTo(21)
         }
         //
         sepLine = UIView()
-        superview?.addSubview(sepLine)
+        superview.addSubview(sepLine)
         sepLine.backgroundColor = UIColor.white
-        sepLine.snp_makeConstraints { (make) -> Void in
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(cancelBtn)
-            make.top.equalTo(cancelBtn.snp_bottom).offset(30)
+            make.top.equalTo(cancelBtn.snp.bottom).offset(30)
             make.width.equalTo(220)
             make.height.equalTo(0.5)
         }

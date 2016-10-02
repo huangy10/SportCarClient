@@ -40,7 +40,7 @@ class ActivityReleaseMapCell: UITableViewCell {
         map = BMKMapView()
         superview.addSubview(map)
         map.viewWillAppear()
-        map.snp_makeConstraints { (make) -> Void in
+        map.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(self.contentView).inset(UIEdgeInsetsMake(0, 0, -trailingHeight, 0))
         }
         //
@@ -58,7 +58,7 @@ class ActivityReleaseMapCell: UITableViewCell {
 //            make.top.equalTo(map).offset(22)
 //        }
         
-        let locInputContainer = superview.addSubview(UIButton)
+        let locInputContainer = superview.addSubview(UIButton.self)
             .config(self, selector: #selector(contentInputPressed))
             .config(UIColor.white)
             .addShadow()
@@ -71,7 +71,7 @@ class ActivityReleaseMapCell: UITableViewCell {
         //
         let locIcon = UIImageView(image: UIImage(named: "news_comment_icon"))
         locInputContainer.addSubview(locIcon)
-        locIcon.snp_makeConstraints { (make) -> Void in
+        locIcon.snp.makeConstraints { (make) -> Void in
             make.size.equalTo(22)
             make.left.equalTo(locInputContainer).offset(15)
             make.centerY.equalTo(locInputContainer)
@@ -89,7 +89,7 @@ class ActivityReleaseMapCell: UITableViewCell {
         let marker = UIImageView(image: UIImage(named: "map_default_marker"))
         marker.contentMode = .scaleAspectFit
         superview.addSubview(marker)
-        marker.snp_makeConstraints { (make) -> Void in
+        marker.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(map)
             make.size.equalTo(CGSize(width: 38, height: 74))
         }
@@ -100,9 +100,9 @@ class ActivityReleaseMapCell: UITableViewCell {
 //        wrapper.addSubview(locInput)
 //        locInput.autoresizingMask = [.FlexibleHeight , .FlexibleWidth]
         
-        locDisplay = locInputContainer.addSubview(UILabel)
+        locDisplay = locInputContainer.addSubview(UILabel.self)
             .config(14).layout({ (make) in
-                make.left.equalTo(locIcon.snp_right).offset(17)
+                make.left.equalTo(locIcon.snp.right).offset(17)
                 make.height.equalTo(locIcon)
                 make.centerY.equalTo(locInputContainer)
                 make.right.equalTo(locInputContainer).offset(-15)

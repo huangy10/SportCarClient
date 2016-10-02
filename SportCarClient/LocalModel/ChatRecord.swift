@@ -120,7 +120,7 @@ class ChatRecord: BaseModel {
     }
 
     override func loadDataFromJSON(_ data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> ChatRecord {
-        try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
+        _ = try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         rosterID = data["roster"]["ssid"].int32Value
         createdAt = DateSTR(data["created_at"].stringValue)
         chatType = data["chat_type"].stringValue

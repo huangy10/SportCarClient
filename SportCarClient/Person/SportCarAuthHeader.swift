@@ -33,14 +33,14 @@ class SportCarAuthHeader: SSCommonHeader {
         let superview = self.contentView
         superview.addSubview(authBtn)
 
-        authBtn.snp_makeConstraints { (make) -> Void in
+        authBtn.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(titleLbl)
             make.height.equalTo(superview)
             make.width.equalTo(60)
         }
         
-        authLbl = authBtn.addSubview(UILabel)
+        authLbl = authBtn.addSubview(UILabel.self)
             .config(14, fontWeight: UIFontWeightUltraLight, textColor: kHighlightedRedTextColor, textAlignment: .right, text: LS("申请认证"))
             .layout({ (make) in
                 make.edges.equalTo(authBtn)

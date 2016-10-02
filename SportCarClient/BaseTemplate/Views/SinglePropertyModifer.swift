@@ -36,7 +36,7 @@ class SinglePropertyModifierController: InputableViewController {
         self.placeholder = placeholder
         self.forcusedIndexPath = forcusedIndexPath
         self.text = text
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -60,12 +60,12 @@ class SinglePropertyModifierController: InputableViewController {
     }
     
     func navLeftBtnPressed() {
-        navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
         delegate?.singlePropertyModifierDidCancelled()
     }
     
     func navRightBtnPressed() {
-        navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
         delegate?.singlePropertyModifierDidModify(contentInput.text, forIndexPath: forcusedIndexPath)
     }
     
@@ -76,9 +76,9 @@ class SinglePropertyModifierController: InputableViewController {
     
     override func createSubviews() {
         super.createSubviews()
-        let superview = self.view
-        superview?.backgroundColor = UIColor.white
-        contentInput = superview?.addSubview(UITextField.self)
+        let superview = self.view!
+        superview.backgroundColor = UIColor.white
+        contentInput = superview.addSubview(UITextField.self)
             .config(placeholder: placeholder, text: text)
             .addToInputable(self)
             .layout({ (make) in
@@ -87,7 +87,7 @@ class SinglePropertyModifierController: InputableViewController {
                 make.top.equalTo(superview).offset(22)
                 make.height.equalTo(17)
             })
-        superview?.addSubview(UIView.self).config(UIColor(white: 0.92, alpha: 1))
+        superview.addSubview(UIView.self).config(UIColor(white: 0.92, alpha: 1))
             .layout { (make) in
                 make.left.equalTo(contentInput)
                 make.right.equalTo(contentInput)

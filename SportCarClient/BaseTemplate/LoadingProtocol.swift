@@ -23,7 +23,7 @@ protocol LoadingProtocol: class {
     var lp_container: UIView! { get set }
     var lp_loadingView: UIImageView! { get set }
     var lp_timer: Timer! {set get}
-    var delayTask: ()->()? { get set }
+    var delayTask: (()->())? { get set }
 }
 
 
@@ -35,19 +35,19 @@ extension LoadingProtocol where Self: UIViewController {
             if let container = objc_getAssociatedObject(self, &containerHandle) as? UIView {
                 return container
             } else {
-                let superview = self.view
+                let superview = self.view!
                 let container: UIView
-                if (superview?.isKind(of: UITableView.self))! {
-                    container = superview?.addSubview(UIView).config(UIColor(white: 0, alpha: 0.2))
+                if (superview.isKind(of: UITableView.self))! {
+                    container = superview.addSubview(UIView.self).config(UIColor(white: 0, alpha: 0.2))
                     container.frame = UIScreen.main.bounds
                 } else {
-                    container = superview?.addSubview(UIView).config(UIColor(white: 0, alpha: 0.2))
+                    container = superview.addSubview(UIView.self).config(UIColor(white: 0, alpha: 0.2))
                         .layout({ (make) in
                             make.edges.equalTo(superview)
                         })
                 }
                 
-                let rect = container.addSubview(UIView).config(UIColor.white)
+                let rect = container.addSubview(UIView.self).config(UIColor.white)
                     .toRound(6)
                     .layout({ (make) in
                         make.centerX.equalTo(container)
@@ -111,7 +111,7 @@ extension LoadingProtocol where Self: UIViewController {
             lp_container.removeFromSuperview()
             lp_container = nil
         } else if self.delayTask != nil {
-            dispatch_block_cancel(delayTask as! () -> Void)
+            dispatch_block_cancel(delayTask!)
         } else {
             assertionFailure()
         }
@@ -121,7 +121,7 @@ extension LoadingProtocol where Self: UIViewController {
     func lp_start() {
         let delay = DispatchTime.now() + Double(Int64(NSEC_PER_MSEC) * kLoadingAppearDelay) / Double(NSEC_PER_SEC)
         lp_timer = nil
-        delayTask = dispatch_block_create(DISPATCH_BLOCK_INHERIT_QOS_CLASS, { [weak self] in
+        delayTask = dispatch_block_create(__DISPATCH_BLOCK_INHERIT_QOS_CLASS, { [weak self] in
             guard let sSelf = self else {
                 return
             }

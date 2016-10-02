@@ -72,7 +72,7 @@ class FFSelectController: UserSelectController {
         }
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    override init () {
         maxSelectUserNum = kMaxSelectUserNum
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -104,15 +104,15 @@ class FFSelectController: UserSelectController {
         let titleFansBtn = UIButton()
         titleFansBtn.tag = 0
         container.addSubview(titleFansBtn)
-        titleFansBtn.snp_makeConstraints(closure: { (make) -> Void in
+        titleFansBtn.snp.makeConstraints({ (make) -> Void in
             make.height.equalTo(30)
             make.width.equalTo(70)
             make.centerY.equalTo(container)
-            make.right.equalTo(container.snp_centerX)
+            make.right.equalTo(container.snp.centerX)
         })
         titleFansBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), for: .touchUpInside)
         titleFansLbl = titleFansBtn.addSubview(UILabel)
-            .config(15, textColor: kTextBlack, textAlignment: .center, text: LS("粉丝"), fontWeight: UIFontWeightBold)
+            .config(15, fontWeight: UIFontWeightUltraLight, textColor: kTextBlack, textAlignment: .center, text: LS("粉丝"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleFansBtn)
                 make.size.equalTo(LS(" 粉丝 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
@@ -121,15 +121,15 @@ class FFSelectController: UserSelectController {
         let titleFollowBtn = UIButton()
         titleFollowBtn.tag = 1
         container.addSubview(titleFollowBtn)
-        titleFollowBtn.snp_makeConstraints(closure: { (make) -> Void in
+        titleFollowBtn.snp.makeConstraints({ (make) -> Void in
             make.height.equalTo(30)
             make.width.equalTo(70)
             make.centerY.equalTo(container)
-            make.left.equalTo(container.snp_centerX)
+            make.left.equalTo(container.snp.centerX)
         })
         titleFollowBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), for: .touchUpInside)
         titleFollowLbl = titleFollowBtn.addSubview(UILabel)
-            .config(15, textColor: kTextGray, textAlignment: .center, text: LS("关注"), fontWeight: UIFontWeightBold)
+            .config(15, fontWeight: UIFontWeightUltraLight, textColor: kTextGray, textAlignment: .center, text: LS("关注"), fontWeight: UIFontWeightBold)
             .layout({ (make) in
                 make.center.equalTo(titleFollowBtn)
                 make.size.equalTo(LS(" 关注 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
@@ -138,7 +138,7 @@ class FFSelectController: UserSelectController {
         titleBtnIcon = UIImageView(image: UIImage(named: "nav_title_btn_icon"))
         container.addSubview(titleBtnIcon!)
         container.sendSubview(toBack: titleBtnIcon!)
-        titleBtnIcon?.snp_makeConstraints(closure: { (make) -> Void in
+        titleBtnIcon?.snp.makeConstraints({ (make) -> Void in
             make.bottom.equalTo(container)
             make.left.equalTo(titleFansLbl)
             make.right.equalTo(titleFansLbl)
@@ -174,7 +174,7 @@ class FFSelectController: UserSelectController {
                 // 此时不需要任何操作
                 return
             }
-            titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
+            titleBtnIcon?.snp.remakeConstraints({ (make) -> Void in
                 make.bottom.equalTo(titleBtnIcon!.superview!)
                 make.left.equalTo(titleFansLbl)
                 make.right.equalTo(titleFansLbl)
@@ -191,7 +191,7 @@ class FFSelectController: UserSelectController {
             if navTitlestate == .follow {
                 return
             }
-            titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
+            titleBtnIcon?.snp.remakeConstraints({ (make) -> Void in
                 make.bottom.equalTo(titleBtnIcon!.superview!)
                 make.left.equalTo(titleFollowLbl)
                 make.right.equalTo(titleFollowLbl)
@@ -227,7 +227,7 @@ class FFSelectController: UserSelectController {
         switch navTitlestate {
         case .fans:
             threshold = fansDateThreshold ?? Date()
-            requester.getFansList(targetUser.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (data) -> () in
+            _ = requester.getFansList(targetUser.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (data) -> () in
                 if let fansJSONData = data?.arrayValue {
                     for json in fansJSONData {
                         let user: User = try! MainManager.sharedManager.getOrCreate(json["user"])
@@ -245,7 +245,7 @@ class FFSelectController: UserSelectController {
             break
         case .follow:
             threshold = followDateThreshold ?? Date()
-            requester.getFollowList(targetUser.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (data) -> () in
+            _ = requester.getFollowList(targetUser.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (data) -> () in
                 if let followJSONData = data?.arrayValue {
                     for json in followJSONData {
                         let user: User = try! MainManager.sharedManager.getOrCreate(json["user"])
@@ -302,13 +302,13 @@ class FFSelectController: UserSelectController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let user = users[(indexPath as NSIndexPath).row]
         if user.identified || !authedUserOnly {
-            return super.tableView(tableView: tableView, cellForRowAtIndexPath: indexPath)
+            return super.tableView(tableView, cellForRowAt: indexPath)
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "user_select_cell_gray", for: indexPath) as! UserSelectCellGray
-            cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
+            cell.avatarImg?.kf.setImage(with: user.avatarURL!)
             cell.nickNameLbl?.text = user.nickName
             cell.recentStatusLbL?.text = user.recentStatusDes
-            if forceSelectedUsers.findIndex({ $0.ssid == user.ssid}) != nil {
+            if forceSelectedUsers.findIndex(callback: { $0.ssid == user.ssid}) != nil {
                 cell.forceSelected = true
                 cell.selectBtn?.isSelected = true
             } else {

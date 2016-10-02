@@ -49,7 +49,7 @@ class BillboardCell: UITableViewCell {
     }
     
     func configureContrainer() {
-        container = contentView.addSubview(UIView)
+        container = contentView.addSubview(UIView.self)
             .config(UIColor.white)
             .layout({ (make) in
                 make.top.equalTo(contentView)
@@ -67,17 +67,17 @@ class BillboardCell: UITableViewCell {
 //                make.centerY.equalTo(nameLbl)
 //                make.left.equalTo(container).offset(11)
 //            })
-        orderLbl = contentView.addSubview(UILabel)
+        orderLbl = contentView.addSubview(UILabel.self)
         orderLbl.font = getOrderTextFont(17)
         orderLbl.textColor = UIColor(white: 0, alpha: 0.2)
-        orderLbl.snp_makeConstraints { (make) in
+        orderLbl.snp.makeConstraints { (make) in
             make.left.equalTo(container).offset(11)
             make.centerY.equalTo(icon)
         }
     }
     
     func configureClubInfo() {
-        icon = contentView.addSubview(UIImageView)
+        icon = contentView.addSubview(UIImageView.self)
             .layout({ (make) in
                 make.centerY.equalTo(contentView).offset(-3)
                 make.left.equalTo(container).offset(40)
@@ -85,13 +85,13 @@ class BillboardCell: UITableViewCell {
             })
         icon.layer.cornerRadius = 22.5
         icon.clipsToBounds = true
-        nameLbl = contentView.addSubview(UILabel)
+        nameLbl = contentView.addSubview(UILabel.self)
             .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor.black, textAlignment: .left)
             .layout({ (make) in
-                make.left.equalTo(icon.snp_right).offset(13)
+                make.left.equalTo(icon.snp.right).offset(13)
                 make.top.equalTo(icon).offset(3)
             })
-        descriLbl = contentView.addSubview(UILabel)
+        descriLbl = contentView.addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.58), textAlignment: .left)
             .layout({ (make) in
                 make.left.equalTo(nameLbl)
@@ -100,26 +100,26 @@ class BillboardCell: UITableViewCell {
     }
     
     func configureOrderDisplay() {
-        upAndDownStaticLbl = contentView.addSubview(UILabel)
+        upAndDownStaticLbl = contentView.addSubview(UILabel.self)
             .config(10, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.38), textAlignment: .right)
             .layout({ (make) in
                 make.centerY.equalTo(nameLbl)
                 make.right.equalTo(container).offset(-13)
             })
         upAndDownStaticLbl.text = LS("升降")
-        upAndDownLbl = contentView.addSubview(UILabel)
+        upAndDownLbl = contentView.addSubview(UILabel.self)
             .config(10, fontWeight: UIFontWeightRegular, textColor: UIColor.black, textAlignment: .right)
             .layout({ (make) in
                 make.right.equalTo(upAndDownStaticLbl)
                 make.top.equalTo(descriLbl)
             })
-        upAndDownIcon = contentView.addSubview(UIImageView)
+        upAndDownIcon = contentView.addSubview(UIImageView.self)
             .layout({ (make) in
-                make.right.equalTo(upAndDownLbl.snp_left).offset(-4)
+                make.right.equalTo(upAndDownLbl.snp.left).offset(-4)
                 make.centerY.equalTo(upAndDownLbl)
                 make.size.equalTo(8)
             })
-        newMarkerLbl = contentView.addSubview(UILabel)
+        newMarkerLbl = contentView.addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor.RGB(255, 21, 21), textAlignment: .center, text: "new")
             .layout({ (make) in
                 make.centerX.equalTo(upAndDownStaticLbl)
@@ -129,7 +129,7 @@ class BillboardCell: UITableViewCell {
     }
     
     func configureSepLine() {
-        sepLine = contentView.addSubview(UIView)
+        sepLine = contentView.addSubview(UIView.self)
             .config(UIColor(white: 0, alpha: 0.12))
             .layout({ (make) in
                 make.right.equalTo(container)
@@ -144,7 +144,7 @@ class BillboardCell: UITableViewCell {
         self.order = order
         self.orderChange = orderChange
         
-        icon.kf_setImageWithURL(club.logoURL!)
+        icon.kf.setImage(with: club.logoURL!)
         nameLbl.text = getNameLblContent()
         descriLbl.text = getDescriLblContent()
         orderLbl.text = "\(order)"
@@ -194,10 +194,10 @@ class BillboardFirstThree: BillboardCell {
     var orderStaticLbl: UILabel!
     
     override func createSubviews() {
-        greatMark = contentView.addSubview(UIView)
+        greatMark = contentView.addSubview(UIView.self)
         super.createSubviews()
         contentView.bringSubview(toFront: greatMark)
-        greatMark.snp_makeConstraints { (make) in
+        greatMark.snp.makeConstraints { (make) in
             make.left.equalTo(container)
             make.bottom.equalTo(icon).offset(-3)
             make.size.equalTo(CGSize(width: 2.5, height: 40))
@@ -215,24 +215,24 @@ class BillboardFirstThree: BillboardCell {
 //    }
     
     override func configureOrderLbl() {
-        orderStaticLbl = contentView.addSubview(UILabel)
+        orderStaticLbl = contentView.addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightRegular, textAlignment: .left, text: LS("排名"), textColor: UIColor(white: 0, alpha: 0.38))
             .layout({ (make) in
                 make.left.equalTo(container).offset(12)
                 make.top.equalTo(greatMark)
             })
-        orderLbl = contentView.addSubview(UILabel)
+        orderLbl = contentView.addSubview(UILabel.self)
         orderLbl.font = UIFont.systemFont(ofSize: 32, weight: UIFontWeightBold)
-        orderLbl.snp_makeConstraints { (make) in
+        orderLbl.snp.makeConstraints { (make) in
             make.left.equalTo(container).offset(12)
             make.bottom.equalTo(greatMark)
-            make.top.equalTo(orderStaticLbl.snp_bottom)
-            make.right.equalTo(icon.snp_left)
+            make.top.equalTo(orderStaticLbl.snp.bottom)
+            make.right.equalTo(icon.snp.left)
         }
     }
     
     override func configureContrainer() {
-        container = contentView.addSubview(UIView)
+        container = contentView.addSubview(UIView.self)
             .config(UIColor.white)
             .addShadow()
             .layout({ (make) in

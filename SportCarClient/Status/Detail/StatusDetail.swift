@@ -46,7 +46,7 @@ fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 //}
 
 
-class StatusDetailController: InputableViewController, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol, LoadingProtocol {
+class StatusDetailController: InputableViewController, DetailCommentCellDelegate, StatusDeleteDelegate, WaitableProtocol, LoadingProtocol {
     
     var list: UITableView?
     var indexPath: IndexPath?
@@ -106,17 +106,13 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     weak var requestOnFly: Request?
     
     // MARK: init
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
-
+ 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     convenience init(status: Status, background: UIImage, initPos: CGFloat, initHeight: CGFloat) {
-        self.init(nibName: nil, bundle: nil)
+        self.init()
         self.status = status
         self.initBackground = background
         self.initialPos = initPos
@@ -124,7 +120,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     }
     
     convenience init(status: Status) {
-        self.init(nibName: nil, bundle: nil)
+        self.init()
         self.status = status
     }
     
@@ -142,8 +138,8 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         board?.contentSize = self.view.bounds.size
         board?.backgroundColor = UIColor.white
         self.view.addSubview(board!)
-        let superview = self.view
-        board?.snp_makeConstraints(closure: { (make) -> Void in
+        let superview = self.view!
+        board?.snp.makeConstraints({ (make) -> Void in
             make.height.equalTo(superview.bounds.height - self.navigationController!.navigationBar.frame.height - UIApplication.shared.statusBarFrame.height)
             make.right.equalTo(superview)
             make.left.equalTo(superview)
@@ -153,7 +149,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
             tmpBackgroundImg = UIImageView()
             tmpBackgroundImg?.image = initBackground
             board?.addSubview(tmpBackgroundImg!)
-            tmpBackgroundImg?.snp_makeConstraints(closure: { (make) -> Void in
+            tmpBackgroundImg?.snp.makeConstraints({ (make) -> Void in
                 make.right.equalTo(self.view)
                 make.left.equalTo(self.view)
                 make.top.equalTo(board!)
@@ -165,14 +161,14 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         statusContainer?.backgroundColor = UIColor.white
         board?.addSubview(statusContainer!)
         if loadAnimated {
-            statusContainer?.snp_makeConstraints(closure: { (make) -> Void in
+            statusContainer?.snp.makeConstraints({ (make) -> Void in
                 make.height.equalTo(initialHight)
                 make.right.equalTo(self.view).offset(-10)
                 make.left.equalTo(self.view).offset(10)
                 make.top.equalTo(board!).offset(initialPos)
             })
         }else {
-            statusContainer?.snp_remakeConstraints(closure: { (make) -> Void in
+            statusContainer?.snp.remakeConstraints({ (make) -> Void in
                 make.left.equalTo(self.view)
                 make.right.equalTo(self.view)
                 make.top.equalTo(board!)
@@ -186,15 +182,15 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         NotificationCenter.default.addObserver(self, selector: #selector(StatusDetailController.changeLayoutWhenKeyboardDisappears(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         // load the detail data
-        StatusRequester.sharedInstance.getStatusDetail(status!.ssidString, onSuccess: { (json) in
+        _ = StatusRequester.sharedInstance.getStatusDetail(status!.ssidString, onSuccess: { (json) in
             if let data = json {
-                try! self.status?.loadDataFromJSON(data, detailLevel: 0, forceMainThread: false)
+                _ = try! self.status?.loadDataFromJSON(data, detailLevel: 0, forceMainThread: false)
                 self.loadDataAndUpdateUI()
             }
             }) { (code) in
                 if code == "status not found" {
                     self.showToast(LS("动态不存在或者已经被删除"))
-                    self.navigationController?.popViewController(animated: true)
+                    _ = self.navigationController?.popViewController(animated: true)
                 } else {
                     self.showToast(LS("网络访问错误:\(code)"))
                 }
@@ -206,7 +202,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         if loadAnimated {
             self.view.updateConstraints()
             self.view.layoutIfNeeded()
-            statusContainer?.snp_remakeConstraints(closure: { (make) -> Void in
+            statusContainer?.snp.remakeConstraints({ (make) -> Void in
                 make.left.equalTo(self.view)
                 make.right.equalTo(self.view)
                 make.top.equalTo(board!)
@@ -245,7 +241,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     }
     
     func backBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
         wp_abortWaiting()
     }
     
@@ -273,23 +269,23 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     }
     
     func createOtherSubivews() {
-        let superview = self.view
+        let superview = self.view!
         //
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.8, alpha: 1)
         board?.addSubview(sepLine)
         if loadAnimated {
-            sepLine.snp_makeConstraints { (make) -> Void in
+            sepLine.snp.makeConstraints { (make) -> Void in
                 make.right.equalTo(superview).offset(-15)
                 make.left.equalTo(superview).offset(15)
                 make.top.equalTo(board!).offset(initialHight + 20)
                 make.height.equalTo(0.5)
             }
         }else {
-            sepLine.snp_makeConstraints(closure: { (make) -> Void in
+            sepLine.snp.makeConstraints({ (make) -> Void in
                 make.right.equalTo(superview).offset(-15)
                 make.left.equalTo(superview).offset(15)
-                make.top.equalTo(statusContainer!.snp_bottom)
+                make.top.equalTo(statusContainer!.snp.bottom)
                 make.height.equalTo(0.5)
             })
         }
@@ -301,7 +297,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         commentStaticLbl.textAlignment = .center
         commentStaticLbl.text = LS("评论")
         board?.addSubview(commentStaticLbl)
-        commentStaticLbl.snp_makeConstraints { (make) -> Void in
+        commentStaticLbl.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(sepLine)
             make.width.equalTo(70)
         }
@@ -313,10 +309,10 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         commentList?.isScrollEnabled = false
         commentList?.backgroundColor = UIColor.white
         board?.addSubview(commentList!)
-        commentList?.snp_makeConstraints(closure: { (make) -> Void in
+        commentList?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
-            make.top.equalTo(commentStaticLbl.snp_bottom).offset(20)
+            make.top.equalTo(commentStaticLbl.snp.bottom).offset(20)
             make.height.equalTo(64)
         })
         commentList?.register(StatusDetailCommentCell.self, forCellReuseIdentifier: StatusDetailCommentCell.reuseIdentifier)
@@ -328,14 +324,14 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
         commentPanel?.likeBtn?.addTarget(self, action: #selector(StatusDetailController.likeBtnPressed), for: .touchUpInside)
         self.view?.addSubview(commentPanel!)
         if loadAnimated {
-            commentPanel?.snp_makeConstraints(closure: { (make) -> Void in
+            commentPanel?.snp.makeConstraints({ (make) -> Void in
                 make.right.equalTo(superview)
                 make.left.equalTo(superview)
                 make.height.equalTo(commentPanel!.barheight)
                 make.bottom.equalTo(superview).offset(commentPanel!.barheight)      // 先将这个panel放置在底部，后续动画调出
             })
         }else {
-            commentPanel?.snp_makeConstraints(closure: { (make) -> Void in
+            commentPanel?.snp.makeConstraints({ (make) -> Void in
                 make.right.equalTo(superview)
                 make.left.equalTo(superview)
                 make.height.equalTo(commentPanel!.barheight)
@@ -348,7 +344,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
     
     func animateOtherSubViews() {
         self.view.layoutIfNeeded()
-        commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
+        commentPanel?.snp.updateConstraints({ (make) -> Void in
             make.bottom.equalTo(self.view).offset(0)
         })
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
@@ -362,7 +358,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
       - parameter   animated: 是否动态调整
      */
     func autoSetBoardContentSize(_ animated: Bool) {
-        commentList?.snp_updateConstraints(closure: { (make) -> Void in
+        commentList?.snp.updateConstraints({ (make) -> Void in
             make.height.equalTo(max(commentList!.contentSize.height, 88))
         })
         self.view.updateConstraints()
@@ -382,7 +378,7 @@ class StatusDetailController: InputableViewController, UICollectionViewDataSourc
 }
 
 // MARK: - 上方status部分
-extension StatusDetailController {
+extension StatusDetailController: UICollectionViewDataSource {
     func createStatusBoard() {
         
         let superview = statusContainer!
@@ -391,7 +387,7 @@ extension StatusDetailController {
         */
         headerContainer = UIView()
         superview.addSubview(headerContainer!)
-        headerContainer?.snp_makeConstraints(closure: { (make) -> Void in
+        headerContainer?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
             make.top.equalTo(superview)
@@ -403,7 +399,7 @@ extension StatusDetailController {
         avatarBtn?.layer.cornerRadius = 35 / 2.0
         avatarBtn?.clipsToBounds = true
         avatarBtn?.addTarget(self, action: #selector(StatusDetailController.statusHostAvatarPressed), for: .touchUpInside)
-        avatarBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        avatarBtn?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(headerContainer!).offset(15)
             make.centerY.equalTo(headerContainer!)
             make.size.equalTo(35)
@@ -413,9 +409,9 @@ extension StatusDetailController {
         nameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBlack)
         nameLbl?.textColor = UIColor.black
         headerContainer?.addSubview(nameLbl!)
-        nameLbl?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(avatarBtn!.snp_right).offset(10)
-            make.bottom.equalTo(avatarBtn!.snp_centerY)
+        nameLbl?.snp.makeConstraints({ (make) -> Void in
+            make.left.equalTo(avatarBtn!.snp.right).offset(10)
+            make.bottom.equalTo(avatarBtn!.snp.centerY)
             make.top.equalTo(avatarBtn!)
         })
         //
@@ -423,20 +419,20 @@ extension StatusDetailController {
         avatarClubBtn?.layer.cornerRadius = 10
         avatarClubBtn?.clipsToBounds = true
         headerContainer?.addSubview(avatarClubBtn!)
-        avatarClubBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        avatarClubBtn?.snp.makeConstraints({ (make) -> Void in
             make.size.equalTo(20)
             make.centerY.equalTo(nameLbl!)
-            make.left.equalTo(nameLbl!.snp_right).offset(7)
+            make.left.equalTo(nameLbl!.snp.right).offset(7)
         })
         //
         releaseDateLbl = UILabel()
         releaseDateLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         releaseDateLbl?.textColor = UIColor(white: 0.72, alpha: 1)
         headerContainer?.addSubview(releaseDateLbl!)
-        releaseDateLbl?.snp_makeConstraints(closure: { (make) -> Void in
+        releaseDateLbl?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(nameLbl!)
             make.bottom.equalTo(avatarBtn!)
-            make.top.equalTo(nameLbl!.snp_bottom)
+            make.top.equalTo(nameLbl!.snp.bottom)
         })
         //
         avatarCarNameLbl = UILabel()
@@ -444,7 +440,7 @@ extension StatusDetailController {
         avatarCarNameLbl?.textAlignment = .right
         avatarCarNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
         headerContainer?.addSubview(avatarCarNameLbl!)
-        avatarCarNameLbl?.snp_makeConstraints(closure: { (make) -> Void in
+        avatarCarNameLbl?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(headerContainer!).offset(-15)
             make.centerY.equalTo(headerContainer!)
         })
@@ -454,8 +450,8 @@ extension StatusDetailController {
         avatarCarLogoIcon?.layer.cornerRadius = 10.5
         avatarCarLogoIcon?.clipsToBounds = true
         superview.addSubview(avatarCarLogoIcon!)
-        avatarCarLogoIcon?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(avatarCarNameLbl!.snp_left).offset(-4)
+        avatarCarLogoIcon?.snp.makeConstraints({ (make) -> Void in
+            make.right.equalTo(avatarCarNameLbl!.snp.left).offset(-4)
             make.centerY.equalTo(avatarCarNameLbl!)
             make.size.equalTo(21)
         })
@@ -466,11 +462,11 @@ extension StatusDetailController {
         mainCover?.contentMode = .scaleAspectFill
         mainCover?.clipsToBounds = true
         superview.addSubview(mainCover!)
-        mainCover?.snp_makeConstraints(closure: { (make) -> Void in
+        mainCover?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.top.equalTo(headerContainer!.snp_bottom)
-            make.height.equalTo(mainCover!.snp_width)
+            make.top.equalTo(headerContainer!.snp.bottom)
+            make.height.equalTo(mainCover!.snp.width)
         })
         //
         let flowLayout = UICollectionViewFlowLayout()
@@ -481,10 +477,10 @@ extension StatusDetailController {
         otherImgList?.dataSource = self
         superview.addSubview(otherImgList!)
         otherImgList?.backgroundColor = UIColor.white
-        otherImgList?.snp_makeConstraints(closure: { (make) -> Void in
+        otherImgList?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
-            make.top.equalTo(mainCover!.snp_bottom).offset(6)
+            make.top.equalTo(mainCover!.snp.bottom).offset(6)
             make.height.equalTo(0)
         })
         otherImgList?.register(StatusCellImageDisplayCell.self, forCellWithReuseIdentifier: StatusCellImageDisplayCell.reuseIdentifier)
@@ -493,19 +489,19 @@ extension StatusDetailController {
         contentLbl?.textColor = UIColor.black
         contentLbl?.numberOfLines = 0
         superview.addSubview(contentLbl!)
-        contentLbl?.snp_makeConstraints(closure: { (make) -> Void in
+        contentLbl?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.left.equalTo(superview).offset(15)
-            make.top.equalTo(otherImgList!.snp_bottom).offset(15)
+            make.top.equalTo(otherImgList!.snp.bottom).offset(15)
         })
         /*
         下方其他信息部分
         */
         let locationIcon = UIImageView(image: UIImage(named: "status_location_icon"))
         superview.addSubview(locationIcon)
-        locationIcon.snp_makeConstraints { (make) -> Void in
+        locationIcon.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(contentLbl!)
-            make.top.equalTo(contentLbl!.snp_bottom).offset(15)
+            make.top.equalTo(contentLbl!.snp.bottom).offset(15)
             make.size.equalTo(CGSize(width: 13.5, height: 18))
         }
         //
@@ -515,8 +511,8 @@ extension StatusDetailController {
         locationLbL?.numberOfLines = 0
         locationLbL?.lineBreakMode = .byWordWrapping
         superview.addSubview(locationLbL!)
-        locationLbL?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(locationIcon.snp_right).offset(10)
+        locationLbL?.snp.makeConstraints({ (make) -> Void in
+            make.left.equalTo(locationIcon.snp.right).offset(10)
             make.top.equalTo(locationIcon)
             make.width.equalTo(superview).multipliedBy(0.6)
         })
@@ -526,7 +522,7 @@ extension StatusDetailController {
         commentNumLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         commentNumLbL?.textAlignment = .right
         superview.addSubview(commentNumLbL!)
-        commentNumLbL?.snp_makeConstraints(closure: { (make) -> Void in
+        commentNumLbL?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.top.equalTo(locationLbL!)
             make.height.equalTo(17)
@@ -534,8 +530,8 @@ extension StatusDetailController {
         //
         commentIcon = UIImageView(image: UIImage(named: "news_comment"))
         superview.addSubview(commentIcon!)
-        commentIcon?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(commentNumLbL!.snp_left).offset(-2)
+        commentIcon?.snp.makeConstraints({ (make) -> Void in
+            make.right.equalTo(commentNumLbL!.snp.left).offset(-2)
             make.top.equalTo(commentNumLbL!)
             make.size.equalTo(15)
         })
@@ -545,21 +541,21 @@ extension StatusDetailController {
         likeNumLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         likeNumLbl?.textAlignment = .right
         superview.addSubview(likeNumLbl!)
-        likeNumLbl?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(commentIcon!.snp_left).offset(-30)
+        likeNumLbl?.snp.makeConstraints({ (make) -> Void in
+            make.right.equalTo(commentIcon!.snp.left).offset(-30)
             make.top.equalTo(commentIcon!)
             make.height.equalTo(17)
         })
         //
         likeIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
         superview.addSubview(likeIcon!)
-        likeIcon?.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(likeNumLbl!.snp_left).offset(-2)
+        likeIcon?.snp.makeConstraints({ (make) -> Void in
+            make.right.equalTo(likeNumLbl!.snp.left).offset(-2)
             make.top.equalTo(likeNumLbl!)
             make.size.equalTo(15)
         })
         
-        likeBtn = superview.addSubview(UIButton)
+        likeBtn = superview.addSubview(UIButton.self)
             .config(self, selector: #selector(likeBtnPressed))
             .layout({ (make) in
                 make.center.equalTo(likeIcon!)
@@ -581,12 +577,12 @@ extension StatusDetailController {
         header区域的数据
         */
         let user: User = status!.user!
-        avatarBtn?.kf_setImageWithURL(user.avatarURL!, forState: UIControlState())
+        avatarBtn?.kf.setImage(with: user.avatarURL!, for: .normal)
         nameLbl?.text = user.nickName
         releaseDateLbl?.text = dateDisplay(status!.createdAt!)
         if let club = user.avatarClubModel {
             avatarClubBtn?.isHidden = false
-            avatarClubBtn?.kf_setImageWithURL(club.logoURL!, forState: UIControlState())
+            avatarClubBtn?.kf.setImage(with: club.logoURL!, for: .normal)
         }else{
             avatarClubBtn?.isHidden = true
             avatarClubBtn?.setImage(nil, for: UIControlState())
@@ -595,7 +591,7 @@ extension StatusDetailController {
             avatarCarNameLbl?.isHidden = false
             avatarCarNameLbl?.text = car.name
             avatarCarLogoIcon?.isHidden = false
-            avatarCarLogoIcon?.kf_setImageWithURL(car.logoURL!)
+            avatarCarLogoIcon?.kf.setImage(with: car.logoURL!)
         }else{
             avatarCarLogoIcon?.isHidden = true
             avatarCarNameLbl?.isHidden = true
@@ -605,21 +601,26 @@ extension StatusDetailController {
         中间内容区域
         */
         let imageInfo = status!.image!
-        statusImages = imageInfo.split(";")
-        mainCover?.kf_setImageWithURL(SFURL(statusImages[0])!)
-        mainCover?.kf_setImageWithURL(status!.coverURL!, placeholderImage: mainCover?.image, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) in
+        statusImages = imageInfo.split(delimiter: ";")
+//        mainCover?.kf_setImageWithURL(SFURL(statusImages[0])!)
+//        mainCover?.kf_setImageWithURL(status!.coverURL!, placeholderImage: mainCover?.image, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) in
+//            if error == nil {
+//                self.mainCover?.setupForImageViewer(nil, backgroundColor: UIColor.black)
+//            }
+//        })
+        mainCover?.kf.setImage(with: status!.coverURL!, placeholder: mainCover?.image, options: nil, progressBlock: nil, completionHandler: { (image, error, _, _) in
             if error == nil {
                 self.mainCover?.setupForImageViewer(nil, backgroundColor: UIColor.black)
             }
         })
         if statusImages.count <= 1 {
             otherImgList?.reloadData()
-            otherImgList?.snp_updateConstraints(closure: { (make) -> Void in
+            otherImgList?.snp.updateConstraints({ (make) -> Void in
                 make.height.equalTo(0)
             })
         }else{
             otherImgList?.reloadData()
-            otherImgList?.snp_updateConstraints(closure: { (make) -> Void in
+            otherImgList?.snp.updateConstraints({ (make) -> Void in
                 make.height.equalTo(100)
             })
         }
@@ -673,7 +674,7 @@ extension StatusDetailController {
 }
 
 // MARK: - about comments
-extension StatusDetailController {
+extension StatusDetailController: UITableViewDataSource, UITableViewDelegate {
     
     func loadMoreCommentData() {
         if requestingCommentData{
@@ -682,7 +683,7 @@ extension StatusDetailController {
         requestingCommentData = true
         let requester = StatusRequester.sharedInstance
         let dateThreshold = comments.last?.createdAt ?? Date()
-        requester.getMoreStatusComment(dateThreshold, statusID: status!.ssidString, onSuccess: { (json) -> () in
+        _ = requester.getMoreStatusComment(dateThreshold, statusID: status!.ssidString, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
                 let newComment = try! StatusComment(status: self.status!).loadDataFromJSON(data)
                 self.comments.append(newComment)
@@ -838,7 +839,7 @@ extension StatusDetailController {
                 assertionFailure()
             }
             let newCommentID = data!.int32Value
-            newComment.confirmSent(newCommentID)
+            _ = newComment.confirmSent(newCommentID)
             self.status?.commentNum += 1
             self.loadDataAndUpdateUI()
             self.lp_stop()
@@ -857,7 +858,7 @@ extension StatusDetailController {
         commentList?.endUpdates()
     
         commentPanel?.contentInput?.text = ""
-        commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
+        commentPanel?.snp.updateConstraints({ (make) -> Void in
             make.height.equalTo(commentPanel!.barheight)
         })
         
@@ -878,7 +879,7 @@ extension StatusDetailController {
         let fixedWidth = textView?.bounds.width
         let newSize = textView?.sizeThatFits(CGSize(width: fixedWidth!, height: CGFloat.greatestFiniteMagnitude))
         // 注：参见 CommentPanel 内部的布局设置，输入框的边缘总是距离下面的Bar的上下边界5个Point
-        commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
+        commentPanel?.snp.updateConstraints({ (make) -> Void in
             make.height.equalTo(max(newSize!.height  + 10 , commentPanel!.barheight))
         })
         self.view.layoutIfNeeded()
@@ -908,21 +909,21 @@ extension StatusDetailController {
     
     func changeLayoutWhenKeyboardAppears(_ notif: Foundation.Notification) {
         let userInfo = (notif as NSNotification).userInfo!
-        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue
-        board?.snp_updateConstraints(closure: { (make) -> Void in
+        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue!
+        board?.snp.updateConstraints({ (make) -> Void in
             make.bottom.equalTo(self.view).offset(-(keyboardFrame.height) )
         })
-        commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
+        commentPanel?.snp.updateConstraints({ (make) -> Void in
             make.bottom.equalTo(self.view).offset(-keyboardFrame.height)
         })
         self.view.layoutIfNeeded()
     }
     
     func changeLayoutWhenKeyboardDisappears(_ notif: Foundation.Notification) {
-        board?.snp_updateConstraints(closure: { (make) -> Void in
+        board?.snp.updateConstraints({ (make) -> Void in
             make.bottom.equalTo(self.view).offset(0)
         })
-        commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
+        commentPanel?.snp.updateConstraints({ (make) -> Void in
             make.bottom.equalTo(self.view).offset(0)
         })
         self.view.layoutIfNeeded()

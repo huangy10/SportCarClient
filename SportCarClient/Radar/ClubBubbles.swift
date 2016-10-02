@@ -88,7 +88,7 @@ class ClubBubbleCell: UIButton {
         didSet {
             if club != nil {
                 let logoURL = club!.logoURL!
-                self.kf_setImageWithURL(logoURL, forState: UIControlState())
+                self.kf.setImage(with: logoURL, for: .normal)
                 switch club!.memberNum {
                 case 0..<30:
                     radius = 30

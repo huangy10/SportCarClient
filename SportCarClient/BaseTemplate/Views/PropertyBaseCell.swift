@@ -49,7 +49,7 @@ class SSPropertyBaseCell: UITableViewCell {
         sepLine = superview.addSubview(UIView.self)
             .config(UIColor(white: 0.933, alpha: 1))
             .layout { (make) in
-                make.top.equalTo(staticLbl.snp_bottom).offset(11)
+                make.top.equalTo(staticLbl.snp.bottom).offset(11)
                 make.right.equalTo(superview).offset(-15)
                 make.height.equalTo(0.5)
                 make.left.equalTo(superview).offset(15)

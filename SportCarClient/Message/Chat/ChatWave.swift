@@ -79,7 +79,7 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
         playBtn?.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4)
         playBtn?.tag = 0
         superview.addSubview(playBtn!)
-        playBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        playBtn?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(self)
             make.centerY.equalTo(self)
             make.size.equalTo(25)
@@ -87,8 +87,8 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
         //
         processView = WideProcessView()
         superview.addSubview(processView!)
-        processView?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(playBtn!.snp_right).offset(15)
+        processView?.snp.makeConstraints({ (make) -> Void in
+            make.left.equalTo(playBtn!.snp.right).offset(15)
             make.height.equalTo(superview)
             make.centerY.equalTo(superview)
             make.width.equalTo(167)
@@ -101,10 +101,10 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
         remainingTimeLbl?.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightRegular)
         remainingTimeLbl?.textColor = UIColor.white
         superview.addSubview(remainingTimeLbl!)
-        remainingTimeLbl?.snp_makeConstraints(closure: { (make) -> Void in
+        remainingTimeLbl?.snp.makeConstraints({ (make) -> Void in
             make.centerY.equalTo(superview)
             make.height.equalTo(superview)
-            make.left.equalTo(processView!.snp_right).offset(10)
+            make.left.equalTo(processView!.snp.right).offset(10)
         })
     }
     
@@ -180,14 +180,14 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
         controller.preferredContentSize = CGSize(width: 100, height: 44)
         let player = UniversalAudioPlayer.sharedPlayer
         if player.isOnSpeaker() {
-            let btn = controller.view.addSubview(UIButton)
+            let btn = controller.view.addSubview(UIButton.self)
                 .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("听筒播放"), titleColor: UIColor.white, titleSize: 14, titleWeight: UIFontWeightRegular)
                 .layout({ (make) in
                     make.edges.equalTo(controller.view)
                 })
             btn.tag = 0
         } else {
-            let btn = controller.view.addSubview(UIButton)
+            let btn = controller.view.addSubview(UIButton.self)
                 .config(self, selector: #selector(onAudioPlayerOutputTypeSwitchBtnPressed(_:)), title: LS("扬声器播放"), titleColor: UIColor.white, titleSize: 14, titleWeight: UIFontWeightRegular)
                 .layout({ (make) in
                     make.edges.equalTo(controller.view)
@@ -292,24 +292,34 @@ class ChatWaveMaskView: UIView {
 //        CGContextFillRect(ctx, self.bounds)
         // 绘制水平线
         let horizontalLine = CGMutablePath()
-        CGPathMoveToPoint(horizontalLine, nil, 0, contextSize.height / 2)
-        CGPathAddLineToPoint(horizontalLine, nil, contextSize.width, contextSize.height / 2)
+        horizontalLine.move(to: CGPoint(x: 0, y: contextSize.height / 2))
+        horizontalLine.addLine(to: CGPoint(x: contextSize.width, y: contextSize.height / 2))
         ctx?.addPath(horizontalLine)
-        ctx?.setStrokeColor(UIColor(white: 1, alpha: 1).cgColor)
+        ctx?.setStrokeColor(UIColor.white.cgColor)
         ctx?.setLineWidth(0.5)
         ctx?.strokePath()
+        
+//        CGPathMoveToPoint(horizontalLine, nil, 0, contextSize.height / 2)
+//        CGPathAddLineToPoint(horizontalLine, nil, contextSize.width, contextSize.height / 2)
+//        ctx?.addPath(horizontalLine)
+//        ctx?.setStrokeColor(UIColor(white: 1, alpha: 1).cgColor)
+//        ctx?.setLineWidth(0.5)
+//        ctx?.strokePath()
         // 绘制波形图
         let waveShape = CGMutablePath()
         var trans = CGAffineTransform.identity
         trans = trans.translatedBy(x: 0, y: contextSize.height/2)
         trans = trans.scaledBy(x: 1, y: contextSize.height/2)
-        CGPathMoveToPoint(waveShape, &trans, 0, 0)
+        waveShape.move(to: CGPoint(x: 0, y: 0), transform: trans)
+//        CGPathMoveToPoint(waveShape, &trans, 0, 0)
         var pos: CGFloat = 1.5
         let interval = (contextSize.width - 3) / CGFloat(data.count - 1)
         for point in data{
             let y = CGFloat(point)
-            CGPathMoveToPoint(waveShape, &trans, pos, y)
-            CGPathAddLineToPoint(waveShape, &trans, pos, -y)
+            waveShape.move(to: CGPoint(x: pos, y: y), transform: trans)
+            waveShape.addLine(to: CGPoint(x: pos, y: -y), transform: trans)
+//            CGPathMoveToPoint(waveShape, &trans, pos, y)
+//            CGPathAddLineToPoint(waveShape, &trans, pos, -y)
             pos += interval
         }
         ctx?.addPath(waveShape)
@@ -325,7 +335,7 @@ class WideProcessView: UIView {
     
     var process: Double=0 {
         didSet {
-            barView.snp_remakeConstraints { (make) -> Void in
+            barView.snp.remakeConstraints { (make) -> Void in
                 make.left.equalTo(self)
                 make.top.equalTo(self)
                 make.bottom.equalTo(self)
@@ -345,7 +355,7 @@ class WideProcessView: UIView {
         super.init(frame: CGRect.zero)
         self.backgroundColor = UIColor(white: 0.72, alpha: 1)
         self.addSubview(barView)
-        barView.snp_makeConstraints { (make) -> Void in
+        barView.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(self)
             make.top.equalTo(self)
             make.bottom.equalTo(self)

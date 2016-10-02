@@ -37,6 +37,7 @@ class BaseModel: NSManagedObject {
      - parameter data: json数据
      - parameter ctx:  所属的context
      */
+    @discardableResult
     func loadDataFromJSON(_ data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> Self {
         if forceMainThread && !Thread.isMainThread {
             assertionFailure()
@@ -54,6 +55,7 @@ class BaseModel: NSManagedObject {
         return self
     }
     
+    @discardableResult
     func loadInitialFromJSON(_ data: JSON) throws -> Self {
         if let host = MainManager.sharedManager.hostUserID {
             hostSSID = host
@@ -70,6 +72,8 @@ class BaseModel: NSManagedObject {
      
      - returns: json字符串
      */
+    
+    @discardableResult
     func toJSONString(_ detailLevel: Int) throws -> String {
         let json = try toJSONObject(detailLevel)
         if json.isEmpty {
@@ -82,6 +86,7 @@ class BaseModel: NSManagedObject {
         }
     }
     
+    @discardableResult
     func toJSONObject(_ detailLevel: Int) throws -> JSON {
         throw SSModelError.notImplemented
     }
@@ -92,13 +97,14 @@ class BaseModel: NSManagedObject {
      - parameter string:      字符串内容
      - parameter detailLevel: 详细程度
      */
+    @discardableResult
     func fromJSONString(_ string: String, detailLevel: Int) throws -> Self{
         let json = JSON(data: string.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
-        try self.loadDataFromJSON(json, detailLevel: detailLevel)
+        _ = try self.loadDataFromJSON(json, detailLevel: detailLevel)
         return self
     }
     
-    
+    @discardableResult
     func toContext(_ ctx: DataContext) -> BaseModel? {
         if self.managedObjectContext == ctx {
             return self

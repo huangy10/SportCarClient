@@ -72,7 +72,7 @@ extension ChatRecord {
 
 // MARK: - AttributeType extensions
 
-extension AlecrimCoreData.AttributeType where Self.ValueType: ChatRecord {
+extension AlecrimCoreData.AttributeProtocol where Self.ValueType: ChatRecord {
 
     var audio: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("audio", self) }
     var audioCaches: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("audioCaches", self) }

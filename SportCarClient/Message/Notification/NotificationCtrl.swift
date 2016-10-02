@@ -23,7 +23,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
     
     var data: [Notification] = []
     
-    var delayTask: ()->()?
+    var delayTask: (()->())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +41,14 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
     
     deinit {
         MessageManager.defaultManager.leaveNotificationList()
+    }
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -351,7 +359,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let notification = data[(indexPath as NSIndexPath).row]
         if !notification.read {
-            NotificationRequester.sharedInstance.notifMarkRead(notification.ssidString, onSuccess: { (json) in
+            _ = NotificationRequester.sharedInstance.notifMarkRead(notification.ssidString, onSuccess: { (json) in
                 //
                 notification.read = true
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -463,7 +471,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
     func getDetailController(forRow row: Int) -> UIViewController {
         let notification = data[row]
         let messageType = notification.simplifiedMessageType
-        let senderClassKey = messageType.split(":")[0]
+        let senderClassKey = messageType.split(delimiter: ":")[0]
         let detail = detailControllerMap[senderClassKey]!(notification)
         return detail
     }
@@ -509,7 +517,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
                 let opType = "invite_\(operationType.rawValue)"
                 let activity = try! notification.getRelatedObj()! as Activity
                 lp_start()
-                ActivityRequester.sharedInstance.activityOperation(activity.ssidString, targetUserID: notification.user!.ssidString, opType: opType, onSuccess: { (json) in
+                _ = ActivityRequester.sharedInstance.activityOperation(activity.ssidString, targetUserID: notification.user!.ssidString, opType: opType, onSuccess: { (json) in
                     notification.flag = operationType == .Agree
                     notification.checked = true
                     self.tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -522,7 +530,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
                 let opType = "club_apply_\(operationType.rawValue)"
                 let club = try! notification.getRelatedObj()! as Club
                 lp_start()
-                ClubRequester.sharedInstance.clubOperation(club.ssidString, targetUserID: notification.user!.ssidString, opType: opType, onSuccess: { (json) in
+                _ = ClubRequester.sharedInstance.clubOperation(club.ssidString, targetUserID: notification.user!.ssidString, opType: opType, onSuccess: { (json) in
                     notification.checked = true
                     notification.flag = operationType == .Agree
                     self.tableView.reloadRows(at: [indexPath], with: .automatic)

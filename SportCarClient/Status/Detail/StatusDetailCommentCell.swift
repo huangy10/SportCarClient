@@ -24,7 +24,7 @@ class StatusDetailCommentCell: DetailCommentCell {
         let user = data.user!
         replyBtn?.isHidden = user.isHost
         // 设置头像
-        avatarBtn?.kf_setImageWithURL(user.avatarURL!, forState: UIControlState())
+        avatarBtn?.kf.setImage(with: user.avatarURL!, for: .normal)
         //
         nameLbl?.text = user.nickName
         // 检查是否有回应对象

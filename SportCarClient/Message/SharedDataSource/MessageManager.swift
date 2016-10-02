@@ -35,7 +35,7 @@ class MessageManager {
         return ChatModelManger.sharedManager.workQueue
     }
     
-    fileprivate var manager: Manager {
+    fileprivate var manager: SessionManager {
         return ChatRequester2.sharedInstance.manager
     }
     
@@ -239,16 +239,16 @@ class MessageManager {
         state = .syncing
         // FIRST: 清除本地缓存的信息
         let context = ChatModelManger.sharedManager.getOperationContext()
-        do {
-            // delete the cached chat records
-            try context.chatRecords.filter({
-                $0.hostSSID == MainManager.sharedManager.hostUserID!
-            }).delete()
-            // delete the cached notifications
-            try context.notifications.filter({
-                $0.hostSSID == MainManager.sharedManager.hostUserID!
-            }).delete()
-        } catch {}
+
+        // delete the cached chat records
+        context.chatRecords.filter({
+            $0.hostSSID == MainManager.sharedManager.hostUserID!
+        }).deleteEntities()
+        // delete the cached notifications
+        context.notifications.filter({
+            $0.hostSSID == MainManager.sharedManager.hostUserID!
+        }).deleteEntities()
+
         NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kMessageChatResetNotification), object: self)
         state = .ongoing
     }
@@ -317,7 +317,7 @@ class MessageManager {
                 }
             }
             // 进入这里说明没有在已有的rosterItems中找到已有的rosterItem，故这里向服务器提交请求
-            ChatRequester2.sharedInstance.startChat("\(targetID)", chatType: chatType, onSuccess: { (json) in
+            _ = ChatRequester2.sharedInstance.startChat("\(targetID)", chatType: chatType, onSuccess: { (json) in
                 let rosterItem = RosterManager.defaultManager.getOrCreateNewRoster(json!, autoBringToFront: true)
                 room.rosterItem = rosterItem
                 //
@@ -363,7 +363,7 @@ class MessageManager {
         queue.async {    
             var chats = ChatModelManger.sharedManager.loadCachedChats(room.rosterItem.ssid, skips: room.chats.count, limit: 20)
             if chats.count < 20 {
-                ChatRequester2.sharedInstance.getChatHistories(room.rosterItem.ssid, skips: room.chats.count + chats.count, limit: 20 - chats.count, onSucces: { (json) in
+                _ = ChatRequester2.sharedInstance.getChatHistories(room.rosterItem.ssid, skips: room.chats.count + chats.count, limit: 20 - chats.count, onSucces: { (json) in
                     let parser = ChatParser()
                     for data in json!.arrayValue {
                         let result = try! parser.parse(data).0
@@ -371,16 +371,16 @@ class MessageManager {
                         chats.insert(result, at: 0)
                     }
                     DispatchQueue.main.async(execute: { 
-                        onFinished(chats: chats)
+                        onFinished(chats)
                     })
                     }, onError: { (code) in
                         DispatchQueue.main.async {
-                            onFinished(chats: nil)
+                            onFinished(nil)
                         }
                 })
             } else {
                 DispatchQueue.main.async(execute: {
-                    onFinished(chats: chats)
+                    onFinished(chats)
                 })
             }
         }
@@ -389,13 +389,12 @@ class MessageManager {
     func clearChatHistory(_ rosterItem: RosterItem) {
         func _clear(_ rosterItem: RosterItem) {
             let context = ChatModelManger.sharedManager.getOperationContext()
-            do {
-                try context.chatRecords
-                    .filter({$0.hostSSID == self.hostUser.ssid})
-                    .filter({$0.rosterID == rosterItem.ssid})
-                    .delete()
-                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kMessageChatHistoryCleared), object: nil, userInfo: [kRosterItemKey: rosterItem])
-            } catch {}
+            context.chatRecords
+                .filter({$0.hostSSID == self.hostUser.ssid})
+                .filter({$0.rosterID == rosterItem.ssid})
+                .deleteEntities()
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kMessageChatHistoryCleared), object: nil, userInfo: [kRosterItemKey: rosterItem])
+
         }
         
         if Thread.isMainThread {
@@ -438,7 +437,7 @@ class MessageManager {
                 })
             } else {
                 // 如果进入通知列表时通知列表是空的，尝试向服务器请求
-                NotificationRequester.sharedInstance.getNotifications(0, onSuccess: { (json) in
+                _ = NotificationRequester.sharedInstance.getNotifications(0, onSuccess: { (json) in
                     let parser = NotificationParser()
                     for data in json!.arrayValue {
                         do {
@@ -468,7 +467,7 @@ class MessageManager {
             var notifs = ChatModelManger.sharedManager.loadCachedNotifications(list.data.count, limit: 20)
             if notifs.count < 20 {
                 // contact server
-                NotificationRequester.sharedInstance.getNotifications(list.data.count + notifs.count, limit: 20 - notifs.count, onSuccess: { (json) in
+                _ = NotificationRequester.sharedInstance.getNotifications(list.data.count + notifs.count, limit: 20 - notifs.count, onSuccess: { (json) in
                     let parser = NotificationParser()
                     for data in json!.arrayValue {
                         do {
@@ -477,16 +476,16 @@ class MessageManager {
                         } catch { continue }
                     }
                     DispatchQueue.main.async(execute: { 
-                        onFinish(notifs: notifs)
+                        onFinish(notifs)
                     })
                     }, onError: { (code) in
                         DispatchQueue.main.async(execute: { 
-                            onFinish(notifs: nil)
+                            onFinish(nil)
                         })
                 })
             } else {
                 DispatchQueue.main.async(execute: { 
-                    onFinish(notifs: notifs)
+                    onFinish(notifs)
                 })
             }
         }

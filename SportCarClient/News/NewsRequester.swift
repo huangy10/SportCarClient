@@ -28,7 +28,7 @@ class NewsRequester: BasicRequester {
         return "news"
     }
     
-    func getLatestNewsList(_ dateThreshold: Date, onSuccess: SSSuccessCallback, onError: SSFailureCallback) -> Request {
+    func getLatestNewsList(_ dateThreshold: Date, onSuccess: @escaping SSSuccessCallback, onError: @escaping SSFailureCallback) -> Request {
         return get(
             urlForName("get"),
             parameters: ["op_type": "latest", "date_threshold": STRDate(dateThreshold), "limit": "20"],
@@ -37,8 +37,7 @@ class NewsRequester: BasicRequester {
         )
     }
     
-    func getMoreNewsList(_ dateThreshold: Date, onSuccess: SSSuccessCallback,
-                         onError: SSFailureCallback) -> Request {
+    func getMoreNewsList(_ dateThreshold: Date, onSuccess: @escaping SSSuccessCallback, onError: @escaping SSFailureCallback) -> Request {
         return get(
             urlForName("get"),
             parameters: ["op_type": "more", "date_threshold": STRDate(dateThreshold), "limit": "20"],
@@ -47,7 +46,7 @@ class NewsRequester: BasicRequester {
         )
     }
     
-    func getMoreNewsComment(_ dateThreshold: Date, newsID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func getMoreNewsComment(_ dateThreshold: Date, newsID: String, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         return get(
             urlForName("comments", param: ["newsID": newsID]),
             parameters: ["op_type": "more", "date_threshold": STRDate(dateThreshold), "limit": "20"],
@@ -56,7 +55,7 @@ class NewsRequester: BasicRequester {
         )
     }
     
-    func postCommentToNews(_ newsID: String, content: String?, responseTo: String?, informOf: [String]?, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) {
+    func postCommentToNews(_ newsID: String, content: String?, responseTo: String?, informOf: [String]?, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) {
         assert(content != nil)
         var param: [String: AnyObject] = ["content": content! as AnyObject]
         if let responseTo = responseTo {
@@ -73,7 +72,7 @@ class NewsRequester: BasicRequester {
         )
     }
     
-    func likeNews(_ newsID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func likeNews(_ newsID: String, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         return post(urlForName("operation", param: ["newsID": newsID]),
                     parameters: ["op_type": "like"],
                     responseDataField: "like_info",

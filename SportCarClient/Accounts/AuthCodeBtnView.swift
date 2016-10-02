@@ -68,7 +68,7 @@ class AuthCodeBtnView: UIButton {
     
     fileprivate func createSubviews() {
         self.addSubview(indicator)
-        indicator.snp_makeConstraints { (make) -> Void in
+        indicator.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(self)
         }
         indicator.hidesWhenStopped = true

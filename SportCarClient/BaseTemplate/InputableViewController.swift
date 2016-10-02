@@ -12,7 +12,15 @@ import UIKit
 class InputableViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     var tapper: UITapGestureRecognizer?
     var inputFields: [UIView?] = []
-    var delayTask: ()->()?
+    var delayTask: (()->())?
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

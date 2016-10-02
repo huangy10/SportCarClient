@@ -50,7 +50,7 @@ class PermissionCheck: Syncable {
             return
         }
         requesting = true
-        AccountRequester2.sharedInstance.syncPermission({ (json) in
+        _ = AccountRequester2.sharedInstance.syncPermission({ (json) in
             self._synced = true
             self.releaseActivity = json!["allow_to_release_acts"].boolValue
             self.requesting = false

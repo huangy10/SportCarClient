@@ -33,7 +33,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         staticLabel1 = getStaticLabel()
         staticLabel1.text = getStaticLabelContentForIndex(0)
         container.addSubview(staticLabel1)
-        staticLabel1.snp_makeConstraints { (make) -> Void in
+        staticLabel1.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(container)
             make.top.equalTo(container)
         }
@@ -43,7 +43,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         imageBtn1.imageView?.contentMode = .scaleAspectFill
         imageBtn1.setImage(defaultCover, for: UIControlState())
         container.addSubview(imageBtn1)
-        imageBtn1.snp_makeConstraints { (make) -> Void in
+        imageBtn1.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(container)
             make.top.equalTo(container)
             make.size.equalTo(btnSize)
@@ -53,9 +53,9 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         staticLabel2 = getStaticLabel()
         staticLabel2.text = getStaticLabelContentForIndex(1)
         container.addSubview(staticLabel2)
-        staticLabel2.snp_makeConstraints { (make) -> Void in
+        staticLabel2.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(container)
-            make.top.equalTo(staticLabel1.snp_bottom).offset(110)
+            make.top.equalTo(staticLabel1.snp.bottom).offset(110)
         }
         //
         imageBtn2 = UIButton()
@@ -63,7 +63,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         imageBtn2.setImage(defaultCover, for: UIControlState())
         imageBtn2.imageView?.contentMode = .scaleAspectFill
         container.addSubview(imageBtn2)
-        imageBtn2.snp_makeConstraints { (make) -> Void in
+        imageBtn2.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(container)
             make.top.equalTo(staticLabel2)
             make.size.equalTo(btnSize)
@@ -73,9 +73,9 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         staticLabel3 = getStaticLabel()
         staticLabel3.text = getStaticLabelContentForIndex(2)
         container.addSubview(staticLabel3)
-        staticLabel3.snp_makeConstraints { (make) -> Void in
+        staticLabel3.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(container)
-            make.top.equalTo(staticLabel2.snp_bottom).offset(110)
+            make.top.equalTo(staticLabel2.snp.bottom).offset(110)
         }
         //
         imageBtn3 = UIButton()
@@ -83,7 +83,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         imageBtn3.setImage(defaultCover, for: UIControlState())
         imageBtn3.imageView?.contentMode = .scaleAspectFill
         container.addSubview(imageBtn3)
-        imageBtn3.snp_makeConstraints { (make) -> Void in
+        imageBtn3.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(container)
             make.top.equalTo(staticLabel3)
             make.size.equalTo(btnSize)

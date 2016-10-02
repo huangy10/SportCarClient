@@ -50,7 +50,7 @@ extension Notification {
 
 // MARK: - AttributeType extensions
 
-extension AlecrimCoreData.AttributeType where Self.ValueType: Notification {
+extension AlecrimCoreData.AttributeProtocol where Self.ValueType: Notification {
 
     var checked: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("checked", self) }
     var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }

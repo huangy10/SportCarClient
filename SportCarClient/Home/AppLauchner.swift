@@ -79,7 +79,7 @@ class AppManager: UIViewController {
     func logout(_ forced: Bool = false) {
         state = .loginRegister
         if !forced {
-            AccountRequester2.sharedInstance.logout({ (json) -> (Void) in
+            _ = AccountRequester2.sharedInstance.logout({ (json) -> (Void) in
                 print("logout")
                 }) { (code) -> (Void) in
                     print("logout fails")
@@ -103,7 +103,7 @@ class AppManager: UIViewController {
                 ctrl.showToast(LS("您的账号在其他设备上登陆了"))
             }
         })
-        self.navigationController?.popToRootViewController(animated: false)
+        _ = self.navigationController?.popToRootViewController(animated: false)
         NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kAppManagerNotificationLogout), object: nil)
     }
     

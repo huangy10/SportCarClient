@@ -137,7 +137,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
 //    var snapShotView: UIView! {
 //        didSet {
 //            view.addSubview(snapShotView)
-//            snapShotView.snp_makeConstraints { (make) in
+//            snapShotView.snp.makeConstraints { (make) in
 //                make.edges.equalTo(view)
 //            }
 //        }
@@ -155,7 +155,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     var atUser: [String] = []
     
     //
-    var delayTask: ()->()?
+    var delayTask: (()->())?
     
     // 
     var tapper: UITapGestureRecognizer!
@@ -170,6 +170,14 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     }
     
     var webViewReqPermitted: Int = 2
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -221,7 +229,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func navLeftBtnPressed() {
-        navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
@@ -233,7 +241,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         tableView.dataSource = self
         tableView.delegate = self
         view.addSubview(tableView)
-        tableView.snp_makeConstraints { (make) in
+        tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(view)
         }
         tableView.separatorStyle = .none
@@ -254,7 +262,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func configureCover() {
-        cover = header.addSubview(UIImageView)
+        cover = header.addSubview(UIImageView.self)
             .layout({ (make) in
                 make.left.equalTo(header)
                 make.right.equalTo(header)
@@ -263,77 +271,77 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
             })
         cover.isHidden = true
         
-        cover.addSubview(UIImageView).config(UIImage(named: "news_cover_mask"))
+        cover.addSubview(UIImageView.self).config(UIImage(named: "news_cover_mask"))
             .layout { (make) in
                 make.left.equalTo(cover)
                 make.right.equalTo(cover)
                 make.bottom.equalTo(cover)
-                make.height.equalTo(cover.snp_width).multipliedBy(0.285)
+                make.height.equalTo(cover.snp.width).multipliedBy(0.285)
         }
     }
     
     func configureShareNumDisplay() {
-        shareNumLbl = cover.addSubview(UILabel)
+        shareNumLbl = cover.addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), text: "0")
             .layout({ (make) in
                 make.bottom.equalTo(cover).offset(-10)
                 make.right.equalTo(cover).offset(-15)
                 make.width.equalTo(30)
             })
-        shareIcon = cover.addSubview(UIImageView)
+        shareIcon = cover.addSubview(UIImageView.self)
             .config(UIImage(named: "news_share_white"))
             .layout({ (make) in
-                make.right.equalTo(shareNumLbl.snp_left).offset(-3)
+                make.right.equalTo(shareNumLbl.snp.left).offset(-3)
                 make.bottom.equalTo(shareNumLbl)
                 make.size.equalTo(15)
             })
     }
     
     func configureCommentNumDisplay() {
-        commentNumLbl = cover.addSubview(UILabel)
+        commentNumLbl = cover.addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), text: "0")
             .layout({ (make) in
-                make.right.equalTo(shareIcon.snp_left)
+                make.right.equalTo(shareIcon.snp.left)
                 make.bottom.equalTo(shareIcon)
                 make.width.equalTo(30)
             })
-        commentIcon = cover.addSubview(UIImageView)
+        commentIcon = cover.addSubview(UIImageView.self)
             .config(UIImage(named: "news_comment"))
             .layout({ (make) in
-                make.right.equalTo(commentNumLbl.snp_left).offset(-3)
+                make.right.equalTo(commentNumLbl.snp.left).offset(-3)
                 make.bottom.equalTo(commentNumLbl)
                 make.size.equalTo(15)
             })
     }
     
     func configureLikeNumDisplay() {
-        likeNumLbl = cover.addSubview(UILabel)
+        likeNumLbl = cover.addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), text: "0")
             .layout({ (make) in
                 make.bottom.equalTo(commentNumLbl)
-                make.right.equalTo(commentIcon.snp_left)
+                make.right.equalTo(commentIcon.snp.left)
                 make.width.equalTo(30)
             })
-        likeIcon = cover.addSubview(UIImageView)
+        likeIcon = cover.addSubview(UIImageView.self)
             .config(UIImage(named: "news_like_unliked"))
             .layout({ (make) in
                 make.bottom.equalTo(likeNumLbl)
-                make.right.equalTo(likeNumLbl.snp_left).offset(-3)
+                make.right.equalTo(likeNumLbl.snp.left).offset(-3)
                 make.size.equalTo(15)
             })
     }
     
     func configureTitleLbl() {
-        titleLbl = header.addSubview(UILabel)
+        titleLbl = header.addSubview(UILabel.self)
             .config(17, fontWeight: UIFontWeightBlack, textColor: UIColor.black, multiLine: true)
             .layout({ (make) in
                 make.left.equalTo(cover).offset(15)
                 make.bottom.equalTo(cover).offset(-10)
-                make.right.equalTo(likeIcon.snp_left).offset(-5)
+                make.right.equalTo(likeIcon.snp.left).offset(-5)
             })
         titleLbl.layer.opacity = 0
         
-        titleLblWhite = cover.addSubview(UILabel)
+        titleLblWhite = cover.addSubview(UILabel.self)
             .config(17, fontWeight: UIFontWeightBlack, textColor: UIColor.white, multiLine: true)
             .layout({ (make) in
                 make.edges.equalTo(titleLbl)
@@ -348,8 +356,8 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         newsDetail.addObserver(self, forKeyPath: "scrollView.contentSize", options: .new, context: &newsContext)
         header.addSubview(newsDetail)
         
-        newsDetail.snp_makeConstraints { (make) in
-            make.top.equalTo(cover.snp_bottom).offset(15)
+        newsDetail.snp.makeConstraints { (make) in
+            make.top.equalTo(cover.snp.bottom).offset(15)
             make.left.equalTo(cover)
             make.right.equalTo(cover)
             make.height.equalTo(100)
@@ -358,31 +366,31 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func configureRecentLikeInfo() {
-        likeInfoIcon = header.addSubview(UIImageView)
+        likeInfoIcon = header.addSubview(UIImageView.self)
             .config(UIImage(named: "news_like_unliked"))
             .layout({ (make) in
                 make.left.equalTo(header).offset(15)
                 make.size.equalTo(15)
-                make.top.equalTo(newsDetail.snp_bottom).offset(30)
+                make.top.equalTo(newsDetail.snp.bottom).offset(30)
             })
-        likeDescriptionLbl = header.addSubview(UILabel)
+        likeDescriptionLbl = header.addSubview(UILabel.self)
             .layout({ (make) in
-                make.left.equalTo(likeInfoIcon.snp_right).offset(10)
+                make.left.equalTo(likeInfoIcon.snp.right).offset(10)
                 make.centerY.equalTo(likeInfoIcon)
             })
     }
     
     func configureCommentSepLine() {
-        let sepLine = header.addSubview(UIView).config(UIColor(white: 0.72, alpha: 1))
+        let sepLine = header.addSubview(UIView.self).config(UIColor(white: 0.72, alpha: 1))
             .layout { (make) in
                 make.left.equalTo(view)
                 make.right.equalTo(view)
                 make.height.equalTo(0.5)
-                make.top.equalTo(likeInfoIcon.snp_bottom).offset(24)
+                make.top.equalTo(likeInfoIcon.snp.bottom).offset(24)
         }
-        header.addSubview(UILabel).config(UIColor.white).config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("评论"))
+        header.addSubview(UILabel.self).config(UIColor.white).config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("评论"))
             .layout { (make) in
-                make.centerY.equalTo(sepLine.snp_top)
+                make.centerY.equalTo(sepLine.snp.top)
                 make.centerX.equalTo(header)
                 make.width.equalTo(75)
         }
@@ -412,7 +420,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func loadDataAndUpdateUI() {
-        cover.kf_setImageWithURL(news.coverURL!)
+        cover.kf.setImage(with: news.coverURL!)
         titleLbl.text = news.title
         titleLblWhite.text = news.title
         if news.likeNum > 99 {
@@ -484,7 +492,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         if keyPath == "scrollView.contentSize" {
             view.updateConstraints()
             view.layoutIfNeeded()
-            newsDetail.snp_updateConstraints(closure: { (make) in
+            newsDetail.snp.updateConstraints({ (make) in
                 make.height.equalTo(newsDetail.scrollView.contentSize.height)
             })
             view.layoutIfNeeded()
@@ -542,13 +550,13 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         cover.isHidden = false
         let titleWidth = titleLbl.frame.width
         view.layoutIfNeeded()
-        titleLbl.snp_remakeConstraints { (make) in
+        titleLbl.snp.remakeConstraints { (make) in
             make.left.equalTo(header).offset(40)
-            make.top.equalTo(cover.snp_bottom).offset(15)
+            make.top.equalTo(cover.snp.bottom).offset(15)
             make.width.equalTo(titleWidth)
         }
-        newsDetail.snp_remakeConstraints { (make) in
-            make.top.equalTo(titleLbl.snp_bottom).offset(10)
+        newsDetail.snp.remakeConstraints { (make) in
+            make.top.equalTo(titleLbl.snp.bottom).offset(10)
             make.left.equalTo(cover)
             make.right.equalTo(cover)
             make.height.equalTo(newsDetail.scrollView.contentSize.height)
@@ -570,13 +578,13 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func animateTitleOut(_ duration: Double, onFinished: @escaping ()->()) {
-        titleLbl.snp_remakeConstraints { (make) in
+        titleLbl.snp.remakeConstraints { (make) in
             make.left.equalTo(cover).offset(15)
             make.bottom.equalTo(cover).offset(-10)
-            make.right.equalTo(likeIcon.snp_left).offset(-5)
+            make.right.equalTo(likeIcon.snp.left).offset(-5)
         }
-        newsDetail.snp_remakeConstraints { (make) in
-            make.top.equalTo(cover.snp_bottom).offset(15)
+        newsDetail.snp.remakeConstraints { (make) in
+            make.top.equalTo(cover.snp.bottom).offset(15)
             make.left.equalTo(cover)
             make.right.equalTo(cover)
             make.height.equalTo(newsDetail.scrollView.contentSize.height)
@@ -655,7 +663,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         switch notification.name {
         case NSNotification.Name.UIKeyboardWillShow:
             let userInfo = (notification as NSNotification).userInfo!
-            let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue
+            let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue!
             commentPanel.setOriginY(view.frame.height - keyboardFrame.height - commentPanel.frame.height)
             tableView.contentInset = UIEdgeInsetsMake(0, 0, view.bounds.height - commentPanel.frame.origin.y, 0)
             break
@@ -788,7 +796,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func linkForShare() -> String {
-        return news.contentURL!.absoluteString!
+        return news.contentURL!.absoluteString
     }
     
     func detailCommentCellReplyPressed(_ cell: DetailCommentCell2) {

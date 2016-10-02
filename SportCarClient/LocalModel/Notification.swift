@@ -16,7 +16,7 @@ class Notification: BaseModel {
     
     var simplifiedMessageType: String {
         get {
-            let elements = messageType!.split(":")
+            let elements = messageType!.split(delimiter: ":")
             return elements[1..<elements.count].joined(separator: ":")
         }
     }
@@ -38,7 +38,7 @@ class Notification: BaseModel {
     }
 
     override func loadDataFromJSON(_ data: JSON, detailLevel: Int, forceMainThread: Bool) throws -> Self {
-        try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
+        let _ = try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         createdAt = DateSTR(data["created_at"].stringValue)
         messageBody = data["message_body"].stringValue
         messageType = data["message_type"].stringValue
@@ -199,7 +199,7 @@ class Notification: BaseModel {
     }()
     
     func getDisplayMode() -> NotificationCell.DisplayMode {
-        let elements = messageType!.split(":")
+        let elements = messageType!.split(delimiter: ":")
         let displayModeString = elements[0]
         
         return displayModeMap[displayModeString] ?? .minimal

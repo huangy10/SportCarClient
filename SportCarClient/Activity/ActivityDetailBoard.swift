@@ -63,11 +63,11 @@ class ActivityDetailBoardView: UIView {
         actCover.contentMode = .scaleAspectFill
         actCover.clipsToBounds = true
         superview.addSubview(actCover)
-        actCover.snp_makeConstraints { (make) -> Void in
+        actCover.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.top.equalTo(superview)
-            make.height.equalTo(actCover.snp_width).multipliedBy(0.5733)
+            make.height.equalTo(actCover.snp.width).multipliedBy(0.5733)
         }
         actCover.isHighlighted = true
         //
@@ -76,7 +76,7 @@ class ActivityDetailBoardView: UIView {
         backMaskView.ratio = -0.15
         backMaskView.backgroundColor = UIColor.clear
         superview.addSubview(backMaskView)
-        backMaskView.snp_makeConstraints { (make) -> Void in
+        backMaskView.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(actCover)
         }
         editBtn = UIButton()
@@ -85,7 +85,7 @@ class ActivityDetailBoardView: UIView {
         editBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         editBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
         superview.addSubview(editBtn)
-        editBtn.snp_makeConstraints { (make) -> Void in
+        editBtn.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.bottom.equalTo(actCover).offset(-16)
             make.size.equalTo(CGSize(width: 30, height: 20))
@@ -96,9 +96,9 @@ class ActivityDetailBoardView: UIView {
         actNameLbl.textColor = UIColor.black
         actNameLbl.numberOfLines = 0
         superview.addSubview(actNameLbl)
-        actNameLbl.snp_makeConstraints { (make) -> Void in
+        actNameLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(20)
-            make.centerY.equalTo(actCover.snp_bottom)
+            make.centerY.equalTo(actCover.snp.bottom)
             make.width.equalTo(superview).multipliedBy(0.5)
         }
         // 
@@ -106,15 +106,15 @@ class ActivityDetailBoardView: UIView {
         desLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         desLbl.textColor = UIColor.black
         superview.addSubview(desLbl)
-        desLbl.snp_makeConstraints { (make) -> Void in
+        desLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(actNameLbl)
-            make.top.equalTo(actNameLbl.snp_bottom).offset(10)
+            make.top.equalTo(actNameLbl.snp.bottom).offset(10)
         }
         //
         doneIcon = UIImageView(image: UIImage(named: "activity_done_2"))
         superview.addSubview(doneIcon)
-        doneIcon.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(actNameLbl.snp_bottom)
+        doneIcon.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(actNameLbl.snp.bottom)
             make.right.equalTo(superview).offset(-29)
             make.size.equalTo(CGSize(width: 100, height: 85))
         }
@@ -122,10 +122,10 @@ class ActivityDetailBoardView: UIView {
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.94, alpha: 1)
         superview.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.top.equalTo(desLbl.snp_bottom).offset(27.5)
+            make.top.equalTo(desLbl.snp.bottom).offset(27.5)
             make.height.equalTo(0.5)
         }
         //
@@ -133,7 +133,7 @@ class ActivityDetailBoardView: UIView {
         hostAvatar.layer.cornerRadius = 17.5
         hostAvatar.clipsToBounds = true
         superview.addSubview(hostAvatar)
-        hostAvatar.snp_makeConstraints { (make) -> Void in
+        hostAvatar.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(20)
             make.top.equalTo(sepLine).offset(27.5)
             make.size.equalTo(35)
@@ -143,25 +143,25 @@ class ActivityDetailBoardView: UIView {
         hostNameLbL.textColor = UIColor.black
         hostNameLbL.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         superview.addSubview(hostNameLbL)
-        hostNameLbL.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(hostAvatar.snp_right).offset(13)
-            make.bottom.equalTo(hostAvatar.snp_centerY)
+        hostNameLbL.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(hostAvatar.snp.right).offset(13)
+            make.bottom.equalTo(hostAvatar.snp.centerY)
         }
         //
         releaseDateLbl = UILabel()
         releaseDateLbl.textColor = UIColor(white: 0.72, alpha: 1)
         releaseDateLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(releaseDateLbl)
-        releaseDateLbl.snp_makeConstraints { (make) -> Void in
+        releaseDateLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(hostNameLbL)
-            make.top.equalTo(hostNameLbL.snp_bottom).offset(3)
+            make.top.equalTo(hostNameLbL.snp.bottom).offset(3)
         }
         //
         avatarCarNameLbl = UILabel()
         avatarCarNameLbl.textColor = UIColor(white: 0.72, alpha: 1)
         avatarCarNameLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(avatarCarNameLbl)
-        avatarCarNameLbl.snp_makeConstraints { (make) -> Void in
+        avatarCarNameLbl.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(hostAvatar)
         }
@@ -169,16 +169,16 @@ class ActivityDetailBoardView: UIView {
         avatarCarLogo = superview.addSubview(UIImageView.self)
             .config(nil)
             .layout(10.5, closurer: { (make) in
-                make.right.equalTo(avatarCarNameLbl.snp_left).offset(-2)
+                make.right.equalTo(avatarCarNameLbl.snp.left).offset(-2)
                 make.centerY.equalTo(avatarCarNameLbl)
                 make.size.equalTo(21)
             })
         //
         let locIcon = UIImageView(image: UIImage(named: "status_location_icon"))
         superview.addSubview(locIcon)
-        locIcon.snp_makeConstraints { (make) -> Void in
+        locIcon.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(15)
-            make.top.equalTo(hostAvatar.snp_bottom).offset(27)
+            make.top.equalTo(hostAvatar.snp.bottom).offset(27)
             make.size.equalTo(CGSize(width: 13.5, height: 18))
         }
         //
@@ -186,8 +186,8 @@ class ActivityDetailBoardView: UIView {
         locationLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         locationLbl.textColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(locationLbl)
-        locationLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(locIcon.snp_right).offset(11)
+        locationLbl.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(locIcon.snp.right).offset(11)
             make.centerY.equalTo(locIcon)
         }
         //
@@ -196,16 +196,16 @@ class ActivityDetailBoardView: UIView {
         attendNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         attendNumLbl.textAlignment = .right
         superview.addSubview(attendNumLbl)
-        attendNumLbl.snp_makeConstraints { (make) -> Void in
+        attendNumLbl.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(locationLbl)
         }
         // 
         let timeIcon = UIImageView(image: UIImage(named: "time_icon"))
         superview.addSubview(timeIcon)
-        timeIcon.snp_makeConstraints { (make) -> Void in
+        timeIcon.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(15)
-            make.top.equalTo(locationLbl.snp_bottom).offset(20)
+            make.top.equalTo(locationLbl.snp.bottom).offset(20)
             make.size.equalTo(14)
         }
         //
@@ -213,8 +213,8 @@ class ActivityDetailBoardView: UIView {
         actTimeLbl.textColor = UIColor(white: 0.72, alpha: 1)
         actTimeLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(actTimeLbl)
-        actTimeLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(timeIcon.snp_right).offset(11)
+        actTimeLbl.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(timeIcon.snp.right).offset(11)
             make.centerY.equalTo(timeIcon)
         }
         //
@@ -222,15 +222,15 @@ class ActivityDetailBoardView: UIView {
         commentNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
         commentNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(commentNumLbl)
-        commentNumLbl.snp_makeConstraints { (make) -> Void in
+        commentNumLbl.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(actTimeLbl)
         }
         //
         let commentIcon = UIImageView(image: UIImage(named: "news_comment"))
         superview.addSubview(commentIcon)
-        commentIcon.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(commentNumLbl.snp_left).offset(-4)
+        commentIcon.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(commentNumLbl.snp.left).offset(-4)
             make.centerY.equalTo(commentNumLbl)
             make.size.equalTo(15)
         }
@@ -239,25 +239,25 @@ class ActivityDetailBoardView: UIView {
         likeNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
         likeNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(likeNumLbl)
-        likeNumLbl.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(commentIcon.snp_left).offset(-32)
+        likeNumLbl.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(commentIcon.snp.left).offset(-32)
             make.centerY.equalTo(commentIcon)
         }
         //
         likeIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
         superview.addSubview(likeIcon)
-        likeIcon.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(likeNumLbl.snp_left).offset(-4)
+        likeIcon.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(likeNumLbl.snp.left).offset(-4)
             make.centerY.equalTo(likeNumLbl)
             make.size.equalTo(15)
         }
         //
         memberDisplay = InlineUserSelectController()
         superview.addSubview(memberDisplay.view)
-        memberDisplay.view.snp_makeConstraints { (make) -> Void in
+        memberDisplay.view.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.top.equalTo(timeIcon.snp_bottom).offset(23)
+            make.top.equalTo(timeIcon.snp.bottom).offset(23)
             make.height.equalTo(70)
         }
         memberDisplay.parentController = parentController
@@ -265,10 +265,10 @@ class ActivityDetailBoardView: UIView {
         let sepLine2 = UIView()
         sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(sepLine2)
-        sepLine2.snp_makeConstraints { (make) -> Void in
+        sepLine2.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
-            make.top.equalTo(memberDisplay.view.snp_bottom).offset(33)
+            make.top.equalTo(memberDisplay.view.snp.bottom).offset(33)
             make.height.equalTo(0.5)
         }
         //
@@ -279,7 +279,7 @@ class ActivityDetailBoardView: UIView {
         commentStaticLbl.textAlignment = .center
         superview.addSubview(commentStaticLbl)
         commentStaticLbl.backgroundColor = UIColor.white
-        commentStaticLbl.snp_makeConstraints { (make) -> Void in
+        commentStaticLbl.snp.makeConstraints { (make) -> Void in
             make.width.equalTo(75)
             make.center.equalTo(sepLine2)
         }
@@ -288,7 +288,7 @@ class ActivityDetailBoardView: UIView {
     
     func loadDataAndUpdateUI() -> CGFloat{
         // 活动海报
-        actCover.kf_setImageWithURL(SFURL(act.poster!)!)
+        actCover.kf.setImage(with: act.posterURL!)
         // 是否显示编辑按钮
         if act.user!.isHost {
             showEditBtn = true
@@ -304,10 +304,10 @@ class ActivityDetailBoardView: UIView {
         doneIcon.isHidden = endAt!.compare(Date()) == ComparisonResult.orderedDescending
         // 举办者的信息
         let host = act.user
-        hostAvatar.kf_setImageWithURL(host!.avatarURL!, forState: UIControlState())
+        hostAvatar.kf.setImage(with: host!.avatarURL!, for: .normal)
         hostNameLbL.text = host?.nickName
         if let avatarCarURL = host?.avatarCarModel?.logoURL {
-            avatarCarLogo.kf_setImageWithURL(avatarCarURL)
+            avatarCarLogo.kf.setImage(with: avatarCarURL)
             avatarCarNameLbl.text = host?.avatarCarModel?.name
         }
         // 活动发布时间
@@ -323,8 +323,12 @@ class ActivityDetailBoardView: UIView {
         let users = act.applicants
         memberDisplay.users = users
         memberDisplay.collectionView?.reloadData()
-        let memberDisplayHeight = UIScreen.main.bounds.width / 4 * CGFloat((users.count + (memberDisplay.showDeleteBtn ? 2 : 1) - 1) / 4 + 1)
-        memberDisplay.view.snp_updateConstraints { (make) -> Void in
+//        let memberDisplayHeight = UIScreen.main.bounds.width / 4 * CGFloat((users.count + (memberDisplay.showDeleteBtn ? 2 : 1) - 1) / 4 + 1)
+        
+        let memberDisplayCount = users.count + (memberDisplay.showDeleteBtn ? 2 : 1)
+        let memberDisplayRows = (memberDisplayCount - 1) / 4 + 1
+        let memberDisplayHeight = UIScreen.main.bounds.width / 4 * CGFloat(memberDisplayRows)
+        memberDisplay.view.snp.updateConstraints { (make) -> Void in
             make.height.equalTo(memberDisplayHeight)
         }
         // 人数要求

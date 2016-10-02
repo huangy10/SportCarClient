@@ -29,7 +29,7 @@ class StatusComment: BaseInMemModel {
     }
     
     override func loadDataFromJSON(_ data: JSON) throws -> Self {
-        try super.loadDataFromJSON(data)
+        _ = try super.loadDataFromJSON(data)
         ssid = data["commentID"].int32Value
         content = data["content"].stringValue
         createdAt = DateSTR(data["created_at"].stringValue)
@@ -75,7 +75,7 @@ class StatusComment: BaseInMemModel {
         if let data = string.data(using: String.Encoding.utf8, allowLossyConversion: false) {
             let json = JSON(data: data)
 //            ssid = json["statusID"].int32Value
-            try self.loadDataFromJSON(json)
+            _ = try self.loadDataFromJSON(json)
             return self
         } else {
             throw SSModelError.invalidJSONString

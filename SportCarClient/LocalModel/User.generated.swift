@@ -108,7 +108,7 @@ extension User {
 
 // MARK: - AttributeType extensions
 
-extension AlecrimCoreData.AttributeType where Self.ValueType: User {
+extension AlecrimCoreData.AttributeProtocol where Self.ValueType: User {
 
     var age: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("age", self) }
     var avatar: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("avatar", self) }

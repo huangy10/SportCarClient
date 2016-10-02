@@ -42,36 +42,36 @@ class ActivityCell: UICollectionViewCell {
             .layout({ (make) in
                 make.edges.equalTo(self.contentView)
             })
-        cover = container.addSubview(UIImageView).config(nil)
+        cover = container.addSubview(UIImageView.self).config(nil)
             .layout({ (make) in
                 make.edges.equalTo(container)
             })
         cover.contentMode = .scaleAspectFill
-        coverMask = container.addSubview(UIImageView).config(UIImage(named: "activityMask"))
+        coverMask = container.addSubview(UIImageView.self).config(UIImage(named: "activityMask"))
             .layout({ (make) in
                 make.bottom.equalTo(cover)
                 make.centerX.equalTo(cover)
                 make.width.equalTo(cover)
-                make.height.equalTo(cover.snp_width).multipliedBy(0.66)
+                make.height.equalTo(cover.snp.width).multipliedBy(0.66)
             })
-        avatar = container.addSubview(UIImageView).config(nil)
+        avatar = container.addSubview(UIImageView.self).config(nil)
             .layout({ (make) in
                 make.left.equalTo(cover).offset(15)
                 make.size.equalTo(16)
                 make.bottom.equalTo(cover).offset(-10)
             }).toRound(8)
-        actStartDateLbl = container.addSubview(UILabel)
+        actStartDateLbl = container.addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 1, alpha: 0.7), textAlignment: .left, text: "", multiLine: false)
             .layout({ (make) in
-                make.left.equalTo(avatar.snp_right).offset(5)
+                make.left.equalTo(avatar.snp.right).offset(5)
                 make.centerY.equalTo(avatar)
             })
-        actNameLbl = container.addSubview(UILabel)
+        actNameLbl = container.addSubview(UILabel.self)
             .config(16, fontWeight: UIFontWeightSemibold, textColor: UIColor.white, textAlignment: .left, text: "", multiLine: false)
             .layout({ (make) in
                 make.left.equalTo(avatar)
                 make.right.equalTo(container).offset(-15)
-                make.bottom.equalTo(avatar.snp_top).offset(-5)
+                make.bottom.equalTo(avatar.snp.top).offset(-5)
             })
         doneMark = container.addSubview(UIImageView.self).config(UIImage(named: "activity_done"))
             .layout({ (make) in
@@ -128,8 +128,8 @@ class ActivityCell: UICollectionViewCell {
 //    }
 //    
     fileprivate func loadDataAndUpdateUI() {
-        cover.kf_setImageWithURL(act.posterURL!)
-        avatar.kf_setImageWithURL(act.user!.avatarURL!)
+        cover.kf.setImage(with: act.posterURL!)
+        avatar.kf.setImage(with: act.user!.avatarURL!)
         actNameLbl.text = act.name
         actStartDateLbl.text = act.startAt?.stringDisplay()
         if act.endAt!.compare(Date()) == .orderedAscending{

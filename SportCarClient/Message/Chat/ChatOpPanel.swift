@@ -60,8 +60,8 @@ class ChatOpPanelController: UIViewController {
     }
     
     internal func createSubviews() {
-        let superview = self.view
-        superview?.backgroundColor = UIColor(white: 0.92, alpha: 1)
+        let superview = self.view!
+        superview.backgroundColor = UIColor(white: 0.92, alpha: 1)
 //        superview.layer.shadowColor = UIColor.blackColor().CGColor
 //        superview.layer.shadowOffset = CGSizeMake(0, -1)
 //        superview.layer.shadowOpacity = 0.2
@@ -72,8 +72,8 @@ class ChatOpPanelController: UIViewController {
         inputToggleBtn = UIButton()
         inputToggleBtn?.backgroundColor = UIColor.clear
         inputToggleBtn?.setImage(UIImage(named: "chat_voice_input_btn"), for: UIControlState())
-        superview?.addSubview(inputToggleBtn!)
-        inputToggleBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(inputToggleBtn!)
+        inputToggleBtn?.snp.makeConstraints({ (make) -> Void in
             make.size.equalTo(contentHeight)
             make.bottom.equalTo(superview).offset(-edgeInset)
             make.left.equalTo(superview).offset(15)
@@ -82,8 +82,8 @@ class ChatOpPanelController: UIViewController {
         // 创建右侧按钮
         accessoryBtn = UIButton()
         accessoryBtn?.setImage(UIImage(named: "chat_add_asscessory"), for: UIControlState())
-        superview?.addSubview(accessoryBtn!)
-        accessoryBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(accessoryBtn!)
+        accessoryBtn?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.size.equalTo(contentHeight)
             make.bottom.equalTo(superview).offset(-edgeInset)
@@ -94,11 +94,11 @@ class ChatOpPanelController: UIViewController {
         contentInputContainer.layer.cornerRadius = contentHeight / 2
         contentInputContainer.clipsToBounds = true
         contentInputContainer.backgroundColor = UIColor.white
-        superview?.addSubview(contentInputContainer)
-        contentInputContainer.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(contentInputContainer)
+        contentInputContainer.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview).offset(-edgeInset)
-            make.right.equalTo(accessoryBtn!.snp_left).offset(-10)
-            make.left.equalTo(inputToggleBtn!.snp_right).offset(10)
+            make.right.equalTo(accessoryBtn!.snp.left).offset(-10)
+            make.left.equalTo(inputToggleBtn!.snp.right).offset(10)
             make.top.equalTo(superview).offset(edgeInset)
         }
         //
@@ -106,7 +106,7 @@ class ChatOpPanelController: UIViewController {
         contentInput?.textColor = UIColor.black
         contentInput?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         contentInputContainer.addSubview(contentInput!)
-        contentInput?.snp_makeConstraints(closure: { (make) -> Void in
+        contentInput?.snp.makeConstraints( { (make) -> Void in
             make.right.equalTo(contentInputContainer).offset(-contentHeight / 2)
             make.height.equalTo(contentInputContainer)
             make.left.equalTo(contentInputContainer).offset(contentHeight / 2)
@@ -120,7 +120,7 @@ class ChatOpPanelController: UIViewController {
         voiceInputBtn?.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
         voiceInputBtn?.setTitleColor(UIColor.black, for: .highlighted)
         contentInputContainer.addSubview(voiceInputBtn!)
-        voiceInputBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        voiceInputBtn?.snp.makeConstraints({ (make) -> Void in
             make.edges.equalTo(contentInputContainer)
         })
         voiceInputBtn?.isHidden = true
@@ -131,20 +131,20 @@ class ChatOpPanelController: UIViewController {
         // 
         voiceAnimationView = UIImageView()
         voiceAnimationView.animationImages = $.map(0..<50, transform: { UIImage(named: String(format: "合成 1_%.5d", $0))! })
-        superview?.addSubview(voiceAnimationView)
+        superview.addSubview(voiceAnimationView)
         voiceAnimationView.startAnimating()
         voiceAnimationView.isUserInteractionEnabled = false
         voiceAnimationView.backgroundColor = UIColor.red
-        voiceAnimationView.snp_makeConstraints { (make) in
+        voiceAnimationView.snp.makeConstraints { (make) in
             make.centerX.equalTo(superview).offset(-20)
-            make.bottom.equalTo(superview.snp_top)
+            make.bottom.equalTo(superview.snp.top)
             make.size.equalTo(CGSize(width: 150, height: 50))
         }
         voiceAnimationView.isHidden = true
         
-        timeCountLbl = superview?.addSubview(UILabel).config(14, textColor: kHighlightedRedTextColor, text: "0.0").layout({ (make) in
+        timeCountLbl = superview.addSubview(UILabel.self).config(14, textColor: kHighlightedRedTextColor, text: "0.0").layout({ (make) in
             make.bottom.equalTo(voiceAnimationView).offset(-2)
-            make.left.equalTo(voiceAnimationView.snp_right).offset(10)
+            make.left.equalTo(voiceAnimationView.snp.right).offset(10)
         })
         timeCountLbl.isHidden = true
     }

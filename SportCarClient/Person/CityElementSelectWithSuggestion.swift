@@ -15,7 +15,15 @@ class CityElementSelectWithSuggestionsController: CityElementSelectController, U
     var curSelected: String!
     var popularCities: [String] = []
     
-    var delayTask: ()->()?
+    var delayTask: (()->())?
+    
+    override init() {
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +35,7 @@ class CityElementSelectWithSuggestionsController: CityElementSelectController, U
     
     func loadPopularCities() {
         lp_start()
-        ClubRequester.sharedInstance.clubPopularCities({ (json) in
+        _ = ClubRequester.sharedInstance.clubPopularCities({ (json) in
             self.lp_stop()
             self.popularCities = $.map(json!.arrayValue, transform: { $0.stringValue }).filter({ $0 != "" })
 //            self.popularCities = ["北京市", "上海市", "广州市", "深圳市", "南京市", "天津市", "武汉市", "成都市", "重庆市"]
@@ -154,7 +162,7 @@ class CityEelementSelectCurrentCell: UITableViewCell {
     
     func configureNameLbl() {
         let itemWidth = (UIScreen.main.bounds.width - 30 - 45) / 3
-        nameLbl = contentView.addSubview(UILabel)
+        nameLbl = contentView.addSubview(UILabel.self)
             .config(15, fontWeight: UIFontWeightRegular, textColor: kHighlightRed, textAlignment: .center)
             .layout({ (make) in
                 make.left.equalTo(contentView).offset(15)
@@ -183,7 +191,7 @@ class CityElementSelectPopularCitiesHeader: UITableViewHeaderFooterView {
     }
     
     func configureTitleLbl() {
-        titleLbl = contentView.addSubview(UILabel)
+        titleLbl = contentView.addSubview(UILabel.self)
             .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.58), textAlignment: .left)
             .layout({ (make) in
                 make.left.equalTo(contentView).offset(15)
@@ -239,7 +247,7 @@ class CityElementPopularCityCell: UICollectionViewCell {
     }
     
     func configureNameLbl() {
-        nameLbl = contentView.addSubview(UILabel)
+        nameLbl = contentView.addSubview(UILabel.self)
             .config(15, fontWeight: UIFontWeightRegular, textColor: UIColor.black, textAlignment: .center)
             .layout({ (make) in
                 make.edges.equalTo(contentView)

@@ -68,7 +68,7 @@ extension Club {
 
 // MARK: - AttributeType extensions
 
-extension AlecrimCoreData.AttributeType where Self.ValueType: Club {
+extension AlecrimCoreData.AttributeProtocol where Self.ValueType: Club {
 
     var alwayOnTop: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("alwayOnTop", self) }
     var alwaysOnTopDate: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("alwaysOnTopDate", self) }

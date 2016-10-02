@@ -10,8 +10,8 @@ import Foundation
 import Alamofire
 
 
-extension Request {
-    func responseJSON(_ queue: DispatchQueue, completionHandler: (Response<AnyObject, NSError>) -> Void) -> Request {
-        return self.response(queue: queue, responseSerializer: Request.JSONResponseSerializer(options: .allowFragments), completionHandler: completionHandler)
-    }
-}
+//extension Alamofire.Request {
+//    func responseJSON(_ queue: DispatchQueue, completionHandler: (DataResponse<Any>) -> Void) -> Request {
+//        return self.response(queue: queue, responseSerializer: Request.JSONResponseSerializer(options: .allowFragments), completionHandler: completionHandler)
+//    }
+//}

@@ -32,7 +32,7 @@ extension BaseModel {
 
 // MARK: - AttributeType extensions
 
-extension AlecrimCoreData.AttributeType where Self.ValueType: BaseModel {
+extension AlecrimCoreData.AttributeProtocol where Self.ValueType: BaseModel {
 
     var hostSSID: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("hostSSID", self) }
     var ssid: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("ssid", self) }

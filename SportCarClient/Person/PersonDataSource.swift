@@ -98,9 +98,9 @@ class PersonDataSource {
     
     func deleteStatus(_ status: Status) {
         //
-        statusList.remove(status)
-        if let car = status.car, var list = statusDict[car.ssidString] {
-            list.remove(status)
+        statusList = $.remove(statusList, value: status)
+        if let car = status.car, let list = statusDict[car.ssidString] {
+            statusDict[car.ssidString] = $.remove(list, value: status)
         }
     }
 }

@@ -63,7 +63,7 @@ class NewsController2: UITableViewController, UINavigationControllerDelegate {
             return
         }
         let requester = NewsRequester.sharedInstance
-        requester.getLatestNewsList(firstNews.createdAt!, onSuccess: { (json) -> () in
+        _ = requester.getLatestNewsList(firstNews.createdAt!, onSuccess: { (json) -> () in
             guard let data = json else{
                 self.refreshControl?.endRefreshing()
                 return

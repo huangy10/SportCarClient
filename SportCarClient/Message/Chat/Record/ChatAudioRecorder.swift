@@ -57,7 +57,8 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
         UniversalAudioPlayer.sharedPlayer.stop()
         
         let cacheFilename = filename ?? (UUID().uuidString + ".m4a")
-        let cacheFilePath = (getCachedAudioDirectory() as AnyObject).appendingPathComponent(cacheFilename)
+//        let cacheFilePath = (getCachedAudioDirectory() as AnyObject).appendingPathComponent(cacheFilename)
+        let cacheFilePath = (getCachedAudioDirectory() as NSString).appendingPathComponent(cacheFilename) as String
         let cacheFileURL = URL(fileURLWithPath: cacheFilePath)
         audioURL = cacheFileURL
         let settings = [

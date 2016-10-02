@@ -46,7 +46,8 @@ extension RosterItem {
 
 // MARK: - AttributeType extensions
 
-extension AlecrimCoreData.AttributeType where Self.ValueType: RosterItem {
+
+extension AlecrimCoreData.AttributeProtocol where Self.ValueType: RosterItem {
 
     var alwaysOnTop: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("alwaysOnTop", self) }
     var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }

@@ -62,7 +62,7 @@ extension Status {
 
 // MARK: - AttributeType extensions
 
-extension AlecrimCoreData.AttributeType where Self.ValueType: Status {
+extension AlecrimCoreData.AttributeProtocol where Self.ValueType: Status {
 
     var carID: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("carID", self) }
     var carInfo: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("carInfo", self) }

@@ -17,7 +17,7 @@ class ActivityCommentCell: DetailCommentCell {
         //
         replyBtn?.isHidden = user.isHost
         //
-        avatarBtn?.kf_setImageWithURL(user.avatarURL!, forState: UIControlState())
+        avatarBtn?.kf.setImage(with: user.avatarURL!, for: .normal)
         //
         nameLbl?.text = user.nickName
         //

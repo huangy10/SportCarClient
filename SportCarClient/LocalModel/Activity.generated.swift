@@ -66,7 +66,7 @@ extension Activity {
 
 // MARK: - AttributeType extensions
 
-extension AlecrimCoreData.AttributeType where Self.ValueType: Activity {
+extension AlecrimCoreData.AttributeProtocol where Self.ValueType: Activity {
 
     var actDescription: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("actDescription", self) }
     var applied: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("applied", self) }

@@ -33,7 +33,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             return
         }
         self.pp_showProgressView()
-        ClubRequester.sharedInstance.clubAuth(
+        _ = ClubRequester.sharedInstance.clubAuth(
             club.ssidString,
             district: district,
             description: desc,
@@ -46,7 +46,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
                 self.showToast(LS("俱乐部认证申请发送失败"))
                 self.pp_hideProgressView()
         }
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     override func titleForRightNavBtn() -> String {
@@ -70,8 +70,8 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
         let image1 = UIImageView(image: UIImage(named: "privilege_show_avatar_logo"))
         container.addSubview(image1)
         image1.contentMode = .scaleAspectFit
-        image1.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(container.snp_centerX).offset(-40)
+        image1.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(container.snp.centerX).offset(-40)
             make.size.equalTo(37)
             make.top.equalTo(container).offset(22)
         }
@@ -82,15 +82,15 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             text: LS("头像旁俱乐部LOGO")
         )
         container.addSubview(static1)
-        static1.snp_makeConstraints { (make) -> Void in
+        static1.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(image1)
-            make.top.equalTo(image1.snp_bottom).offset(11)
+            make.top.equalTo(image1.snp.bottom).offset(11)
         }
         let image2 = UIImageView(image: UIImage(named: "privilege_allow_start_activity"))
         image2.contentMode = .scaleAspectFit
         container.addSubview(image2)
-        image2.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(container.snp_centerX).offset(40)
+        image2.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(container.snp.centerX).offset(40)
             make.size.equalTo(37)
             make.top.equalTo(container).offset(22)
         }
@@ -101,9 +101,9 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             text: LS("可以发布活动")
         )
         container.addSubview(static2)
-        static2.snp_makeConstraints { (make) -> Void in
+        static2.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(image2)
-            make.top.equalTo(image2.snp_bottom).offset(11)
+            make.top.equalTo(image2.snp.bottom).offset(11)
         }
         return container
     }
@@ -117,13 +117,13 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             text: LS("活跃地区")
         )
         container.addSubview(districtStaticLbl)
-        districtStaticLbl.snp_makeConstraints { (make) -> Void in
+        districtStaticLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(container)
             make.top.equalTo(container)
         }
         let arrow = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         container.addSubview(arrow)
-        arrow.snp_makeConstraints { (make) -> Void in
+        arrow.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(container)
             make.centerY.equalTo(districtStaticLbl)
             make.size.equalTo(CGSize(width: 9, height: 15))
@@ -135,23 +135,23 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             text: LS("北京市")
         )
         container.addSubview(districtLbl)
-        districtLbl.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(arrow.snp_left).offset(-11)
+        districtLbl.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(arrow.snp.left).offset(-11)
             make.centerY.equalTo(districtStaticLbl)
         }
         let sepLine1 = UIView()
         sepLine1.backgroundColor = UIColor(white: 0.945, alpha: 1)
         container.addSubview(sepLine1)
-        sepLine1.snp_makeConstraints { (make) -> Void in
+        sepLine1.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(districtStaticLbl)
             make.right.equalTo(arrow)
-            make.top.equalTo(districtStaticLbl.snp_bottom).offset(11)
+            make.top.equalTo(districtStaticLbl.snp.bottom).offset(11)
             make.height.equalTo(1)
         }
         let districtSelectBtn = UIButton()
         container.addSubview(districtSelectBtn)
         districtSelectBtn.addTarget(self, action: #selector(ClubAuthController.districtSelectBtnPressed), for: .touchUpInside)
-        districtSelectBtn.snp_makeConstraints { (make) -> Void in
+        districtSelectBtn.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(container)
             make.top.equalTo(container)
             make.right.equalTo(container)
@@ -163,13 +163,13 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             textAlignment: .right,
             text: LS("本群简介"))
         container.addSubview(desStaticLbl)
-        desStaticLbl.snp_makeConstraints { (make) -> Void in
+        desStaticLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(sepLine1)
             make.top.equalTo(sepLine1).offset(22)
         }
         let arrow2 = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         container.addSubview(arrow2)
-        arrow2.snp_makeConstraints { (make) -> Void in
+        arrow2.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(arrow)
             make.centerY.equalTo(desStaticLbl)
             make.size.equalTo(CGSize(width: 9, height: 15))
@@ -181,27 +181,27 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             text: LS("待补充")
         )
         container.addSubview(descriptionLbl)
-        descriptionLbl.snp_makeConstraints { (make) -> Void in
+        descriptionLbl.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(districtLbl)
             make.centerY.equalTo(desStaticLbl)
-            make.left.equalTo(desStaticLbl.snp_right).offset(30)
+            make.left.equalTo(desStaticLbl.snp.right).offset(30)
         }
         let sepLine2 = UIView()
         sepLine2.backgroundColor = UIColor(white: 0.945, alpha: 1)
         container.addSubview(sepLine2)
-        sepLine2.snp_makeConstraints { (make) -> Void in
+        sepLine2.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(sepLine1)
             make.right.equalTo(sepLine1)
-            make.top.equalTo(desStaticLbl.snp_bottom).offset(11)
+            make.top.equalTo(desStaticLbl.snp.bottom).offset(11)
             make.height.equalTo(0.5)
         }
         let desEditBtn = UIButton()
         desEditBtn.addTarget(self, action: #selector(ClubAuthController.desEditBtnPressed), for: .touchUpInside)
         container.addSubview(desEditBtn)
-        desEditBtn.snp_makeConstraints { (make) -> Void in
+        desEditBtn.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(desStaticLbl)
             make.right.equalTo(arrow2)
-            make.top.equalTo(sepLine1.snp_bottom)
+            make.top.equalTo(sepLine1.snp.bottom)
             make.bottom.equalTo(sepLine2)
         }
         return container
@@ -216,7 +216,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             text: "1. 头像应为企业商标/标识或品牌Logo\n2.昵称应为俱乐部的全称或无歧义简称\n3.昵称不能仅包含一个通用性描述词语，不可过度修饰\n4.俱乐部人数满100人，认证用户50人以上\n5.有完整的俱乐部简介")
         label.numberOfLines = 0
         container.addSubview(label)
-        label.snp_makeConstraints { (make) -> Void in
+        label.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(container)
             make.right.equalTo(container)
             make.top.equalTo(container)
@@ -240,12 +240,12 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
     }
     
     func cityElementSelectDidSelect(_ dataSource: CityElementSelectDataSource) {
-        self.navigationController?.popToViewController(self, animated: true)
+        _ = self.navigationController?.popToViewController(self, animated: true)
         districtLbl.text = dataSource.selectedCity
     }
     
     func cityElementSelectDidCancel() {
-        self.navigationController?.popToViewController(self, animated: true)
+        _ = self.navigationController?.popToViewController(self, animated: true)
     }
     
     func didModify(_ newValue: String?, indexPath: IndexPath) {

@@ -15,7 +15,7 @@ import SwiftyJSON
 
 private var newsContext = 0
 
-class NewsDetailController: InputableViewController, UITableViewDelegate, UITableViewDataSource, UIWebViewDelegate, MakeCommentControllerDelegate, DetailCommentCellDelegate, ShareControllorDelegate, LoadingProtocol {
+class NewsDetailController: InputableViewController, UIWebViewDelegate, MakeCommentControllerDelegate, DetailCommentCellDelegate, ShareControllorDelegate, LoadingProtocol {
     /// 这个详情页面需要展示的相关资讯
     var news: News!
     /// 评论列表
@@ -95,7 +95,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         self.view.updateConstraints()
         self.view.layoutIfNeeded()
         let titleWidth = self.newsTitle.frame.width
-        newsCover.snp_updateConstraints { (make) -> Void in
+        newsCover.snp.updateConstraints { (make) -> Void in
             make.top.equalTo(board).offset(0)
         }
         UIView.animate(withDuration: 0.5, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
@@ -103,12 +103,12 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             self.initBg.layer.opacity = 0.1
             self.initBg.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             }, completion: { _ in
-                self.newsTitle.snp_remakeConstraints(closure: { (make) -> Void in
+                self.newsTitle.snp.remakeConstraints({ (make) -> Void in
                     make.left.equalTo(self.view).offset(40)
-                    make.top.equalTo(self.newsCover.snp_bottom).offset(15)
+                    make.top.equalTo(self.newsCover.snp.bottom).offset(15)
                     make.width.equalTo(titleWidth)
                 })
-                self.newsTitleFake.snp_remakeConstraints(closure: { (make) -> Void in
+                self.newsTitleFake.snp.remakeConstraints({ (make) -> Void in
                     make.edges.equalTo(self.newsTitle)
                 })
                 UIView.animate(withDuration: 0.4, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
@@ -122,7 +122,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
                         
                 })
         })
-        bg.snp_remakeConstraints { (make) -> Void in
+        bg.snp.remakeConstraints { (make) -> Void in
             make.edges.equalTo(self.view)
         }
         bg.isHidden = false
@@ -131,7 +131,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             }, completion: nil)
         // 弹出评论栏
         
-        commentPanel.snp_updateConstraints { (make) -> Void in
+        commentPanel.snp.updateConstraints { (make) -> Void in
             make.bottom.equalTo(self.view).offset(0)
         }
         UIView.animate(withDuration: 0.2, delay: 0.7, options: UIViewAnimationOptions(), animations: { () -> Void in
@@ -140,17 +140,17 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     }
     
     func hideNewsCoverAnimated() {
-        let superview = self.view
+        let superview = self.view!
         self.view.updateConstraints()
         self.view.layoutIfNeeded()
-        commentPanel.snp_updateConstraints { (make) -> Void in
+        commentPanel.snp.updateConstraints { (make) -> Void in
             make.bottom.equalTo(self.view).offset(45)
             self.hideNewsContentViews()
         }
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
             self.view.layoutIfNeeded()
             }, completion: nil)
-        bg.snp_remakeConstraints { (make) -> Void in
+        bg.snp.remakeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.top.equalTo(superview).offset(UIScreen.main.bounds.width * 0.573)
@@ -160,12 +160,12 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             self.view.layoutIfNeeded()
             }, completion: nil)
         //
-        self.newsTitle.snp_remakeConstraints { (make) -> Void in
-            make.right.equalTo(likeIcon.snp_left)
+        self.newsTitle.snp.remakeConstraints { (make) -> Void in
+            make.right.equalTo(likeIcon.snp.left)
             make.left.equalTo(superview).offset(15)
             make.bottom.equalTo(newsCover).offset(-10)
         }
-        self.newsTitleFake.snp_remakeConstraints { (make) -> Void in
+        self.newsTitleFake.snp.remakeConstraints { (make) -> Void in
             make.edges.equalTo(newsTitle)
         }
         UIView.animate(withDuration: 0.4, delay: 0.3, options: UIViewAnimationOptions(), animations: { () -> Void in
@@ -175,7 +175,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
             self.newsTitle.transform = CGAffineTransform.identity
             self.newsTitleFake.transform = CGAffineTransform.identity
             }) { (_) -> Void in
-                self.newsCover.snp_updateConstraints(closure: { (make) -> Void in
+                self.newsCover.snp.updateConstraints({ (make) -> Void in
                     make.top.equalTo(self.board).offset(self.initPos)
                 })
                 UIView.animate(withDuration: 0.9, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
@@ -183,7 +183,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
                     self.initBg.layer.opacity = 1
                     self.initBg.transform = CGAffineTransform.identity
                     }, completion: { _ in
-                        self.navigationController?.popViewController(animated: false)
+                        _ = self.navigationController?.popViewController(animated: false)
                 })
         }
     }
@@ -192,15 +192,15 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
      进场动画后期开始创建载入资讯的内容，此处将其均设置为hidden
      */
     func createNewsContentViews() {
-        let superview = self.view
+        let superview = self.view!
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.8, alpha: 1)
         board?.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(newsTitle!)
             make.height.equalTo(1)
             make.width.equalTo(board!).multipliedBy(0.64)
-            make.top.equalTo(newsTitle!.snp_bottom).offset(15)
+            make.top.equalTo(newsTitle!.snp.bottom).offset(15)
         }
         sepLine.layer.opacity = 0
         newsDetailPanelView = UIWebView()
@@ -208,8 +208,8 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         newsDetailPanelView?.delegate = self
         newsDetailPanelView?.paginationMode = .unpaginated
         board?.addSubview(newsDetailPanelView!)
-        newsDetailPanelView?.snp_makeConstraints(closure: { (make) -> Void in
-            make.top.equalTo(sepLine.snp_bottom).offset(15)
+        newsDetailPanelView?.snp.makeConstraints({ (make) -> Void in
+            make.top.equalTo(sepLine.snp.bottom).offset(15)
             make.right.equalTo(superview).offset(-20)
             make.left.equalTo(superview).offset(20)
             make.height.equalTo(200)
@@ -219,7 +219,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         //
         newsDetailLoading = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         newsDetailPanelView?.addSubview(newsDetailLoading!)
-        newsDetailLoading?.snp_makeConstraints(closure: { (make) -> Void in
+        newsDetailLoading?.snp.makeConstraints({ (make) -> Void in
             make.center.equalTo(newsDetailPanelView)
             make.size.equalTo(44)
         })
@@ -229,17 +229,17 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         //
         likeInfoIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
         board?.addSubview(likeInfoIcon!)
-        likeInfoIcon?.snp_makeConstraints(closure: { (make) -> Void in
+        likeInfoIcon?.snp.makeConstraints({ (make) -> Void in
             make.size.equalTo(15)
             make.left.equalTo(newsDetailPanelView!)
-            make.top.equalTo(newsDetailPanelView!.snp_bottom).offset(35)
+            make.top.equalTo(newsDetailPanelView!.snp.bottom).offset(35)
         })
         likeInfoIcon.isHidden = true
         //
         likeDescriptionLbl = UILabel()
         board?.addSubview(likeDescriptionLbl!)
-        likeDescriptionLbl?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(likeInfoIcon!.snp_right).offset(10)
+        likeDescriptionLbl?.snp.makeConstraints({ (make) -> Void in
+            make.left.equalTo(likeInfoIcon!.snp.right).offset(10)
             make.centerY.equalTo(likeInfoIcon!)
             make.height.equalTo(17)
         })
@@ -248,10 +248,10 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         let sepLine2 = UIView()
         sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
         board?.addSubview(sepLine2)
-        sepLine2.snp_makeConstraints { (make) -> Void in
+        sepLine2.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(board!)
-            make.top.equalTo(likeInfoIcon!.snp_bottom).offset(16)
+            make.top.equalTo(likeInfoIcon!.snp.bottom).offset(16)
             make.height.equalTo(1)
         }
         sepLine2.layer.opacity = 0
@@ -263,7 +263,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         commentStaticLbl.textAlignment = .center
         commentStaticLbl.textColor = UIColor(white: 0.72, alpha: 1)
         board?.addSubview(commentStaticLbl)
-        commentStaticLbl.snp_makeConstraints { (make) -> Void in
+        commentStaticLbl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(board!)
             make.centerY.equalTo(sepLine2)
             make.size.equalTo(CGSize(width: 75, height: 17))
@@ -277,8 +277,8 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         commentTableView?.register(NewsDetailCommentCell.self, forCellReuseIdentifier: NewsDetailCommentCell.reuseIdentifier)
         commentTableView.register(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty_cell")
         board?.addSubview(commentTableView!)
-        commentTableView?.snp_makeConstraints(closure: { (make) -> Void in
-            make.top.equalTo(sepLine2.snp_bottom).offset(27)
+        commentTableView?.snp.makeConstraints({ (make) -> Void in
+            make.top.equalTo(sepLine2.snp.bottom).offset(27)
             make.right.equalTo(superview)
             make.left.equalTo(superview)
             make.height.equalTo(100)
@@ -290,7 +290,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         commentTableView?.addSubview(commentTableLoading!)
         commentTableLoading?.hidesWhenStopped = true
         commentTableLoading?.startAnimating()
-        commentTableLoading?.snp_makeConstraints(closure: { (make) -> Void in
+        commentTableLoading?.snp.makeConstraints({ (make) -> Void in
             make.center.equalTo(commentTableView!)
             make.size.equalTo(44)
         })
@@ -309,20 +309,20 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     
     internal override func createSubviews() {
         super.createSubviews()
-        let superview = self.view
-        superview?.backgroundColor = UIColor.white
+        let superview = self.view!
+        superview.backgroundColor = UIColor.white
         //
         board = UIScrollView()
-        superview?.addSubview(board)
+        superview.addSubview(board)
         board.delegate = self
-        board.snp_makeConstraints { (make) -> Void in
+        board.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         board.backgroundColor = UIColor.black
         //
         initBg = UIImageView(image: initBgImg)
         board.addSubview(initBg)
-        initBg.snp_makeConstraints { (make) -> Void in
+        initBg.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.bottom.equalTo(superview)
@@ -332,7 +332,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         board.addSubview(bg)
         bg.backgroundColor = UIColor.white
         bg.isHidden = true
-        bg.snp_makeConstraints { (make) -> Void in
+        bg.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.top.equalTo(superview).offset(UIScreen.main.bounds.width * 0.573)
@@ -341,15 +341,15 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         //
         newsCover = UIImageView()
         board.addSubview(newsCover)
-        newsCover.snp_makeConstraints { (make) -> Void in
+        newsCover.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
             make.top.equalTo(board).offset(initPos)
-            make.height.equalTo(newsCover.snp_width).multipliedBy(0.573)
+            make.height.equalTo(newsCover.snp.width).multipliedBy(0.573)
         }
         let coverMask = UIImageView(image: UIImage(named: "news_cover_mask"))
         newsCover.addSubview(coverMask)
-        coverMask.snp_makeConstraints { (make) -> Void in
+        coverMask.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(newsCover)
             make.right.equalTo(newsCover)
             make.bottom.equalTo(newsCover)
@@ -360,17 +360,17 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         shareNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         shareNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
         shareNumLbl.text = "0"
-        superview?.addSubview(shareNumLbl)
-        shareNumLbl?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(shareNumLbl)
+        shareNumLbl?.snp.makeConstraints({ (make) -> Void in
             make.bottom.equalTo(newsCover).offset(-10)
             make.right.equalTo(superview).offset(-15)
             make.height.equalTo(15)
             make.width.lessThanOrEqualTo(30)
         })
         shareIcon = UIImageView(image: UIImage(named: "news_share_white"))
-        superview?.addSubview(shareIcon)
-        shareIcon.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(shareNumLbl.snp_left).offset(-3)
+        superview.addSubview(shareIcon)
+        shareIcon.snp.makeConstraints({ (make) -> Void in
+            make.right.equalTo(shareNumLbl.snp.left).offset(-3)
             make.bottom.equalTo(shareNumLbl)
             make.size.equalTo(15)
         })
@@ -379,16 +379,16 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         commentNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         commentNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
         commentNumLbl.text = "0"
-        superview?.addSubview(commentNumLbl)
-        commentNumLbl.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(shareIcon.snp_left)
+        superview.addSubview(commentNumLbl)
+        commentNumLbl.snp.makeConstraints({ (make) -> Void in
+            make.right.equalTo(shareIcon.snp.left)
             make.bottom.equalTo(shareIcon)
             make.size.equalTo(CGSize(width: 30, height: 15))
         })
         commentIcon = UIImageView(image: UIImage(named: "news_comment"))
-        superview?.addSubview(commentIcon)
-        commentIcon.snp_makeConstraints(closure: { (make) -> Void in
-            make.right.equalTo(commentNumLbl.snp_left).offset(-3)
+        superview.addSubview(commentIcon)
+        commentIcon.snp.makeConstraints({ (make) -> Void in
+            make.right.equalTo(commentNumLbl.snp.left).offset(-3)
             make.bottom.equalTo(commentNumLbl)
             make.size.equalTo(15)
         })
@@ -396,18 +396,18 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         likeNumLbl = UILabel()
         likeNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         likeNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        superview?.addSubview(likeNumLbl)
+        superview.addSubview(likeNumLbl)
         likeNumLbl.text = "0"
-        likeNumLbl.snp_makeConstraints(closure: { (make) -> Void in
+        likeNumLbl.snp.makeConstraints({ (make) -> Void in
             make.bottom.equalTo(commentIcon)
-            make.right.equalTo(commentIcon.snp_left)
+            make.right.equalTo(commentIcon.snp.left)
             make.size.equalTo(CGSize(width: 30, height: 15))
         })
         likeIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
-        superview?.addSubview(likeIcon)
-        likeIcon.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(likeIcon)
+        likeIcon.snp.makeConstraints({ (make) -> Void in
             make.bottom.equalTo(commentIcon)
-            make.right.equalTo(likeNumLbl.snp_left).offset(-3)
+            make.right.equalTo(likeNumLbl.snp.left).offset(-3)
             make.size.equalTo(15)
         })
         //
@@ -416,8 +416,8 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         newsTitleFake.textColor = UIColor.white
         newsTitleFake.numberOfLines = 0
         board.addSubview(newsTitleFake)
-        newsTitleFake.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(likeIcon.snp_left)
+        newsTitleFake.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(likeIcon.snp.left)
             make.left.equalTo(superview).offset(15)
             make.bottom.equalTo(newsCover).offset(-10)
         }
@@ -426,7 +426,7 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
         newsTitle.textColor = UIColor.black
         newsTitle.numberOfLines = 0
         board.addSubview(newsTitle)
-        newsTitle.snp_makeConstraints { (make) -> Void in
+        newsTitle.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(newsTitleFake)
         }
         newsTitle.layer.opacity = 0
@@ -436,11 +436,11 @@ class NewsDetailController: InputableViewController, UITableViewDelegate, UITabl
     
     func initializeCommentBar() {
         commentPanel = CommentBarView()
-        let superview = self.view
+        let superview = self.view!
         commentPanel?.contentInput?.delegate = self
         self.inputFields.append(commentPanel?.contentInput)
-        superview?.addSubview(commentPanel!)
-        commentPanel?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(commentPanel!)
+        commentPanel?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview)
             make.bottom.equalTo(superview).offset(45)
             make.left.equalTo(superview)
@@ -545,7 +545,7 @@ extension NewsDetailController{
         likeRequesting = true
         let requester = NewsRequester.sharedInstance
         lp_start()
-        requester.likeNews(news!.ssidString, onSuccess: { (json) -> () in
+        _ = requester.likeNews(news!.ssidString, onSuccess: { (json) -> () in
             self.lp_stop()
             let liked = json!["like_state"].boolValue
             
@@ -614,7 +614,7 @@ extension NewsDetailController{
         commentTableView.endUpdates()
         commentPanel?.contentInput?.text = ""
         reArrangeCommentTableFrame()
-        commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
+        commentPanel?.snp.updateConstraints({ (make) -> Void in
             make.height.equalTo(commentPanel!.barheight)
         })
         commentPanel.superview?.layoutIfNeeded()
@@ -656,7 +656,7 @@ extension NewsDetailController {
      */
     fileprivate func reArrageWebViewFrames() {
 
-        newsDetailPanelView?.snp_updateConstraints(closure: { (make) -> Void in
+        newsDetailPanelView?.snp.updateConstraints({ (make) -> Void in
             make.height.equalTo(newsDetailPanelView!.scrollView.contentSize.height)
         })
         reArrageBoardContentSize()
@@ -667,7 +667,7 @@ extension NewsDetailController {
      */
     fileprivate func reArrangeCommentTableFrame() {
         let tableContentSize = commentTableView?.contentSize
-        commentTableView?.snp_updateConstraints(closure: { (make) -> Void in
+        commentTableView?.snp.updateConstraints({ (make) -> Void in
             make.height.equalTo(tableContentSize!.height)
         })
         reArrageBoardContentSize()
@@ -690,7 +690,7 @@ extension NewsDetailController {
     fileprivate func loadDataAndUpdateUI() {
         likeDescriptionLbl?.attributedText = news.getLikeDescription()
         let imageURL = SFURL(news.cover)!
-        newsCover?.kf_setImageWithURL(imageURL)
+        newsCover.kf.setImage(with: imageURL)
         newsTitleFake.text = news.title
         newsTitle.text = news.title
         likeNumLbl.text = "\(news.likeNum)"
@@ -724,7 +724,7 @@ extension NewsDetailController {
             dateThreshold  = lastComment.createdAt as Date? ?? dateThreshold
         }
         requestingCommentData = true
-        requester.getMoreNewsComment(dateThreshold, newsID: news.ssidString, onSuccess: { (json) -> () in
+        _ = requester.getMoreNewsComment(dateThreshold, newsID: news.ssidString, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
                 let newComment = try! NewsComment(news: self.news).loadDataFromJSON(data)
                 self.comments.append(newComment)
@@ -763,7 +763,8 @@ extension NewsDetailController {
 
 
 // MARK: - Table 相关
-extension NewsDetailController {
+extension NewsDetailController: UITableViewDataSource, UITableViewDelegate {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -830,8 +831,15 @@ extension NewsDetailController {
         newsDetailPanelView?.loadRequest(request)
     }
 
+//    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+//        newsDetailLoading?.startAnimating()
+//        print(request)
+//        return true
+//    }
+    
+    @objc(webView:shouldStartLoadWithRequest:navigationType:)
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        newsDetailLoading?.startAnimating()
+        newsDetailLoading.startAnimating()
         print(request)
         return true
     }
@@ -842,10 +850,10 @@ extension NewsDetailController {
     }
     
     func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
-        if error != nil {
+//        if error != nil {
             // TODO: 错误处理，目前遇到redirect的情况的话，运作错误，暂时取消报错
 //            showToast(LS("无法获取资讯详情"))
-        }
+//        }
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -861,22 +869,22 @@ extension NewsDetailController {
             return
         }
         let curOffsetY = scrollView.contentOffset.y
-        let superview = self.view
+        let superview = self.view!
         if curOffsetY >= 0 {
-            newsCover?.snp_remakeConstraints(closure: { (make) -> Void in
+            newsCover?.snp.remakeConstraints({ (make) -> Void in
                 make.right.equalTo(superview)
                 make.left.equalTo(superview)
                 make.top.equalTo(board)
-                make.height.equalTo(newsCover.snp_width).multipliedBy(0.573)
+                make.height.equalTo(newsCover.snp.width).multipliedBy(0.573)
             })
         }else if curOffsetY < 0 {
-            let basicHeight = (superview?.frame.width)! * 0.573
+            let basicHeight = (superview.frame.width)! * 0.573
             let scaleFactor = (-curOffsetY) / basicHeight + 1
-            newsCover?.snp_remakeConstraints(closure: { (make) -> Void in
+            newsCover?.snp.remakeConstraints({ (make) -> Void in
                 make.top.equalTo(superview)
                 make.centerX.equalTo(superview)
                 make.width.equalTo(superview).multipliedBy(scaleFactor)
-                make.height.equalTo(newsCover.snp_width).multipliedBy(0.573)
+                make.height.equalTo(newsCover.snp.width).multipliedBy(0.573)
             })
         }
         self.view.layoutIfNeeded()
@@ -903,7 +911,7 @@ extension NewsDetailController {
         let fixedWidth = textView?.bounds.width
         let newSize = textView?.sizeThatFits(CGSize(width: fixedWidth!, height: CGFloat.greatestFiniteMagnitude))
         // 注：参见 CommentPanel 内部的布局设置，输入框的边缘总是距离下面的Bar的上下边界5个Point
-        commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
+        commentPanel?.snp.updateConstraints({ (make) -> Void in
             make.height.equalTo(max(newSize!.height  + 10 , commentPanel!.barheight))
         })
         self.view.layoutIfNeeded()
@@ -933,21 +941,21 @@ extension NewsDetailController {
     
     func changeLayoutWhenKeyboardAppears(_ notif: Foundation.Notification) {
         let userInfo = (notif as NSNotification).userInfo!
-        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue
-        board?.snp_updateConstraints(closure: { (make) -> Void in
+        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue!
+        board?.snp.updateConstraints({ (make) -> Void in
             make.bottom.equalTo(self.view).offset(-(commentPanel!.barheight + keyboardFrame.height) )
         })
-        commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
+        commentPanel?.snp.updateConstraints({ (make) -> Void in
             make.bottom.equalTo(self.view).offset(-keyboardFrame.height)
         })
         self.view.layoutIfNeeded()
     }
     
     func changeLayoutWhenKeyboardDisappears(_ notif: Foundation.Notification) {
-        board?.snp_updateConstraints(closure: { (make) -> Void in
+        board?.snp.updateConstraints({ (make) -> Void in
             make.bottom.equalTo(self.view).offset(-(commentPanel!.barheight) )
         })
-        commentPanel?.snp_updateConstraints(closure: { (make) -> Void in
+        commentPanel?.snp.updateConstraints({ (make) -> Void in
             make.bottom.equalTo(self.view).offset(0)
         })
         self.view.layoutIfNeeded()
@@ -969,7 +977,7 @@ extension NewsDetailController {
     }
     
     func linkForShare() -> String {
-        return news.contentURL!.absoluteString!
+        return news.contentURL!.absoluteString
     }
 
 }

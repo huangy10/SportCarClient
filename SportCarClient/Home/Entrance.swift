@@ -60,24 +60,24 @@ class HomeController2: UIViewController, HomeDelegate {
     }
 
     func createSidebar() {
-        let superview = self.view
+        let superview = self.view!
         
         setInitContentController()
         
-        invokeBtn = superview?.addSubview(UIButton).config(self, selector: #selector(hideSidebar)).layout({ (make) in
+        invokeBtn = superview.addSubview(UIButton.self).config(self, selector: #selector(hideSidebar)).layout({ (make) in
             make.edges.equalTo(superview)
         }).config(UIColor(white: 0, alpha: 0.2))
         invokeBtn.layer.isHidden = true
         
-        sideBar = superview?.addSubview(UIView)
+        sideBar = superview.addSubview(UIView.self)
             .config(UIColor.RGB(23, 19, 19)).layout({ (make) in
                 make.top.equalTo(superview)
-                make.right.equalTo(superview.snp_left).offset(-10)
+                make.right.equalTo(superview.snp.left).offset(-10)
                 make.bottom.equalTo(superview)
                 make.width.equalTo(superview).multipliedBy(0.667)
             }).addShadow(offset: CGSize(width: 2, height: 0))
         
-        avatarBtn = sideBar.addSubview(UIButton)
+        avatarBtn = sideBar.addSubview(UIButton.self)
             .config(self, selector: #selector(avatarPressed))
             .toRoundButton(25)
             .layout({ (make) in
@@ -86,17 +86,17 @@ class HomeController2: UIViewController, HomeDelegate {
                 make.size.equalTo(50)
             })
 //        avatarBtn.enabled = false
-        avatarBtn.kf_setImageWithURL(hostUser.avatarURL!, forState: UIControlState())
+        avatarBtn.kf.setImage(with: hostUser.avatarURL!, for: .normal)
         
-        nameLbl = sideBar.addSubview(UILabel)
+        nameLbl = sideBar.addSubview(UILabel.self)
             .config(20, fontWeight: UIFontWeightRegular, textColor: UIColor.white)
             .layout({ (make) in
                 make.centerY.equalTo(avatarBtn)
-                make.left.equalTo(avatarBtn.snp_right).offset(12)
+                make.left.equalTo(avatarBtn.snp.right).offset(12)
             })
         nameLbl.text = hostUser.nickName
         
-        sideBar.addSubview(UIButton)
+        sideBar.addSubview(UIButton.self)
             .config(self, selector: #selector(avatarPressed))
             .layout({ (make) in
                 make.bottom.equalTo(avatarBtn)
@@ -110,43 +110,43 @@ class HomeController2: UIViewController, HomeDelegate {
         let icons = ["side_discover", "side_act", "side_news", "side_status", "side_message", "side_mine"]
         var topOffset: CGFloat = 25
         for index in 0..<titles.count {
-            let container = sideBar.addSubview(UIButton)
+            let container = sideBar.addSubview(UIButton.self)
                 .config(self, selector: #selector(sideBarBtnPressed(_:)))
                 .layout({ (make) in
                 make.left.equalTo(superview).offset(-self.view.bounds.width)
                 make.width.equalTo(sideBar)
                 make.height.equalTo(50)
-                make.top.equalTo(formerView.snp_bottom).offset(topOffset)
+                make.top.equalTo(formerView.snp.bottom).offset(topOffset)
             })
             sideBtns.append(container)
             container.tag = index
-            let icon = container.addSubview(UIImageView)
+            let icon = container.addSubview(UIImageView.self)
                 .config(UIImage(named: icons[index]), contentMode: .scaleAspectFit)
                 .layout({ (make) in
                     make.centerY.equalTo(container)
                     make.left.equalTo(container).offset(20)
                     make.size.equalTo(17)
                 })
-            container.addSubview(UILabel)
+            container.addSubview(UILabel.self)
                 .config(17, fontWeight: UIFontWeightRegular, textColor: UIColor.white, text: titles[index])
                 .layout({ (make) in
                     make.centerY.equalTo(icon)
-                    make.left.equalTo(icon.snp_right).offset(20)
+                    make.left.equalTo(icon.snp.right).offset(20)
                 })
             formerView = container
             topOffset = 10
         }
         
-        sepLine = sideBar.addSubview(UIView)
+        sepLine = sideBar.addSubview(UIView.self)
             .config(UIColor(white: 0.38, alpha: 1))
             .layout { (make) in
                 make.left.equalTo(superview).offset(-self.view.bounds.width)
                 make.width.equalTo(sideBar).multipliedBy(0.6)
                 make.height.equalTo(0.5)
-                make.top.equalTo(formerView.snp_bottom).offset(20)
+                make.top.equalTo(formerView.snp.bottom).offset(20)
         }
         
-        adviceBtn = sideBar.addSubview(UIButton)
+        adviceBtn = sideBar.addSubview(UIButton.self)
             .config(self, selector: #selector(adviceBtnPressed))
             .layout { (make) in
                 make.left.equalTo(superview).offset(-self.view.bounds.width)
@@ -156,19 +156,19 @@ class HomeController2: UIViewController, HomeDelegate {
         }
         adviceBtn.tag = 7
         
-        adviceBtn.addSubview(UILabel)
+        adviceBtn.addSubview(UILabel.self)
             .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0.38, alpha: 1), text: LS("意见反馈"))
             .layout { (make) in
                 make.centerY.equalTo(adviceBtn)
                 make.left.equalTo(adviceBtn).offset(20)
         }
         
-        marker = sideBar.addSubview(UIView).config(UIColor(white: 0.145, alpha: 1))
+        marker = sideBar.addSubview(UIView.self).config(UIColor(white: 0.145, alpha: 1))
             .layout({ (make) in
                 make.edges.equalTo(sideBtns[0])
             })
         sideBar.sendSubview(toBack: marker)
-        marker.addSubview(UIView).config(kHighlightRed)
+        marker.addSubview(UIView.self).config(kHighlightRed)
             .addShadow(4, color: kHighlightRed, opacity: 0.4, offset: CGSize(width: 1, height: 0))
             .layout { (make) in
                 make.left.equalTo(marker)
@@ -177,7 +177,7 @@ class HomeController2: UIViewController, HomeDelegate {
                 make.width.equalTo(3)
         }
         
-        unreadLbl = sideBar.addSubview(UILabel)
+        unreadLbl = sideBar.addSubview(UILabel.self)
             .config(9, textColor: UIColor.white, textAlignment: .center)
             .config(kHighlightedRedTextColor)
             .layout({ (make) in
@@ -217,22 +217,22 @@ class HomeController2: UIViewController, HomeDelegate {
     // MARK: - Animation
     
     func hideSidebar() {
-        let superview = self.view
-        sideBar.snp_remakeConstraints { (make) in
+        let superview = self.view!
+        sideBar.snp.remakeConstraints { (make) in
             make.top.equalTo(superview)
-            make.right.equalTo(superview.snp_left).offset(-10)
+            make.right.equalTo(superview.snp.left).offset(-10)
             make.bottom.equalTo(superview)
             make.width.equalTo(superview).multipliedBy(0.667)
         }
         for btn in sideBtns {
-            btn.snp_updateConstraints(closure: { (make) in
+            btn.snp.updateConstraints({ (make) in
                 make.left.equalTo(superview).offset(-self.view.bounds.width)
             })
         }
-        sepLine.snp_updateConstraints { (make) in
+        sepLine.snp.updateConstraints { (make) in
             make.left.equalTo(superview).offset(-self.view.bounds.width)
         }
-        adviceBtn.snp_updateConstraints { (make) in
+        adviceBtn.snp.updateConstraints { (make) in
             make.left.equalTo(superview).offset(-self.view.bounds.width)
         }
         UIView.animate(withDuration: 0.3, animations: {
@@ -249,15 +249,15 @@ class HomeController2: UIViewController, HomeDelegate {
     
     func showSidebar() {
         
-        avatarBtn.kf_setImageWithURL(hostUser.avatarURL!, forState: UIControlState())
+        avatarBtn.kf.setImage(with: hostUser.avatarURL!, for: .normal)
         nameLbl.text = hostUser.nickName
         
         var temp: [UIView] = []
         temp.append(contentsOf: sideBtns as [UIView])
         temp.append(sepLine)
         temp.append(adviceBtn)
-        let superview = view
-        sideBar.snp_remakeConstraints { (make) in
+        let superview = view!
+        sideBar.snp.remakeConstraints { (make) in
             make.top.equalTo(superview)
             make.left.equalTo(superview)
             make.bottom.equalTo(superview)
@@ -278,13 +278,13 @@ class HomeController2: UIViewController, HomeDelegate {
 //                    }, completion: nil)
                 UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: .calculationModeCubicPaced, animations: {
                         UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.1, animations: { 
-                            v.snp_updateConstraints(closure: { (make) in
+                            v.snp.updateConstraints({ (make) in
                                 make.left.equalTo(superview).offset(-self.view.bounds.width * 0.9)
                             })
                             self.view.layoutIfNeeded()
                         })
                         UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.4, animations: {
-                            v.snp_updateConstraints(closure: { (make) in
+                            v.snp.updateConstraints({ (make) in
                                 make.left.equalTo(superview).offset(v == self.sepLine! ? 20 : 0)
                             })
                             self.view.layoutIfNeeded()
@@ -314,7 +314,7 @@ class HomeController2: UIViewController, HomeDelegate {
             return
         }
         if to < sideBtns.count {
-            marker.snp_remakeConstraints { (make) in
+            marker.snp.remakeConstraints { (make) in
                 make.edges.equalTo(sideBtns[to])
             }
         }

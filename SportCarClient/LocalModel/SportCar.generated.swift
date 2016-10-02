@@ -60,7 +60,7 @@ extension SportCar {
 
 // MARK: - AttributeType extensions
 
-extension AlecrimCoreData.AttributeType where Self.ValueType: SportCar {
+extension AlecrimCoreData.AttributeProtocol where Self.ValueType: SportCar {
 
     var audio: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("audio", self) }
     var body: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("body", self) }

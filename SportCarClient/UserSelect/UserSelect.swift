@@ -33,6 +33,14 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
     /// 搜索栏
     var searchBar: UISearchBar?
     
+    override init () {
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()

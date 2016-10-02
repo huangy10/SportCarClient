@@ -33,7 +33,7 @@ class AvatarCarSelectController: AvatarItemSelectController {
         //
         let requester = AccountRequester2.sharedInstance
         toast = showStaticToast(LS("载入中...请稍后"))
-        requester.getAuthedCarsList(user.ssidString, onSuccess: { (json) in
+        _ = requester.getAuthedCarsList(user.ssidString, onSuccess: { (json) in
             let data = json!.arrayValue
             var i = 0
             if data.count > 0 {
@@ -62,12 +62,12 @@ class AvatarCarSelectController: AvatarItemSelectController {
     }
     
     func showNoCars() {
-        let superview = self.view
+        let superview = self.view!
         //
         addAuthCarBtn = UIButton()
         addAuthCarBtn.setImage(UIImage(named: "auth_add_item_btn"), for: UIControlState())
-        superview?.addSubview(addAuthCarBtn)
-        addAuthCarBtn.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(addAuthCarBtn)
+        addAuthCarBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(35)
             make.size.equalTo(90)
@@ -79,10 +79,10 @@ class AvatarCarSelectController: AvatarItemSelectController {
         addAuthCarLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         addAuthCarLbl.textColor = UIColor(white: 0.72, alpha: 1)
         addAuthCarLbl.textAlignment = .center
-        superview?.addSubview(addAuthCarLbl)
-        addAuthCarLbl.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(addAuthCarLbl)
+        addAuthCarLbl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(addAuthCarBtn)
-            make.top.equalTo(addAuthCarBtn.snp_bottom).offset(25)
+            make.top.equalTo(addAuthCarBtn.snp.bottom).offset(25)
         }
         
         addAuthCarBtn.isHidden = true
@@ -122,7 +122,7 @@ class AvatarCarSelectController: AvatarItemSelectController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: AvatarItemSelectCell.reuseIdentifier, for: indexPath) as! AvatarItemSelectCell
         let car = cars[(indexPath as NSIndexPath).row]
-        cell.avatarImg?.kf_setImageWithURL(car.logoURL!)
+        cell.avatarImg.kf.setImage(with: car.logoURL!)
         cell.nickNameLbl?.text = car.name
         cell.selectBtn?.tag = (indexPath as NSIndexPath).row
         if car.identified {
