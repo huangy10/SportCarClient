@@ -54,7 +54,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
 //    }
     
     init (currentLocation: CLLocationCoordinate2D?, des: String?) {
-        super.init(nibName: nil, bundle: nil)
+        super.init()
         self.location = currentLocation
         self.locDescription = des
     }
@@ -98,12 +98,12 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
     
     override func createSubviews() {
         super.createSubviews()
-        let superview = self.view
+        let superview = self.view!
         
         mapView = BMKMapView()
         mapView.zoomLevel = 16
-        superview?.addSubview(mapView)
-        mapView.snp_makeConstraints { (make) in
+        superview.addSubview(mapView)
+        mapView.snp.makeConstraints { (make) in
             make.edges.equalTo(superview)
         }
         
@@ -111,7 +111,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
             mapView.setCenter(loc, animated: false)
         }
         
-        let container = superview?.addSubview(UIView)
+        let container = superview.addSubview(UIView.self)
             .config(UIColor.white)
             .addShadow()
             .layout { (make) in
@@ -121,7 +121,7 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
                 make.height.equalTo(50)
         }
         
-        keywordInput = container.addSubview(UITextField)
+        keywordInput = container.addSubview(UITextField.self)
             .config(14, text: self.locDescription)
             .layout({ (make) in
                 make.edges.equalTo(container).inset(UIEdgeInsetsMake(5, 15, 5, 15))
@@ -133,11 +133,11 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(LocationSelectCell.self, forCellReuseIdentifier: "cell")
-        superview?.addSubview(tableView)
-        tableView.snp_makeConstraints { (make) in
+        superview.addSubview(tableView)
+        tableView.snp.makeConstraints { (make) in
             make.left.equalTo(container)
             make.right.equalTo(container)
-            make.top.equalTo(container.snp_bottom).offset(15)
+            make.top.equalTo(container.snp.bottom).offset(15)
             make.bottom.equalTo(superview).offset(-30)
         }
         tableView.isHidden = true

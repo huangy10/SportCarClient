@@ -47,7 +47,7 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
     }
     
     func backBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func nextBtnPressed() {
@@ -58,16 +58,16 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
     override func createSubviews() {
         super.createSubviews()
         navigationBarSettings()
-        let superview = self.view
-        superview?.backgroundColor = UIColor.white
+        let superview = self.view!
+        superview.backgroundColor = UIColor.white
         //
         sportCarDisplay = UIImageView(image: UIImage(named: "account_car_select_placeholder"))
-        superview?.addSubview(sportCarDisplay!)
-        sportCarDisplay?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(sportCarDisplay!)
+        sportCarDisplay?.snp.makeConstraints({ (make) -> Void in
             make.width.equalTo(superview).multipliedBy(0.5)
             make.left.equalTo(superview)
             make.top.equalTo(superview)
-            make.height.equalTo(sportCarDisplay!.snp_width).multipliedBy(0.58)
+            make.height.equalTo(sportCarDisplay!.snp.width).multipliedBy(0.58)
         })
         //
         let selectBtn = UIButton()
@@ -75,9 +75,9 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         selectBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
         selectBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         selectBtn.titleLabel?.textAlignment = .center
-        superview?.addSubview(selectBtn)
-        selectBtn.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(sportCarDisplay!.snp_right)
+        superview.addSubview(selectBtn)
+        selectBtn.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(sportCarDisplay!.snp.right)
             make.right.equalTo(superview)
             make.centerY.equalTo(sportCarDisplay!)
             make.height.equalTo(44)
@@ -87,7 +87,7 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         //
         let btnIcon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         selectBtn.addSubview(btnIcon)
-        btnIcon.snp_makeConstraints { (make) -> Void in
+        btnIcon.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(selectBtn).offset(-15)
             make.centerY.equalTo(selectBtn)
             make.size.equalTo(CGSize(width: 9, height: 15))
@@ -98,9 +98,9 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         signatureLbl.textColor = UIColor(white: 0.72, alpha: 1)
         signatureLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
         signatureLbl.textAlignment = .left
-        superview?.addSubview(signatureLbl)
-        signatureLbl.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(sportCarDisplay!.snp_bottom).offset(22)
+        superview.addSubview(signatureLbl)
+        signatureLbl.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(sportCarDisplay!.snp.bottom).offset(22)
             make.height.equalTo(34)
             make.width.equalTo(134)
             make.left.equalTo(superview).offset(15)
@@ -111,17 +111,17 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         signatureInput?.placeholder = NSLocalizedString("为爱车写一段签名吧(选填)", comment: "")
         signatureInput?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         self.inputFields.append(signatureInput)
-        superview?.addSubview(signatureInput!)
-        signatureInput?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(signatureInput!)
+        signatureInput?.snp.makeConstraints({ (make) -> Void in
             make.centerY.equalTo(signatureLbl)
-            make.left.equalTo(signatureLbl.snp_right)
+            make.left.equalTo(signatureLbl.snp.right)
             make.right.equalTo(superview).offset(-15)
             make.height.equalTo(signatureLbl)
         })
         
         let signatureIcon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         signatureInput?.addSubview(signatureIcon)
-        signatureIcon.snp_makeConstraints { (make) -> Void in
+        signatureIcon.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(signatureInput!)
             make.centerY.equalTo(signatureInput!)
             make.size.equalTo(CGSize(width: 9, height: 15))
@@ -129,12 +129,12 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.92, alpha: 1)
-        superview?.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(sepLine)
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(signatureLbl)
             make.right.equalTo(signatureInput!)
             make.height.equalTo(1)
-            make.top.equalTo(signatureLbl.snp_bottom).offset(11)
+            make.top.equalTo(signatureLbl.snp.bottom).offset(11)
         }
         
         let plzSelectLbl = UILabel()
@@ -142,8 +142,8 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         plzSelectLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
         plzSelectLbl.textAlignment = .center
         plzSelectLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        superview?.addSubview(plzSelectLbl)
-        plzSelectLbl.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(plzSelectLbl)
+        plzSelectLbl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.centerY.equalTo(superview)
             make.width.equalTo(superview)

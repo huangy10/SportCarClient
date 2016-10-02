@@ -61,7 +61,7 @@ class FFSelectController: UserSelectController {
     
     convenience init(maxSelectNum: Int, preSelectedUsers: [User] = [], preSelect: Bool = true, forced: Bool = true, authedUserOnly: Bool = false) {
         // 2016-08-11 authedUserOnly这个参数表明是否只允许选择认证用户
-        self.init(nibName: nil, bundle: nil)
+        self.init()
         maxSelectUserNum = maxSelectNum
         self.authedUserOnly = authedUserOnly
         if forced {
@@ -74,7 +74,7 @@ class FFSelectController: UserSelectController {
     
     override init () {
         maxSelectUserNum = kMaxSelectUserNum
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -111,11 +111,11 @@ class FFSelectController: UserSelectController {
             make.right.equalTo(container.snp.centerX)
         })
         titleFansBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), for: .touchUpInside)
-        titleFansLbl = titleFansBtn.addSubview(UILabel)
-            .config(15, fontWeight: UIFontWeightUltraLight, textColor: kTextBlack, textAlignment: .center, text: LS("粉丝"), fontWeight: UIFontWeightBold)
+        titleFansLbl = titleFansBtn.addSubview(UILabel.self)
+            .config(15, fontWeight: UIFontWeightBold, textColor: kTextBlack, textAlignment: .center, text: LS("粉丝"))
             .layout({ (make) in
                 make.center.equalTo(titleFansBtn)
-                make.size.equalTo(LS(" 粉丝 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
+                make.size.equalTo(LS(" 粉丝 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
             })
         // 创建关注按钮
         let titleFollowBtn = UIButton()
@@ -128,11 +128,11 @@ class FFSelectController: UserSelectController {
             make.left.equalTo(container.snp.centerX)
         })
         titleFollowBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), for: .touchUpInside)
-        titleFollowLbl = titleFollowBtn.addSubview(UILabel)
-            .config(15, fontWeight: UIFontWeightUltraLight, textColor: kTextGray, textAlignment: .center, text: LS("关注"), fontWeight: UIFontWeightBold)
+        titleFollowLbl = titleFollowBtn.addSubview(UILabel.self)
+            .config(15, fontWeight: UIFontWeightBold, textColor: kTextGray, textAlignment: .center, text: LS("关注"))
             .layout({ (make) in
                 make.center.equalTo(titleFollowBtn)
-                make.size.equalTo(LS(" 关注 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
+                make.size.equalTo(LS(" 关注 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
             })
         // 创建可以平移的白色按钮形状
         titleBtnIcon = UIImageView(image: UIImage(named: "nav_title_btn_icon"))

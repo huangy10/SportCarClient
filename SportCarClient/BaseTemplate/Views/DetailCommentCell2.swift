@@ -64,7 +64,7 @@ class DetailCommentCell: UITableViewCell {
         avatarBtn?.clipsToBounds = true
         avatarBtn?.backgroundColor = UIColor.gray
         superview.addSubview(avatarBtn!)
-        avatarBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        avatarBtn?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.top.equalTo(superview)
             make.size.equalTo(35)
@@ -75,8 +75,8 @@ class DetailCommentCell: UITableViewCell {
         nameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         nameLbl?.textColor = UIColor.black
         superview.addSubview(nameLbl!)
-        nameLbl?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(avatarBtn!.snp_right).offset(11)
+        nameLbl?.snp.makeConstraints({ (make) -> Void in
+            make.left.equalTo(avatarBtn!.snp.right).offset(11)
             make.top.equalTo(avatarBtn!)
         })
         //
@@ -85,8 +85,8 @@ class DetailCommentCell: UITableViewCell {
         responseStaticLbl?.textColor = UIColor(white: 0.72, alpha: 1)
         responseStaticLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(responseStaticLbl!)
-        responseStaticLbl!.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(nameLbl!.snp_right).offset(2)
+        responseStaticLbl!.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(nameLbl!.snp.right).offset(2)
             make.bottom.equalTo(nameLbl!)
         }
         responseStaticLbl?.isHidden = true
@@ -95,8 +95,8 @@ class DetailCommentCell: UITableViewCell {
         responseLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         responseLbl?.textColor = UIColor.black
         superview.addSubview(responseLbl!)
-        responseLbl?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(responseStaticLbl!.snp_right).offset(2)
+        responseLbl?.snp.makeConstraints({ (make) -> Void in
+            make.left.equalTo(responseStaticLbl!.snp.right).offset(2)
             make.bottom.equalTo(nameLbl!)
         })
         responseLbl?.isHidden = true
@@ -106,10 +106,10 @@ class DetailCommentCell: UITableViewCell {
         commentDateLbl?.textColor = UIColor(white: 0.72, alpha: 1)
         commentDateLbl?.text = LS("评论时间")
         superview.addSubview(commentDateLbl!)
-        commentDateLbl?.snp_makeConstraints(closure: { (make) -> Void in
+        commentDateLbl?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(nameLbl!)
             make.height.equalTo(11)
-            make.top.equalTo(nameLbl!.snp_bottom).offset(2)
+            make.top.equalTo(nameLbl!.snp.bottom).offset(2)
         })
         //
         replyBtn = UIButton()
@@ -117,7 +117,7 @@ class DetailCommentCell: UITableViewCell {
         replyBtn?.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
         replyBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(replyBtn!)
-        replyBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        replyBtn?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.top.equalTo(commentDateLbl!)
             make.height.equalTo(17)
@@ -131,10 +131,10 @@ class DetailCommentCell: UITableViewCell {
         commentContentLbl?.numberOfLines = 0
         commentContentLbl?.text = LS("评论内容")
         superview.addSubview(commentContentLbl!)
-        commentContentLbl?.snp_makeConstraints(closure: { (make) -> Void in
+        commentContentLbl?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(nameLbl!)
-            make.top.equalTo(avatarBtn!.snp_bottom).offset(7)
-            make.right.equalTo(replyBtn!.snp_left)
+            make.top.equalTo(avatarBtn!.snp.bottom).offset(7)
+            make.right.equalTo(replyBtn!.snp.left)
         })
         //
         commentImage = UIButton()

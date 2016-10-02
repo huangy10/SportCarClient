@@ -20,6 +20,7 @@ class LocationModel: BaseInMemModel {
         return CLLocationCoordinate2DMake(latitude, longitude)
     }
     
+    @discardableResult
     override func fromJSONString(_ string: String, detailLevel: Int) throws -> LocationModel{
         if let data = string.data(using: String.Encoding.utf8, allowLossyConversion: false) {
             let json = JSON(data: data)
@@ -32,6 +33,7 @@ class LocationModel: BaseInMemModel {
         }
     }
     
+    @discardableResult
     override func loadDataFromJSON(_ data: JSON) throws -> LocationModel {
         try super.loadDataFromJSON(data)
         latitude = data["lat"].doubleValue
@@ -44,6 +46,7 @@ class LocationModel: BaseInMemModel {
         return self
     }
     
+    @discardableResult
     override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         return [
             "lat": latitude,

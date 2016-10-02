@@ -80,15 +80,15 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     
     override func createSubviews() {
         super.createSubviews()
-        let superview = self.view
+        let superview = self.view!
         
         tableView = UITableView(frame: CGRect.zero, style: .grouped)
         tableView.backgroundColor = UIColor.white
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        superview?.addSubview(tableView)
-        tableView.snp_makeConstraints { (make) in
+        superview.addSubview(tableView)
+        tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view)
         }
         tableView.contentInset = UIEdgeInsetsMake(275, 0, 0, 0)
@@ -98,52 +98,52 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         SSCommonHeader.registerTableView(tableView)
         SSPropertySwitcherCell.registerTableView(tableView)
         
-        let container = tableView.addSubview(UIView)
+        let container = tableView.addSubview(UIView.self)
             .setFrame(CGRect(x: 0, y: -275, width: superview.frame.width, height: 275))
             .config(UIColor.white)
-        imagePickerBtn = container.addSubview(UIButton)
+        imagePickerBtn = container.addSubview(UIButton.self)
             .config(self, selector: #selector(needPickPoster), image: UIImage(named: "status_add_image"))
             .layout({ (make) in
                 make.left.equalTo(container).offset(15)
                 make.top.equalTo(container).offset(15)
                 make.size.equalTo(100)
             })
-        let static1 = container.addSubview(UILabel)
+        let static1 = container.addSubview(UILabel.self)
             .config(fontWeight: UIFontWeightUltraLight, text: LS("取一个名字"))
             .layout { (make) in
-                make.left.equalTo(imagePickerBtn.snp_right).offset(18)
+                make.left.equalTo(imagePickerBtn.snp.right).offset(18)
                 make.top.equalTo(imagePickerBtn)
         }
-        let wrapper = container.addSubview(UIScrollView).config(UIColor.white)
+        let wrapper = container.addSubview(UIScrollView.self).config(UIColor.white)
             .layout { (make) in
                 make.left.equalTo(static1)
-                make.top.equalTo(static1.snp_bottom).offset(14)
+                make.top.equalTo(static1.snp.bottom).offset(14)
                 make.bottom.equalTo(imagePickerBtn)
                 make.right.equalTo(container).offset(-15)
         }
-        nameInput = wrapper.addSubview(UITextField)
-            .config(17, placeholder: LS("为活动取一个名字..."), fontWeight: UIFontWeightSemibold).layout({ (make) in
+        nameInput = wrapper.addSubview(UITextField.self)
+            .config(17, fontWeight: UIFontWeightSemibold, placeholder: LS("为活动取一个名字...")).layout({ (make) in
                 make.left.equalTo(static1)
-                make.top.equalTo(static1.snp_bottom).offset(14)
+                make.top.equalTo(static1.snp.bottom).offset(14)
             }).addToInputable(self)
-        desInput = container.addSubview(UITextView)
+        desInput = container.addSubview(UITextView.self)
             .config(16, textColor: UIColor(white: 0.72, alpha: 1), text: LS("活动描述..."))
             .layout({ (make) in
                 make.left.equalTo(imagePickerBtn)
                 make.right.equalTo(container).offset(-15)
-                make.top.equalTo(imagePickerBtn.snp_bottom).offset(16)
+                make.top.equalTo(imagePickerBtn.snp.bottom).offset(16)
                 make.height.equalTo(100)
             }).addToInputable(self)
-        desWordCountLbl = container.addSubview(UILabel)
-            .config(12, textAlignment: .right, text: "0/\(actDescriptionWordLimit)", textColor: UIColor(white: 0.72, alpha: 1)).layout({ (make) in
+        desWordCountLbl = container.addSubview(UILabel.self)
+            .config(12, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .right, text: "0/\(actDescriptionWordLimit)").layout({ (make) in
                 make.right.equalTo(container).offset(-15)
                 make.bottom.equalTo(desInput)
             })
-        let atBtn = container.addSubview(UIButton)
+        let atBtn = container.addSubview(UIButton.self)
             .config(self, selector: #selector(needAtSomeone), title: LS("@提醒谁看"), titleColor: UIColor.black)
             .layout { (make) in
                 make.left.equalTo(container).offset(15)
-                make.top.equalTo(desInput.snp_bottom)
+                make.top.equalTo(desInput.snp.bottom)
                 make.bottom.equalTo(container)
                 make.width.equalTo(80)
         }
@@ -156,10 +156,10 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         inlineMiniUserSelectView.delegate = self
         inlineMiniUserSelectView.dataSource = self
         container.addSubview(inlineMiniUserSelectView)
-        inlineMiniUserSelectView.snp_makeConstraints { (make) in
-            make.left.equalTo(atBtn.snp_right)
+        inlineMiniUserSelectView.snp.makeConstraints { (make) in
+            make.left.equalTo(atBtn.snp.right)
             make.right.equalTo(container).offset(-15)
-            make.top.equalTo(desInput.snp_bottom)
+            make.top.equalTo(desInput.snp.bottom)
             make.bottom.equalTo(container)
         }
         inlineMiniUserSelectView.register(InlineUserSelectMiniCell.self, forCellWithReuseIdentifier: InlineUserSelectMiniCell.reuseIdentifier)
@@ -181,8 +181,8 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         //
         datePicker = CustomDatePicker()
         datePicker.delegate = self
-        superview?.addSubview(datePicker)
-        datePicker.snp_makeConstraints { (make) in
+        superview.addSubview(datePicker)
+        datePicker.snp.makeConstraints { (make) in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
             make.bottom.equalTo(superview).offset(CustomDatePicker.requiredHegiht)
@@ -217,7 +217,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     
     func navRightBtnPressed() {
         
-        self.inputFields.each { (view) in
+        _ = self.inputFields.each { (view) in
             view?.resignFirstResponder()
         }
         // check integrity of the data
@@ -383,7 +383,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.ss_reusableHeader(SSCommonHeader)
+        let header = tableView.ss_reusableHeader(SSCommonHeader.self)
         header.titleLbl.text = LS("基本设置")
         return header
     }
@@ -599,9 +599,9 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 return
             }
         }
-        let text = textView.text
+        let text = textView.text ?? ""
         if text.length > actDescriptionWordLimit {
-            textView.text = text?[0..<actDescriptionWordLimit]
+            textView.text = text[0..<actDescriptionWordLimit]
         }
         desWordCountLbl.text = "\(min(text.length, actDescriptionWordLimit))/\(actDescriptionWordLimit)"
     }

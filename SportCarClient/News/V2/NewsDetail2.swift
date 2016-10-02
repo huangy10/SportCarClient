@@ -110,6 +110,8 @@ class NewsDetailDismissAnimation: NSObject, UIViewControllerAnimatedTransitionin
 
 
 class NewsDetailController2: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, LoadingProtocol, UIWebViewDelegate, RequestManageProtocol, ShareControllorDelegate, DetailCommentCellDelegate2 {
+    internal var delayWorkItem: DispatchWorkItem?
+
     var news: News!
     var comments: [NewsComment] = []
     
@@ -153,9 +155,6 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     var responseToRow: Int?         // 回应的评论对象所在的行
     var responseToPrefixStr: String?
     var atUser: [String] = []
-    
-    //
-    var delayTask: (()->())?
     
     // 
     var tapper: UITapGestureRecognizer!

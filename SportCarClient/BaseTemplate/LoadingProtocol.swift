@@ -23,7 +23,8 @@ protocol LoadingProtocol: class {
     var lp_container: UIView! { get set }
     var lp_loadingView: UIImageView! { get set }
     var lp_timer: Timer! {set get}
-    var delayTask: (()->())? { get set }
+    
+    var delayWorkItem: DispatchWorkItem? { get set }
 }
 
 
@@ -37,7 +38,7 @@ extension LoadingProtocol where Self: UIViewController {
             } else {
                 let superview = self.view!
                 let container: UIView
-                if (superview.isKind(of: UITableView.self))! {
+                if (superview.isKind(of: UITableView.self)) {
                     container = superview.addSubview(UIView.self).config(UIColor(white: 0, alpha: 0.2))
                     container.frame = UIScreen.main.bounds
                 } else {
@@ -110,18 +111,20 @@ extension LoadingProtocol where Self: UIViewController {
             lp_container.isHidden = true
             lp_container.removeFromSuperview()
             lp_container = nil
-        } else if self.delayTask != nil {
-            dispatch_block_cancel(delayTask!)
+        } else if self.delayWorkItem != nil {
+//            dispatch_block_cancel(delayTask!)
+            delayWorkItem?.cancel()
         } else {
             assertionFailure()
         }
-        delayTask = nil
+        delayWorkItem = nil
     }
     
     func lp_start() {
         let delay = DispatchTime.now() + Double(Int64(NSEC_PER_MSEC) * kLoadingAppearDelay) / Double(NSEC_PER_SEC)
         lp_timer = nil
-        delayTask = dispatch_block_create(__DISPATCH_BLOCK_INHERIT_QOS_CLASS, { [weak self] in
+        
+        delayWorkItem = DispatchWorkItem(block: { [weak self] in
             guard let sSelf = self else {
                 return
             }
@@ -132,7 +135,18 @@ extension LoadingProtocol where Self: UIViewController {
             })
             sSelf.lp_timer = timer
         })
-        DispatchQueue.main.asyncAfter(deadline: delay, execute: delayTask as! @convention(block) () -> Void)
-
+        
+//        delayTask = dispatch_block_create(__DISPATCH_BLOCK_INHERIT_QOS_CLASS, { [weak self] in
+//            guard let sSelf = self else {
+//                return
+//            }
+//            let timer = Timer.schedule(repeatInterval: 0.05, handler: { (_) in
+//                let curTrans = sSelf.lp_loadingView.transform
+//                let newTrans = curTrans.rotated(by: 0.4)
+//                sSelf.lp_loadingView.transform = newTrans
+//            })
+//            sSelf.lp_timer = timer
+//        })
+        DispatchQueue.main.asyncAfter(deadline: delay, execute: delayWorkItem!)
     }
 }

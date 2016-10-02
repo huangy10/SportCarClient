@@ -12,7 +12,7 @@ import UIKit
 import Spring
 
 
-class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDataSource, UIPickerViewDelegate {
+class SportscarAuthController: PersonMineSettingsAuthController {
     let kDistrictSet = ["京", "沪", "晋", "冀", "鄂", "豫", "鲁", "贵", "陕", "赣", "苏", "湘", "桂", "甘", "闽", "粤", "辽", "黑", "云", "宁", "新", "川", "渝", "蒙", "吉", "琼", "藏", "青", "甲", "乙"]
     /// 汽车所属区域选择
     var districtPickerContainer: UIView!
@@ -48,7 +48,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
                 self.pp_hideProgressView()
                 self.showToast(LS("认证申请发送失败"))
         }
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     override func getStaticLabelContentForIndex(_ index: Int) -> String {
@@ -58,10 +58,10 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
     override func createSubviews() {
         super.createSubviews()
         // 调整中间一块的布局
-        descriptionLabel.snp_remakeConstraints { (make) -> Void in
+        descriptionLabel.snp.remakeConstraints { (make) -> Void in
             make.left.equalTo(self.view).offset(15)
             make.right.equalTo(self.view).offset(-15)
-            make.top.equalTo(privilegeBoard.snp_bottom)
+            make.top.equalTo(privilegeBoard.snp.bottom)
             make.height.equalTo(90)
         }
         createDistrictPicker()
@@ -71,11 +71,11 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         let container = super.createImagesImputPanel()
         let exampleImage = UIImageView(image: UIImage(named: "sports_car_auth_example"))
         container.addSubview(exampleImage)
-        exampleImage.snp_makeConstraints { (make) -> Void in
+        exampleImage.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(container)
-            make.top.equalTo(staticLabel1.snp_bottom).offset(5)
-            make.right.equalTo(imageBtn1.snp_left).offset(-24)
-            make.height.equalTo(exampleImage.snp_width).multipliedBy(0.67)
+            make.top.equalTo(staticLabel1.snp.bottom).offset(5)
+            make.right.equalTo(imageBtn1.snp.left).offset(-24)
+            make.height.equalTo(exampleImage.snp.width).multipliedBy(0.67)
         }
         return container
     }
@@ -87,13 +87,13 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         districtStaticLbl.textColor = UIColor(white: 0.72, alpha: 1)
         districtStaticLbl.text = LS("车牌地区")
         container.addSubview(districtStaticLbl)
-        districtStaticLbl.snp_makeConstraints { (make) -> Void in
+        districtStaticLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(container)
             make.top.equalTo(container)
         }
         let arrow = UIImageView(image: UIImage(named: "account_profile_down_arrow"))
         container.addSubview(arrow)
-        arrow.snp_makeConstraints { (make) -> Void in
+        arrow.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(container)
             make.centerY.equalTo(districtStaticLbl)
             make.size.equalTo(CGSize(width: 15, height: 9))
@@ -104,23 +104,23 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         districtLabel.textAlignment = .right
         districtLabel.text = "京"
         container.addSubview(districtLabel)
-        districtLabel.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(arrow.snp_left).offset(-11)
+        districtLabel.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(arrow.snp.left).offset(-11)
             make.centerY.equalTo(districtStaticLbl)
         }
         let sepLine1 = UIView()
         sepLine1.backgroundColor = UIColor(white: 0.945, alpha: 1)
         container.addSubview(sepLine1)
-        sepLine1.snp_makeConstraints { (make) -> Void in
+        sepLine1.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(districtStaticLbl)
             make.right.equalTo(arrow)
-            make.top.equalTo(districtStaticLbl.snp_bottom).offset(11)
+            make.top.equalTo(districtStaticLbl.snp.bottom).offset(11)
             make.height.equalTo(1)
         }
         //
         districtBtn = UIButton()
         container.addSubview(districtBtn)
-        districtBtn.snp_makeConstraints { (make) -> Void in
+        districtBtn.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(container)
             make.top.equalTo(container)
             make.right.equalTo(container)
@@ -133,13 +133,13 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         licenseStaticLbl.textColor = UIColor(white: 0.72, alpha: 1)
         licenseStaticLbl.text = LS("车牌号")
         container.addSubview(licenseStaticLbl)
-        licenseStaticLbl.snp_makeConstraints { (make) -> Void in
+        licenseStaticLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(sepLine1)
             make.top.equalTo(sepLine1).offset(22)
         }
         let arrow2 = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         container.addSubview(arrow2)
-        arrow2.snp_makeConstraints { (make) -> Void in
+        arrow2.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(arrow)
             make.centerY.equalTo(licenseStaticLbl)
             make.size.equalTo(CGSize(width: 9, height: 15))
@@ -152,7 +152,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         carLicense.delegate = self
         inputFields.append(carLicense)
         container.addSubview(carLicense)
-        carLicense.snp_makeConstraints { (make) -> Void in
+        carLicense.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(districtLabel)
             make.centerY.equalTo(licenseStaticLbl)
             make.height.equalTo(licenseStaticLbl)
@@ -161,22 +161,22 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         let sepLine2 = UIView()
         sepLine2.backgroundColor = UIColor(white: 0.945, alpha: 1)
         container.addSubview(sepLine2)
-        sepLine2.snp_makeConstraints { (make) -> Void in
+        sepLine2.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(sepLine1)
             make.right.equalTo(sepLine1)
-            make.top.equalTo(licenseStaticLbl.snp_bottom).offset(11)
+            make.top.equalTo(licenseStaticLbl.snp.bottom).offset(11)
             make.height.equalTo(0.5)
         }
         return container
     }
     
     func createDistrictPicker() {
-        let superview = self.view
+        let superview = self.view!
         districtPickerContainer = UIView()
         districtPickerContainer.backgroundColor = UIColor(white: 0.945, alpha: 1)
-        superview?.addSubview(districtPickerContainer)
-        districtPickerContainer.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(superview.snp_bottom)
+        superview.addSubview(districtPickerContainer)
+        districtPickerContainer.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(superview.snp.bottom)
             make.right.equalTo(superview)
             make.left.equalTo(superview)
             make.height.equalTo(234)
@@ -185,7 +185,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         let pickerHeader = UIView()
         pickerHeader.backgroundColor = UIColor(white: 0.92, alpha: 1)
         districtPickerContainer.addSubview(pickerHeader)
-        pickerHeader.snp_makeConstraints { (make) -> Void in
+        pickerHeader.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(districtPickerContainer)
             make.right.equalTo(districtPickerContainer)
             make.left.equalTo(districtPickerContainer)
@@ -196,7 +196,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         pickerTitle.text = LS("选择车牌地区")
         pickerTitle.font = UIFont.systemFont(ofSize: 14)
         pickerHeader.addSubview(pickerTitle)
-        pickerTitle.snp_makeConstraints { (make) -> Void in
+        pickerTitle.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(pickerHeader).offset(20)
             make.centerY.equalTo(pickerHeader)
         }
@@ -207,7 +207,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         doneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         pickerHeader.addSubview(doneBtn)
         doneBtn.addTarget(self, action: #selector(SportscarAuthController.donePickDistrictBtnPressed), for: .touchUpInside)
-        doneBtn.snp_makeConstraints { (make) -> Void in
+        doneBtn.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(pickerHeader).offset(-20)
             make.centerY.equalTo(pickerHeader)
             make.height.equalTo(pickerHeader)
@@ -218,9 +218,9 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
         districtPicker.delegate = self
         districtPicker.dataSource = self
         districtPickerContainer.addSubview(districtPicker)
-        districtPicker.snp_makeConstraints { (make) -> Void in
+        districtPicker.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(districtPickerContainer)
-            make.top.equalTo(pickerHeader.snp_bottom)
+            make.top.equalTo(pickerHeader.snp.bottom)
             make.left.equalTo(districtPickerContainer)
             make.bottom.equalTo(districtPickerContainer)
         }
@@ -235,13 +235,13 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
     func showDistrictPicker() {
         districtBtn.isEnabled = false
         tapper?.isEnabled = true
-        districtPickerContainer.snp_remakeConstraints { (make) -> Void in
+        districtPickerContainer.snp.remakeConstraints { (make) -> Void in
             make.right.equalTo(self.view)
             make.left.equalTo(self.view)
             make.bottom.equalTo(self.view)
             make.height.equalTo(234)
         }
-        SpringAnimation.spring(0.3) { () -> Void in
+        SpringAnimation.spring(duration: 0.3) { () -> Void in
             self.view.layoutIfNeeded()
         }
     }
@@ -249,13 +249,13 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
     func hideDistrictPicker() {
         districtBtn.isEnabled = true
         tapper?.isEnabled = false
-        districtPickerContainer.snp_remakeConstraints { (make) -> Void in
+        districtPickerContainer.snp.remakeConstraints { (make) -> Void in
             make.right.equalTo(self.view)
             make.left.equalTo(self.view)
-            make.top.equalTo(self.view.snp_bottom)
+            make.top.equalTo(self.view.snp.bottom)
             make.height.equalTo(234)
         }
-        SpringAnimation.spring(0.3) { () -> Void in
+        SpringAnimation.spring(duration: 0.3) { () -> Void in
             self.view.layoutIfNeeded()
         }
     }
@@ -268,7 +268,7 @@ class SportscarAuthController: PersonMineSettingsAuthController, UIPickerViewDat
 }
 
 // MARK: - privide data for district picker
-extension SportscarAuthController {
+extension SportscarAuthController: UIPickerViewDataSource, UIPickerViewDelegate  {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1

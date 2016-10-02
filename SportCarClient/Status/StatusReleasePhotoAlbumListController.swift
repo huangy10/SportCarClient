@@ -97,7 +97,7 @@ extension StatusReleasePhotoAlbumListController {
             let result = PHAsset.fetchAssets(in: album, options: fetchOptions)
             cell.photoNumInAlbumLbl?.text = "(\(result.count))"
             
-            if let asset = result.firstObject as? PHAsset {
+            if let asset = result.firstObject {
                 let imageSize = CGSize(width: 100, height: 100)
                 let imageContentMode: PHImageContentMode = .aspectFill
                 PHCachingImageManager.default().requestImage(for: asset, targetSize: imageSize, contentMode: imageContentMode, options: nil, resultHandler: { (image, _) -> Void in
@@ -116,7 +116,7 @@ extension StatusReleasePhotoAlbumListController {
                 NSSortDescriptor(key: "creationDate", ascending: false)
             ]
             fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-            let detail = StatusReleasePhotoSelectController(fetchResult: PHAsset.fetchAssets(in: album, options: fetchOptions), maxSelectLimit: maxSelectLimit)
+            let detail = StatusReleasePhotoSelectController(fetchResult: PHAsset.fetchAssets(in: album, options: fetchOptions) as! PHFetchResult<AnyObject>, maxSelectLimit: maxSelectLimit)
             detail.delegate = self.delegate
             self.navigationController?.pushViewController(detail, animated: true)
         }
@@ -149,34 +149,34 @@ class StatusReleasePhotoAlbumListCell: UITableViewCell {
         imageCover?.clipsToBounds = true
         imageCover?.contentMode = .scaleAspectFill
         superview.addSubview(imageCover!)
-        imageCover?.snp_makeConstraints(closure: { (make) -> Void in
+        imageCover?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview)
             make.centerY.equalTo(superview)
             make.height.equalTo(superview)
-            make.width.equalTo(superview.snp_height)
+            make.width.equalTo(superview.snp.height)
         })
         //
         albumNameLbl = UILabel()
         albumNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightBold)
         albumNameLbl?.textColor = UIColor.black
         superview.addSubview(albumNameLbl!)
-        albumNameLbl?.snp_makeConstraints(closure: { (make) -> Void in
+        albumNameLbl?.snp.makeConstraints({ (make) -> Void in
             make.centerY.equalTo(superview)
-            make.left.equalTo(imageCover!.snp_right).offset(3)
+            make.left.equalTo(imageCover!.snp.right).offset(3)
         })
         //
         photoNumInAlbumLbl = UILabel()
         photoNumInAlbumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
         photoNumInAlbumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(photoNumInAlbumLbl!)
-        photoNumInAlbumLbl?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(albumNameLbl!.snp_right)
+        photoNumInAlbumLbl?.snp.makeConstraints({ (make) -> Void in
+            make.left.equalTo(albumNameLbl!.snp.right)
             make.centerY.equalTo(albumNameLbl!)
         })
         //
         let rightArrow = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         superview.addSubview(rightArrow)
-        rightArrow.snp_makeConstraints { (make) -> Void in
+        rightArrow.snp.makeConstraints { (make) -> Void in
             make.size.equalTo(CGSize(width: 9, height: 15.5))
             make.centerY.equalTo(imageCover!)
             make.right.equalTo(superview).offset(-10)

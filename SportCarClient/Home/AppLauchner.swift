@@ -8,6 +8,7 @@
 
 import UIKit
 import AudioToolbox
+import UserNotifications
 
 let kAppManagerNotificationLogout = "app_manager_notification_logout"
 
@@ -115,8 +116,18 @@ class AppManager: UIViewController {
     // push notifications
     
     func registerForPushNotifications(_ application: UIApplication) {
-        let notificationSettings = UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil)
-        application.registerUserNotificationSettings(notificationSettings)
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
+            // pass
+            if granted {
+                application.registerForRemoteNotifications()
+            } else {
+                self.deviceTokenString = "UnauthorizedDevice"
+            }
+        }
+        
+//        let notificationSettings = UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil)
+//        application.registerUserNotificationSettings(notificationSettings)
     }
     
     func loadHistoricalNotifications(_ launchOptions: [AnyHashable: Any]?) {

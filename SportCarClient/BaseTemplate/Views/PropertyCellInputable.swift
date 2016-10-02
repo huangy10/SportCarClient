@@ -27,21 +27,21 @@ class SSPropertyInputableCell: SSPropertyBaseCell {
         super.createSubviews()
         let superview = self.contentView
         // You should put the textfield into an UIScrollView to avoid the auto offset adjustment, which could not be closed. Stupid apple!
-        wrapper = superview.addSubview(UIScrollView).config(UIColor.white).layout({ (make) in
+        wrapper = superview.addSubview(UIScrollView.self).config(UIColor.white).layout({ (make) in
             make.centerY.equalTo(staticLbl)
-            make.right.equalTo(arrowIcon.snp_left).offset(-8)
+            make.right.equalTo(arrowIcon.snp.left).offset(-8)
             make.height.equalTo(superview)
-            make.left.equalTo(staticLbl.snp_right).offset(30)
+            make.left.equalTo(staticLbl.snp.right).offset(30)
         })
 
         wrapper.isScrollEnabled = false
-        contentInput = wrapper.addSubview(UITextField)
+        contentInput = wrapper.addSubview(UITextField.self)
             .config(textAlignment: .right)
             .layout({ (make) in
                 make.centerY.equalTo(staticLbl)
-                make.right.equalTo(arrowIcon.snp_left).offset(-8)
+                make.right.equalTo(arrowIcon.snp.left).offset(-8)
                 make.height.equalTo(superview)
-                make.left.equalTo(staticLbl.snp_right).offset(30)
+                make.left.equalTo(staticLbl.snp.right).offset(30)
             })
     }
     
@@ -63,17 +63,17 @@ class SSPropertyInputableCell: SSPropertyBaseCell {
             return
         }
         arrowIcon.isHidden = true
-        wrapper.snp_remakeConstraints(closure: { (make) in
+        wrapper.snp.remakeConstraints({ (make) in
             make.centerY.equalTo(staticLbl)
             make.right.equalTo(arrowIcon)
             make.height.equalTo(self.contentView)
-            make.left.equalTo(staticLbl.snp_right).offset(30)
+            make.left.equalTo(staticLbl.snp.right).offset(30)
         })
-        contentInput.snp_remakeConstraints { (make) in
+        contentInput.snp.remakeConstraints { (make) in
             make.centerY.equalTo(staticLbl)
             make.right.equalTo(arrowIcon)
             make.height.equalTo(self.contentView)
-            make.left.equalTo(staticLbl.snp_right).offset(30)
+            make.left.equalTo(staticLbl.snp.right).offset(30)
         }
         self.contentView.layoutIfNeeded()
     }

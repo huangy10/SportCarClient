@@ -143,8 +143,9 @@ class RosterManager {
             return
         }
         let context = ChatModelManger.sharedManager.getOperationContext()
+        // TODO: order by createdAt or updatedAt?
         let existingRosterItems = context.rosterItems.filter({$0.hostSSID == hostID})
-            .orderBy({$0.updatedAt})
+            .orderBy(orderingClosure: { $0.createdAt })
         var unread: Int = 0
         existingRosterItems.forEach { (item) in
             item.manager = ChatModelManger.sharedManager
@@ -186,7 +187,7 @@ class RosterManager {
      actual working queue
      */
     fileprivate func _sync() {
-        ChatRequester2.sharedInstance.getChatList({ (json) in
+        _ = ChatRequester2.sharedInstance.getChatList({ (json) in
             let newRosters = RosterDict()
             var unreadTotal = 0
             for var data in json!.arrayValue {
@@ -211,7 +212,7 @@ class RosterManager {
                 if self.data.count == 0 {
                     // 若此时数据仍然是空的，尝试从数据库中读入列表
                     let context = ChatModelManger.sharedManager.getOperationContext()
-                    context.rosterItems.orderByDescending({ $0.createdAt }).filter({
+                    _ = context.rosterItems.orderBy(ascending: false, orderingClosure: { $0.createdAt }).filter({
                         $0.hostSSID == MainManager.sharedManager.hostUserID!
                     }).each { self.data[$0.mapKey] = $0 }
                     if self.data.count > 0 {
@@ -228,14 +229,12 @@ class RosterManager {
         let wait = DispatchSemaphore(value: 0)
         queue.async {
             let context = ChatModelManger.sharedManager.getOperationContext()
-            do {
-                try context.rosterItems.filter({ $0.ssid == MainManager.sharedManager.hostUserID! })
-                    .filter({ $0.entityType == "club" && $0.relatedID == club.ssid })
-                    .delete()
-            } catch {}
+            context.rosterItems.filter({ $0.ssid == MainManager.sharedManager.hostUserID! })
+                .filter({ $0.entityType == "club" && $0.relatedID == club.ssid })
+                .deleteEntities()
             wait.signal()
         }
-        wait.wait(timeout: DispatchTime.distantFuture)
+        _ = wait.wait(timeout: DispatchTime.distantFuture)
         let mapKey = "club:\(club.ssid)"
         self.data[mapKey] = nil
     }

@@ -61,7 +61,7 @@ class Status: BaseModel {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         content = data["content"].stringValue
         createdAt = DateSTR(data["created_at"].stringValue)
-        image = data["images"].stringValue.split(";").first()
+        image = data["images"].stringValue.split(delimiter: ";").first()
         loc = data["location"].rawString()
         _location = try LocationModel().loadDataFromJSON(data["location"])
         if let likeNum = data["like_num"].int32 {

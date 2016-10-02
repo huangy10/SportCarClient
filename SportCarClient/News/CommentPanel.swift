@@ -22,7 +22,7 @@ class CommentBarView: UIView {
         didSet {
             if shareBtnHidden {
                 shareBtn?.isHidden = true
-                likeBtn?.snp_remakeConstraints(closure: { (make) -> Void in
+                likeBtn?.snp.remakeConstraints({ (make) -> Void in
                     make.size.equalTo(barheight * 0.76)
                     make.bottom.equalTo(self).offset(-5)
                     make.right.equalTo(self).offset(-15)
@@ -84,7 +84,7 @@ class CommentBarView: UIView {
         shareBtn?.backgroundColor = UIColor.white
         shareBtn?.layer.cornerRadius = contentHeight * 0.5
         self.addSubview(shareBtn!)
-        shareBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        shareBtn?.snp.makeConstraints({ (make) -> Void in
             make.size.equalTo(contentHeight)
             make.bottom.equalTo(self).offset(-5)
             make.right.equalTo(self).offset(-15)
@@ -93,7 +93,7 @@ class CommentBarView: UIView {
         let shareBtnIcon = UIImageView(image: UIImage(named: "news_share"))
         shareBtnIcon.contentMode = .scaleAspectFit
         shareBtn?.addSubview(shareBtnIcon)
-        shareBtnIcon.snp_makeConstraints { (make) -> Void in
+        shareBtnIcon.snp.makeConstraints { (make) -> Void in
             make.size.equalTo(15)
             make.center.equalTo(shareBtn!)
         }
@@ -102,15 +102,15 @@ class CommentBarView: UIView {
         likeBtn?.layer.cornerRadius = contentHeight * 0.5
         likeBtn?.backgroundColor = UIColor.white
         self.addSubview(likeBtn!)
-        likeBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        likeBtn?.snp.makeConstraints({ (make) -> Void in
             make.size.equalTo(contentHeight)
             make.bottom.equalTo(self).offset(-5)
-            make.right.equalTo(shareBtn!.snp_left).offset(-9)
+            make.right.equalTo(shareBtn!.snp.left).offset(-9)
         })
         //
         likeBtnIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
         likeBtn?.addSubview(likeBtnIcon)
-        likeBtnIcon.snp_makeConstraints { (make) -> Void in
+        likeBtnIcon.snp.makeConstraints { (make) -> Void in
             make.size.equalTo(17)
             make.center.equalTo(likeBtn!)
         }
@@ -119,8 +119,8 @@ class CommentBarView: UIView {
         roundCornerContainer.backgroundColor = UIColor.white
         roundCornerContainer.layer.cornerRadius = contentHeight / 2
         self.addSubview(roundCornerContainer)
-        roundCornerContainer.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(likeBtn!.snp_left).offset(-9)
+        roundCornerContainer.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(likeBtn!.snp.left).offset(-9)
             make.top.equalTo(self).offset(5)
             make.left.equalTo(self).offset(15)
             make.bottom.equalTo(self).offset(-5)
@@ -128,7 +128,7 @@ class CommentBarView: UIView {
         //
         commentIcon = UIImageView(image: UIImage(named: "news_comment_icon"))
         roundCornerContainer.addSubview(commentIcon!)
-        commentIcon?.snp_makeConstraints(closure: { (make) -> Void in
+        commentIcon?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(18)
             make.top.equalTo(roundCornerContainer).offset(9)
             make.size.equalTo(20)
@@ -139,8 +139,8 @@ class CommentBarView: UIView {
         contentInput?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         contentInput?.textColor = UIColor.black
         roundCornerContainer.addSubview(contentInput!)
-        contentInput?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(commentIcon!.snp_right).offset(10)
+        contentInput?.snp.makeConstraints({ (make) -> Void in
+            make.left.equalTo(commentIcon!.snp.right).offset(10)
             make.right.equalTo(roundCornerContainer).offset(-18)
             make.top.equalTo(roundCornerContainer)
             make.bottom.equalTo(roundCornerContainer)

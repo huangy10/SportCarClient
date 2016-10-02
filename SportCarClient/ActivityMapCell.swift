@@ -37,7 +37,7 @@ class MapCell: UITableViewCell {
         self.contentView.addSubview(map)
         map.isScrollEnabled = false
         map.isZoomEnabled = false
-        map.snp_makeConstraints { (make) -> Void in
+        map.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(self.contentView).inset(UIEdgeInsetsMake(0, 0, -trailingHeight, 0))
         }
         //
@@ -45,7 +45,7 @@ class MapCell: UITableViewCell {
         locDesContainer.backgroundColor = UIColor.white
         locDesContainer.addShadow()
         self.contentView.addSubview(locDesContainer)
-        locDesContainer.snp_makeConstraints { (make) -> Void in
+        locDesContainer.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(self.contentView)
             make.height.equalTo(50)
             make.width.equalTo(self.contentView).multipliedBy(0.776)
@@ -56,7 +56,7 @@ class MapCell: UITableViewCell {
         locDesIcon = UIImageView(image: UIImage(named: "news_comment_icon"))
         locDesContainer.addSubview(locDesIcon)
         locDesIcon.contentMode = .scaleAspectFit
-        locDesIcon.snp_makeConstraints { (make) -> Void in
+        locDesIcon.snp.makeConstraints { (make) -> Void in
             make.size.equalTo(20)
             make.left.equalTo(locDesContainer).offset(15)
             make.centerY.equalTo(locDesContainer)
@@ -66,8 +66,8 @@ class MapCell: UITableViewCell {
         locLbl.textColor = UIColor.black
         locLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         locDesContainer.addSubview(locLbl)
-        locLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(locDesIcon.snp_right).offset(17)
+        locLbl.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(locDesIcon.snp.right).offset(17)
             make.height.equalTo(locDesIcon)
             make.centerY.equalTo(locDesContainer)
             make.right.equalTo(locDesContainer).offset(-15)
@@ -76,7 +76,7 @@ class MapCell: UITableViewCell {
         let marker = UIImageView(image: UIImage(named: "map_default_marker"))
         self.contentView.addSubview(marker)
         marker.contentMode = .scaleAspectFit
-        marker.snp_makeConstraints { (make) -> Void in
+        marker.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(map) //.offset(CGPointMake(0, -trailingHeight/2))
             make.size.equalTo(CGSize(width: 38, height: 74))
         }

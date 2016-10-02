@@ -33,14 +33,14 @@ extension RosterItem {
 extension RosterItem {
 
     static let alwaysOnTop = AlecrimCoreData.NullableAttribute<Bool>("alwaysOnTop")
-    static let createdAt = AlecrimCoreData.NullableAttribute<NSDate>("createdAt")
+    static let createdAt = AlecrimCoreData.NullableAttribute<Date>("createdAt")
     static let entityData = AlecrimCoreData.NullableAttribute<NSData>("entityData")
     static let entityType = AlecrimCoreData.NullableAttribute<String>("entityType")
     static let noDisturbing = AlecrimCoreData.NullableAttribute<Bool>("noDisturbing")
     static let recentChatDes = AlecrimCoreData.NullableAttribute<String>("recentChatDes")
     static let relatedID = AlecrimCoreData.NullableAttribute<Int32>("relatedID")
     static let unreadNum = AlecrimCoreData.NullableAttribute<Int32>("unreadNum")
-    static let updatedAt = AlecrimCoreData.NullableAttribute<NSDate>("updatedAt")
+    static let updatedAt = AlecrimCoreData.NullableAttribute<Date>("updatedAt")
 
 }
 
@@ -48,16 +48,17 @@ extension RosterItem {
 
 
 extension AlecrimCoreData.AttributeProtocol where Self.ValueType: RosterItem {
+    var test: String { return "" }
 
     var alwaysOnTop: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("alwaysOnTop", self) }
-    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
-    var entityData: AlecrimCoreData.NullableAttribute<Data> { return AlecrimCoreData.NullableAttribute<NSData>("entityData", self) }
+    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<Date>("createdAt", self) }
+    var entityData: AlecrimCoreData.NullableAttribute<Data> { return AlecrimCoreData.NullableAttribute<Data>("entityData", self) }
     var entityType: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("entityType", self) }
     var noDisturbing: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("noDisturbing", self) }
     var recentChatDes: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("recentChatDes", self) }
     var relatedID: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("relatedID", self) }
     var unreadNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("unreadNum", self) }
-    var updatedAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("updatedAt", self) }
+    var updatedAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<Date>("updatedAt", self) }
 
 }
 

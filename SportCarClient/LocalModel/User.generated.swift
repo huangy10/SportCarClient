@@ -82,7 +82,7 @@ extension User {
     static let avatar = AlecrimCoreData.NullableAttribute<String>("avatar")
     static let avatarCar = AlecrimCoreData.NullableAttribute<String>("avatarCar")
     static let avatarClub = AlecrimCoreData.NullableAttribute<String>("avatarClub")
-    static let birthDate = AlecrimCoreData.NullableAttribute<NSDate>("birthDate")
+    static let birthDate = AlecrimCoreData.NullableAttribute<Date>("birthDate")
     static let blacklisted = AlecrimCoreData.NullableAttribute<Bool>("blacklisted")
     static let district = AlecrimCoreData.NullableAttribute<String>("district")
     static let fansNum = AlecrimCoreData.NullableAttribute<Int32>("fansNum")
@@ -114,7 +114,7 @@ extension AlecrimCoreData.AttributeProtocol where Self.ValueType: User {
     var avatar: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("avatar", self) }
     var avatarCar: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("avatarCar", self) }
     var avatarClub: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("avatarClub", self) }
-    var birthDate: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("birthDate", self) }
+    var birthDate: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<Date>("birthDate", self) }
     var blacklisted: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("blacklisted", self) }
     var district: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("district", self) }
     var fansNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("fansNum", self) }

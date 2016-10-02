@@ -205,7 +205,8 @@ public extension UIImage {
                 //
 
                 let inputRadius = blurRadius * screenScale
-                var radius = UInt32(floor(inputRadius * 3.0 * CGFloat(sqrt(2 * M_PI)) / 4 + 0.5))
+                let radius_temp = inputRadius * 3.0 * CGFloat(sqrt(2 * M_PI)) / 4 + 0.5
+                var radius = UInt32(floor(radius_temp))
                 if radius % 2 != 1 {
                     radius += 1 // force radius to be odd so that the three box-blur methodology works.
                 }

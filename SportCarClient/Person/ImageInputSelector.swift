@@ -48,18 +48,18 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
     }
     
     func createSubviews() {
-        let superview = self.view
+        let superview = self.view!
         //
         bg = UIImageView()
         bg.image = bgImage
-        superview?.addSubview(bg)
+        superview.addSubview(bg)
         bg.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         
         bgBlurred = UIImageView()
         bgBlurred.image = blurImageUsingCoreImage(bgImage)
-        superview?.addSubview(bgBlurred)
+        superview.addSubview(bgBlurred)
         bgBlurred.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(bg)
         }
@@ -67,7 +67,7 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
         
         bgMask = UIView()
         bgMask.backgroundColor = UIColor(white: 1, alpha: 0.7)
-        superview?.addSubview(bgMask)
+        superview.addSubview(bgMask)
         bgMask.snp_makeConstraints { (make) -> Void in
             make.edges.equalTo(bg)
         }
@@ -76,8 +76,8 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
         container = UIView()
         container.backgroundColor = UIColor.clear
         container.clipsToBounds = true
-        superview?.addSubview(container)
-        container.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(container)
+        container.snp_makeConstraints({ (make) -> Void in
             make.edges.equalTo(superview)
         })
         container.layer.opacity = 0

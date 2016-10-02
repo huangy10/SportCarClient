@@ -41,7 +41,7 @@ class DriverMapUserCell: UITableViewCell {
         superview.addSubview(avatar)
         avatar.layer.cornerRadius = 17.5
         avatar.clipsToBounds = true
-        avatar.snp_makeConstraints { (make) -> Void in
+        avatar.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(superview)
             make.left.equalTo(25)
             make.size.equalTo(35)
@@ -51,8 +51,8 @@ class DriverMapUserCell: UITableViewCell {
         nameLbl.textColor = UIColor.black
         nameLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         superview.addSubview(nameLbl)
-        nameLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(avatar.snp_right).offset(13)
+        nameLbl.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(avatar.snp.right).offset(13)
             make.top.equalTo(avatar)
         }
         //
@@ -60,8 +60,8 @@ class DriverMapUserCell: UITableViewCell {
         avatarClubLogo.layer.cornerRadius = 10
         avatarClubLogo.clipsToBounds = true
         superview.addSubview(avatarClubLogo)
-        avatarClubLogo.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(nameLbl.snp_right).offset(9)
+        avatarClubLogo.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(nameLbl.snp.right).offset(9)
             make.centerY.equalTo(nameLbl)
             make.size.equalTo(20)
         }
@@ -70,8 +70,8 @@ class DriverMapUserCell: UITableViewCell {
         avatarClubLbl.textColor = UIColor(white: 0.72, alpha: 1)
         avatarClubLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(avatarClubLbl)
-        avatarClubLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(avatarClubLogo.snp_right).offset(4)
+        avatarClubLbl.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(avatarClubLogo.snp.right).offset(4)
             make.centerY.equalTo(avatarClubLogo)
         }
         //
@@ -79,14 +79,14 @@ class DriverMapUserCell: UITableViewCell {
         distanceLbl.textColor = UIColor(white: 0, alpha: 0.58)
         distanceLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(distanceLbl)
-        distanceLbl.snp_makeConstraints { (make) -> Void in
+        distanceLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(nameLbl)
-            make.top.equalTo(nameLbl.snp_bottom).offset(3)
+            make.top.equalTo(nameLbl.snp.bottom).offset(3)
         }
         //
         let arrow = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         superview.addSubview(arrow)
-        arrow.snp_makeConstraints { (make) -> Void in
+        arrow.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(avatar)
             make.right.equalTo(superview).offset(-25)
             make.size.equalTo(CGSize(width: 9, height: 15))
@@ -95,7 +95,7 @@ class DriverMapUserCell: UITableViewCell {
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.945, alpha: 1)
         superview.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.bottom.equalTo(superview)
@@ -104,7 +104,7 @@ class DriverMapUserCell: UITableViewCell {
     }
     
     func loadDataAndUpdateUI() {
-        avatar.kf_setImageWithURL(user.avatarURL!)
+        avatar.kf.setImage(with: user.avatarURL!)
         nameLbl.text = user.nickName
         var distance = hostLoc.distance(from: userLoc)
         var showKM = false

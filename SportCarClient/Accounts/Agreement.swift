@@ -16,7 +16,7 @@ class AgreementController: UIViewController {
         self.view.backgroundColor = UIColor.white
         let board = UIScrollView()
         self.view.addSubview(board)
-        board.snp_makeConstraints { (make) -> Void in
+        board.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(self.view!).inset(23)
         }
         

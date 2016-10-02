@@ -64,32 +64,32 @@ class ShareController: UIViewController {
     }
     
     func createSubviews() {
-        let superview = self.view
-        superview?.backgroundColor = UIColor.black
+        let superview = self.view!
+        superview.backgroundColor = UIColor.black
         //
         bg = UIImageView(image: bgImg)
-        superview?.addSubview(bg)
+        superview.addSubview(bg)
         bg.layer.opacity = 1
-        bg.snp_makeConstraints { (make) -> Void in
+        bg.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         //
         bgBlured = UIImageView(image: self.blurImageUsingCoreImage(bgImg))
-        superview?.addSubview(bgBlured)
+        superview.addSubview(bgBlured)
         bgBlured.layer.opacity = 0
-        bgBlured.snp_makeConstraints { (make) -> Void in
+        bgBlured.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(bg)
         }
         //
         bgMask = UIView()
         bgMask.backgroundColor = UIColor(white: 1, alpha: 0.7)
-        superview?.addSubview(bgMask)
+        superview.addSubview(bgMask)
         bgMask.layer.opacity = 0
         //
         container = UIView()
         container.backgroundColor = UIColor.clear
-        superview?.addSubview(container)
-        container.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(container)
+        container.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         container.layer.opacity = 0
@@ -98,7 +98,7 @@ class ShareController: UIViewController {
         cancelBtn.setImage(UIImage(named: "news_comment_cancel_btn"), for: UIControlState())
         cancelBtn.addTarget(self, action: #selector(ShareController.cancelBtnPressed), for: .touchUpInside)
         container.addSubview(cancelBtn)
-        cancelBtn.snp_makeConstraints { (make) -> Void in
+        cancelBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
             make.top.equalTo(container).offset(90)
             make.size.equalTo(21)
@@ -107,9 +107,9 @@ class ShareController: UIViewController {
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor.white
         container.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
-            make.top.equalTo(cancelBtn.snp_bottom).offset(50)
+            make.top.equalTo(cancelBtn.snp.bottom).offset(50)
             make.width.equalTo(220)
             make.height.equalTo(0.5)
         }
@@ -119,7 +119,7 @@ class ShareController: UIViewController {
         shareLbl.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
         shareLbl.textColor = UIColor.white
         container.addSubview(shareLbl)
-        shareLbl.snp_makeConstraints { (make) -> Void in
+        shareLbl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
             make.top.equalTo(sepLine).offset(50)
         }
@@ -129,9 +129,9 @@ class ShareController: UIViewController {
         shareSina.setImage(UIImage(named: "share_sinaweibo"), for: UIControlState())
         shareSina.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), for: .touchUpInside)
         container.addSubview(shareSina)
-        shareSina.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(container.snp_centerX).offset(15)
-            make.top.equalTo(shareLbl.snp_bottom).offset(40)
+        shareSina.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(container.snp.centerX).offset(15)
+            make.top.equalTo(shareLbl.snp.bottom).offset(40)
             make.size.equalTo(50)
         }
         //
@@ -140,8 +140,8 @@ class ShareController: UIViewController {
         shareQQ.setImage(UIImage(named: "share_qq"), for: UIControlState())
         shareQQ.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), for: .touchUpInside)
         container.addSubview(shareQQ)
-        shareQQ.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(shareSina.snp_right).offset(30)
+        shareQQ.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(shareSina.snp.right).offset(30)
             make.top.equalTo(shareSina)
             make.size.equalTo(50)
         }
@@ -151,8 +151,8 @@ class ShareController: UIViewController {
         shareWechatFriend.setImage(UIImage(named: "share_wechat_friend"), for: UIControlState())
         shareWechatFriend.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), for: .touchUpInside)
         container.addSubview(shareWechatFriend)
-        shareWechatFriend.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(container.snp_centerX).offset(-15)
+        shareWechatFriend.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(container.snp.centerX).offset(-15)
             make.top.equalTo(shareSina)
             make.size.equalTo(50)
         }
@@ -162,8 +162,8 @@ class ShareController: UIViewController {
         shareWechat.setImage(UIImage(named: "share_wechat"), for: UIControlState())
         shareWechat.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), for: .touchUpInside)
         container.addSubview(shareWechat)
-        shareWechat.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(shareWechatFriend.snp_left).offset(-30)
+        shareWechat.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(shareWechatFriend.snp.left).offset(-30)
             make.size.equalTo(50)
             make.top.equalTo(shareSina)
         }

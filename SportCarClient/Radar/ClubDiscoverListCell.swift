@@ -26,7 +26,7 @@ class ClubDiscoverCell: DriverMapUserCell {
     }
     
     override func loadDataAndUpdateUI() {
-        avatar.kf_setImageWithURL(club.logoURL!)
+        avatar.kf.setImage(with: club.logoURL!)
         nameLbl.text = club.name! + "(\(club.memberNum))"
         let valueDes = LS("价值") + "\(club.value/10000)万"
         if let city = club.city {

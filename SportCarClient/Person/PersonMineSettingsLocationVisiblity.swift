@@ -48,11 +48,11 @@ class PersonMineSettingsLocationVisiblityController: UITableViewController {
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
         if dirty {
             let dataSource = PersonMineSettingsDataSource.sharedDataSource
             dataSource.locationVisible = self.selectedType
@@ -125,7 +125,7 @@ class PersonMineSettingsLocationVisiblityCell: UITableViewCell {
         titleLbl.numberOfLines = 0
         titleLbl.textAlignment = .center
         self.contentView.addSubview(titleLbl)
-        titleLbl.snp_makeConstraints { (make) -> Void in
+        titleLbl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(self.contentView)
             make.top.equalTo(self.contentView).offset(40)
             make.width.equalTo(218)

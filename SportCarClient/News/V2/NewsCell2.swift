@@ -38,83 +38,83 @@ class NewsCell2: UITableViewCell {
     }
     
     func configureCover() {
-        cover = contentView.addSubview(UIImageView)
+        cover = contentView.addSubview(UIImageView.self)
             .layout({ (make) in
                 make.edges.equalTo(contentView)
             })
-        cover.addSubview(UIImageView).config(UIImage(named: "news_cover_mask"))
+        cover.addSubview(UIImageView.self).config(UIImage(named: "news_cover_mask"))
             .layout { (make) in
                 make.right.equalTo(cover)
                 make.left.equalTo(cover)
                 make.bottom.equalTo(cover)
-                make.height.equalTo(cover.snp_width).multipliedBy(0.285)
+                make.height.equalTo(cover.snp.width).multipliedBy(0.285)
         }
     }
     
     func configureTitleLbl() {
-        titleLbl = contentView.addSubview(UILabel)
+        titleLbl = contentView.addSubview(UILabel.self)
             .config(17, fontWeight: UIFontWeightBlack, textColor: UIColor.white)
             .layout({ (make) in
                 make.left.equalTo(contentView) .offset(15)
                 make.bottom.equalTo(contentView).offset(-10)
-                make.right.equalTo(likeIcon.snp_left).offset(-5)
+                make.right.equalTo(likeIcon.snp.left).offset(-5)
             })
         titleLbl.numberOfLines = 0
     }
     
     func configureShareNumDisplay() {
-        shareNumLbl = contentView.addSubview(UILabel)
+        shareNumLbl = contentView.addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), text: "0")
             .layout({ (make) in
                 make.bottom.equalTo(contentView).offset(-10)
                 make.right.equalTo(contentView).offset(-15)
                 make.width.equalTo(30)
             })
-        shareIcon = contentView.addSubview(UIImageView)
+        shareIcon = contentView.addSubview(UIImageView.self)
             .config(UIImage(named: "news_share_white"))
             .layout({ (make) in
-                make.right.equalTo(shareNumLbl.snp_left).offset(-3)
+                make.right.equalTo(shareNumLbl.snp.left).offset(-3)
                 make.bottom.equalTo(shareNumLbl)
                 make.size.equalTo(15)
             })
     }
     
     func configureCommentNumDisplay() {
-        commentNumLbl = contentView.addSubview(UILabel)
+        commentNumLbl = contentView.addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), text: "0")
             .layout({ (make) in
-                make.right.equalTo(shareIcon.snp_left)
+                make.right.equalTo(shareIcon.snp.left)
                 make.bottom.equalTo(shareIcon)
                 make.width.equalTo(30)
             })
-        commentIcon = contentView.addSubview(UIImageView)
+        commentIcon = contentView.addSubview(UIImageView.self)
             .config(UIImage(named: "news_comment"))
             .layout({ (make) in
-                make.right.equalTo(commentNumLbl.snp_left).offset(-3)
+                make.right.equalTo(commentNumLbl.snp.left).offset(-3)
                 make.bottom.equalTo(commentNumLbl)
                 make.size.equalTo(15)
             })
     }
     
     func configureLikeNumDisplay() {
-        likeNumLbl = contentView.addSubview(UILabel)
+        likeNumLbl = contentView.addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), text: "0")
             .layout({ (make) in
                 make.bottom.equalTo(commentNumLbl)
-                make.right.equalTo(commentIcon.snp_left)
+                make.right.equalTo(commentIcon.snp.left)
                 make.width.equalTo(30)
             })
-        likeIcon = contentView.addSubview(UIImageView)
+        likeIcon = contentView.addSubview(UIImageView.self)
             .config(UIImage(named: "news_like_unliked"))
             .layout({ (make) in
                 make.bottom.equalTo(likeNumLbl)
-                make.right.equalTo(likeNumLbl.snp_left).offset(-3)
+                make.right.equalTo(likeNumLbl.snp.left).offset(-3)
                 make.size.equalTo(15)
             })
     }
     
     func setData(_ coverImage: URL, title: String, likeNum: Int, commentNum: Int, shareNum: Int, liked: Bool) {
-        cover.kf_setImageWithURL(coverImage)
+        cover.kf.setImage(with: coverImage)
         titleLbl.text = title
         if likeNum > 99 {
             likeNumLbl.text = "99+"

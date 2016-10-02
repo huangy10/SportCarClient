@@ -26,11 +26,11 @@ class SettingsRequester: BasicRequester {
         return "settings"
     }
     
-    func updatePersonMineSettings(_ onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func updatePersonMineSettings(_ onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         return get(urlForName("settings"), responseDataField: "settings", onSuccess: onSuccess, onError: onError)
     }
     
-    func syncPersonMineSettings(_ param: [String: AnyObject], onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func syncPersonMineSettings(_ param: [String: Any], onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         return post(
             urlForName("settings"),
             parameters: param,

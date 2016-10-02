@@ -75,7 +75,7 @@ class PersonMineSettings: UITableViewController {
         if let delegate = homeDelegate {
             delegate.backToHome(nil)
         } else {
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         }
     }
     
@@ -148,7 +148,8 @@ class PersonMineSettings: UITableViewController {
             break
         case 5:
             let url = URL(string: "https://itunes.apple.com/us/app/pao-che-fan/id1100110084?l=zh&ls=1&mt=8")
-            UIApplication.shared.openURL(url!)
+            UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+//            UIApplication.shared.openURL(url!)
         case 6:
             let detail = SuggestionController(parent: self)
             self.present(detail, animated: false, completion: nil)
@@ -213,7 +214,7 @@ class PersonMineSettingsBtnsCell: UITableViewCell {
         quitBtn = UIButton()
         quitBtn.setImage(UIImage(named: "person_logout"), for: UIControlState())
         superview.addSubview(quitBtn)
-        quitBtn.snp_makeConstraints { (make) -> Void in
+        quitBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(3)
             make.size.equalTo(CGSize(width: 150, height: 50))
@@ -224,9 +225,9 @@ class PersonMineSettingsBtnsCell: UITableViewCell {
         changePassword.setTitleColor(UIColor.black, for: UIControlState())
         changePassword.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(changePassword)
-        changePassword.snp_makeConstraints { (make) -> Void in
+        changePassword.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(quitBtn)
-            make.top.equalTo(quitBtn.snp_bottom)
+            make.top.equalTo(quitBtn.snp.bottom)
             make.bottom.equalTo(superview)
             make.width.equalTo(quitBtn)
         }

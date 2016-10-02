@@ -106,6 +106,10 @@ class StatusDetailController: InputableViewController, DetailCommentCellDelegate
     weak var requestOnFly: Request?
     
     // MARK: init
+    
+    override init() {
+        super.init()
+    }
  
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -663,8 +667,13 @@ extension StatusDetailController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StatusCellImageDisplayCell.reuseIdentifier, for: indexPath) as! StatusCellImageDisplayCell
-        cell.imageView?.kf_setImageWithURL(SFURL(statusImages[(indexPath as NSIndexPath).row + 1])!)
-        cell.imageView?.kf_setImageWithURL(SFURL(statusImages[(indexPath as NSIndexPath).row + 1])!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+//        cell.imageView?.kf_setImageWithURL(SFURL(statusImages[(indexPath as NSIndexPath).row + 1])!)
+//        cell.imageView?.kf_setImageWithURL(SFURL(statusImages[(indexPath as NSIndexPath).row + 1])!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+//            if error == nil {
+//                cell.imageView?.setupForImageViewer(nil, backgroundColor: UIColor.black)
+//            }
+//        })
+        cell.imageView?.kf.setImage(with: SFURL(statusImages[(indexPath as NSIndexPath).row + 1])!, placeholder: nil, options: nil, progressBlock: nil, completionHandler: { (image, error, _, _) in
             if error == nil {
                 cell.imageView?.setupForImageViewer(nil, backgroundColor: UIColor.black)
             }

@@ -72,7 +72,7 @@ class HomeController: UIViewController, HomeDelegate {
         self.navigationController?.pushViewController(radar!, animated: false)
         
         let requester = AccountRequester2.sharedInstance
-        requester.getProfileDataFor(self.hostUser!.ssidString, onSuccess: { (data) -> () in
+        _ = requester.getProfileDataFor(self.hostUser!.ssidString, onSuccess: { (data) -> () in
             // 获取到了数据之后更新
             guard data != nil else{
                 return
@@ -150,7 +150,7 @@ extension HomeController {
             board.layer.transform = trans
             return
         }
-        SpringAnimation.spring(0.5) { () -> Void in
+        SpringAnimation.spring(duration: 0.5) { () -> Void in
             // 绕Y轴旋转-20度
             self.board.layer.transform = trans
         }
@@ -160,7 +160,7 @@ extension HomeController {
     /**
     */
     func hideSideBar(_ animated: Bool = false) {
-        SpringAnimation.springWithCompletion(0.5, animations: { () -> Void in
+        SpringAnimation.springWithCompletion(duration: 0.5, animations: { () -> Void in
             let screenWidth = self.view.frame.width
             var move = CATransform3DTranslate(CATransform3DIdentity, 0 * screenWidth, 0, 0)
             move.m34 = 1.0 / -500
@@ -181,7 +181,7 @@ extension HomeController {
     func backToHome(_ onComplete: (()->())?) {
         board.layer.transform = CATransform3DIdentity
 //        board.setImage(screenShot, forState: .Normal)
-        self.navigationController?.popViewController(animated: false)
+        _ = self.navigationController?.popViewController(animated: false)
         showSideBar(true)
     }
     
@@ -240,7 +240,7 @@ extension HomeController {
         if board.tag != 3 {
             radar = nil
         }
-        let cache = KingfisherManager.sharedManager.cache
+        let cache = KingfisherManager.shared.cache
         cache.clearMemoryCache()
     }
 }

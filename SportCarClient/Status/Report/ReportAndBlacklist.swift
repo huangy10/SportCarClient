@@ -31,24 +31,24 @@ class ReportBlacklistViewController: PresentTemplateViewController {
     }
     
     override func createContent() {
-        let superview = self.view
+        let superview = self.view!
         // 创建第一版面
         container1 = UIView()
         container.addSubview(container1)
-        container1.snp_makeConstraints { (make) -> Void in
+        container1.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.top.equalTo(sepLine.snp_bottom)
+            make.top.equalTo(sepLine.snp.bottom)
             make.bottom.equalTo(superview)
         }
         // 创建第二版面
         container2 = UIView()
         container.addSubview(container2)
-        container2.snp_makeConstraints { (make) -> Void in
+        container2.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(container1)
         }
         //
-        var headerView = sepLine
+        var headerView = sepLine!
         var index = 0
         for title in kReportTitles {
             let btn = UIButton()
@@ -57,9 +57,9 @@ class ReportBlacklistViewController: PresentTemplateViewController {
             btn.tag = index
             btn.addTarget(self, action: #selector(ReportBlacklistViewController.reportItemPressed(_:)), for: .touchUpInside)
             container2.addSubview(btn)
-            btn.snp_makeConstraints(closure: { (make) -> Void in
+            btn.snp.makeConstraints({ (make) -> Void in
                 make.centerX.equalTo(container2)
-                make.top.equalTo(headerView.snp_bottom).offset(45)
+                make.top.equalTo(headerView.snp.bottom).offset(45)
                 make.height.equalTo(24)
                 make.width.equalTo(container2)
             })

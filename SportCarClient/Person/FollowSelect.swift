@@ -30,8 +30,8 @@ class FollowSelectController: UserSelectController {
     override func createSubviews() {
         super.createSubviews()
         //
-        let superview = self.view
-        searchBar?.snp_updateConstraints(closure: { (make) -> Void in
+        let superview = self.view!
+        searchBar?.snp.updateConstraints({ (make) -> Void in
             make.right.equalTo(superview).offset(0)
         })
         //
@@ -45,13 +45,13 @@ class FollowSelectController: UserSelectController {
     
     override func navLeftBtnPressed() {
         // dismiss self
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserSelectCellUnselectable
         let user = users[(indexPath as NSIndexPath).row]
-        cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
+        cell.avatarImg?.kf.setImage(with: user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
         return cell
@@ -67,7 +67,7 @@ class FollowSelectController: UserSelectController {
     func getMoreUserData() {
         let threshold: Date = followsDateThreshold ?? Date()
         let requester = AccountRequester2.sharedInstance
-        requester.getFollowList(targetUser!.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (data) -> () in
+        _ = requester.getFollowList(targetUser!.ssidString, dateThreshold: threshold, op_type: "more", limit: 20, filterStr: searchText, onSuccess: { (data) -> () in
             
             if let fansJSONData = data?.arrayValue {
                 for json in fansJSONData {

@@ -13,6 +13,8 @@ import MapKit
 import Dollar
 
 class ActivityDetailController: InputableViewController, UITableViewDataSource, UITableViewDelegate, FFSelectDelegate, DetailCommentCellDelegate, LoadingProtocol {
+
+
     
     var act: Activity!
     var comments: [ActivityComment] = []

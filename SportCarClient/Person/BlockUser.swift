@@ -36,9 +36,9 @@ class BlockUserController: UIViewController {
     }
     
     fileprivate func createSubviews() {
-        let superview = self.view
+        let superview = self.view!
         
-        container = superview?.addSubview(UIView).config(UIColor.clear)
+        container = superview.addSubview(UIView.self).config(UIColor.clear)
             .layout({ (make) in
                 make.edges.equalTo(superview)
             })
@@ -47,42 +47,42 @@ class BlockUserController: UIViewController {
         let blurMask = UIVisualEffectView(effect: blurEffect)
 //        blurMask.layer.opacity = 0.9
         container.addSubview(blurMask)
-        blurMask.snp_makeConstraints { (make) in
+        blurMask.snp.makeConstraints { (make) in
             make.edges.equalTo(container)
         }
         
-        container.addSubview(UIView).config(UIColor(white: 0, alpha: 0.7))
+        container.addSubview(UIView.self).config(UIColor(white: 0, alpha: 0.7))
         
-        closeBtn = container.addSubview(UIButton).config(self, selector: #selector(closeBtnPressed))
+        closeBtn = container.addSubview(UIButton.self).config(self, selector: #selector(closeBtnPressed))
             .layout({ (make) in
                 make.centerX.equalTo(container)
                 make.top.equalTo(container).offset(80)
                 make.size.equalTo(44)
             })
-        closeBtn.addSubview(UIImageView).config(UIImage(named: "news_comment_cancel_btn"))
+        closeBtn.addSubview(UIImageView.self).config(UIImage(named: "news_comment_cancel_btn"))
             .layout { (make) in
                 make.center.equalTo(closeBtn)
                 make.size.equalTo(21)
         }
         
-        sepLine = container.addSubview(UIView).config(UIColor.white)
+        sepLine = container.addSubview(UIView.self).config(UIColor.white)
             .layout({ (make) in
                 make.centerX.equalTo(closeBtn)
-                make.top.equalTo(closeBtn.snp_bottom).offset(30)
+                make.top.equalTo(closeBtn.snp.bottom).offset(30)
                 make.height.equalTo(0.5)
                 make.width.equalTo(220)
             })
-        blockLbl = container.addSubview(UILabel)
+        blockLbl = container.addSubview(UILabel.self)
             .config(14, fontWeight: UIFontWeightUltraLight, textColor: UIColor.white, textAlignment: .center, text: LS("屏蔽"))
             .layout({ (make) in
                 make.centerX.equalTo(closeBtn)
-                make.top.equalTo(sepLine.snp_bottom).offset(30)
+                make.top.equalTo(sepLine.snp.bottom).offset(30)
             })
-        blockSwitch = container.addSubview(UISwitch).config(self, selector: #selector(switchPressed))
+        blockSwitch = container.addSubview(UISwitch.self).config(self, selector: #selector(switchPressed))
             .layout({ (make) in
                 make.centerX.equalTo(closeBtn)
                 make.size.equalTo(CGSize(width: 51, height: 31))
-                make.top.equalTo(blockLbl.snp_bottom).offset(10)
+                make.top.equalTo(blockLbl.snp.bottom).offset(10)
             })
         blockSwitch.isOn = user.blacklisted
     }
@@ -99,7 +99,7 @@ class BlockUserController: UIViewController {
     
     func dismissSelf() {
         if dirty && blockSwitch.isOn != user.blacklisted {
-            AccountRequester2.sharedInstance.block(user, flag: blockSwitch.isOn, onSuccess: { (json) in
+            _ = AccountRequester2.sharedInstance.block(user, flag: blockSwitch.isOn, onSuccess: { (json) in
                 let blocked = json!.boolValue
                 self.user.blacklisted = blocked
                 let blockStatus = blocked ? kAccountBlackStatusBlocked : kAccountBlackStatusDefault

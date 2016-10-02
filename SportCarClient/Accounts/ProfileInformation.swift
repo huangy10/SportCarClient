@@ -55,7 +55,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
     }
     
     func backBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func nextBtnPressed() {
@@ -106,15 +106,15 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
     override func createSubviews(){
         super.createSubviews()
         navigationBarSettings()
-        let superview = self.view
-        superview?.backgroundColor = UIColor.white
+        let superview = self.view!
+        superview.backgroundColor = UIColor.white
         //
         avatarBtn = UIButton()
         avatarBtn?.setImage(UIImage(named: "account_profile_avatar_btn"), for: UIControlState())
         avatarBtn?.layer.cornerRadius = 45
         avatarBtn?.clipsToBounds = true
-        superview?.addSubview(avatarBtn!)
-        avatarBtn?.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(avatarBtn!)
+        avatarBtn?.snp.makeConstraints { (make) -> Void in
             make.size.equalTo(CGSize(width: 90, height: 90))
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(42)
@@ -127,11 +127,11 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         nickNameInput?.textAlignment = NSTextAlignment.center
         nickNameInput?.textColor = UIColor.black
         nickNameInput?.delegate = self
-        superview?.addSubview(nickNameInput!)
-        nickNameInput?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(nickNameInput!)
+        nickNameInput?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview).offset(50)
             make.right.equalTo(superview).offset(-52)
-            make.centerY.equalTo(avatarBtn!.snp_bottom).offset(60)
+            make.centerY.equalTo(avatarBtn!.snp.bottom).offset(60)
             make.height.equalTo(27.5)
         })
         self.inputFields.append(nickNameInput)
@@ -139,8 +139,8 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         let sepLine = UIView()
         let lineColor = UIColor(white: 0.933, alpha: 1)
         sepLine.backgroundColor = lineColor
-        superview?.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(sepLine)
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.width.equalTo(nickNameInput!)
             make.centerX.equalTo(nickNameInput!)
             make.height.equalTo(1)
@@ -151,8 +151,8 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         genderInput?.setTitle(NSLocalizedString("请选择您的性别", comment: ""), for: UIControlState())
         genderInput?.titleLabel?.font = kTextInputFont
         genderInput?.setTitleColor(kPlaceholderTextColor, for: UIControlState())
-        superview?.addSubview(genderInput!)
-        genderInput?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(genderInput!)
+        genderInput?.snp.makeConstraints({ (make) -> Void in
             make.centerY.equalTo(sepLine).offset(30)
             make.left.equalTo(nickNameInput!)
             make.right.equalTo(nickNameInput!)
@@ -162,7 +162,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         //
         let arrowIcon = UIImageView(image: UIImage(named: "account_profile_down_arrow"))
         genderInput?.addSubview(arrowIcon)
-        arrowIcon.snp_makeConstraints { (make) -> Void in
+        arrowIcon.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(genderInput!)
             make.centerY.equalTo(genderInput!)
             make.width.equalTo(15.5)
@@ -171,8 +171,8 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         // 
         let sepLine2 = UIView()
         sepLine2.backgroundColor = lineColor
-        superview?.addSubview(sepLine2)
-        sepLine2.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(sepLine2)
+        sepLine2.snp.makeConstraints { (make) -> Void in
             make.width.equalTo(genderInput!)
             make.centerX.equalTo(genderInput!)
             make.centerY.equalTo(genderInput!).offset(20)
@@ -183,8 +183,8 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         birthDateInput?.setTitle(NSLocalizedString("请选择您的生日", comment: ""), for: UIControlState())
         birthDateInput?.titleLabel?.font = kTextInputFont
         birthDateInput?.setTitleColor(kPlaceholderTextColor, for: UIControlState())
-        superview?.addSubview(birthDateInput!)
-        birthDateInput?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(birthDateInput!)
+        birthDateInput?.snp.makeConstraints({ (make) -> Void in
             make.centerY.equalTo(sepLine2).offset(30)
             make.left.equalTo(genderInput!)
             make.right.equalTo(genderInput!)
@@ -194,7 +194,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         //
         let arrowIcon2 = UIImageView(image: UIImage(named: "account_profile_down_arrow"))
         birthDateInput?.addSubview(arrowIcon2)
-        arrowIcon2.snp_makeConstraints { (make) -> Void in
+        arrowIcon2.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(birthDateInput!)
             make.centerY.equalTo(birthDateInput!)
             make.width.equalTo(15.5)
@@ -203,8 +203,8 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         // 
         let sepLine3 = UIView()
         sepLine3.backgroundColor = lineColor
-        superview?.addSubview(sepLine3)
-        sepLine3.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(sepLine3)
+        sepLine3.snp.makeConstraints { (make) -> Void in
             make.width.equalTo(birthDateInput!)
             make.height.equalTo(1)
             make.centerY.equalTo(birthDateInput!).offset(20)
@@ -213,9 +213,9 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         // 
         pickerContainer = UIView()
         pickerContainer?.backgroundColor = UIColor(white: 0.945, alpha: 1)
-        superview?.addSubview(pickerContainer!)
-        pickerContainer?.snp_makeConstraints(closure: { (make) -> Void in
-            make.top.equalTo(superview.snp_bottom)
+        superview.addSubview(pickerContainer!)
+        pickerContainer?.snp.makeConstraints({ (make) -> Void in
+            make.top.equalTo(superview.snp.bottom)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.height.equalTo(234)
@@ -224,7 +224,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         let pickerHeader = UIView()
         pickerHeader.backgroundColor = UIColor(white: 0.92, alpha: 1)
         pickerContainer?.addSubview(pickerHeader)
-        pickerHeader.snp_makeConstraints { (make) -> Void in
+        pickerHeader.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(pickerContainer!)
             make.left.equalTo(pickerContainer!)
             make.right.equalTo(pickerContainer!)
@@ -235,7 +235,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         pickerTitle?.text = ""
         pickerTitle?.font = UIFont.systemFont(ofSize: 14)
         pickerHeader.addSubview(pickerTitle!)
-        pickerTitle?.snp_makeConstraints(closure: { (make) -> Void in
+        pickerTitle?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(pickerHeader).offset(20)
             make.centerY.equalTo(pickerHeader)
             make.height.equalTo(pickerHeader)
@@ -247,7 +247,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         pickerDoneBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
         pickerDoneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         pickerHeader.addSubview(pickerDoneBtn)
-        pickerDoneBtn.snp_makeConstraints { (make) -> Void in
+        pickerDoneBtn.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(pickerHeader).offset(-20)
             make.centerY.equalTo(pickerHeader)
             make.height.equalTo(pickerHeader)
@@ -259,21 +259,21 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         genderPickerView?.delegate = self
         genderPickerView?.dataSource = self
         pickerContainer?.addSubview(genderPickerView!)
-        genderPickerView?.snp_makeConstraints(closure: { (make) -> Void in
+        genderPickerView?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(pickerContainer!)
             make.left.equalTo(pickerContainer!)
             make.bottom.equalTo(pickerContainer!)
-            make.top.equalTo(pickerHeader.snp_bottom)
+            make.top.equalTo(pickerHeader.snp.bottom)
         })
         //
         birthDatePickerView = UIDatePicker()
         birthDatePickerView?.datePickerMode = .date
         pickerContainer?.addSubview(birthDatePickerView!)
-        birthDatePickerView?.snp_makeConstraints(closure: { (make) -> Void in
+        birthDatePickerView?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(pickerContainer!)
             make.left.equalTo(pickerContainer!)
             make.bottom.equalTo(pickerContainer!)
-            make.top.equalTo(pickerHeader.snp_bottom)
+            make.top.equalTo(pickerHeader.snp.bottom)
         })
     }
     
@@ -317,15 +317,15 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         pickerTitle?.text = "您的性别"
         birthDatePickerView?.isHidden = true
         genderPickerView?.isHidden = false
-        let superview = self.view
-        pickerContainer?.snp_remakeConstraints(closure: { (make) -> Void in
+        let superview = self.view!
+        pickerContainer?.snp.remakeConstraints({ (make) -> Void in
             make.bottom.equalTo(superview)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.height.equalTo(234)
         })
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
-            superview?.layoutIfNeeded()
+            superview.layoutIfNeeded()
             }, completion: nil)
     }
     
@@ -334,15 +334,15 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         pickerTitle?.text = "您的生日"
         birthDatePickerView?.isHidden = false
         genderPickerView?.isHidden = true
-        let superview = self.view
-        pickerContainer?.snp_remakeConstraints(closure: { (make) -> Void in
+        let superview = self.view!
+        pickerContainer?.snp.remakeConstraints({ (make) -> Void in
             make.bottom.equalTo(superview)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.height.equalTo(234)
         })
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
-            superview?.layoutIfNeeded()
+            superview.layoutIfNeeded()
             }, completion: nil)
     }
     
@@ -365,16 +365,16 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
             genderInput?.setTitleColor(UIColor.black, for: UIControlState())
         }
         
-        let superview = self.view
-        superview?.layoutIfNeeded()
-        pickerContainer?.snp_remakeConstraints(closure: { (make) -> Void in
-            make.top.equalTo(superview.snp_bottom)
+        let superview = self.view!
+        superview.layoutIfNeeded()
+        pickerContainer?.snp.remakeConstraints({ (make) -> Void in
+            make.top.equalTo(superview.snp.bottom)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.height.equalTo(234)
         })
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
-            superview?.layoutIfNeeded()
+            superview.layoutIfNeeded()
             }, completion: nil)
     }
     // MARK: Picker view的代理

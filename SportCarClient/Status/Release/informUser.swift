@@ -27,17 +27,17 @@ class InformOtherUserController: UIViewController, UICollectionViewDelegate, UIC
     }
     
     internal func createSubviews() {
-        let superview = self.view
+        let superview = self.view!
         self.view.backgroundColor = UIColor.white
         //
         atBtn = UIButton()
-        superview?.addSubview(atBtn!)
+        superview.addSubview(atBtn!)
         atBtn?.setTitle(LS("@ 提醒谁看"), for: UIControlState())
         atBtn?.setTitleColor(UIColor.black, for: UIControlState())
         atBtn?.titleLabel?.textAlignment = .center
         atBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         atBtn?.addTarget(self, action: #selector(InformOtherUserController.atBtnPressed), for: .touchUpInside)
-        atBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        atBtn?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.centerY.equalTo(superview)
             make.size.equalTo(CGSize(width: 75, height: 35))
@@ -51,9 +51,9 @@ class InformOtherUserController: UIViewController, UICollectionViewDelegate, UIC
         collectionView?.backgroundColor = UIColor.white
         collectionView?.delegate = self
         collectionView?.dataSource = self
-        superview?.addSubview(collectionView!)
-        collectionView?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(atBtn!.snp_right).offset(15)
+        superview.addSubview(collectionView!)
+        collectionView?.snp.makeConstraints({ (make) -> Void in
+            make.left.equalTo(atBtn!.snp.right).offset(15)
             make.top.equalTo(superview)
             make.bottom.equalTo(superview)
             make.right.equalTo(superview).offset(-15)
@@ -82,7 +82,7 @@ class InformOtherUserController: UIViewController, UICollectionViewDelegate, UIC
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InformOtherUserCell.reuseIdentifier, for: indexPath) as! InformOtherUserCell
         let user = users[(indexPath as NSIndexPath).row]
         cell.user = user
-        cell.imageView?.kf_setImageWithURL(user.avatarURL!)
+        cell.imageView?.kf.setImage(with: user.avatarURL!)
         return cell
     }
 }
@@ -112,7 +112,7 @@ class InformOtherUserCell: UICollectionViewCell {
         imageView?.clipsToBounds = true
         imageView?.backgroundColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(imageView!)
-        imageView?.snp_makeConstraints(closure: { (make) -> Void in
+        imageView?.snp.makeConstraints({ (make) -> Void in
             make.edges.equalTo(superview)
         })
     }

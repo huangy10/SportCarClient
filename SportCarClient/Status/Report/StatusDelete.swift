@@ -28,7 +28,7 @@ class StatusDeleteController: PresentTemplateViewController, LoadingProtocol {
         deleteBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
         deleteBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
         container.addSubview(deleteBtn)
-        deleteBtn.snp_makeConstraints { (make) -> Void in
+        deleteBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
             make.top.equalTo(sepLine).offset(45)
             make.size.equalTo(CGSize(width: 40, height: 25))
@@ -46,7 +46,7 @@ class StatusDeleteController: PresentTemplateViewController, LoadingProtocol {
         let requester = StatusRequester.sharedInstance
         let waitSignal = DispatchSemaphore(value: 0)
         lp_start()
-        requester.deleteStatus(status.ssidString, onSuccess: { (json) -> () in
+        _ = requester.deleteStatus(status.ssidString, onSuccess: { (json) -> () in
             self.lp_stop()
             // 删除成功以后发送一个notification
             NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kStatusDidDeletedNotification), object: nil, userInfo: [kStatusDidDeletedStatusIDKey: self.status.ssidString, kStatusKey: self.status])

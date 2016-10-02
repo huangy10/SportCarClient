@@ -43,11 +43,11 @@ class ActivityReleaseInfoBoard: UIView {
         posterBtn.setImage(UIImage(named: "activity_release_default_cover"), for: UIControlState())
         posterBtn.imageView?.contentMode = .scaleAspectFill
         posterBtn.clipsToBounds = true
-        posterBtn.snp_makeConstraints { (make) -> Void in
+        posterBtn.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.top.equalTo(superview)
             make.left.equalTo(superview)
-            make.height.equalTo(posterBtn.snp_width).multipliedBy(0.573)
+            make.height.equalTo(posterBtn.snp.width).multipliedBy(0.573)
         }
         
         posterLbl = UILabel()
@@ -56,7 +56,7 @@ class ActivityReleaseInfoBoard: UIView {
         posterLbl.font = UIFont.systemFont(ofSize: 12)
         posterLbl.text = LS("上传一个活动海报")
         posterBtn.addSubview(posterLbl)
-        posterLbl.snp_makeConstraints { (make) -> Void in
+        posterLbl.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(posterBtn)
         }
         //
@@ -65,16 +65,16 @@ class ActivityReleaseInfoBoard: UIView {
         staticTitleLbl.textColor = UIColor.black
         staticTitleLbl.text = LS("取一个名字")
         superview.addSubview(staticTitleLbl)
-        staticTitleLbl.snp_makeConstraints { (make) -> Void in
+        staticTitleLbl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
-            make.top.equalTo(posterBtn.snp_bottom).offset(20)
+            make.top.equalTo(posterBtn.snp.bottom).offset(20)
         }
         // 为了防止外层的tableView的contentOffset被TextField自动更改，这里用一个wrapper来拦截
         let wrapper = UIScrollView()
         super.addSubview(wrapper)
-        wrapper.snp_makeConstraints { (make) -> Void in
+        wrapper.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
-            make.top.equalTo(staticTitleLbl.snp_bottom).offset(13)
+            make.top.equalTo(staticTitleLbl.snp.bottom).offset(13)
             make.height.equalTo(24)
             make.width.equalTo(superview).multipliedBy(0.8)
         }
@@ -91,10 +91,10 @@ class ActivityReleaseInfoBoard: UIView {
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.933, alpha: 11)
         superview.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.right.equalTo(superview).offset(-15)
-            make.top.equalTo(actNameInput.snp_bottom).offset(6)
+            make.top.equalTo(actNameInput.snp.bottom).offset(6)
             make.height.equalTo(0.5)
         }
         //
@@ -103,7 +103,7 @@ class ActivityReleaseInfoBoard: UIView {
         actDesInput.textColor = UIColor(white: 0.72, alpha: 1)
         actDesInput.text = LS("活动描述...")
         superview.addSubview(actDesInput)
-        actDesInput.snp_makeConstraints { (make) -> Void in
+        actDesInput.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.left.equalTo(superview).offset(15)
             make.top.equalTo(sepLine).offset(20)
@@ -115,7 +115,7 @@ class ActivityReleaseInfoBoard: UIView {
         actDesInputWordCount.textColor = UIColor(white: 0.72, alpha: 1)
         actDesInputWordCount.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(actDesInputWordCount)
-        actDesInputWordCount.snp_makeConstraints { (make) -> Void in
+        actDesInputWordCount.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.bottom.equalTo(actDesInput)
         }
@@ -129,10 +129,10 @@ class ActivityReleaseInfoBoard: UIView {
         }
         let informOfListView = informOfList.view
         superview.addSubview(informOfListView!)
-        informOfListView.snp_makeConstraints { (make) -> Void in
+        informOfListView!.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
-            make.top.equalTo(actDesInput.snp_bottom).offset(10)
+            make.top.equalTo(actDesInput.snp.bottom).offset(10)
             make.height.equalTo(35)
         }
         //
@@ -141,9 +141,9 @@ class ActivityReleaseInfoBoard: UIView {
         informOfListCountLbl.text = "0/9"
         informOfListCountLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(informOfListCountLbl)
-        informOfListCountLbl.snp_makeConstraints { (make) -> Void in
+        informOfListCountLbl.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
-            make.centerY.equalTo(informOfListView)
+            make.centerY.equalTo(informOfListView!)
         }
         //
     }

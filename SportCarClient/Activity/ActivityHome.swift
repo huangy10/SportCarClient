@@ -65,34 +65,34 @@ class ActivityHomeController: UIViewController {
         let container = UIView(frame: CGRect(x: 0, y: 0, width: containerWidth, height: barHeight))
         container.backgroundColor = UIColor.clear
         
-        let titleMineBtn = container.addSubview(UIButton)
+        let titleMineBtn = container.addSubview(UIButton.self)
             .config(self, selector: #selector(navTitleBtnPressed(_:)))
             .layout({ (make) in
-                make.right.equalTo(container.snp_centerX)
+                make.right.equalTo(container.snp.centerX)
                 make.centerY.equalTo(container)
                 make.size.equalTo(CGSize(width: 70, height: 30))
             })
         titleMineBtn.tag = 0
-        titleMineLbl = titleMineBtn.addSubview(UILabel)
-            .config(15, textColor: kTextBlack, textAlignment: .center, text: LS("已发布"), fontWeight: UIFontWeightBold)
+        titleMineLbl = titleMineBtn.addSubview(UILabel.self)
+            .config(15, fontWeight: UIFontWeightBold, textColor: kTextBlack, textAlignment: .center, text: LS("已发布"))
             .layout({ (make) in
                 make.center.equalTo(titleMineBtn)
-                make.size.equalTo(LS(" 已发布 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
+                make.size.equalTo(LS(" 已发布 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
             })
         
-        let titleAppliedBtn = container.addSubview(UIButton)
+        let titleAppliedBtn = container.addSubview(UIButton.self)
             .config(self, selector: #selector(navTitleBtnPressed(_:)))
             .layout({ (make) in
-                make.left.equalTo(container.snp_centerX)
+                make.left.equalTo(container.snp.centerX)
                 make.centerY.equalTo(container)
                 make.size.equalTo(CGSize(width: 70, height: 30))
             })
         titleAppliedBtn.tag = 1
-        titleAppliedLbl = titleAppliedBtn.addSubview(UILabel)
-            .config(15, textColor: kTextGray, textAlignment: .center, text: LS("已报名"), fontWeight: UIFontWeightBold)
+        titleAppliedLbl = titleAppliedBtn.addSubview(UILabel.self)
+            .config(15, fontWeight: UIFontWeightBold, textColor: kTextGray, textAlignment: .center, text: LS("已报名"))
             .layout({ (make) in
                 make.center.equalTo(titleAppliedBtn)
-                make.size.equalTo(LS(" 已报名 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
+                make.size.equalTo(LS(" 已报名 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
             })
 //        //
 //        titleMineBtn = UIButton()
@@ -102,7 +102,7 @@ class ActivityHomeController: UIViewController {
 //        titleMineBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
 //        titleMineBtn.addTarget(self, action: #selector(ActivityHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
 //        container.addSubview(titleMineBtn)
-//        titleMineBtn.snp_makeConstraints { (make) -> Void in
+//        titleMineBtn.snp.makeConstraints { (make) -> Void in
 //            make.height.equalTo(30)
 //            make.width.equalTo(80)
 //            make.center.equalTo(container)
@@ -115,9 +115,9 @@ class ActivityHomeController: UIViewController {
 //        titleNearByBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
 //        titleNearByBtn.addTarget(self, action: #selector(ActivityHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
 //        container.addSubview(titleNearByBtn)
-//        titleNearByBtn.snp_makeConstraints { (make) -> Void in
+//        titleNearByBtn.snp.makeConstraints { (make) -> Void in
 //            make.centerY.equalTo(container)
-//            make.right.equalTo(titleMineBtn.snp_left).offset(-9)
+//            make.right.equalTo(titleMineBtn.snp.left).offset(-9)
 //            make.size.equalTo(CGSizeMake(80, 30))
 //        }
 //        //
@@ -128,15 +128,15 @@ class ActivityHomeController: UIViewController {
 //        titleAppliedBtn.tag = 2
 //        titleAppliedBtn.addTarget(self, action: #selector(ActivityHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
 //        container.addSubview(titleAppliedBtn)
-//        titleAppliedBtn.snp_makeConstraints { (make) -> Void in
-//            make.left.equalTo(titleMineBtn.snp_right).offset(9)
+//        titleAppliedBtn.snp.makeConstraints { (make) -> Void in
+//            make.left.equalTo(titleMineBtn.snp.right).offset(9)
 //            make.centerY.equalTo(container)
 //            make.size.equalTo(CGSizeMake(80, 30))
 //        }
         //
         titleBtnIcon = UIImageView(image: UIImage(named: "nav_title_btn_icon"))
         container.addSubview(titleBtnIcon)
-        titleBtnIcon.snp_makeConstraints { (make) -> Void in
+        titleBtnIcon.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(container)
             make.left.equalTo(titleMineLbl)
             make.right.equalTo(titleMineLbl)
@@ -155,12 +155,12 @@ class ActivityHomeController: UIViewController {
         controllers[curTag].viewWillDisappear(true)
         
         let lbls = [titleMineLbl, titleAppliedLbl]
-        let targetLbl = lbls[sender.tag]
-        let sourceLbl = lbls[curTag]
-        targetLbl?.textColor = kTextBlack
-        sourceLbl?.textColor = kTextGray
+        let targetLbl = lbls[sender.tag]!
+        let sourceLbl = lbls[curTag]!
+        targetLbl.textColor = kTextBlack
+        sourceLbl.textColor = kTextGray
         
-        titleBtnIcon.snp_remakeConstraints { (make) -> Void in
+        titleBtnIcon.snp.remakeConstraints { (make) -> Void in
             make.bottom.equalTo(titleBtnIcon.superview!)
             make.left.equalTo(targetLbl)
             make.right.equalTo(targetLbl)
@@ -187,25 +187,25 @@ class ActivityHomeController: UIViewController {
     }
     
     func createSubviews() {
-        let superview = self.view
-        superview?.backgroundColor = UIColor.white
+        let superview = self.view!
+        superview.backgroundColor = UIColor.white
         
         board = UIScrollView()
         board.isPagingEnabled = true
         board.isScrollEnabled = false
-        let width = superview?.frame.width
-        let height = superview?.frame.height
-        board.contentSize = CGSize(width: width! * 2, height: height!)
-        superview?.addSubview(board)
-        board.snp_makeConstraints { (make) -> Void in
+        let width = superview.frame.width
+        let height = superview.frame.height
+        board.contentSize = CGSize(width: width * 2, height: height)
+        superview.addSubview(board)
+        board.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         
         mine = ActivityHomeMineListController()
         addChildViewController(mine)
-        let mineView = mine.view
-        board.addSubview(mineView!)
-        mineView.snp_makeConstraints { (make) -> Void in
+        let mineView = mine.view!
+        board.addSubview(mineView)
+        mineView.snp.makeConstraints { (make) -> Void in
             make.size.equalTo(superview)
             make.top.equalTo(superview)
             make.left.equalTo(board)
@@ -216,7 +216,7 @@ class ActivityHomeController: UIViewController {
 //        nearBy = ActivityNearByController()
 //        let nearByView = nearBy.view
 //        board.addSubview(nearByView)
-//        nearByView.snp_makeConstraints { (make) -> Void in
+//        nearByView.snp.makeConstraints { (make) -> Void in
 //            make.size.equalTo(superview)
 //            make.top.equalTo(superview)
 //            make.left.equalTo(board)
@@ -227,7 +227,7 @@ class ActivityHomeController: UIViewController {
         addChildViewController(applied)
         let appliedView = applied.view
         board.addSubview(appliedView!)
-        appliedView.snp_makeConstraints { (make) -> Void in
+        appliedView?.snp.makeConstraints { (make) -> Void in
             make.size.equalTo(superview)
             make.top.equalTo(superview)
             make.left.equalTo(board).offset(width)

@@ -24,7 +24,7 @@ enum ChatRoomType {
 }
 
 
-class ChatRoomController: InputableViewController, UITableViewDataSource, UITableViewDelegate, ChatOpPanelDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChatAudioRecordDelegate, ChatCellDelegate {
+class ChatRoomController: InputableViewController, ChatOpPanelDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChatAudioRecordDelegate, ChatCellDelegate {
     
     // 从chatlist之外的地方进入聊天时，设置这个属性为false
     var chatCreated = true
@@ -135,12 +135,12 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     
     override func createSubviews() {
         super.createSubviews()
-        let superview = self.view
-        superview?.backgroundColor = UIColor.white
+        let superview = self.view!
+        superview.backgroundColor = UIColor.white
         //
         chatOpPanelController = ChatOpPanelController()
-        superview?.addSubview(chatOpPanelController!.view)
-        chatOpPanelController?.view.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(chatOpPanelController!.view)
+        chatOpPanelController?.view.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.bottom.equalTo(superview).offset(0)
@@ -153,14 +153,14 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         //
         talkBoard = UITableView(frame: CGRect.zero, style: .plain)
         talkBoard?.separatorStyle = .none
-        superview?.addSubview(talkBoard!)
+        superview.addSubview(talkBoard!)
         talkBoard?.dataSource = self
         talkBoard?.delegate = self
         talkBoard?.contentInset = UIEdgeInsetsMake(0, 0, 15, 0)
-        talkBoard?.snp_makeConstraints(closure: { (make) -> Void in
+        talkBoard?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
-            make.bottom.equalTo(chatOpPanelController!.view.snp_top)
+            make.bottom.equalTo(chatOpPanelController!.view.snp.top)
             make.top.equalTo(superview)
         })
         refresh = UIRefreshControl()
@@ -181,7 +181,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
         
         let navRightBtn = UIButton()
         let navRightBtnIconURLStr = navRightBtnImageURLStr
-        navRightBtn.kf_setImageWithURL(SFURL(navRightBtnIconURLStr!)!, forState: UIControlState())
+        navRightBtn.kf.setImage(with: SFURL(navRightBtnIconURLStr!)!, for: .normal)
         navRightBtn.addTarget(self, action: #selector(ChatRoomController.navRightBtnPressed), for: .touchUpInside)
         navRightBtn.layer.cornerRadius = 17.5
         navRightBtn.clipsToBounds = true
@@ -192,7 +192,7 @@ class ChatRoomController: InputableViewController, UITableViewDataSource, UITabl
     func navLeftBtnPressed() {
 //        ChatRecordDataSource.sharedDataSource.curRoom = nil
 //        chatList?.needUpdate()
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
@@ -278,7 +278,7 @@ extension ChatRoomController {
 
 
 // MARK: - tableView代理
-extension ChatRoomController {
+extension ChatRoomController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -393,8 +393,8 @@ extension ChatRoomController {
             newChat.confirmSent(newID, image: json!["image"].string, audio: json!["audio"].string)
             if messageType == "image" {
                 let imageURL = SFURL(newChat.image!)!
-                let cache = KingfisherManager.sharedManager.cache
-                cache.storeImage(image!, forKey: imageURL.absoluteString)
+                let cache = KingfisherManager.shared.cache
+                cache.store(image!, forKey: imageURL.absoluteString)
             } else if messageType == "audio" {
                 newChat.audioCaches = json!["audio_wave_data"].stringValue
                 newChat.audioLength = json!["audio_length"].doubleValue
@@ -415,7 +415,7 @@ extension ChatRoomController {
     }
     
     func opPanelWillSwitchInputMode(_ opPanel: ChatOpPanelController) {
-        opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
+        opPanelView?.snp.updateConstraints({ (make) -> Void in
             make.height.equalTo(45)
         })
     }
@@ -426,10 +426,10 @@ extension ChatRoomController {
             accessoryBoard = ChatAccessoryBoard()
             accessoryBoard?.chatRoomController = self
             self.view.addSubview(accessoryBoard!)
-            accessoryBoard?.snp_makeConstraints(closure: { (make) -> Void in
+            accessoryBoard?.snp.makeConstraints({ (make) -> Void in
                 make.right.equalTo(self.view)
                 make.left.equalTo(self.view)
-                make.top.equalTo(self.view.snp_bottom).offset(0)
+                make.top.equalTo(self.view.snp.bottom).offset(0)
                 make.height.equalTo(accessoryBoardHeight)
             })
             self.view.layoutIfNeeded()
@@ -440,20 +440,20 @@ extension ChatRoomController {
         if displayAccessoryBoard {
             displayAccessoryBoard = false
             // 隐藏accessory面板
-            accessoryBoard?.snp_updateConstraints(closure: { (make) -> Void in
-                make.top.equalTo(self.view.snp_bottom).offset(0)
+            accessoryBoard?.snp.updateConstraints({ (make) -> Void in
+                make.top.equalTo(self.view.snp.bottom).offset(0)
             })
-            opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
+            opPanelView?.snp.updateConstraints({ (make) -> Void in
                 make.bottom.equalTo(self.view).offset(0)
             })
         }else {
             displayAccessoryBoard = true
             // 显示accessory面板
             self.tapper?.isEnabled = true
-            accessoryBoard?.snp_updateConstraints(closure: { (make) -> Void in
-                make.top.equalTo(self.view.snp_bottom).offset(-accessoryBoardHeight)
+            accessoryBoard?.snp.updateConstraints({ (make) -> Void in
+                make.top.equalTo(self.view.snp.bottom).offset(-accessoryBoardHeight)
             })
-            opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
+            opPanelView?.snp.updateConstraints({ (make) -> Void in
                 make.bottom.equalTo(self.view).offset(-accessoryBoardHeight)
             })
         }
@@ -469,9 +469,9 @@ extension ChatRoomController {
     func textView(_ textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         
         if text == "\n" {
-            let commentText = textView.text
+            let commentText = textView.text ?? ""
             if commentText.length > 0 {
-                opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
+                opPanelView?.snp.updateConstraints({ (make) -> Void in
                     make.height.equalTo(45)
                 })
                 confirmSendChatMessage(commentText, image: nil)
@@ -498,7 +498,7 @@ extension ChatRoomController {
     func textViewDidChange(_ textView: UITextView) {
         let fixedWidth = textView.frame.width
         let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-        opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
+        opPanelView?.snp.updateConstraints({ (make) -> Void in
             make.height.equalTo(max(45, newSize.height))
         })
         self.view.layoutIfNeeded()
@@ -522,8 +522,8 @@ extension ChatRoomController {
      */
     func changeLayoutWhenKeyboardAppears(_ notif: Foundation.Notification) {
         let userInfo = (notif as NSNotification).userInfo!
-        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue
-        opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
+        let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue!
+        opPanelView?.snp.updateConstraints({ (make) -> Void in
             make.bottom.equalTo(self.view).offset(-keyboardFrame.height)
         })
         self.view.layoutIfNeeded()
@@ -538,13 +538,13 @@ extension ChatRoomController {
         
         // 当键盘出现时将accessoryBoard的显示状态设置为false
         displayAccessoryBoard = false
-        accessoryBoard?.snp_updateConstraints(closure: { (make) -> Void in
-            make.top.equalTo(self.view.snp_bottom).offset(0)
+        accessoryBoard?.snp.updateConstraints({ (make) -> Void in
+            make.top.equalTo(self.view.snp.bottom).offset(0)
         })
     }
     
     func changeLayoutWhenKeyboardDisappears(_ notif: Foundation.Notification) {
-        opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
+        opPanelView?.snp.updateConstraints({ (make) -> Void in
             make.bottom.equalTo(self.view).offset(0)
         })
         self.view.layoutIfNeeded()
@@ -553,10 +553,10 @@ extension ChatRoomController {
     override func dismissKeyboard() {
         super.dismissKeyboard()
         if displayAccessoryBoard {
-            accessoryBoard?.snp_updateConstraints(closure: { (make) -> Void in
-                make.top.equalTo(self.view.snp_bottom).offset(0)
+            accessoryBoard?.snp.updateConstraints({ (make) -> Void in
+                make.top.equalTo(self.view.snp.bottom).offset(0)
             })
-            opPanelView?.snp_updateConstraints(closure: { (make) -> Void in
+            opPanelView?.snp.updateConstraints({ (make) -> Void in
                 make.bottom.equalTo(self.view).offset(0)
             })
             displayAccessoryBoard = false

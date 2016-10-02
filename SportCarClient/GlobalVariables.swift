@@ -32,7 +32,7 @@ let kTextInputFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
 
 // Network
 //let kHostName = "166.111.17.86"
-let kHostName = "paochefan.com"
+let kHostName = "localhost"
 let kPortName = "80"
 let kChatPortName = "8888"
 let kProtocalName = "http"
@@ -111,7 +111,9 @@ func dateDisplay(_ date: Date) -> String {
     // 到现在的时间
     let timeDelta = -(date.timeIntervalSinceNow)
     var result: String = ""
-    let timeRegion = Region(calType: CalendarType.gregorian)
+//    let timeRegion = Region(components: CalendarName.gregorian)
+    let timeRegion = Region(tz: TimeZoneName.current, cal: CalendarName.gregorian, loc: LocaleName.chineseChina)
+    
     if timeDelta < 300 {
         // 五分钟显示『刚刚』
         result = LS("刚刚")
@@ -120,11 +122,11 @@ func dateDisplay(_ date: Date) -> String {
         result = "\(Int(timeDelta / 60))" + LS("分钟前")
     }else if timeDelta < 86400 {
         // 一天内显示小时
-        result = date.toString(DateFormat.custom("HH:mm"), inRegion: timeRegion)!
+        result = date.string(format: .custom("HH:mm"), in: timeRegion)
     }else if timeDelta < 172800 {
-        result = LS("昨天") + date.toString(DateFormat.custom("HH:mm"), inRegion: timeRegion)!
+        result = LS("昨天") + date.string(format: .custom("HH:mm"), in: timeRegion)
     }else {
-        result = date.toString(DateFormat.custom("MM\(LS("月"))dd\(LS("日")) HH:mm"), inRegion: timeRegion)!
+        result = date.string(format: .custom("MM\(LS("月"))dd\(LS("日")) HH:mm"), in: timeRegion)
     }
     return result
 }
@@ -133,14 +135,16 @@ func dateDisplayExact(_ date: Date?) -> String? {
     if date == nil {
         return nil
     }
-    let timeRegion = Region(calType: CalendarType.gregorian)
-    return date!.toString(DateFormat.custom("MM\(LS("月"))dd\(LS("日")) HH:mm"), inRegion: timeRegion)!
+//    let timeRegion = Region(components: CalendarName.gregorian)
+    let timeRegion = Region(tz: TimeZoneName.current, cal: CalendarName.gregorian, loc: LocaleName.chineseChina)
+    return date!.string(format: .custom("MM\(LS("月"))dd\(LS("日")) HH:mm"), in: timeRegion)
 }
 
 func dateDisplayHHMM(_ date: Date?) -> String! {
     if date == nil {
         return nil
     }
-    let timeRegion = Region(calType: CalendarType.gregorian)
-    return date!.toString(DateFormat.custom("HH:mm"), inRegion: timeRegion)!
+//    let timeRegion = Region(components: CalendarName.gregorian)
+    let timeRegion = Region(tz: TimeZoneName.current, cal: CalendarName.gregorian, loc: LocaleName.chineseChina)
+    return date!.string(format: .custom("HH:mm"), in: timeRegion)
 }

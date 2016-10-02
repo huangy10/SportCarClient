@@ -90,7 +90,7 @@ class ChatCell: UITableViewCell {
         timeMarkerLbL?.backgroundColor = UIColor.white
         timeMarkerLbL?.isHidden = true
         superview.addSubview(timeMarkerLbL!)
-        timeMarkerLbL?.snp_makeConstraints(closure: { (make) -> Void in
+        timeMarkerLbL?.snp.makeConstraints({ (make) -> Void in
             make.centerX.equalTo(superview)
             make.height.equalTo(11)
             make.top.equalTo(superview).offset(10)
@@ -100,7 +100,7 @@ class ChatCell: UITableViewCell {
         timeMarkerLine?.backgroundColor = UIColor(white: 0.92, alpha: 1)
         superview.addSubview(timeMarkerLine!)
         timeMarkerLine?.isHidden = true
-        timeMarkerLine?.snp_makeConstraints(closure: { (make) -> Void in
+        timeMarkerLine?.snp.makeConstraints({ (make) -> Void in
             make.top.equalTo(superview).offset(15)
             make.centerX.equalTo(superview)
             make.width.equalTo(145)
@@ -142,13 +142,13 @@ class ChatCell: UITableViewCell {
             bubbleContentView = tempWave
             bubbleView?.addSubview(tempWave)
         }
-        bubbleContentView?.snp_makeConstraints(closure: { (make) -> Void in
+        bubbleContentView?.snp.makeConstraints({ (make) -> Void in
             make.edges.equalTo(bubbleView!).inset(bubbleContentInset)
         })
         //
         loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
         bubbleView?.addSubview(loadingIndicator!)
-        loadingIndicator?.snp_makeConstraints(closure: { (make) -> Void in
+        loadingIndicator?.snp.makeConstraints({ (make) -> Void in
             make.center.equalTo(bubbleView!)
             make.size.equalTo(30)
         })
@@ -184,35 +184,35 @@ class ChatCell: UITableViewCell {
         }
         
         if isMine {
-            avatarBtn?.snp_remakeConstraints(closure: { (make) -> Void in
+            avatarBtn?.snp.remakeConstraints({ (make) -> Void in
                 make.top.equalTo(superview).offset(7.5 + timeMarkHeight)
                 make.size.equalTo(35)
                 make.right.equalTo(-15)
             })
-            triangle?.snp_remakeConstraints(closure: { (make) -> Void in
-                make.right.equalTo(avatarBtn!.snp_left).offset(-6)
+            triangle?.snp.remakeConstraints({ (make) -> Void in
+                make.right.equalTo(avatarBtn!.snp.left).offset(-6)
                 make.size.equalTo(10)
-                make.centerY.equalTo(superview.snp_top).offset(25 + timeMarkHeight)
+                make.centerY.equalTo(superview.snp.top).offset(25 + timeMarkHeight)
             })
             bubbleView?.backgroundColor = UIColor(red: 0.329, green: 0.361, blue: 0.384, alpha: 1)
             triangle?.image = UIImage(named: "chat_triangle_gray")
             bubbleLbL?.textColor = UIColor.white
         }else {
-            avatarBtn?.snp_remakeConstraints(closure: { (make) -> Void in
+            avatarBtn?.snp.remakeConstraints({ (make) -> Void in
                 make.top.equalTo(superview).offset(7.5 + timeMarkHeight)
                 make.size.equalTo(35)
                 make.left.equalTo(15)
             })
-            triangle?.snp_remakeConstraints(closure: { (make) -> Void in
-                make.left.equalTo(avatarBtn!.snp_right).offset(6)
+            triangle?.snp.remakeConstraints({ (make) -> Void in
+                make.left.equalTo(avatarBtn!.snp.right).offset(6)
                 make.size.equalTo(10)
-                make.centerY.equalTo(superview.snp_top).offset(25 + timeMarkHeight)
+                make.centerY.equalTo(superview.snp.top).offset(25 + timeMarkHeight)
             })
             bubbleView?.backgroundColor = UIColor(white: 0.945, alpha: 1)
             triangle?.image = UIImage(named: "chat_triangle_light_gray")
             bubbleLbL?.textColor = UIColor(red: 0.157, green: 0.173, blue: 0.184, alpha: 1)
         }
-        avatarBtn?.kf_setImageWithURL(chat!.senderUser!.avatarURL!, forState: UIControlState())
+        avatarBtn?.kf.setImage(with: chat!.senderUser!.avatarURL!, for: .normal)
         var bubbleContentSize = CGSize.zero
         if reuseIdentifier == "text"{
             bubbleLbL?.text = chat?.textContent
@@ -227,9 +227,9 @@ class ChatCell: UITableViewCell {
                     assertionFailure()
                     return
                 }
-                bubbleImg?.kf_setImageWithURL(imageURL, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+                bubbleImg?.kf.setImage(with: imageURL, placeholder: nil, options: nil, progressBlock: nil, completionHandler: { (image, error, _, _) in
                     if error == nil {
-                    self.bubbleImg?.setupForImageViewer(imageURL, backgroundColor: UIColor.black)
+                        self.bubbleImg?.setupForImageViewer(imageURL, backgroundColor: UIColor.black)
                     }
                 })
             }
@@ -245,14 +245,14 @@ class ChatCell: UITableViewCell {
             bubbleContentSize = CGSize(width: maxBubbleWidth - 30, height: 30)
         }
         if isMine {
-            bubbleView?.snp_remakeConstraints(closure: { (make) -> Void in
-                make.right.equalTo(triangle!.snp_left).offset(1)
+            bubbleView?.snp.remakeConstraints({ (make) -> Void in
+                make.right.equalTo(triangle!.snp.left).offset(1)
                 make.top.equalTo(superview).offset(timeMarkHeight)
                 make.size.equalTo(CGSize(width: bubbleContentSize.width + bubbleContentInset.left + bubbleContentInset.right, height: bubbleContentSize.height + bubbleContentInset.top + bubbleContentInset.bottom))
             })
         }else{
-            bubbleView?.snp_remakeConstraints(closure: { (make) -> Void in
-                make.left.equalTo(triangle!.snp_right).offset(-1)
+            bubbleView?.snp.remakeConstraints({ (make) -> Void in
+                make.left.equalTo(triangle!.snp.right).offset(-1)
                 make.top.equalTo(superview).offset(timeMarkHeight)
                 make.size.equalTo(CGSize(width: bubbleContentSize.width + bubbleContentInset.left + bubbleContentInset.right, height: bubbleContentSize.height + bubbleContentInset.top + bubbleContentInset.bottom))
             })
@@ -270,7 +270,7 @@ class ChatCell: UITableViewCell {
         let maxBubbleContentWidth = UIScreen.main.bounds.width - 100 - 30
         let timeMarkHeight = chat.displayTimeMark ? kChatCellTimeMarkSpaceHeight : 0
         if messageType == "text" {
-            if let textSize = chat.textContent?.boundingRect(with: CGSize(width: maxBubbleContentWidth, height: CGFloat.max), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)], context: nil).size {
+            if let textSize = chat.textContent?.boundingRect(with: CGSize(width: maxBubbleContentWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)], context: nil).size {
                 return textSize.height + 32 + 10 + timeMarkHeight
             }else {
                 assertionFailure()

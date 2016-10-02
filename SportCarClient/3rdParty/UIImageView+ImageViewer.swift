@@ -67,7 +67,7 @@ public extension UIImageView {
     func getPopoverControllerForImageSave() -> UIViewController {
         let controller = UIViewController()
         controller.preferredContentSize = CGSize(width: 100, height: 44)
-        controller.view.addSubview(UIButton).config(self, selector: #selector(saveImageToPhotoAlbums(_:)), title: LS("保存"), titleColor: UIColor.white, titleSize: 14, titleWeight: UIFontWeightRegular)
+        controller.view.addSubview(UIButton.self).config(self, selector: #selector(saveImageToPhotoAlbums(_:)), title: LS("保存"), titleColor: UIColor.white, titleSize: 14, titleWeight: UIFontWeightRegular)
             .layout { (make) in
                 make.edges.equalTo(controller.view)
         }

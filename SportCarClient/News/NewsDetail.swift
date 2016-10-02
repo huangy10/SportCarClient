@@ -878,7 +878,7 @@ extension NewsDetailController {
                 make.height.equalTo(newsCover.snp.width).multipliedBy(0.573)
             })
         }else if curOffsetY < 0 {
-            let basicHeight = (superview.frame.width)! * 0.573
+            let basicHeight = superview.frame.width * 0.573
             let scaleFactor = (-curOffsetY) / basicHeight + 1
             newsCover?.snp.remakeConstraints({ (make) -> Void in
                 make.top.equalTo(superview)

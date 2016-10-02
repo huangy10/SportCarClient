@@ -41,11 +41,11 @@ class AvatarItemSelectController: UITableViewController {
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
 
     
@@ -60,14 +60,14 @@ class AvatarItemSelectCell: UserSelectCell {
         
         authIcon = UIImageView()
         self.contentView.addSubview(authIcon)
-        authIcon.snp_makeConstraints { (make) -> Void in
+        authIcon.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(avatarImg!)
             make.right.equalTo(self.contentView).offset(-40)
             make.size.equalTo(CGSize(width: 44, height: 18.5))
         }
         recentStatusLbL?.isHidden = true
-        nickNameLbl?.snp_remakeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(avatarImg!.snp_right).offset(12)
+        nickNameLbl?.snp.remakeConstraints({ (make) -> Void in
+            make.left.equalTo(avatarImg!.snp.right).offset(12)
             make.centerY.equalTo(avatarImg!)
             make.height.equalTo(avatarImg!).multipliedBy(0.5)
         })

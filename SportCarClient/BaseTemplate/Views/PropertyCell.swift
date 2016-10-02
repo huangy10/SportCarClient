@@ -24,14 +24,14 @@ class SSPropertyCell: SSPropertyBaseCell {
         didSet {
             arrowIcon.isHidden = !editable
             if arrowIcon.isHidden {
-                infoLbl.snp_remakeConstraints(closure: { (make) in
+                infoLbl.snp.remakeConstraints({ (make) in
                     make.centerY.equalTo(staticLbl)
                     make.right.equalTo(arrowIcon)
                 })
             } else {
-                infoLbl.snp_updateConstraints(closure: { (make) in
+                infoLbl.snp.updateConstraints({ (make) in
                     make.centerY.equalTo(staticLbl)
-                    make.right.equalTo(arrowIcon.snp_left).offset(-15)
+                    make.right.equalTo(arrowIcon.snp.left).offset(-15)
                 })
             }
         }
@@ -44,13 +44,13 @@ class SSPropertyCell: SSPropertyBaseCell {
             .config(14, textColor: UIColor.black)
             .layout({ (make) in
                 make.centerY.equalTo(staticLbl)
-                make.right.equalTo(arrowIcon.snp_left).offset(-15)
+                make.right.equalTo(arrowIcon.snp.left).offset(-15)
             })
         icon = superview.addSubview(UIImageView.self)
             .config(nil)
             .layout(10, closurer: { (make) in
                 make.centerY.equalTo(staticLbl)
-                make.right.equalTo(infoLbl.snp_left).offset(-8)
+                make.right.equalTo(infoLbl.snp.left).offset(-8)
                 make.size.equalTo(20)
             })
     }
@@ -74,7 +74,7 @@ class SSPropertyCell: SSPropertyBaseCell {
             staticLbl.text = propertyName
             infoLbl.text = propertyValue ?? propertyEmptyPlaceHolder
             if propertyImageURL != nil {
-                icon.kf_setImageWithURL(propertyImageURL!)
+                icon.kf.setImage(with: propertyImageURL!)
             } else {
                 icon.image = nil
             }

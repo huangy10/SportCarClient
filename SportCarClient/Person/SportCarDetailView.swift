@@ -45,7 +45,7 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
@@ -77,7 +77,7 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
-            let header = tableView.ss_reusableHeader(SportCarAuthHeader)
+            let header = tableView.ss_reusableHeader(SportCarAuthHeader.self)
             header.titleLbl.text = LS("爱车型号")
             header.authed = car.identified
             header.authBtn.addTarget(self, action: #selector(SportCarInfoDetailController.carAuthBtnPressed), for: .touchUpInside)
@@ -152,10 +152,10 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     
     func confirmDelete() {
 //        hideConfirmToast()
-        SportCarRequester.sharedInstance.deleteCar(car.ssidString, onSuccess: { (json) in
+        _ = SportCarRequester.sharedInstance.deleteCar(car.ssidString, onSuccess: { (json) in
             self.showToast(LS("删除成功"))
             NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kCarDeletedNotification), object: nil, userInfo: [kSportcarKey: self.car])
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
             }) { (code) in
                 self.showToast(LS("删除失败"))
         }
@@ -174,7 +174,7 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     }
     
     func singlePropertyModifierDidModify(_ newValue: String?, forIndexPath indexPath: IndexPath) {
-        SportCarRequester.sharedInstance.updateCarSignature(car.ssidString, signature: newValue ?? "", onSuccess: { (json) in
+        _ = SportCarRequester.sharedInstance.updateCarSignature(car.ssidString, signature: newValue ?? "", onSuccess: { (json) in
             self.showToast(LS("修改成功"))
             self.car.signature = newValue
             self.tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -185,7 +185,7 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         let newValue = textField.text
-        SportCarRequester.sharedInstance.updateCarSignature(car.ssidString, signature: newValue ?? "", onSuccess: { (json) in
+        _ = SportCarRequester.sharedInstance.updateCarSignature(car.ssidString, signature: newValue ?? "", onSuccess: { (json) in
             self.showToast(LS("修改成功"))
             self.car.signature = newValue
             self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
@@ -221,7 +221,7 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
         superview.addSubview(carImage)
         carImage.contentMode = .scaleAspectFill
         carImage.clipsToBounds = true
-        carImage.snp_makeConstraints { (make) -> Void in
+        carImage.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
             make.top.equalTo(superview)
             make.bottom.equalTo(superview)
@@ -232,16 +232,16 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
         carNameLbl.textColor = UIColor.black
         carNameLbl.font = UIFont.systemFont(ofSize: 19, weight: UIFontWeightSemibold)
         superview.addSubview(carNameLbl)
-        carNameLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(carImage.snp_right).offset(15)
+        carNameLbl.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(carImage.snp.right).offset(15)
             make.top.equalTo(superview).offset(16)
         }
         //
         carAuthStatusIcon = UIImageView()
         superview.addSubview(carAuthStatusIcon)
-        carAuthStatusIcon.snp_makeConstraints { (make) -> Void in
+        carAuthStatusIcon.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(carNameLbl)
-            make.top.equalTo(carNameLbl.snp_bottom).offset(10)
+            make.top.equalTo(carNameLbl.snp.bottom).offset(10)
             make.size.equalTo(CGSize(width: 44, height: 18.5))
         }
         //
@@ -250,14 +250,14 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
         statementLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         statementLbl.text = LS("认证可以获得什么？")
         superview.addSubview(statementLbl)
-        statementLbl.snp_makeConstraints { (make) -> Void in
+        statementLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(carNameLbl)
-            make.top.equalTo(carAuthStatusIcon.snp_bottom).offset(8)
+            make.top.equalTo(carAuthStatusIcon.snp.bottom).offset(8)
         }
         //
         let arrowIcon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         superview.addSubview(arrowIcon)
-        arrowIcon.snp_makeConstraints { (make) -> Void in
+        arrowIcon.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(superview)
             make.size.equalTo(CGSize(width: 9, height: 15))
@@ -265,8 +265,8 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
         //
         authBtn = UIButton()
         superview.addSubview(authBtn)
-        authBtn.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(carImage.snp_right)
+        authBtn.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(carImage.snp.right)
             make.right.equalTo(superview)
             make.top.equalTo(superview)
             make.bottom.equalTo(superview)

@@ -15,7 +15,7 @@ class ActivityCommentPanel: CommentBarView {
         super.createSubivews()
         let contentHeight = barheight * 0.76
         shareBtn?.isHidden = true
-        likeBtn?.snp_remakeConstraints(closure: { (make) -> Void in
+        likeBtn?.snp.remakeConstraints({ (make) -> Void in
             make.size.equalTo(contentHeight)
             make.bottom.equalTo(self).offset(-5)
             make.right.equalTo(self).offset(-15)

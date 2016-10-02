@@ -39,11 +39,11 @@ class LoginRegisterController: InputableViewController {
         super.viewWillAppear(animated)
         self.view.updateConstraints()
         self.view.layoutIfNeeded()
-        bgImgView.snp_remakeConstraints { (make) -> Void in
+        bgImgView.snp.remakeConstraints { (make) -> Void in
             make.right.equalTo(self.view)
             make.top.equalTo(self.view)
             make.bottom.equalTo(self.view)
-            make.width.equalTo(bgImgView.snp_height).multipliedBy(0.807)
+            make.width.equalTo(bgImgView.snp.height).multipliedBy(0.807)
         }
         UIView.animate(withDuration: 10, delay: 0, options: .curveEaseIn, animations: { () -> Void in
             self.view.layoutIfNeeded()
@@ -61,11 +61,11 @@ class LoginRegisterController: InputableViewController {
         //
         bgImgView = UIImageView(image: UIImage(named: "account_bg_image"))
         superview.addSubview(bgImgView)
-        bgImgView.snp_makeConstraints { (make) -> Void in
+        bgImgView.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(-50)
             make.top.equalTo(superview)
             make.bottom.equalTo(superview)
-            make.width.equalTo(bgImgView.snp_height).multipliedBy(0.807)
+            make.width.equalTo(bgImgView.snp.height).multipliedBy(0.807)
         }
         //
         titleLbl = UILabel()
@@ -75,7 +75,7 @@ class LoginRegisterController: InputableViewController {
         titleLbl?.textColor = UIColor.white
         titleLbl?.textAlignment = NSTextAlignment.center
         superview.addSubview(titleLbl!)
-        titleLbl!.snp_makeConstraints { (make) -> Void in
+        titleLbl!.snp.makeConstraints { (make) -> Void in
             make.width.equalTo(superview)
             make.height.equalTo(125)
             make.centerX.equalTo(superview)
@@ -84,7 +84,7 @@ class LoginRegisterController: InputableViewController {
         //
         titleLogo = UIImageView(image: UIImage(named: "account_title_logo"))
         titleLbl?.addSubview(titleLogo)
-        titleLogo.snp_makeConstraints { (make) -> Void in
+        titleLogo.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(titleLbl!)
             make.height.equalTo(30)
             make.width.equalTo(81)
@@ -94,8 +94,8 @@ class LoginRegisterController: InputableViewController {
         board?.backgroundColor = UIColor.clear
         board?.isPagingEnabled = true
         superview.addSubview(board!)
-        board?.snp_makeConstraints(closure: { (make) -> Void in
-            make.top.equalTo(titleLogo.snp_bottom).offset(43)
+        board?.snp.makeConstraints({ (make) -> Void in
+            make.top.equalTo(titleLogo.snp.bottom).offset(43)
             make.bottom.equalTo(superview)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -104,7 +104,7 @@ class LoginRegisterController: InputableViewController {
         //
         let register = self.registerView()
         board!.addSubview(register!)
-        register.snp_makeConstraints { (make) -> Void in
+        register?.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(board!)
             make.left.equalTo(board!)
             make.width.equalTo(board!)
@@ -115,9 +115,9 @@ class LoginRegisterController: InputableViewController {
         //
         let login = self.loginView()
         board!.addSubview(login!)
-        login.snp_makeConstraints { (make) -> Void in
+        login?.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(board!)
-            make.left.equalTo(register.snp_right)
+            make.left.equalTo(register!.snp.right)
             make.width.equalTo(board!)
             make.height.equalTo(board!)
         }
@@ -133,7 +133,7 @@ class LoginRegisterController: InputableViewController {
         inputContainer.backgroundColor = UIColor.white
         inputContainer.layer.cornerRadius = 4
         container.addSubview(inputContainer)
-        inputContainer.snp_makeConstraints { (make) -> Void in
+        inputContainer.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(container)
             make.centerX.equalTo(container)
             make.height.equalTo(100)
@@ -143,7 +143,7 @@ class LoginRegisterController: InputableViewController {
         let seqLine = UIView()
         seqLine.backgroundColor = UIColor(white: 0.933, alpha: 1)
         inputContainer.addSubview(seqLine)
-        seqLine.snp_makeConstraints { (make) -> Void in
+        seqLine.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(1)
             make.centerY.equalTo(inputContainer)
             make.left.equalTo(inputContainer).offset(13)
@@ -158,7 +158,7 @@ class LoginRegisterController: InputableViewController {
         let loginPhoneInputIcon = UIImageView(image: UIImage(named: "account_phone_input"))
         loginPhoneInput?.leftView = loginPhoneInputIcon
         inputContainer.addSubview(loginPhoneInput!)
-        loginPhoneInput!.snp_makeConstraints(closure: { (make) -> Void in
+        loginPhoneInput!.snp.makeConstraints({ (make) -> Void in
             make.height.equalTo(inputContainer).multipliedBy(0.5)
             make.left.equalTo(inputContainer).offset(10)
             make.right.equalTo(inputContainer).offset(-10)
@@ -174,7 +174,7 @@ class LoginRegisterController: InputableViewController {
         let loginPasswordInputIcon =  UIImageView(image: UIImage(named: "account_password_input"))
         loginPasswordInput?.leftView = loginPasswordInputIcon
         container.addSubview(loginPasswordInput!)
-        loginPasswordInput!.snp_makeConstraints { (make) -> Void in
+        loginPasswordInput!.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(inputContainer).multipliedBy(0.5)
             make.left.equalTo(inputContainer).offset(10)
             make.right.equalTo(inputContainer).offset(-10)
@@ -186,10 +186,10 @@ class LoginRegisterController: InputableViewController {
         forgetBtn.titleLabel?.adjustsFontSizeToFitWidth = true
         forgetBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
         container.addSubview(forgetBtn)
-        forgetBtn.snp_makeConstraints { (make) -> Void in
+        forgetBtn.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(17)
             make.width.equalTo(60)
-            make.top.equalTo(inputContainer.snp_bottom).offset(15)
+            make.top.equalTo(inputContainer.snp.bottom).offset(15)
             make.right.equalTo(inputContainer)
         }
         forgetBtn.addTarget(self, action: #selector(LoginRegisterController.forgetBtnPressed), for: .touchUpInside)
@@ -201,10 +201,10 @@ class LoginRegisterController: InputableViewController {
         login.layer.shadowRadius = 7
         login.layer.shadowOpacity = 1
         container.addSubview(login)
-        login.snp_makeConstraints { (make) -> Void in
+        login.snp.makeConstraints { (make) -> Void in
             make.width.equalTo(100)
             make.height.equalTo(40)
-            make.top.equalTo(inputContainer.snp_bottom).offset(75)
+            make.top.equalTo(inputContainer.snp.bottom).offset(75)
             make.centerX.equalTo(container)
         }
         login.addTarget(self, action: #selector(LoginRegisterController.loginPressed), for: .touchUpInside)
@@ -219,7 +219,7 @@ class LoginRegisterController: InputableViewController {
         inputContainer.backgroundColor = UIColor.white
         inputContainer.layer.cornerRadius = 4
         container.addSubview(inputContainer)
-        inputContainer.snp_makeConstraints { (make) -> Void in
+        inputContainer.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(container)
             make.centerX.equalTo(container)
             make.height.equalTo(150)
@@ -229,18 +229,18 @@ class LoginRegisterController: InputableViewController {
         let seqLine1 = UIView()
         seqLine1.backgroundColor = UIColor(white: 0.953, alpha: 1)
         inputContainer.addSubview(seqLine1)
-        seqLine1.snp_makeConstraints { (make) -> Void in
+        seqLine1.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(1)
-            make.centerY.equalTo(inputContainer.snp_top).offset(50)
+            make.centerY.equalTo(inputContainer.snp.top).offset(50)
             make.left.equalTo(inputContainer).offset(13)
             make.right.equalTo(inputContainer).offset(-13)
         }
         let seqLine2 = UIView()
         seqLine2.backgroundColor = UIColor(white: 0.953, alpha: 1)
         inputContainer.addSubview(seqLine2)
-        seqLine2.snp_makeConstraints { (make) -> Void in
+        seqLine2.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(1)
-            make.centerY.equalTo(inputContainer.snp_bottom).offset(-50)
+            make.centerY.equalTo(inputContainer.snp.bottom).offset(-50)
             make.left.equalTo(inputContainer).offset(13)
             make.right.equalTo(inputContainer).offset(-13)
         }
@@ -253,7 +253,7 @@ class LoginRegisterController: InputableViewController {
         let registerPhoneInputIcon = UIImageView(image: UIImage(named: "account_phone_input"))
         registerPhoneInput?.leftView = registerPhoneInputIcon
         inputContainer.addSubview(registerPhoneInput!)
-        registerPhoneInput?.snp_makeConstraints(closure: { (make) -> Void in
+        registerPhoneInput?.snp.makeConstraints({ (make) -> Void in
             make.height.equalTo(inputContainer).multipliedBy(0.3333)
             make.left.equalTo(inputContainer).offset(10)
             make.width.equalTo(inputContainer).multipliedBy(0.65)
@@ -266,9 +266,9 @@ class LoginRegisterController: InputableViewController {
         sendCodeBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
         sendCodeBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         inputContainer.addSubview(sendCodeBtn)
-        sendCodeBtn.snp_makeConstraints { (make) -> Void in
+        sendCodeBtn.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(registerPhoneInput!)
-            make.left.equalTo(registerPhoneInput!.snp_right)
+            make.left.equalTo(registerPhoneInput!.snp.right)
             make.right.equalTo(inputContainer).offset(-13)
             make.centerY.equalTo(registerPhoneInput!)
         }
@@ -283,10 +283,10 @@ class LoginRegisterController: InputableViewController {
         let registerAuthCodeIcon = UIImageView(image: UIImage(named: "account_auth_code"))
         registerAuthCode?.leftView = registerAuthCodeIcon
         inputContainer.addSubview(registerAuthCode!)
-        registerAuthCode!.snp_makeConstraints { (make) -> Void in
+        registerAuthCode!.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(registerPhoneInput!)
             make.left.equalTo(registerPhoneInput!)
-            make.top.equalTo(registerPhoneInput!.snp_bottom)
+            make.top.equalTo(registerPhoneInput!.snp.bottom)
             make.right.equalTo(sendCodeBtn)
         }
         //
@@ -299,10 +299,10 @@ class LoginRegisterController: InputableViewController {
         let registerPasswordInputIcon = UIImageView(image: UIImage(named: "account_password_input"))
         registerPasswordInput?.leftView = registerPasswordInputIcon
         inputContainer.addSubview(registerPasswordInput!)
-        registerPasswordInput?.snp_makeConstraints(closure: { (make) -> Void in
+        registerPasswordInput?.snp.makeConstraints({ (make) -> Void in
             make.height.equalTo(registerPhoneInput!)
             make.width.equalTo(registerAuthCode!)
-            make.top.equalTo(registerAuthCode!.snp_bottom)
+            make.top.equalTo(registerAuthCode!.snp.bottom)
             make.centerX.equalTo(registerAuthCode!)
         })
         // 
@@ -311,21 +311,21 @@ class LoginRegisterController: InputableViewController {
         agreementBtn.titleLabel?.adjustsFontSizeToFitWidth = true
         agreementBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
         container.addSubview(agreementBtn)
-        agreementBtn.snp_makeConstraints { (make) -> Void in
+        agreementBtn.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(17)
             make.width.equalTo(60)
-            make.top.equalTo(inputContainer.snp_bottom).offset(15)
+            make.top.equalTo(inputContainer.snp.bottom).offset(15)
             make.right.equalTo(inputContainer)
         }
         agreementBtn.addTarget(self, action: #selector(LoginRegisterController.checkAgreement), for: .touchUpInside)
         
         let agreementCheckIcon = UIImageView(image: UIImage(named: "account_agreement_check"))
         container.addSubview(agreementCheckIcon)
-        agreementCheckIcon.snp_makeConstraints { (make) -> Void in
+        agreementCheckIcon.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(agreementBtn)
-            make.width.equalTo(agreementCheckIcon.snp_height)
+            make.width.equalTo(agreementCheckIcon.snp.height)
             make.top.equalTo(agreementBtn)
-            make.right.equalTo(agreementBtn.snp_left)
+            make.right.equalTo(agreementBtn.snp.left)
         }
         
         let registerBtn = UIButton()
@@ -335,10 +335,10 @@ class LoginRegisterController: InputableViewController {
         registerBtn.layer.shadowRadius = 7
         registerBtn.layer.shadowOpacity = 1
         container.addSubview(registerBtn)
-        registerBtn.snp_makeConstraints { (make) -> Void in
+        registerBtn.snp.makeConstraints { (make) -> Void in
             make.width.equalTo(100)
             make.height.equalTo(40)
-            make.top.equalTo(inputContainer.snp_bottom).offset(75)
+            make.top.equalTo(inputContainer.snp.bottom).offset(75)
             make.centerX.equalTo(container)
         }
         registerBtn.addTarget(self, action: #selector(LoginRegisterController.registerPressed), for: .touchUpInside)
@@ -361,11 +361,11 @@ class LoginRegisterController: InputableViewController {
         titleLoginBtn?.setTitle(NSLocalizedString("登录", comment: ""), for: UIControlState())
         titleLoginBtn?.titleLabel?.font = kBarTextFont
         container.addSubview(titleLoginBtn!)
-        titleLoginBtn?.snp_makeConstraints { (make) -> Void in
+        titleLoginBtn?.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(30)
             make.width.equalTo(80)
             make.centerY.equalTo(container)
-            make.left.equalTo(container.snp_centerX).offset(9)
+            make.left.equalTo(container.snp.centerX).offset(9)
         }
         titleLoginBtn?.addTarget(self, action: #selector(LoginRegisterController.barTitleBtnPressed(_:)), for: .touchUpInside)
         
@@ -375,11 +375,11 @@ class LoginRegisterController: InputableViewController {
         titleRegisterBtn?.setTitle(NSLocalizedString("注册", comment: ""), for: UIControlState())
         titleRegisterBtn?.titleLabel?.font = kBarTextFont
         container.addSubview(titleRegisterBtn!)
-        titleRegisterBtn?.snp_makeConstraints { (make) -> Void in
+        titleRegisterBtn?.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(30)
             make.width.equalTo(80)
             make.centerY.equalTo(container)
-            make.right.equalTo(container.snp_centerX).offset(9)
+            make.right.equalTo(container.snp.centerX).offset(9)
         }
         titleRegisterBtn?.addTarget(self, action: #selector(LoginRegisterController.barTitleBtnPressed(_:)), for: .touchUpInside)
 
@@ -387,7 +387,7 @@ class LoginRegisterController: InputableViewController {
         titleBtnIcon = UIImageView(image: UIImage(named: "account_header_button"))
         container.addSubview(titleBtnIcon!)
         container.sendSubview(toBack: titleBtnIcon!)
-        titleBtnIcon?.snp_makeConstraints(closure: { (make) -> Void in
+        titleBtnIcon?.snp.makeConstraints({ (make) -> Void in
             make.edges.equalTo(titleLoginBtn!)
         })
         return container
@@ -405,7 +405,7 @@ class LoginRegisterController: InputableViewController {
     
     func barTitleBtnPressed(_ sender: UIButton) {
         if sender.titleLabel?.text == "注册" && board?.contentOffset.x != 0{
-            titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
+            titleBtnIcon?.snp.remakeConstraints({ (make) -> Void in
                 make.edges.equalTo(titleRegisterBtn!)
             })
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
@@ -415,7 +415,7 @@ class LoginRegisterController: InputableViewController {
                 self.board?.contentOffset = CGPoint(x: 0, y: 0)
                 }, completion: nil)
         }else if sender.titleLabel?.text == "登录" && board?.contentOffset.x == 0{
-            titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
+            titleBtnIcon?.snp.remakeConstraints({ (make) -> Void in
                 make.edges.equalTo(titleLoginBtn!)
             })
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
@@ -444,7 +444,7 @@ class LoginRegisterController: InputableViewController {
             return
         }
         loginBtn?.isEnabled = false
-        self.requester.postToLogin(username, password: password, onSuccess: { (json) -> (Void) in
+        _ = self.requester.postToLogin(username, password: password, onSuccess: { (json) -> (Void) in
             self.loginBtn?.isEnabled = true
             let user: User = try! MainManager.sharedManager.getOrCreate(json!)
             MainManager.sharedManager.login(user, jwtToken: json!["jwt_token"].stringValue)
@@ -491,7 +491,7 @@ class LoginRegisterController: InputableViewController {
             return
         }
     
-        self.requester.postToRegister(phone, passwd: passwd, authCode: authCode, onSuccess: { (json) -> (Void) in
+        _ = self.requester.postToRegister(phone, passwd: passwd, authCode: authCode, onSuccess: { (json) -> (Void) in
             let user: User = try! MainManager.sharedManager.getOrCreate(json!)
             MainManager.sharedManager.login(user, jwtToken: json!["jwt_token"].stringValue)
             self.registerConfirm()
@@ -529,7 +529,7 @@ class LoginRegisterController: InputableViewController {
             return
         }
         authCodeBtn?.status = AuthCodeBtnViewStatus.pending
-        self.requester.requestAuthCode(registerPhoneInput!.text!, onSuccess: { () -> (Void) in
+        _ = self.requester.requestAuthCode(registerPhoneInput!.text!, onSuccess: { () -> (Void) in
             self.authCodeBtn?.status = AuthCodeBtnViewStatus.countDown
             }) { () -> (Void) in
                 // 弹窗
@@ -547,7 +547,7 @@ class LoginRegisterController: InputableViewController {
     
     override func dismissKeyboard() {
         super.dismissKeyboard()
-        self.titleLbl?.snp_updateConstraints(closure: { (make) -> Void in
+        self.titleLbl?.snp.updateConstraints({ (make) -> Void in
             make.height.equalTo(125)
         })
         UIView.animate(withDuration: 0.2, animations: { () -> Void in
@@ -556,20 +556,20 @@ class LoginRegisterController: InputableViewController {
     }
     
     override func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        super.textFieldShouldBeginEditing(textField)
+        let result = super.textFieldShouldBeginEditing(textField)
         self.tapper?.isEnabled = true
-        self.titleLbl?.snp_updateConstraints(closure: { (make) -> Void in
+        self.titleLbl?.snp.updateConstraints({ (make) -> Void in
             make.height.equalTo(0)
         })
         UIView.animate(withDuration: 0.2, animations: { () -> Void in
             self.view.layoutIfNeeded()
         }) 
-        return true
+        return true && result
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.x < self.view.frame.width/2 {
-            titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
+            titleBtnIcon?.snp.remakeConstraints({ (make) -> Void in
                 make.edges.equalTo(titleRegisterBtn!)
             })
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
@@ -578,7 +578,7 @@ class LoginRegisterController: InputableViewController {
                 self.titleLoginBtn?.setTitleColor(UIColor.white, for: UIControlState())
                 }, completion: nil)
         }else{
-            titleBtnIcon?.snp_remakeConstraints(closure: { (make) -> Void in
+            titleBtnIcon?.snp.remakeConstraints({ (make) -> Void in
                 make.edges.equalTo(titleLoginBtn!)
             })
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in

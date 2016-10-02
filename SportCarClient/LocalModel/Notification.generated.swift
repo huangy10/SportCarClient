@@ -35,7 +35,7 @@ extension Notification {
 extension Notification {
 
     static let checked = AlecrimCoreData.NullableAttribute<Bool>("checked")
-    static let createdAt = AlecrimCoreData.NullableAttribute<NSDate>("createdAt")
+    static let createdAt = AlecrimCoreData.NullableAttribute<Date>("createdAt")
     static let flag = AlecrimCoreData.NullableAttribute<Bool>("flag")
     static let image = AlecrimCoreData.NullableAttribute<String>("image")
     static let messageBody = AlecrimCoreData.NullableAttribute<String>("messageBody")
@@ -53,7 +53,7 @@ extension Notification {
 extension AlecrimCoreData.AttributeProtocol where Self.ValueType: Notification {
 
     var checked: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("checked", self) }
-    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
+    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<Date>("createdAt", self) }
     var flag: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("flag", self) }
     var image: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("image", self) }
     var messageBody: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("messageBody", self) }

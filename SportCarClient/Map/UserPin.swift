@@ -21,9 +21,9 @@ class UserAnnotationView: BMKAnnotationView {
     weak var parent: UIViewController!
     var user: User! {
         didSet {
-            avatar.kf_setImageWithURL(user.avatarURL!, forState: UIControlState())
+            avatar.kf.setImage(with: user.avatarURL!, for: .normal)
             if let avatarCarURL = user.avatarCarModel?.logoURL {
-                avatarCar.kf_setImageWithURL(avatarCarURL)
+                avatarCar.kf.setImage(with: avatarCarURL)
             }
         }
     }
@@ -78,7 +78,8 @@ class HostUserOnRadarAnnotationView: BMKAnnotationView {
         
         updator = CADisplayLink(target: self, selector: #selector(HostUserOnRadarAnnotationView.scanUpdate))
         updator?.add(to: RunLoop.current, forMode: RunLoopMode.defaultRunLoopMode)
-        updator?.frameInterval = 1
+//        updator?.frameInterval = 1
+        updator?.preferredFramesPerSecond = 30
         updator?.isPaused = true
         
         self.isUserInteractionEnabled = false

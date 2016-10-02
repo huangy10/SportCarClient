@@ -45,11 +45,12 @@ class SSAvatarCell: SSPropertyBaseCell {
     
     func setData(_ imageURL: URL, showArrow: Bool = false, zoomable: Bool = false) -> Self {
         arrowIcon.isHidden = !showArrow
-        avatarImg.kf_setImageWithURL(imageURL, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
-            if error == nil && zoomable {
+        
+        avatarImg.kf.setImage(with: imageURL, placeholder: nil, options: nil, progressBlock: nil) { (image, error, _, _) in
+            if zoomable && error == nil {
                 self.avatarImg.setupForImageViewer(nil, backgroundColor: UIColor.black)
             }
-        })
+        }
         return self
     }
 }

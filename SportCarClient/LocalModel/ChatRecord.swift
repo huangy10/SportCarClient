@@ -157,6 +157,7 @@ class ChatRecord: BaseModel {
         return self
     }
     
+    @discardableResult
     func initForPost(_ messageType: String, textContent: String?, image: UIImage?, audio: URL?, relatedID: String? = nil) -> ChatRecord {
         self.messageType = messageType
         self.textContent = textContent
@@ -168,6 +169,7 @@ class ChatRecord: BaseModel {
         return self
     }
     
+    @discardableResult
     func confirmSent(_ newID: Int32, image: String?, audio: String?) -> Self{
         ssid = newID
         self.image = image

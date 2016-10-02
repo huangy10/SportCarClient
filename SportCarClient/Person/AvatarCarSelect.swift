@@ -122,7 +122,7 @@ class AvatarCarSelectController: AvatarItemSelectController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: AvatarItemSelectCell.reuseIdentifier, for: indexPath) as! AvatarItemSelectCell
         let car = cars[(indexPath as NSIndexPath).row]
-        cell.avatarImg.kf.setImage(with: car.logoURL!)
+        cell.avatarImg?.kf.setImage(with: car.logoURL!)
         cell.nickNameLbl?.text = car.name
         cell.selectBtn?.tag = (indexPath as NSIndexPath).row
         if car.identified {

@@ -24,19 +24,19 @@ class LocationSelectCell: UITableViewCell {
     
     func createSubviews() {
         let superview = self.contentView
-        titleLbl = superview.addSubview(UILabel)
+        titleLbl = superview.addSubview(UILabel.self)
             .config(14)
             .layout({ (make) in
                 make.left.equalTo(superview).offset(15)
                 make.right.equalTo(superview).offset(-15)
-                make.bottom.equalTo(superview.snp_centerY)
+                make.bottom.equalTo(superview.snp.centerY)
             })
-        detailLbl = superview.addSubview(UILabel)
+        detailLbl = superview.addSubview(UILabel.self)
             .config(12, textColor: UIColor(white: 0.72, alpha: 1))
             .layout({ (make) in
                 make.left.equalTo(titleLbl)
                 make.right.equalTo(titleLbl)
-                make.top.equalTo(titleLbl.snp_bottom)
+                make.top.equalTo(titleLbl.snp.bottom)
             })
     }
     

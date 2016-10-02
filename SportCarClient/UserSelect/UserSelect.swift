@@ -9,9 +9,10 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import Dollar
 
 /// 用户选择界面
-class UserSelectController: InputableViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UICollectionViewDataSource {
+class UserSelectController: InputableViewController, UISearchBarDelegate {
     /// 用户列表
     var users: [User] {
         get {
@@ -48,15 +49,15 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
     
     override func createSubviews() {
         super.createSubviews()
-        let superview = self.view
-        superview?.backgroundColor = UIColor.white
+        let superview = self.view!
+        superview.backgroundColor = UIColor.white
         //
         searchBar = UISearchBar()
-        superview?.addSubview(searchBar!)
+        superview.addSubview(searchBar!)
         searchBar?.delegate = self
         searchBar?.searchBarStyle = .minimal
         searchBar?.isTranslucent = true
-        searchBar?.snp_makeConstraints(closure: { (make) -> Void in
+        searchBar?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.top.equalTo(superview)
@@ -74,21 +75,21 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
         selectedUserList?.register(UserSelectedcell.self, forCellWithReuseIdentifier: UserSelectedcell.reuseIdentifier)
         selectedUserList?.backgroundColor = UIColor.white
         selectedUserList?.dataSource = self
-        superview?.addSubview(selectedUserList!)
-        selectedUserList?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(selectedUserList!)
+        selectedUserList?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
             make.height.equalTo(selectedUsers.count > 0 ? 65 : 0)
-            make.top.equalTo(searchBar!.snp_bottom)
+            make.top.equalTo(searchBar!.snp.bottom)
         })
         //
         userTableView = UITableView(frame: CGRect.zero, style: .plain)
         userTableView?.delegate = self
         userTableView?.dataSource = self
         userTableView?.separatorStyle = .none
-        superview?.addSubview(userTableView!)
-        userTableView?.snp_makeConstraints(closure: { (make) -> Void in
-            make.top.equalTo(selectedUserList!.snp_bottom)
+        superview.addSubview(userTableView!)
+        userTableView?.snp.makeConstraints({ (make) -> Void in
+            make.top.equalTo(selectedUserList!.snp.bottom)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.bottom.equalTo(superview)
@@ -122,7 +123,7 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
     
     func setSelectedUserListHiddenAnimated(_ hidden: Bool){
         if hidden {
-            selectedUserList?.snp_updateConstraints(closure: { (make) -> Void in
+            selectedUserList?.snp.updateConstraints({ (make) -> Void in
                 make.height.equalTo(0)
             })
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
@@ -132,7 +133,7 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
             })
         }else{
 //            selectedUserList?.hidden = false
-            selectedUserList?.snp_updateConstraints(closure: { (make) -> Void in
+            selectedUserList?.snp.updateConstraints({ (make) -> Void in
                 make.height.equalTo(65)
             })
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
@@ -164,7 +165,7 @@ class UserSelectController: InputableViewController, UITableViewDelegate, UITabl
 }
 
 // MARK: - TableView和SearchBar的代理
-extension UserSelectController {
+extension UserSelectController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -177,12 +178,12 @@ extension UserSelectController {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: UserSelectCell.reuseIdentifier, for: indexPath) as! UserSelectCell
         let user = users[(indexPath as NSIndexPath).row]
-        cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
+        cell.avatarImg?.kf.setImage(with: user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
         
         cell.selectBtn?.tag = (indexPath as NSIndexPath).row
-        if forceSelectedUsers.findIndex({$0.ssid == user.ssid}) != nil {
+        if forceSelectedUsers.findIndex(callback: {$0.ssid == user.ssid}) != nil {
             cell.forceSelected = true
             cell.selectBtn?.isSelected = true
         } else {
@@ -198,14 +199,14 @@ extension UserSelectController {
                 return false
             }
             let row = sender.tag
-            let targetUser = sSelf.users.fetch(row)
+            let targetUser = sSelf.users.fetch(index: row)!
             
             if !sSelf.userSelectionShouldChange(targetUser, addOrDelete: !sender.isSelected) {
                 return false
             }
             
             if sender.isSelected {
-                sSelf.selectedUsers.remove(targetUser)
+                sSelf.selectedUsers = $.remove(sSelf.selectedUsers, value: targetUser)
                 if sSelf.selectedUsers.count == 0 {
                     sSelf.selectedUserList?.reloadData()
                     sSelf.setSelectedUserListHiddenAnimated(true)
@@ -263,7 +264,7 @@ extension UserSelectController {
 }
 
 // MARK: - Collection Delegate functions
-extension UserSelectController {
+extension UserSelectController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -276,7 +277,7 @@ extension UserSelectController {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserSelectedcell.reuseIdentifier, for: indexPath) as! UserSelectedcell
         let user = selectedUsers[(indexPath as NSIndexPath).row]
-        cell.imageView?.kf_setImageWithURL(user.avatarURL!)
+        cell.imageView?.kf.setImage(with: user.avatarURL!)
         return cell
     }
 }
@@ -330,7 +331,7 @@ class UserSelectCell: UITableViewCell {
         selectBtn?.contentEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5)
         selectBtn?.isSelected = false
         superview.addSubview(selectBtn!)
-        selectBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        selectBtn?.snp.makeConstraints({ (make) -> Void in
             make.centerY.equalTo(superview)
             make.left.equalTo(superview).offset(15)
             make.size.equalTo(32.5)
@@ -341,9 +342,9 @@ class UserSelectCell: UITableViewCell {
         superview.addSubview(avatarImg!)
         avatarImg?.layer.cornerRadius = 35 / 2
         avatarImg?.clipsToBounds = true
-        avatarImg?.snp_makeConstraints(closure: { (make) -> Void in
+        avatarImg?.snp.makeConstraints({ (make) -> Void in
             make.centerY.equalTo(superview)
-            make.left.equalTo(selectBtn!.snp_right).offset(5)
+            make.left.equalTo(selectBtn!.snp.right).offset(5)
             make.size.equalTo(35)
         })
         //
@@ -351,8 +352,8 @@ class UserSelectCell: UITableViewCell {
         nickNameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         nickNameLbl?.textColor = UIColor.black
         superview.addSubview(nickNameLbl!)
-        nickNameLbl?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(avatarImg!.snp_right).offset(12)
+        nickNameLbl?.snp.makeConstraints({ (make) -> Void in
+            make.left.equalTo(avatarImg!.snp.right).offset(12)
             make.top.equalTo(avatarImg!)
             make.height.equalTo(avatarImg!).multipliedBy(0.5)
         })
@@ -361,7 +362,7 @@ class UserSelectCell: UITableViewCell {
         recentStatusLbL?.textColor = UIColor(white: 0.72, alpha: 1)
         recentStatusLbL?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(recentStatusLbL!)
-        recentStatusLbL?.snp_makeConstraints(closure: { (make) -> Void in
+        recentStatusLbL?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(nickNameLbl!)
             make.bottom.equalTo(avatarImg!)
             make.height.equalTo(17)
@@ -369,7 +370,7 @@ class UserSelectCell: UITableViewCell {
         //
         let rightArrowImg = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         superview.addSubview(rightArrowImg)
-        rightArrowImg.snp_makeConstraints { (make) -> Void in
+        rightArrowImg.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(superview)
             make.size.equalTo(CGSize(width: 9, height: 15))
@@ -378,7 +379,7 @@ class UserSelectCell: UITableViewCell {
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.945, alpha: 1)
         superview .addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(0.5)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -415,7 +416,7 @@ class UserSelectedcell: UICollectionViewCell {
         imageView?.layer.cornerRadius = 17.5
         imageView?.clipsToBounds = true
         self.contentView.addSubview(imageView!)
-        imageView?.snp_makeConstraints(closure: { (make) -> Void in
+        imageView?.snp.makeConstraints({ (make) -> Void in
             make.edges.equalTo(self.contentView)
         })
     }

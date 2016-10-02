@@ -28,16 +28,16 @@ class PersonMineSinglePropertyModifierController: InputableViewController {
     
     override func createSubviews() {
         super.createSubviews()
-        let superview = self.view
-        superview?.backgroundColor = UIColor.white
+        let superview = self.view!
+        superview.backgroundColor = UIColor.white
         contentInput = UITextField()
         inputFields.append(contentInput)
         contentInput.delegate = self
         contentInput.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         contentInput.textColor = UIColor.black
         contentInput.text = initValue
-        superview?.addSubview(contentInput)
-        contentInput.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(contentInput)
+        contentInput.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.right.equalTo(superview).offset(-15)
             make.top.equalTo(superview).offset(22)
@@ -46,8 +46,8 @@ class PersonMineSinglePropertyModifierController: InputableViewController {
         //
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.92, alpha: 1)
-        superview?.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(sepLine)
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(contentInput)
             make.right.equalTo(contentInput)
             make.top.equalTo(superview).offset(52.5)
@@ -71,12 +71,12 @@ class PersonMineSinglePropertyModifierController: InputableViewController {
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
         delegate?.modificationCancelled()
     }
     
     func navRightBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
         delegate?.didModify(contentInput.text, indexPath: self.focusedIndexPath)
     }
 }

@@ -12,7 +12,7 @@ import UIKit
 class InputableViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     var tapper: UITapGestureRecognizer?
     var inputFields: [UIView?] = []
-    var delayTask: (()->())?
+    var delayWorkItem: DispatchWorkItem?
     
     init() {
         super.init(nibName: nil, bundle: nil)

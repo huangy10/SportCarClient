@@ -42,7 +42,7 @@ class PersonMineSettingsAuthController: AuthThreeImagesController, ProgressProto
                 self.pp_hideProgressView()
                 self.showToast(LS("认证请求发送失败"))
         }
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     override func getStaticLabelContentForIndex(_ index: Int) -> String {
@@ -61,12 +61,12 @@ class PersonMineSettingsAuthController: AuthThreeImagesController, ProgressProto
             .config(12, textAlignment: .center, text: LS("头像旁企业标志"))
             .layout { (make) in
                 make.centerX.equalTo(image1)
-                make.top.equalTo(image1.snp_bottom).offset(11)
+                make.top.equalTo(image1.snp.bottom).offset(11)
         }
         let image2 = container.addSubview(UIImageView.self)
             .config(UIImage(named: "privilege_show_on_map"), contentMode: .scaleAspectFit)
             .layout { (make) in
-                make.right.equalTo(image1.snp_left).offset(-78.5)
+                make.right.equalTo(image1.snp.left).offset(-78.5)
                 make.top.equalTo(container).offset(22)
                 make.size.equalTo(37)
         }
@@ -74,13 +74,13 @@ class PersonMineSettingsAuthController: AuthThreeImagesController, ProgressProto
             .config(12, textAlignment: .center, text: LS("在雷达上显示"))
             .layout { (make) in
                 make.centerX.equalTo(image2)
-                make.top.equalTo(image2.snp_bottom).offset(11)
+                make.top.equalTo(image2.snp.bottom).offset(11)
         }
         //
         let image3 = container.addSubview(UIImageView.self)
             .config(UIImage(named: "privilege_allow_start_activity"), contentMode: .scaleAspectFit)
             .layout { (make) in
-                make.left.equalTo(image1.snp_right).offset(78.5)
+                make.left.equalTo(image1.snp.right).offset(78.5)
                 make.top.equalTo(container).offset(22)
                 make.size.equalTo(37)
         }
@@ -88,7 +88,7 @@ class PersonMineSettingsAuthController: AuthThreeImagesController, ProgressProto
             .config(12, textAlignment: .center, text: LS("允许发布活动"))
             .layout { (make) in
                 make.centerX.equalTo(image3)
-                make.top.equalTo(image3.snp_bottom).offset(11)
+                make.top.equalTo(image3.snp.bottom).offset(11)
         }
         return container
     }

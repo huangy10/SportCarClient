@@ -15,7 +15,7 @@ class InlineUserSelectMiniCell: UICollectionViewCell {
     
     var user: User! {
         didSet {
-            imageView.kf_setImageWithURL(user.avatarURL!)
+            imageView.kf.setImage(with: user.avatarURL!)
         }
     }
     
@@ -23,7 +23,7 @@ class InlineUserSelectMiniCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        imageView = self.contentView.addSubview(UIImageView)
+        imageView = self.contentView.addSubview(UIImageView.self)
             .config(nil).layout(17.5, closurer: { (make) in
                 make.edges.equalTo(self.contentView)
             })

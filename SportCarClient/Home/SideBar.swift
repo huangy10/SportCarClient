@@ -54,18 +54,18 @@ class SideBarController: UIViewController {
     } 
     
     func createSubviewsHigherResolution() {
-        let superview = self.view
+        let superview = self.view!
         guard let host = MainManager.sharedManager.hostUser else{
             assertionFailure()
             return
         }
         //
         bgImg = UIImageView(image: UIImage(named: "home_bg"))
-        superview?.addSubview(bgImg!)
-        bgImg?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(bgImg!)
+        bgImg?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview)
             make.height.equalTo(superview)
-            make.width.equalTo(bgImg!.snp_height).multipliedBy(0.75)
+            make.width.equalTo(bgImg!.snp.height).multipliedBy(0.75)
         })
         // 头像
         avatarBtn = LoadingButton(size: CGSize(width: 125, height: 125))
@@ -73,11 +73,11 @@ class SideBarController: UIViewController {
         avatarBtn?.clipsToBounds = true
         avatarBtn?.loadImageFromURL(host.avatarURL!, placeholderImage: UIImage(named: "account_profile_avatar_btn"))
         avatarBtn?.tag = 0
-        superview?.addSubview(avatarBtn!)
-        let screenWidth = superview?.frame.width
-        avatarBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(avatarBtn!)
+        let screenWidth = superview.frame.width
+        avatarBtn?.snp.makeConstraints({ (make) -> Void in
             make.size.equalTo(CGSize(width: 125, height: 125))
-            make.centerX.equalTo(superview.snp_left).offset(screenWidth * 0.45)
+            make.centerX.equalTo(superview.snp.left).offset(screenWidth * 0.45)
             make.top.equalTo(superview).offset(40)
         })
         avatarBtn?.addTarget(self, action: #selector(SideBarController.sideBtnPressed(_:)), for: .touchUpInside)
@@ -87,10 +87,10 @@ class SideBarController: UIViewController {
         nameLbl?.textColor = UIColor.white
         nameLbl?.textAlignment = .center
         nameLbl?.text = host.nickName ?? LS("正在获取数据")
-        superview?.addSubview(nameLbl!)
-        nameLbl?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(nameLbl!)
+        nameLbl?.snp.makeConstraints({ (make) -> Void in
             make.centerX.equalTo(avatarBtn!)
-            make.top.equalTo(avatarBtn!.snp_bottom).offset(11)
+            make.top.equalTo(avatarBtn!.snp.bottom).offset(11)
             make.width.equalTo(superview).multipliedBy(0.8)
             make.height.equalTo(33)
         })
@@ -99,27 +99,27 @@ class SideBarController: UIViewController {
             carNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
             carNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
             carNameLbl?.text = car.name
-            superview?.addSubview(carNameLbl!)
+            superview.addSubview(carNameLbl!)
             let size = carNameLbl?.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
             carNameLbl?.translatesAutoresizingMaskIntoConstraints = true
-            carNameLbl?.snp_makeConstraints(closure: { (make) -> Void in
-                make.left.equalTo(avatarBtn!.snp_centerX).offset((25 - size!.width) / 2)
-                make.top.equalTo(nameLbl!.snp_bottom).offset(10)
+            carNameLbl?.snp.makeConstraints({ (make) -> Void in
+                make.left.equalTo(avatarBtn!.snp.centerX).offset((25 - size!.width) / 2)
+                make.top.equalTo(nameLbl!.snp.bottom).offset(10)
             })
             
             carIcon = UIImageView()
             carIcon?.layer.cornerRadius = 10.5
             carIcon?.clipsToBounds = true
-            carIcon?.kf_setImageWithURL(car.logoURL!)
-            superview?.addSubview(carIcon!)
-            carIcon?.snp_makeConstraints(closure: { (make) -> Void in
-                make.right.equalTo(carNameLbl!.snp_left).offset(-5)
+            carIcon?.kf.setImage(with: car.logoURL!)
+            superview.addSubview(carIcon!)
+            carIcon?.snp.makeConstraints({ (make) -> Void in
+                make.right.equalTo(carNameLbl!.snp.left).offset(-5)
                 make.centerY.equalTo(carNameLbl!)
                 make.size.equalTo(CGSize(width: 21, height: 21))
             })
         }
         // 创建左侧的一列按钮
-        let titles = $.each(["雷达", "活动", "资讯", "动态", "消息"]) { (value) -> () in
+        let titles = $.map(["雷达", "活动", "资讯", "动态", "消息"]) { (value) -> (String) in
             return LS(value)
         }
         var preView: UIView = nameLbl!
@@ -132,8 +132,8 @@ class SideBarController: UIViewController {
             btn.addTarget(self, action: #selector(SideBarController.sideBtnPressed(_:)), for: .touchUpInside)
             btn.tag = i + 1
             btnArray.append(btn)
-            superview?.addSubview(btn)
-            btn.snp_makeConstraints(closure: { (make) -> Void in
+            superview.addSubview(btn)
+            btn.snp.makeConstraints({ (make) -> Void in
                 make.centerY.equalTo(preView).offset({ ()-> Int in
                     if i == 0 {
                         // 第一个页面
@@ -158,8 +158,8 @@ class SideBarController: UIViewController {
         unreadMessagesLbl.layer.cornerRadius = 9
         unreadMessagesLbl.clipsToBounds = true
         unreadMessagesLbl.textAlignment = .center
-        superview?.addSubview(unreadMessagesLbl)
-        unreadMessagesLbl.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(unreadMessagesLbl)
+        unreadMessagesLbl.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(btnArray[4])
             make.left.equalTo(superview).offset(125)
             make.size.equalTo(18)
@@ -168,35 +168,35 @@ class SideBarController: UIViewController {
         let radarBtn = btnArray[0]
         let marker = UIImage(named: "home_slct_marker")
         btnMarker = UIImageView(image: marker)
-        superview?.addSubview(btnMarker!)
-        btnMarker?.snp_makeConstraints(closure: { (make) -> Void in
+        superview.addSubview(btnMarker!)
+        btnMarker?.snp.makeConstraints({ (make) -> Void in
             make.size.equalTo(CGSize(width: 243, height: 36))
             make.centerY.equalTo(radarBtn)
             make.left.equalTo(superview).offset(34)
         })
-        superview?.sendSubview(toBack: btnMarker!)
-        superview?.sendSubview(toBack: bgImg!)
+        superview.sendSubview(toBack: btnMarker!)
+        superview.sendSubview(toBack: bgImg!)
         
         self.selectedBtn = radarBtn
     }
     
     func animateBG() {
         bgImg?.layer.removeAllAnimations()
-        let superview = self.view
-        bgImg?.snp_remakeConstraints(closure: { (make) -> Void in
+        let superview = self.view!
+        bgImg?.snp.remakeConstraints({ (make) -> Void in
             make.left.equalTo(superview)
             make.height.equalTo(superview)
-            make.width.equalTo(bgImg!.snp_height).multipliedBy(0.75)
+            make.width.equalTo(bgImg!.snp.height).multipliedBy(0.75)
         })
-        superview?.updateConstraints()
-        superview?.layoutIfNeeded()
-        bgImg?.snp_remakeConstraints(closure: { (make) -> Void in
+        superview.updateConstraints()
+        superview.layoutIfNeeded()
+        bgImg?.snp.remakeConstraints({ (make) -> Void in
             make.right.equalTo(superview)
             make.height.equalTo(superview)
-            make.width.equalTo(bgImg!.snp_height).multipliedBy(0.75)
+            make.width.equalTo(bgImg!.snp.height).multipliedBy(0.75)
         })
         UIView.animate(withDuration: 10, animations: { () -> Void in
-            superview?.layoutIfNeeded()
+            superview.layoutIfNeeded()
         }) 
     }
 }
@@ -218,14 +218,13 @@ extension SideBarController {
             carNameLbl?.text = car.name
             let size = carNameLbl?.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
             carNameLbl?.translatesAutoresizingMaskIntoConstraints = true
-            carNameLbl?.snp_remakeConstraints(closure: { (make) -> Void in
-                make.left.equalTo(avatarBtn!.snp_centerX).offset((25 - size!.width) / 2)
-                make.top.equalTo(nameLbl!.snp_bottom).offset(10)
+            carNameLbl?.snp.remakeConstraints({ (make) -> Void in
+                make.left.equalTo(avatarBtn!.snp.centerX).offset((25 - size!.width) / 2)
+                make.top.equalTo(nameLbl!.snp.bottom).offset(10)
             })
-
-            carIcon?.kf_setImageWithURL(car.logoURL!)
-            carIcon?.snp_remakeConstraints(closure: { (make) -> Void in
-                make.right.equalTo(carNameLbl!.snp_left).offset(-5)
+            carIcon?.kf.setImage(with: car.logoURL!)
+            carIcon?.snp.remakeConstraints({ (make) -> Void in
+                make.right.equalTo(carNameLbl!.snp.left).offset(-5)
                 make.centerY.equalTo(carNameLbl!)
                 make.size.equalTo(CGSize(width: 21, height: 21))
             })
@@ -265,27 +264,27 @@ extension SideBarController {
     }
     
     func switchBtnMarker(_ nextBtn: UIButton, animated: Bool=true) {
-        btnMarker?.snp_remakeConstraints(closure: { (make) -> Void in
+        btnMarker?.snp.remakeConstraints({ (make) -> Void in
             make.size.equalTo(CGSize(width: 243, height: 36))
             make.centerY.equalTo(selectedBtn!)
-            make.left.equalTo(self.view.snp_right)
+            make.left.equalTo(self.view.snp.right)
         })
-        SpringAnimation.springWithCompletion(0.3, animations: { () -> Void in
+        SpringAnimation.springWithCompletion(duration: 0.3, animations: { () -> Void in
             self.view.layoutIfNeeded()
             }) { (finished) -> Void in
                 self.view.updateConstraints()
-                self.btnMarker?.snp_remakeConstraints(closure: { (make) -> Void in
+                self.btnMarker?.snp.remakeConstraints({ (make) -> Void in
                     make.size.equalTo(CGSize(width: 243, height: 36))
                     make.centerY.equalTo(nextBtn)
-                    make.left.equalTo(self.view.snp_right)
+                    make.left.equalTo(self.view.snp.right)
                 })
                 self.view.layoutIfNeeded()
-                self.btnMarker?.snp_remakeConstraints(closure: { (make) -> Void in
+                self.btnMarker?.snp.remakeConstraints({ (make) -> Void in
                     make.size.equalTo(CGSize(width: 243, height: 36))
                     make.centerY.equalTo(nextBtn)
                     make.left.equalTo(self.view).offset(34)
                 })
-                SpringAnimation.spring(0.5, animations: { () -> Void in
+                SpringAnimation.spring(duration: 0.5, animations: { () -> Void in
                     self.view.layoutIfNeeded()
                 })
         }

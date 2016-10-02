@@ -45,7 +45,7 @@ class CustomDatePicker: UIView {
         header = UIView()
         header.backgroundColor = UIColor(white: 0.92, alpha: 1)
         superview.addSubview(header)
-        header.snp_makeConstraints { (make) -> Void in
+        header.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(superview)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -56,7 +56,7 @@ class CustomDatePicker: UIView {
         pickerTitleLbl.font = UIFont.systemFont(ofSize: 14)
         pickerTitleLbl.textColor = UIColor.black
         header.addSubview(pickerTitleLbl)
-        pickerTitleLbl.snp_makeConstraints { (make) -> Void in
+        pickerTitleLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(header).offset(20)
             make.centerY.equalTo(header)
             make.width.equalTo(30)
@@ -68,7 +68,7 @@ class CustomDatePicker: UIView {
         doneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         doneBtn.addTarget(self, action: #selector(CustomDatePicker.doneBtnPressed), for: .touchUpInside)
         superview.addSubview(doneBtn)
-        doneBtn.snp_makeConstraints { (make) -> Void in
+        doneBtn.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(header).offset(-20)
             make.centerY.equalTo(header)
             make.height.equalTo(header)
@@ -80,10 +80,10 @@ class CustomDatePicker: UIView {
         picker.minimumDate = Date()
         picker.setDate(Date(), animated: true)
         superview.addSubview(picker)
-        picker.snp_makeConstraints { (make) -> Void in
+        picker.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
-            make.top.equalTo(header.snp_bottom)
+            make.top.equalTo(header.snp.bottom)
             make.bottom.equalTo(superview)
         }
     }
@@ -99,7 +99,7 @@ class CustomDatePicker: UIView {
     }
     
     func show(_ date: Date? = nil) {
-        self.snp_remakeConstraints { (make) in
+        self.snp.remakeConstraints { (make) in
             make.right.equalTo(self.superview!)
             make.left.equalTo(self.superview!)
             make.bottom.equalTo(self.superview!)
@@ -108,19 +108,19 @@ class CustomDatePicker: UIView {
         if date != nil {
             picker.setDate(date!, animated: false)
         }
-        SpringAnimation.spring(0.3) { 
+        SpringAnimation.spring(duration: 0.3) { 
             self.superview?.layoutIfNeeded()
         }
     }
     
     func hide() {
-        self.snp_remakeConstraints { (make) in
+        self.snp.remakeConstraints { (make) in
             make.right.equalTo(self.superview!)
             make.left.equalTo(self.superview!)
-            make.top.equalTo(self.superview!.snp_bottom)
+            make.top.equalTo(self.superview!.snp.bottom)
             make.height.equalTo(CustomDatePicker.requiredHegiht)
         }
-        SpringAnimation.spring(0.3) { 
+        SpringAnimation.spring(duration: 0.3) { 
             self.superview?.layoutIfNeeded()
         }
     }

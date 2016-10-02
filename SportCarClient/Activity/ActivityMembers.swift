@@ -32,7 +32,7 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
     weak var delegate: ActivityMemberDelegate!
     var indexToDelete: Int?
     
-    var delayTask: ()->()?
+    var delayWorkItem: DispatchWorkItem?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +58,7 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
     }
     
     func navLeftBtnPressed() {
-        navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -105,7 +105,7 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
         }
         let user = act.applicants[userIndex]
         lp_start()
-        ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: user.ssidString, opType: "kick_out", onSuccess: { (json) in
+        _ = ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: user.ssidString, opType: "kick_out", onSuccess: { (json) in
             self.lp_stop()
             self.delegate.activityMemberControllerDidRemove(user)
             self.act.applicants.remove(at: userIndex)
@@ -147,7 +147,7 @@ class ActivityMemberCell: UITableViewCell {
     }
     
     func configureAvatar() {
-        avatar = contentView.addSubview(UIImageView)
+        avatar = contentView.addSubview(UIImageView.self)
             .toRound(17.5)
             .layout({ (make) in
                 make.left.equalTo(contentView).offset(20)
@@ -158,16 +158,16 @@ class ActivityMemberCell: UITableViewCell {
     }
     
     func configureNameLbl() {
-        nameLbl = contentView.addSubview(UILabel)
+        nameLbl = contentView.addSubview(UILabel.self)
             .config(14, fontWeight: UIFontWeightSemibold, textColor: UIColor.black)
             .layout({ (make) in
-                make.left.equalTo(avatar.snp_right).offset(12)
+                make.left.equalTo(avatar.snp.right).offset(12)
                 make.top.equalTo(avatar)
             })
     }
     
     func configureAvatarCarLbl() {
-        avatarCarLbl = contentView.addSubview(UILabel)
+        avatarCarLbl = contentView.addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0, alpha: 0.58))
             .layout({ (make) in
                 make.left.equalTo(nameLbl)
@@ -176,16 +176,16 @@ class ActivityMemberCell: UITableViewCell {
     }
     
     func configureAuthIcon() {
-        authIcon = contentView.addSubview(UIImageView)
+        authIcon = contentView.addSubview(UIImageView.self)
             .layout({ (make) in
                 make.bottom.equalTo(avatar)
-                make.left.equalTo(avatarCarLbl.snp_right).offset(5)
+                make.left.equalTo(avatarCarLbl.snp.right).offset(5)
                 make.size.equalTo(CGSize(width: 40, height: 15))
             })
     }
     
     func configureKickoutBtn() {
-        kickoutBtn = contentView.addSubview(UIButton)
+        kickoutBtn = contentView.addSubview(UIButton.self)
             .config(self, selector: #selector(kickoutBtnPressed))
             .layout({ (make) in
                 make.centerY.equalTo(contentView)
@@ -207,7 +207,7 @@ class ActivityMemberCell: UITableViewCell {
     func setData(_ username: String, avatarURL: URL, avatarCarName: String?, authed: Bool, showKickoutBtn: Bool) {
         nameLbl.text = username
         avatarCarLbl.text = avatarCarName ?? "奥迪"
-        avatar.kf_setImageWithURL(avatarURL)
+        avatar.kf.setImage(with: avatarURL)
         authIcon.image = authed ? UIImage(named: "auth_status_authed") : UIImage(named: "auth_status_unauthed")
         kickoutBtn.isHidden = !showKickoutBtn
     }

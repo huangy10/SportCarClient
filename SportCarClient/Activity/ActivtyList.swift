@@ -79,7 +79,7 @@ class ActivityHomeMineListController: UICollectionViewController {
         loading = true
         let requester = ActivityRequester.sharedInstance
         let dateThreshold = data.first?.createdAt ?? Date()
-        requester.getMineActivityList(dateThreshold, op_type: "latest", limit: 10, onSuccess: { (json) -> () in
+        _ = requester.getMineActivityList(dateThreshold, op_type: "latest", limit: 10, onSuccess: { (json) -> () in
             var i = 0
             let curIdList = self.data.map({return $0.ssid})
             for data in json!.arrayValue {
@@ -111,7 +111,7 @@ class ActivityHomeMineListController: UICollectionViewController {
         let requester = ActivityRequester.sharedInstance
         let dateThreshold = data.last?.createdAt ?? Date()
 
-        requester.getMineActivityList(dateThreshold, op_type: "more", limit: 10, onSuccess: { (json) -> () in
+        _ = requester.getMineActivityList(dateThreshold, op_type: "more", limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
                 let act: Activity = try! MainManager.sharedManager.getOrCreate(data, overwrite: true)
                 self.data.append(act)
@@ -127,10 +127,10 @@ class ActivityHomeMineListController: UICollectionViewController {
     }
     
     func onActivityManuallyEnded(_ notification: Foundation.Notification) {
-        let name = notification.name
+        let name = notification.name.rawValue
         if name == kActivityManualEndedNotification {
             if let act = (notification as NSNotification).userInfo?[kActivityKey] as? Activity,
-                let targetIndex = data.findIndex({ $0.ssid == act.ssid}) {
+                let targetIndex = data.findIndex(callback: { $0.ssid == act.ssid}) {
                 // reload the specific cell
                 collectionView?.reloadItems(at: [IndexPath(row: targetIndex, section: 0)])
             }

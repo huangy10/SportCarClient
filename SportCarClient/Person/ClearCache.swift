@@ -22,7 +22,7 @@ class ClearCacheController: PresentTemplateViewController {
         // 由于这个页面只能由mine setting调出，而mine settng出现时，缓存描述符已经可用
         cacheSizeInfoLabl.text = LS("清除全部缓存") + PersonMineSettingsDataSource.sharedDataSource.cacheSizeDes! + "?"
         container.addSubview(cacheSizeInfoLabl)
-        cacheSizeInfoLabl.snp_makeConstraints { (make) -> Void in
+        cacheSizeInfoLabl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
             make.top.equalTo(sepLine).offset(45)
         }
@@ -31,15 +31,15 @@ class ClearCacheController: PresentTemplateViewController {
         clearBtn.setImage(UIImage(named: "clear_cache_confirm"), for: UIControlState())
         clearBtn.addTarget(self, action: #selector(ClearCacheController.clearBtnPressed), for: .touchUpInside)
         container.addSubview(clearBtn)
-        clearBtn.snp_makeConstraints { (make) -> Void in
+        clearBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)
-            make.top.equalTo(cacheSizeInfoLabl.snp_bottom).offset(45)
+            make.top.equalTo(cacheSizeInfoLabl.snp.bottom).offset(45)
             make.size.equalTo(CGSize(width: 105, height: 50))
         }
     }
     
     func clearBtnPressed() {
-        PersonMineSettingsDataSource.sharedDataSource.clearCacheFolder()
+        _ = PersonMineSettingsDataSource.sharedDataSource.clearCacheFolder()
         cacheSizeInfoLabl.text = LS("缓存已清除")
     }
 }

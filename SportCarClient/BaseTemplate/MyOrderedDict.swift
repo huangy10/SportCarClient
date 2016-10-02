@@ -32,7 +32,7 @@ class MyOrderedDict<Key: Hashable, Value> {
             
             if newValue == nil {
                 _dict.removeValue(forKey: key)
-                _keys.remove(key)
+                _ = _keys.remove(value: key)
                 return
             }
             

@@ -10,7 +10,9 @@ import UIKit
 import SwiftyJSON
 import Dollar
 
-class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, BMKLocationServiceDelegate, BMKMapViewDelegate, SportCarSelectDetailProtocol, SportCarBrandOnlineSelectorDelegate, LoadingProtocol {
+class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, SportCarSelectDetailProtocol, SportCarBrandOnlineSelectorDelegate, LoadingProtocol {
+    internal var delayWorkItem: DispatchWorkItem?
+
     weak var homeDelegate: HomeDelegate?
     // 显示的用户的信息
     var data: PersonDataSource!
@@ -27,7 +29,6 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     var isRoot: Bool = false
     
     var homeBtn: BackToHomeBtn!
-    var delayTask: ()->()?
     
     var needReloadUserInfo: Bool = false
     
@@ -63,7 +64,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         loadAccountInfo()
         
         // 第三个响应：开始获取的动态列表，每次获取十个
-        AccountRequester2.sharedInstance.getStatusListSimplified(data.user.ssidString, carID: nil, dateThreshold: Date(), limit: 10, onSuccess: { (json) -> () in
+        _ = AccountRequester2.sharedInstance.getStatusListSimplified(data.user.ssidString, carID: nil, dateThreshold: Date(), limit: 10, onSuccess: { (json) -> () in
             //
             self.jsonDataHandler(json!, container: &self.data.statusList)
             self.collectionView?.reloadData()
@@ -115,8 +116,8 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     func loadAccountInfo() {
         let requester = AccountRequester2.sharedInstance
         // 这个请求是保证当前用户的数据是最新的，而hostuser中的数据可以暂时先直接拿来展示
-        requester.getProfileDataFor(data.user.ssidString, onSuccess: { (json) -> () in
-            let hostUser = self.data.user
+        _ = requester.getProfileDataFor(data.user.ssidString, onSuccess: { (json) -> () in
+            let hostUser = self.data.user!
             try! hostUser.loadDataFromJSON(json!, detailLevel: 1)
             self.header.user = hostUser
             self.header.loadDataAndUpdateUI()
@@ -124,7 +125,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             self.showToast(LS("网络访问错误:\(code)"))
         }
         // 获取认证车辆的列表
-        requester.getAuthedCarsList(data.user.ssidString, onSuccess: { (json) -> () in
+        _ = requester.getAuthedCarsList(data.user.ssidString, onSuccess: { (json) -> () in
             self.data.handleAuthedCarsJSONResponse(json!, user: self.data.user)
             self.data.selectedCar = self.data.cars.first()
             self.carsViewList.cars = self.data.cars
@@ -161,33 +162,33 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     }
     
     func createSubviews() {
-        let superview = self.view
+        let superview = self.view!
         collectionView?.backgroundColor = kGeneralTableViewBGColor
         collectionView?.alwaysBounceVertical = true
         //
-        let screenWidth = superview?.frame.width
+        let screenWidth = superview.frame.width
         let authCarListHeight: CGFloat = 62
         header = getPersonInfoPanel()
         collectionView?.addSubview(header)
-        header.frame = CGRect(x: 0, y: -totalHeaderHeight, width: screenWidth!, height: totalHeaderHeight - authCarListHeight)
+        header.frame = CGRect(x: 0, y: -totalHeaderHeight, width: screenWidth, height: totalHeaderHeight - authCarListHeight)
         header.user = data.user
         //
         carsViewList = SportsCarViewListController()
         carsViewList.showAddBtn = carsViewListShowAddBtn
         carsViewList.delegate = self
-        let carsView = carsViewList.view
-        collectionView?.addSubview(carsView!)
-        carsView.snp_makeConstraints { (make) -> Void in
+        let carsView = carsViewList.view!
+        collectionView?.addSubview(carsView)
+        carsView.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
-            make.top.equalTo(header.snp_bottom)
+            make.top.equalTo(header.snp.bottom)
             make.height.equalTo(authCarListHeight)
         }
         //
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.72, alpha: 1)
-        carsView?.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        carsView.addSubview(sepLine)
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(carsView)
             make.right.equalTo(carsView)
             make.top.equalTo(carsView)
@@ -196,8 +197,8 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         //
         let sepLine2 = UIView()
         sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
-        carsView?.addSubview(sepLine2)
-        sepLine2.snp_makeConstraints { (make) -> Void in
+        carsView.addSubview(sepLine2)
+        sepLine2.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(carsView)
             make.right.equalTo(carsView)
             make.bottom.equalTo(carsView)
@@ -229,7 +230,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         
         let setting = UIButton().config(self, selector: #selector(navRightBtnPressed))
             .setFrame(CGRect(x: 0, y: 0, width: 44, height: 44))
-        setting.addSubview(UIImageView).config(UIImage(named: "person_setting"), contentMode: .scaleAspectFit)
+        setting.addSubview(UIImageView.self).config(UIImage(named: "person_setting"), contentMode: .scaleAspectFit)
             .layout { (make) in
                 make.centerY.equalTo(setting)
                 make.right.equalTo(setting)
@@ -248,7 +249,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         if homeDelegate != nil {
             homeDelegate?.backToHome(nil)
         }else {
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         }
     }
     
@@ -287,16 +288,18 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
                     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PersonStatusListCell.reuseIdentifier, for: indexPath) as! PersonStatusListCell
                     let status = data.statusList[(indexPath as NSIndexPath).row - 1]
                     let statusImages = status.image
-                    let statusCover = statusImages?.split(";").first()
-                    cell.cover.kf_setImageWithURL(SFURL(statusCover!)!)
+                    let statusCover = statusImages?.split(delimiter: ";").first()
+//                    cell.cover.kf_setImageWithURL(SFURL(statusCover!)!)
+                    cell.cover.kf.setImage(with: SFURL(statusCover!)!)
                     return cell
                 }
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PersonStatusListCell.reuseIdentifier, for: indexPath) as! PersonStatusListCell
                 let status = data.statusList[(indexPath as NSIndexPath).row]
                 let statusImages = status.image
-                let statusCover = statusImages?.split(";").first()
-                cell.cover.kf_setImageWithURL(SFURL(statusCover!)!)
+                let statusCover = statusImages?.split(delimiter: ";").first()
+//                cell.cover.kf_setImageWithURL(SFURL(statusCover!)!)
+                cell.cover.kf.setImage(with: SFURL(statusCover!)!)
                 return cell
             }
         }else {
@@ -312,8 +315,9 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
                 let statusList = data.statusDict[data.selectedCar!.ssidString]!
                 let status = statusList[(indexPath as NSIndexPath).row]
                 let statusImages = status.image
-                let statusCover = statusImages?.split(";").first()
-                cell.cover.kf_setImageWithURL(SFURL(statusCover!)!)
+                let statusCover = statusImages?.split(delimiter: ";").first()
+//                cell.cover.kf_setImageWithURL(SFURL(statusCover!)!)
+                cell.cover.kf.setImage(with: SFURL(statusCover!)!)
                 return cell
             }
         }
@@ -394,7 +398,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
 }
 
 // MARK: - About map
-extension PersonBasicController {
+extension PersonBasicController: BMKLocationServiceDelegate, BMKMapViewDelegate {
     func didUpdate(_ userLocation: BMKUserLocation!) {
         if self.userLocation == nil {
             userAnno = BMKPointAnnotation()
@@ -496,7 +500,7 @@ extension PersonBasicController {
     func sportCarBrandOnlineSelectorDidSelect(_ manufacture: String, carName: String, subName: String) {
         dismiss(animated: true, completion: nil)
         lp_start()
-        SportCarRequester.sharedInstance.querySportCarWith(manufacture, carName: carName, subName: subName, onSuccess: { (json) in
+        _ = SportCarRequester.sharedInstance.querySportCarWith(manufacture, carName: carName, subName: subName, onSuccess: { (json) in
             self.lp_stop()
             guard let data = json else {
                 return
@@ -563,7 +567,7 @@ extension PersonBasicController {
                 dateThreshold = targetStatusList!.last!.createdAt!
             }
             let statusRequester = AccountRequester2.sharedInstance
-            statusRequester.getStatusListSimplified(data.user.ssidString, carID: selectedCarID, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
+            _ = statusRequester.getStatusListSimplified(data.user.ssidString, carID: selectedCarID, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
                 self.jsonDataHandler(json!, container: &(self.data.statusDict[selectedCarID]!))
                 self.collectionView?.reloadData()
                 }, onError: { (code) -> () in
@@ -575,7 +579,7 @@ extension PersonBasicController {
                 dateThreshold = targetStatusList.last!.createdAt!
             }
             let statusRequester = AccountRequester2.sharedInstance
-            statusRequester.getStatusListSimplified(data.user.ssidString, carID: nil, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
+            _ = statusRequester.getStatusListSimplified(data.user.ssidString, carID: nil, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
                 self.jsonDataHandler(json!, container: &(self.data.statusList))
                 self.collectionView?.reloadData()
                 }, onError: { (code) -> () in
@@ -608,7 +612,7 @@ extension PersonBasicController {
     }
     
     func onSportCarDeleted(_ notification: Foundation.Notification) {
-        if notification.name == kCarDeletedNotification {
+        if notification.name.rawValue == kCarDeletedNotification {
             if let car = (notification as NSNotification).userInfo?[kSportcarKey] as? SportCar{
                 data.deleteCar(car)
                 data.selectedCar = nil
@@ -655,7 +659,7 @@ class PersonAddStatusCell: UICollectionViewCell {
     
     func createSubviews() {
         self.contentView.clipsToBounds = true
-        self.contentView.addSubview(UIImageView)
+        self.contentView.addSubview(UIImageView.self)
             .config(UIImage(named: "release_status_in_person"), contentMode: .scaleAspectFill)
             .layout { (make) in
                 make.edges.equalTo(self.contentView)
@@ -681,7 +685,7 @@ class PersonStatusListCell: UICollectionViewCell {
         cover.contentMode = .scaleAspectFill
         cover.clipsToBounds = true
         self.contentView.addSubview(cover)
-        cover.snp_makeConstraints { (make) -> Void in
+        cover.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(self.contentView)
         }
     }

@@ -62,7 +62,7 @@ class ActivityReleaseCell: UITableViewCell {
         staticLbl.textColor = UIColor(white: 0.72, alpha: 1)
         staticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(staticLbl)
-        staticLbl.snp_makeConstraints { (make) -> Void in
+        staticLbl.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(superview)
             make.left.equalTo(superview).offset(15)
         }
@@ -70,7 +70,7 @@ class ActivityReleaseCell: UITableViewCell {
         arrowIcon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         superview.addSubview(arrowIcon)
         arrowIcon.contentMode = .scaleAspectFit
-        arrowIcon.snp_makeConstraints { (make) -> Void in
+        arrowIcon.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(superview)
             make.size.equalTo(15)
@@ -78,10 +78,10 @@ class ActivityReleaseCell: UITableViewCell {
         //
         wrapper = UIScrollView()
         superview.addSubview(wrapper)
-        wrapper.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(arrowIcon.snp_left).offset(-15)
+        wrapper.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(arrowIcon.snp.left).offset(-15)
             make.centerY.equalTo(superview)
-            make.left.equalTo(staticLbl.snp_right)
+            make.left.equalTo(staticLbl.snp.right)
             make.height.equalTo(staticLbl)
         }
         wrapper.isUserInteractionEnabled = false
@@ -91,7 +91,7 @@ class ActivityReleaseCell: UITableViewCell {
         infoInput.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         wrapper.addSubview(infoInput)
         infoInput.textAlignment = .right
-        infoInput.snp_makeConstraints { (make) -> Void in
+        infoInput.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(wrapper)
             make.size.equalTo(wrapper)
         }
@@ -100,15 +100,15 @@ class ActivityReleaseCell: UITableViewCell {
         staticInfoLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         staticInfoLabel.textColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(staticInfoLabel)
-        staticInfoLabel.snp_makeConstraints { (make) -> Void in
+        staticInfoLabel.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(wrapper)
         }
         //
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.933, alpha: 1)
         superview.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(staticLbl.snp_bottom).offset(11)
+        sepLine.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(staticLbl.snp.bottom).offset(11)
             make.right.equalTo(superview).offset(-15)
             make.left.equalTo(superview).offset(15)
             make.height.equalTo(0.5)

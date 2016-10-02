@@ -31,14 +31,14 @@ class BlacklistController: UserSelectController {
     }
     
     override func navLeftBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     override func createSubviews() {
         super.createSubviews()
         //
-        let superview = self.view
-        searchBar?.snp_updateConstraints(closure: { (make) -> Void in
+        let superview = self.view!
+        searchBar?.snp.updateConstraints({ (make) -> Void in
             make.right.equalTo(superview).offset(0)
         })
         //
@@ -49,7 +49,7 @@ class BlacklistController: UserSelectController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserSelectCellUnselectable
         let user = users[(indexPath as NSIndexPath).row]
-        cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
+        cell.avatarImg?.kf.setImage(with: user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
         return cell

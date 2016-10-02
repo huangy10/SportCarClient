@@ -56,8 +56,10 @@ class ShinyButton: UIView {
         
         context?.saveGState()
         let path = CGMutablePath()
-        CGPathMoveToPoint(path, nil, prePoint.x, prePoint.y)
-        CGPathAddLineToPoint(path, nil, curPoint.x, curPoint.y)
+        path.move(to: CGPoint(x: prePoint.x, y: prePoint.y))
+        path.addLine(to: CGPoint(x: curPoint.x, y: curPoint.y))
+//        CGPathMoveToPoint(path, nil, prePoint.x, prePoint.y)
+//        CGPathAddLineToPoint(path, nil, curPoint.x, curPoint.y)
         context?.setStrokeColor(UIColor.green.cgColor)
         context?.setLineWidth(self.borderWidth)
         context?.addPath(path)

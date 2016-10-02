@@ -52,21 +52,21 @@ class SportCarSelectParamCell: UITableViewCell {
         
         let superview = self.contentView
         // 添加约束
-        content?.snp_makeConstraints(closure: { (make) -> Void in
+        content?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview).offset(-38)
             make.top.equalTo(superview).offset(22)
             make.height.equalTo(20)
             make.width.equalTo(self.contentView).multipliedBy(0.5)
         })
         //
-        header?.snp_makeConstraints(closure: { (make) -> Void in
+        header?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.bottom.equalTo(content!)
             make.height.equalTo(17)
             make.width.equalTo(self.contentView).multipliedBy(0.4)
         })
         //
-//        icon.snp_makeConstraints { (make) -> Void in
+//        icon.snp.makeConstraints { (make) -> Void in
 //            make.centerY.equalTo(content!)
 //            make.right.equalTo(self.contentView).offset(-15)
 //            make.size.equalTo(CGSize(width: 9, height: 15))
@@ -84,7 +84,7 @@ class SportCarSelectParamEditableCell: SportCarSelectParamCell {
         contentInput.textColor = UIColor.black
         contentInput.textAlignment = .right
         self.contentView.addSubview(contentInput)
-        contentInput.snp_makeConstraints { (make) -> Void in
+        contentInput.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(content!)
         }
         content?.text = ""
@@ -141,7 +141,7 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
     }
     
     func backBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     /**
@@ -150,11 +150,11 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
     func nextBtnPressed() {
         contentInput?.resignFirstResponder()
         let signature: String = contentInput?.text ?? ""
-        SportCarRequester.sharedInstance.postToFollow(signature, carId: carId!, onSuccess: { (json) -> () in
+        _ = SportCarRequester.sharedInstance.postToFollow(signature, carId: carId!, onSuccess: { (json) -> () in
             // add this car to current users
             let car: SportCar = try! MainManager.sharedManager.getOrCreate(SportCar.reorgnaizeJSON(json!))
             if AppManager.sharedAppManager.state != AppManagerState.loginRegister {
-                self.navigationController?.popViewController(animated: true)
+                _ = self.navigationController?.popViewController(animated: true)
             } else {
                 let app = AppManager.sharedAppManager
                 app.guideToContent()
@@ -263,7 +263,7 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
     
     func sportCarBrandOnlineSelectorDidSelect(_ manufacture: String, carName: String, subName: String) {
         dismiss(animated: true, completion: nil)
-        SportCarRequester.sharedInstance.querySportCarWith(manufacture, carName: carName, subName: subName, onSuccess: { (json) in
+        _ = SportCarRequester.sharedInstance.querySportCarWith(manufacture, carName: carName, subName: subName, onSuccess: { (json) in
             guard let data = json else {
                 return
             }

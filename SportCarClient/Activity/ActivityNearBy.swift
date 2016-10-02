@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 
 
-class ActivityNearByController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate, CityElementSelectDelegate {
+class ActivityNearByController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, CityElementSelectDelegate {
     
     weak var home: RadarHomeController!
     
@@ -73,19 +73,19 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func createSubviews() {
-        let superview = self.view
-        superview?.backgroundColor = UIColor.black
+        let superview = self.view!
+        superview.backgroundColor = UIColor.black
         //
         map = BMKMapView()
-        superview?.addSubview(map)
-        map.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(map)
+        map.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         //
         pageCount = UIPageControl()
         pageCount.numberOfPages = 1
-        superview?.addSubview(pageCount)
-        pageCount.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(pageCount)
+        pageCount.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview).offset(5)
             make.centerX.equalTo(superview)
         }
@@ -100,8 +100,8 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
         actsBoard.dataSource = self
         let sideInset = (UIScreen.main.bounds.width - 170) / 2
         actsBoard.contentInset = UIEdgeInsetsMake(0, sideInset, 20, sideInset)
-        superview?.addSubview(actsBoard)
-        actsBoard.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(actsBoard)
+        actsBoard.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -112,7 +112,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func configureCityFilter() {
-        cityFilterBtn = view.addSubview(UIButton)
+        cityFilterBtn = view.addSubview(UIButton.self)
             .config(self, selector: #selector(cityFilterBtnPressed)).config(UIColor.white)
             .addShadow()
             .toRound(20)
@@ -121,18 +121,18 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
                 make.top.equalTo(view).offset(13)
                 make.size.equalTo(CGSize(width: 120, height: 40))
             })
-        let icon = cityFilterBtn.addSubview(UIImageView)
+        let icon = cityFilterBtn.addSubview(UIImageView.self)
             .config(UIImage(named: "down_arrow_black"))
             .layout { (make) in
                 make.centerY.equalTo(cityFilterBtn)
                 make.right.equalTo(cityFilterBtn).offset(-20)
                 make.size.equalTo(CGSize(width: 13, height: 9))
         }
-        cityFilterLbl = cityFilterBtn.addSubview(UILabel)
+        cityFilterLbl = cityFilterBtn.addSubview(UILabel.self)
             .config(14, textColor: UIColor(white: 0, alpha: 0.87), text: LS("全国"))
             .layout({ (make) in
                 make.left.equalTo(cityFilterBtn).offset(20)
-                make.right.equalTo(icon.snp_left).offset(-10)
+                make.right.equalTo(icon.snp.left).offset(-10)
                 make.centerY.equalTo(cityFilterBtn)
             })
     }
@@ -241,7 +241,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func onActivityManuallyEnded(_ notification: Foundation.Notification) {
-        let name = notification.name
+        let name = notification.name.rawValue
         if name == kActivityManualEndedNotification {
             if let act = (notification as NSNotification).userInfo?[kActivityKey] as? Activity {
                 let originLen = acts.count
@@ -267,7 +267,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
 }
 
 // MARK: - About map
-extension ActivityNearByController {
+extension ActivityNearByController: BMKMapViewDelegate, BMKLocationServiceDelegate {
     
     /**
     当前focus的活动发生了变化
@@ -327,7 +327,7 @@ extension ActivityNearByController {
             return
         }
         
-        ActivityRequester.sharedInstance.getNearByActivities(userLoc, queryDistance: 10000, cityLimit: cityFilterLbl.text!, skip: 0, limit: 10, onSuccess: { (json) -> () in
+        _ = ActivityRequester.sharedInstance.getNearByActivities(userLoc, queryDistance: 10000, cityLimit: cityFilterLbl.text!, skip: 0, limit: 10, onSuccess: { (json) -> () in
             self.acts.removeAll()
             for data in json!.arrayValue {
                 let act: Activity = try! MainManager.sharedManager.getOrCreate(data)

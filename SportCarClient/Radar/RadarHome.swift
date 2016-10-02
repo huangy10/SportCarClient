@@ -77,11 +77,11 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             })
         titleClubBtn.tag = 1
         let defaultFont = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        titleClubLbl = titleClubBtn.addSubview(UILabel)
-            .config(15, textWeight: UIFontWeightUltraLight, textColor: kTextGray, textAlignment: .center, text: LS("俱乐部"), fontWeight: UIFontWeightBold)
+        titleClubLbl = titleClubBtn.addSubview(UILabel.self)
+            .config(15, fontWeight: UIFontWeightBold, textColor: kTextGray, textAlignment: .center, text: LS("俱乐部"), multiLine: false)
             .layout({ (make) in
                 make.center.equalTo(titleClubBtn)
-                make.size.equalTo(LS(" 俱乐部 ").sizeWithFont(defaultFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
+                make.size.equalTo(LS(" 俱乐部 ").sizeWithFont(defaultFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
             })
         
         let titleDriverBtn = container.addSubview(UIButton.self)
@@ -92,14 +92,14 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
                 make.size.equalTo(CGSize(width: 70, height: 30))
             })
         titleDriverBtn.tag = 0
-        titleDriverLbl = titleDriverBtn.addSubview(UILabel)
-            .config(15, textColor: kTextBlack, textAlignment: .center, text: LS("车主"), fontWeight: UIFontWeightBold)
+        titleDriverLbl = titleDriverBtn.addSubview(UILabel.self)
+            .config(15, fontWeight: UIFontWeightBold, textColor: kTextBlack, textAlignment: .center, text: LS("车主"))
             .layout({ (make) in
                 make.center.equalTo(titleDriverBtn)
-                make.size.equalTo(LS(" 车主 ").sizeWithFont(defaultFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
+                make.size.equalTo(LS(" 车主 ").sizeWithFont(defaultFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
             })
         
-        let titleActBtn = container.addSubview(UIButton)
+        let titleActBtn = container.addSubview(UIButton.self)
             .config(self, selector: #selector(navTitleBtnPressed(_:)))
             .layout({ (make) in
                 make.centerY.equalTo(container)
@@ -107,11 +107,11 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
                 make.size.equalTo(CGSize(width: 70, height: 30))
             })
         titleActBtn.tag = 2
-        titleActLbl = titleActBtn.addSubview(UILabel)
-            .config(15, textColor: kTextGray, textAlignment: .center, text: LS("活动"), fontWeight: UIFontWeightBold)
+        titleActLbl = titleActBtn.addSubview(UILabel.self)
+            .config(15, fontWeight: UIFontWeightBold, textColor: kTextGray, textAlignment: .center, text: LS("活动"))
             .layout({ (make) in
                 make.center.equalTo(titleActBtn)
-                make.size.equalTo(LS(" 活动 ").sizeWithFont(defaultFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
+                make.size.equalTo(LS(" 活动 ").sizeWithFont(defaultFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
             })
         //
         titleBtnIcon = UIImageView(image: UIImage(named: "nav_title_btn_icon"))
@@ -131,12 +131,12 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         if homeDelegate != nil {
             homeDelegate?.backToHome(nil)
         }else {
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         }
     }
     
     func navRightBtnPressed() {
-        let superview = self.view
+        let superview = self.view!
         let trans: CATransform3D
         if navRightBtn.tag == 1 {
             releaseBoard.snp.remakeConstraints { (make) -> Void in
@@ -171,10 +171,10 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         controllers[curTag].viewWillDisappear(true)
         
         let btns = [titleDriverLbl, titleClubLbl, titleActLbl]
-        let targetLbl = btns[sender.tag]
-        let sourceLbl = btns[curTag]
-        targetLbl?.textColor = kTextBlack
-        sourceLbl?.textColor = kTextGray
+        let targetLbl = btns[sender.tag]!
+        let sourceLbl = btns[curTag]!
+        targetLbl.textColor = kTextBlack
+        sourceLbl.textColor = kTextGray
         titleBtnIcon.snp.remakeConstraints { (make) in
             make.bottom.equalTo(titleBtnIcon.superview!)
             make.left.equalTo(targetLbl).offset(-3)
@@ -209,15 +209,15 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     }
     
     func createSubviews(){
-        let superview = self.view
-        superview?.backgroundColor = UIColor.white
+        let superview = self.view!
+        superview.backgroundColor = UIColor.white
         //
         let width = self.view.frame.width
         board = UIScrollView()
         board.isPagingEnabled = true
         board.isScrollEnabled = false
         board.contentSize = CGSize(width: width * 2, height: 0)
-        superview?.addSubview(board)
+        superview.addSubview(board)
         board.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
@@ -257,9 +257,9 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
     }
     
     func createReleaseBoard() {
-        var superview = self.view
+        var superview = self.view!
         
-        releaseBoard = superview?.addSubview(UIView).config(UIColor.white)
+        releaseBoard = superview.addSubview(UIView.self).config(UIColor.white)
             .addShadow().layout({ (make) in
                 make.bottom.equalTo(superview.snp.top).offset(-10)
                 make.right.equalTo(superview)
@@ -273,7 +273,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         releaseStatus.setTitle(LS("发布动态"), for: UIControlState())
         releaseStatus.setTitleColor(UIColor.black, for: UIControlState())
         releaseStatus.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        superview?.addSubview(releaseStatus)
+        superview.addSubview(releaseStatus)
         releaseStatus.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.top.equalTo(superview)
@@ -281,7 +281,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             make.width.equalTo(90)
         }
         let releaseStatusIcon = UIImageView(image: UIImage(named: "radar_new_status"))
-        superview?.addSubview(releaseStatusIcon)
+        superview.addSubview(releaseStatusIcon)
         releaseStatusIcon.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(releaseStatus)
             make.right.equalTo(releaseStatus.snp.left)
@@ -289,7 +289,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         }
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.945, alpha: 1)
-        superview?.addSubview(sepLine)
+        superview.addSubview(sepLine)
         sepLine.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
@@ -302,7 +302,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         addChat.setTitleColor(UIColor.black, for: UIControlState())
         addChat.setTitle(LS("新建聊天"), for: UIControlState())
         addChat.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        superview?.addSubview(addChat)
+        superview.addSubview(addChat)
         addChat.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.top.equalTo(releaseStatus.snp.bottom)
@@ -310,7 +310,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             make.height.equalTo(releaseStatus)
         }
         let addChatIcon = UIImageView(image: UIImage(named: "radar_new_chat"))
-        superview?.addSubview(addChatIcon)
+        superview.addSubview(addChatIcon)
         addChatIcon.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(addChat)
             make.right.equalTo(addChat.snp.left)
@@ -318,7 +318,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         }
         let sepLine2 = UIView()
         sepLine2.backgroundColor = UIColor(white: 0.945, alpha: 1)
-        superview?.addSubview(sepLine2)
+        superview.addSubview(sepLine2)
         sepLine2.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.left.equalTo(superview)
@@ -331,7 +331,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         startActivity.setTitle(LS("发起活动"), for: UIControlState())
         startActivity.setTitleColor(UIColor.black, for: UIControlState())
         startActivity.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        superview?.addSubview(startActivity)
+        superview.addSubview(startActivity)
         startActivity.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
             make.top.equalTo(addChat.snp.bottom)
@@ -339,7 +339,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             make.bottom.equalTo(superview)
         }
         let startActivityIcon = UIImageView(image: UIImage(named: "radar_new_activity"))
-        superview?.addSubview(startActivityIcon)
+        superview.addSubview(startActivityIcon)
         startActivityIcon.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(startActivity.snp.left)
             make.centerY.equalTo(startActivity)
@@ -395,7 +395,7 @@ extension RadarHomeController {
     
     func groupChatSetupControllerDidSuccessCreatingClub(_ newClub: Club) {
         // 群聊创建成功，打开聊天窗口
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
         // Ensure that the datasource is started
         let chatRoom = ChatRoomController()
         chatRoom.chatCreated = false

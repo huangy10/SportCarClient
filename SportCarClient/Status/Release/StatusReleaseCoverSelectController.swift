@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 import SnapKit
+import Dollar
 
 
 protocol StatusReleasePhotoSelectDelegate: class {
@@ -77,11 +78,11 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
     }
     
     func createSubviews() {
-        let superview = self.view
+        let superview = self.view!
         let bottomBar = UIView()
         bottomBar.backgroundColor = UIColor(white: 0.92, alpha: 1)
-        superview?.addSubview(bottomBar)
-        bottomBar.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(bottomBar)
+        bottomBar.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview)
             make.right.equalTo(superview)
             make.left.equalTo(superview)
@@ -94,7 +95,7 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
         cancelBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         cancelBtn.addTarget(self, action: #selector(StatusReleasePhotoSelectController.bottomBtnPressed), for: .touchUpInside)
         bottomBar.addSubview(cancelBtn)
-        cancelBtn.snp_makeConstraints { (make) -> Void in
+        cancelBtn.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(bottomBar)
             make.height.equalTo(bottomBar)
             make.width.equalTo(72)
@@ -143,16 +144,12 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popToRootViewController(animated: true)
+        _ = self.navigationController?.popToRootViewController(animated: true)
     }
     
     func bottomBtnPressed() {
         delegate?.photeSelectCancelled()
     }
-}
-
-
-extension StatusReleasePhotoSelectController {
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -190,7 +187,7 @@ extension StatusReleasePhotoSelectController {
         let row = (indexPath as NSIndexPath).row
         let cell = collectionView.cellForItem(at: indexPath) as! StatusReleasePhotoSelectCell
         if selectedImageRow.contains(row) {
-            selectedImageRow.remove(row)
+            selectedImageRow = $.remove(selectedImageRow, value: row)
             cell.setSelected(false, animtated: true)
         }else {
             // 检查是否已经到了选择上限
@@ -251,7 +248,7 @@ class StatusReleasePhotoSelectCell: UICollectionViewCell {
         contentView.addSubview(imageView!)
         imageView?.contentMode = .scaleAspectFill
         imageView?.clipsToBounds = true
-        imageView?.snp_makeConstraints(closure: { (make) -> Void in
+        imageView?.snp.makeConstraints({ (make) -> Void in
             make.edges.equalTo(contentView)
         })
         //
@@ -260,7 +257,7 @@ class StatusReleasePhotoSelectCell: UICollectionViewCell {
         selectBtn?.setImage(UIImage(named: "status_photo_unselected_small"), for: UIControlState())
         selectBtn?.setImage(UIImage(named: "status_photo_selected_small"), for: .selected)
         contentView.addSubview(selectBtn!)
-        selectBtn?.snp_makeConstraints(closure: { (make) -> Void in
+        selectBtn?.snp.makeConstraints({ (make) -> Void in
             make.size.equalTo(16)
             make.right.equalTo(contentView).offset(-2)
             make.top.equalTo(contentView).offset(2)

@@ -105,14 +105,14 @@ class ChatAudioRecorder: NSObject, AVAudioRecorderDelegate {
     
     func getCachedAudioDirectory() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
-        let cacheDirectory: AnyObject = paths[0] as AnyObject
+        let cacheDirectory = paths[0] as NSString
         let targetFolder = cacheDirectory.appendingPathComponent("record_audio_cache")
         do {
             if !FileManager.default.fileExists(atPath: targetFolder) {
                 try FileManager.default.createDirectory(atPath: targetFolder, withIntermediateDirectories: false, attributes: nil)
             }
         }catch{
-            return cacheDirectory as! String
+            return cacheDirectory as String
         }
         return targetFolder
     }

@@ -31,10 +31,10 @@ class BackToHomeBtn: UIButton {
 //        imageView?.contentMode = .ScaleAspectFit
         clipsToBounds = false
         
-        messageMark = self.addSubview(UIView).config(kHighlightedRedTextColor)
+        messageMark = self.addSubview(UIView.self).config(kHighlightedRedTextColor)
             .layout({ (make) in
-                make.centerX.equalTo(self.snp_right)
-                make.centerY.equalTo(self.snp_top)
+                make.centerX.equalTo(self.snp.right)
+                make.centerY.equalTo(self.snp.top)
                 make.size.equalTo(8)
             }).toRound(4)
         // check the unread status

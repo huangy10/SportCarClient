@@ -11,8 +11,7 @@ import Kingfisher
 //import Haneke
 
 class ImageViewer: UIViewController, LoadingProtocol {
-    
-    var delayTask: ()->()?
+    internal var delayWorkItem: DispatchWorkItem?
     // MARK: - Properties
     let kMinMaskViewAlpha: CGFloat = 0.3
     let kMaxImageScale: CGFloat = 2.5
@@ -112,7 +111,8 @@ class ImageViewer: UIViewController, LoadingProtocol {
         
         if let highQualityImageUrl = highQualityImageUrl {
 //            imageView.hnk_setImageFromURL(highQualityImageUrl, placeholder: senderView.image, format: nil, failure: nil, success: nil)
-            imageView.kf_setImageWithURL(highQualityImageUrl, placeholderImage: senderView.image)
+//            imageView.kf_setImageWithURL(highQualityImageUrl, placeholderImage: senderView.image)
+            imageView.kf.setImage(with: highQualityImageUrl, placeholder: senderView.image, options: nil, progressBlock: nil, completionHandler: nil)
         } else {
             imageView.image = senderView.image
         }

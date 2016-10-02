@@ -108,7 +108,8 @@ class User: BaseModel {
             }
         }
     }
-
+    
+    @discardableResult
     override func loadDataFromJSON(_ data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> Self {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
         nickName = data["nick_name"].stringValue

@@ -113,9 +113,9 @@ class InlineUserSelectController: UICollectionViewController {
             } else {
                 cell.nameLbl.textColor = UIColor.black
             }
-            cell.avatarImg.kf_setImageWithURL(user.avatarURL!)
+            cell.avatarImg.kf.setImage(with: user.avatarURL!)
             if let carURL = user.avatarCarModel?.logoURL {
-                cell.avatarCarLogo.kf_setImageWithURL(carURL)
+                cell.avatarCarLogo.kf.setImage(with: carURL)
             } else {
                 cell.avatarCarLogo.image = nil
             }
@@ -154,7 +154,7 @@ class InlineUserSelectController: UICollectionViewController {
     // MARK: - 全部成员按钮
     
     func configureShowAllMembersBtn() {
-        showAllMembersBtn = self.view.addSubview(UIButton)
+        showAllMembersBtn = self.view.addSubview(UIButton.self)
             .config(self, selector: #selector(showAllMembersBtnPressed), title: LS("全部成员"), titleColor: kHighlightRed, titleSize: 14, titleWeight: UIFontWeightUltraLight)
             .layout({ (make) in
                 make.right.equalTo(self.view).offset(-15)
@@ -200,11 +200,11 @@ class InlineUserSelectBtnCell: UICollectionViewCell  {
     func createSubviews() {
         btnImage = UIImageView(image: UIImage(named: "chat_settings_add_person"))
         self.contentView.addSubview(btnImage)
-        btnImage.snp_makeConstraints { (make) -> Void in
+        btnImage.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(self.contentView)
             make.top.equalTo(self.contentView)
             make.width.equalTo(self.contentView).multipliedBy(btnSizeRatio)
-            make.height.equalTo(btnImage.snp_width)
+            make.height.equalTo(btnImage.snp.width)
         }
     }
 }
@@ -224,10 +224,10 @@ class InlineUserSelectCell: UICollectionViewCell {
             if user == nil {
                 return
             }
-            avatarImg.kf_setImageWithURL(user!.avatarURL!)
+            avatarImg.kf.setImage(with: user!.avatarURL!)
             if let avatarCarURL = user?.avatarCarModel?.logoURL {
                 avatarCarLogo.isHidden = false
-                avatarCarLogo.kf_setImageWithURL(avatarCarURL)
+                avatarCarLogo.kf.setImage(with: avatarCarURL)
             } else {
                 avatarCarLogo.isHidden = true
                 avatarCarLogo.image = nil
@@ -256,20 +256,20 @@ class InlineUserSelectCell: UICollectionViewCell {
         //
         avatarImg = UIImageView()
         superview.addSubview(avatarImg)
-        avatarImg.snp_makeConstraints { (make) -> Void in
+        avatarImg.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview)
             make.width.equalTo(superview).multipliedBy(avatarSizeRatio)
-            make.height.equalTo(avatarImg.snp_width)
+            make.height.equalTo(avatarImg.snp.width)
         }
         //
         avatarCarLogo = UIImageView()
         superview.addSubview(avatarCarLogo)
-        avatarCarLogo.snp_makeConstraints { (make) -> Void in
+        avatarCarLogo.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(avatarImg)
             make.bottom.equalTo(avatarImg)
             make.width.equalTo(avatarImg).multipliedBy(avatarCarLogoSizeRatio)
-            make.height.equalTo(avatarCarLogo.snp_width)
+            make.height.equalTo(avatarCarLogo.snp.width)
         }
         avatarImg.layer.cornerRadius = superview.frame.width * avatarSizeRatio / 2
         avatarImg.clipsToBounds = true
@@ -281,9 +281,9 @@ class InlineUserSelectCell: UICollectionViewCell {
         nameLbl.textColor = UIColor.black
         nameLbl.textAlignment = .center
         superview.addSubview(nameLbl)
-        nameLbl.snp_makeConstraints { (make) -> Void in
+        nameLbl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(avatarImg)
-            make.top.equalTo(avatarImg.snp_bottom).offset(8)
+            make.top.equalTo(avatarImg.snp.bottom).offset(8)
         }
     }
 }

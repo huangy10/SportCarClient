@@ -42,14 +42,14 @@ extension WaitableProtocol where Self: UIViewController {
             assertionFailure()
         }
         
-        let superview = self.view
-        wp_waitingContainer = superview?.addSubview(UIView).config(UIColor.clear)
+        let superview = self.view!
+        wp_waitingContainer = superview.addSubview(UIView.self).config(UIColor.clear)
             .layout({ (make) in
                 make.edges.equalTo(superview)
             })
         let activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         wp_waitingContainer?.addSubview(activityView)
-        activityView.snp_makeConstraints { (make) in
+        activityView.snp.makeConstraints { (make) in
             make.center.equalTo(wp_waitingContainer!)
             make.size.equalTo(60)
         }

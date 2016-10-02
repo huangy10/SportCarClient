@@ -46,6 +46,7 @@ class News: BaseInMemModel {
         return self
     }
     
+    @discardableResult
     override func loadDataFromJSON(_ data: JSON) throws -> News {
         try super.loadDataFromJSON(data)
         ssid = data["id"].int32Value

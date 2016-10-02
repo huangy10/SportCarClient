@@ -44,7 +44,7 @@ extension Status {
     static let carInfo = AlecrimCoreData.NullableAttribute<String>("carInfo")
     static let commentNum = AlecrimCoreData.NullableAttribute<Int32>("commentNum")
     static let content = AlecrimCoreData.NullableAttribute<String>("content")
-    static let createdAt = AlecrimCoreData.NullableAttribute<NSDate>("createdAt")
+    static let createdAt = AlecrimCoreData.NullableAttribute<Date>("createdAt")
     static let fromFollow = AlecrimCoreData.NullableAttribute<Bool>("fromFollow")
     static let fromHot = AlecrimCoreData.NullableAttribute<Bool>("fromHot")
     static let fromPerson = AlecrimCoreData.NullableAttribute<Bool>("fromPerson")
@@ -68,7 +68,7 @@ extension AlecrimCoreData.AttributeProtocol where Self.ValueType: Status {
     var carInfo: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("carInfo", self) }
     var commentNum: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("commentNum", self) }
     var content: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("content", self) }
-    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
+    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<Date>("createdAt", self) }
     var fromFollow: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("fromFollow", self) }
     var fromHot: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("fromHot", self) }
     var fromPerson: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("fromPerson", self) }

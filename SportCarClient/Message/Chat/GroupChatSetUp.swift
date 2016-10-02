@@ -33,16 +33,16 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
     override func createSubviews() {
         navSettings()
         super.createSubviews()
-        let superview = self.view
-        superview?.backgroundColor = UIColor.white
+        let superview = self.view!
+        superview.backgroundColor = UIColor.white
         //
         let logoLbl = UILabel()
         logoLbl.text = LS("请选择一个标识")
         logoLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         logoLbl.textColor = UIColor.black
         logoLbl.textAlignment = .center
-        superview?.addSubview(logoLbl)
-        logoLbl.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(logoLbl)
+        logoLbl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(25)
         }
@@ -51,10 +51,10 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
         logo.layer.cornerRadius = 45
         logo.clipsToBounds = true
         logo.setImage(UIImage(named: "account_profile_avatar_btn"), for: UIControlState())
-        superview?.addSubview(logo)
-        logo.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(logo)
+        logo.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
-            make.top.equalTo(logoLbl.snp_bottom).offset(20)
+            make.top.equalTo(logoLbl.snp.bottom).offset(20)
             make.size.equalTo(90)
         }
         logo.addTarget(self, action: #selector(GroupChatSetupController.logoBtnPressed), for: .touchUpInside)
@@ -66,18 +66,18 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
         nameInput.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightUltraLight)
         nameInput.textAlignment = .center
         nameInput.placeholder = LS("请输入群聊名称")
-        superview?.addSubview(nameInput)
-        nameInput.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(nameInput)
+        nameInput.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
-            make.top.equalTo(logo.snp_bottom).offset(30)
+            make.top.equalTo(logo.snp.bottom).offset(30)
             make.size.equalTo(CGSize(width: 250, height: 27.5))
         }
         //
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.945, alpha: 1)
-        superview?.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(nameInput.snp_bottom).offset(3)
+        superview.addSubview(sepLine)
+        sepLine.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(nameInput.snp.bottom).offset(3)
             make.width.equalTo(273)
             make.height.equalTo(0.5)
             make.centerX.equalTo(superview)
@@ -100,7 +100,7 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
@@ -131,11 +131,11 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
             })
             let waitUntil = DispatchTime.now() + Double(Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)
             // only wait for one second
-            waiter.wait(timeout: waitUntil)
+            _ = waiter.wait(timeout: waitUntil)
             club = MainManager.sharedManager.objectWithSSID(club.ssid) as Club?
             club.rosterItem?.loadData()
-            let kingfisherCache = KingfisherManager.sharedManager.cache
-            kingfisherCache.storeImage(self.logoImage!, forKey: club!.logoURL!.absoluteString)
+            let kingfisherCache = KingfisherManager.shared.cache
+            kingfisherCache.store(self.logoImage!, forKey: club!.logoURL!.absoluteString)
             self.delegate?.groupChatSetupControllerDidSuccessCreatingClub(club!)
             self.pp_hideProgressView()
             self.requesting = false

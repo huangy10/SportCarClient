@@ -45,7 +45,7 @@ class PersonHeaderMine: UIView {
     
     func createSubviews() {
         let superview = self
-        map = superview.addSubview(BMKMapView).config(UIColor.black)
+        map = superview.addSubview(BMKMapView.self).config(UIColor.black)
             .layout({ (make) in
                 make.edges.equalTo(superview).inset(UIEdgeInsetsMake(-300, 0, 0, 0))
             })
@@ -56,7 +56,7 @@ class PersonHeaderMine: UIView {
         backMask.ratio = 0.2
         backMask.addShadow(opacity: 0.1, offset: CGSize(width: 0, height: -3))
         superview.addSubview(backMask)
-        backMask.snp_makeConstraints { (make) -> Void in
+        backMask.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
@@ -69,7 +69,7 @@ class PersonHeaderMine: UIView {
         avatarBtn.layer.cornerRadius = 62.5
         avatarBtn.clipsToBounds = true
         superview.addSubview(avatarBtn)
-        avatarBtn.snp_makeConstraints { (make) -> Void in
+        avatarBtn.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(superview).offset(-100)
             make.centerX.equalTo(superview)
             make.size.equalTo(125)
@@ -81,7 +81,7 @@ class PersonHeaderMine: UIView {
         avatarCarBtn.imageView?.layer.cornerRadius = 16.5
         avatarCarBtn.imageView?.contentMode = .scaleAspectFit
         superview.addSubview(avatarCarBtn)
-        avatarCarBtn.snp_makeConstraints { (make) -> Void in
+        avatarCarBtn.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(avatarBtn)
             make.right.equalTo(avatarBtn)
             make.size.equalTo(33)
@@ -91,8 +91,8 @@ class PersonHeaderMine: UIView {
         nameLbl.font = UIFont.systemFont(ofSize: 19, weight: UIFontWeightUltraLight)
         nameLbl.textColor = UIColor.black
         superview.addSubview(nameLbl)
-        nameLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(avatarBtn.snp_right).offset(15)
+        nameLbl.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(avatarBtn.snp.right).offset(15)
             make.centerY.equalTo(avatarBtn).offset(-5)
         }
         //
@@ -100,9 +100,9 @@ class PersonHeaderMine: UIView {
         avatarClubLogo.layer.cornerRadius = 10
         avatarClubLogo.clipsToBounds = true
         superview.addSubview(avatarClubLogo)
-        avatarClubLogo.snp_makeConstraints { (make) -> Void in
+        avatarClubLogo.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(nameLbl)
-            make.left.equalTo(nameLbl.snp_right).offset(7)
+            make.left.equalTo(nameLbl.snp.right).offset(7)
             make.size.equalTo(20)
         }
         //
@@ -111,14 +111,14 @@ class PersonHeaderMine: UIView {
         genderAgeLbl.textColor = UIColor.white
         genderAgeLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(genderAgeLbl)
-        genderAgeLbl.snp_makeConstraints { (make) -> Void in
+        genderAgeLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(nameLbl)
-            make.top.equalTo(nameLbl.snp_bottom).offset(5)
+            make.top.equalTo(nameLbl.snp.bottom).offset(5)
         }
         //
         let arrowIcon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         superview.addSubview(arrowIcon)
-        arrowIcon.snp_makeConstraints { (make) -> Void in
+        arrowIcon.snp.makeConstraints { (make) -> Void in
             make.size.equalTo(CGSize(width: 9, height: 15))
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(genderAgeLbl).offset(2)
@@ -128,14 +128,14 @@ class PersonHeaderMine: UIView {
         avatarCarNameLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         avatarCarNameLbl.textColor = UIColor.black
         superview.addSubview(avatarCarNameLbl)
-        avatarCarNameLbl.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(genderAgeLbl.snp_bottom).offset(12)
+        avatarCarNameLbl.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(genderAgeLbl.snp.bottom).offset(12)
             make.left.equalTo(genderAgeLbl)
         }
         //
         detailBtn = UIButton()
         superview.addSubview(detailBtn)
-        detailBtn.snp_makeConstraints { (make) -> Void in
+        detailBtn.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(avatarBtn)
             make.top.equalTo(nameLbl)
             make.bottom.equalTo(avatarBtn)
@@ -146,13 +146,13 @@ class PersonHeaderMine: UIView {
             .config(21, fontWeight: UIFontWeightSemibold, textAlignment: .center)
             .layout({ (make) in
                 make.centerX.equalTo(avatarBtn)
-                make.top.equalTo(avatarBtn.snp_bottom).offset(35)
+                make.top.equalTo(avatarBtn.snp.bottom).offset(35)
             })
         //
         superview.addSubview(UILabel.self)
             .config(15, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("粉丝"))
             .layout { (make) in
-                make.top.equalTo(fansNumLbl.snp_bottom).offset(2)
+                make.top.equalTo(fansNumLbl.snp.bottom).offset(2)
                 make.centerX.equalTo(fansNumLbl)
         }
         //
@@ -167,7 +167,7 @@ class PersonHeaderMine: UIView {
             .config(15, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("动态"))
             .layout { (make) in
                 make.centerX.equalTo(statusNumLbl)
-                make.top.equalTo(statusNumLbl.snp_bottom).offset(2)
+                make.top.equalTo(statusNumLbl.snp.bottom).offset(2)
         }
         //
         followNumLbl = superview.addSubview(UILabel.self)
@@ -181,12 +181,12 @@ class PersonHeaderMine: UIView {
             .config(15, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("关注"))
             .layout { (make) in
                 make.centerX.equalTo(followNumLbl)
-                make.top.equalTo(followNumLbl.snp_bottom).offset(2)
+                make.top.equalTo(followNumLbl.snp.bottom).offset(2)
         }
         // 在粉丝和关注上方加一个透明按钮以实现点击进入粉丝列表
         fanslistBtn = UIButton()
         superview.addSubview(fanslistBtn)
-        fanslistBtn.snp_makeConstraints { (make) -> Void in
+        fanslistBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(fansNumLbl)
             make.top.equalTo(fansNumLbl)
             make.size.equalTo(44)
@@ -194,7 +194,7 @@ class PersonHeaderMine: UIView {
         //
         followlistBtn = UIButton()
         superview.addSubview(followlistBtn)
-        followlistBtn.snp_makeConstraints { (make) -> Void in
+        followlistBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(followNumLbl)
             make.top.equalTo(followNumLbl)
             make.size.equalTo(44)
@@ -202,7 +202,7 @@ class PersonHeaderMine: UIView {
         //
         statuslistBtn = UIButton()
         superview.addSubview(statuslistBtn)
-        statuslistBtn.snp_makeConstraints { (make) -> Void in
+        statuslistBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(statusNumLbl)
             make.top.equalTo(statusNumLbl)
             make.size.equalTo(44)
@@ -211,10 +211,10 @@ class PersonHeaderMine: UIView {
     
     func loadDataAndUpdateUI() {
         // 头像
-        avatarBtn.kf_setImageWithURL(user.avatarURL!, forState: UIControlState())
+        avatarBtn.kf.setImage(with: user.avatarURL!, for: .normal)
         // 认证跑车
         if let car = user.avatarCarModel {
-            avatarCarBtn.kf_setImageWithURL(car.logoURL!, forState: UIControlState())
+            avatarCarBtn.kf.setImage(with: car.logoURL!, for: .normal)
             avatarCarNameLbl.text = car.name
         } else {
             avatarCarBtn.setImage(nil, for: UIControlState())
@@ -222,7 +222,7 @@ class PersonHeaderMine: UIView {
         }
         // 认证俱乐部
         if let club = user.avatarClubModel {
-            avatarClubLogo.kf_setImageWithURL(club.logoURL!, forState: UIControlState())
+            avatarClubLogo.kf.setImage(with: club.logoURL!, for: .normal)
         }else {
             avatarClubLogo.setImage(nil, for: UIControlState())
         }

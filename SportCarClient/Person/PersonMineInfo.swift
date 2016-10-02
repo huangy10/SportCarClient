@@ -37,7 +37,7 @@ class PersonMineInfoController: UITableViewController, AvatarCarSelectDelegate, 
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -188,13 +188,13 @@ class PersonMineInfoController: UITableViewController, AvatarCarSelectDelegate, 
 extension PersonMineInfoController {
     
     func cityElementSelectDidSelect(_ dataSource: CityElementSelectDataSource) {
-        self.navigationController?.popToViewController(self, animated: true)
+        _ = self.navigationController?.popToViewController(self, animated: true)
         let district = dataSource.selectedCity! + dataSource.selectedDistrict!
         self.singlePropertyModifierDidModify(district, forIndexPath: IndexPath(row: 2, section: 2))
     }
     
     func cityElementSelectDidCancel() {
-        self.navigationController?.popToViewController(self, animated: true)
+        _ = self.navigationController?.popToViewController(self, animated: true)
     }
     
     func singlePropertyModifierDidModify(_ newValue: String?, forIndexPath indexPath: IndexPath) {
@@ -205,7 +205,7 @@ extension PersonMineInfoController {
         case 1:
             switch (indexPath as NSIndexPath).row {
             case 0:
-                requester.profileModifiy(["nick_name": newValue!], onSuccess: { (json) -> () in
+                _ = requester.profileModifiy(["nick_name": newValue!], onSuccess: { (json) -> () in
                     self.user.nickName = newValue
                     self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
                     }, onError: { (code) -> () in
@@ -221,7 +221,7 @@ extension PersonMineInfoController {
             case 1:
                 self.user.job = newValue
                 self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-                requester.profileModifiy(["job": newValue!], onSuccess: { (json) -> () in
+                _ = requester.profileModifiy(["job": newValue!], onSuccess: { (json) -> () in
 //                    self.user.job = newValue
 //                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                     }, onError: { (code) -> () in
@@ -230,7 +230,7 @@ extension PersonMineInfoController {
             case 2:
                 self.user.district = newValue
                 self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-                requester.profileModifiy(["district": newValue!], onSuccess: { (json) -> () in
+                _ = requester.profileModifiy(["district": newValue!], onSuccess: { (json) -> () in
 //                    self.user.district = newValue
 //                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                     }, onError: { (code) -> () in
@@ -238,7 +238,7 @@ extension PersonMineInfoController {
             case 3:
                 self.user.signature = newValue
                 self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-                requester.profileModifiy(["signature": newValue!], onSuccess: { (json) -> () in
+                _ = requester.profileModifiy(["signature": newValue!], onSuccess: { (json) -> () in
 //                    self.user.signature = newValue
 //                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                     }, onError: { (code) -> () in
@@ -271,7 +271,7 @@ extension PersonMineInfoController {
         let requester = AccountRequester2.sharedInstance
         requester.profileModifyUploadAvatar(image, onSuccess: { (json) -> () in
             let avatarURL = SFURL(json!.stringValue)!
-            KingfisherManager.sharedManager.cache.storeImage(image, forKey: avatarURL.absoluteString)
+            KingfisherManager.shared.cache.store(image, forKey: avatarURL.absoluteString)
             self.user.avatar = json!.stringValue
             self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
             self.showToast(LS("头像上传成功"))
@@ -291,7 +291,7 @@ extension PersonMineInfoController {
     func avatarCarSelectDidFinish(_ selectedCar: SportCar) {
         // 将修改的内容提交到服务器
         let requester = AccountRequester2.sharedInstance
-        requester.profileModifiy(["avatar_car": selectedCar.ssidString], onSuccess: { (data) -> () in
+        _ = requester.profileModifiy(["avatar_car": selectedCar.ssidString], onSuccess: { (data) -> () in
             // 
             let targetUser = self.user
             targetUser.avatarCarModel = selectedCar
@@ -307,7 +307,7 @@ extension PersonMineInfoController {
     
     func avatarClubSelectDidFinish(_ selectedClub: Club) {
         let requester = AccountRequester2.sharedInstance
-        requester.profileModifiy(["avatar_club": selectedClub.ssidString], onSuccess: { (data) -> () in
+        _ = requester.profileModifiy(["avatar_club": selectedClub.ssidString], onSuccess: { (data) -> () in
             //
             let targetUser = self.user
             targetUser.avatarClubModel = selectedClub
@@ -361,8 +361,8 @@ class PersonMineInfoCell: PrivateChatSettingsCommonCell {
         self.contentView.addSubview(iconImage)
         iconImage.layer.cornerRadius = 10
         iconImage.clipsToBounds = true
-        iconImage.snp_makeConstraints { (make) -> Void in
-            make.right.equalTo(infoLbl.snp_left).offset(-8)
+        iconImage.snp.makeConstraints { (make) -> Void in
+            make.right.equalTo(infoLbl.snp.left).offset(-8)
             make.centerY.equalTo(infoLbl)
             make.size.equalTo(20)
         }

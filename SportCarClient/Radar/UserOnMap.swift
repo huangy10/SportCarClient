@@ -46,7 +46,7 @@ class UserOnMapView: UIButton {
         avatar.layer.cornerRadius = size.width / 2
         avatar.clipsToBounds = true
         self.addSubview(avatar)
-        avatar.snp_makeConstraints { (make) -> Void in
+        avatar.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(self)
         }
         //
@@ -54,7 +54,7 @@ class UserOnMapView: UIButton {
         avatarCar.layer.cornerRadius = size.width / 2 * 0.385
         avatarCar.clipsToBounds = true
         self.addSubview(avatarCar)
-        avatarCar.snp_makeConstraints { (make) -> Void in
+        avatarCar.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(self)
             make.bottom.equalTo(self)
             make.size.equalTo(size.width * 0.385)
@@ -65,9 +65,9 @@ class UserOnMapView: UIButton {
         if user == nil {
             return
         }
-        avatar.kf_setImageWithURL(user!.avatarURL!)
+        avatar.kf.setImage(with: user!.avatarURL!)
         if let avatarURL = user?.avatarCarModel?.logoURL {
-            avatarCar.kf_setImageWithURL(avatarURL)
+            avatarCar.kf.setImage(with: avatarURL)
         }
         updatedAt = Date()
     }

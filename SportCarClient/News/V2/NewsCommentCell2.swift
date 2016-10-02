@@ -12,7 +12,7 @@ import UIKit
 class NewsCommentCell2: DetailCommentCell2 {
     
     func setData(_ avatarURL: URL, name: String, content: String, commentAt: Date, responseTo: String?, showReplyBtn: Bool) {
-        avatarBtn.kf_setImageWithURL(avatarURL, forState: UIControlState())
+        avatarBtn.kf.setImage(with: avatarURL, for: .normal)
         nameLbl.text = name
         contentLbl.text = content
         commentDateLbl.text = dateDisplay(commentAt)

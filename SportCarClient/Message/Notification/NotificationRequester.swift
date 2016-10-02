@@ -32,9 +32,9 @@ class NotificationRequester: BasicRequester {
         return ChatModelManger.sharedManager.workQueue
     }
     
-    func getNotifications(_ skips: Int, limit: Int = 20, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request{
+    func getNotifications(_ skips: Int, limit: Int = 20, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request{
         
-        let params: [String : AnyObject] = [
+        let params: [String : Any] = [
             "limit": limit,
             "skips": skips
         ]
@@ -47,7 +47,7 @@ class NotificationRequester: BasicRequester {
         )
     }
     
-    func notifMarkRead(_ notifID:String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func notifMarkRead(_ notifID:String, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         return post(
             urlForName("mark_read", param: ["notifID": notifID]),
             onSuccess: onSuccess, onError: onError)

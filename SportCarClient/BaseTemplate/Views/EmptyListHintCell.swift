@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 
 class SSEmptyListHintCell: UITableViewCell {
@@ -24,9 +25,9 @@ class SSEmptyListHintCell: UITableViewCell {
     func createSubviews() {
         self.selectionStyle = .none
         let superview = self.contentView
-        titleLbl = superview.addSubview(UILabel).config(14, textColor: UIColor(white: 0.72, alpha: 1))
+        titleLbl = superview.addSubview(UILabel.self).config(14, textColor: UIColor(white: 0.72, alpha: 1))
             .layout({ (make) in
-                make.center.equalTo(superview).offset(CGPoint(x: 0, y: -15))
+                make.center.equalTo(superview).offset(CGPoint(x: 0, y: -15) as! ConstraintOffsetTarget)
             })
         contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 100)
     }

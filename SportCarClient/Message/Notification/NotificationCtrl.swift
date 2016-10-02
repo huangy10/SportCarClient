@@ -18,12 +18,12 @@ protocol NotificationDataSource: class {
 }
 
 class NotificationController: UITableViewController, NotificationCellDelegate, LoadingProtocol {
+    internal var delayWorkItem: DispatchWorkItem?
+
     // Pointer to the home controller which you can use to push or present detail controllers
     var messageHome: MessageController?
     
     var data: [Notification] = []
-    
-    var delayTask: (()->())?
     
     override func viewDidLoad() {
         super.viewDidLoad()

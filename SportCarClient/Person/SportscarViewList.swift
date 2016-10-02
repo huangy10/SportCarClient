@@ -119,7 +119,7 @@ class SportsCarViewListController: UICollectionViewController, UICollectionViewD
         }
         let car = cars[(indexPath as NSIndexPath).row - 1]
         let name = car.name!
-        let size = name.sizeWithFont(UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold), boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max))
+        let size = name.sizeWithFont(UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold), boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
         if size.width > 80 {
             return CGSize(width: size.width + 40, height: 62)
         } else {
@@ -153,7 +153,7 @@ class SportCarViewListTextCell: UICollectionViewCell {
         selectedBg.backgroundColor = UIColor(white: 0.878, alpha: 1)
         selectedBg.layer.cornerRadius = 6.5
         superview.addSubview(selectedBg)
-        selectedBg.snp_makeConstraints { (make) -> Void in
+        selectedBg.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview).inset(8)
         }
         //
@@ -162,7 +162,7 @@ class SportCarViewListTextCell: UICollectionViewCell {
         titleLbl.textColor = UIColor(white: 0.72, alpha: 1)
         titleLbl.textAlignment = .center
         superview.addSubview(titleLbl)
-        titleLbl.snp_makeConstraints { (make) -> Void in
+        titleLbl.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(superview)
         }
     }
@@ -174,7 +174,7 @@ class SportCarViewListTextCell: UICollectionViewCell {
     
     func pulse() {
         selectedBg.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        SpringAnimation.spring(0.3) { 
+        SpringAnimation.spring(duration: 0.3) {
             self.selectedBg.transform = CGAffineTransform.identity
         }
     }
@@ -199,7 +199,7 @@ class SportCarViewListAddBtnCell: UICollectionViewCell {
         
         let icon = UIImageView(image: UIImage(named: "person_add_more"))
         self.addSubview(icon)
-        icon.snp_makeConstraints { (make) -> Void in
+        icon.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(self)
             make.size.equalTo(18)
         }

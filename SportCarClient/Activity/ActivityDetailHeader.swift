@@ -54,7 +54,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     }
     
     func setCoverRelativeMove(_ y: CGFloat) {
-        cover.snp_remakeConstraints { (make) in
+        cover.snp.remakeConstraints { (make) in
             make.left.equalTo(coverContainer)
             make.right.equalTo(coverContainer)
             make.height.equalTo(coverContainer).multipliedBy(coverExtraHeightRatio)
@@ -66,15 +66,15 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     fileprivate func createSubviews() {
         let superview = self.config(UIColor.white)
         
-        coverContainer = superview.addSubview(UIView).config(UIColor.clear)
+        coverContainer = superview.addSubview(UIView.self).config(UIColor.clear)
             .layout({ (make) in
                 make.top.equalTo(superview)
                 make.centerX.equalTo(superview)
                 make.width.equalTo(superview)
-                make.height.equalTo(superview.snp_width).multipliedBy(0.588)
+                make.height.equalTo(superview.snp.width).multipliedBy(0.588)
             })
         
-        cover = coverContainer.addSubview(UIImageView).config(nil)
+        cover = coverContainer.addSubview(UIImageView.self).config(nil)
             .layout({ (make) in
                 make.left.equalTo(coverContainer)
                 make.right.equalTo(coverContainer)
@@ -89,14 +89,14 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         backMaskView.backgroundColor = UIColor.clear
         backMaskView.isUserInteractionEnabled = false
         superview.addSubview(backMaskView)
-        backMaskView.snp_makeConstraints { (make) in
+        backMaskView.snp.makeConstraints { (make) in
             make.edges.equalTo(coverContainer)
         }
         backMaskView.addShadow(opacity: 0.1, offset: CGSize(width: 0, height: -3))
         
-        superview.addSubview(UIView).config(UIColor.white)
+        superview.addSubview(UIView.self).config(UIColor.white)
             .layout { (make) in
-                make.top.equalTo(coverContainer.snp_bottom)
+                make.top.equalTo(coverContainer.snp.bottom)
                 make.left.equalTo(superview)
                 make.right.equalTo(superview)
                 make.bottom.equalTo(cover)
@@ -112,32 +112,32 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
             .config(21, fontWeight: UIFontWeightSemibold, multiLine: true)
             .layout({ (make) in
                 make.left.equalTo(superview).offset(20)
-                make.top.equalTo(coverContainer.snp_bottom)
+                make.top.equalTo(coverContainer.snp.bottom)
                 make.width.equalTo(superview).multipliedBy(0.6)
             })
         hostAvatar = superview.addSubview(UIButton.self)
             .config(self, selector: #selector(hostAvatarPressed))
             .layout({ (make) in
                 make.left.equalTo(actNameLbl)
-                make.top.equalTo(actNameLbl.snp_bottom).offset(9)
+                make.top.equalTo(actNameLbl.snp.bottom).offset(9)
                 make.size.equalTo(20)
             }).toRoundButton(10)
         hostNameLbl = superview.addSubview(UILabel.self)
             .config(14).layout({ (make) in
-                make.left.equalTo(hostAvatar.snp_right).offset(7)
+                make.left.equalTo(hostAvatar.snp.right).offset(7)
                 make.bottom.equalTo(hostAvatar)
             })
         releaseDateLbl = superview.addSubview(UILabel.self)
             .config(12, textColor: UIColor(white: 0.72, alpha: 1))
             .layout({ (make) in
-                make.left.equalTo(hostNameLbl.snp_right).offset(8)
+                make.left.equalTo(hostNameLbl.snp.right).offset(8)
                 make.bottom.equalTo(hostNameLbl)
             })
         desLbl = superview.addSubview(UILabel.self)
             .config(15, multiLine: true).layout({ (make) in
                 make.left.equalTo(hostAvatar)
                 make.right.equalTo(superview).offset(-20)
-                make.top.equalTo(hostAvatar.snp_bottom).offset(18)
+                make.top.equalTo(hostAvatar.snp.bottom).offset(18)
             })
         desLbl.numberOfLines = 0
         desLbl.lineBreakMode = .byCharWrapping
@@ -146,13 +146,13 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
             .config(12, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .right)
             .layout({ (make) in
                 make.right.equalTo(superview).offset(-20)
-                make.top.equalTo(desLbl.snp_bottom).offset(10)
+                make.top.equalTo(desLbl.snp.bottom).offset(10)
             })
         commentIcon = superview.addSubview(UIImageView.self)
             .config(UIImage(named: "news_comment"), contentMode: .scaleAspectFit)
             .layout({ (make) in
                 make.centerY.equalTo(commentNumLbl)
-                make.right.equalTo(commentNumLbl.snp_left).offset(-4)
+                make.right.equalTo(commentNumLbl.snp.left).offset(-4)
                 make.size.equalTo(15)
             })
         likeNumLbl = superview.addSubview(UILabel.self)
@@ -164,10 +164,10 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
             .config(UIImage(named: "news_like_unliked"), contentMode: .scaleAspectFit)
             .layout({ (make) in
                 make.centerY.equalTo(likeNumLbl)
-                make.right.equalTo(likeNumLbl.snp_left).offset(-4)
+                make.right.equalTo(likeNumLbl.snp.left).offset(-4)
                 make.size.equalTo(15)
             })
-        likeBtn = superview.addSubview(UIButton)
+        likeBtn = superview.addSubview(UIButton.self)
             .layout({ (make) in
                 make.center.equalTo(likeIcon)
                 make.size.equalTo(30)
@@ -177,9 +177,9 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
                 make.left.equalTo(superview).offset(15)
                 make.right.equalTo(superview).offset(-15)
                 make.height.equalTo(0.5)
-                make.top.equalTo(commentNumLbl.snp_bottom).offset(30)
+                make.top.equalTo(commentNumLbl.snp.bottom).offset(30)
         }
-        superview.addSubview(UILabel).config(textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("详情"))
+        superview.addSubview(UILabel.self).config(textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("详情"))
             .layout { (make) in
                 make.center.equalTo(sepLine)
                 make.width.equalTo(70)
@@ -187,62 +187,62 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
             view.backgroundColor = UIColor.white
         }
         
-        let bubble1 = superview.addSubview(UIView).config(kHighlightedRedTextColor)
+        let bubble1 = superview.addSubview(UIView.self).config(kHighlightedRedTextColor)
             .layout { (make) in
-                make.top.equalTo(sepLine.snp_bottom).offset(25)
+                make.top.equalTo(sepLine.snp.bottom).offset(25)
                 make.left.equalTo(superview).offset(25)
                 make.size.equalTo(10)
         }.toRound(5)
-        let static1 = superview.addSubview(UILabel)
+        let static1 = superview.addSubview(UILabel.self)
             .config(textColor: UIColor(white: 0.72, alpha: 1), text: LS("活动地点"))
             .layout { (make) in
-                make.left.equalTo(bubble1.snp_right).offset(20)
+                make.left.equalTo(bubble1.snp.right).offset(20)
                 make.top.equalTo(bubble1)
         }
-        locationLbl = superview.addSubview(UILabel)
+        locationLbl = superview.addSubview(UILabel.self)
             .config(14).layout({ (make) in
                 make.left.equalTo(static1)
-                make.top.equalTo(static1.snp_bottom).offset(10)
+                make.top.equalTo(static1.snp.bottom).offset(10)
             })
-        let bubble2 = superview.addSubview(UIView).config(kHighlightedRedTextColor)
+        let bubble2 = superview.addSubview(UIView.self).config(kHighlightedRedTextColor)
             .layout { (make) in
                 make.left.equalTo(bubble1)
-                make.top.equalTo(bubble1.snp_bottom).offset(65)
+                make.top.equalTo(bubble1.snp.bottom).offset(65)
                 make.size.equalTo(10)
         }.toRound(5)
-        let static2 = superview.addSubview(UILabel).styleCopy(static1, text: LS("活动时间"))
+        let static2 = superview.addSubview(UILabel.self).styleCopy(static1, text: LS("活动时间"))
             .layout { (make) in
                 make.top.equalTo(bubble2)
                 make.left.equalTo(static1)
         }
-        actDateLbl = superview.addSubview(UILabel).styleCopy(locationLbl)
+        actDateLbl = superview.addSubview(UILabel.self).styleCopy(locationLbl)
             .layout({ (make) in
                 make.left.equalTo(locationLbl)
-                make.top.equalTo(static2.snp_bottom).offset(10)
+                make.top.equalTo(static2.snp.bottom).offset(10)
             })
-        let bubble3 = superview.addSubview(UIView).config(kHighlightedRedTextColor)
+        let bubble3 = superview.addSubview(UIView.self).config(kHighlightedRedTextColor)
             .layout { (make) in
                 make.left.equalTo(bubble1)
-                make.top.equalTo(bubble2.snp_bottom).offset(65)
+                make.top.equalTo(bubble2.snp.bottom).offset(65)
                 make.size.equalTo(10)
         }.toRound(5)
-        let static3 = superview.addSubview(UILabel).styleCopy(static2, text: LS("活动人数"))
+        let static3 = superview.addSubview(UILabel.self).styleCopy(static2, text: LS("活动人数"))
             .layout { (make) in
                 make.top.equalTo(bubble3)
                 make.left.equalTo(static2)
         }
-        attendNumLbl = superview.addSubview(UILabel).styleCopy(locationLbl)
+        attendNumLbl = superview.addSubview(UILabel.self).styleCopy(locationLbl)
             .layout({ (make) in
                 make.left.equalTo(actDateLbl)
-                make.top.equalTo(static3.snp_bottom).offset(10)
+                make.top.equalTo(static3.snp.bottom).offset(10)
             })
-        let bubble4 = superview.addSubview(UIView).config(kHighlightedRedTextColor)
+        let bubble4 = superview.addSubview(UIView.self).config(kHighlightedRedTextColor)
             .layout { (make) in
                 make.left.equalTo(bubble3)
-                make.top.equalTo(bubble3.snp_bottom).offset(65)
+                make.top.equalTo(bubble3.snp.bottom).offset(65)
                 make.size.equalTo(10)
         }.toRound(5)
-        let static4 = superview.addSubview(UILabel).styleCopy(static3, text: LS("活动成员"))
+        let static4 = superview.addSubview(UILabel.self).styleCopy(static3, text: LS("活动成员"))
             .layout { (make) in
                 make.left.equalTo(static3)
                 make.top.equalTo(bubble4)
@@ -258,17 +258,17 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         superview.addSubview(inlineMiniUserSelect)
         inlineMiniUserSelect.layout { (make) in
             make.left.equalTo(static4)
-            make.top.equalTo(static4.snp_bottom).offset(10)
+            make.top.equalTo(static4.snp.bottom).offset(10)
 //            make.right.equalTo(superview).offset(-75)
             make.width.equalTo(35)
             make.height.equalTo(35)
         }
         inlineMiniUserSelect.register(InlineUserSelectMiniCell.self, forCellWithReuseIdentifier: InlineUserSelectMiniCell.reuseIdentifier)
         
-        showAllMemberBtn = superview.addSubview(UIButton)
+        showAllMemberBtn = superview.addSubview(UIButton.self)
             .config(self, selector: #selector(showAllMemberBtnPressed))
             .layout({ (make) in
-                make.left.equalTo(inlineMiniUserSelect.snp_right).offset(5)
+                make.left.equalTo(inlineMiniUserSelect.snp.right).offset(5)
                 make.height.equalTo(35)
                 make.centerY.equalTo(inlineMiniUserSelect)
                 make.width.equalTo(60)
@@ -279,10 +279,10 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         showAllMemberBtn.layer.borderWidth = 0.5
         showAllMemberBtn.layer.cornerRadius = 17.5
         
-        superview.addSubview(UIView).config(kHighlightedRedTextColor)
+        superview.addSubview(UIView.self).config(kHighlightedRedTextColor)
             .layout { (make) in
-                make.top.equalTo(bubble1.snp_centerY)
-                make.bottom.equalTo(bubble4.snp_centerY)
+                make.top.equalTo(bubble1.snp.centerY)
+                make.bottom.equalTo(bubble4.snp.centerY)
                 make.centerX.equalTo(bubble1)
                 make.width.equalTo(0.5)
         }
@@ -292,9 +292,9 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
                 make.left.equalTo(superview).offset(15)
                 make.right.equalTo(superview).offset(-15)
                 make.height.equalTo(0.5)
-                make.top.equalTo(inlineMiniUserSelect.snp_bottom).offset(30)
+                make.top.equalTo(inlineMiniUserSelect.snp.bottom).offset(30)
         }
-        superview.addSubview(UILabel)
+        superview.addSubview(UILabel.self)
             .config(UIColor.white)
             .config(textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("评论"))
             .layout { (make) in
@@ -304,13 +304,13 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     }
     
     func loadDataAndUpdateUI() -> CGFloat {
-        cover.kf_setImageWithURL(act.posterURL!, placeholderImage: nil, optionsInfo: nil) { (image, error, cacheType, imageURL) in
-            self.cover.setupForImageViewer(backgroundColor: UIColor.black, fadeToHide: true)
+        cover.kf.setImage(with: act.posterURL!, placeholder: nil, options: nil, progressBlock: nil) { (image, _, _, _) in
+            self.cover.setupForImageViewer(nil, backgroundColor: UIColor.black, fadeToHide: true)
         }
         editBtn.isHidden = !act.user!.isHost
         actNameLbl.text = act.name
         desLbl.text = act.actDescription
-        hostAvatar.kf_setImageWithURL(act.user!.avatarURL!, forState: UIControlState())
+        hostAvatar.kf.setImage(with: act.user!.avatarURL!, for: .normal)
         hostNameLbl.text = act.user?.nickName
         releaseDateLbl.text = dateDisplay(act.createdAt!)
         locationLbl.text = act.location!.descr
@@ -329,11 +329,11 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
 //        let inlineUserSelectHeight = max(35, inlineMiniUserSelect.contentSize.height)
 //        let rows = CGFloat((act.applicants.count) / 7 + 1)
 //        let inlineUserSelectHeight = rows * 35 + (rows - 1) * 5
-//        inlineMiniUserSelect.snp_updateConstraints { (make) in
+//        inlineMiniUserSelect.snp.updateConstraints { (make) in
 //            make.height.equalTo(inlineUserSelectHeight)
 //        }
         let cellNum = min(estimatedDisplayCellNumber(), act.applicants.count + 1)
-        inlineMiniUserSelect.snp_updateConstraints { (make) in
+        inlineMiniUserSelect.snp.updateConstraints { (make) in
             make.width.equalTo(CGFloat(cellNum) * 40 - 5)
         }
 //        showAllMemberBtn.hidden = !act.user!.isHost
@@ -346,7 +346,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
             contentRect = contentRect.union(view.frame)
         }
         preferedHeight = contentRect.height + 20
-        self.snp_updateConstraints { (make) in
+        self.snp.updateConstraints { (make) in
             make.height.equalTo(preferedHeight)
         }
         return contentRect.height + 20
@@ -363,7 +363,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
             }
         } else if offset < 0 {
             let scaleFactor = (-offset) / coverContainer.frame.height + 1
-            cover.snp_remakeConstraints(closure: { (make) in
+            cover.snp.remakeConstraints({ (make) in
                 make.centerX.equalTo(coverContainer)
                 make.bottom.equalTo(coverContainer).offset(extraHeight)
                 make.width.equalTo(coverContainer).multipliedBy(scaleFactor)
@@ -447,7 +447,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
     func activityMemberControllerDidRemove(_ user: User) {
         inlineMiniUserSelect.reloadData()
         let cellNum = min(estimatedDisplayCellNumber(), act.applicants.count + 1)
-        inlineMiniUserSelect.snp_updateConstraints { (make) in
+        inlineMiniUserSelect.snp.updateConstraints { (make) in
             make.width.equalTo(CGFloat(cellNum) * 40 - 5)
         }
         layoutIfNeeded()

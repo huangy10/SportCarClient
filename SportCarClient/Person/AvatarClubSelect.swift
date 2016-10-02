@@ -34,7 +34,7 @@ class AvatarClubSelectController: AvatarItemSelectController {
         super.viewDidLoad()
         createSubviews()
         let requester = ClubRequester.sharedInstance
-        requester.getClubListAuthed({ (json) -> () in
+        _ = requester.getClubListAuthed({ (json) -> () in
             var i = 0
             for data in json!.arrayValue {
                 let club: Club = try! MainManager.sharedManager.getOrCreate(Club.reorganizeJSON(data))
@@ -50,15 +50,15 @@ class AvatarClubSelectController: AvatarItemSelectController {
     }
     
     func createSubviews() {
-        let superview = self.view
-        superview?.backgroundColor = UIColor.white
+        let superview = self.view!
+        superview.backgroundColor = UIColor.white
         
         noClubLbl = UILabel()
         noClubLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         noClubLbl.textColor = UIColor(white: 0.72, alpha: 1)
         noClubLbl.text = LS("暂未加入认证俱乐部，在群聊中申请认证")
-        superview?.addSubview(noClubLbl)
-        noClubLbl.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(noClubLbl)
+        noClubLbl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(100)
         }
@@ -98,7 +98,7 @@ class AvatarClubSelectController: AvatarItemSelectController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: AvatarItemSelectCell.reuseIdentifier, for: indexPath) as! AvatarItemSelectCell
         let club = clubs[(indexPath as NSIndexPath).row]
-        cell.avatarImg?.kf_setImageWithURL(club.logoURL!, placeholderImage: nil)
+        cell.avatarImg?.kf.setImage(with: club.logoURL!)
         cell.selectBtn?.tag = (indexPath as NSIndexPath).row
         cell.nickNameLbl?.text = club.name
         cell.authIcon.isHidden = true

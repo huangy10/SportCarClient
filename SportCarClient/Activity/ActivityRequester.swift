@@ -38,7 +38,7 @@ class ActivityRequester: BasicRequester {
         return "activity"
     }
     
-    func getMineActivityList(_ dateThreshold: Date, op_type: String, limit: Int, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func getMineActivityList(_ dateThreshold: Date, op_type: String, limit: Int, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         return get(
             urlForName("mine"),
             parameters: ["date_threshold": STRDate(dateThreshold), "limit": limit, "op_type": op_type],
@@ -47,7 +47,7 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func getNearByActivities(_ userLocation: CLLocationCoordinate2D, queryDistance: Double, cityLimit: String, skip: Int, limit: Int, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func getNearByActivities(_ userLocation: CLLocationCoordinate2D, queryDistance: Double, cityLimit: String, skip: Int, limit: Int, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         let lat: Double = userLocation.latitude
         let lon: Double = userLocation.longitude
         return get(
@@ -58,7 +58,7 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func getActivityApplied(_ dateThreshold: Date, op_type: String, limit: Int, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func getActivityApplied(_ dateThreshold: Date, op_type: String, limit: Int, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         return get(
             urlForName("applied"),
             parameters: ["date_threshold": STRDate(dateThreshold), "limit": limit, "op_type": op_type],
@@ -67,7 +67,7 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func getActivityDetail(_ actID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func getActivityDetail(_ actID: String, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         return get(
             urlForName("detail", param: ["actID": actID]),
             responseDataField: "data",
@@ -75,7 +75,7 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func sendActivityComment(_ actID: String, content: String, responseTo: String?, informOf: [String]?,  onSuccess: (JSON?)->(), onError: (_ code: String?)->()) {
+    func sendActivityComment(_ actID: String, content: String, responseTo: String?, informOf: [String]?,  onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) {
         var param: [String: AnyObject] = [
             "content": content as AnyObject
         ]
@@ -92,7 +92,7 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func getActivityComments(_ actID: String, dateThreshold: Date, limit: Int, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func getActivityComments(_ actID: String, dateThreshold: Date, limit: Int, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         return get(
             urlForName("comments", param: ["actID": actID]),
             parameters: ["date_threshold": STRDate(dateThreshold), "limit": limit, "op_type": "more"],
@@ -110,9 +110,9 @@ class ActivityRequester: BasicRequester {
         authedUserOnly: Bool,
         poster: UIImage,
         lat: Double, lon: Double, loc_des: String, city: String,
-        onSuccess: (JSON?)->(), onProgress: (_ progress: Float)->(), onError: (_ code: String?)->()
+        onSuccess: @escaping (JSON?)->(), onProgress: @escaping (_ progress: Float)->(), onError: @escaping (_ code: String?)->()
         ) {
-        var param: [String: AnyObject] = [
+        var param: [String: Any] = [
             "name": name as AnyObject,
             "description": des as AnyObject,
             "max_attend": maxAttend as AnyObject,
@@ -140,12 +140,12 @@ class ActivityRequester: BasicRequester {
         authedUserOnly: Bool,
         poster: UIImage,
         lat: Double, lon: Double, loc_des: String, city: String,
-        onSuccess: (JSON?)->(), onProgress: (_ progress: Float)->(), onError: (_ code: String?)->()
+        onSuccess: @escaping (JSON?)->(), onProgress: @escaping (_ progress: Float)->(), onError: @escaping (_ code: String?)->()
         ) {
-        var param: [String: AnyObject] = [
-            "name": name as AnyObject,
-            "description": des as AnyObject,
-            "max_attend": maxAttend as AnyObject,
+        var param: [String: Any] = [
+            "name": name,
+            "description": des,
+            "max_attend": maxAttend,
             "start_at": STRDate(startAt),
             "end_at": STRDate(endAt),
             "poster": poster,
@@ -163,7 +163,7 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func postToApplyActivty(_ actID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func postToApplyActivty(_ actID: String, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         return post(
             urlForName("apply", param: ["actID": actID]),
             responseDataField: "join",
@@ -171,11 +171,11 @@ class ActivityRequester: BasicRequester {
         )
     }
     
-    func closeActivty(_ actID: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func closeActivty(_ actID: String, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         return post(urlForName("close", param: ["actID": actID]), onSuccess: onSuccess, onError: onError)
     }
     
-    func activityOperation(_ actID: String, targetUserID: String, opType: String, onSuccess: (JSON?)->(), onError: (_ code: String?)->()) -> Request{
+    func activityOperation(_ actID: String, targetUserID: String, opType: String, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request{
         return post(
             urlForName("operation", param: ["actID": actID]),
             parameters: ["op_type": opType, "target_user": targetUserID],

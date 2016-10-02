@@ -74,6 +74,8 @@ class RosterItem: BaseModel {
             assertionFailure()
         }
         dataLoaded = true
+        
+        let _ = RosterItem.alwaysOnTop.___name
     }
     
     func takeChatRecord(_ chat: ChatRecord) -> Bool {
@@ -83,6 +85,7 @@ class RosterItem: BaseModel {
         return (chat.chatType! == self.entityType && chat.targetID == self.relatedID) || (chat.chatType! == "user" && chat.senderUser!.ssid == self.relatedID)
     }
     
+    @discardableResult
     override func loadDataFromJSON(_ data: JSON, detailLevel: Int = 0, forceMainThread: Bool = false) throws -> Self {
         try super.loadDataFromJSON(data, detailLevel: detailLevel)
         let entityType = data["entity_type"].stringValue

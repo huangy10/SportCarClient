@@ -32,8 +32,8 @@ class RadarRequester: BasicRequester {
     @available(*, deprecated: 1)
     func updateCurrentLocation(
         _ loc: CLLocationCoordinate2D,
-        onSuccess: SSSuccessCallback,
-        onError: SSFailureCallback
+        onSuccess: @escaping SSSuccessCallback,
+        onError: @escaping SSFailureCallback
         ) -> Request {
         return post(
             urlForName("update"),
@@ -49,10 +49,10 @@ class RadarRequester: BasicRequester {
         filterDistance: Double,
         filterType: String,
         filterParam: [String: AnyObject]?,
-        onSuccess: (_ json: JSON?)->(),
-        onError: (_ code: String?)->()
+        onSuccess: @escaping (_ json: JSON?)->(),
+        onError: @escaping (_ code: String?)->()
         ) -> Request {
-        var params: [String: AnyObject] = [
+        var params: [String: Any] = [
             "filter": filterType,
             "loc": ["lat": loc.latitude, "lon": loc.longitude],
             "scan_center": ["lat": scanCenter.latitude, "lon": scanCenter.longitude],
@@ -64,7 +64,7 @@ class RadarRequester: BasicRequester {
         return post(
             urlForName("nearby"),
             parameters: params,
-            encoding: .json,
+            encoding: URLEncoding.default,
                responseDataField: "result",
                onSuccess: onSuccess, onError: onError
         )
@@ -74,8 +74,8 @@ class RadarRequester: BasicRequester {
         _ loc: CLLocationCoordinate2D,
         scanCenter: CLLocationCoordinate2D,
         filterDistance: Double,
-        onSuccess: (_ json: JSON?)->(),
-        onError: (_ code: String?)->()
+        onSuccess: @escaping (_ json: JSON?)->(),
+        onError: @escaping (_ code: String?)->()
         ) -> Request{
         return post(
             urlForName("nearby"),
@@ -83,13 +83,13 @@ class RadarRequester: BasicRequester {
                 "filter": "distance", "filter_param": filterDistance,
                 "loc": ["lat": loc.latitude, "lon": loc.longitude],
                 "scan_center": ["lat": scanCenter.latitude, "lon": scanCenter.longitude]
-            ], encoding: .json,
+            ],
             responseDataField: "result",
             onSuccess: onSuccess, onError: onError
         )
     }
     
-    func trackUser(_ userID: String, onSuccess: (_ json: JSON?)->(), onError: (_ code: String?)->()) -> Request {
+    func trackUser(_ userID: String, onSuccess: @escaping (_ json: JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request {
         return get(urlForName("track", param: ["userID": userID]),
                    responseDataField: "location",
                    onSuccess: onSuccess, onError: onError)

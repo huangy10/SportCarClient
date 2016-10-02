@@ -51,7 +51,8 @@ class ClubBubbleView: UIView {
     func startUpdate() {
         updator?.invalidate()
         updator = CADisplayLink(target: self, selector: #selector(ClubBubbleView.update))
-        updator?.frameInterval = 0
+        updator?.preferredFramesPerSecond = 30
+//        updator?.frameInterval = 0
         updator?.add(to: RunLoop.current, forMode: RunLoopMode.defaultRunLoopMode)
     }
     

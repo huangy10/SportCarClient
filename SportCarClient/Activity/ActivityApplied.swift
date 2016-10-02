@@ -14,7 +14,7 @@ class ActivityAppliedController: ActivityHomeMineListController {
     override func getMoreActData() {
         let requester = ActivityRequester.sharedInstance
         let dateThreshold = data.last?.applyAt ?? Date()
-        requester.getActivityApplied(dateThreshold, op_type: "more", limit: 10, onSuccess: { (json) -> () in
+        _ = requester.getActivityApplied(dateThreshold, op_type: "more", limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
                 let act: Activity = try! MainManager.sharedManager.getOrCreate(data["activity"])
                 self.data.append(act)
@@ -30,7 +30,7 @@ class ActivityAppliedController: ActivityHomeMineListController {
     
     override func getLatestActData() {
         let dateThreshold = data.last?.applyAt ?? Date()
-        ActivityRequester.sharedInstance.getActivityApplied(dateThreshold, op_type: "latest", limit: 10, onSuccess: { (json) -> () in
+        _ = ActivityRequester.sharedInstance.getActivityApplied(dateThreshold, op_type: "latest", limit: 10, onSuccess: { (json) -> () in
             self.refreshControl?.endRefreshing()
             var new = [Activity]()
             for data in json!.arrayValue {

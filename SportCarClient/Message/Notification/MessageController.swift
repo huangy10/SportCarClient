@@ -61,8 +61,8 @@ class MessageController: UIViewController {
     }
     
     func createSubviews() {
-        let superview = self.view
-        superview?.backgroundColor = UIColor.white
+        let superview = self.view!
+        superview.backgroundColor = UIColor.white
 
         board = UIScrollView()
         board.isPagingEnabled = true
@@ -70,8 +70,8 @@ class MessageController: UIViewController {
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
         board.contentSize = CGSize(width: screenWidth * 2, height: screenHeight)
-        superview?.addSubview(board)
-        board.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(board)
+        board.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         
@@ -80,7 +80,7 @@ class MessageController: UIViewController {
         addChildViewController(chatList)
         board.addSubview(chatList.view)
         chatList.messageController = self
-        chatList.view.snp_makeConstraints { (make) -> Void in
+        chatList.view.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(board).offset(screenWidth)
             make.top.equalTo(superview)
             make.bottom.equalTo(superview)
@@ -95,7 +95,7 @@ class MessageController: UIViewController {
         addChildViewController(notificationList)
         board.addSubview(notificationList.view)
         notificationList.messageHome = self
-        notificationList.view.snp_makeConstraints { (make) -> Void in
+        notificationList.view.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(board)
             make.top.equalTo(superview)
             make.bottom.equalTo(superview)
@@ -128,19 +128,19 @@ class MessageController: UIViewController {
         //
         let titleNotifBtn = UIButton()
         container.addSubview(titleNotifBtn)
-        titleNotifBtn.snp_makeConstraints { (make) -> Void in
+        titleNotifBtn.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(30)
             make.width.equalTo(70)
             make.centerY.equalTo(container)
-            make.right.equalTo(container.snp_centerX)
+            make.right.equalTo(container.snp.centerX)
         }
-        titleNotifLbl = titleNotifBtn.addSubview(UILabel)
-            .config(15, textColor: kTextBlack, textAlignment: .center, text: LS("通知"), fontWeight: UIFontWeightBold)
+        titleNotifLbl = titleNotifBtn.addSubview(UILabel.self)
+            .config(15, fontWeight: UIFontWeightBold, textColor: kTextBlack, textAlignment: .center, text: LS("通知"))
             .layout({ (make) in
                 make.center.equalTo(titleNotifBtn)
-                make.size.equalTo(LS(" 通知 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
+                make.size.equalTo(LS(" 通知 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
             })
-        notifUnreadLbl = container.addSubview(UILabel).config(9, textColor: UIColor.white, textAlignment: .center).config(kHighlightedRedTextColor).layout({ (make) in
+        notifUnreadLbl = container.addSubview(UILabel.self).config(9, textColor: UIColor.white, textAlignment: .center).config(kHighlightedRedTextColor).layout({ (make) in
             make.left.equalTo(titleNotifBtn)
             make.top.equalTo(titleNotifBtn)
             make.size.equalTo(18)
@@ -152,21 +152,21 @@ class MessageController: UIViewController {
         //
         let titleChatBtn = UIButton()
         container.addSubview(titleChatBtn)
-        titleChatBtn.snp_makeConstraints { (make) -> Void in
+        titleChatBtn.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(30)
             make.width.equalTo(70)
             make.centerY.equalTo(container)
-            make.left.equalTo(container.snp_centerX)
+            make.left.equalTo(container.snp.centerX)
         }
         titleChatBtn.tag = 1
         titleChatBtn.addTarget(self, action: #selector(MessageController.titleBtnPressed(_:)), for: .touchUpInside)
-        titleChatLbl = titleChatBtn.addSubview(UILabel)
-            .config(15, textColor: kTextGray, textAlignment: .center, text: LS("聊天"), fontWeight: UIFontWeightBold)
+        titleChatLbl = titleChatBtn.addSubview(UILabel.self)
+            .config(15, fontWeight: UIFontWeightBold, textColor: kTextGray, textAlignment: .center, text: LS("聊天"))
             .layout({ (make) in
                 make.center.equalTo(titleChatBtn)
-                make.size.equalTo(LS(" 聊天 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.max, height: CGFloat.max)))
+                make.size.equalTo(LS(" 聊天 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
             })
-        chatUnreadLbl = container.addSubview(UILabel)
+        chatUnreadLbl = container.addSubview(UILabel.self)
             .config(9, textColor: UIColor.white, textAlignment: .center)
             .config(kHighlightedRedTextColor)
             .layout({ (make) in
@@ -180,7 +180,7 @@ class MessageController: UIViewController {
         titleBtnIcon = UIImageView(image: UIImage(named: "nav_title_btn_icon"))
         container.addSubview(titleBtnIcon)
         container.sendSubview(toBack: titleBtnIcon)
-        titleBtnIcon.snp_makeConstraints { (make) -> Void in
+        titleBtnIcon.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(container)
             make.left.equalTo(titleNotifLbl)
             make.right.equalTo(titleNotifLbl)
@@ -207,7 +207,7 @@ class MessageController: UIViewController {
             chatList.viewWillAppear(true)
             notificationList.viewWillDisappear(true)
             board.setContentOffset(CGPoint(x: board.frame.width, y: 0), animated: true)
-            titleBtnIcon.snp_remakeConstraints(closure: { (make) -> Void in
+            titleBtnIcon.snp.remakeConstraints({ (make) -> Void in
                 make.bottom.equalTo(titleBtnIcon.superview!)
                 make.left.equalTo(titleChatLbl)
                 make.right.equalTo(titleChatLbl)
@@ -222,7 +222,7 @@ class MessageController: UIViewController {
             chatList.viewWillDisappear(true)
             notificationList.viewWillAppear(true)
             board.setContentOffset(CGPoint.zero, animated: true)
-            titleBtnIcon.snp_remakeConstraints(closure: { (make) -> Void in
+            titleBtnIcon.snp.remakeConstraints({ (make) -> Void in
                 make.bottom.equalTo(titleBtnIcon.superview!)
                 make.left.equalTo(titleNotifLbl)
                 make.right.equalTo(titleNotifLbl)
@@ -238,7 +238,7 @@ class MessageController: UIViewController {
     }
     
     func onUnreadNumChanged(_ notification: Foundation.Notification) {
-        let name = notification.name
+        let name = notification.name.rawValue
         if name == kUnreadNumberDidChangeNotification {
             DispatchQueue.main.async(execute: { 
                 self.notifUnreadLbl.setUnreadNum(MessageManager.defaultManager.unreadNotifNum)

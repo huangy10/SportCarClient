@@ -11,11 +11,11 @@ import Dollar
 
 
 class CityElementSelectWithSuggestionsController: CityElementSelectController, UICollectionViewDataSource, UICollectionViewDelegate, LoadingProtocol {
+    internal var delayWorkItem: DispatchWorkItem?
+
     
     var curSelected: String!
     var popularCities: [String] = []
-    
-    var delayTask: (()->())?
     
     override init() {
         super.init()

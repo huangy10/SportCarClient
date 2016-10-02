@@ -69,7 +69,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     }
     
     override func navLeftBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     /*
@@ -97,7 +97,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     func followBtnPressed(_ sender: UIButton) {
         let requester = AccountRequester2.sharedInstance
         lp_start()
-        requester.follow(self.data.user.ssidString, onSuccess: { (json) -> () in
+        _ = requester.follow(self.data.user.ssidString, onSuccess: { (json) -> () in
             self.lp_stop()
             let board = self.header as! PersonHeaderOther
             
@@ -122,8 +122,8 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     }
     
     func chatBtnPressed() {
-        if self.navigationController!.viewControllers.count > 3, let room = self.navigationController?.viewControllers.fetch(-3) as? ChatRoomController , room.targetUser == self.data.user{
-            self.navigationController?.popViewController(animated: true)
+        if self.navigationController!.viewControllers.count > 3, let room = self.navigationController?.viewControllers.fetch(index: -3) as? ChatRoomController , room.targetUser == self.data.user{
+            _ = self.navigationController?.popViewController(animated: true)
             return
         }
         let room = ChatRoomController()

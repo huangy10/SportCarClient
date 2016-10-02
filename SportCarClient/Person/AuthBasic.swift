@@ -45,7 +45,7 @@ class AuthBasicController: InputableViewController {
     }
     
     func navLeftBtnPressed(){
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func titleForRightNavBtn() -> String{
@@ -59,14 +59,14 @@ class AuthBasicController: InputableViewController {
         board = UIScrollView()
         board.showsVerticalScrollIndicator = false
         self.view.addSubview(board)
-        board.snp_makeConstraints { (make) -> Void in
+        board.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(self.view)
         }
-        let superview = board
+        let superview = board!
         //
         privilegeBoard = createPrivilegeBoard()
         board.addSubview(privilegeBoard)
-        privilegeBoard.snp_makeConstraints { (make) -> Void in
+        privilegeBoard.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(self.view)
             make.left.equalTo(self.view)
             make.top.equalTo(superview)
@@ -74,20 +74,20 @@ class AuthBasicController: InputableViewController {
         }
         //
         descriptionLabel = createDescriptionLabel()
-        superview?.addSubview(descriptionLabel)
-        descriptionLabel.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(descriptionLabel)
+        descriptionLabel.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(self.view).offset(15)
             make.right.equalTo(self.view).offset(-15)
-            make.top.equalTo(privilegeBoard.snp_bottom)
+            make.top.equalTo(privilegeBoard.snp.bottom)
             make.height.equalTo(getHeightForDescriptionLable())
         }
         //
         imagesInputPanel = createImagesImputPanel()
-        superview?.addSubview(imagesInputPanel)
-        imagesInputPanel.snp_makeConstraints { (make) -> Void in
+        superview.addSubview(imagesInputPanel)
+        imagesInputPanel.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(self.view).offset(15)
             make.right.equalTo(self.view).offset(-15)
-            make.top.equalTo(descriptionLabel.snp_bottom).offset(35)
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(35)
             make.height.equalTo(getHeightForImageInputPanel())
         }
         board.contentSize = CGSize(width: UIScreen.main.bounds.width, height: getHeightForDescriptionLable() + getHeightForImageInputPanel() + getHeightForPrivilegeBoard() + 35)

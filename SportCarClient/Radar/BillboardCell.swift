@@ -216,7 +216,7 @@ class BillboardFirstThree: BillboardCell {
     
     override func configureOrderLbl() {
         orderStaticLbl = contentView.addSubview(UILabel.self)
-            .config(12, fontWeight: UIFontWeightRegular, textAlignment: .left, text: LS("排名"), textColor: UIColor(white: 0, alpha: 0.38))
+            .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.38), textAlignment: .left, text: LS("排名"))
             .layout({ (make) in
                 make.left.equalTo(container).offset(12)
                 make.top.equalTo(greatMark)

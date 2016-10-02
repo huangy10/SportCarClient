@@ -44,11 +44,11 @@ class PersonMineSettingsInvitationController: UITableViewController {
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func navRightBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
         if dirty {
             let dataSource = PersonMineSettingsDataSource.sharedDataSource
             dataSource.acceptInvitation = selectedType

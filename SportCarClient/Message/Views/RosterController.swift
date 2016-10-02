@@ -111,7 +111,7 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
     
     func groupChatSetupControllerDidSuccessCreatingClub(_ newClub: Club) {
         // 群聊创建成功，打开聊天窗口
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
         let chatRoom = ChatRoomController()
         chatRoom.targetClub = newClub
         

@@ -45,7 +45,7 @@ class SSPullToRefresh: UIView {
                 action?()
             case .finished:
                 removeScrollViewObserving()
-                SpringAnimation.springWithCompletion(1, animations: { 
+                SpringAnimation.springWithCompletion(duration: 1, animations: { 
                     self.scrollView?.contentInset = self.scrollViewDefaultInsets
                     self.scrollView?.contentOffset.y -= self.scrollViewDefaultInsets.top
                     self.actIndicator.layer.opacity = 0
@@ -80,12 +80,12 @@ class SSPullToRefresh: UIView {
     }
     
     func createSubviews() {
-        pullingLbl = self.addSubview(UILabel).config(textColor: kTextBlack, textAlignment: .center)
+        pullingLbl = self.addSubview(UILabel.self).config(textColor: kTextBlack, textAlignment: .center)
             .layout({ (make) in
                 make.center.equalTo(self)
             })
         
-        confirmingLabl = self.addSubview(UILabel).config(textColor: kTextBlack, textAlignment: .center)
+        confirmingLabl = self.addSubview(UILabel.self).config(textColor: kTextBlack, textAlignment: .center)
             .layout({ (make) in
                 make.center.equalTo(self)
             })

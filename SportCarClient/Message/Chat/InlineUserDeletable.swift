@@ -46,9 +46,9 @@ class InlineUserSelectDeletable: InlineUserSelectController {
                 self.delegate?.inlineUserSelectShouldDeleteUser(user)
             }
         }
-        cell.avatarImg.kf_setImageWithURL(user.avatarURL!)
+        cell.avatarImg.kf.setImage(with: user.avatarURL!)
         if let carURL = user.avatarCarModel?.logoURL {
-            cell.avatarCarLogo.kf_setImageWithURL(carURL)
+            cell.avatarCarLogo.kf.setImage(with: carURL)
         } else {
             cell.avatarCarLogo.image = nil
         }
@@ -96,7 +96,7 @@ class InlineUserSelectDeletableCell: InlineUserSelectCell {
         deleteBtn.setImage(UIImage(named: "status_delete_image_btn"), for: UIControlState())
         deleteBtn.addTarget(self, action: #selector(InlineUserSelectDeletableCell.deleteBtnPressed), for: .touchUpInside)
         superview.addSubview(deleteBtn)
-        deleteBtn.snp_makeConstraints { (make) -> Void in
+        deleteBtn.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(avatarImg)
             make.top.equalTo(avatarImg)
             make.size.equalTo(25)

@@ -29,8 +29,8 @@ class ClubMembersController: UserSelectController {
     override func createSubviews() {
         super.createSubviews()
         
-        let superview = self.view
-        searchBar?.snp_makeConstraints(closure: { (make) in
+        let superview = self.view!
+        searchBar?.snp.makeConstraints({ (make) in
             make.right.equalTo(superview).offset(0)
         })
         selectedUserList?.isHidden = true
@@ -42,13 +42,13 @@ class ClubMembersController: UserSelectController {
     }
     
     override func navLeftBtnPressed() {
-        navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserSelectCellUnselectable
         let user = users[(indexPath as NSIndexPath).row]
-        cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
+        cell.avatarImg?.kf.setImage(with: user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
         return cell
@@ -69,7 +69,7 @@ class ClubMembersController: UserSelectController {
     func getMoreUserData() {
         let skip = users.count
         let limit = 10
-        ClubRequester.sharedInstance.getClubMembers(targetClub.ssidString, skip: skip, limit: limit, searchText: searchBar?.text ?? "", onSuccess: { (json) in
+        _ = ClubRequester.sharedInstance.getClubMembers(targetClub.ssidString, skip: skip, limit: limit, searchText: searchBar?.text ?? "", onSuccess: { (json) in
             if let data = json?.arrayValue {
                 for element in data {
                     let user: User = try! MainManager.sharedManager.getOrCreate(element)

@@ -31,7 +31,7 @@ class GroupMemberSelectController: UserSelectController {
     init (club: Club) {
         self.club = club
         self.members = club.members.filter({$0.ssid != club.founderUser!.ssid})
-        super.init(nibName: nil, bundle: nil)
+        super.init()
         self.forceSelectedUsers = [club.founderUser!]
     }
 
@@ -62,7 +62,7 @@ class GroupMemberSelectController: UserSelectController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserSelectCellUnselectable
         let user = users[(indexPath as NSIndexPath).row]
-        cell.avatarImg?.kf_setImageWithURL(user.avatarURL!)
+        cell.avatarImg?.kf.setImage(with: user.avatarURL!)
         cell.nickNameLbl?.text = user.nickName
         cell.recentStatusLbL?.text = user.recentStatusDes
         return cell

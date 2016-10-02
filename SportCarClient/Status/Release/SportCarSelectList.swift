@@ -93,7 +93,7 @@ class SportCarSelectListController: UICollectionViewController{
      从服务器获取认证跑车信息
      */
     func getSportCarData() {
-        AccountRequester2.sharedInstance.getAuthedCarsList(MainManager.sharedManager.hostUserIDString!, onSuccess: { (data) -> () in
+        _ = AccountRequester2.sharedInstance.getAuthedCarsList(MainManager.sharedManager.hostUserIDString!, onSuccess: { (data) -> () in
             for carOwnerShipJSON in data!.arrayValue {
                 let carJSON = carOwnerShipJSON["car"]
                 let car: SportCar = try! MainManager.sharedManager.getOrCreate(carJSON)
@@ -141,7 +141,7 @@ class SportCarSelectListCell: UICollectionViewCell {
         //
         selectMarker = UIImageView(image: UIImage(named: "status_add_sport_car_unselected"))
         superview.addSubview(selectMarker!)
-        selectMarker?.snp_makeConstraints(closure: { (make) -> Void in
+        selectMarker?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview).offset(15)
             make.centerY.equalTo(superview)
             make.size.equalTo(22.5)
@@ -151,8 +151,8 @@ class SportCarSelectListCell: UICollectionViewCell {
         sportCarNameLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         sportCarNameLbL?.textColor = UIColor(white: 0.72, alpha: 1)
         superview.addSubview(sportCarNameLbL!)
-        sportCarNameLbL?.snp_makeConstraints(closure: { (make) -> Void in
-            make.left.equalTo(selectMarker!.snp_right).offset(10)
+        sportCarNameLbL?.snp.makeConstraints({ (make) -> Void in
+            make.left.equalTo(selectMarker!.snp.right).offset(10)
             make.top.equalTo(superview)
             make.bottom.equalTo(superview)
             make.right.equalTo(superview).offset(-15)
@@ -184,8 +184,8 @@ class SportCarSelectListAddCell: UICollectionViewCell {
         addBtn?.setImage(UIImage(named: "person_add_more"), for: UIControlState())
         addBtn?.addTarget(self, action: #selector(SportCarSelectListAddCell.addPressed), for: .touchUpInside)
         superview.addSubview(addBtn!)
-        addBtn?.snp_makeConstraints(closure: { (make) -> Void in
-            make.center.equalTo(superview).offset(CGPoint(x: -20, y: 0))
+        addBtn?.snp.makeConstraints({ (make) -> Void in
+            make.center.equalTo(superview).offset(CGPoint(x: -20, y: 0) as! ConstraintOffsetTarget)
             make.size.equalTo(18)
         })
     }

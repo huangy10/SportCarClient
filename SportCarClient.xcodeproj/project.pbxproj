@@ -222,13 +222,12 @@
 		BFE9673D1CA5908E0097C42C /* SportCar.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE9673C1CA5908E0097C42C /* SportCar.generated.swift */; };
 		BFE967411CA591C30097C42C /* LocationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967401CA591C30097C42C /* LocationModel.swift */; };
 		BFE967431CA6296F0097C42C /* SSModelError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967421CA6296F0097C42C /* SSModelError.swift */; };
-		BFE967491CA6D8920097C42C /* SportCarClient.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BFE967471CA6D8920097C42C /* SportCarClient.xcdatamodeld */; };
+		BFE967491CA6D8920097C42C /* SportCarApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BFE967471CA6D8920097C42C /* SportCarApp.xcdatamodeld */; };
 		BFE967571CA6D9B90097C42C /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967551CA6D9B90097C42C /* Notification.swift */; };
 		BFE967591CA6D9DC0097C42C /* Notification.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967581CA6D9DC0097C42C /* Notification.generated.swift */; };
 		BFE9675C1CA6E8D60097C42C /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE9675B1CA6E8D60097C42C /* News.swift */; };
 		BFE9675E1CA6E9DF0097C42C /* NewsComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE9675D1CA6E9DF0097C42C /* NewsComment.swift */; };
 		BFE967601CA6EE080097C42C /* ChatModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE9675F1CA6EE080097C42C /* ChatModelManager.swift */; };
-		BFE967621CA7699B0097C42C /* Chater.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967611CA7699B0097C42C /* Chater.swift */; };
 		BFE967661CA81E060097C42C /* ActivityEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967651CA81E060097C42C /* ActivityEdit.swift */; };
 		BFE9676A1CA90CF60097C42C /* SportCarAuthHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967691CA90CF60097C42C /* SportCarAuthHeader.swift */; };
 		BFE9676C1CA92AD40097C42C /* GroupMemberSelecter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE9676B1CA92AD40097C42C /* GroupMemberSelecter.swift */; };
@@ -544,7 +543,6 @@
 		BFE9675B1CA6E8D60097C42C /* News.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = News.swift; path = LocalModel/News.swift; sourceTree = "<group>"; };
 		BFE9675D1CA6E9DF0097C42C /* NewsComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsComment.swift; path = LocalModel/NewsComment.swift; sourceTree = "<group>"; };
 		BFE9675F1CA6EE080097C42C /* ChatModelManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatModelManager.swift; path = LocalModel/Manager/ChatModelManager.swift; sourceTree = "<group>"; };
-		BFE967611CA7699B0097C42C /* Chater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Chater.swift; path = LocalModel/InMem/Chater.swift; sourceTree = "<group>"; };
 		BFE967651CA81E060097C42C /* ActivityEdit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityEdit.swift; path = Activity/ActivityEdit.swift; sourceTree = "<group>"; };
 		BFE967691CA90CF60097C42C /* SportCarAuthHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarAuthHeader.swift; path = Person/SportCarAuthHeader.swift; sourceTree = "<group>"; };
 		BFE9676B1CA92AD40097C42C /* GroupMemberSelecter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GroupMemberSelecter.swift; path = Message/Chat/GroupMemberSelecter.swift; sourceTree = "<group>"; };
@@ -1615,7 +1613,6 @@
 			children = (
 				BFE967201CA584A20097C42C /* User.generated.swift */,
 				BFE967081CA584870097C42C /* User.swift */,
-				BFE967611CA7699B0097C42C /* Chater.swift */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -1791,7 +1788,7 @@
 				BF32EEAA1C088CF60098FEC1 /* Account */,
 				BFFA51151C05D9910019E5EF /* AppDelegate.swift */,
 				BFFA51241C05D9920019E5EF /* Info.plist */,
-				BFE967471CA6D8920097C42C /* SportCarClient.xcdatamodeld */,
+				BFE967471CA6D8920097C42C /* SportCarApp.xcdatamodeld */,
 				BF3BD5E91C28E89000499674 /* Settings.bundle */,
 				BFD044321D75CC72003F8831 /* Assets.xcassets */,
 				BF63089C1C1970AB0087A4F0 /* Localizable.strings */,
@@ -2206,7 +2203,7 @@
 				BFE9676C1CA92AD40097C42C /* GroupMemberSelecter.swift in Sources */,
 				BFC36BAF1C6C5E1D00DC6FE2 /* PersonMineSettings.swift in Sources */,
 				BF6308A31C19A8040087A4F0 /* ResetPassword.swift in Sources */,
-				BFE967491CA6D8920097C42C /* SportCarClient.xcdatamodeld in Sources */,
+				BFE967491CA6D8920097C42C /* SportCarApp.xcdatamodeld in Sources */,
 				BF01FDA51D65E78A00865630 /* ActivityMembers.swift in Sources */,
 				BF8D42FA1C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift in Sources */,
 				BF139E6E1C4E6E8E0022F4FC /* FFSelect.swift in Sources */,
@@ -2292,7 +2289,6 @@
 				BFE967411CA591C30097C42C /* LocationModel.swift in Sources */,
 				BFC0325C1C6ECF5100ECA69A /* ImageInputSelector.swift in Sources */,
 				BFC36BAC1C6C496A00DC6FE2 /* OtherPerson.swift in Sources */,
-				BFE967621CA7699B0097C42C /* Chater.swift in Sources */,
 				BFC0324B1C6CCC7D00ECA69A /* PersonMineSettingsInvitation.swift in Sources */,
 				BFC0325A1C6E22EF00ECA69A /* PersonMineSinglePropertyModifier.swift in Sources */,
 				BFC36BA31C69A90400DC6FE2 /* SportscarViewList.swift in Sources */,
@@ -2438,7 +2434,7 @@
 					"$(PROJECT_DIR)/SportCarClient/QQ",
 				);
 				INFOPLIST_FILE = SportCarClient/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2579,7 +2575,7 @@
 					"$(PROJECT_DIR)/SportCarClient/QQ",
 				);
 				INFOPLIST_FILE = SportCarClient/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2608,7 +2604,7 @@
 					"$(PROJECT_DIR)/SportCarClient/QQ",
 				);
 				INFOPLIST_FILE = SportCarClient/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2720,14 +2716,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		BFE967471CA6D8920097C42C /* SportCarClient.xcdatamodeld */ = {
+		BFE967471CA6D8920097C42C /* SportCarApp.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				BFC7F26D1D5C57FA00C5BE46 /* SportCarClient V160811.xcdatamodel */,
 				BFE967481CA6D8920097C42C /* SportCarClient.xcdatamodel */,
 			);
 			currentVersion = BFC7F26D1D5C57FA00C5BE46 /* SportCarClient V160811.xcdatamodel */;
-			path = SportCarClient.xcdatamodeld;
+			path = SportCarApp.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

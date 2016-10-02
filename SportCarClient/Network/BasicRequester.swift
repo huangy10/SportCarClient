@@ -17,14 +17,16 @@ class BasicRequester {
         
         m.delegate.taskWillPerformHTTPRedirectionWithCompletion = {
             (session: URLSession, task: URLSessionTask, response: HTTPURLResponse,
-            newRequest: NSURLRequest, completionHandler: (URLRequest?) -> ()) in
-            
-            if let requestWithHeader: MutableURLRequest = newRequest.mutableCopy() as? MutableURLRequest {
-                requestWithHeader.setValue(self.jwtToken, forHTTPHeaderField: "Authorization")
-                completionHandler(requestWithHeader)
-            } else {
-                completionHandler(newRequest)
-            }
+            newRequest: URLRequest, completionHandler: (URLRequest?) -> ()) in
+            var req: URLRequest = newRequest
+            req.setValue(self.jwtToken, forHTTPHeaderField: "Authorization")
+            completionHandler(req)
+//            if let requestWithHeader: URLRequest = newRequest.mutableCopy() as? URLRequest {
+//                requestWithHeader.setValue(self.jwtToken, forHTTPHeaderField: "Authorization")
+//                completionHandler(requestWithHeader)
+//            } else {
+//                completionHandler(newRequest)
+//            }
         }
         return m
     } ()

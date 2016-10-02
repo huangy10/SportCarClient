@@ -27,6 +27,7 @@ class NewsComment: BaseInMemModel {
         super.init()
     }
     
+    @discardableResult
     override func fromJSONString(_ string: String, detailLevel: Int) throws -> NewsComment {
         let json = JSON(data: string.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
         try loadDataFromJSON(json)
@@ -44,6 +45,7 @@ class NewsComment: BaseInMemModel {
 //        }
 //    }
 //    
+    @discardableResult
     override func loadDataFromJSON(_ data: JSON) throws -> NewsComment {
         try super.loadDataFromJSON(data)
         ssid = data["commentID"].int32Value
@@ -59,6 +61,7 @@ class NewsComment: BaseInMemModel {
         return self
     }
     
+    @discardableResult
     override func toJSONObject(_ detailLevel: Int) throws -> JSON {
         return [] as JSON
     }

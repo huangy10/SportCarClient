@@ -25,7 +25,7 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         bgImgView = UIImageView(image: UIImage(named: "account_bg_image"))
         bgImgView.layer.opacity = 0.5
         superview.addSubview(bgImgView)
-        bgImgView.snp_makeConstraints { (make) -> Void in
+        bgImgView.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         //
@@ -36,7 +36,7 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
 //        titleLbl?.textColor = UIColor.whiteColor()
 //        titleLbl?.textAlignment = NSTextAlignment.Center
 //        superview.addSubview(titleLbl!)
-//        titleLbl!.snp_makeConstraints { (make) -> Void in
+//        titleLbl!.snp.makeConstraints { (make) -> Void in
 //            make.width.equalTo(superview)
 //            make.height.equalTo(125)
 //            make.centerX.equalTo(superview)
@@ -44,7 +44,7 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
 //        }
         titleLogo = UIImageView(image: UIImage(named: "account_title_logo"))
         superview.addSubview(titleLogo)
-        titleLogo.snp_makeConstraints { (make) -> Void in
+        titleLogo.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
             make.top.equalTo(superview).offset(40)
             make.height.equalTo(23)
@@ -54,8 +54,8 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         // 复用了注册页面的结构
         let panel = self.registerView()
         superview.addSubview(panel!)
-        panel.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(titleLogo!.snp_bottom).offset(43)
+        panel?.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(titleLogo!.snp.bottom).offset(43)
             make.left.equalTo(superview)
             make.right.equalTo(superview)
             make.bottom.equalTo(superview)
@@ -69,7 +69,7 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         inputContainer.backgroundColor = UIColor.white
         inputContainer.layer.cornerRadius = 4
         container.addSubview(inputContainer)
-        inputContainer.snp_makeConstraints { (make) -> Void in
+        inputContainer.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(container)
             make.centerX.equalTo(container)
             make.height.equalTo(150)
@@ -79,18 +79,18 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         let seqLine1 = UIView()
         seqLine1.backgroundColor = UIColor(white: 0.953, alpha: 1)
         inputContainer.addSubview(seqLine1)
-        seqLine1.snp_makeConstraints { (make) -> Void in
+        seqLine1.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(1)
-            make.centerY.equalTo(inputContainer.snp_top).offset(50)
+            make.centerY.equalTo(inputContainer.snp.top).offset(50)
             make.left.equalTo(inputContainer).offset(13)
             make.right.equalTo(inputContainer).offset(-13)
         }
         let seqLine2 = UIView()
         seqLine2.backgroundColor = UIColor(white: 0.953, alpha: 1)
         inputContainer.addSubview(seqLine2)
-        seqLine2.snp_makeConstraints { (make) -> Void in
+        seqLine2.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(1)
-            make.centerY.equalTo(inputContainer.snp_bottom).offset(-50)
+            make.centerY.equalTo(inputContainer.snp.bottom).offset(-50)
             make.left.equalTo(inputContainer).offset(13)
             make.right.equalTo(inputContainer).offset(-13)
         }
@@ -103,7 +103,7 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         let registerPhoneInputIcon = UIImageView(image: UIImage(named: "account_phone_input"))
         registerPhoneInput?.leftView = registerPhoneInputIcon
         inputContainer.addSubview(registerPhoneInput!)
-        registerPhoneInput?.snp_makeConstraints(closure: { (make) -> Void in
+        registerPhoneInput?.snp.makeConstraints({ (make) -> Void in
             make.height.equalTo(inputContainer).multipliedBy(0.3333)
             make.left.equalTo(inputContainer).offset(10)
             make.width.equalTo(inputContainer).multipliedBy(0.65)
@@ -116,9 +116,9 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         sendCodeBtn.setTitleColor(UIColor(red: 1, green: 0.2667, blue: 0.2745, alpha: 1), for: UIControlState())
         sendCodeBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         inputContainer.addSubview(sendCodeBtn)
-        sendCodeBtn.snp_makeConstraints { (make) -> Void in
+        sendCodeBtn.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(registerPhoneInput!)
-            make.left.equalTo(registerPhoneInput!.snp_right)
+            make.left.equalTo(registerPhoneInput!.snp.right)
             make.right.equalTo(inputContainer).offset(-13)
             make.centerY.equalTo(registerPhoneInput!)
         }
@@ -133,10 +133,10 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         let registerAuthCodeIcon = UIImageView(image: UIImage(named: "account_auth_code"))
         registerAuthCode?.leftView = registerAuthCodeIcon
         inputContainer.addSubview(registerAuthCode!)
-        registerAuthCode!.snp_makeConstraints { (make) -> Void in
+        registerAuthCode!.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(registerPhoneInput!)
             make.left.equalTo(registerPhoneInput!)
-            make.top.equalTo(registerPhoneInput!.snp_bottom)
+            make.top.equalTo(registerPhoneInput!.snp.bottom)
             make.right.equalTo(sendCodeBtn)
         }
         //
@@ -149,10 +149,10 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         let registerPasswordInputIcon = UIImageView(image: UIImage(named: "account_password_input"))
         registerPasswordInput?.leftView = registerPasswordInputIcon
         inputContainer.addSubview(registerPasswordInput!)
-        registerPasswordInput?.snp_makeConstraints(closure: { (make) -> Void in
+        registerPasswordInput?.snp.makeConstraints({ (make) -> Void in
             make.height.equalTo(registerPhoneInput!)
             make.width.equalTo(registerAuthCode!)
-            make.top.equalTo(registerAuthCode!.snp_bottom)
+            make.top.equalTo(registerAuthCode!.snp.bottom)
             make.centerX.equalTo(registerAuthCode!)
         })
         
@@ -164,10 +164,10 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         registerBtn.layer.shadowOpacity = 1
         registerBtn.addTarget(self, action: #selector(registerPressed), for: .touchUpInside)
         container.addSubview(registerBtn)
-        registerBtn.snp_makeConstraints { (make) -> Void in
+        registerBtn.snp.makeConstraints { (make) -> Void in
             make.width.equalTo(100)
             make.height.equalTo(40)
-            make.top.equalTo(inputContainer.snp_bottom).offset(75)
+            make.top.equalTo(inputContainer.snp.bottom).offset(75)
             make.centerX.equalTo(container)
         }
         return container
@@ -194,7 +194,7 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
             return
         }
         lp_start()
-        AccountRequester2.sharedInstance.resetPassword(phone, passwd: passwd, authCode: authCode, onSuccess: { (json) in
+        _ = AccountRequester2.sharedInstance.resetPassword(phone, passwd: passwd, authCode: authCode, onSuccess: { (json) in
             self.lp_stop()
 //            self.showToast(LS("密码修改成功！"))
             UIApplication.shared.keyWindow?.rootViewController?.showToast(LS("密码修改成功！"))

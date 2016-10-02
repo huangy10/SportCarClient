@@ -12,8 +12,7 @@ import SnapKit
 let kGroupChatSettingSectionTitles = ["", "信息", "通知", "聊天"]
 
 class GroupChatSettingController: UITableViewController, PersonMineSinglePropertyModifierDelegate, InlineUserSelectDelegate, FFSelectDelegate, LoadingProtocol {
-    
-    var delayTask: (()->())?
+    internal var delayWorkItem: DispatchWorkItem?
     
     var targetClub: Club!
     // 是否设置发生了更改

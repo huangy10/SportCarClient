@@ -57,8 +57,8 @@ class PersonMineSettingsDataSource {
      将本地设置同步到服务器端
      */
     func sync() {
-        let uploadParam: [String: AnyObject] = [
-            "notification_accept": newMessageNotificationAccept ? "y" : "n" as AnyObject,
+        let uploadParam: [String: Any] = [
+            "notification_accept": newMessageNotificationAccept ? "y" : "n",
             "notification_shake": newMessageNotificationShake ? "y" : "n",
             "notification_sound": newMessageNotificationSound ? "y" : "n",
             "location_visible_to": locationVisible,
@@ -67,7 +67,7 @@ class PersonMineSettingsDataSource {
         ]
         saveToUserDefault()
         let requester = SettingsRequester.sharedInstance
-        requester.syncPersonMineSettings(uploadParam, onSuccess: { (data) -> () in
+        _ = requester.syncPersonMineSettings(uploadParam, onSuccess: { (data) -> () in
             print("setting data uploaded")
             }) { (code) -> () in
                 print("sync error")
@@ -83,7 +83,7 @@ class PersonMineSettingsDataSource {
         }
         getCacheFolderSize()
         let requester = SettingsRequester.sharedInstance
-        requester.updatePersonMineSettings({ (json) -> () in
+        _ = requester.updatePersonMineSettings({ (json) -> () in
             if let data = json {
                 self.locationVisible = data["location_visible_to"].stringValue
                 self.acceptInvitation = data["accept_invitation"].stringValue
@@ -114,21 +114,21 @@ class PersonMineSettingsDataSource {
         let userDefault = UserDefaults.standard
         locationVisible = (userDefault.object(forKey: prefix + "_location_visible") as? String) ?? "all"
         acceptInvitation = (userDefault.object(forKey: prefix + "_accept_invitation") as? String) ?? "all"
-        newMessageNotificationAccept = (userDefault.bool(forKey: prefix + "_notification_accept")) ?? true
-        newMessageNotificationShake = userDefault.bool(forKey: prefix + "_notification_shake") ?? true
-        newMessageNotificationSound = userDefault.bool(forKey: prefix + "_notification_sound") ?? true
-        newMessageNotificationAccept = userDefault.bool(forKey: prefix + "_notification_accept") ?? true
+        newMessageNotificationAccept = (userDefault.bool(forKey: prefix + "_notification_accept")) 
+        newMessageNotificationShake = userDefault.bool(forKey: prefix + "_notification_shake") 
+        newMessageNotificationSound = userDefault.bool(forKey: prefix + "_notification_sound") 
+        newMessageNotificationAccept = userDefault.bool(forKey: prefix + "_notification_accept") 
     }
     
     func getCacheFolderSize() {
         let fileManger = FileManager.default
-        let cacheFolderPath: AnyObject = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0] as AnyObject
+        let cacheFolderPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0] as NSString
         do {
-            let subpaths = try fileManger.subpathsOfDirectory(atPath: cacheFolderPath as! String)
+            let subpaths = try fileManger.subpathsOfDirectory(atPath: cacheFolderPath as String)
             var size: UInt64 = 0
             for fileName in subpaths {
                 let filePath = cacheFolderPath.appendingPathComponent(fileName)
-                let fileInfo: NSDictionary = try fileManger.attributesOfItem(atPath: filePath)
+                let fileInfo: NSDictionary = try fileManger.attributesOfItem(atPath: filePath) as NSDictionary
                 size += fileInfo.fileSize()
             }
             cacheSize = size

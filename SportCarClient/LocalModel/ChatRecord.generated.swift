@@ -50,7 +50,7 @@ extension ChatRecord {
     static let audioLength = AlecrimCoreData.NullableAttribute<Double>("audioLength")
     static let audioReady = AlecrimCoreData.NullableAttribute<Bool>("audioReady")
     static let chatType = AlecrimCoreData.NullableAttribute<String>("chatType")
-    static let createdAt = AlecrimCoreData.NullableAttribute<NSDate>("createdAt")
+    static let createdAt = AlecrimCoreData.NullableAttribute<Date>("createdAt")
     static let draft = AlecrimCoreData.NullableAttribute<String>("draft")
     static let hidden = AlecrimCoreData.NullableAttribute<Bool>("hidden")
     static let image = AlecrimCoreData.NullableAttribute<String>("image")
@@ -66,7 +66,7 @@ extension ChatRecord {
     static let sent = AlecrimCoreData.NullableAttribute<Bool>("sent")
     static let targetID = AlecrimCoreData.NullableAttribute<Int32>("targetID")
     static let textContent = AlecrimCoreData.NullableAttribute<String>("textContent")
-    static let updatedAt = AlecrimCoreData.NullableAttribute<NSDate>("updatedAt")
+    static let updatedAt = AlecrimCoreData.NullableAttribute<Date>("updatedAt")
 
 }
 
@@ -79,7 +79,7 @@ extension AlecrimCoreData.AttributeProtocol where Self.ValueType: ChatRecord {
     var audioLength: AlecrimCoreData.NullableAttribute<Double> { return AlecrimCoreData.NullableAttribute<Double>("audioLength", self) }
     var audioReady: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("audioReady", self) }
     var chatType: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("chatType", self) }
-    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
+    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<Date>("createdAt", self) }
     var draft: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("draft", self) }
     var hidden: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("hidden", self) }
     var image: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("image", self) }
@@ -95,7 +95,7 @@ extension AlecrimCoreData.AttributeProtocol where Self.ValueType: ChatRecord {
     var sent: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("sent", self) }
     var targetID: AlecrimCoreData.NullableAttribute<Int32> { return AlecrimCoreData.NullableAttribute<Int32>("targetID", self) }
     var textContent: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("textContent", self) }
-    var updatedAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("updatedAt", self) }
+    var updatedAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<Date>("updatedAt", self) }
 
 }
 

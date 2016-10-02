@@ -46,7 +46,8 @@ class UserMapLocationManager: UIView {
         //
         updator = CADisplayLink(target: self, selector: #selector(UserMapLocationManager.scanUpdate))
         updator.isPaused = true
-        updator.frameInterval = 1
+        updator.preferredFramesPerSecond = 30
+//        updator.frameInterval = 1 // deprecated
         updator.add(to: RunLoop.current, forMode: RunLoopMode.defaultRunLoopMode)
         updator.isPaused = false
     }

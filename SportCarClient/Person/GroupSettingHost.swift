@@ -28,7 +28,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         inlineUserSelect = InlineUserSelectDeletable()
         inlineUserSelect?.delegate = self
         cell.contentView.addSubview(inlineUserSelect!.view)
-        inlineUserSelect?.view.snp_makeConstraints(closure: { (make) in
+        inlineUserSelect?.view.snp.makeConstraints({ (make) in
             make.edges.equalTo(cell.contentView)
         })
         inlineUserSelect?.relatedClub = targetClub
@@ -50,7 +50,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         
         let rightBtn = UIButton()
         let btnText = LS("进入聊天")
-        rightBtn.frame = CGRect(x: 0, y: 0, width: btnText.sizeWithFont(UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), boundingSize: CGSize(width: CGFloat.max, height: 21)).width, height: 21)
+        rightBtn.frame = CGRect(x: 0, y: 0, width: btnText.sizeWithFont(UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 21)).width, height: 21)
         rightBtn.setTitle(btnText, for: UIControlState())
         rightBtn.titleLabel!.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         rightBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
@@ -61,7 +61,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
     override func navLeftBtnPressed() {
         if dirty {
             let requester = ClubRequester.sharedInstance
-            requester.updateClubSettings(targetClub, onSuccess: { (json) -> () in
+            _ = requester.updateClubSettings(targetClub, onSuccess: { (json) -> () in
                 print("success")
                 }, onError: { (code) -> () in
                     print("failure")
@@ -74,14 +74,14 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
                     self.targetClub.logo = newLogoURL
                     // save the uploaded image to the shared cache
                     let logoURL = SFURL(newLogoURL)!
-                    let cache = KingfisherManager.sharedManager.cache
-                    cache.storeImage(self.newLogo!, forKey: logoURL.absoluteString)
+                    let cache = KingfisherManager.shared.cache
+                    cache.store(self.newLogo!, forKey: logoURL.absoluteString)
                 }
                 }, onError: { (code) -> () in
                     
             })
         }
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
 //    override func navRightBtnPressed() {
@@ -112,7 +112,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
                 cell.avatarImage.image = newLogo
                 return cell
             }
-            cell.avatarImage.kf_setImageWithURL(targetClub.logoURL!)
+            cell.avatarImage.kf.setImage(with: targetClub.logoURL!)
             return cell
         case 1:
             switch (indexPath as NSIndexPath).row {
@@ -146,7 +146,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
 //                if inlineUserSelect == nil {
 //                    let select = InlineUserSelectDeletable()
 //                    cell.contentView.addSubview(select.view)
-//                    select.view.snp_makeConstraints(closure: { (make) -> Void in
+//                    select.view.snp.makeConstraints(closure: { (make) -> Void in
 //                        make.edges.equalTo(cell.contentView)
 //                    })
 //                    select.relatedClub = targetClub
@@ -336,7 +336,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
      */
     override func inlineUserSelectShouldDeleteUser(_ user: User) {
         self.lp_start()
-        ClubRequester.sharedInstance.updateClubMembers(self.targetClub.ssidString, members: [user.ssidString], opType: "delete", onSuccess: { (_) in
+        _ = ClubRequester.sharedInstance.updateClubMembers(self.targetClub.ssidString, members: [user.ssidString], opType: "delete", onSuccess: { (_) in
             self.targetClub.removeMember(user)
             self.targetClub.memberNum -= 1
             self.inlineUserSelect?.users = self.targetClub.members
@@ -370,13 +370,13 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
     func groupMemberSelectControllerDidSelectUser(_ user: User) {
         let waiter = DispatchSemaphore(value: 0)
         var success = false
-        ClubRequester.sharedInstance.clubQuit(targetClub.ssidString, newHostID: user.ssidString, onSuccess: { (json) -> () in
+        _ = ClubRequester.sharedInstance.clubQuit(targetClub.ssidString, newHostID: user.ssidString, onSuccess: { (json) -> () in
             success = true
             waiter.signal()
             }) { (code) -> () in
                 waiter.signal()
         }
-        waiter.wait(timeout: DispatchTime.distantFuture)
+        _ = waiter.wait(timeout: DispatchTime.distantFuture)
         if success {
             targetClub.attended = false
             targetClub.mine = true
@@ -386,7 +386,7 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
             if let _ = nav?.viewControllers[n-1] as? ChatRoomController {
                 nav?.pushViewController(nav!.viewControllers[n-2], animated: true)
             } else {
-                nav?.popViewController(animated: true)
+                _ = nav?.popViewController(animated: true)
             }
             
         } else {
@@ -423,9 +423,9 @@ class GroupChatSettingHostClubAuthCell: PrivateChatSettingsCommonCell {
         markIcon.isHidden = true
         authIcon = UIImageView(image: UIImage(named: "auth_status_authed"))
         self.contentView.addSubview(authIcon)
-        authIcon.snp_makeConstraints { (make) -> Void in
+        authIcon.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(icon)
-            make.right.equalTo(icon.snp_left).offset(-15)
+            make.right.equalTo(icon.snp.left).offset(-15)
             make.size.equalTo(CGSize(width: 44, height: 18.5))
         }
     }

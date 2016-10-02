@@ -26,14 +26,14 @@ class PrivateChatSettingsHeader: UITableViewHeaderFooterView {
         titleLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         titleLbl.textColor = UIColor.black
         self.addSubview(titleLbl)
-        titleLbl.snp_makeConstraints { (make) -> Void in
+        titleLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(self).offset(15)
             make.centerY.equalTo(self)
         }
 //        let sepLine1 = UIView()
 //        sepLine1.backgroundColor = UIColor(white: 0.72, alpha: 1)
 //        self.addSubview(sepLine1)
-//        sepLine1.snp_makeConstraints { (make) -> Void in
+//        sepLine1.snp.makeConstraints { (make) -> Void in
 //            make.right.equalTo(self)
 //            make.bottom.equalTo(self)
 //            make.left.equalTo(self)
@@ -43,7 +43,7 @@ class PrivateChatSettingsHeader: UITableViewHeaderFooterView {
 //        let sepLine2 = UIView()
 //        sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
 //        self.addSubview(sepLine2)
-//        sepLine2.snp_makeConstraints { (make) -> Void in
+//        sepLine2.snp.makeConstraints { (make) -> Void in
 //            make.left.equalTo(self)
 //            make.right.equalTo(self)
 //            make.top.equalTo(self)
@@ -73,7 +73,7 @@ class PrivateChatSettingsAvatarCell: UITableViewCell {
         avatarImage.layer.cornerRadius = 37
         avatarImage.contentMode = .scaleAspectFill
         self.contentView.addSubview(avatarImage)
-        avatarImage.snp_makeConstraints { (make) -> Void in
+        avatarImage.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(self.contentView)
             make.size.equalTo(74)
         }
@@ -117,15 +117,15 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         didSet {
             if arrowHidden {
                 icon.isHidden = true
-                infoLbl.snp_remakeConstraints(closure: { (make) in
+                infoLbl.snp.remakeConstraints({ (make) in
                     make.centerY.equalTo(staticLbl)
                     make.right.equalTo(icon)
                 })
             } else {
                 icon.isHidden = false
-                infoLbl.snp_makeConstraints { (make) -> Void in
+                infoLbl.snp.makeConstraints { (make) -> Void in
                     make.centerY.equalTo(staticLbl)
-                    make.right.equalTo(icon.snp_left).offset(-15)
+                    make.right.equalTo(icon.snp.left).offset(-15)
                 }
             }
             contentView.layoutIfNeeded()
@@ -149,14 +149,14 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         staticLbl.textColor = UIColor(white: 0.72, alpha: 1)
         staticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(staticLbl)
-        staticLbl.snp_makeConstraints { (make) -> Void in
+        staticLbl.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(superview)
             make.left.equalTo(superview).offset(15)
         }
         //
         icon = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         superview.addSubview(icon)
-        icon.snp_makeConstraints { (make) -> Void in
+        icon.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(staticLbl)
             make.right.equalTo(superview).offset(-15)
             make.size.equalTo(CGSize(width: 9, height: 15))
@@ -166,9 +166,9 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         infoLbl.textColor = UIColor.black
         infoLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(infoLbl)
-        infoLbl.snp_makeConstraints { (make) -> Void in
+        infoLbl.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(staticLbl)
-            make.right.equalTo(icon.snp_left).offset(-15)
+            make.right.equalTo(icon.snp.left).offset(-15)
         }
         //
         boolSelect = UISwitch()
@@ -177,7 +177,7 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         boolSelect.backgroundColor = UIColor(white: 0.72, alpha: 1)
         boolSelect.layer.cornerRadius = 15.5
         superview.addSubview(boolSelect)
-        boolSelect.snp_makeConstraints { (make) -> Void in
+        boolSelect.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(staticLbl)
             make.size.equalTo(CGSize(width: 51, height: 31))
@@ -186,9 +186,9 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0.933, alpha: 1)
         superview.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        sepLine.snp.makeConstraints { (make) -> Void in
 //            make.bottom.equalTo(superview)
-            make.top.equalTo(staticLbl.snp_bottom).offset(11)
+            make.top.equalTo(staticLbl.snp.bottom).offset(11)
             make.right.equalTo(superview).offset(-15)
             make.height.equalTo(0.5)
             make.left.equalTo(superview).offset(15)
@@ -196,7 +196,7 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         //
         markIcon = UIImageView(image: UIImage(named: "hook"))
         superview.addSubview(markIcon)
-        markIcon.snp_makeConstraints { (make) -> Void in
+        markIcon.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.top.equalTo(staticLbl)
             make.size.equalTo(CGSize(width: 17, height: 12))

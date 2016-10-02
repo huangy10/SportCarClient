@@ -100,7 +100,7 @@ class StatusBasicController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let curStatus = status[(indexPath as NSIndexPath).row]
-        if curStatus.image?.split(";").count <= 1{
+        if curStatus.image?.split(delimiter: ";").count <= 1{
             return 420
         }else{
             return 520
@@ -146,6 +146,7 @@ extension StatusBasicController {
      
      - return: 返回生成的status的数量
      */
+    @discardableResult
     func jsonDataHandler(_ json: JSON) -> Int{
         let statusJSONData = json.arrayValue
         for statusJSON in statusJSONData {
@@ -159,7 +160,7 @@ extension StatusBasicController {
     
     func onStatusDelete(_ notification: Foundation.Notification) {
         if let statusID = (notification as NSNotification).userInfo![kStatusDidDeletedStatusIDKey] as? String{
-            if let index = status.findIndex({$0.ssidString == statusID}) {
+            if let index = status.findIndex(callback: {$0.ssidString == statusID}) {
                 status.remove(at: index)
                 tableView.reloadData()
             }
@@ -169,7 +170,7 @@ extension StatusBasicController {
     }
     
     func onUserBlacklisted(_ notification: Foundation.Notification) {
-        let name  = notification.name
+        let name  = notification.name.rawValue
         if let user = (notification as NSNotification).userInfo?[kUserKey] as? User {
             if name == kUserBlacklistedNotification {
                 status = status.filter({$0.user!.ssid != user.ssid})

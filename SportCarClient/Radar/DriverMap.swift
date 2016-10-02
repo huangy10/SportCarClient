@@ -11,7 +11,7 @@ import Spring
 import Alamofire
 
 
-class RadarDriverMapController: UIViewController, UITableViewDataSource, UITableViewDelegate, RadarFilterDelegate, BMKMapViewDelegate, BMKLocationServiceDelegate {
+class RadarDriverMapController: UIViewController, RadarFilterDelegate {
     weak var radarHome: RadarHomeController?
     
     var map: BMKMapView!
@@ -96,7 +96,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         self.view.backgroundColor = UIColor.black
         map = BMKMapView()
         self.view.addSubview(map)
-        map.snp_makeConstraints { (make) -> Void in
+        map.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(self.view)
         }
         tapper = UITapGestureRecognizer(target: self, action: #selector(mapTapped))
@@ -109,14 +109,14 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         userList.delegate = self
         userList.dataSource = self
         self.view.addSubview(userList)
-        userList.snp_makeConstraints { (make) -> Void in
+        userList.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(self.view)
             make.left.equalTo(self.view)
             make.height.equalTo(self.view.frame.height - 100)
-            make.top.equalTo(self.view.snp_bottom)
+            make.top.equalTo(self.view.snp.bottom)
         }
         userList.register(DriverMapUserCell.self, forCellReuseIdentifier: "cell")
-        self.view.addSubview(UIView)
+        self.view.addSubview(UIView.self)
             .config(UIColor.white)
             .addShadow(3, color: UIColor.black, opacity: 0.1, offset: CGSize(width: 0, height: -2))
             .layout { (make) in
@@ -129,11 +129,11 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
             .config(self, selector: #selector(showUserBtnPressed))
             .toRound(20)
             .addShadow().layout({ (make) in
-                make.bottom.equalTo(userList.snp_top).offset(-25)
+                make.bottom.equalTo(userList.snp.top).offset(-25)
                 make.right.equalTo(self.view).offset(-20)
                 make.size.equalTo(CGSize(width: 40, height: 40))
             })
-        showUserListBtn.addSubview(UIImageView)
+        showUserListBtn.addSubview(UIImageView.self)
             .config(UIImage(named: "view_list"), contentMode: .scaleAspectFit)
             .layout { (make) in
                 make.center.equalTo(showUserListBtn)
@@ -149,7 +149,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
         mapFilterView = mapNav.view.addShadow()
             .layout({ (make) in
             make.bottom.equalTo(showUserListBtn)
-            make.right.equalTo(showUserListBtn.snp_left).offset(-13)
+            make.right.equalTo(showUserListBtn.snp.left).offset(-13)
             make.width.equalTo(115)
             make.height.equalTo(40)
         })
@@ -165,7 +165,7 @@ class RadarDriverMapController: UIViewController, UITableViewDataSource, UITable
 
 
 // MARK: - Delegate functions about map
-extension RadarDriverMapController {
+extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelegate {
     
     func getLocationData() {
         locationService.startUserLocationService()
@@ -349,7 +349,7 @@ extension RadarDriverMapController {
 }
 
 // MARK: - 关于用户列表显示
-extension RadarDriverMapController {
+extension RadarDriverMapController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -382,13 +382,13 @@ extension RadarDriverMapController {
     func showUserBtnPressed() {
         if showUserListBtn.tag == 0 {
             // show the list
-            userList.snp_remakeConstraints { (make) -> Void in
+            userList.snp.remakeConstraints { (make) -> Void in
                 make.right.equalTo(self.view)
                 make.left.equalTo(self.view)
                 make.height.equalTo(self.view.frame.height - 100)
-                make.bottom.equalTo(self.view.snp_bottom).offset(90)
+                make.bottom.equalTo(self.view.snp.bottom).offset(90)
             }
-            SpringAnimation.spring(0.6, animations: { () -> Void in
+            SpringAnimation.spring(duration: 0.6, animations: { () -> Void in
                 self.view.layoutIfNeeded()
             })
             if mapFilter.expanded {
@@ -398,13 +398,13 @@ extension RadarDriverMapController {
             showUserListBtn.tag = 1
             tapper.isEnabled = true
         }else {
-            userList.snp_remakeConstraints { (make) -> Void in
+            userList.snp.remakeConstraints { (make) -> Void in
                 make.right.equalTo(self.view)
                 make.left.equalTo(self.view)
                 make.height.equalTo(self.view.frame.height - 100)
-                make.top.equalTo(self.view.snp_bottom)
+                make.top.equalTo(self.view.snp.bottom)
             }
-            SpringAnimation.spring(0.6, animations: { () -> Void in
+            SpringAnimation.spring(duration: 0.6, animations: { () -> Void in
                 self.view.layoutIfNeeded()
             })
             showUserListBtn.tag = 0
@@ -424,9 +424,9 @@ extension RadarDriverMapController {
         
         if mapFilter.expanded {
             // hide the list
-            mapFilterView.snp_remakeConstraints(closure: { (make) -> Void in
+            mapFilterView.snp.remakeConstraints({ (make) -> Void in
                 make.bottom.equalTo(showUserListBtn)
-                make.right.equalTo(showUserListBtn.snp_left).offset(-13)
+                make.right.equalTo(showUserListBtn.snp.left).offset(-13)
                 make.width.equalTo(115)
                 make.height.equalTo(40)
             })
@@ -437,9 +437,9 @@ extension RadarDriverMapController {
             }) 
         }else {
             // dispaly the list
-            mapFilterView.snp_remakeConstraints(closure: { (make) -> Void in
+            mapFilterView.snp.remakeConstraints({ (make) -> Void in
                 make.bottom.equalTo(showUserListBtn)
-                make.right.equalTo(showUserListBtn.snp_left).offset(-13)
+                make.right.equalTo(showUserListBtn.snp.left).offset(-13)
                 make.width.equalTo(115)
                 make.height.equalTo(40 * 6)
             })

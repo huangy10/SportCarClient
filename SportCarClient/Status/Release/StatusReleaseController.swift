@@ -285,7 +285,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKGeo
             let status = try! MainManager.sharedManager.getOrCreate(json!) as Status
             // 将图片存入缓存：注意Key应当是包含了域名等部分的完整URL
 //            KingfisherManager.sharedManager.cache.storeImage(self.selectedImage!, forKey: SF(status.image!)!)
-            KingfisherManager.shared.cache.store(self.selectedImage!, forKey: status.coverURL!)
+            KingfisherManager.shared.cache.store(self.selectedImage!, forKey: status.coverURL!.absoluteString)
             /*
              注意这里发布Notification，主要是为了让『我的』页面中的动态列表及时进行更新，而『动态』中的列表不会接收这个Notification。
              */

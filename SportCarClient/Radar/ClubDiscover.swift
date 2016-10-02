@@ -34,7 +34,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         createSubviews()
 
         let requester = ClubRequester.sharedInstance
-        requester.discoverClub("value", cityLimit: "全国", skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
+        _ = requester.discoverClub("value", cityLimit: "全国", skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
             for data in json!.arrayValue {
                 let club: Club = try! MainManager.sharedManager.getOrCreate(data)
                 self.clubs.append(club)
@@ -56,8 +56,8 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func createSubviews() {
-        let superview = self.view
-        superview?.clipsToBounds = true
+        let superview = self.view!
+        superview.clipsToBounds = true
 
         clubList = UITableView(frame: CGRect.zero, style: .plain)
         clubList.separatorStyle = .none
@@ -65,7 +65,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         clubList.delegate = self
         clubList.dataSource = self
         self.view.addSubview(clubList)
-        clubList.snp_makeConstraints { (make) -> Void in
+        clubList.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(superview)
         }
         clubList.register(ClubDiscoverCell.self, forCellReuseIdentifier: "cell")
@@ -89,27 +89,27 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
                 make.size.equalTo(CGSize(width: 115, height: 40))
         }
         
-        cityFilter = self.view.addSubview(UIButton)
+        cityFilter = self.view.addSubview(UIButton.self)
             .config(self, selector: #selector(cityFilterPressed))
             .config(UIColor.white)
             .toRound(20).addShadow()
             .layout({ (make) in
-                make.right.equalTo(clubFilterView.snp_left).offset(-10)
+                make.right.equalTo(clubFilterView.snp.left).offset(-10)
                 make.bottom.equalTo(clubFilterView)
                 make.size.equalTo(CGSize(width: 120, height: 40))
             })
-        let icon = cityFilter.addSubview(UIImageView)
+        let icon = cityFilter.addSubview(UIImageView.self)
             .config(UIImage(named: "up_arrow"))
             .layout { (make) in
                 make.centerY.equalTo(cityFilter)
                 make.right.equalTo(cityFilter).offset(-20)
                 make.size.equalTo(CGSize(width: 13, height: 9))
         }
-        cityFilterLbl = cityFilter.addSubview(UILabel)
+        cityFilterLbl = cityFilter.addSubview(UILabel.self)
             .config(14, textColor: UIColor(white: 0, alpha: 0.87), text: LS("全国"))
             .layout({ (make) in
                 make.left.equalTo(cityFilter).offset(20)
-                make.right.equalTo(icon.snp_left).offset(-10)
+                make.right.equalTo(icon.snp.left).offset(-10)
                 make.centerY.equalTo(cityFilter)
             })
     }
@@ -171,7 +171,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     func toggleMapFilter() {
         
         if clubFilter.expanded {
-            clubFilterView.snp_remakeConstraints(closure: { (make) -> Void in
+            clubFilterView.snp.remakeConstraints({ (make) -> Void in
                 make.bottom.equalTo(self.view).offset(-25)
                 make.right.equalTo(self.view).offset(-20)
                 make.size.equalTo(CGSize(width: 115, height: 40))
@@ -182,7 +182,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
                 self.clubFilter.marker.transform = CGAffineTransform.identity
             }) 
         }else {
-            clubFilterView.snp_remakeConstraints(closure: { (make) -> Void in
+            clubFilterView.snp.remakeConstraints({ (make) -> Void in
                 make.bottom.equalTo(self.view).offset(-25)
                 make.right.equalTo(self.view).offset(-20)
                 make.size.equalTo(CGSize(width: 115, height: 40 * 6))
@@ -198,7 +198,7 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
     
     func sendRequest(_ reload: Bool = false) {
         let opType = ["value", "average", "members", "beauty", "recent"][clubFilter.selectedRow]
-        ClubRequester.sharedInstance.discoverClub(opType, cityLimit: self.cityFilterType, skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
+        _ = ClubRequester.sharedInstance.discoverClub(opType, cityLimit: self.cityFilterType, skip: clubs.count, limit: 10, onSuccess: { (json) -> () in
             if reload {
                 self.clubs.removeAll()
             }

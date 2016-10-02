@@ -44,11 +44,11 @@ extension Club {
 extension Club {
 
     static let alwayOnTop = AlecrimCoreData.NullableAttribute<Bool>("alwayOnTop")
-    static let alwaysOnTopDate = AlecrimCoreData.NullableAttribute<NSDate>("alwaysOnTopDate")
+    static let alwaysOnTopDate = AlecrimCoreData.NullableAttribute<Date>("alwaysOnTopDate")
     static let attended = AlecrimCoreData.NullableAttribute<Bool>("attended")
     static let city = AlecrimCoreData.NullableAttribute<String>("city")
     static let clubDescription = AlecrimCoreData.NullableAttribute<String>("clubDescription")
-    static let createdAt = AlecrimCoreData.NullableAttribute<NSDate>("createdAt")
+    static let createdAt = AlecrimCoreData.NullableAttribute<Date>("createdAt")
     static let founder = AlecrimCoreData.NullableAttribute<String>("founder")
     static let identified = AlecrimCoreData.NullableAttribute<Bool>("identified")
     static let logo = AlecrimCoreData.NullableAttribute<String>("logo")
@@ -71,11 +71,11 @@ extension Club {
 extension AlecrimCoreData.AttributeProtocol where Self.ValueType: Club {
 
     var alwayOnTop: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("alwayOnTop", self) }
-    var alwaysOnTopDate: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("alwaysOnTopDate", self) }
+    var alwaysOnTopDate: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<Date>("alwaysOnTopDate", self) }
     var attended: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("attended", self) }
     var city: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("city", self) }
     var clubDescription: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("clubDescription", self) }
-    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<NSDate>("createdAt", self) }
+    var createdAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<Date>("createdAt", self) }
     var founder: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("founder", self) }
     var identified: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("identified", self) }
     var logo: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("logo", self) }

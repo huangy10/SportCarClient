@@ -31,16 +31,16 @@ class ClubBriefInfoController: UITableViewController {
         tableView.register(PrivateChatSettingsHeader.self, forHeaderFooterViewReuseIdentifier: "reuse_header")
         // Request data for the club
         let requester = ClubRequester.sharedInstance
-        requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
+        _ = requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
             var clubJson: JSON
             if json!["id"].exists() {
-                try! self.targetClub.loadDataFromJSON(json!)
+                _ = try! self.targetClub.loadDataFromJSON(json!)
                 clubJson = json!
                 let barBtnItem = UIBarButtonItem(title: LS("申请加入"), style: .plain, target: self, action: #selector(ClubBriefInfoController.navRightBtnPressed))
                 barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
                 self.navigationItem.rightBarButtonItem = barBtnItem
             }else {
-                try! self.targetClub.loadDataFromJSON(json!["club"])
+                _ = try! self.targetClub.loadDataFromJSON(json!["club"])
                 self.navigationItem.rightBarButtonItem = nil
                 clubJson = json!["club"]
             }
@@ -66,7 +66,7 @@ class ClubBriefInfoController: UITableViewController {
         cell.selectionStyle = .none
         inlineUserSelect = InlineUserSelectController()
         cell.contentView.addSubview(inlineUserSelect!.view)
-        inlineUserSelect?.view.snp_makeConstraints(closure: { (make) in
+        inlineUserSelect?.view.snp.makeConstraints({ (make) in
             make.edges.equalTo(cell.contentView)
         })
         inlineUserSelect?.relatedClub = targetClub
@@ -86,7 +86,7 @@ class ClubBriefInfoController: UITableViewController {
     }
     
     func navRightBtnPressed() {
-        ClubRequester.sharedInstance.applyForAClub(targetClub.ssidString, onSuccess: { (json) in
+        _ = ClubRequester.sharedInstance.applyForAClub(targetClub.ssidString, onSuccess: { (json) in
             self.showToast(LS("申请已发送"))
             }) { (code) in
                 guard let code = code else {
@@ -105,7 +105,7 @@ class ClubBriefInfoController: UITableViewController {
     }
     
     func navLeftBtnPressed() {
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -145,7 +145,7 @@ class ClubBriefInfoController: UITableViewController {
 //                inlineUserSelect?.showDeleteBtn = false
 //                inlineUserSelect?.parentController = self
 //                cell.contentView.addSubview(inlineUserSelect!.view)
-//                inlineUserSelect?.view.snp_makeConstraints(closure: { (make) -> Void in
+//                inlineUserSelect?.view.snp.makeConstraints(closure: { (make) -> Void in
 //                    make.edges.equalTo(cell.contentView).inset(UIEdgeInsetsMake(20, 0, 0, 0))
 //                })
 //            }

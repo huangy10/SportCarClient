@@ -45,7 +45,7 @@ class NotificationBaseCell: UITableViewCell {
         avatarBtn.addTarget(self, action: #selector(avatarPressed), for: .touchUpInside)
 //        avatarBtn.userInteractionEnabled = false
         superview.addSubview(avatarBtn)
-        avatarBtn.snp_makeConstraints { (make) -> Void in
+        avatarBtn.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(superview).offset(15)
             make.left.equalTo(superview).offset(15)
             make.size.equalTo(45)
@@ -55,17 +55,17 @@ class NotificationBaseCell: UITableViewCell {
         nickNameLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBlack)
         nickNameLbl.textColor = UIColor.black
         superview.addSubview(nickNameLbl)
-        nickNameLbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(avatarBtn.snp_right).offset(15)
-            make.bottom.equalTo(avatarBtn.snp_centerY)
+        nickNameLbl.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(avatarBtn.snp.right).offset(15)
+            make.bottom.equalTo(avatarBtn.snp.centerY)
         }
         //
         informLbL = UILabel()
         informLbL.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         informLbL.textColor = kNotificationHintColor
         superview.addSubview(informLbL)
-        informLbL.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(nickNameLbl.snp_right).offset(10)
+        informLbL.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(nickNameLbl.snp.right).offset(10)
             make.bottom.equalTo(nickNameLbl)
         }
         //
@@ -73,15 +73,15 @@ class NotificationBaseCell: UITableViewCell {
         dateLbl.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightUltraLight)
         dateLbl.textColor = kNotificationHintColor
         superview.addSubview(dateLbl)
-        dateLbl.snp_makeConstraints { (make) -> Void in
+        dateLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(nickNameLbl)
-            make.top.equalTo(nickNameLbl.snp_bottom).offset(5)
+            make.top.equalTo(nickNameLbl.snp.bottom).offset(5)
         }
         
-        readDot = superview.addSubview(UIView).config(kHighlightedRedTextColor)
+        readDot = superview.addSubview(UIView.self).config(kHighlightedRedTextColor)
             .toRound(5).layout({ (make) in
-                make.centerX.equalTo(superview.snp_right).offset(-15)
-                make.centerY.equalTo(avatarBtn.snp_top)
+                make.centerX.equalTo(superview.snp.right).offset(-15)
+                make.centerY.equalTo(avatarBtn.snp.top)
                 make.size.equalTo(10)
             })
     }
@@ -122,7 +122,7 @@ class NotificationCellWithCoverThumbnail: NotificationBaseCell {
         
         cover = UIImageView()
         superview.addSubview(cover)
-        cover.snp_makeConstraints { (make) -> Void in
+        cover.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
             make.centerY.equalTo(avatarBtn)
             make.height.equalTo(avatarBtn)
@@ -133,10 +133,10 @@ class NotificationCellWithCoverThumbnail: NotificationBaseCell {
         messageBodyLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         messageBodyLbl.textColor = kNotificationHintColor
         superview.addSubview(messageBodyLbl)
-        messageBodyLbl.snp_makeConstraints { (make) -> Void in
+        messageBodyLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(avatarBtn)
             make.right.equalTo(cover)
-            make.top.equalTo(avatarBtn.snp_bottom).offset(15)
+            make.top.equalTo(avatarBtn.snp.bottom).offset(15)
         }
         
         superview.bringSubview(toFront: readDot)
@@ -181,8 +181,8 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         name2LbL.textColor = UIColor.black
         name2LbL.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBlack)
         superview.addSubview(name2LbL)
-        name2LbL.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(informLbL.snp_right).offset(10)
+        name2LbL.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(informLbL.snp.right).offset(10)
             make.bottom.equalTo(nickNameLbl) 
         }
         //
@@ -190,8 +190,8 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         inform2Lbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         inform2Lbl.textColor = kNotificationHintColor
         superview.addSubview(inform2Lbl)
-        inform2Lbl.snp_makeConstraints { (make) -> Void in
-            make.left.equalTo(name2LbL.snp_right).offset(10)
+        inform2Lbl.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(name2LbL.snp.right).offset(10)
             make.bottom.equalTo(name2LbL)
         }
         //
@@ -200,9 +200,9 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         agreenBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
         agreenBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(agreenBtn)
-        agreenBtn.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(superview.snp_right).offset(-45)
-            make.top.equalTo(dateLbl.snp_bottom).offset(13)
+        agreenBtn.snp.makeConstraints { (make) -> Void in
+            make.centerX.equalTo(superview.snp.right).offset(-45)
+            make.top.equalTo(dateLbl.snp.bottom).offset(13)
             make.size.equalTo(CGSize(width: 44, height: 20))
         }
         agreenBtn.addTarget(self, action: #selector(NotificationCellAboutActivity.agreeBtnPressed), for: .touchUpInside)
@@ -212,8 +212,8 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         denyBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
         denyBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(denyBtn)
-        denyBtn.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(agreenBtn.snp_centerX).offset(-50)
+        denyBtn.snp.makeConstraints { (make) -> Void in
+            make.centerX.equalTo(agreenBtn.snp.centerX).offset(-50)
             make.centerY.equalTo(agreenBtn)
             make.size.equalTo(agreenBtn)
         }
@@ -224,7 +224,7 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         doneLbl.textColor = UIColor.black
         doneLbl.textAlignment = .right
         superview.addSubview(doneLbl)
-        doneLbl.snp_makeConstraints { (make) -> Void in
+        doneLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(denyBtn)
             make.right.equalTo(agreenBtn)
             make.height.equalTo(agreenBtn)

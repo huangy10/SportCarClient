@@ -89,7 +89,7 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
     func radarClubFilterDidChange(_ controller: RadarClubFilterController) {
         selectedClub = controller.selectdClub
         selectedClubID = controller.selectdClubID
-        self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
         tableView.reloadData()
         delegate?.radarFilterDidChange()
     }
@@ -130,14 +130,14 @@ class RadarFilterCell: UITableViewCell {
         titleLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         titleLbl.textColor = UIColor(white: 0, alpha: 0.87)
         superview.addSubview(titleLbl)
-        titleLbl.snp_makeConstraints { (make) -> Void in
+        titleLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(10)
             make.centerY.equalTo(superview)
         }
         //
         marker = UIImageView(image: UIImage(named: "hook"))
         superview.addSubview(marker)
-        marker.snp_makeConstraints { (make) -> Void in
+        marker.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-10)
             make.centerY.equalTo(superview)
             make.size.equalTo(CGSize(width: 17, height: 12))
@@ -167,11 +167,11 @@ class RadarFilterHeader: UITableViewHeaderFooterView {
         titleLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         titleLbl.textColor = UIColor(white: 0, alpha: 0.87)
         superview.addSubview(titleLbl)
-        titleLbl.snp_makeConstraints { (make) -> Void in
+        titleLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(20)
             make.centerY.equalTo(superview)
         }
-        let markerContainer = superview.addSubview(UIView)
+        let markerContainer = superview.addSubview(UIView.self)
             .layout { (make) in
                 make.right.equalTo(superview).offset(-20)
                 make.centerY.equalTo(superview)
@@ -182,7 +182,7 @@ class RadarFilterHeader: UITableViewHeaderFooterView {
             .setFrame(CGRect(x: 0, y: 0, width: 13, height: 8))
 //        marker = UIImageView(image: UIImage(named: "down_arrow"))
 //        superview.addSubview(marker)
-//        marker.snp_makeConstraints { (make) -> Void in
+//        marker.snp.makeConstraints { (make) -> Void in
 //            make.right.equalTo(superview).offset(-20)
 //            make.centerY.equalTo(superview)
 //            make.size.equalTo(CGSizeMake(13, 8))
@@ -191,7 +191,7 @@ class RadarFilterHeader: UITableViewHeaderFooterView {
         let sepLine = UIView()
         sepLine.backgroundColor = UIColor(white: 0, alpha: 0.12)
         superview.addSubview(sepLine)
-        sepLine.snp_makeConstraints { (make) -> Void in
+        sepLine.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview).offset(10)
             make.right.equalTo(superview).offset(-10)
             make.height.equalTo(1)
