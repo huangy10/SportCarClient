@@ -139,10 +139,10 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
             })
 
         //
-        let staticCarPriceLbl = getCarParamStaticLabel()
-        carParamBoard.addSubview(staticCarPriceLbl)
-        staticCarPriceLbl.text = LS("型号")
-        staticCarPriceLbl.snp.makeConstraints { (make) -> Void in
+        let staticSubtypeLbl = getCarParamStaticLabel()
+        carParamBoard.addSubview(staticSubtypeLbl)
+        staticSubtypeLbl.text = LS("型号")
+        staticSubtypeLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(carParamBoard).offset(20)
             make.top.equalTo(carParamBoard).offset(20)
         }
@@ -150,25 +150,25 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         carSubname = getCarParamContentLbl()
         carParamBoard.addSubview(carSubname)
         carSubname.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(staticCarPriceLbl)
-            make.top.equalTo(staticCarPriceLbl.snp.bottom)
+            make.left.equalTo(staticSubtypeLbl)
+            make.top.equalTo(staticSubtypeLbl.snp.bottom)
         }
         //
-        let staticCarEngineLbl = getCarParamStaticLabel()
-        carParamBoard.addSubview(staticCarEngineLbl)
-        staticCarEngineLbl.text = LS("发动机")
-        staticCarEngineLbl.snp.makeConstraints { (make) -> Void in
+        let staticPriceLbl = getCarParamStaticLabel()
+        carParamBoard.addSubview(staticPriceLbl)
+        staticPriceLbl.text = LS("价格")
+        staticPriceLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview.snp.centerX).offset(20)
             make.top.equalTo(carParamBoard).offset(20)
         }
         //
-        carEngine = getCarParamContentLbl()
-        carParamBoard.addSubview(carEngine)
-        carEngine.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(staticCarEngineLbl)
-            make.top.equalTo(staticCarEngineLbl.snp.bottom)
+        carPrice = getCarParamContentLbl()
+        carParamBoard.addSubview(carPrice)
+        carPrice.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(staticPriceLbl)
+            make.top.equalTo(staticPriceLbl.snp.bottom)
         }
-        //
+                //
         let sepLine2 = UIView()
         sepLine2.backgroundColor = sepLineBackgroundColor
         carParamBoard.addSubview(sepLine2)
@@ -179,20 +179,22 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
             make.height.equalTo(0.5)
         }
         //
-        let staticTransLbl = getCarParamStaticLabel()
-        staticTransLbl.text = LS("价格")
-        carParamBoard.addSubview(staticTransLbl)
-        staticTransLbl.snp.makeConstraints { (make) -> Void in
+        let staticEngineLbl = getCarParamStaticLabel()
+        staticEngineLbl.text = LS("发动机")
+        carParamBoard.addSubview(staticEngineLbl)
+        staticEngineLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(carParamBoard).offset(20)
             make.top.equalTo(sepLine2).offset(20)
         }
         //
-        carPrice = getCarParamContentLbl()
-        carParamBoard.addSubview(carPrice)
-        carPrice.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(staticTransLbl)
-            make.top.equalTo(staticTransLbl.snp.bottom)
+        
+        carEngine = getCarParamContentLbl()
+        carParamBoard.addSubview(carEngine)
+        carEngine.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(staticEngineLbl)
+            make.top.equalTo(staticEngineLbl.snp.bottom)
         }
+
         //
         let staticCarBody = getCarParamStaticLabel()
         staticCarBody.text = LS("车身结构")

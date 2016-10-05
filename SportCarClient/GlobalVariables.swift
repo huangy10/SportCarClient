@@ -31,8 +31,8 @@ let kBarTitleFont = UIFont.systemFont(ofSize: 17, weight: UIFontWeightBlack)
 let kTextInputFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
 
 // Network
-//let kHostName = "166.111.17.86"
-let kHostName = "localhost"
+let kHostName = "166.111.17.91"
+//let kHostName = "paochefan.com"
 let kPortName = "80"
 let kChatPortName = "8888"
 let kProtocalName = "http"
@@ -57,10 +57,14 @@ func LS(_ str: String, comment: String="") -> String{
  - parameter urlStr: 返回的完整的路径
  */ 
 func SF(_ urlStr: String?)->String?{
-    if urlStr == nil {
+    guard let url = urlStr else {
         return nil
     }
-    return kProtocalName + "://" + kHostName + ":" + kPortName + urlStr!
+    if url.hasPrefix("http") {
+        // support external link
+        return url
+    }
+    return kProtocalName + "://" + kHostName + ":" + kPortName + url
 }
 
 /**

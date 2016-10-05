@@ -10,7 +10,7 @@
 
 import UIKit
 
-let kMineSettingsStaticLabelString = [LS("新消息通知"), LS("黑名单"), LS("定位可见"), LS("邀请加入群组"), LS("清除缓存"), LS("评价我们"), LS("意见反馈"), LS("用户协议"), LS("企业认证")]
+let kMineSettingsStaticLabelString = [LS("新消息通知"), LS("黑名单"), LS("定位可见"), LS("清除缓存"), LS("评价我们"), LS("意见反馈"), LS("用户协议"), LS("企业认证")]
 
 
 class PersonMineSettings: UITableViewController {
@@ -99,8 +99,6 @@ class PersonMineSettings: UITableViewController {
             case 2:
                 return cell.setData(kMineSettingsStaticLabelString[(indexPath as NSIndexPath).row], propertyValue: locationVisible)
             case 3:
-                return cell.setData(kMineSettingsStaticLabelString[(indexPath as NSIndexPath).row], propertyValue: acceptInvitation)
-            case 4:
                 return cell.setData(kMineSettingsStaticLabelString[(indexPath as NSIndexPath).row], propertyValue: cacheSizeRepre)
             default:
                 return cell.setData(kMineSettingsStaticLabelString[(indexPath as NSIndexPath).row], propertyValue: nil)
@@ -115,9 +113,9 @@ class PersonMineSettings: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if (indexPath as NSIndexPath).section == 0 {
+        if indexPath.section == 0 {
             return 50
-        }else {
+        } else {
             return 138
         }
     }
@@ -130,35 +128,30 @@ class PersonMineSettings: UITableViewController {
         case 0:
             let detail = PersonMineSettingsNewsMessageNotificationController()
             self.navigationController?.pushViewController(detail, animated: true)
-            break
         case 1:
             let blacklist = BlacklistController()
             navigationController?.pushViewController(blacklist, animated: true)
         case 2:
             let detail = PersonMineSettingsLocationVisiblityController()
             self.navigationController?.pushViewController(detail, animated: true)
-            break
         case 3:
-            let detail = PersonMineSettingsInvitationController()
-            self.navigationController?.pushViewController(detail, animated: true)
-        case 4:
             showConfirmToast(LS("清除缓存"), message: LS("确认清除全部缓存？"), target: self, onConfirm: #selector(clearCacheConfirmed))
 //            let detail = ClearCacheController(parent: self)
 //            self.presentViewController(detail, animated: false, completion: nil)
             break
-        case 5:
+        case 4:
             let url = URL(string: "https://itunes.apple.com/us/app/pao-che-fan/id1100110084?l=zh&ls=1&mt=8")
             UIApplication.shared.open(url!, options: [:], completionHandler: nil)
 //            UIApplication.shared.openURL(url!)
-        case 6:
+        case 5:
             let detail = SuggestionController(parent: self)
             self.present(detail, animated: false, completion: nil)
             break
-        case 7:
+        case 6:
             let detail = AgreementController()
             self.navigationController?.pushViewController(detail, animated: true)
             break
-        case 8:
+        case 7:
             let detail = PersonMineSettingsAuthController()
             self.navigationController?.pushViewController(detail, animated: true)
             break

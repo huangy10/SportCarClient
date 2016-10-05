@@ -1943,6 +1943,7 @@
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = 2LEMXT4M9M;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -2428,6 +2429,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2442,7 +2444,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "d61d31a9-c089-4057-b128-2bae7e8da5db";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -2569,6 +2572,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2583,7 +2587,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "d61d31a9-c089-4057-b128-2bae7e8da5db";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -2598,6 +2603,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2612,7 +2618,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "d61d31a9-c089-4057-b128-2bae7e8da5db";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};

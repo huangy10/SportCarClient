@@ -65,18 +65,20 @@ class SportscarAuthController: PersonMineSettingsAuthController {
             make.height.equalTo(90)
         }
         createDistrictPicker()
+        
+        driverLicenseOnlyForNow()
     }
     
     override func createImagesImputPanel() -> UIView {
         let container = super.createImagesImputPanel()
-        let exampleImage = UIImageView(image: UIImage(named: "sports_car_auth_example"))
-        container.addSubview(exampleImage)
-        exampleImage.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(container)
-            make.top.equalTo(staticLabel1.snp.bottom).offset(5)
-            make.right.equalTo(imageBtn1.snp.left).offset(-24)
-            make.height.equalTo(exampleImage.snp.width).multipliedBy(0.67)
-        }
+//        let exampleImage = UIImageView(image: UIImage(named: "sports_car_auth_example"))
+//        container.addSubview(exampleImage)
+//        exampleImage.snp.makeConstraints { (make) -> Void in
+//            make.left.equalTo(container)
+//            make.top.equalTo(staticLabel1.snp.bottom).offset(5)
+//            make.right.equalTo(imageBtn1.snp.left).offset(-24)
+//            make.height.equalTo(exampleImage.snp.width).multipliedBy(0.67)
+//        }
         return container
     }
     
@@ -265,6 +267,13 @@ class SportscarAuthController: PersonMineSettingsAuthController {
         hideDistrictPicker()
     }
     
+    func driverLicenseOnlyForNow() {
+        imageBtn2.isHidden = true
+        imageBtn3.isHidden = true
+        staticLabel2.isHidden = true
+        staticLabel3.isHidden = true
+        
+    }
 }
 
 // MARK: - privide data for district picker

@@ -64,9 +64,8 @@ class RadarRequester: BasicRequester {
         return post(
             urlForName("nearby"),
             parameters: params,
-            encoding: URLEncoding.default,
-               responseDataField: "result",
-               onSuccess: onSuccess, onError: onError
+            responseDataField: "result",
+            onSuccess: onSuccess, onError: onError
         )
     }
     

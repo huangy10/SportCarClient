@@ -109,7 +109,7 @@ class BasicRequester {
         _ URLString: URLConvertible,
         parameters: [String: Any]? = nil,
         withManager: Alamofire.SessionManager? = nil,
-        encoding: ParameterEncoding = URLEncoding.default,
+        encoding: ParameterEncoding = JSONEncoding.default,
         headers: [String: String]? = nil,
         responseQueue: DispatchQueue = DispatchQueue.main,
         responseDataField: String = "",
@@ -122,16 +122,15 @@ class BasicRequester {
             defaultHeader.merge(dictionaries: userHeader)
         }
 //        let req = (withManager ?? manager).request(.POST, URLString, parameters: parameters, encoding: encoding, headers: defaultHeader)
-        let req = (withManager ?? manager).request(URLString, method: .post, parameters: parameters, encoding: encoding, headers: defaultHeader)
-        if let _ = onProgress {
-//            req.progress { (_, written, total) in
-//                let progress: Float = Float(written) / Float(total)
-//                progressClosure(progress: progress)
-//            }
-            // TODO: progress
-        }
-        req.responseJSON(queue: responseQueue) { (response) in
+        var req = (withManager ?? manager).request(URLString, method: .post, parameters: parameters, encoding: encoding, headers: defaultHeader)
+        
+        req = req.responseJSON(queue: responseQueue) { (response) in
             self.responseChecker(URLString, response, dataField: responseDataField, onSuccess: onSuccess, onError: onError)
+        }
+        if let progressHandler = onProgress {
+            req = req.downloadProgress(closure: { (p) in
+                progressHandler(Float(p.fractionCompleted))
+            })
         }
         return req
     }
@@ -152,16 +151,18 @@ class BasicRequester {
             defaultHeader.merge(dictionaries: userHeader)
         }
 //        let req = manager.request(.GET, URLString, parameters: parameters, encoding: encoding, headers: defaultHeader)
-        let req = manager.request(URLString, method: .get, parameters: parameters, encoding: encoding, headers: defaultHeader)
-        req.responseJSON(queue: responseQueue) { (response) in
+        var req = manager.request(URLString, method: .get, parameters: parameters, encoding: encoding, headers: defaultHeader)
+        req = req.responseJSON(queue: responseQueue) { (response) in
             self.responseChecker(URLString, response, dataField: responseDataField, onSuccess: onSuccess, onError: onError)
         }
-        if let _ = onProgress {
+        if let progressHandler = onProgress {
 //            req.progress { (_, written, total) in
 //                let progress: Float = Float(written) / Float(total)
 //                progressClosure(progress: progress)
 //            }
-            // TODO: progress
+            req.downloadProgress(closure: { (p) in
+                progressHandler(Float(p.fractionCompleted))
+            })
         }
         return req
     }
@@ -169,7 +170,7 @@ class BasicRequester {
     func upload(
         _ URLString: URLConvertible,
         parameters: [String: Any]? = nil,
-        encoding: ParameterEncoding = URLEncoding.default,
+        encoding: ParameterEncoding = JSONEncoding.default,
         headers: [String: String]? = nil,
         responseQueue: DispatchQueue = DispatchQueue.main,
         responseDataField: String = "",

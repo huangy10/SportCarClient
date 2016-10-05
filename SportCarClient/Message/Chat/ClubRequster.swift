@@ -133,7 +133,6 @@ class ClubRequester: BasicRequester {
         return post(
             urlForName("update_members", param: ["clubID": clubID]),
             parameters: ["op_type": opType, "target_users": members],
-            encoding: URLEncoding.default,
             onSuccess: onSuccess, onError: onError
         )
     }
@@ -150,7 +149,7 @@ class ClubRequester: BasicRequester {
     func clubQuit(_ clubID: String, newHostID: String, onSuccess: @escaping (JSON?)->(), onError: @escaping (_ code: String?)->()) -> Request{
         return post(
             urlForName("quit", param: ["clubID": clubID]),
-            parameters: ["new_host": newHostID], encoding: URLEncoding.default,
+            parameters: ["new_host": newHostID],
             responseQueue: self.privateQueue,
             onSuccess: onSuccess, onError: onError)
     }
