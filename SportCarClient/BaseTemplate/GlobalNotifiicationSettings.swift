@@ -61,3 +61,6 @@ let kSportcarKey = "sportcar_key"
 // MAKR: Activity
 
 let kActivityInfoChanged = "activity_changed"
+
+//
+let kOpertaionCodeKey = "operation"

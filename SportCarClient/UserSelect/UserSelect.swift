@@ -301,6 +301,8 @@ class UserSelectCell: UITableViewCell {
     var nickNameLbl: UILabel?
     /// 签名
     var recentStatusLbL: UILabel?
+    //
+    var rightArrowImg: UIImageView!
     /// 强制选中
     var forceSelected: Bool = false {
         didSet {
@@ -368,7 +370,7 @@ class UserSelectCell: UITableViewCell {
             make.height.equalTo(17)
         })
         //
-        let rightArrowImg = UIImageView(image: UIImage(named: "account_btn_next_icon"))
+        rightArrowImg = UIImageView(image: UIImage(named: "account_btn_next_icon"))
         superview.addSubview(rightArrowImg)
         rightArrowImg.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)

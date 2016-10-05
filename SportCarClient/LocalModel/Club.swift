@@ -170,8 +170,10 @@ class Club: BaseModel {
         self.members.append(user)
     }
     
-    func removeMember(_ user: User) {
+    func remove(member user: User) {
+        let oldLength = members.count
         members = $.remove(members, callback: { $0.ssid == user.ssid })
+        self.memberNum -= oldLength - members.count
     }
 }
 

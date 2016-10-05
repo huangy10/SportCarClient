@@ -16,10 +16,16 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
     
     var newLogo: UIImage?
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(GroupChatSettingHostClubAuthCell.self, forCellReuseIdentifier: "auth_status")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "inline_user_select_deletable")
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(onClubMemberDeletedElseWhere(notification:)), name: NSNotification.Name(rawValue: kMessageClubMemberChangeNotification), object: nil)
     }
     
     override func createInlineUserSelect() {
@@ -337,11 +343,11 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
     override func inlineUserSelectShouldDeleteUser(_ user: User) {
         self.lp_start()
         _ = ClubRequester.sharedInstance.updateClubMembers(self.targetClub.ssidString, members: [user.ssidString], opType: "delete", onSuccess: { (_) in
-            self.targetClub.removeMember(user)
-            self.targetClub.memberNum -= 1
-            self.inlineUserSelect?.users = self.targetClub.members
-            self.tableView.reloadData()
-            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kMessageClubMemberChangeNotification), object: self, userInfo: [kMessageClubKey: self.targetClub])
+//            self.targetClub.removeMember(user)
+//            self.inlineUserSelect?.users = self.targetClub.members
+//            self.tableView.reloadData()
+            self.remove(member: user)
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kMessageClubMemberChangeNotification), object: self, userInfo: [kMessageClubKey: self.targetClub, kUserKey: user, kOpertaionCodeKey: "delete"])
             self.showToast(LS("删除成功"))
             self.lp_stop()
             }) { (code) in
@@ -355,6 +361,28 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         select.delegate = self
         let wrapper = BlackBarNavigationController(rootViewController: select)
         self.present(wrapper, animated: true, completion: nil)
+    }
+    
+    func onClubMemberDeletedElseWhere(notification: NSNotification) {
+        guard notification.name.rawValue == kMessageClubMemberChangeNotification else {
+            return
+        }
+        guard let relatedClub = notification.userInfo?[kMessageClubKey] as? Club, relatedClub == targetClub else {
+            return
+        }
+        guard let deletedUser = notification.userInfo?[kUserKey] as? User else {
+            return
+        }
+        guard let operationType = notification.userInfo?[kOpertaionCodeKey] as? String, operationType == "delete" else {
+            return
+        }
+        remove(member: deletedUser)
+    }
+    
+    func remove(member: User) {
+        targetClub.remove(member: member)
+        inlineUserSelect?.users = targetClub.members
+        tableView.reloadData()
     }
     
     // MARK: 退出群聊

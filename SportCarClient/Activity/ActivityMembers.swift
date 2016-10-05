@@ -192,8 +192,8 @@ class ActivityMemberCell: UITableViewCell {
                 make.right.equalTo(contentView).offset(-15)
                 make.size.equalTo(CGSize(width: 75, height: 30))
             })
-        kickoutBtn.setTitle(LS("请出"), for: UIControlState())
-        kickoutBtn.setTitleColor(kHighlightRed, for: UIControlState())
+        kickoutBtn.setTitle(LS("请出"), for: .normal)
+        kickoutBtn.setTitleColor(kHighlightRed, for: .normal)
         kickoutBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         kickoutBtn.layer.cornerRadius = 2
         kickoutBtn.layer.borderColor = kHighlightRed.cgColor

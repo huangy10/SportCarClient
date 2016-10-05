@@ -9,13 +9,29 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SportCarClient/Network/BasicRequester.swift"
-            timestampString = "497336994.579381"
+            filePath = "SportCarClient/Person/GroupSettingHost.swift"
+            timestampString = "497351112.645187"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "154"
-            endingLineNumber = "154"
-            landmarkName = "get(_:parameters:encoding:headers:responseQueue:responseDataField:onSuccess:onProgress:onError:)"
+            startingLineNumber = "367"
+            endingLineNumber = "367"
+            landmarkName = "onClubMemberDeletedElseWhere(notification:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SportCarClient/Message/Chat/ClubMembersList.swift"
+            timestampString = "497351146.139083"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
+            landmarkName = "onMemberDeletedElsewhere(notification:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
