@@ -34,7 +34,7 @@ class ChatAccessoryBoard: UIView {
         superview.backgroundColor = UIColor.white
         //
         takePhotoBtn = UIButton()
-        takePhotoBtn?.setImage(UIImage(named: "chat_accessory_take_photo"), for: UIControlState())
+        takePhotoBtn?.setImage(UIImage(named: "chat_accessory_take_photo"), for: .normal)
         takePhotoBtn?.addTarget(self, action: #selector(ChatAccessoryBoard.takePhotoBtnPressed), for: .touchUpInside)
         superview.addSubview(takePhotoBtn!)
         takePhotoBtn?.snp.makeConstraints({ (make) -> Void in
@@ -54,7 +54,7 @@ class ChatAccessoryBoard: UIView {
         }
         //
         photoAlbumBtn = UIButton()
-        photoAlbumBtn?.setImage(UIImage(named: "chat_accessory_photos"), for: UIControlState())
+        photoAlbumBtn?.setImage(UIImage(named: "chat_accessory_photos"), for: .normal)
         photoAlbumBtn?.addTarget(self, action: #selector(ChatAccessoryBoard.photoAlbumBtnPressed), for: .touchUpInside)
         superview.addSubview(photoAlbumBtn!)
         photoAlbumBtn?.snp.makeConstraints({ (make) -> Void in

@@ -22,7 +22,7 @@ class PersonHeaderOther: PersonHeaderMine {
         let superview = self
         //
         followBtn = UIButton()
-        followBtn.setImage(UIImage(named: "person_add_follow"), for: UIControlState())
+        followBtn.setImage(UIImage(named: "person_add_follow"), for: .normal)
         superview.addSubview(followBtn)
         followBtn.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(avatarBtn.snp.centerX).offset(3.5)
@@ -38,7 +38,7 @@ class PersonHeaderOther: PersonHeaderMine {
         followBtnTmpImage.isHidden = true
         //
         chatBtn = UIButton()
-        chatBtn.setImage(UIImage(named: "person_send_message"), for: UIControlState())
+        chatBtn.setImage(UIImage(named: "person_send_message"), for: .normal)
         superview.addSubview(chatBtn)
         chatBtn.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(followBtn)
@@ -47,7 +47,7 @@ class PersonHeaderOther: PersonHeaderMine {
         }
         //
         locBtn = UIButton()
-        locBtn.setImage(UIImage(named: "person_guide_to"), for: UIControlState())
+        locBtn.setImage(UIImage(named: "person_guide_to"), for: .normal)
         superview.addSubview(locBtn)
         locBtn.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(followBtn)
@@ -71,10 +71,10 @@ class PersonHeaderOther: PersonHeaderMine {
         super.loadDataAndUpdateUI()
         if user.followed {
             followBtnTmpImage.image = UIImage(named: "person_followed")
-            followBtn.setImage(UIImage(named: "person_followed"), for: UIControlState())
+            followBtn.setImage(UIImage(named: "person_followed"), for: .normal)
         }else{
             followBtnTmpImage.image = UIImage(named: "person_add_follow")
-            followBtn.setImage(UIImage(named: "person_add_follow"), for: UIControlState())
+            followBtn.setImage(UIImage(named: "person_add_follow"), for: .normal)
         }
     }
 }

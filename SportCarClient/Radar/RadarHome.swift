@@ -270,8 +270,8 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         let releaseStatus = UIButton()
         releaseStatus.tag = 0
         releaseStatus.addTarget(self, action: #selector(RadarHomeController.releaseBtnPressed(_:)), for: .touchUpInside)
-        releaseStatus.setTitle(LS("发布动态"), for: UIControlState())
-        releaseStatus.setTitleColor(UIColor.black, for: UIControlState())
+        releaseStatus.setTitle(LS("发布动态"), for: .normal)
+        releaseStatus.setTitleColor(UIColor.black, for: .normal)
         releaseStatus.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(releaseStatus)
         releaseStatus.snp.makeConstraints { (make) -> Void in
@@ -299,8 +299,8 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         let addChat = UIButton()
         addChat.tag = 1
         addChat.addTarget(self, action: #selector(RadarHomeController.releaseBtnPressed(_:)), for: .touchUpInside)
-        addChat.setTitleColor(UIColor.black, for: UIControlState())
-        addChat.setTitle(LS("新建聊天"), for: UIControlState())
+        addChat.setTitleColor(UIColor.black, for: .normal)
+        addChat.setTitle(LS("新建聊天"), for: .normal)
         addChat.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(addChat)
         addChat.snp.makeConstraints { (make) -> Void in
@@ -328,8 +328,8 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         let startActivity = UIButton()
         startActivity.tag = 2
         startActivity.addTarget(self, action: #selector(RadarHomeController.releaseBtnPressed(_:)), for: .touchUpInside)
-        startActivity.setTitle(LS("发起活动"), for: UIControlState())
-        startActivity.setTitleColor(UIColor.black, for: UIControlState())
+        startActivity.setTitle(LS("发起活动"), for: .normal)
+        startActivity.setTitleColor(UIColor.black, for: .normal)
         startActivity.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(startActivity)
         startActivity.snp.makeConstraints { (make) -> Void in

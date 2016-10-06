@@ -52,7 +52,7 @@ class ActivityMembersController: UITableViewController, ActivityMemberCellDelega
         navigationItem.title = LS("已报名")
         let leftBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed))
         leftBtn.frame = CGRect(x: 0, y: 0, width: 15, height: 15)
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         leftBtn.contentMode = .scaleAspectFit
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
     }

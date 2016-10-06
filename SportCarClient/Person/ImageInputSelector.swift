@@ -83,7 +83,7 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
         container.layer.opacity = 0
         
         cancelBtn = UIButton()
-        cancelBtn.setImage(UIImage(named: "news_comment_cancel_btn"), for: UIControlState())
+        cancelBtn.setImage(UIImage(named: "news_comment_cancel_btn"), for: .normal)
         cancelBtn.addTarget(self, action: #selector(ImageInputSelectorController.cancelBtnPressed), for: .touchUpInside)
         container.addSubview(cancelBtn)
         cancelBtn.snp_makeConstraints { (make) -> Void in
@@ -103,8 +103,8 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
         }
         //
         takePhotoBtn = UIButton()
-        takePhotoBtn.setTitle(LS("拍照"), for: UIControlState())
-        takePhotoBtn.setTitleColor(UIColor.white, for: UIControlState())
+        takePhotoBtn.setTitle(LS("拍照"), for: .normal)
+        takePhotoBtn.setTitleColor(UIColor.white, for: .normal)
         takePhotoBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
         container.addSubview(takePhotoBtn)
         takePhotoBtn.snp_makeConstraints { (make) -> Void in
@@ -115,8 +115,8 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
         takePhotoBtn.addTarget(self, action: #selector(ImageInputSelectorController.takePhotoBtnPressed), for: .touchUpInside)
         //
         albumBtn = UIButton()
-        albumBtn.setTitle(LS("相册"), for: UIControlState())
-        albumBtn.setTitleColor(UIColor.white, for: UIControlState())
+        albumBtn.setTitle(LS("相册"), for: .normal)
+        albumBtn.setTitleColor(UIColor.white, for: .normal)
         albumBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
         container.addSubview(albumBtn)
         albumBtn.snp_makeConstraints { (make) -> Void in

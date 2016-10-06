@@ -37,7 +37,7 @@ class ClubBriefInfoController: UITableViewController {
                 _ = try! self.targetClub.loadDataFromJSON(json!)
                 clubJson = json!
                 let barBtnItem = UIBarButtonItem(title: LS("申请加入"), style: .plain, target: self, action: #selector(ClubBriefInfoController.navRightBtnPressed))
-                barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
+                barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
                 self.navigationItem.rightBarButtonItem = barBtnItem
             }else {
                 _ = try! self.targetClub.loadDataFromJSON(json!["club"])
@@ -79,7 +79,7 @@ class ClubBriefInfoController: UITableViewController {
         // Override this method to enable "release activity" button
         self.navigationItem.title = targetClub.name
         let leftBtn = UIButton()
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         leftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
         leftBtn.addTarget(self, action: #selector(ClubBriefInfoController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)

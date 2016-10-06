@@ -174,7 +174,7 @@ class ChatRoomController: InputableViewController, ChatOpPanelDelegate, UIImageP
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = navTitle
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         navLeftBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
         navLeftBtn.addTarget(self, action: #selector(ChatRoomController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)

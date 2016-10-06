@@ -182,9 +182,9 @@ class LoginRegisterController: InputableViewController {
         }
         //
         let forgetBtn = UIButton()
-        forgetBtn.setTitle(NSLocalizedString("忘记密码?", comment: ""), for: UIControlState())
+        forgetBtn.setTitle(NSLocalizedString("忘记密码?", comment: ""), for: .normal)
         forgetBtn.titleLabel?.adjustsFontSizeToFitWidth = true
-        forgetBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
+        forgetBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: .normal)
         container.addSubview(forgetBtn)
         forgetBtn.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(17)
@@ -195,7 +195,7 @@ class LoginRegisterController: InputableViewController {
         forgetBtn.addTarget(self, action: #selector(LoginRegisterController.forgetBtnPressed), for: .touchUpInside)
         //
         let login = UIButton()
-        login.setBackgroundImage(UIImage(named: "account_login_btn"), for: UIControlState())
+        login.setBackgroundImage(UIImage(named: "account_login_btn"), for: .normal)
         login.layer.shadowColor = UIColor(red: 0.95, green: 0.21, blue: 0.21, alpha: 1).cgColor
         login.layer.shadowOffset = CGSize(width: 0, height: 3)
         login.layer.shadowRadius = 7
@@ -261,9 +261,9 @@ class LoginRegisterController: InputableViewController {
         })
         //
         let sendCodeBtn = AuthCodeBtnView()
-        sendCodeBtn.setTitle(NSLocalizedString("获取验证码", comment: ""), for: UIControlState())
+        sendCodeBtn.setTitle(NSLocalizedString("获取验证码", comment: ""), for: .normal)
         sendCodeBtn.displayText = NSLocalizedString("获取验证码", comment: "")
-        sendCodeBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        sendCodeBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         sendCodeBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         inputContainer.addSubview(sendCodeBtn)
         sendCodeBtn.snp.makeConstraints { (make) -> Void in
@@ -307,9 +307,9 @@ class LoginRegisterController: InputableViewController {
         })
         // 
         let agreementBtn = UIButton()
-        agreementBtn.setTitle(NSLocalizedString("用户协议", comment: ""), for: UIControlState())
+        agreementBtn.setTitle(NSLocalizedString("用户协议", comment: ""), for: .normal)
         agreementBtn.titleLabel?.adjustsFontSizeToFitWidth = true
-        agreementBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        agreementBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         container.addSubview(agreementBtn)
         agreementBtn.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(17)
@@ -329,7 +329,7 @@ class LoginRegisterController: InputableViewController {
         }
         
         let registerBtn = UIButton()
-        registerBtn.setBackgroundImage(UIImage(named: "account_register_btn"), for: UIControlState())
+        registerBtn.setBackgroundImage(UIImage(named: "account_register_btn"), for: .normal)
         registerBtn.layer.shadowColor = UIColor(red: 0.95, green: 0.21, blue: 0.21, alpha: 1).cgColor
         registerBtn.layer.shadowOffset = CGSize(width: 0, height: 3)
         registerBtn.layer.shadowRadius = 7
@@ -357,8 +357,8 @@ class LoginRegisterController: InputableViewController {
         // 创建登录按钮
         titleLoginBtn = UIButton()
         // loginBtn.setBackgroundImage(UIImage(named: "account_header_button"), forState: .Normal)
-        titleLoginBtn?.setTitleColor(kBarBgColor, for: UIControlState())
-        titleLoginBtn?.setTitle(NSLocalizedString("登录", comment: ""), for: UIControlState())
+        titleLoginBtn?.setTitleColor(kBarBgColor, for: .normal)
+        titleLoginBtn?.setTitle(NSLocalizedString("登录", comment: ""), for: .normal)
         titleLoginBtn?.titleLabel?.font = kBarTextFont
         container.addSubview(titleLoginBtn!)
         titleLoginBtn?.snp.makeConstraints { (make) -> Void in
@@ -371,8 +371,8 @@ class LoginRegisterController: InputableViewController {
         
         // 创建注册按钮
         titleRegisterBtn = UIButton()
-        titleRegisterBtn?.setTitleColor(UIColor.white, for: UIControlState())
-        titleRegisterBtn?.setTitle(NSLocalizedString("注册", comment: ""), for: UIControlState())
+        titleRegisterBtn?.setTitleColor(UIColor.white, for: .normal)
+        titleRegisterBtn?.setTitle(NSLocalizedString("注册", comment: ""), for: .normal)
         titleRegisterBtn?.titleLabel?.font = kBarTextFont
         container.addSubview(titleRegisterBtn!)
         titleRegisterBtn?.snp.makeConstraints { (make) -> Void in
@@ -410,8 +410,8 @@ class LoginRegisterController: InputableViewController {
             })
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.titleBtnIcon?.superview?.layoutIfNeeded()
-                self.titleRegisterBtn?.setTitleColor(kBarBgColor, for: UIControlState())
-                self.titleLoginBtn?.setTitleColor(UIColor.white, for: UIControlState())
+                self.titleRegisterBtn?.setTitleColor(kBarBgColor, for: .normal)
+                self.titleLoginBtn?.setTitleColor(UIColor.white, for: .normal)
                 self.board?.contentOffset = CGPoint(x: 0, y: 0)
                 }, completion: nil)
         }else if sender.titleLabel?.text == "登录" && board?.contentOffset.x == 0{
@@ -420,8 +420,8 @@ class LoginRegisterController: InputableViewController {
             })
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.titleBtnIcon?.superview?.layoutIfNeeded()
-                self.titleLoginBtn?.setTitleColor(kBarBgColor, for: UIControlState())
-                self.titleRegisterBtn?.setTitleColor(UIColor.white, for: UIControlState())
+                self.titleLoginBtn?.setTitleColor(kBarBgColor, for: .normal)
+                self.titleRegisterBtn?.setTitleColor(UIColor.white, for: .normal)
                 self.board?.contentOffset = CGPoint(x: self.view.frame.size.width, y: 0)
                 }, completion: nil)
         }
@@ -574,8 +574,8 @@ class LoginRegisterController: InputableViewController {
             })
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.titleBtnIcon?.superview?.layoutIfNeeded()
-                self.titleRegisterBtn?.setTitleColor(kBarBgColor, for: UIControlState())
-                self.titleLoginBtn?.setTitleColor(UIColor.white, for: UIControlState())
+                self.titleRegisterBtn?.setTitleColor(kBarBgColor, for: .normal)
+                self.titleLoginBtn?.setTitleColor(UIColor.white, for: .normal)
                 }, completion: nil)
         }else{
             titleBtnIcon?.snp.remakeConstraints({ (make) -> Void in
@@ -583,8 +583,8 @@ class LoginRegisterController: InputableViewController {
             })
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.titleBtnIcon?.superview?.layoutIfNeeded()
-                self.titleLoginBtn?.setTitleColor(kBarBgColor, for: UIControlState())
-                self.titleRegisterBtn?.setTitleColor(UIColor.white, for: UIControlState())
+                self.titleLoginBtn?.setTitleColor(kBarBgColor, for: .normal)
+                self.titleRegisterBtn?.setTitleColor(UIColor.white, for: .normal)
                 }, completion: nil)
         }
     }

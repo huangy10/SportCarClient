@@ -204,8 +204,8 @@ class SportscarAuthController: PersonMineSettingsAuthController {
         }
         //
         let doneBtn = UIButton()
-        doneBtn.setTitle(LS("完成"), for: UIControlState())
-        doneBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        doneBtn.setTitle(LS("完成"), for: .normal)
+        doneBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         doneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         pickerHeader.addSubview(doneBtn)
         doneBtn.addTarget(self, action: #selector(SportscarAuthController.donePickDistrictBtnPressed), for: .touchUpInside)

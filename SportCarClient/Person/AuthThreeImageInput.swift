@@ -41,7 +41,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         imageBtn1 = UIButton()
         imageBtn1.tag = 0
         imageBtn1.imageView?.contentMode = .scaleAspectFill
-        imageBtn1.setImage(defaultCover, for: UIControlState())
+        imageBtn1.setImage(defaultCover, for: .normal)
         container.addSubview(imageBtn1)
         imageBtn1.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(container)
@@ -60,7 +60,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         //
         imageBtn2 = UIButton()
         imageBtn2.tag = 1
-        imageBtn2.setImage(defaultCover, for: UIControlState())
+        imageBtn2.setImage(defaultCover, for: .normal)
         imageBtn2.imageView?.contentMode = .scaleAspectFill
         container.addSubview(imageBtn2)
         imageBtn2.snp.makeConstraints { (make) -> Void in
@@ -80,7 +80,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
         //
         imageBtn3 = UIButton()
         imageBtn3.tag = 2
-        imageBtn3.setImage(defaultCover, for: UIControlState())
+        imageBtn3.setImage(defaultCover, for: .normal)
         imageBtn3.imageView?.contentMode = .scaleAspectFill
         container.addSubview(imageBtn3)
         imageBtn3.snp.makeConstraints { (make) -> Void in
@@ -157,7 +157,7 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
             assertionFailure()
         }
         self.dismiss(animated: true, completion: nil)
-        activeBtn?.setImage(image, for: UIControlState())
+        activeBtn?.setImage(image, for: .normal)
         selectedImages[activeBtn!.tag] = image
     }
     

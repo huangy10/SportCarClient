@@ -36,8 +36,8 @@ class ActivityEditController: ActivityReleaseController {
         desInput.text = act.actDescription
         maxAttend = Int(act.maxAttend)
         desWordCountLbl.text = "\(act.actDescription!.length)/40"
-//        imagePickerBtn.kf_setImageWithURL(act.posterURL!, forState: UIControlState(), placeholderImage: nil)
-//        imagePickerBtn.kf_setImageWithURL(act.posterURL!, forState: UIControlState(), placeholderImage: nil, optionsInfo: nil, progressBlock: nil) { (image, error, cacheType, imageURL) in
+//        imagePickerBtn.kf_setImageWithURL(act.posterURL!, forState: .normal, placeholderImage: nil)
+//        imagePickerBtn.kf_setImageWithURL(act.posterURL!, forState: .normal, placeholderImage: nil, optionsInfo: nil, progressBlock: nil) { (image, error, cacheType, imageURL) in
 //            self.poster = image
 //        }
         imagePickerBtn.kf.setImage(with: act.posterURL!, for: .normal, placeholder: nil, options: nil, progressBlock: nil) { (image, _, _, _) in

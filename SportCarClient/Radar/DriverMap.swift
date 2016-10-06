@@ -112,7 +112,7 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
         userList.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(self.view)
             make.left.equalTo(self.view)
-            make.height.equalTo(self.view.frame.height - 100)
+            make.height.equalTo(self.view.frame.height - 190)
             make.top.equalTo(self.view.snp.bottom)
         }
         userList.register(DriverMapUserCell.self, forCellReuseIdentifier: "cell")
@@ -385,8 +385,8 @@ extension RadarDriverMapController: UITableViewDataSource, UITableViewDelegate {
             userList.snp.remakeConstraints { (make) -> Void in
                 make.right.equalTo(self.view)
                 make.left.equalTo(self.view)
-                make.height.equalTo(self.view.frame.height - 100)
-                make.bottom.equalTo(self.view.snp.bottom).offset(90)
+                make.height.equalTo(self.view.frame.height - 190)
+                make.bottom.equalTo(self.view.snp.bottom)// .offset(90)
             }
             SpringAnimation.spring(duration: 0.6, animations: { () -> Void in
                 self.view.layoutIfNeeded()
@@ -401,7 +401,7 @@ extension RadarDriverMapController: UITableViewDataSource, UITableViewDelegate {
             userList.snp.remakeConstraints { (make) -> Void in
                 make.right.equalTo(self.view)
                 make.left.equalTo(self.view)
-                make.height.equalTo(self.view.frame.height - 100)
+                make.height.equalTo(self.view.frame.height - 190)
                 make.top.equalTo(self.view.snp.bottom)
             }
             SpringAnimation.spring(duration: 0.6, animations: { () -> Void in

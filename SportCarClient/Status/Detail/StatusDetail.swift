@@ -230,13 +230,13 @@ class StatusDetailController: InputableViewController, DetailCommentCellDelegate
         navigationItem.title = LS("动态详情")
         //
         let backBtn = UIButton()
-        backBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        backBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
         backBtn.addTarget(self, action: #selector(StatusDetailController.backBtnPressed), for: .touchUpInside)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
         //
         let shareBtn = UIButton()
-        shareBtn.setImage(UIImage(named: "status_detail_other_operation"), for: UIControlState())
+        shareBtn.setImage(UIImage(named: "status_detail_other_operation"), for: .normal)
         shareBtn.imageView?.contentMode = .scaleAspectFit
         shareBtn.frame = CGRect(x: 0, y: 0, width: 24, height: 214)
         shareBtn.addTarget(self, action: #selector(StatusDetailController.navRightBtnPressed), for: .touchUpInside)
@@ -589,7 +589,7 @@ extension StatusDetailController: UICollectionViewDataSource {
             avatarClubBtn?.kf.setImage(with: club.logoURL!, for: .normal)
         }else{
             avatarClubBtn?.isHidden = true
-            avatarClubBtn?.setImage(nil, for: UIControlState())
+            avatarClubBtn?.setImage(nil, for: .normal)
         }
         if let car = user.avatarCarModel {
             avatarCarNameLbl?.isHidden = false

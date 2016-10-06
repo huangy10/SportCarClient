@@ -102,7 +102,7 @@ class UserSelectController: InputableViewController, UISearchBarDelegate {
         self.navigationItem.title = self.navTitle()
         let leftBtn = UIButton()
         leftBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         leftBtn.addTarget(self, action: #selector(UserSelectController.navLeftBtnPressed), for: .touchUpInside)
         let leftBtnItem = UIBarButtonItem(customView: leftBtn)
         self.navigationItem.leftBarButtonItem = leftBtnItem
@@ -327,7 +327,7 @@ class UserSelectCell: UITableViewCell {
     func createSubviews() {
         let superview = self.contentView
         selectBtn = UIButton()
-        selectBtn?.setImage(UIImage(named: "status_photo_unselected_small"), for: UIControlState())
+        selectBtn?.setImage(UIImage(named: "status_photo_unselected_small"), for: .normal)
         selectBtn?.setImage(UIImage(named: "status_photo_selected_small"), for: .selected)
         selectBtn?.addTarget(self, action: #selector(UserSelectCell.selectBtnPressed), for: .touchUpInside)
         selectBtn?.contentEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5)

@@ -81,8 +81,8 @@ class SuggestionController: PresentTemplateViewController {
         }
         //
         confirmBtn = UIButton()
-        confirmBtn.setTitle(LS("确定"), for: UIControlState())
-        confirmBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        confirmBtn.setTitle(LS("确定"), for: .normal)
+        confirmBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         confirmBtn.addTarget(self, action: #selector(confirmMessageSent), for: .touchUpInside)
         confirmBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         container.addSubview(confirmBtn)
@@ -93,9 +93,9 @@ class SuggestionController: PresentTemplateViewController {
         }
         //
         cancelBtn = UIButton()
-        cancelBtn.setTitle(LS("取消"), for: UIControlState())
+        cancelBtn.setTitle(LS("取消"), for: .normal)
         cancelBtn.addTarget(self, action: #selector(hideAnimated), for: .touchUpInside)
-        cancelBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
+        cancelBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: .normal)
         cancelBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         container.addSubview(cancelBtn)
         cancelBtn.snp.makeConstraints { (make) -> Void in

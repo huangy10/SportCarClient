@@ -18,7 +18,7 @@ protocol SportCarViewListDelegate: class {
      
      - parameter car: 选中的车辆
      */
-    func didSelectSportCar(_ car: SportCar?)
+    func didSelect(sportCar car: SportCar?)
     
     /**
      按下了最后的添加按钮
@@ -103,10 +103,10 @@ class SportsCarViewListController: UICollectionViewController, UICollectionViewD
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if (indexPath as NSIndexPath).row == 0 {
             selectedCar = nil
-            delegate?.didSelectSportCar(selectedCar)
+            delegate?.didSelect(sportCar: selectedCar)
         } else if (indexPath as NSIndexPath).row < cars.count + 1 {
             selectedCar = cars[(indexPath as NSIndexPath).row - 1]
-            delegate?.didSelectSportCar(selectedCar)
+            delegate?.didSelect(sportCar: selectedCar)
         } else {
             delegate?.needAddSportCar()
         }

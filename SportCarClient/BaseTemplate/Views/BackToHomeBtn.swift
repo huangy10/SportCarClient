@@ -26,7 +26,7 @@ class BackToHomeBtn: UIButton {
     }
     
     func createSubview() {
-        setImage(UIImage(named: "home_back"), for: UIControlState())
+        setImage(UIImage(named: "home_back"), for: .normal)
         bounds = CGRect(x: 0, y: 0, width: 15, height: 13.5)
 //        imageView?.contentMode = .ScaleAspectFit
         clipsToBounds = false

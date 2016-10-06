@@ -84,7 +84,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
         panel.locBtn.addTarget(self, action: #selector(PersonOtherController.locateBtnPressed), for: .touchUpInside)
         //
         if data.user.followed {
-            panel.followBtn.setImage(UIImage(named: "person_followed"), for: UIControlState())
+            panel.followBtn.setImage(UIImage(named: "person_followed"), for: .normal)
             panel.followBtnTmpImage.image = UIImage(named: "person_followed")
         }
         panel.fanslistBtn.addTarget(self, action: #selector(fanslistPressed), for: .touchUpInside)
@@ -103,10 +103,10 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
             
             if json!.boolValue {
                 board.followBtnTmpImage.image = UIImage(named: "person_add_follow")
-                board.followBtn.setImage(UIImage(named: "person_followed"), for: UIControlState())
+                board.followBtn.setImage(UIImage(named: "person_followed"), for: .normal)
             }else{
                 board.followBtnTmpImage.image = UIImage(named: "person_followed")
-                board.followBtn.setImage(UIImage(named: "person_add_follow"), for: UIControlState())
+                board.followBtn.setImage(UIImage(named: "person_add_follow"), for: .normal)
             }
             board.followBtnTmpImage.isHidden = false
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in

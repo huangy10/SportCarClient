@@ -125,8 +125,8 @@ class SideBarController: UIViewController {
         var preView: UIView = nameLbl!
         for i in 0..<5 {
             let btn = UIButton()
-            btn.setTitle(titles[i], for: UIControlState())
-            btn.setTitleColor(UIColor.white, for: UIControlState())
+            btn.setTitle(titles[i], for: .normal)
+            btn.setTitleColor(UIColor.white, for: .normal)
             btn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
             btn.contentHorizontalAlignment = .left
             btn.addTarget(self, action: #selector(SideBarController.sideBtnPressed(_:)), for: .touchUpInside)

@@ -79,7 +79,7 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         })
         //
         cancelBtn = UIButton()
-        cancelBtn?.setImage(UIImage(named: "news_comment_cancel_btn"), for: UIControlState())
+        cancelBtn?.setImage(UIImage(named: "news_comment_cancel_btn"), for: .normal)
         cancelBtn?.addTarget(self, action: #selector(MakeCommentController.commentCancelled), for: .touchUpInside)
         superview.addSubview(cancelBtn!)
         cancelBtn?.snp.makeConstraints({ (make) -> Void in
@@ -99,9 +99,9 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         })
         //
         confirmBtn = UIButton()
-        confirmBtn?.setTitle(LS("发布"), for: UIControlState())
+        confirmBtn?.setTitle(LS("发布"), for: .normal)
         confirmBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBold)
-        confirmBtn?.setTitleColor(UIColor(red: 1, green: 0.29, blue: 0.30, alpha: 1), for: UIControlState())
+        confirmBtn?.setTitleColor(UIColor(red: 1, green: 0.29, blue: 0.30, alpha: 1), for: .normal)
         confirmBtn?.titleLabel?.textAlignment = .center
         confirmBtn?.layer.borderColor = UIColor(red: 1, green: 0.29, blue: 0.30, alpha: 1).cgColor
         confirmBtn?.layer.borderWidth = 1.5
@@ -157,7 +157,7 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         })
         //
         attachImageBtn = UIButton()
-        attachImageBtn?.setImage(UIImage(named: "news_comment_attach_image"), for: UIControlState())
+        attachImageBtn?.setImage(UIImage(named: "news_comment_attach_image"), for: .normal)
         opPanel?.addSubview(attachImageBtn!)
         attachImageBtn?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(inputContainer)
@@ -245,7 +245,7 @@ extension MakeCommentController {
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        attachImageBtn?.setImage(image, for: UIControlState())
+        attachImageBtn?.setImage(image, for: .normal)
         commentImage = image
         self.dismiss(animated: true, completion: nil)
     }

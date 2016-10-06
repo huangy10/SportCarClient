@@ -24,13 +24,13 @@ class AuthBasicController: InputableViewController {
         self.navigationItem.title = navTitle()
         //
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
         navLeftBtn.addTarget(self, action: #selector(AuthBasicController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
         let rightItem = UIBarButtonItem(title: titleForRightNavBtn(), style: .done, target: self, action: #selector(AuthBasicController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.rightBarButtonItem = rightItem
 
     }

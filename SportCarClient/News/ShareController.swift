@@ -95,7 +95,7 @@ class ShareController: UIViewController {
         container.layer.opacity = 0
         //
         let cancelBtn = UIButton()
-        cancelBtn.setImage(UIImage(named: "news_comment_cancel_btn"), for: UIControlState())
+        cancelBtn.setImage(UIImage(named: "news_comment_cancel_btn"), for: .normal)
         cancelBtn.addTarget(self, action: #selector(ShareController.cancelBtnPressed), for: .touchUpInside)
         container.addSubview(cancelBtn)
         cancelBtn.snp.makeConstraints { (make) -> Void in
@@ -126,7 +126,7 @@ class ShareController: UIViewController {
         //
         shareSina = UIButton()
         shareSina.tag = 2
-        shareSina.setImage(UIImage(named: "share_sinaweibo"), for: UIControlState())
+        shareSina.setImage(UIImage(named: "share_sinaweibo"), for: .normal)
         shareSina.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), for: .touchUpInside)
         container.addSubview(shareSina)
         shareSina.snp.makeConstraints { (make) -> Void in
@@ -137,7 +137,7 @@ class ShareController: UIViewController {
         //
         shareQQ = UIButton()
         shareQQ.tag = 3
-        shareQQ.setImage(UIImage(named: "share_qq"), for: UIControlState())
+        shareQQ.setImage(UIImage(named: "share_qq"), for: .normal)
         shareQQ.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), for: .touchUpInside)
         container.addSubview(shareQQ)
         shareQQ.snp.makeConstraints { (make) -> Void in
@@ -148,7 +148,7 @@ class ShareController: UIViewController {
         //
         shareWechatFriend = UIButton()
         shareWechatFriend.tag = 1
-        shareWechatFriend.setImage(UIImage(named: "share_wechat_friend"), for: UIControlState())
+        shareWechatFriend.setImage(UIImage(named: "share_wechat_friend"), for: .normal)
         shareWechatFriend.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), for: .touchUpInside)
         container.addSubview(shareWechatFriend)
         shareWechatFriend.snp.makeConstraints { (make) -> Void in
@@ -159,7 +159,7 @@ class ShareController: UIViewController {
         //
         shareWechat = UIButton()
         shareWechat.tag = 0
-        shareWechat.setImage(UIImage(named: "share_wechat"), for: UIControlState())
+        shareWechat.setImage(UIImage(named: "share_wechat"), for: .normal)
         shareWechat.addTarget(self, action: #selector(ShareController.shareBtnPressed(_:)), for: .touchUpInside)
         container.addSubview(shareWechat)
         shareWechat.snp.makeConstraints { (make) -> Void in

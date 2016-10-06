@@ -99,7 +99,7 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKGeo
             make.height.equalTo(superview)
         })
         addImageBtn = UIButton()
-        addImageBtn.setImage(UIImage(named: "status_add_image"), for: UIControlState())
+        addImageBtn.setImage(UIImage(named: "status_add_image"), for: .normal)
         addImageBtn.addTarget(self, action: #selector(StatusReleaseController.addImageBtnPressed), for: .touchUpInside)
         board?.addSubview(addImageBtn)
         addImageBtn.snp.makeConstraints { (make) -> Void in
@@ -230,12 +230,12 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKGeo
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = LS("发布动态")
         let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .plain, target: self, action: #selector(StatusReleaseController.navLeftBtnPressed))
-        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.leftBarButtonItem = leftBtnItem
         
         let rightBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 28, height: 16))
-        rightBtn.setTitle(LS("发布"), for: UIControlState())
-        rightBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        rightBtn.setTitle(LS("发布"), for: .normal)
+        rightBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         rightBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         rightBtn.addTarget(self, action: #selector(StatusReleaseController.navRightBtnPressed), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
@@ -348,7 +348,7 @@ extension StatusReleaseController {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         self.dismiss(animated: true, completion: nil)
         selectedImage = image
-        addImageBtn?.setImage(image, for: UIControlState())
+        addImageBtn?.setImage(image, for: .normal)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

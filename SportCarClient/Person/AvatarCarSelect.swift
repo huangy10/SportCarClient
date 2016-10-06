@@ -65,7 +65,7 @@ class AvatarCarSelectController: AvatarItemSelectController {
         let superview = self.view!
         //
         addAuthCarBtn = UIButton()
-        addAuthCarBtn.setImage(UIImage(named: "auth_add_item_btn"), for: UIControlState())
+        addAuthCarBtn.setImage(UIImage(named: "auth_add_item_btn"), for: .normal)
         superview.addSubview(addAuthCarBtn)
         addAuthCarBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)

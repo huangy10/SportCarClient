@@ -32,8 +32,8 @@ class InformOtherUserController: UIViewController, UICollectionViewDelegate, UIC
         //
         atBtn = UIButton()
         superview.addSubview(atBtn!)
-        atBtn?.setTitle(LS("@ 提醒谁看"), for: UIControlState())
-        atBtn?.setTitleColor(UIColor.black, for: UIControlState())
+        atBtn?.setTitle(LS("@ 提醒谁看"), for: .normal)
+        atBtn?.setTitleColor(UIColor.black, for: .normal)
         atBtn?.titleLabel?.textAlignment = .center
         atBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         atBtn?.addTarget(self, action: #selector(InformOtherUserController.atBtnPressed), for: .touchUpInside)

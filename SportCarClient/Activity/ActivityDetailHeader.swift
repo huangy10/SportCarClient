@@ -273,8 +273,8 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
                 make.centerY.equalTo(inlineMiniUserSelect)
                 make.width.equalTo(60)
             })
-        showAllMemberBtn.setTitle(LS("全部"), for: UIControlState())
-        showAllMemberBtn.setTitleColor(kHighlightRed, for: UIControlState())
+        showAllMemberBtn.setTitle(LS("全部"), for: .normal)
+        showAllMemberBtn.setTitleColor(kHighlightRed, for: .normal)
         showAllMemberBtn.layer.borderColor = kHighlightRed.cgColor
         showAllMemberBtn.layer.borderWidth = 0.5
         showAllMemberBtn.layer.cornerRadius = 17.5

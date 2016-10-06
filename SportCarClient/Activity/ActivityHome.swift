@@ -55,7 +55,7 @@ class ActivityHomeController: UIViewController {
         navigationItem.leftBarButtonItem = navLeftBtn.wrapToBarBtn()
         // 导航栏右侧按钮
         let navRightBtn = UIButton()
-        navRightBtn.setImage(UIImage(named: "status_add_btn_white"), for: UIControlState())
+        navRightBtn.setImage(UIImage(named: "status_add_btn_white"), for: .normal)
         navRightBtn.frame = CGRect(x: 0, y: 0, width: 18, height: 18)
         navRightBtn.addTarget(self, action: #selector(ActivityHomeController.navRightBtnPressed), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navRightBtn)

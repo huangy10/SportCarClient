@@ -55,7 +55,7 @@ class AgreementController: UIViewController {
 //        let leftBtnItem = UIBarButtonItem(customView: backBtn)
         
         let leftBtn = UIBarButtonItem(title: LS("取消"), style: .done, target: self, action: #selector(backBtnPressed))
-        leftBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
+        leftBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         return leftBtn
     }
     

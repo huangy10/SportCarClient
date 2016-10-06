@@ -71,7 +71,7 @@ class NewsCell2: UITableViewCell {
                 make.width.equalTo(30)
             })
         shareIcon = contentView.addSubview(UIImageView.self)
-            .config(UIImage(named: "news_share_white"))
+            .config(UIImage(named: "news_share_white"), contentMode: .scaleAspectFit)
             .layout({ (make) in
                 make.right.equalTo(shareNumLbl.snp.left).offset(-3)
                 make.bottom.equalTo(shareNumLbl)
@@ -88,7 +88,7 @@ class NewsCell2: UITableViewCell {
                 make.width.equalTo(30)
             })
         commentIcon = contentView.addSubview(UIImageView.self)
-            .config(UIImage(named: "news_comment"))
+            .config(UIImage(named: "news_comment"), contentMode: .scaleAspectFit)
             .layout({ (make) in
                 make.right.equalTo(commentNumLbl.snp.left).offset(-3)
                 make.bottom.equalTo(commentNumLbl)
@@ -105,7 +105,7 @@ class NewsCell2: UITableViewCell {
                 make.width.equalTo(30)
             })
         likeIcon = contentView.addSubview(UIImageView.self)
-            .config(UIImage(named: "news_like_unliked"))
+            .config(UIImage(named: "news_like_unliked"), contentMode: .scaleAspectFit)
             .layout({ (make) in
                 make.bottom.equalTo(likeNumLbl)
                 make.right.equalTo(likeNumLbl.snp.left).offset(-3)

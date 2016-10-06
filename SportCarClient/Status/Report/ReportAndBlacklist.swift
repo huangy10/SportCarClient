@@ -52,8 +52,8 @@ class ReportBlacklistViewController: PresentTemplateViewController {
         var index = 0
         for title in kReportTitles {
             let btn = UIButton()
-            btn.setTitle(title, for: UIControlState())
-            btn.setTitleColor(UIColor.white, for: UIControlState())
+            btn.setTitle(title, for: .normal)
+            btn.setTitleColor(UIColor.white, for: .normal)
             btn.tag = index
             btn.addTarget(self, action: #selector(ReportBlacklistViewController.reportItemPressed(_:)), for: .touchUpInside)
             container2.addSubview(btn)

@@ -111,9 +111,9 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         })
         //
         let sendCodeBtn = AuthCodeBtnView()
-        sendCodeBtn.setTitle(NSLocalizedString("获取验证码", comment: ""), for: UIControlState())
+        sendCodeBtn.setTitle(NSLocalizedString("获取验证码", comment: ""), for: .normal)
         sendCodeBtn.displayText = NSLocalizedString("获取验证码", comment: "")
-        sendCodeBtn.setTitleColor(UIColor(red: 1, green: 0.2667, blue: 0.2745, alpha: 1), for: UIControlState())
+        sendCodeBtn.setTitleColor(UIColor(red: 1, green: 0.2667, blue: 0.2745, alpha: 1), for: .normal)
         sendCodeBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         inputContainer.addSubview(sendCodeBtn)
         sendCodeBtn.snp.makeConstraints { (make) -> Void in
@@ -157,7 +157,7 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         })
         
         let registerBtn = UIButton()
-        registerBtn.setBackgroundImage(UIImage(named: "account_resetpwd_confirm_btn"), for: UIControlState())
+        registerBtn.setBackgroundImage(UIImage(named: "account_resetpwd_confirm_btn"), for: .normal)
         registerBtn.layer.shadowColor = UIColor(red: 0.95, green: 0.21, blue: 0.21, alpha: 1).cgColor
         registerBtn.layer.shadowOffset = CGSize(width: 0, height: 3)
         registerBtn.layer.shadowRadius = 7
@@ -207,7 +207,7 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
 //    
     override func leftBarBtn() -> UIBarButtonItem! {
         let btn = UIBarButtonItem(title: LS("取消"), style: .plain, target: self, action: #selector(LoginRegisterController.backBtnPressed(_:)))
-        btn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
+        btn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         return btn
     }
 }

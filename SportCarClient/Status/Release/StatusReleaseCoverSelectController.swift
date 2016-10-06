@@ -90,8 +90,8 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
         }
         
         let cancelBtn = UIButton()
-        cancelBtn.setTitle(LS("取消"), for: UIControlState())
-        cancelBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
+        cancelBtn.setTitle(LS("取消"), for: .normal)
+        cancelBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: .normal)
         cancelBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         cancelBtn.addTarget(self, action: #selector(StatusReleasePhotoSelectController.bottomBtnPressed), for: .touchUpInside)
         bottomBar.addSubview(cancelBtn)
@@ -107,15 +107,15 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
         self.navigationItem.title = LS("相机胶卷")
         
         rightNavBtn = UIButton()
-        rightNavBtn?.setTitle(LS("确定") + "(0/\(maxSelectLimit))", for: UIControlState())
-        rightNavBtn?.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        rightNavBtn?.setTitle(LS("确定") + "(0/\(maxSelectLimit))", for: .normal)
+        rightNavBtn?.setTitleColor(kHighlightedRedTextColor, for: .normal)
         rightNavBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         rightNavBtn?.addTarget(self, action: #selector(StatusReleasePhotoSelectController.navRightBtnPressed), for: .touchUpInside)
         rightNavBtn?.frame = CGRect(x: 0, y: 0, width: 60, height: 20)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightNavBtn!)
         
         let leftNavBtn = UIButton()
-        leftNavBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftNavBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         leftNavBtn.frame = CGRect(x: 0, y: 0, width: 10.5, height: 18)
         leftNavBtn.addTarget(self, action: #selector(StatusReleasePhotoSelectController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftNavBtn)
@@ -198,7 +198,7 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
             cell.setSelected(true, animtated: true)
             selectedImageRow.append(row)
             let selectedCount = selectedImageRow.count
-            rightNavBtn?.setTitle(LS("确定") + "(\(selectedCount)/\(maxSelectLimit))", for: UIControlState())
+            rightNavBtn?.setTitle(LS("确定") + "(\(selectedCount)/\(maxSelectLimit))", for: .normal)
         }
     }
     
@@ -254,7 +254,7 @@ class StatusReleasePhotoSelectCell: UICollectionViewCell {
         //
         selectBtn = UIButton()
         selectBtn?.addTarget(self, action: #selector(StatusReleasePhotoSelectCell.selectBtnPressed), for: .touchUpInside)
-        selectBtn?.setImage(UIImage(named: "status_photo_unselected_small"), for: UIControlState())
+        selectBtn?.setImage(UIImage(named: "status_photo_unselected_small"), for: .normal)
         selectBtn?.setImage(UIImage(named: "status_photo_selected_small"), for: .selected)
         contentView.addSubview(selectBtn!)
         selectBtn?.snp.makeConstraints({ (make) -> Void in

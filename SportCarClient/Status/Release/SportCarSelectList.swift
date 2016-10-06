@@ -181,7 +181,7 @@ class SportCarSelectListAddCell: UICollectionViewCell {
         let superview = self.contentView
         //
         addBtn = UIButton()
-        addBtn?.setImage(UIImage(named: "person_add_more"), for: UIControlState())
+        addBtn?.setImage(UIImage(named: "person_add_more"), for: .normal)
         addBtn?.addTarget(self, action: #selector(SportCarSelectListAddCell.addPressed), for: .touchUpInside)
         superview.addSubview(addBtn!)
         addBtn?.snp.makeConstraints({ (make) -> Void in

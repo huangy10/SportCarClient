@@ -73,7 +73,7 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
         let superview = self
         //
         playBtn = UIButton()
-        playBtn?.setImage(UIImage(named: "chat_voice_play"), for: UIControlState())
+        playBtn?.setImage(UIImage(named: "chat_voice_play"), for: .normal)
         playBtn?.addTarget(self, action: #selector(ChatWaveView.playBtnPressed), for: .touchUpInside)
         playBtn?.imageView?.contentMode = .scaleAspectFit
         playBtn?.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4)
@@ -127,7 +127,7 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
         // TODO: use isPlaying property instead of operating on `tag` directly
         
         if playBtn?.tag == 0 {
-            playBtn?.setImage(UIImage(named: "chat_voice_pause"), for: UIControlState())
+            playBtn?.setImage(UIImage(named: "chat_voice_pause"), for: .normal)
             player.play(SFURL(audioURL)!, newDelegate: self)
             playBtn?.tag = 1
         }else{
@@ -136,7 +136,7 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
                 remainingTimeLbl?.text = getRemainingTimeString(0)
             }
             playBtn?.tag = 0
-            playBtn?.setImage(UIImage(named: "chat_voice_play"), for: UIControlState())
+            playBtn?.setImage(UIImage(named: "chat_voice_play"), for: .normal)
         }
     }
     
@@ -237,13 +237,13 @@ class ChatWaveView: UIView, UniversalAudioPlayerDelegate, UIPopoverPresentationC
 
 extension ChatWaveView {
     func willPlayAnotherAudioFile() {
-        playBtn?.setImage(UIImage(named: "chat_voice_play"), for: UIControlState())
+        playBtn?.setImage(UIImage(named: "chat_voice_play"), for: .normal)
         playBtn?.tag = 0
         remainingTimeLbl?.text = getRemainingTimeString(0)
     }
     
     func willStartPlaying() {
-        playBtn?.setImage(UIImage(named: "chat_voice_pause"), for: UIControlState())
+        playBtn?.setImage(UIImage(named: "chat_voice_pause"), for: .normal)
         processView?.process = 0
         remainingTimeLbl?.text = getRemainingTimeString(0)
         chatRecord?.read = true
@@ -256,7 +256,7 @@ extension ChatWaveView {
     
     func playDidFinished() {
         processView?.process = 1
-        playBtn?.setImage(UIImage(named: "chat_voice_play"), for: UIControlState())
+        playBtn?.setImage(UIImage(named: "chat_voice_play"), for: .normal)
         playBtn?.tag = 0
         remainingTimeLbl?.text = getRemainingTimeString(0)
     }

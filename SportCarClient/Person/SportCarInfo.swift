@@ -23,8 +23,8 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     var car: SportCar!
     var mine: Bool = false
     
-    @available(*, deprecated: 1)
-    var carCover: UIImageView!
+//    @available(*, deprecated: 1)
+//    var carCover: UIImageView!
     var carGallary: SportCarGallary!
     var carAudioWave: CarWaveView?
     
@@ -92,8 +92,8 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         }
         //
         carEditBtn = UIButton()
-        carEditBtn.setTitle(LS("认证"), for: UIControlState())
-        carEditBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        carEditBtn.setTitle(LS("认证"), for: .normal)
+        carEditBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         carEditBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         carEditBtn.addTarget(self, action: #selector(carEditBtnPressed), for: .touchUpInside)
         superview.addSubview(carEditBtn)
@@ -370,9 +370,9 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     var isPlaying: Bool = false {
         didSet {
             if isPlaying {
-                playBtn.setImage(UIImage(named: "chat_voice_pause"), for: UIControlState())
+                playBtn.setImage(UIImage(named: "chat_voice_pause"), for: .normal)
             } else {
-                playBtn.setImage(UIImage(named: "chat_voice_play"), for: UIControlState())
+                playBtn.setImage(UIImage(named: "chat_voice_play"), for: .normal)
             }
         }
     }
@@ -426,7 +426,7 @@ class CarWaveView: UIView, UIPopoverPresentationControllerDelegate, UniversalAud
     
     func configWaveMask() {
         wavMask = UIImageView(image: UIImage(named: "static_wave_mask"))
-        wavMask.frame = CGRect(x: 0, y: 0, width: 167, height: 50)
+        wavMask.frame = CGRect(x: 0, y: 8, width: 167, height: 34)
         wavMask.backgroundColor = UIColor.clear
         processView.mask = wavMask
     }

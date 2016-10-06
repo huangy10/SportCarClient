@@ -40,7 +40,7 @@ class ActivityReleaseInfoBoard: UIView {
         //
         posterBtn = UIButton()
         superview.addSubview(posterBtn)
-        posterBtn.setImage(UIImage(named: "activity_release_default_cover"), for: UIControlState())
+        posterBtn.setImage(UIImage(named: "activity_release_default_cover"), for: .normal)
         posterBtn.imageView?.contentMode = .scaleAspectFill
         posterBtn.clipsToBounds = true
         posterBtn.snp.makeConstraints { (make) -> Void in

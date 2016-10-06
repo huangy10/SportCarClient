@@ -202,11 +202,11 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         self.navigationItem.title = LS("发布活动")
         //
         let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .plain, target: self, action: #selector(ActivityReleaseController.navLeftBtnPressed))
-        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.leftBarButtonItem = leftBtnItem
         //
         let rightItem = UIBarButtonItem(title: LS("发布"), style: .done, target: self, action: #selector(ActivityReleaseController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
@@ -485,7 +485,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         dismiss(animated: false, completion: nil)
         poster = image
-        imagePickerBtn.setImage(image, for: UIControlState())
+        imagePickerBtn.setImage(image, for: .normal)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

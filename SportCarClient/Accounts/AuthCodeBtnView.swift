@@ -22,18 +22,18 @@ class AuthCodeBtnView: UIButton {
             switch status{
             case .normal:
                 self.updateTimer?.invalidate()
-                self.setTitle(displayText, for: UIControlState())
+                self.setTitle(displayText, for: .normal)
                 self.indicator.stopAnimating()
                 self.isUserInteractionEnabled = true
                 break
             case .pending:
-                self.setTitle("", for: UIControlState())
+                self.setTitle("", for: .normal)
                 self.indicator.startAnimating()
                 self.isUserInteractionEnabled = false
                 break
             case .countDown:
                 self.indicator.stopAnimating()
-                self.setTitle("\(maxCD)", for: UIControlState())
+                self.setTitle("\(maxCD)", for: .normal)
                 updateTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(AuthCodeBtnView.countDownUpdater), userInfo: nil, repeats: true)
                 self.isUserInteractionEnabled = false
                 break
@@ -81,7 +81,7 @@ class AuthCodeBtnView: UIButton {
             status = .normal
             return
         }
-        self.setTitle("\(cdTime)", for: UIControlState())
+        self.setTitle("\(cdTime)", for: .normal)
     }
     
 }

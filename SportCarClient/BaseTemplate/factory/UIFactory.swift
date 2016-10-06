@@ -263,10 +263,10 @@ extension UIButton {
         image: UIImage? = nil,
         contentMode: UIViewContentMode = .scaleAspectFill
         ) -> UIButton {
-        self.setTitle(title, for: UIControlState())
-        self.setImage(image, for: UIControlState())
+        self.setTitle(title, for: .normal)
+        self.setImage(image, for: .normal)
         self.imageView?.contentMode = contentMode
-        self.setTitleColor(titleColor, for: UIControlState())
+        self.setTitleColor(titleColor, for: .normal)
         self.titleLabel?.font = UIFont.systemFont(ofSize: titleSize, weight: titleWeight)
         self.addTarget(target, action: selector, for: .touchUpInside)
         return self

@@ -196,8 +196,8 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         }
         //
         agreenBtn = UIButton()
-        agreenBtn.setTitle(LS("同意"), for: UIControlState())
-        agreenBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        agreenBtn.setTitle(LS("同意"), for: .normal)
+        agreenBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         agreenBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(agreenBtn)
         agreenBtn.snp.makeConstraints { (make) -> Void in
@@ -208,8 +208,8 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         agreenBtn.addTarget(self, action: #selector(NotificationCellAboutActivity.agreeBtnPressed), for: .touchUpInside)
         //
         denyBtn = UIButton()
-        denyBtn.setTitle(LS("谢绝"), for: UIControlState())
-        denyBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
+        denyBtn.setTitle(LS("谢绝"), for: .normal)
+        denyBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: .normal)
         denyBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(denyBtn)
         denyBtn.snp.makeConstraints { (make) -> Void in

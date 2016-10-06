@@ -81,9 +81,9 @@ class ActivityDetailBoardView: UIView {
         }
         editBtn = UIButton()
         editBtn.isHidden = !showEditBtn
-        editBtn.setTitle(LS("编辑"), for: UIControlState())
+        editBtn.setTitle(LS("编辑"), for: .normal)
         editBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        editBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        editBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         superview.addSubview(editBtn)
         editBtn.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)

@@ -71,7 +71,7 @@ class ChatOpPanelController: UIViewController {
         // 创建左侧按钮
         inputToggleBtn = UIButton()
         inputToggleBtn?.backgroundColor = UIColor.clear
-        inputToggleBtn?.setImage(UIImage(named: "chat_voice_input_btn"), for: UIControlState())
+        inputToggleBtn?.setImage(UIImage(named: "chat_voice_input_btn"), for: .normal)
         superview.addSubview(inputToggleBtn!)
         inputToggleBtn?.snp.makeConstraints({ (make) -> Void in
             make.size.equalTo(contentHeight)
@@ -81,7 +81,7 @@ class ChatOpPanelController: UIViewController {
         inputToggleBtn?.addTarget(self, action: #selector(ChatOpPanelController.inputToggleBtnPressed), for: .touchUpInside)
         // 创建右侧按钮
         accessoryBtn = UIButton()
-        accessoryBtn?.setImage(UIImage(named: "chat_add_asscessory"), for: UIControlState())
+        accessoryBtn?.setImage(UIImage(named: "chat_add_asscessory"), for: .normal)
         superview.addSubview(accessoryBtn!)
         accessoryBtn?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(superview).offset(-15)
@@ -116,8 +116,8 @@ class ChatOpPanelController: UIViewController {
         voiceInputBtn = UIButton()
         voiceInputBtn?.backgroundColor = UIColor.white
         voiceInputBtn?.layer.cornerRadius = contentHeight / 2
-        voiceInputBtn?.setTitle(LS("按住 说话"), for: UIControlState())
-        voiceInputBtn?.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
+        voiceInputBtn?.setTitle(LS("按住 说话"), for: .normal)
+        voiceInputBtn?.setTitleColor(UIColor(white: 0.72, alpha: 1), for: .normal)
         voiceInputBtn?.setTitleColor(UIColor.black, for: .highlighted)
         contentInputContainer.addSubview(voiceInputBtn!)
         voiceInputBtn?.snp.makeConstraints({ (make) -> Void in
@@ -221,7 +221,7 @@ extension ChatOpPanelController {
             // 显示出音频输入按钮
             voiceInputBtn?.isHidden = false
             // 更改toggle按钮图标
-            inputToggleBtn?.setImage(UIImage(named: "chat_text_input_btn"), for: UIControlState())
+            inputToggleBtn?.setImage(UIImage(named: "chat_text_input_btn"), for: .normal)
             // 取消contentInput的可能focused状态
             contentInput?.resignFirstResponder()
             // 完成状态转换后告知代理
@@ -232,7 +232,7 @@ extension ChatOpPanelController {
             delegate?.opPanelWillSwitchInputMode(self)
             voiceInputBtn?.isHidden = true
             contentInput?.becomeFirstResponder()
-            inputToggleBtn?.setImage(UIImage(named: "chat_voice_input_btn"), for: UIControlState())
+            inputToggleBtn?.setImage(UIImage(named: "chat_voice_input_btn"), for: .normal)
             break
         }
     }

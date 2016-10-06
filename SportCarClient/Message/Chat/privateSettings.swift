@@ -82,7 +82,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
     func navSettings() {
         self.navigationItem.title = user.chatName
         let leftBtn = UIButton()
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         leftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
         leftBtn.addTarget(self, action: #selector(PrivateChatSettingController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
@@ -176,7 +176,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                 if startGroupChatBtn == nil {
                     startGroupChatBtn = UIButton()
                     startGroupChatBtn?.addTarget(self, action: #selector(PrivateChatSettingController.startGroupChatPressed), for: .touchUpInside)
-                    startGroupChatBtn?.setImage(UIImage(named: "chat_settings_add_person"), for: UIControlState())
+                    startGroupChatBtn?.setImage(UIImage(named: "chat_settings_add_person"), for: .normal)
                     cell.contentView.addSubview(startGroupChatBtn!)
                     startGroupChatBtn?.snp.makeConstraints({ (make) -> Void in
                         make.left.equalTo(cell.contentView).offset(15)
@@ -223,7 +223,7 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                 cell.selectionStyle = .none
                 if startChat == nil {
                     startChat = UIButton()
-                    startChat?.setImage(UIImage(named: "chat_setting_start_chat"), for: UIControlState())
+                    startChat?.setImage(UIImage(named: "chat_setting_start_chat"), for: .normal)
                     startChat?.addTarget(self, action: #selector(startChatBtnPressed), for: .touchUpInside)
                     cell.contentView.addSubview(startChat!)
                     startChat?.snp.makeConstraints({ (make) -> Void in

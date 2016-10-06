@@ -24,9 +24,9 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         SSCommonHeader.registerTableView(tableView)
         SSPropertyCell.registerTableView(tableView)
         SSPropertyInputableCell.registerTableView(tableView)
+        tableView.register(SimpleLabelCell.self, forCellReuseIdentifier: "simple_label_cell")
         
         tableView.separatorStyle = .none
-        tableView.rowHeight = 50
     }
     
     func navSettings() {
@@ -34,14 +34,14 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         self.navigationItem.title = LS("跑车详情")
         //
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
         navLeftBtn.addTarget(self, action: #selector(SportCarInfoDetailController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
-        //
-        let rightItem = UIBarButtonItem(title: LS("删除"), style: .done, target: self, action: #selector(SportCarInfoDetailController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
-        self.navigationItem.rightBarButtonItem = rightItem
+//        //
+//        let rightItem = UIBarButtonItem(title: LS("删除"), style: .done, target: self, action: #selector(SportCarInfoDetailController.navRightBtnPressed))
+//        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+//        self.navigationItem.rightBarButtonItem = rightItem
     }
     
     func navLeftBtnPressed() {
@@ -49,30 +49,37 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
     }
     
     func navRightBtnPressed() {
-//        toast = showConfirmToast(
-//            LS("删除"), message: LS("确认删除爱车?"),
-//            target: self,
-//            confirmSelector: #selector(confirmDelete),
-//            cancelSelector: #selector(hideConfirmToast as ()->()),
-//            onSelf: false
-//        )
         showConfirmToast(LS("删除"), message: LS("确认删除爱车？"), target: self, onConfirm: #selector(confirmDelete))
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return kSportsCarInfoDetailStaticLabelString1.count
-        }else{
+        }else if section == 1 {
             return kSportsCarInfoDetailStaticLabelString2.count
+        } else {
+            return 1
         }
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
+        if section == 2 {
+            return 0
+        } else {
+            return 50
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 2 {
+            return 100
+        } else {
+            return 50
+        }
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -82,10 +89,12 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
             header.authed = car.identified
             header.authBtn.addTarget(self, action: #selector(SportCarInfoDetailController.carAuthBtnPressed), for: .touchUpInside)
             return header
-        }else{
+        } else if section == 1{
             let header = tableView.ss_reusableHeader(SSCommonHeader.self)
             header.titleLbl.text = LS("性能参数")
             return header
+        } else {
+            return nil
         }
     }
     
@@ -95,6 +104,11 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
             cell.staticLbl.text = LS("爱车签名")
             cell.hideArrowIcon()
             cell.extraSettings(self, text: car.signature, placeholder: LS("请输入爱车签名"))
+            return cell
+        }
+        if indexPath.section == 2 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "simple_label_cell", for: indexPath) as! SimpleLabelCell
+            cell.titleLbl.text = LS("删除爱车")
             return cell
         }
         let cell = tableView.ss_reuseablePropertyCell(SSPropertyCell.self, forIndexPath: indexPath)
@@ -138,6 +152,9 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
 //        if indexPath.row == 1 && indexPath.section == 0 {
 //            SinglePropertyModifierController(propertyName: LS("爱车签名"), delegate: self, forcusedIndexPath: indexPath).pushFromViewController(self)
 //        }
+        if indexPath.section == 2 {
+            navRightBtnPressed()
+        }
     }
     
     func carAuthBtnPressed() {

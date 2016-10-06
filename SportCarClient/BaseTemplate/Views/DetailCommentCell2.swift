@@ -113,8 +113,8 @@ class DetailCommentCell: UITableViewCell {
         })
         //
         replyBtn = UIButton()
-        replyBtn?.setTitle(LS("回复"), for: UIControlState())
-        replyBtn?.setTitleColor(UIColor(white: 0.72, alpha: 1), for: UIControlState())
+        replyBtn?.setTitle(LS("回复"), for: .normal)
+        replyBtn?.setTitleColor(UIColor(white: 0.72, alpha: 1), for: .normal)
         replyBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         superview.addSubview(replyBtn!)
         replyBtn?.snp.makeConstraints({ (make) -> Void in

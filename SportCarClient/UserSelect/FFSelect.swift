@@ -147,16 +147,16 @@ class FFSelectController: UserSelectController {
         self.navigationItem.titleView = container
         
         let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .plain, target: self, action: #selector(UserSelectController.navLeftBtnPressed))
-        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.leftBarButtonItem = leftBtnItem
 
         
         navRightBtn = UIButton()
-        navRightBtn?.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        navRightBtn?.setTitleColor(kHighlightedRedTextColor, for: .normal)
         if maxSelectUserNum == 0 {
-            navRightBtn?.setTitle(LS("确定(0)"), for: UIControlState())
+            navRightBtn?.setTitle(LS("确定(0)"), for: .normal)
         } else {
-            navRightBtn?.setTitle(LS("确定") + "(\(selectedUsers.count)/\(maxSelectUserNum))", for: UIControlState())
+            navRightBtn?.setTitle(LS("确定") + "(\(selectedUsers.count)/\(maxSelectUserNum))", for: .normal)
         }
         navRightBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
         navRightBtn?.titleLabel?.textAlignment = .right
@@ -273,10 +273,10 @@ class FFSelectController: UserSelectController {
     override func userSelectionDidChange() {
         if maxSelectUserNum > 0 {
             let currentSelectedNum = selectedUsers.count
-            navRightBtn?.setTitle(LS("确定") + "(\(currentSelectedNum)/\(maxSelectUserNum))", for: UIControlState())
+            navRightBtn?.setTitle(LS("确定") + "(\(currentSelectedNum)/\(maxSelectUserNum))", for: .normal)
         } else {
             let currentSelectedNum = selectedUsers.count
-            navRightBtn?.setTitle(LS("确定") + "(\(currentSelectedNum))", for: UIControlState())
+            navRightBtn?.setTitle(LS("确定") + "(\(currentSelectedNum))", for: .normal)
         }
     }
     

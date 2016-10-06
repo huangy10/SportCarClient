@@ -36,7 +36,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
     
     func navBarLeftBtn() -> UIBarButtonItem! {
         let backBtn = UIButton()
-        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        backBtn.setBackgroundImage(UIImage(named: "account_header_back_btn"), for: .normal)
         backBtn.addTarget(self, action: #selector(ProfileInfoController.backBtnPressed), for: .touchUpInside)
         backBtn.frame = CGRect(x: 0, y: 0, width: 10.2, height: 18)
         
@@ -46,8 +46,8 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
     
     func navBarRigthBtn() -> UIBarButtonItem! {
         let nextStepBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 42, height: 16))
-        nextStepBtn.setTitle(NSLocalizedString("下一步", comment: ""), for: UIControlState())
-        nextStepBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        nextStepBtn.setTitle(NSLocalizedString("下一步", comment: ""), for: .normal)
+        nextStepBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         nextStepBtn.titleLabel?.font = kBarTextFont
         nextStepBtn.addTarget(self, action: #selector(ProfileInfoController.nextBtnPressed), for: .touchUpInside)
         let rightBtnItem = UIBarButtonItem(customView: nextStepBtn)
@@ -110,7 +110,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         superview.backgroundColor = UIColor.white
         //
         avatarBtn = UIButton()
-        avatarBtn?.setImage(UIImage(named: "account_profile_avatar_btn"), for: UIControlState())
+        avatarBtn?.setImage(UIImage(named: "account_profile_avatar_btn"), for: .normal)
         avatarBtn?.layer.cornerRadius = 45
         avatarBtn?.clipsToBounds = true
         superview.addSubview(avatarBtn!)
@@ -148,9 +148,9 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         }
         //
         genderInput = UIButton()
-        genderInput?.setTitle(NSLocalizedString("请选择您的性别", comment: ""), for: UIControlState())
+        genderInput?.setTitle(NSLocalizedString("请选择您的性别", comment: ""), for: .normal)
         genderInput?.titleLabel?.font = kTextInputFont
-        genderInput?.setTitleColor(kPlaceholderTextColor, for: UIControlState())
+        genderInput?.setTitleColor(kPlaceholderTextColor, for: .normal)
         superview.addSubview(genderInput!)
         genderInput?.snp.makeConstraints({ (make) -> Void in
             make.centerY.equalTo(sepLine).offset(30)
@@ -180,9 +180,9 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         }
         //
         birthDateInput = UIButton()
-        birthDateInput?.setTitle(NSLocalizedString("请选择您的生日", comment: ""), for: UIControlState())
+        birthDateInput?.setTitle(NSLocalizedString("请选择您的生日", comment: ""), for: .normal)
         birthDateInput?.titleLabel?.font = kTextInputFont
-        birthDateInput?.setTitleColor(kPlaceholderTextColor, for: UIControlState())
+        birthDateInput?.setTitleColor(kPlaceholderTextColor, for: .normal)
         superview.addSubview(birthDateInput!)
         birthDateInput?.snp.makeConstraints({ (make) -> Void in
             make.centerY.equalTo(sepLine2).offset(30)
@@ -243,8 +243,8 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         })
         
         let pickerDoneBtn = UIButton()
-        pickerDoneBtn.setTitle(NSLocalizedString("完成", comment: ""), for: UIControlState())
-        pickerDoneBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        pickerDoneBtn.setTitle(NSLocalizedString("完成", comment: ""), for: .normal)
+        pickerDoneBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         pickerDoneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
         pickerHeader.addSubview(pickerDoneBtn)
         pickerDoneBtn.snp.makeConstraints { (make) -> Void in
@@ -352,17 +352,17 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd"
             
-            birthDateInput?.setTitle(formatter.string(from: selectedDate!), for: UIControlState())
-            birthDateInput?.setTitleColor(UIColor.black, for: UIControlState())
+            birthDateInput?.setTitle(formatter.string(from: selectedDate!), for: .normal)
+            birthDateInput?.setTitleColor(UIColor.black, for: .normal)
         }
         if !genderPickerView!.isHidden{
             let selectedGender = genderPickerView?.selectedRow(inComponent: 0)
             if selectedGender == 0{
-                genderInput?.setTitle("男", for: UIControlState())
+                genderInput?.setTitle("男", for: .normal)
             }else{
-                genderInput?.setTitle("女", for: UIControlState())
+                genderInput?.setTitle("女", for: .normal)
             }
-            genderInput?.setTitleColor(UIColor.black, for: UIControlState())
+            genderInput?.setTitleColor(UIColor.black, for: .normal)
         }
         
         let superview = self.view!
@@ -411,7 +411,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
     
     // MARK: ImagePicker的代理
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        avatarBtn?.setImage(image, for: UIControlState())
+        avatarBtn?.setImage(image, for: .normal)
         selectedAvatarImage = image
         self.dismiss(animated: true, completion: nil)
     }

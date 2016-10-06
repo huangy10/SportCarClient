@@ -85,7 +85,7 @@ class ImageViewer: UIViewController, LoadingProtocol {
         
         let image = UIImage(named: "Close", in: Bundle(for: ImageViewer.self), compatibleWith: nil)
         
-        closeButton.setImage(image, for: UIControlState())
+        closeButton.setImage(image, for: .normal)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.addTarget(self, action: #selector(ImageViewer.closeButtonTapped(_:)), for: UIControlEvents.touchUpInside)
         view.addSubview(closeButton)

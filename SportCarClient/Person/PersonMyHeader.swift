@@ -217,14 +217,14 @@ class PersonHeaderMine: UIView {
             avatarCarBtn.kf.setImage(with: car.logoURL!, for: .normal)
             avatarCarNameLbl.text = car.name
         } else {
-            avatarCarBtn.setImage(nil, for: UIControlState())
+            avatarCarBtn.setImage(nil, for: .normal)
             avatarCarNameLbl.text = ""
         }
         // 认证俱乐部
         if let club = user.avatarClubModel {
             avatarClubLogo.kf.setImage(with: club.logoURL!, for: .normal)
         }else {
-            avatarClubLogo.setImage(nil, for: UIControlState())
+            avatarClubLogo.setImage(nil, for: .normal)
         }
         // 
         nameLbl.text = user.nickName

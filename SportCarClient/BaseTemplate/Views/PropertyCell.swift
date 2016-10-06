@@ -41,7 +41,7 @@ class SSPropertyCell: SSPropertyBaseCell {
         super.createSubviews()
         let superview = self.contentView
         infoLbl = superview.addSubview(UILabel.self)
-            .config(14, textColor: UIColor.black)
+            .config(14, textColor: UIColor.black, textAlignment: .right)
             .layout({ (make) in
                 make.centerY.equalTo(staticLbl)
                 make.right.equalTo(arrowIcon.snp.left).offset(-15)

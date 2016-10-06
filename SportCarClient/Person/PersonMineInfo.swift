@@ -15,6 +15,8 @@ class PersonMineInfoController: UITableViewController, AvatarCarSelectDelegate, 
     
     var user: User = MainManager.sharedManager.hostUser!
     
+    let signatureMaxLen = 15
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
@@ -30,7 +32,7 @@ class PersonMineInfoController: UITableViewController, AvatarCarSelectDelegate, 
         self.navigationItem.title = user.nickName
         
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
         navLeftBtn.addTarget(self, action: #selector(navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
@@ -122,7 +124,14 @@ class PersonMineInfoController: UITableViewController, AvatarCarSelectDelegate, 
             case 2:
                 return rawCell.setData(LS("活跃地区"), propertyValue: user.district)
             default:
-                return rawCell.setData(LS("个性签名"), propertyValue: user.signature)
+                let sigLen = user.signature!.length
+                let sig: String
+                if sigLen > signatureMaxLen {
+                    sig = user.signature![0..<signatureMaxLen]
+                } else {
+                    sig = user.signature!
+                }
+                return rawCell.setData(LS("个性签名"), propertyValue: sig)
             }
         }
     }

@@ -113,16 +113,16 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     func navSettings() {
         self.navigationItem.title = targetClub.name
         let leftBtn = UIButton()
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         leftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
         leftBtn.addTarget(self, action: #selector(GroupChatSettingController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBtn)
         let rightBtn = UIButton()
         let btnText = LS("进入聊天")
         rightBtn.frame = CGRect(x: 0, y: 0, width: btnText.sizeWithFont(UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 21)).width, height: 21)
-        rightBtn.setTitle(btnText, for: UIControlState())
+        rightBtn.setTitle(btnText, for: .normal)
         rightBtn.titleLabel!.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        rightBtn.setTitleColor(kHighlightedRedTextColor, for: UIControlState())
+        rightBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         rightBtn.addTarget(self, action: #selector(GroupChatSettingController.navRightBtnPressed), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
     }

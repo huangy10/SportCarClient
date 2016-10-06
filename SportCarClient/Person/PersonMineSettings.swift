@@ -64,7 +64,7 @@ class PersonMineSettings: UITableViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
         navLeftBtn.addTarget(self, action: #selector(PersonMineSettings.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
@@ -205,7 +205,7 @@ class PersonMineSettingsBtnsCell: UITableViewCell {
         self.backgroundColor = UIColor.white
         //
         quitBtn = UIButton()
-        quitBtn.setImage(UIImage(named: "person_logout"), for: UIControlState())
+        quitBtn.setImage(UIImage(named: "person_logout"), for: .normal)
         superview.addSubview(quitBtn)
         quitBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
@@ -214,8 +214,8 @@ class PersonMineSettingsBtnsCell: UITableViewCell {
         }
         //
         changePassword = UIButton()
-        changePassword.setTitle(LS("修改密码"), for: UIControlState())
-        changePassword.setTitleColor(UIColor.black, for: UIControlState())
+        changePassword.setTitle(LS("修改密码"), for: .normal)
+        changePassword.setTitleColor(UIColor.black, for: .normal)
         changePassword.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(changePassword)
         changePassword.snp.makeConstraints { (make) -> Void in

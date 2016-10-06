@@ -50,7 +50,7 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
         logo = UIButton()
         logo.layer.cornerRadius = 45
         logo.clipsToBounds = true
-        logo.setImage(UIImage(named: "account_profile_avatar_btn"), for: UIControlState())
+        logo.setImage(UIImage(named: "account_profile_avatar_btn"), for: .normal)
         superview.addSubview(logo)
         logo.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
@@ -89,13 +89,13 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
         self.navigationItem.title = LS("聊天信息") + "(\(users.count))"
         //
         let navLeftBtn = UIButton()
-        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        navLeftBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         navLeftBtn.frame = CGRect(x: 0, y: 0, width: 9, height: 15)
         navLeftBtn.addTarget(self, action: #selector(GroupChatSetupController.navLeftBtnPressed), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
         let rightItem = UIBarButtonItem(title: LS("确定"), style: .done, target: self, action: #selector(GroupChatSetupController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
@@ -208,7 +208,7 @@ extension GroupChatSetupController {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         self.dismiss(animated: true, completion: nil)
         logoImage = image
-        logo.setImage(logoImage!, for: UIControlState())
+        logo.setImage(logoImage!, for: .normal)
     }
     
 }

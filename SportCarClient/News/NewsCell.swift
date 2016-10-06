@@ -75,6 +75,7 @@ class NewsCell: UITableViewCell {
             make.width.lessThanOrEqualTo(30)
         })
         shareIcon = UIImageView(image: UIImage(named: "news_share_white"))
+        shareIcon?.contentMode = .scaleAspectFit
         superview.addSubview(shareIcon!)
         shareIcon?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(shareNumLbl!.snp.left).offset(-3)
@@ -93,6 +94,7 @@ class NewsCell: UITableViewCell {
             make.size.equalTo(CGSize(width: 30, height: 15))
         })
         commentIcon = UIImageView(image: UIImage(named: "news_comment"))
+        commentIcon?.contentMode = .scaleAspectFit
         superview.addSubview(commentIcon!)
         commentIcon?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(commentNumLbl!.snp.left).offset(-3)
@@ -110,6 +112,7 @@ class NewsCell: UITableViewCell {
             make.size.equalTo(CGSize(width: 30, height: 15))
         })
         likeIcon = UIImageView(image: UIImage(named: "news_like_unliked"))
+        likeIcon?.contentMode = .scaleAspectFit
         superview.addSubview(likeIcon!)
         likeIcon?.snp.makeConstraints({ (make) -> Void in
             make.bottom.equalTo(commentIcon!)

@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		059B97869E6AEDFF9D074A8B /* Pods_SportCarClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45DA73EE76E0833101879EDB /* Pods_SportCarClient.framework */; };
 		BF01FDA51D65E78A00865630 /* ActivityMembers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF01FDA41D65E78A00865630 /* ActivityMembers.swift */; };
+		BF0472D11DA550FC00213581 /* PersonController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0472D01DA550FC00213581 /* PersonController2.swift */; };
+		BF0472D31DA5529200213581 /* PersonDataSource2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0472D21DA5529200213581 /* PersonDataSource2.swift */; };
+		BF0472D51DA60DBF00213581 /* PesronHeader2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0472D41DA60DBF00213581 /* PesronHeader2.swift */; };
 		BF11C7041CF32A8A00CCD184 /* LoadingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11C7031CF32A8A00CCD184 /* LoadingProtocol.swift */; };
 		BF11F6AE1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */; };
 		BF11F6B01CC0A11F0092A7E9 /* EmptyListHintCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */; };
@@ -200,6 +203,7 @@
 		BFDFF2811C8C0E8600055C1C /* ClubDiscoverListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFF2801C8C0E8600055C1C /* ClubDiscoverListCell.swift */; };
 		BFDFF2871C8CB11000055C1C /* ClubFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDFF2861C8CB11000055C1C /* ClubFilter.swift */; };
 		BFE0CD151C8D79810031C45B /* AlamofireExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE0CD141C8D79810031C45B /* AlamofireExtension.swift */; };
+		BFE1CDCC1DA54B0E00F4CADD /* PropertyButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE1CDCB1DA54B0E00F4CADD /* PropertyButtons.swift */; };
 		BFE598591CB4107300001F99 /* ActivityDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE598581CB4107300001F99 /* ActivityDetailHeader.swift */; };
 		BFE5985D1CB4A31100001F99 /* InlineUserSelectMiniCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE5985C1CB4A31100001F99 /* InlineUserSelectMiniCell.swift */; };
 		BFE966C51CA57C220097C42C /* MainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE966C41CA57C220097C42C /* MainManager.swift */; };
@@ -319,6 +323,9 @@
 		3C67C8D9B0B71677E04519EA /* Pods-SportCarClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportCarClient.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SportCarClient/Pods-SportCarClient.debug.xcconfig"; sourceTree = "<group>"; };
 		45DA73EE76E0833101879EDB /* Pods_SportCarClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SportCarClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF01FDA41D65E78A00865630 /* ActivityMembers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityMembers.swift; path = Activity/ActivityMembers.swift; sourceTree = "<group>"; };
+		BF0472D01DA550FC00213581 /* PersonController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonController2.swift; path = Person/V2/PersonController2.swift; sourceTree = "<group>"; };
+		BF0472D21DA5529200213581 /* PersonDataSource2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonDataSource2.swift; path = Person/V2/PersonDataSource2.swift; sourceTree = "<group>"; };
+		BF0472D41DA60DBF00213581 /* PesronHeader2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PesronHeader2.swift; path = Person/V2/PesronHeader2.swift; sourceTree = "<group>"; };
 		BF11C7031CF32A8A00CCD184 /* LoadingProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingProtocol.swift; path = BaseTemplate/LoadingProtocol.swift; sourceTree = "<group>"; };
 		BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GlobalNotifiicationSettings.swift; path = BaseTemplate/GlobalNotifiicationSettings.swift; sourceTree = "<group>"; };
 		BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmptyListHintCell.swift; path = BaseTemplate/Views/EmptyListHintCell.swift; sourceTree = "<group>"; };
@@ -515,6 +522,7 @@
 		BFDFF2801C8C0E8600055C1C /* ClubDiscoverListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubDiscoverListCell.swift; path = Radar/ClubDiscoverListCell.swift; sourceTree = "<group>"; };
 		BFDFF2861C8CB11000055C1C /* ClubFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubFilter.swift; path = Radar/ClubFilter.swift; sourceTree = "<group>"; };
 		BFE0CD141C8D79810031C45B /* AlamofireExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlamofireExtension.swift; path = 3rdParty/AlamofireExtension.swift; sourceTree = "<group>"; };
+		BFE1CDCB1DA54B0E00F4CADD /* PropertyButtons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyButtons.swift; path = BaseTemplate/Views/PropertyButtons.swift; sourceTree = "<group>"; };
 		BFE598581CB4107300001F99 /* ActivityDetailHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityDetailHeader.swift; path = Activity/ActivityDetailHeader.swift; sourceTree = "<group>"; };
 		BFE5985C1CB4A31100001F99 /* InlineUserSelectMiniCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InlineUserSelectMiniCell.swift; path = BaseTemplate/Views/InlineUserSelectMiniCell.swift; sourceTree = "<group>"; };
 		BFE966C41CA57C220097C42C /* MainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainManager.swift; path = LocalModel/Manager/MainManager.swift; sourceTree = "<group>"; };
@@ -655,6 +663,16 @@
 				45DA73EE76E0833101879EDB /* Pods_SportCarClient.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BF0472CF1DA5505800213581 /* V2 */ = {
+			isa = PBXGroup;
+			children = (
+				BF0472D01DA550FC00213581 /* PersonController2.swift */,
+				BF0472D21DA5529200213581 /* PersonDataSource2.swift */,
+				BF0472D41DA60DBF00213581 /* PesronHeader2.swift */,
+			);
+			name = V2;
 			sourceTree = "<group>";
 		};
 		BF11F6AC1CBFD7EC0092A7E9 /* Globals */ = {
@@ -840,6 +858,7 @@
 		BF5491DE1C23070A0090D151 /* Person */ = {
 			isa = PBXGroup;
 			children = (
+				BF0472CF1DA5505800213581 /* V2 */,
 				BF5E7EE91C8607B9004B8305 /* Other */,
 				BFFFAFE91C84AA3000EBA314 /* UserSelect */,
 				BFC36BAD1C6C5DFA00DC6FE2 /* Mine */,
@@ -1144,6 +1163,7 @@
 				BF630EDC1CABDBF900EFD37E /* PropertyBaseCell.swift */,
 				BF630EDE1CABE46C00EFD37E /* AvatarCell.swift */,
 				BFB72FEB1CB7A80800ABB0CB /* PropertyCellInputable.swift */,
+				BFE1CDCB1DA54B0E00F4CADD /* PropertyButtons.swift */,
 			);
 			name = PropertyCells;
 			sourceTree = "<group>";
@@ -2204,6 +2224,7 @@
 				BFE9676C1CA92AD40097C42C /* GroupMemberSelecter.swift in Sources */,
 				BFC36BAF1C6C5E1D00DC6FE2 /* PersonMineSettings.swift in Sources */,
 				BF6308A31C19A8040087A4F0 /* ResetPassword.swift in Sources */,
+				BF0472D31DA5529200213581 /* PersonDataSource2.swift in Sources */,
 				BFE967491CA6D8920097C42C /* SportCarApp.xcdatamodeld in Sources */,
 				BF01FDA51D65E78A00865630 /* ActivityMembers.swift in Sources */,
 				BF8D42FA1C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift in Sources */,
@@ -2313,6 +2334,7 @@
 				BF27E6CD1C38457F0074771D /* MakeCommentPanel.swift in Sources */,
 				BF5FF0ED1C15B4860050F5FE /* GlobalVariables.swift in Sources */,
 				BFE967211CA584A20097C42C /* Activity.generated.swift in Sources */,
+				BF0472D51DA60DBF00213581 /* PesronHeader2.swift in Sources */,
 				BF630EDF1CABE46C00EFD37E /* AvatarCell.swift in Sources */,
 				BFDFF2811C8C0E8600055C1C /* ClubDiscoverListCell.swift in Sources */,
 				BFADDF6A1C82A35100893435 /* ShareController.swift in Sources */,
@@ -2320,6 +2342,7 @@
 				BFFFAFEB1C84AA4300EBA314 /* FansSelect.swift in Sources */,
 				BF8FE9A41C86C22400008170 /* UIImageView+ImageViewer.swift in Sources */,
 				BFCB96401C205DF1004F77E8 /* Home.swift in Sources */,
+				BF0472D11DA550FC00213581 /* PersonController2.swift in Sources */,
 				BFC032791C700DFA00ECA69A /* ActivityNearBy.swift in Sources */,
 				BFCA90141C50D6CB00B05E74 /* StatusDetail.swift in Sources */,
 				BFC032511C6DCD6200ECA69A /* AuthBasic.swift in Sources */,
@@ -2342,6 +2365,7 @@
 				BFC032841C734C8300ECA69A /* ActivityCommentPanel.swift in Sources */,
 				BF8FE9A31C86C22400008170 /* ImageViewer.swift in Sources */,
 				BF5D19D41D8A940100A66FC0 /* NewsCommentCell2.swift in Sources */,
+				BFE1CDCC1DA54B0E00F4CADD /* PropertyButtons.swift in Sources */,
 				BF4113D11D649A76005B6757 /* NotificationCell2.swift in Sources */,
 				BFC4F14E1CE6C2CE004D7BD0 /* LocationSearch.swift in Sources */,
 				BFB857D71CD9983600610349 /* SettingsRequester.swift in Sources */,

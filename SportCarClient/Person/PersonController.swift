@@ -42,7 +42,6 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         flowLayout.minimumInteritemSpacing = 2.5
         flowLayout.minimumLineSpacing = 2.5
         super.init(collectionViewLayout: flowLayout)
-        
         data = PersonDataSource()
         data.user = user
             }
@@ -423,14 +422,14 @@ extension PersonBasicController: BMKLocationServiceDelegate, BMKMapViewDelegate 
 
 extension PersonBasicController {
     
-    func didSelectSportCar(_ own: SportCar?) {
-        if data.selectedCar == nil && own == nil {
+    func didSelect(sportCar car: SportCar?) {
+        if data.selectedCar == nil && car == nil {
             // 
             carsViewList.selectAllStatus(true)
-        } else if own == nil {
+        } else if car == nil {
             carsViewList.selectAllStatus(false)
         }
-        data.selectedCar = own
+        data.selectedCar = car
         // 当car是nil时，代表显示所有的动态，直接
         self.collectionView?.reloadData()
     }
@@ -640,7 +639,7 @@ extension PersonBasicController {
     func statuslistPressed() {
         carsViewList.selectedCar = nil
         carsViewList.collectionView?.reloadData()
-        didSelectSportCar(nil)
+        didSelect(sportCar: nil)
     }
 }
 

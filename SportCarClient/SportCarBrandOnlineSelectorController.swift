@@ -42,7 +42,7 @@ class ManufacturerOnlineSelectorController: UITableViewController, UISearchBarDe
     func configureNavigationBar() {
         navigationItem.title = LS("品牌型号")
         let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .done, target: self, action: #selector(navLeftBtnPressed))
-        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightRed], for: UIControlState())
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightRed], for: .normal)
         navigationItem.leftBarButtonItem = leftBtnItem
     }
     
@@ -162,7 +162,7 @@ class SportCarBrandOnlineSelectorController: UITableViewController, UISearchBarD
     func configureNavigationBar() {
         navigationItem.title = pickedCarInfo.last
         let leftBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed))
-        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: UIControlState())
+        leftBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
         leftBtn.frame = CGRect(x: 0, y: 0, width: 15, height: 15)
         leftBtn.contentMode = .scaleAspectFit
 

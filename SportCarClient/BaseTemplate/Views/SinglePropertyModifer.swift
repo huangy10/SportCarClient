@@ -55,7 +55,7 @@ class SinglePropertyModifierController: InputableViewController {
             .setFrame(CGRect(x: 0, y: 0, width: 9, height: 15))
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         let rightItem = UIBarButtonItem(title: LS("确定"), style: .done, target: self, action: #selector(navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: UIControlState())
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         navigationItem.rightBarButtonItem = rightItem
     }
     

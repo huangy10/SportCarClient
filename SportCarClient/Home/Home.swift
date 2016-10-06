@@ -42,7 +42,7 @@ class HomeController: UIViewController, HomeDelegate {
     let board: UIButton!
     //
     var person: PersonBasicController?
-    var news: NewsController?
+    var news: NewsController2?
     var status: StatusHomeController?
     var message: MessageController?
     var act: ActivityHomeController?
@@ -212,7 +212,7 @@ extension HomeController {
             break
         case 3:
             if news == nil {
-                news = NewsController(style: .plain)
+                news = NewsController2(style: .plain)
                 news?.homeDelegate = self
             }
             self.navigationController?.pushViewController(news!, animated: true)
