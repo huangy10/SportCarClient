@@ -28,7 +28,6 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     override func viewDidLoad() {
         carsViewListShowAddBtn = false
         super.viewDidLoad()
-        navSettings()
         trackTargetUserLocation()
     }
     
@@ -43,22 +42,64 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     }
     
     override func navSettings() {
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-        navigationItem.title = LS("个人信息")
+//        self.navigationController?.setNavigationBarHidden(false, animated: false)
+//        navigationItem.title = LS("个人信息")
+//        //
+//        let backBtn = UIButton().config(
+//            self, selector: #selector(navLeftBtnPressed),
+//            image: UIImage(named: "account_header_back_btn"))
+//            .setFrame(CGRect(x: 0, y: 0, width: 10.5, height: 18))
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
+//        //
+//        let shareBtn = UIButton().config(
+//            self, selector: #selector(navRightBtnPressed),
+//            image: UIImage(named: "status_detail_other_operation"))
+//            .setFrame(CGRect(x: 0, y: 0, width: 24, height: 214))
+//        shareBtn.imageView?.contentMode = .scaleAspectFit
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareBtn)
         //
-        let backBtn = UIButton().config(
-            self, selector: #selector(navLeftBtnPressed),
-            image: UIImage(named: "account_header_back_btn"))
-            .setFrame(CGRect(x: 0, y: 0, width: 10.5, height: 18))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
-        //
-        let shareBtn = UIButton().config(
+        super.navSettings()
+        
+        navigationItem.rightBarButtonItems = getNavRightBtns()
+    }
+    
+    override func getNavTitle() -> String {
+        return LS("个人信息")
+    }
+    
+    override func getNavRightBtn() -> UIBarButtonItem? {
+        return nil
+    }
+    
+    func getNavRightBtns() -> [UIBarButtonItem] {
+        var result: [UIBarButtonItem] = []
+        let btnSize: CGFloat = 30
+        let iconSize: CGFloat = 18
+        let btnFrame = CGRect(x: 0, y: 0, width: btnSize, height: btnSize)
+        let edgeVal = (btnSize - iconSize) / 2
+        let edge = UIEdgeInsets(top: edgeVal, left: edgeVal, bottom: edgeVal, right: edgeVal)
+        let setting = UIButton().config(
             self, selector: #selector(navRightBtnPressed),
-            image: UIImage(named: "status_detail_other_operation"))
-            .setFrame(CGRect(x: 0, y: 0, width: 24, height: 214))
-        shareBtn.imageView?.contentMode = .scaleAspectFit
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: shareBtn)
-        //
+            image: UIImage(named: "person_setting"))
+        setting.frame = btnFrame
+        setting.imageEdgeInsets = edge
+        setting.imageView?.contentMode = .scaleAspectFit
+        result.append(UIBarButtonItem(customView: setting))
+        
+        let navigate = UIButton().config(self, selector: #selector(locateBtnPressed))
+        navigate.setImage(UIImage(named: "locate"), for: .normal)
+        navigate.imageView?.contentMode = .scaleAspectFit
+        navigate.frame = btnFrame
+        navigate.imageEdgeInsets = edge
+        result.append(UIBarButtonItem(customView: navigate))
+        
+        let chat = UIButton().config(self, selector: #selector(chatBtnPressed))
+        chat.setImage(UIImage(named: "chat"), for: .normal)
+        chat.imageView?.contentMode = .scaleAspectFit
+        chat.frame = btnFrame
+        chat.imageEdgeInsets = edge
+        result.append(UIBarButtonItem(customView: chat))
+        return result
     }
     
     override func navRightBtnPressed() {
@@ -78,15 +119,9 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
     
     override func getPersonInfoPanel() -> PersonHeaderMine {
         let panel = PersonHeaderOther()
-        totalHeaderHeight = 920 / 750 * self.view.frame.width
+        totalHeaderHeight = 773.0 / 750 * self.view.frame.width
         panel.followBtn.addTarget(self, action: #selector(PersonOtherController.followBtnPressed(_:)), for: .touchUpInside)
-        panel.chatBtn.addTarget(self, action: #selector(PersonOtherController.chatBtnPressed), for: .touchUpInside)
-        panel.locBtn.addTarget(self, action: #selector(PersonOtherController.locateBtnPressed), for: .touchUpInside)
-        //
-        if data.user.followed {
-            panel.followBtn.setImage(UIImage(named: "person_followed"), for: .normal)
-            panel.followBtnTmpImage.image = UIImage(named: "person_followed")
-        }
+        panel.set(followed: data.user.followed)
         panel.fanslistBtn.addTarget(self, action: #selector(fanslistPressed), for: .touchUpInside)
         panel.followlistBtn.addTarget(self, action: #selector(followlistPressed), for: .touchUpInside)
         panel.statuslistBtn.addTarget(self, action: #selector(statuslistPressed), for: .touchUpInside)
@@ -99,21 +134,23 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
         lp_start()
         _ = requester.follow(self.data.user.ssidString, onSuccess: { (json) -> () in
             self.lp_stop()
-            let board = self.header as! PersonHeaderOther
-            
-            if json!.boolValue {
-                board.followBtnTmpImage.image = UIImage(named: "person_add_follow")
-                board.followBtn.setImage(UIImage(named: "person_followed"), for: .normal)
-            }else{
-                board.followBtnTmpImage.image = UIImage(named: "person_followed")
-                board.followBtn.setImage(UIImage(named: "person_add_follow"), for: .normal)
-            }
-            board.followBtnTmpImage.isHidden = false
-            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
-                board.followBtnTmpImage.layer.opacity = 0
-                }, completion: { (_) -> Void in
-                    board.followBtnTmpImage.isHidden = false
-            })
+//            let board = self.header as! PersonHeaderOther
+            let followed = json!.boolValue
+            self.data.user.followed = followed
+            self.header.loadDataAndUpdateUI()
+//            if json!.boolValue {
+//                board.followBtnTmpImage.image = UIImage(named: "person_add_follow")
+//                board.followBtn.setImage(UIImage(named: "person_followed"), for: .normal)
+//            }else{
+//                board.followBtnTmpImage.image = UIImage(named: "person_followed")
+//                board.followBtn.setImage(UIImage(named: "person_add_follow"), for: .normal)
+//            }
+//            board.followBtnTmpImage.isHidden = false
+//            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
+//                board.followBtnTmpImage.layer.opacity = 0
+//                }, completion: { (_) -> Void in
+//                    board.followBtnTmpImage.isHidden = false
+//            })
             NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kAccountInfoChanged), object: nil)
             }) { (code) -> () in
                 self.lp_stop()

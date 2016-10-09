@@ -152,6 +152,9 @@ class RosterManager {
             unread += Int(item.unreadNum)
         }
         MessageManager.defaultManager.unreadChatNum += unread
+        if unread == 0 {
+            ss_sendUnreadNumberDidChangeNotification()
+        }
         for item in existingRosterItems {
             let mapKey: String
             if item.entityType! == "user" {

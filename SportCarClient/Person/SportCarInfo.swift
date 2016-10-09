@@ -23,12 +23,12 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     var car: SportCar!
     var mine: Bool = false
     
-//    @available(*, deprecated: 1)
-//    var carCover: UIImageView!
     var carGallary: SportCarGallary!
     var carAudioWave: CarWaveView?
     
     var carNameLbl: UILabel!
+    
+    @available(*, deprecated: 1)
     var carAuthIcon: UIImageView!
     var carEditBtn: UIButton!
     var carSignatureLbl: UILabel!
@@ -83,24 +83,16 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
             make.width.equalTo(superview).multipliedBy(0.55)
         }
         //
-        carAuthIcon = UIImageView()
-        superview.addSubview(carAuthIcon)
-        carAuthIcon.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(carNameLbl.snp.right).offset(5)
-            make.top.equalTo(carNameLbl).offset(5)
-            make.size.equalTo(CGSize(width: 44, height: 18.5))
-        }
-        //
         carEditBtn = UIButton()
-        carEditBtn.setTitle(LS("认证"), for: .normal)
+        carEditBtn.setTitle(LS("设置/认证"), for: .normal)
         carEditBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         carEditBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         carEditBtn.addTarget(self, action: #selector(carEditBtnPressed), for: .touchUpInside)
         superview.addSubview(carEditBtn)
         carEditBtn.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
-            make.centerY.equalTo(carAuthIcon)
-            make.size.equalTo(CGSize(width: 56, height: 32))
+            make.top.equalTo(carNameLbl).offset(2)
+            make.size.equalTo(CGSize(width: 70, height: 32))
         }
         //
         let sepLineBackgroundColor = UIColor(white: 0.1, alpha: 1)
@@ -287,12 +279,6 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
             showAudioWave()
         } else {
             hideAudioWave()
-        }
-        // 设置认证标签
-        if car.identified {
-            carAuthIcon.image = UIImage(named: "auth_status_authed")
-        }else {
-            carAuthIcon.image = UIImage(named: "auth_status_unauthed")
         }
         // 跑车签名
         carSignatureLbl.text = car.signature

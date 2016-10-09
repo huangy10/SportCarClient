@@ -9,9 +9,6 @@
 /* Begin PBXBuildFile section */
 		059B97869E6AEDFF9D074A8B /* Pods_SportCarClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45DA73EE76E0833101879EDB /* Pods_SportCarClient.framework */; };
 		BF01FDA51D65E78A00865630 /* ActivityMembers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF01FDA41D65E78A00865630 /* ActivityMembers.swift */; };
-		BF0472D11DA550FC00213581 /* PersonController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0472D01DA550FC00213581 /* PersonController2.swift */; };
-		BF0472D31DA5529200213581 /* PersonDataSource2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0472D21DA5529200213581 /* PersonDataSource2.swift */; };
-		BF0472D51DA60DBF00213581 /* PesronHeader2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0472D41DA60DBF00213581 /* PesronHeader2.swift */; };
 		BF11C7041CF32A8A00CCD184 /* LoadingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11C7031CF32A8A00CCD184 /* LoadingProtocol.swift */; };
 		BF11F6AE1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */; };
 		BF11F6B01CC0A11F0092A7E9 /* EmptyListHintCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */; };
@@ -45,6 +42,7 @@
 		BF3387E61C47C2AF00B95CAB /* StatusReleaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3387E51C47C2AF00B95CAB /* StatusReleaseController.swift */; };
 		BF3BD5EA1C28E89000499674 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BF3BD5E91C28E89000499674 /* Settings.bundle */; };
 		BF4113D11D649A76005B6757 /* NotificationCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4113D01D649A76005B6757 /* NotificationCell2.swift */; };
+		BF49102F1DA68B35004F21FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF49102E1DA68B35004F21FB /* Assets.xcassets */; };
 		BF49FBAD1C19424D0019EBC2 /* ShinyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF49FBAC1C19424D0019EBC2 /* ShinyButton.swift */; };
 		BF51070D1C609B45008DC14F /* ChatAudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF51070C1C609B45008DC14F /* ChatAudioRecorder.swift */; };
 		BF5107131C60CBA6008DC14F /* ChatListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5107121C60CBA6008DC14F /* ChatListCell.swift */; };
@@ -192,7 +190,6 @@
 		BFCB96401C205DF1004F77E8 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB963F1C205DF1004F77E8 /* Home.swift */; };
 		BFCB96441C206169004F77E8 /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96431C206169004F77E8 /* SideBar.swift */; };
 		BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96451C2061E0004F77E8 /* LoadingButton.swift */; };
-		BFD044331D75CC72003F8831 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFD044321D75CC72003F8831 /* Assets.xcassets */; };
 		BFDB5CB41D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB5CB31D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift */; };
 		BFDBD6011D3D1A4200793256 /* PermissionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */; };
 		BFDD88601D6AF2700043A333 /* CityElementSelectWithSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDD885F1D6AF2700043A333 /* CityElementSelectWithSuggestion.swift */; };
@@ -323,9 +320,6 @@
 		3C67C8D9B0B71677E04519EA /* Pods-SportCarClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportCarClient.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SportCarClient/Pods-SportCarClient.debug.xcconfig"; sourceTree = "<group>"; };
 		45DA73EE76E0833101879EDB /* Pods_SportCarClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SportCarClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF01FDA41D65E78A00865630 /* ActivityMembers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityMembers.swift; path = Activity/ActivityMembers.swift; sourceTree = "<group>"; };
-		BF0472D01DA550FC00213581 /* PersonController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonController2.swift; path = Person/V2/PersonController2.swift; sourceTree = "<group>"; };
-		BF0472D21DA5529200213581 /* PersonDataSource2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonDataSource2.swift; path = Person/V2/PersonDataSource2.swift; sourceTree = "<group>"; };
-		BF0472D41DA60DBF00213581 /* PesronHeader2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PesronHeader2.swift; path = Person/V2/PesronHeader2.swift; sourceTree = "<group>"; };
 		BF11C7031CF32A8A00CCD184 /* LoadingProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingProtocol.swift; path = BaseTemplate/LoadingProtocol.swift; sourceTree = "<group>"; };
 		BF11F6AD1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GlobalNotifiicationSettings.swift; path = BaseTemplate/GlobalNotifiicationSettings.swift; sourceTree = "<group>"; };
 		BF11F6AF1CC0A11F0092A7E9 /* EmptyListHintCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmptyListHintCell.swift; path = BaseTemplate/Views/EmptyListHintCell.swift; sourceTree = "<group>"; };
@@ -359,6 +353,7 @@
 		BF3387E51C47C2AF00B95CAB /* StatusReleaseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusReleaseController.swift; path = Status/Release/StatusReleaseController.swift; sourceTree = "<group>"; };
 		BF3BD5E91C28E89000499674 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		BF4113D01D649A76005B6757 /* NotificationCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationCell2.swift; path = Message/Notification/NotificationCell2.swift; sourceTree = "<group>"; };
+		BF49102E1DA68B35004F21FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BF49FBAC1C19424D0019EBC2 /* ShinyButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShinyButton.swift; path = Accounts/ShinyButton.swift; sourceTree = "<group>"; };
 		BF51070C1C609B45008DC14F /* ChatAudioRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatAudioRecorder.swift; path = Message/Chat/Record/ChatAudioRecorder.swift; sourceTree = "<group>"; };
 		BF5107121C60CBA6008DC14F /* ChatListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatListCell.swift; path = Message/Chat/ChatListCell.swift; sourceTree = "<group>"; };
@@ -511,7 +506,6 @@
 		BFCB963F1C205DF1004F77E8 /* Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Home.swift; path = Home/Home.swift; sourceTree = "<group>"; };
 		BFCB96431C206169004F77E8 /* SideBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideBar.swift; path = Home/SideBar.swift; sourceTree = "<group>"; };
 		BFCB96451C2061E0004F77E8 /* LoadingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingButton.swift; path = BaseTemplate/LoadingButton.swift; sourceTree = "<group>"; };
-		BFD044321D75CC72003F8831 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFDB5CB31D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SportCarBrandOnlineSelectorController.swift; sourceTree = "<group>"; };
 		BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PermissionCheck.swift; path = Sync/PermissionCheck.swift; sourceTree = "<group>"; };
 		BFDD885F1D6AF2700043A333 /* CityElementSelectWithSuggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CityElementSelectWithSuggestion.swift; path = Person/CityElementSelectWithSuggestion.swift; sourceTree = "<group>"; };
@@ -663,16 +657,6 @@
 				45DA73EE76E0833101879EDB /* Pods_SportCarClient.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		BF0472CF1DA5505800213581 /* V2 */ = {
-			isa = PBXGroup;
-			children = (
-				BF0472D01DA550FC00213581 /* PersonController2.swift */,
-				BF0472D21DA5529200213581 /* PersonDataSource2.swift */,
-				BF0472D41DA60DBF00213581 /* PesronHeader2.swift */,
-			);
-			name = V2;
 			sourceTree = "<group>";
 		};
 		BF11F6AC1CBFD7EC0092A7E9 /* Globals */ = {
@@ -858,7 +842,6 @@
 		BF5491DE1C23070A0090D151 /* Person */ = {
 			isa = PBXGroup;
 			children = (
-				BF0472CF1DA5505800213581 /* V2 */,
 				BF5E7EE91C8607B9004B8305 /* Other */,
 				BFFFAFE91C84AA3000EBA314 /* UserSelect */,
 				BFC36BAD1C6C5DFA00DC6FE2 /* Mine */,
@@ -1810,8 +1793,8 @@
 				BFFA51241C05D9920019E5EF /* Info.plist */,
 				BFE967471CA6D8920097C42C /* SportCarApp.xcdatamodeld */,
 				BF3BD5E91C28E89000499674 /* Settings.bundle */,
-				BFD044321D75CC72003F8831 /* Assets.xcassets */,
 				BF63089C1C1970AB0087A4F0 /* Localizable.strings */,
+				BF49102E1DA68B35004F21FB /* Assets.xcassets */,
 			);
 			path = SportCarClient;
 			sourceTree = "<group>";
@@ -2044,7 +2027,7 @@
 				BF63089F1C1972050087A4F0 /* agreement.rtf in Resources */,
 				BFF7150B1CC289C30028F87F /* 合成 1_00011.png in Resources */,
 				BFC8F14C1CC8A5B200ABE31F /* read_me.txt in Resources */,
-				BFD044331D75CC72003F8831 /* Assets.xcassets in Resources */,
+				BF49102F1DA68B35004F21FB /* Assets.xcassets in Resources */,
 				BFF7152D1CC289C30028F87F /* 合成 1_00045.png in Resources */,
 				BFF715051CC289C30028F87F /* 合成 1_00005.png in Resources */,
 				BFC8F14A1CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
@@ -2224,7 +2207,6 @@
 				BFE9676C1CA92AD40097C42C /* GroupMemberSelecter.swift in Sources */,
 				BFC36BAF1C6C5E1D00DC6FE2 /* PersonMineSettings.swift in Sources */,
 				BF6308A31C19A8040087A4F0 /* ResetPassword.swift in Sources */,
-				BF0472D31DA5529200213581 /* PersonDataSource2.swift in Sources */,
 				BFE967491CA6D8920097C42C /* SportCarApp.xcdatamodeld in Sources */,
 				BF01FDA51D65E78A00865630 /* ActivityMembers.swift in Sources */,
 				BF8D42FA1C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift in Sources */,
@@ -2334,7 +2316,6 @@
 				BF27E6CD1C38457F0074771D /* MakeCommentPanel.swift in Sources */,
 				BF5FF0ED1C15B4860050F5FE /* GlobalVariables.swift in Sources */,
 				BFE967211CA584A20097C42C /* Activity.generated.swift in Sources */,
-				BF0472D51DA60DBF00213581 /* PesronHeader2.swift in Sources */,
 				BF630EDF1CABE46C00EFD37E /* AvatarCell.swift in Sources */,
 				BFDFF2811C8C0E8600055C1C /* ClubDiscoverListCell.swift in Sources */,
 				BFADDF6A1C82A35100893435 /* ShareController.swift in Sources */,
@@ -2342,7 +2323,6 @@
 				BFFFAFEB1C84AA4300EBA314 /* FansSelect.swift in Sources */,
 				BF8FE9A41C86C22400008170 /* UIImageView+ImageViewer.swift in Sources */,
 				BFCB96401C205DF1004F77E8 /* Home.swift in Sources */,
-				BF0472D11DA550FC00213581 /* PersonController2.swift in Sources */,
 				BFC032791C700DFA00ECA69A /* ActivityNearBy.swift in Sources */,
 				BFCA90141C50D6CB00B05E74 /* StatusDetail.swift in Sources */,
 				BFC032511C6DCD6200ECA69A /* AuthBasic.swift in Sources */,

@@ -184,25 +184,25 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             make.height.equalTo(authCarListHeight)
         }
         //
-        let sepLine = UIView()
-        sepLine.backgroundColor = UIColor(white: 0.72, alpha: 1)
-        carsView.addSubview(sepLine)
-        sepLine.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(carsView)
-            make.right.equalTo(carsView)
-            make.top.equalTo(carsView)
-            make.height.equalTo(0.5)
-        }
-        //
-        let sepLine2 = UIView()
-        sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
-        carsView.addSubview(sepLine2)
-        sepLine2.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(carsView)
-            make.right.equalTo(carsView)
-            make.bottom.equalTo(carsView)
-            make.height.equalTo(0.5)
-        }
+//        let sepLine = UIView()
+//        sepLine.backgroundColor = UIColor(white: 0.72, alpha: 1)
+//        carsView.addSubview(sepLine)
+//        sepLine.snp.makeConstraints { (make) -> Void in
+//            make.left.equalTo(carsView)
+//            make.right.equalTo(carsView)
+//            make.top.equalTo(carsView)
+//            make.height.equalTo(0.5)
+//        }
+//        //
+//        let sepLine2 = UIView()
+//        sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
+//        carsView.addSubview(sepLine2)
+//        sepLine2.snp.makeConstraints { (make) -> Void in
+//            make.left.equalTo(carsView)
+//            make.right.equalTo(carsView)
+//            make.bottom.equalTo(carsView)
+//            make.height.equalTo(0.5)
+//        }
         //
         collectionView?.contentInset = UIEdgeInsetsMake(totalHeaderHeight - 20, 0, 0, 0)
         collectionView?.register(PersonStatusListCell.self, forCellWithReuseIdentifier: PersonStatusListCell.reuseIdentifier)
@@ -212,21 +212,49 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     }
     
     func navSettings() {
-        navigationItem.title = LS("我")
+//        navigationItem.title = LS("我")
+//        if isRoot {
+//            homeBtn = BackToHomeBtn()
+//            homeBtn.addTarget(self, action: #selector(navLeftBtnPressed), for: .touchUpInside)
+//            self.navigationItem.leftBarButtonItem = homeBtn.wrapToBarBtn()
+//        } else {
+//            let backBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "account_header_back_btn"), contentMode: .scaleAspectFit)
+//                .setFrame(CGRect(x: 0, y: 0, width: 15, height: 15))
+//            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
+//            
+//        }
+//        
+//        let setting = UIButton().config(self, selector: #selector(navRightBtnPressed))
+//            .setFrame(CGRect(x: 0, y: 0, width: 44, height: 44))
+//        setting.addSubview(UIImageView.self).config(UIImage(named: "person_setting"), contentMode: .scaleAspectFit)
+//            .layout { (make) in
+//                make.centerY.equalTo(setting)
+//                make.right.equalTo(setting)
+//                make.size.equalTo(20)
+//        }
+//        setting.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7)
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: setting)
+        
+        navigationItem.title = getNavTitle()
+        navigationItem.leftBarButtonItem = getNavLeftBtn()
+        navigationItem.rightBarButtonItem = getNavRightBtn()
+    }
+    
+    func getNavLeftBtn() -> UIBarButtonItem? {
         if isRoot {
             homeBtn = BackToHomeBtn()
             homeBtn.addTarget(self, action: #selector(navLeftBtnPressed), for: .touchUpInside)
-            self.navigationItem.leftBarButtonItem = homeBtn.wrapToBarBtn()
+            return homeBtn.wrapToBarBtn()
         } else {
-            let backBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "account_header_back_btn"), contentMode: .scaleAspectFit)
-                .setFrame(CGRect(x: 0, y: 0, width: 15, height: 15))
-            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
-            
+            let backBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed))
+            backBtn.setImage(UIImage(named: "account_header_back_btn"), for: .normal)
+            backBtn.imageView?.contentMode = .scaleAspectFit
+            backBtn.frame = CGRect(x: 0, y: 0, width: 15, height: 15)
+            return UIBarButtonItem(customView: backBtn)
         }
-//        let backBtn = UIButton().config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "home_back"), contentMode: .ScaleAspectFit)
-//            .setFrame(CGRectMake(0, 0, 15, 15))
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
-        
+    }
+    
+    func getNavRightBtn() -> UIBarButtonItem? {
         let setting = UIButton().config(self, selector: #selector(navRightBtnPressed))
             .setFrame(CGRect(x: 0, y: 0, width: 44, height: 44))
         setting.addSubview(UIImageView.self).config(UIImage(named: "person_setting"), contentMode: .scaleAspectFit)
@@ -236,7 +264,11 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
                 make.size.equalTo(20)
         }
         setting.imageEdgeInsets = UIEdgeInsetsMake(7, 7, 7, 7)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: setting)
+        return UIBarButtonItem(customView: setting)
+    }
+    
+    func getNavTitle() -> String {
+        return LS("我")
     }
     
     func navRightBtnPressed() {

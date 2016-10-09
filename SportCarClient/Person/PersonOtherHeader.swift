@@ -13,68 +13,63 @@ import Kingfisher
 
 class PersonHeaderOther: PersonHeaderMine {
     var followBtn: UIButton!
-    var followBtnTmpImage: UIImageView!
-    var chatBtn: UIButton!
-    var locBtn: UIButton!
     
     override func createSubviews() {
         super.createSubviews()
-        let superview = self
         //
-        followBtn = UIButton()
-        followBtn.setImage(UIImage(named: "person_add_follow"), for: .normal)
-        superview.addSubview(followBtn)
-        followBtn.snp.makeConstraints { (make) -> Void in
-            make.right.equalTo(avatarBtn.snp.centerX).offset(3.5)
-            make.top.equalTo(avatarBtn.snp.bottom).offset(24)
-            make.size.equalTo(CGSize(width: 130, height: 45))
+        configureFollowBtn()
+    }
+    
+    func configureFollowBtn() {
+        followBtn = addSubview(UIButton.self)
+            .layout({ (make) in
+                make.centerY.equalTo(fansNumLbl.snp.bottom)
+                make.right.equalTo(self).offset(-15)
+                make.width.equalTo(78)
+                make.height.equalTo(25)
+            })
+        followBtn.layer.cornerRadius = 2
+        followBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        set(followed: false)
+    }
+    
+    func set(followed isFollowed: Bool) {
+        if isFollowed {
+            followBtn.layer.borderColor = UIColor.clear.cgColor
+            followBtn.backgroundColor = UIColor(white: 0.96, alpha: 1)
+            followBtn.setTitle(LS("已关注"), for: .normal)
+            followBtn.setTitleColor(kTextLightGray, for: .normal)
+        } else {
+            followBtn.layer.borderColor = kHighlightRed.cgColor
+            followBtn.backgroundColor = UIColor.clear
+            followBtn.layer.borderWidth = 1
+            followBtn.setTitle(LS("+ 关注"), for: .normal)
+            followBtn.setTitleColor(kHighlightRed, for: .normal)
         }
-        followBtnTmpImage = UIImageView()
-        followBtnTmpImage.backgroundColor = UIColor.white
-        followBtn.addSubview(followBtnTmpImage)
-        followBtnTmpImage.snp.makeConstraints { (make) -> Void in
-            make.edges.equalTo(followBtn)
+    }
+    
+    override func layoutBottomLbls() {
+        fansNumLbl.snp.makeConstraints { (make) in
+            make.top.equalTo(avatarBtn.snp.bottom).offset(23)
+            make.left.equalTo(nameLbl)
         }
-        followBtnTmpImage.isHidden = true
-        //
-        chatBtn = UIButton()
-        chatBtn.setImage(UIImage(named: "person_send_message"), for: .normal)
-        superview.addSubview(chatBtn)
-        chatBtn.snp.makeConstraints { (make) -> Void in
-            make.centerY.equalTo(followBtn)
-            make.left.equalTo(followBtn.snp.right).offset(15)
-            make.size.equalTo(45)
+        statusNumLbl.snp.makeConstraints { (make) in
+            make.centerX.equalTo(fansNumLbl).offset(-80)
+            make.centerY.equalTo(fansNumLbl)
         }
-        //
-        locBtn = UIButton()
-        locBtn.setImage(UIImage(named: "person_guide_to"), for: .normal)
-        superview.addSubview(locBtn)
-        locBtn.snp.makeConstraints { (make) -> Void in
-            make.centerY.equalTo(followBtn)
-            make.left.equalTo(chatBtn.snp.right).offset(15)
-            make.size.equalTo(45)
+        followNumLbl.snp.makeConstraints { (make) in
+            make.centerX.equalTo(fansNumLbl).offset(80)
+            make.centerY.equalTo(fansNumLbl)
         }
-        // 这里需要重新设置下面是三组数字的布局
-        fansNumLbl.snp.remakeConstraints { (make) -> Void in
-            make.top.equalTo(followBtn.snp.bottom).offset(21)
-            make.centerX.equalTo(avatarBtn)
-        }
-        // 更改maskView的高度
-        backMask.centerHegiht = 225
-        avatarBtn.snp.updateConstraints { (make) -> Void in
-            make.bottom.equalTo(self).offset(-156)
-        }
-        //=
+    }
+    
+    override func setAppearance(ofBottomLbls label: UILabel) {
+        super.setAppearance(ofBottomLbls: label)
+        label.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightBold)
     }
     
     override func loadDataAndUpdateUI() {
         super.loadDataAndUpdateUI()
-        if user.followed {
-            followBtnTmpImage.image = UIImage(named: "person_followed")
-            followBtn.setImage(UIImage(named: "person_followed"), for: .normal)
-        }else{
-            followBtnTmpImage.image = UIImage(named: "person_add_follow")
-            followBtn.setImage(UIImage(named: "person_add_follow"), for: .normal)
-        }
+        set(followed: user.followed)
     }
 }
