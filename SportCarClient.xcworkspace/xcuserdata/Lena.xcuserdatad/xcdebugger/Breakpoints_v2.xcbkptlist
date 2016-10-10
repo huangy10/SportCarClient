@@ -195,5 +195,67 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SportCarClient/GlobalVariables.swift"
+            timestampString = "497774699.340662"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "globalinit_33_628FEEAA734915F4FD1A34FBCA239F6D_func12"
+                  moduleName = "SportCarClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Lena/Project/IOS/SportFan/SportCarClient/SportCarClient/GlobalVariables.swift"
+                  timestampString = "497774700.508265"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35"
+                  offsetFromSymbolStart = "8">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SportCarClient.kHostName.unsafeMutableAddressor : Swift.String"
+                  moduleName = "SportCarClient"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Lena/Project/IOS/SportFan/SportCarClient/SportCarClient/GlobalVariables.swift"
+                  timestampString = "497774700.511015"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SportCarClient/Network/BasicRequester.swift"
+            timestampString = "497781102.949521"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "247"
+            endingLineNumber = "247"
+            landmarkName = "upload(_:parameters:encoding:headers:responseQueue:responseDataField:onSuccess:onProgress:onError:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

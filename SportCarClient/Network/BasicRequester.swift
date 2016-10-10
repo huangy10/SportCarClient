@@ -239,6 +239,9 @@ class BasicRequester {
                     form.append("\(number)".data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: key)
                 } else if let double = value as? Double {
                     form.append("\(double)".data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: key)
+                } else if let b = value as? Bool {
+                    let toText = b ? "1" : "0"
+                    form.append(toText.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: key)
                 } else {
                     do {
                         let data = try JSON(value).rawData()

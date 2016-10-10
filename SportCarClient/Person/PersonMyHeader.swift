@@ -133,9 +133,9 @@ class PersonHeaderMine: UIView {
             .layout { (make) in
                 make.right.equalTo(self).offset(-12)
                 make.centerY.equalTo(nameLbl)
-                make.height.equalTo(15)
-                make.width.equalTo(9)
+                make.size.equalTo(12)
         }
+        arrowRightIcon.contentMode = .scaleAspectFit
         
         _ = addSubview(UILabel.self)
             .config(12, fontWeight: UIFontWeightUltraLight, textColor: kTextGray, textAlignment: .right, text: LS("详细信息"))

@@ -131,13 +131,14 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
     }
     
     func navBarRigthBtn() -> UIBarButtonItem! {
-        let nextStepBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 42, height: 16))
-        nextStepBtn.setTitle(NSLocalizedString("下一步", comment: ""), for: .normal)
-        nextStepBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
-        nextStepBtn.titleLabel?.font = kBarTextFont
-        nextStepBtn.addTarget(self, action: #selector(SportCarSelectDetailController.nextBtnPressed), for: .touchUpInside)
-        let rightBtnItem = UIBarButtonItem(customView: nextStepBtn)
-        return rightBtnItem
+//        let nextStepBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 42, height: 16))
+//        nextStepBtn.setTitle(NSLocalizedString("下一步", comment: ""), for: .normal)
+//        nextStepBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
+//        nextStepBtn.titleLabel?.font = kBarTextFont
+//        nextStepBtn.addTarget(self, action: #selector(SportCarSelectDetailController.nextBtnPressed), for: .touchUpInside)
+        let nextStepBtnItem = UIBarButtonItem(title: LS("下一步"), style: .done, target: self, action: #selector(nextBtnPressed))
+        nextStepBtnItem.setTitleTextAttributes([NSFontAttributeName:kBarTextFont, NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        return nextStepBtnItem
     }
     
     func backBtnPressed() {

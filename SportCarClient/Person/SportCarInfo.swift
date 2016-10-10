@@ -27,6 +27,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     var carAudioWave: CarWaveView?
     
     var carNameLbl: UILabel!
+    var carLogoIcon: UIImageView!
     
     @available(*, deprecated: 1)
     var carAuthIcon: UIImageView!
@@ -82,6 +83,16 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
             make.top.equalTo(carGallary.snp.bottom).offset(15)
             make.width.equalTo(superview).multipliedBy(0.55)
         }
+        
+        carLogoIcon = superview.addSubview(UIImageView.self)
+            .layout({ (make) in
+                make.size.equalTo(20)
+                make.centerY.equalTo(carNameLbl)
+                make.left.equalTo(carNameLbl.snp.right).offset(3)
+            })
+        carLogoIcon.layer.cornerRadius = 10
+        carLogoIcon.contentMode = .scaleAspectFit
+        carLogoIcon.clipsToBounds = true
         //
         carEditBtn = UIButton()
         carEditBtn.setTitle(LS("设置/认证"), for: .normal)
@@ -271,6 +282,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         // 设置数据
         // 设置跑车名
         carNameLbl.text = car.name
+        carLogoIcon.kf.setImage(with: car.logoURL!)
         // 设置封面图
 //        carCover.kf_setImageWithURL(car.imageArray[0])
         carGallary.reloadData()

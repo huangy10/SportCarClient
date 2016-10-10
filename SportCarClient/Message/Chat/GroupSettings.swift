@@ -11,9 +11,10 @@ import SnapKit
 
 let kGroupChatSettingSectionTitles = ["", "信息", "通知", "聊天"]
 
-class GroupChatSettingController: UITableViewController, PersonMineSinglePropertyModifierDelegate, InlineUserSelectDelegate, FFSelectDelegate, LoadingProtocol {
+class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModifierDelegate, InlineUserSelectDelegate, FFSelectDelegate, LoadingProtocol, UITableViewDataSource, UITableViewDelegate {
     internal var delayWorkItem: DispatchWorkItem?
     
+    var tableView: UITableView!
     var targetClub: Club!
     // 是否设置发生了更改
     var dirty: Bool = false
@@ -28,7 +29,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     var inlineUsersCell: UITableViewCell!
     
     init(targetClub: Club) {
-        super.init(style: .plain)
+        super.init(nibName: nil, bundle: nil)
         self.targetClub = targetClub
     }
     
@@ -50,7 +51,14 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
+        tableView = UITableView(frame: view.bounds, style: .plain)
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { (make) in
+            make.edges.equalTo(view)
+        }
         tableView.separatorStyle = .none
+        tableView.delegate = self
+        tableView.dataSource = self
         
         tableView.register(PrivateChatSettingsAvatarCell.self, forCellReuseIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier)
         tableView.register(PrivateChatSettingsCommonCell.self, forCellReuseIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier)
@@ -144,11 +152,11 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         _ = self.navigationController?.popViewController(animated: true)
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return kGroupChatSettingSectionTitles.count
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section{
         case 0:
             return 1
@@ -161,7 +169,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         }
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
             return 0
         }else {
@@ -169,7 +177,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         }
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0{
             return nil
         }
@@ -178,7 +186,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         return header
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch (indexPath as NSIndexPath).section {
         case 0:
             return 114
@@ -209,7 +217,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         }
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch (indexPath as NSIndexPath).section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsAvatarCell
@@ -345,7 +353,7 @@ class GroupChatSettingController: UITableViewController, PersonMineSinglePropert
         }
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath as NSIndexPath).section == 1 && (indexPath as NSIndexPath).row == 2 {
             // 修改本群昵称
             let detail = PersonMineSinglePropertyModifierController()

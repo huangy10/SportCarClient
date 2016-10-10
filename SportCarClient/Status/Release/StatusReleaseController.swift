@@ -233,12 +233,16 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKGeo
         leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.leftBarButtonItem = leftBtnItem
         
-        let rightBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 28, height: 16))
-        rightBtn.setTitle(LS("发布"), for: .normal)
-        rightBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
-        rightBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        rightBtn.addTarget(self, action: #selector(StatusReleaseController.navRightBtnPressed), for: .touchUpInside)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)
+//        let rightBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 28, height: 16))
+//        rightBtn.setTitle(LS("发布"), for: .normal)
+//        rightBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
+//        rightBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+//        rightBtn.addTarget(self, action: #selector(StatusReleaseController.navRightBtnPressed), for: .touchUpInside)
+        let rightBtnItem = UIBarButtonItem(title: LS("发布"), style: .done, target: self, action: #selector(navRightBtnPressed))
+        rightBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        
+        self.navigationItem.rightBarButtonItem = rightBtnItem
+        
     }
     
     func navRightBtnPressed() {

@@ -34,7 +34,7 @@ class SSPropertyBaseCell: UITableViewCell {
     internal func createSubviews() {
         let superview = self.contentView
         staticLbl = superview.addSubview(UILabel.self)
-            .config(14, textColor: UIColor(white: 0.72, alpha: 1))
+            .config(14, textColor: kTextGray)
             .layout({ (make) in
                 make.centerY.equalTo(superview)
                 make.left.equalTo(superview).offset(15)

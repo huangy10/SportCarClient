@@ -80,7 +80,7 @@ class ChatListCell: UITableViewCell {
         }
         //
         nickNameLbl = UILabel()
-        nickNameLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBlack)
+        nickNameLbl.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightBlack)
         nickNameLbl.textColor = UIColor.black
         superview.addSubview(nickNameLbl)
         nickNameLbl.snp.makeConstraints { (make) -> Void in
@@ -89,7 +89,7 @@ class ChatListCell: UITableViewCell {
         }
         //
         recentTalkLbl = UILabel()
-        recentTalkLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        recentTalkLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         recentTalkLbl.textColor = UIColor(white: 0, alpha: 0.58)
         superview.addSubview(recentTalkLbl)
         recentTalkLbl.snp.makeConstraints { (make) -> Void in

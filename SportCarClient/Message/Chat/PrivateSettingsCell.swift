@@ -146,8 +146,8 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         let superview = self
         //
         staticLbl = UILabel()
-        staticLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        staticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        staticLbl.textColor = kTextGray
+        staticLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
         superview.addSubview(staticLbl)
         staticLbl.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(superview)

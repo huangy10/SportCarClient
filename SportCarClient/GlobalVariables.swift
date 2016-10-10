@@ -22,6 +22,7 @@ let kPlaceholderTextColor = UIColor(white: 0.72, alpha: 1)
 let kTextBlack = UIColor(white: 0, alpha: 0.87)
 let kTextGray = UIColor(white: 0, alpha: 0.54)
 let kTextLightGray = UIColor(white: 0, alpha: 0.38)
+let kSepLineLightGray = UIColor(white: 0.94, alpha: 1)
 let kGeneralTableViewBGColor = UIColor(white: 0.96, alpha: 1)
 let kNotificationHintColor = UIColor(white: 0.42, alpha: 1)
 let kHighlightRed = UIColor.RGB(255, 21, 21)
@@ -32,7 +33,7 @@ let kBarTitleFont = UIFont.systemFont(ofSize: 17, weight: UIFontWeightBlack)
 let kTextInputFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
 
 // Network
-let kHostName = "101.5.64.39"
+let kHostName = "166.111.17.86"
 //let kHostName = "paochefan.com"
 let kPortName = "80"
 let kChatPortName = "8888"

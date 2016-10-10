@@ -69,12 +69,12 @@ class SuggestionController: PresentTemplateViewController {
         suggestionInput = UITextView()
         inputFields.append(suggestionInput)
         suggestionInput.delegate = self
-        suggestionInput.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        suggestionInput.textColor = UIColor(white: 0.72, alpha: 1)
+        suggestionInput.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        suggestionInput.textColor = kTextGray
         suggestionInput.text = LS("请在此处输入反馈...")
         container.addSubview(suggestionInput)
         suggestionInput.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(staticLbl)
+            make.left.equalTo(staticLbl).offset(-3)
             make.right.equalTo(container).offset(-15)
             make.top.equalTo(staticLbl.snp.bottom).offset(10)
             make.height.equalTo(80)

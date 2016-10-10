@@ -116,7 +116,7 @@ class PersonMineSettings: UITableViewController {
         if indexPath.section == 0 {
             return 50
         } else {
-            return 138
+            return 200
         }
     }
     
@@ -209,7 +209,7 @@ class PersonMineSettingsBtnsCell: UITableViewCell {
         superview.addSubview(quitBtn)
         quitBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)
-            make.top.equalTo(superview).offset(3)
+            make.top.equalTo(superview).offset(30)
             make.size.equalTo(CGSize(width: 150, height: 50))
         }
         //
