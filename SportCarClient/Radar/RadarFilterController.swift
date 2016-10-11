@@ -127,7 +127,7 @@ class RadarFilterCell: UITableViewCell {
         superview.backgroundColor = UIColor.clear
         //
         titleLbl = UILabel()
-        titleLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        titleLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         titleLbl.textColor = UIColor(white: 0, alpha: 0.87)
         superview.addSubview(titleLbl)
         titleLbl.snp.makeConstraints { (make) -> Void in
@@ -164,7 +164,7 @@ class RadarFilterHeader: UITableViewHeaderFooterView {
         superview.backgroundColor = UIColor.white
         //
         titleLbl = UILabel()
-        titleLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        titleLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         titleLbl.textColor = UIColor(white: 0, alpha: 0.87)
         superview.addSubview(titleLbl)
         titleLbl.snp.makeConstraints { (make) -> Void in

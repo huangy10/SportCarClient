@@ -30,7 +30,7 @@ class AuthBasicController: InputableViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
         let rightItem = UIBarButtonItem(title: titleForRightNavBtn(), style: .done, target: self, action: #selector(AuthBasicController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.rightBarButtonItem = rightItem
 
     }

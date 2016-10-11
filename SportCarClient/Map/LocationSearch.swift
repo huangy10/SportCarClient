@@ -150,11 +150,11 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
 //            .setFrame(CGRectMake(0, 0, 15, 15))
 //        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         let navLeftBtn = UIBarButtonItem(title: LS("取消"), style: .done, target: self, action: #selector(navLeftBtnPressed))
-        navLeftBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        navLeftBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         navigationItem.leftBarButtonItem = navLeftBtn
         
         let navRightBtn = UIBarButtonItem(title: LS("确认"), style: .done, target: self, action: #selector(navRightBtnPressed))
-        navRightBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        navRightBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         navigationItem.rightBarButtonItem = navRightBtn
     }
     

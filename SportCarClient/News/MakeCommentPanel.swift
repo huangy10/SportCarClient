@@ -100,7 +100,7 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         //
         confirmBtn = UIButton()
         confirmBtn?.setTitle(LS("发布"), for: .normal)
-        confirmBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBold)
+        confirmBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         confirmBtn?.setTitleColor(UIColor(red: 1, green: 0.29, blue: 0.30, alpha: 1), for: .normal)
         confirmBtn?.titleLabel?.textAlignment = .center
         confirmBtn?.layer.borderColor = UIColor(red: 1, green: 0.29, blue: 0.30, alpha: 1).cgColor
@@ -135,8 +135,8 @@ class MakeCommentController: InputableViewController, UIImagePickerControllerDel
         inputContainerView = inputContainer
         //
         wordCount = UILabel()
-        wordCount?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        wordCount?.textColor = UIColor(white: 0.72, alpha: 1)
+        wordCount?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        wordCount?.textColor = kTextGray28
         wordCount?.textAlignment = .right
         wordCount?.text = "0/\(maxWordLimit)"
         inputContainer.addSubview(wordCount!)

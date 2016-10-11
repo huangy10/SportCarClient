@@ -42,7 +42,7 @@ class ManufacturerOnlineSelectorController: UITableViewController, UISearchBarDe
     func configureNavigationBar() {
         navigationItem.title = LS("品牌型号")
         let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .done, target: self, action: #selector(navLeftBtnPressed))
-        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightRed], for: .normal)
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightRed], for: .normal)
         navigationItem.leftBarButtonItem = leftBtnItem
     }
     
@@ -249,7 +249,7 @@ class SportCarBrandSelectCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         //
         nameLbl = UILabel()
-        nameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        nameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         nameLbl?.textColor = UIColor.black
         self.contentView.addSubview(nameLbl!)
         nameLbl?.snp.makeConstraints({ (make) -> Void in

@@ -32,7 +32,7 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
 //        titleLbl = UILabel()
 //        titleLbl?.clipsToBounds = true
 //        titleLbl?.text = "跑车范"
-//        titleLbl?.font = UIFont.systemFontOfSize(30, weight: UIFontWeightBold)
+//        titleLbl?.font = UIFont.systemFontOfSize(30, weight: UIFontWeightSemibold)
 //        titleLbl?.textColor = UIColor.whiteColor()
 //        titleLbl?.textAlignment = NSTextAlignment.Center
 //        superview.addSubview(titleLbl!)
@@ -98,7 +98,8 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
         registerPhoneInput = TextFieldWithLeadingIconView()
         registerPhoneInput?.delegate = self
         registerPhoneInput?.placeholder = NSLocalizedString("请输入您的手机号", comment: "")
-        registerPhoneInput?.font = UIFont.systemFont(ofSize: 12)
+        registerPhoneInput?.keyboardType = .numberPad
+        registerPhoneInput?.font = UIFont.systemFont(ofSize: 14)
         registerPhoneInput?.leftViewMode = UITextFieldViewMode.always
         let registerPhoneInputIcon = UIImageView(image: UIImage(named: "account_phone_input"))
         registerPhoneInput?.leftView = registerPhoneInputIcon
@@ -207,7 +208,7 @@ class ResetPasswordController: LoginRegisterController, LoadingProtocol {
 //    
     override func leftBarBtn() -> UIBarButtonItem! {
         let btn = UIBarButtonItem(title: LS("取消"), style: .plain, target: self, action: #selector(LoginRegisterController.backBtnPressed(_:)))
-        btn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        btn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         return btn
     }
 }

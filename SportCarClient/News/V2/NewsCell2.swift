@@ -53,7 +53,7 @@ class NewsCell2: UITableViewCell {
     
     func configureTitleLbl() {
         titleLbl = contentView.addSubview(UILabel.self)
-            .config(17, fontWeight: UIFontWeightBlack, textColor: UIColor.white)
+            .config(17, fontWeight: UIFontWeightSemibold, textColor: UIColor.white)
             .layout({ (make) in
                 make.left.equalTo(contentView) .offset(15)
                 make.bottom.equalTo(contentView).offset(-10)
@@ -64,11 +64,11 @@ class NewsCell2: UITableViewCell {
     
     func configureShareNumDisplay() {
         shareNumLbl = contentView.addSubview(UILabel.self)
-            .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), text: "0")
+            .config(12, fontWeight: UIFontWeightRegular, textColor: kTextGray28, text: "0")
             .layout({ (make) in
                 make.bottom.equalTo(contentView).offset(-10)
-                make.right.equalTo(contentView).offset(-15)
-                make.width.equalTo(30)
+                make.right.equalTo(contentView)
+                make.width.equalTo(25)
             })
         shareIcon = contentView.addSubview(UIImageView.self)
             .config(UIImage(named: "news_share_white"), contentMode: .scaleAspectFit)
@@ -81,7 +81,7 @@ class NewsCell2: UITableViewCell {
     
     func configureCommentNumDisplay() {
         commentNumLbl = contentView.addSubview(UILabel.self)
-            .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), text: "0")
+            .config(12, fontWeight: UIFontWeightRegular, textColor: kTextGray28, text: "0")
             .layout({ (make) in
                 make.right.equalTo(shareIcon.snp.left)
                 make.bottom.equalTo(shareIcon)
@@ -98,7 +98,7 @@ class NewsCell2: UITableViewCell {
     
     func configureLikeNumDisplay() {
         likeNumLbl = contentView.addSubview(UILabel.self)
-            .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), text: "0")
+            .config(12, fontWeight: UIFontWeightRegular, textColor: kTextGray28, text: "0")
             .layout({ (make) in
                 make.bottom.equalTo(commentNumLbl)
                 make.right.equalTo(commentIcon.snp.left)

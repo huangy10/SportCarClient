@@ -148,7 +148,7 @@ extension UIViewController {
                 make.top.equalTo(toast).offset(20)
         }
         let messageLbl = toast.addSubview(UILabel.self)
-            .config(12, textColor: UIColor(white: 0.72, alpha: 1), text: message, multiLine: true)
+            .config(12, textColor: kTextGray28, text: message, multiLine: true)
             .layout { (make) in
                 make.left.equalTo(titleLbl)
                 make.right.equalTo(toast).offset(-15)
@@ -162,7 +162,7 @@ extension UIViewController {
                 make.top.equalTo(messageLbl.snp.bottom).offset(15)
         }
         toast.addSubview(UIButton.self)
-            .config(target, selector: cancelSelector, title: LS("取消"), titleColor: UIColor(white: 0.72, alpha: 1))
+            .config(target, selector: cancelSelector, title: LS("取消"), titleColor: kTextGray28)
             .layout { (make) in
                 make.centerY.equalTo(confirmBtn)
                 make.size.equalTo(CGSize(width: 74, height: 43))
@@ -407,7 +407,7 @@ class ConfirmToastPresentationController: UIViewController {
             let detailLblMaxWidth = dialogWidth - 40
             let style = NSMutableParagraphStyle()
             style.lineSpacing = desLineSpacing
-            desLblHeight = (confirmDes as NSString).boundingRect(with: CGSize(width: detailLblMaxWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSParagraphStyleAttributeName: style], context: nil).height
+            desLblHeight = (confirmDes as NSString).boundingRect(with: CGSize(width: detailLblMaxWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSParagraphStyleAttributeName: style], context: nil).height
         }
     }
     
@@ -447,13 +447,13 @@ class ConfirmToastPresentationController: UIViewController {
         desLbl.lineBreakMode = .byCharWrapping
         let style = NSMutableParagraphStyle()
         style.lineSpacing = desLineSpacing
-        let str = NSAttributedString(string: confirmDes, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSParagraphStyleAttributeName: style, NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.72)])
+        let str = NSAttributedString(string: confirmDes, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSParagraphStyleAttributeName: style, NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.72)])
         desLbl.attributedText = str
     }
     
     func configureConfirmBtn() {
         confirmBtnLbl = dialog.addSubview(UILabel.self)
-            .config(14, fontWeight: UIFontWeightUltraLight, textColor: kHighlightRed, textAlignment: .center, text: LS("确定"))
+            .config(14, fontWeight: UIFontWeightRegular, textColor: kHighlightRed, textAlignment: .center, text: LS("确定"))
             .layout({ (make) in
                 make.right.equalTo(dialog).offset(-25)
                 make.bottom.equalTo(dialog).offset(-16)
@@ -468,7 +468,7 @@ class ConfirmToastPresentationController: UIViewController {
     
     func configureCancelBtn() {
         canceLBtnLbl = dialog.addSubview(UILabel.self)
-            .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("取消"))
+            .config(12, fontWeight: UIFontWeightRegular, textColor: kTextGray28, textAlignment: .center, text: LS("取消"))
             .layout({ (make) in
                 make.centerY.equalTo(confirmBtnLbl)
                 make.right.equalTo(confirmBtnLbl.snp.left).offset(-35)

@@ -35,7 +35,7 @@ class SportCarSelectListController: UICollectionViewController{
         collectionView?.register(SportCarSelectListAddCell.self, forCellWithReuseIdentifier: SportCarSelectListAddCell.reuseIdentifier)
         
         collectionView?.backgroundColor = UIColor(white: 0.945, alpha: 1)
-        collectionView?.layer.borderColor = UIColor(white: 0.72, alpha: 1).cgColor
+        collectionView?.layer.borderColor = kTextGray28.cgColor
         collectionView?.layer.borderWidth = 0.5
         
         getSportCarData()
@@ -122,7 +122,7 @@ class SportCarSelectListCell: UICollectionViewCell {
                 sportCarNameLbL?.textColor = UIColor.black
             }else {
                 selectMarker?.image = UIImage(named: "status_add_sport_car_unselected")
-                sportCarNameLbL?.textColor = UIColor(white: 0.72, alpha: 1)
+                sportCarNameLbL?.textColor = kTextGray28
             }
         }
     }
@@ -149,7 +149,7 @@ class SportCarSelectListCell: UICollectionViewCell {
         //
         sportCarNameLbL = UILabel()
         sportCarNameLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
-        sportCarNameLbL?.textColor = UIColor(white: 0.72, alpha: 1)
+        sportCarNameLbL?.textColor = kTextGray28
         superview.addSubview(sportCarNameLbL!)
         sportCarNameLbL?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(selectMarker!.snp.right).offset(10)

@@ -91,7 +91,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         avatarBtn?.addTarget(self, action: #selector(StatusCell.avatarBtnPressed), for: .touchUpInside)
         //
         nameLbl = UILabel()
-        nameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBlack)
+        nameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         nameLbl?.textColor = UIColor.black
         headerContainer?.addSubview(nameLbl!)
         nameLbl?.snp.makeConstraints({ (make) -> Void in
@@ -113,8 +113,8 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         })
         //
         releaseDateLbl = UILabel()
-        releaseDateLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        releaseDateLbl?.textColor = UIColor(white: 0.72, alpha: 1)
+        releaseDateLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        releaseDateLbl?.textColor = kTextGray28
         headerContainer?.addSubview(releaseDateLbl!)
         releaseDateLbl?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(nameLbl!)
@@ -123,7 +123,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         })
         //
         avatarCarNameLbl = UILabel()
-        avatarCarNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        avatarCarNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         avatarCarNameLbl?.textAlignment = .right
         avatarCarNameLbl?.textColor = UIColor(white: 0, alpha: 0.58)
         headerContainer?.addSubview(avatarCarNameLbl!)
@@ -175,7 +175,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         //
         contentLbl = UILabel()
         contentLbl?.textColor = UIColor.black
-        contentLbl?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
+        contentLbl?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
         contentLbl?.numberOfLines = 0
         superview.addSubview(contentLbl!)
         contentLbl?.snp.makeConstraints({ (make) -> Void in
@@ -195,8 +195,8 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         }
         //
         locationLbL = UILabel()
-        locationLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        locationLbL?.textColor = UIColor(white: 0.72, alpha: 1)
+        locationLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        locationLbL?.textColor = kTextGray28
         locationLbL?.numberOfLines = 2
         locationLbL?.lineBreakMode = .byWordWrapping
         superview.addSubview(locationLbL!)
@@ -207,8 +207,8 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         })
         // 
         commentNumLbL = UILabel()
-        commentNumLbL?.textColor = UIColor(white: 0.72, alpha: 1)
-        commentNumLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        commentNumLbL?.textColor = kTextGray28
+        commentNumLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         commentNumLbL?.textAlignment = .right
         superview.addSubview(commentNumLbL!)
         commentNumLbL?.snp.makeConstraints({ (make) -> Void in
@@ -227,8 +227,8 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         })
         //
         likeNumLbl = UILabel()
-        likeNumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-        likeNumLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        likeNumLbl?.textColor = kTextGray28
+        likeNumLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         likeNumLbl?.textAlignment = .right
         superview.addSubview(likeNumLbl!)
         likeNumLbl?.snp.makeConstraints({ (make) -> Void in
@@ -261,7 +261,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         if content == "" {
             textHeight = 0
         } else {
-//            textHeight = content.boundingRectWithSize(CGSizeMake(screenWidth - 50, 1000), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightUltraLight)], context: nil).height
+//            textHeight = content.boundingRectWithSize(CGSizeMake(screenWidth - 50, 1000), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFontOfSize(17, weight: UIFontWeightRegular)], context: nil).height
             textHeight = heightForStatusContent(content)
         }
         // 1080 + 40 - 200 - 114
@@ -354,7 +354,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 3
         style.lineBreakMode = .byCharWrapping
-        let result = NSAttributedString(string: content, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.58), NSParagraphStyleAttributeName: style])
+        let result = NSAttributedString(string: content, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular), NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.58), NSParagraphStyleAttributeName: style])
         return result
     }
     

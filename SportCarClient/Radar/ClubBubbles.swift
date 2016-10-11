@@ -100,7 +100,7 @@ class ClubBubbleCell: UIButton {
                 default:
                     radius = 50
                 }
-                self.backgroundColor = UIColor(white: 0.72, alpha: 1)
+                self.backgroundColor = kTextGray28
             }
         }
     }

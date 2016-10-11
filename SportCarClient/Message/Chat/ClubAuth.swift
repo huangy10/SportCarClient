@@ -76,7 +76,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             make.top.equalTo(container).offset(22)
         }
         let static1 = ss_createLabel(
-            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
+            UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular),
             textColor: UIColor.black,
             textAlignment: .center,
             text: LS("头像旁俱乐部LOGO")
@@ -95,7 +95,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             make.top.equalTo(container).offset(22)
         }
         let static2 = ss_createLabel(
-            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
+            UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular),
             textColor: UIColor.black,
             textAlignment: .center,
             text: LS("可以发布活动")
@@ -111,8 +111,8 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
     override func createDescriptionLabel() -> UIView {
         let container = UIView()
         let districtStaticLbl = ss_createLabel(
-            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
-            textColor: UIColor(white: 0.72, alpha: 1),
+            UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular),
+            textColor: kTextGray28,
             textAlignment: .left,
             text: LS("活跃地区")
         )
@@ -129,7 +129,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             make.size.equalTo(CGSize(width: 9, height: 15))
         }
         districtLbl = ss_createLabel(
-            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
+            UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular),
             textColor: UIColor.black,
             textAlignment: .right,
             text: LS("北京市")
@@ -158,8 +158,8 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             make.bottom.equalTo(sepLine1)
         }
         let desStaticLbl = ss_createLabel(
-            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
-            textColor: UIColor(white: 0.72, alpha: 1),
+            UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular),
+            textColor: kTextGray28,
             textAlignment: .right,
             text: LS("本群简介"))
         container.addSubview(desStaticLbl)
@@ -175,7 +175,7 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
             make.size.equalTo(CGSize(width: 9, height: 15))
         }
         descriptionLbl = ss_createLabel(
-            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
+            UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular),
             textColor: UIColor.black,
             textAlignment: .right,
             text: LS("待补充")
@@ -209,18 +209,31 @@ class ClubAuthController: AuthBasicController, CityElementSelectDelegate, Progre
     
     override func createImagesImputPanel() -> UIView {
         let container = UIView()
-        let label = ss_createLabel(
-            UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight),
-            textColor: UIColor(white: 0.72, alpha: 1),
-            textAlignment: .left,
-            text: "1. 头像应为企业商标/标识或品牌Logo\n2.昵称应为俱乐部的全称或无歧义简称\n3.昵称不能仅包含一个通用性描述词语，不可过度修饰\n4.俱乐部人数满100人，认证用户50人以上\n5.有完整的俱乐部简介")
-        label.numberOfLines = 0
-        container.addSubview(label)
-        label.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(container)
-            make.right.equalTo(container)
-            make.top.equalTo(container)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 4
+        let text = "1. 头像应为企业商标/标识或品牌Logo\n2.昵称应为俱乐部的全称或无歧义简称\n3.昵称不能仅包含一个通用性描述词语，不可过度修饰\n4.俱乐部人数满100人，认证用户50人以上\n5.有完整的俱乐部简介"
+        let attrString = NSAttributedString(string: text, attributes: [NSParagraphStyleAttributeName: paragraphStyle, NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kTextGray28])
+        let label = container.addSubview(UILabel.self)
+            .layout { (make) in
+                make.left.equalTo(container)
+                make.right.equalTo(container)
+                make.top.equalTo(container)
         }
+        label.numberOfLines = 0
+        label.attributedText = attrString
+//        let label = ss_createLabel(
+//            UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular),
+//            textColor: kTextGray28,
+//            textAlignment: .left,
+//            text: "1. 头像应为企业商标/标识或品牌Logo\n2.昵称应为俱乐部的全称或无歧义简称\n3.昵称不能仅包含一个通用性描述词语，不可过度修饰\n4.俱乐部人数满100人，认证用户50人以上\n5.有完整的俱乐部简介")
+//        label.numberOfLines = 0
+//        
+//        container.addSubview(label)
+//        label.snp.makeConstraints { (make) -> Void in
+//            make.left.equalTo(container)
+//            make.right.equalTo(container)
+//            make.top.equalTo(container)
+//        }
         return container
     }
     

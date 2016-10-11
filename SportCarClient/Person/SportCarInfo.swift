@@ -87,7 +87,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         carLogoIcon = superview.addSubview(UIImageView.self)
             .layout({ (make) in
                 make.size.equalTo(20)
-                make.centerY.equalTo(carNameLbl)
+                make.top.equalTo(carNameLbl)
                 make.left.equalTo(carNameLbl.snp.right).offset(3)
             })
         carLogoIcon.layer.cornerRadius = 10
@@ -97,14 +97,16 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         carEditBtn = UIButton()
         carEditBtn.setTitle(LS("设置/认证"), for: .normal)
         carEditBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
-        carEditBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        carEditBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         carEditBtn.addTarget(self, action: #selector(carEditBtnPressed), for: .touchUpInside)
         superview.addSubview(carEditBtn)
         carEditBtn.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
-            make.top.equalTo(carNameLbl).offset(2)
-            make.size.equalTo(CGSize(width: 70, height: 32))
+            make.top.equalTo(carNameLbl)
+            make.width.equalTo(70)
+            make.height.equalTo(32)
         }
+    
         //
         let sepLineBackgroundColor = UIColor(white: 0.1, alpha: 1)
 //        let sepLine = UIView()
@@ -307,8 +309,8 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
     
     func getCarParamStaticLabel() -> UILabel {
         let staticLbl = UILabel()
-        staticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        staticLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        staticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        staticLbl.textColor = kTextGray28
         return staticLbl
     }
     
@@ -334,7 +336,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         if signature == "" {
             signatureLblHeight = 0
         } else {
-            signatureLblHeight = signature.boundingRect(with: CGSize(width: signatureLblWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)], context: nil).height
+            signatureLblHeight = signature.boundingRect(with: CGSize(width: signatureLblWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)], context: nil).height
         }
         let carNameHeight = carName.boundingRect(with: CGSize(width: signatureLblWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 19, weight: UIFontWeightSemibold)], context: nil).height
         let audioWaveHeight: CGFloat = withAudioWave ? 72.5 : 0

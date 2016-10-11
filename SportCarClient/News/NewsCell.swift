@@ -64,8 +64,8 @@ class NewsCell: UITableViewCell {
 
         // 首先创建右下角的三个按钮
         shareNumLbl = UILabel()
-        shareNumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        shareNumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
+        shareNumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        shareNumLbl?.textColor = kTextGray28
         shareNumLbl?.text = "0"
         superview.addSubview(shareNumLbl!)
         shareNumLbl?.snp.makeConstraints({ (make) -> Void in
@@ -84,8 +84,8 @@ class NewsCell: UITableViewCell {
         })
         //
         commentNumLbl = UILabel()
-        commentNumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        commentNumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
+        commentNumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        commentNumLbl?.textColor = kTextGray28
         commentNumLbl?.text = "0"
         superview.addSubview(commentNumLbl!)
         commentNumLbl?.snp.makeConstraints({ (make) -> Void in
@@ -103,8 +103,8 @@ class NewsCell: UITableViewCell {
         })
         //
         likeNumLbl = UILabel()
-        likeNumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        likeNumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
+        likeNumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        likeNumLbl?.textColor = kTextGray28
         superview.addSubview(likeNumLbl!)
         likeNumLbl?.snp.makeConstraints({ (make) -> Void in
             make.bottom.equalTo(commentIcon!)
@@ -121,7 +121,7 @@ class NewsCell: UITableViewCell {
         })
         // 创建标题
         titleLbl = UILabel()
-        titleLbl?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightBlack)
+        titleLbl?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightSemibold)
         titleLbl?.textColor = UIColor.white
         titleLbl?.numberOfLines = 0
         titleLbl?.lineBreakMode = .byWordWrapping

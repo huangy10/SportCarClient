@@ -342,7 +342,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
 //            return 75
 //        case "status_comment", "status_comment_replied":
 //            let messageBody = notification.messageBody ?? ""
-//            return 90 + messageBody.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightLight), boundingSize: CGSizeMake(NotificationCellWithCoverThumbnail.messageBodyLblMaxWidth, CGFloat.max)).height
+//            return 90 + messageBody.sizeWithFont(UIFont.systemFontOfSize(14, weight: UIFontWeightRegular), boundingSize: CGSizeMake(NotificationCellWithCoverThumbnail.messageBodyLblMaxWidth, CGFloat.max)).height
 //        case "act_invited":
 //            return NotificationCell.cellHeightForTitle(notification.makeDisplayTitlePhrases(), detailDescription: "", displayMode: .Interact)
 ////            return 100

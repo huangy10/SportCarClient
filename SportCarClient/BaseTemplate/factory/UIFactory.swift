@@ -123,7 +123,7 @@ extension UILabel {
     @discardableResult
     @nonobjc func config(
         _ fontSize: CGFloat               = 14,
-        fontWeight: CGFloat             = UIFontWeightUltraLight,
+        fontWeight: CGFloat             = UIFontWeightRegular,
         textColor: UIColor              = UIColor.black,
         textAlignment: NSTextAlignment  = .left,
         text: String?                   = nil,
@@ -153,7 +153,7 @@ extension UILabel {
     
     class func facotry(
         _ fontSize: CGFloat               = 14,
-        fontWeight: CGFloat             = UIFontWeightUltraLight,
+        fontWeight: CGFloat             = UIFontWeightRegular,
         textColor: UIColor              = UIColor.black,
         textAlignment: NSTextAlignment  = .left
         ) -> (String) -> UILabel {
@@ -169,7 +169,7 @@ extension UITextField {
     @discardableResult
     @nonobjc func config(
         _ fontSize: CGFloat               = 14,
-        fontWeight: CGFloat             = UIFontWeightUltraLight,
+        fontWeight: CGFloat             = UIFontWeightRegular,
         textColor: UIColor              = UIColor.black,
         textAlignment: NSTextAlignment  = .left,
         placeholder: String?            = nil,
@@ -196,7 +196,7 @@ extension UITextView {
     @discardableResult
     @nonobjc func config(
         _ fontSize: CGFloat               = 14,
-        fontWeight: CGFloat             = UIFontWeightUltraLight,
+        fontWeight: CGFloat             = UIFontWeightRegular,
         textColor: UIColor              = UIColor.black,
         textAlignment: NSTextAlignment  = .left,
         text: String?                   = nil
@@ -259,7 +259,7 @@ extension UIButton {
         title: String? = nil,
         titleColor: UIColor? = kHighlightedRedTextColor,
         titleSize: CGFloat = 14,
-        titleWeight: CGFloat = UIFontWeightUltraLight,
+        titleWeight: CGFloat = UIFontWeightRegular,
         image: UIImage? = nil,
         contentMode: UIViewContentMode = .scaleAspectFill
         ) -> UIButton {
@@ -285,9 +285,9 @@ extension UISwitch {
     @nonobjc func config(
         _ target: AnyObject,
         selector: Selector,
-        tintColor: UIColor = UIColor(white: 0.72, alpha: 1),
+        tintColor: UIColor = kTextGray28,
         onTintColor: UIColor = kHighlightedRedTextColor,
-        backgroundColor: UIColor = UIColor(white: 0.72, alpha: 1),
+        backgroundColor: UIColor = kTextGray28,
         cornerRadius: CGFloat = 15.5
         ) -> UISwitch {
         self.tintColor = tintColor

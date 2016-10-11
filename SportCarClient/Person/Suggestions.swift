@@ -69,8 +69,8 @@ class SuggestionController: PresentTemplateViewController {
         suggestionInput = UITextView()
         inputFields.append(suggestionInput)
         suggestionInput.delegate = self
-        suggestionInput.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        suggestionInput.textColor = kTextGray
+        suggestionInput.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        suggestionInput.textColor = kTextGray54
         suggestionInput.text = LS("请在此处输入反馈...")
         container.addSubview(suggestionInput)
         suggestionInput.snp.makeConstraints { (make) -> Void in
@@ -84,7 +84,7 @@ class SuggestionController: PresentTemplateViewController {
         confirmBtn.setTitle(LS("确定"), for: .normal)
         confirmBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         confirmBtn.addTarget(self, action: #selector(confirmMessageSent), for: .touchUpInside)
-        confirmBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        confirmBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         container.addSubview(confirmBtn)
         confirmBtn.snp.makeConstraints { (make) -> Void in
             make.size.equalTo(CGSize(width: 74, height: 43))
@@ -95,8 +95,8 @@ class SuggestionController: PresentTemplateViewController {
         cancelBtn = UIButton()
         cancelBtn.setTitle(LS("取消"), for: .normal)
         cancelBtn.addTarget(self, action: #selector(hideAnimated), for: .touchUpInside)
-        cancelBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: .normal)
-        cancelBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        cancelBtn.setTitleColor(kTextGray28, for: .normal)
+        cancelBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         container.addSubview(cancelBtn)
         cancelBtn.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(confirmBtn)

@@ -85,8 +85,8 @@ class SportscarAuthController: PersonMineSettingsAuthController {
     override func createDescriptionLabel() -> UIView {
         let container = UIView()
         let districtStaticLbl = UILabel()
-        districtStaticLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        districtStaticLbl.textColor = kTextGray
+        districtStaticLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        districtStaticLbl.textColor = kTextGray54
         districtStaticLbl.text = LS("车牌地区")
         container.addSubview(districtStaticLbl)
         districtStaticLbl.snp.makeConstraints { (make) -> Void in
@@ -101,7 +101,7 @@ class SportscarAuthController: PersonMineSettingsAuthController {
             make.size.equalTo(CGSize(width: 15, height: 9))
         }
         districtLabel = UILabel()
-        districtLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        districtLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         districtLabel.textColor = UIColor.black
         districtLabel.textAlignment = .right
         districtLabel.text = "京"
@@ -131,8 +131,8 @@ class SportscarAuthController: PersonMineSettingsAuthController {
         districtBtn.addTarget(self, action: #selector(SportscarAuthController.showDistrictPicker), for: .touchUpInside)
         //
         let licenseStaticLbl = UILabel()
-        licenseStaticLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        licenseStaticLbl.textColor = kTextGray
+        licenseStaticLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        licenseStaticLbl.textColor = kTextGray54
         licenseStaticLbl.text = LS("车牌号")
         container.addSubview(licenseStaticLbl)
         licenseStaticLbl.snp.makeConstraints { (make) -> Void in
@@ -148,7 +148,7 @@ class SportscarAuthController: PersonMineSettingsAuthController {
 //        }
 //        arrow2.isHidden = true
         carLicense = UITextField()
-        carLicense.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        carLicense.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         carLicense.placeholder = LS("请填写车牌号")
         carLicense.textColor = UIColor.black
         carLicense.textAlignment = .right
@@ -207,7 +207,7 @@ class SportscarAuthController: PersonMineSettingsAuthController {
         let doneBtn = UIButton()
         doneBtn.setTitle(LS("完成"), for: .normal)
         doneBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
-        doneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        doneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         pickerHeader.addSubview(doneBtn)
         doneBtn.addTarget(self, action: #selector(SportscarAuthController.donePickDistrictBtnPressed), for: .touchUpInside)
         doneBtn.snp.makeConstraints { (make) -> Void in
@@ -290,7 +290,7 @@ extension SportscarAuthController: UIPickerViewDataSource, UIPickerViewDelegate 
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let titleLabel = UILabel()
-        titleLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightLight)
+        titleLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightRegular)
         titleLabel.textAlignment = .center
         titleLabel.text = kDistrictSet[row]
         titleLabel.textColor = UIColor.black

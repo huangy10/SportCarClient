@@ -42,8 +42,8 @@ class SportCarSelectParamCell: UITableViewCell {
         self.contentView.addSubview(content!)
         
         header = UILabel()
-        header?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
-        header?.textColor = UIColor(white: 0.72, alpha: 1)
+        header?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        header?.textColor = kTextGray28
         header?.textAlignment = .left
         self.contentView.addSubview(header!)
         
@@ -80,7 +80,7 @@ class SportCarSelectParamEditableCell: SportCarSelectParamCell {
     override func createSubviews() {
         super.createSubviews()
         contentInput = UITextField()
-        contentInput.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        contentInput.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         contentInput.textColor = UIColor.black
         contentInput.textAlignment = .right
         self.contentView.addSubview(contentInput)

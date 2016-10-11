@@ -52,7 +52,7 @@ class NotificationBaseCell: UITableViewCell {
         }
         //
         nickNameLbl = UILabel()
-        nickNameLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBlack)
+        nickNameLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         nickNameLbl.textColor = UIColor.black
         superview.addSubview(nickNameLbl)
         nickNameLbl.snp.makeConstraints { (make) -> Void in
@@ -61,7 +61,7 @@ class NotificationBaseCell: UITableViewCell {
         }
         //
         informLbL = UILabel()
-        informLbL.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        informLbL.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         informLbL.textColor = kNotificationHintColor
         superview.addSubview(informLbL)
         informLbL.snp.makeConstraints { (make) -> Void in
@@ -70,7 +70,7 @@ class NotificationBaseCell: UITableViewCell {
         }
         //
         dateLbl = UILabel()
-        dateLbl.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightUltraLight)
+        dateLbl.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightRegular)
         dateLbl.textColor = kNotificationHintColor
         superview.addSubview(dateLbl)
         dateLbl.snp.makeConstraints { (make) -> Void in
@@ -130,7 +130,7 @@ class NotificationCellWithCoverThumbnail: NotificationBaseCell {
         }
         
         messageBodyLbl = UILabel()
-        messageBodyLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        messageBodyLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         messageBodyLbl.textColor = kNotificationHintColor
         superview.addSubview(messageBodyLbl)
         messageBodyLbl.snp.makeConstraints { (make) -> Void in
@@ -179,7 +179,7 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         //
         name2LbL = UILabel()
         name2LbL.textColor = UIColor.black
-        name2LbL.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBlack)
+        name2LbL.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         superview.addSubview(name2LbL)
         name2LbL.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(informLbL.snp.right).offset(10)
@@ -187,7 +187,7 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         }
         //
         inform2Lbl = UILabel()
-        inform2Lbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        inform2Lbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         inform2Lbl.textColor = kNotificationHintColor
         superview.addSubview(inform2Lbl)
         inform2Lbl.snp.makeConstraints { (make) -> Void in
@@ -198,7 +198,7 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         agreenBtn = UIButton()
         agreenBtn.setTitle(LS("同意"), for: .normal)
         agreenBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
-        agreenBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        agreenBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         superview.addSubview(agreenBtn)
         agreenBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview.snp.right).offset(-45)
@@ -209,8 +209,8 @@ class NotificationCellAboutActivity: NotificationBaseCell{
         //
         denyBtn = UIButton()
         denyBtn.setTitle(LS("谢绝"), for: .normal)
-        denyBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: .normal)
-        denyBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        denyBtn.setTitleColor(kTextGray28, for: .normal)
+        denyBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         superview.addSubview(denyBtn)
         denyBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(agreenBtn.snp.centerX).offset(-50)

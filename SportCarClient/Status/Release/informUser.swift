@@ -35,7 +35,7 @@ class InformOtherUserController: UIViewController, UICollectionViewDelegate, UIC
         atBtn?.setTitle(LS("@ 提醒谁看"), for: .normal)
         atBtn?.setTitleColor(UIColor.black, for: .normal)
         atBtn?.titleLabel?.textAlignment = .center
-        atBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        atBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         atBtn?.addTarget(self, action: #selector(InformOtherUserController.atBtnPressed), for: .touchUpInside)
         atBtn?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview).offset(15)
@@ -110,7 +110,7 @@ class InformOtherUserCell: UICollectionViewCell {
         imageView = UIImageView()
         imageView?.layer.cornerRadius = 17.5
         imageView?.clipsToBounds = true
-        imageView?.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        imageView?.backgroundColor = kTextGray28
         superview.addSubview(imageView!)
         imageView?.snp.makeConstraints({ (make) -> Void in
             make.edges.equalTo(superview)

@@ -100,7 +100,7 @@ class PersonHeaderMine: UIView {
         avatarCarIcon.layer.cornerRadius = 15
         
         avatarCarNameLbl = addSubview(UILabel.self)
-            .config(14, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0, alpha: 0.58))
+            .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.58))
             .layout({ (make) in
                 make.left.equalTo(avatarBtn.snp.right).offset(14)
                 make.centerY.equalTo(avatarCarIcon)
@@ -109,7 +109,7 @@ class PersonHeaderMine: UIView {
     
     func configureNameLbl() {
         nameLbl = addSubview(UILabel.self)
-            .config(16, fontWeight: UIFontWeightBold, textColor: UIColor.black)
+            .config(16, fontWeight: UIFontWeightSemibold, textColor: UIColor.black)
             .layout({ (make) in
                 make.left.equalTo(avatarBtn.snp.right).offset(14)
                 make.centerY.equalTo(avatarBtn).offset(-3)
@@ -133,12 +133,12 @@ class PersonHeaderMine: UIView {
             .layout { (make) in
                 make.right.equalTo(self).offset(-12)
                 make.centerY.equalTo(nameLbl)
-                make.size.equalTo(12)
+                make.size.equalTo(10)
         }
         arrowRightIcon.contentMode = .scaleAspectFit
         
         _ = addSubview(UILabel.self)
-            .config(12, fontWeight: UIFontWeightUltraLight, textColor: kTextGray, textAlignment: .right, text: LS("详细信息"))
+            .config(12, fontWeight: UIFontWeightRegular, textColor: kTextGray54, textAlignment: .right, text: LS("详细信息"))
             .layout({ (make) in
                 make.centerY.equalTo(arrowRightIcon)
                 make.right.equalTo(arrowRightIcon.snp.left).offset(-7)
@@ -226,13 +226,13 @@ class PersonHeaderMine: UIView {
     }
     
     func setAppearance(ofBottomLbls label: UILabel) {
-        label.font = UIFont.systemFont(ofSize: 24, weight: UIFontWeightBold)
+        label.font = UIFont.systemFont(ofSize: 24, weight: UIFontWeightSemibold)
         label.textColor = UIColor.black
         label.textAlignment = .center
     }
     
     func setAppearance(ofBottomStaticLabel label: UILabel, withText text: String) {
-        label.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        label.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         label.textColor = UIColor(white: 0, alpha: 0.38)
         label.textAlignment = .center
         label.text = text

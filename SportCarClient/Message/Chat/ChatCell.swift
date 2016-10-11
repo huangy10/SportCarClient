@@ -84,8 +84,8 @@ class ChatCell: UITableViewCell {
         self.backgroundColor = UIColor.clear
         //
         timeMarkerLbL = UILabel()
-        timeMarkerLbL?.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightLight)
-        timeMarkerLbL?.textColor = UIColor(white: 0.72, alpha: 1)
+        timeMarkerLbL?.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightRegular)
+        timeMarkerLbL?.textColor = kTextGray28
         timeMarkerLbL?.textAlignment = .center
         timeMarkerLbL?.backgroundColor = UIColor.white
         timeMarkerLbL?.isHidden = true
@@ -126,7 +126,7 @@ class ChatCell: UITableViewCell {
         //
         if self.reuseIdentifier == "text" {
             let templbl = UILabel()
-            templbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+            templbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
             templbl.textColor = UIColor.black
             templbl.textAlignment = .left
             templbl.numberOfLines = 0
@@ -270,7 +270,7 @@ class ChatCell: UITableViewCell {
         let maxBubbleContentWidth = UIScreen.main.bounds.width - 100 - 30
         let timeMarkHeight = chat.displayTimeMark ? kChatCellTimeMarkSpaceHeight : 0
         if messageType == "text" {
-            if let textSize = chat.textContent?.boundingRect(with: CGSize(width: maxBubbleContentWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)], context: nil).size {
+            if let textSize = chat.textContent?.boundingRect(with: CGSize(width: maxBubbleContentWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)], context: nil).size {
                 return textSize.height + 32 + 10 + timeMarkHeight
             }else {
                 assertionFailure()

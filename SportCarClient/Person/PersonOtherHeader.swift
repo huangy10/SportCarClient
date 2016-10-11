@@ -29,7 +29,7 @@ class PersonHeaderOther: PersonHeaderMine {
                 make.height.equalTo(25)
             })
         followBtn.layer.cornerRadius = 2
-        followBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        followBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         set(followed: false)
     }
     
@@ -38,7 +38,7 @@ class PersonHeaderOther: PersonHeaderMine {
             followBtn.layer.borderColor = UIColor.clear.cgColor
             followBtn.backgroundColor = UIColor(white: 0.96, alpha: 1)
             followBtn.setTitle(LS("已关注"), for: .normal)
-            followBtn.setTitleColor(kTextLightGray, for: .normal)
+            followBtn.setTitleColor(kTextGray38, for: .normal)
         } else {
             followBtn.layer.borderColor = kHighlightRed.cgColor
             followBtn.backgroundColor = UIColor.clear
@@ -65,7 +65,7 @@ class PersonHeaderOther: PersonHeaderMine {
     
     override func setAppearance(ofBottomLbls label: UILabel) {
         super.setAppearance(ofBottomLbls: label)
-        label.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightBold)
+        label.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightSemibold)
     }
     
     override func loadDataAndUpdateUI() {

@@ -16,7 +16,7 @@ class SimpleLabelCell: UITableViewCell {
     
     func configureTitleLbl() {
         titleLbl = contentView.addSubview(UILabel.self)
-            .config(14, fontWeight: UIFontWeightUltraLight, textColor: kHighlightRed, textAlignment: .center)
+            .config(14, fontWeight: UIFontWeightRegular, textColor: kHighlightRed, textAlignment: .center)
             .layout({ (make) in
                 make.center.equalTo(contentView)
             })

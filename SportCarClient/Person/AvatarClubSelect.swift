@@ -54,8 +54,8 @@ class AvatarClubSelectController: AvatarItemSelectController {
         superview.backgroundColor = UIColor.white
         
         noClubLbl = UILabel()
-        noClubLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        noClubLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        noClubLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        noClubLbl.textColor = kTextGray28
         noClubLbl.text = LS("暂未加入认证俱乐部，在群聊中申请认证")
         superview.addSubview(noClubLbl)
         noClubLbl.snp.makeConstraints { (make) -> Void in

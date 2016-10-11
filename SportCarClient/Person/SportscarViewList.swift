@@ -171,7 +171,7 @@ class SportCarViewListAddBtnCell: UICollectionViewCell {
     func createSubviews() {
         
         let desLbl = contentView.addSubview(UILabel.self)
-            .config(14, fontWeight: UIFontWeightBold, textColor: kTextLightGray, textAlignment: .left, text: LS("添加爱车"))
+            .config(14, fontWeight: UIFontWeightSemibold, textColor: kTextGray38, textAlignment: .left, text: LS("添加爱车"))
             .layout { (make) in
                 make.centerX.equalTo(contentView).offset(18)
                 make.centerY.equalTo(contentView)
@@ -215,7 +215,7 @@ class SportscarViewListCarCell: UICollectionViewCell {
             })
         carNameLbl.font = type(of: self).fontForNameLbl()
         carNameLbl.textAlignment = .center
-        carNameLbl.textColor = kTextBlack
+        carNameLbl.textColor = kTextGray87
     }
     
     func configureAuthIcon() {
@@ -245,7 +245,7 @@ class SportscarViewListCarCell: UICollectionViewCell {
         if isSelected {
             carNameLbl.textColor = UIColor.black
         } else {
-            carNameLbl.textColor = kTextLightGray
+            carNameLbl.textColor = kTextGray38
         }
     }
     
@@ -254,7 +254,7 @@ class SportscarViewListCarCell: UICollectionViewCell {
     }
     
     class func fontForNameLbl() -> UIFont {
-        return UIFont.systemFont(ofSize: 15, weight: UIFontWeightBold)
+        return UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
     }
     
     class func getRequiredSize(forGivenCar car: SportCar?) -> CGSize {

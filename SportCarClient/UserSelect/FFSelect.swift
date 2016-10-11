@@ -112,7 +112,7 @@ class FFSelectController: UserSelectController {
         })
         titleFansBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), for: .touchUpInside)
         titleFansLbl = titleFansBtn.addSubview(UILabel.self)
-            .config(15, fontWeight: UIFontWeightBold, textColor: kTextBlack, textAlignment: .center, text: LS("粉丝"))
+            .config(15, fontWeight: UIFontWeightSemibold, textColor: kTextGray87, textAlignment: .center, text: LS("粉丝"))
             .layout({ (make) in
                 make.center.equalTo(titleFansBtn)
                 make.size.equalTo(LS(" 粉丝 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
@@ -129,7 +129,7 @@ class FFSelectController: UserSelectController {
         })
         titleFollowBtn.addTarget(self, action: #selector(FFSelectController.titleBtnPressed(_:)), for: .touchUpInside)
         titleFollowLbl = titleFollowBtn.addSubview(UILabel.self)
-            .config(15, fontWeight: UIFontWeightBold, textColor: kTextGray, textAlignment: .center, text: LS("关注"))
+            .config(15, fontWeight: UIFontWeightSemibold, textColor: kTextGray54, textAlignment: .center, text: LS("关注"))
             .layout({ (make) in
                 make.center.equalTo(titleFollowBtn)
                 make.size.equalTo(LS(" 关注 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
@@ -147,7 +147,7 @@ class FFSelectController: UserSelectController {
         self.navigationItem.titleView = container
         
         let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .plain, target: self, action: #selector(UserSelectController.navLeftBtnPressed))
-        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.leftBarButtonItem = leftBtnItem
 
         
@@ -158,7 +158,7 @@ class FFSelectController: UserSelectController {
         } else {
             navRightBtn?.setTitle(LS("确定") + "(\(selectedUsers.count)/\(maxSelectUserNum))", for: .normal)
         }
-        navRightBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        navRightBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         navRightBtn?.titleLabel?.textAlignment = .right
         navRightBtn?.addTarget(self, action: #selector(FFSelectController.navRightBtnPressed), for: .touchUpInside)
         navRightBtn?.frame = CGRect(x: 0, y: 0, width: 67, height: 20)
@@ -180,8 +180,8 @@ class FFSelectController: UserSelectController {
                 make.right.equalTo(titleFansLbl)
                 make.height.equalTo(2.5)
             })
-            titleFansLbl.textColor = kTextBlack
-            titleFollowLbl.textColor = kTextGray
+            titleFansLbl.textColor = kTextGray87
+            titleFollowLbl.textColor = kTextGray54
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 sender.superview?.layoutIfNeeded()
                 }, completion: nil)
@@ -197,8 +197,8 @@ class FFSelectController: UserSelectController {
                 make.right.equalTo(titleFollowLbl)
                 make.height.equalTo(2.5)
             })
-            titleFansLbl.textColor = kTextGray
-            titleFollowLbl.textColor = kTextBlack
+            titleFansLbl.textColor = kTextGray54
+            titleFollowLbl.textColor = kTextGray87
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 sender.superview?.layoutIfNeeded()
                 }, completion: nil)
@@ -324,6 +324,6 @@ class UserSelectCellGray: UserSelectCell {
     override func createSubviews() {
         super.createSubviews()
         selectBtn?.isEnabled = false
-        nickNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
+        nickNameLbl?.textColor = kTextGray28
     }
 }

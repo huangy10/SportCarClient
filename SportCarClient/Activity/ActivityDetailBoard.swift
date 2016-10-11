@@ -82,7 +82,7 @@ class ActivityDetailBoardView: UIView {
         editBtn = UIButton()
         editBtn.isHidden = !showEditBtn
         editBtn.setTitle(LS("编辑"), for: .normal)
-        editBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        editBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         editBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         superview.addSubview(editBtn)
         editBtn.snp.makeConstraints { (make) -> Void in
@@ -103,7 +103,7 @@ class ActivityDetailBoardView: UIView {
         }
         // 
         desLbl = UILabel()
-        desLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        desLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         desLbl.textColor = UIColor.black
         superview.addSubview(desLbl)
         desLbl.snp.makeConstraints { (make) -> Void in
@@ -120,7 +120,7 @@ class ActivityDetailBoardView: UIView {
         }
         //
         let sepLine = UIView()
-        sepLine.backgroundColor = UIColor(white: 0.94, alpha: 1)
+        sepLine.backgroundColor = kSepLineLightGray
         superview.addSubview(sepLine)
         sepLine.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(superview)
@@ -149,8 +149,8 @@ class ActivityDetailBoardView: UIView {
         }
         //
         releaseDateLbl = UILabel()
-        releaseDateLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        releaseDateLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        releaseDateLbl.textColor = kTextGray28
+        releaseDateLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         superview.addSubview(releaseDateLbl)
         releaseDateLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(hostNameLbL)
@@ -158,8 +158,8 @@ class ActivityDetailBoardView: UIView {
         }
         //
         avatarCarNameLbl = UILabel()
-        avatarCarNameLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        avatarCarNameLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        avatarCarNameLbl.textColor = kTextGray28
+        avatarCarNameLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         superview.addSubview(avatarCarNameLbl)
         avatarCarNameLbl.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
@@ -183,8 +183,8 @@ class ActivityDetailBoardView: UIView {
         }
         //
         locationLbl = UILabel()
-        locationLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        locationLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        locationLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        locationLbl.textColor = kTextGray28
         superview.addSubview(locationLbl)
         locationLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(locIcon.snp.right).offset(11)
@@ -192,8 +192,8 @@ class ActivityDetailBoardView: UIView {
         }
         //
         attendNumLbl = UILabel()
-        attendNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        attendNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        attendNumLbl.textColor = kTextGray28
+        attendNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         attendNumLbl.textAlignment = .right
         superview.addSubview(attendNumLbl)
         attendNumLbl.snp.makeConstraints { (make) -> Void in
@@ -210,8 +210,8 @@ class ActivityDetailBoardView: UIView {
         }
         //
         actTimeLbl = UILabel()
-        actTimeLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        actTimeLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        actTimeLbl.textColor = kTextGray28
+        actTimeLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         superview.addSubview(actTimeLbl)
         actTimeLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(timeIcon.snp.right).offset(11)
@@ -219,8 +219,8 @@ class ActivityDetailBoardView: UIView {
         }
         //
         commentNumLbl = UILabel()
-        commentNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        commentNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        commentNumLbl.textColor = kTextGray28
+        commentNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         superview.addSubview(commentNumLbl)
         commentNumLbl.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
@@ -236,8 +236,8 @@ class ActivityDetailBoardView: UIView {
         }
         //
         likeNumLbl = UILabel()
-        likeNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        likeNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        likeNumLbl.textColor = kTextGray28
+        likeNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         superview.addSubview(likeNumLbl)
         likeNumLbl.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(commentIcon.snp.left).offset(-32)
@@ -263,7 +263,7 @@ class ActivityDetailBoardView: UIView {
         memberDisplay.parentController = parentController
         //
         let sepLine2 = UIView()
-        sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        sepLine2.backgroundColor = kTextGray28
         superview.addSubview(sepLine2)
         sepLine2.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
@@ -273,8 +273,8 @@ class ActivityDetailBoardView: UIView {
         }
         //
         let commentStaticLbl = UILabel()
-        commentStaticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        commentStaticLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        commentStaticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        commentStaticLbl.textColor = kTextGray28
         commentStaticLbl.text = LS("评论")
         commentStaticLbl.textAlignment = .center
         superview.addSubview(commentStaticLbl)

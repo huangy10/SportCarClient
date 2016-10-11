@@ -121,7 +121,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
             make.center.equalTo(container)
         }
         titleFollowLbl = titleFollowBtn.addSubview(UILabel.self)
-            .config(15, fontWeight: UIFontWeightBold, textColor: kTextBlack, textAlignment: .center, text: LS("关注"))
+            .config(15, fontWeight: UIFontWeightSemibold, textColor: kTextGray87, textAlignment: .center, text: LS("关注"))
             .layout({ (make) in
                 make.center.equalTo(titleFollowBtn)
                 make.size.equalTo(LS(" 关注 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
@@ -137,7 +137,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
             make.size.equalTo(CGSize(width: 70, height: 30))
         }
         titleNearbyLbl = titleNearbyBtn.addSubview(UILabel.self)
-            .config(15, fontWeight: UIFontWeightBold, textColor: kTextGray, textAlignment: .center, text: LS("附近"))
+            .config(15, fontWeight: UIFontWeightSemibold, textColor: kTextGray54, textAlignment: .center, text: LS("附近"))
             .layout({ (make) in
                 make.center.equalTo(titleNearbyBtn)
                 make.size.equalTo(LS(" 附近 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
@@ -153,7 +153,7 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
             make.size.equalTo(CGSize(width: 70, height: 30))
         }
         titleHotLbl = titleHotBtn.addSubview(UILabel.self)
-            .config(15, fontWeight: UIFontWeightBold, textColor: kTextGray, textAlignment: .center, text: LS("热门"))
+            .config(15, fontWeight: UIFontWeightSemibold, textColor: kTextGray54, textAlignment: .center, text: LS("热门"))
             .layout({ (make) in
                 make.center.equalTo(titleHotBtn)
                 make.size.equalTo(LS(" 热门 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
@@ -193,8 +193,8 @@ class StatusHomeController: UIViewController, UIScrollViewDelegate {
         (controllers[sender.tag] as AnyObject).viewWillAppear(true)
         let targetLbl = lbls[sender.tag]!
         let sourceLbl = lbls[_curTag]!
-        targetLbl.textColor = kTextBlack
-        sourceLbl.textColor = kTextGray
+        targetLbl.textColor = kTextGray87
+        sourceLbl.textColor = kTextGray54
         titleIcon.snp.remakeConstraints { (make) -> Void in
             make.bottom.equalTo(titleIcon.superview!)
             make.left.equalTo(targetLbl)

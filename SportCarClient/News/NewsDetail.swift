@@ -247,7 +247,7 @@
 //        likeDescriptionLbl.layer.opacity = 0
 //        //
 //        let sepLine2 = UIView()
-//        sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
+//        sepLine2.backgroundColor = kTextGray28
 //        board?.addSubview(sepLine2)
 //        sepLine2.snp.makeConstraints { (make) -> Void in
 //            make.right.equalTo(superview)
@@ -260,9 +260,9 @@
 //        let commentStaticLbl = UILabel()
 //        commentStaticLbl.backgroundColor = UIColor.white
 //        commentStaticLbl.text = LS("评论")
-//        commentStaticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+//        commentStaticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
 //        commentStaticLbl.textAlignment = .center
-//        commentStaticLbl.textColor = UIColor(white: 0.72, alpha: 1)
+//        commentStaticLbl.textColor = kTextGray28
 //        board?.addSubview(commentStaticLbl)
 //        commentStaticLbl.snp.makeConstraints { (make) -> Void in
 //            make.centerX.equalTo(board!)
@@ -358,8 +358,8 @@
 //        }
 //        // 创建like， comment和share标签
 //        shareNumLbl = UILabel()
-//        shareNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-//        shareNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
+//        shareNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+//        shareNumLbl.textColor = kTextGray28
 //        shareNumLbl.text = "0"
 //        superview.addSubview(shareNumLbl)
 //        shareNumLbl?.snp.makeConstraints({ (make) -> Void in
@@ -377,8 +377,8 @@
 //        })
 //        //
 //        commentNumLbl = UILabel()
-//        commentNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-//        commentNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
+//        commentNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+//        commentNumLbl.textColor = kTextGray28
 //        commentNumLbl.text = "0"
 //        superview.addSubview(commentNumLbl)
 //        commentNumLbl.snp.makeConstraints({ (make) -> Void in
@@ -395,8 +395,8 @@
 //        })
 //        //
 //        likeNumLbl = UILabel()
-//        likeNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-//        likeNumLbl.textColor = UIColor(white: 0.72, alpha: 1)
+//        likeNumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+//        likeNumLbl.textColor = kTextGray28
 //        superview.addSubview(likeNumLbl)
 //        likeNumLbl.text = "0"
 //        likeNumLbl.snp.makeConstraints({ (make) -> Void in
@@ -413,7 +413,7 @@
 //        })
 //        //
 //        newsTitleFake = UILabel()
-//        newsTitleFake.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightBlack)
+//        newsTitleFake.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightSemibold)
 //        newsTitleFake.textColor = UIColor.white
 //        newsTitleFake.numberOfLines = 0
 //        board.addSubview(newsTitleFake)
@@ -423,7 +423,7 @@
 //            make.bottom.equalTo(newsCover).offset(-10)
 //        }
 //        newsTitle = UILabel()
-//        newsTitle.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightBlack)
+//        newsTitle.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightSemibold)
 //        newsTitle.textColor = UIColor.black
 //        newsTitle.numberOfLines = 0
 //        board.addSubview(newsTitle)

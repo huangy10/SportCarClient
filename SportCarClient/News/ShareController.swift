@@ -116,7 +116,7 @@ class ShareController: UIViewController {
         //
         let shareLbl = UILabel()
         shareLbl.text = LS("分享")
-        shareLbl.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
+        shareLbl.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
         shareLbl.textColor = UIColor.white
         container.addSubview(shareLbl)
         shareLbl.snp.makeConstraints { (make) -> Void in

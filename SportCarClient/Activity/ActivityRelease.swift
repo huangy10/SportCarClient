@@ -109,7 +109,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 make.size.equalTo(100)
             })
         let static1 = container.addSubview(UILabel.self)
-            .config(fontWeight: UIFontWeightUltraLight, text: LS("取一个名字"))
+            .config(fontWeight: UIFontWeightRegular, text: LS("取一个名字"))
             .layout { (make) in
                 make.left.equalTo(imagePickerBtn.snp.right).offset(18)
                 make.top.equalTo(imagePickerBtn)
@@ -127,7 +127,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 make.top.equalTo(static1.snp.bottom).offset(14)
             }).addToInputable(self)
         desInput = container.addSubview(UITextView.self)
-            .config(16, textColor: UIColor(white: 0.72, alpha: 1), text: LS("活动描述..."))
+            .config(16, textColor: kTextGray28, text: LS("活动描述..."))
             .layout({ (make) in
                 make.left.equalTo(imagePickerBtn)
                 make.right.equalTo(container).offset(-15)
@@ -135,7 +135,7 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
                 make.height.equalTo(100)
             }).addToInputable(self)
         desWordCountLbl = container.addSubview(UILabel.self)
-            .config(12, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .right, text: "0/\(actDescriptionWordLimit)").layout({ (make) in
+            .config(12, textColor: kTextGray28, textAlignment: .right, text: "0/\(actDescriptionWordLimit)").layout({ (make) in
                 make.right.equalTo(container).offset(-15)
                 make.bottom.equalTo(desInput)
             })
@@ -202,11 +202,11 @@ class ActivityReleaseController: InputableViewController, UITableViewDataSource,
         self.navigationItem.title = LS("发布活动")
         //
         let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .plain, target: self, action: #selector(ActivityReleaseController.navLeftBtnPressed))
-        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.leftBarButtonItem = leftBtnItem
         //
         let rightItem = UIBarButtonItem(title: LS("发布"), style: .done, target: self, action: #selector(ActivityReleaseController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }
     

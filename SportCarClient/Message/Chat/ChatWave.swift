@@ -353,7 +353,7 @@ class WideProcessView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: CGRect.zero)
-        self.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        self.backgroundColor = kTextGray28
         self.addSubview(barView)
         barView.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(self)

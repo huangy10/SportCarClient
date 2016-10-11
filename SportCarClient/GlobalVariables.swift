@@ -18,22 +18,23 @@ typealias SSProgressCallback = (_ progress: Float) -> Void
 // Colors
 let kBarBgColor = UIColor(red: 0.09, green: 0.075, blue: 0.075, alpha: 1)
 let kHighlightedRedTextColor = UIColor(red: 1, green: 0.267, blue: 0.274, alpha: 1)
-let kPlaceholderTextColor = UIColor(white: 0.72, alpha: 1)
-let kTextBlack = UIColor(white: 0, alpha: 0.87)
-let kTextGray = UIColor(white: 0, alpha: 0.54)
-let kTextLightGray = UIColor(white: 0, alpha: 0.38)
+let kPlaceholderTextColor = kTextGray28
+let kTextGray87 = UIColor(white: 0, alpha: 0.87)
+let kTextGray54 = UIColor(white: 0, alpha: 0.54)
+let kTextGray38 = UIColor(white: 0, alpha: 0.38)
+let kTextGray28 = UIColor(white: 0.72, alpha: 1)
 let kSepLineLightGray = UIColor(white: 0.94, alpha: 1)
 let kGeneralTableViewBGColor = UIColor(white: 0.96, alpha: 1)
 let kNotificationHintColor = UIColor(white: 0.42, alpha: 1)
 let kHighlightRed = UIColor.RGB(255, 21, 21)
 
 // Fonts
-let kBarTextFont = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-let kBarTitleFont = UIFont.systemFont(ofSize: 17, weight: UIFontWeightBlack)
-let kTextInputFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
+let kBarTextFont = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
+let kBarTitleFont = UIFont.systemFont(ofSize: 17, weight: UIFontWeightSemibold)
+let kTextInputFont = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
 
 // Network
-let kHostName = "166.111.17.86"
+let kHostName = "166.111.17.91"
 //let kHostName = "paochefan.com"
 let kPortName = "80"
 let kChatPortName = "8888"

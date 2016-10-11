@@ -184,8 +184,8 @@ class PrivateChatSettingController: UITableViewController, FFSelectDelegate, Per
                         make.size.equalTo(65)
                     })
                     let staticLbl = UILabel()
-                    staticLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-                    staticLbl.textColor = kTextGray
+                    staticLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
+                    staticLbl.textColor = kTextGray54
                     staticLbl.text = LS("发起一个群聊")
                     cell.contentView.addSubview(staticLbl)
                     staticLbl.snp.makeConstraints({ (make) -> Void in

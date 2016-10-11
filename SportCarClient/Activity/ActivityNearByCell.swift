@@ -75,8 +75,8 @@ class ActivityNearByCell: UICollectionViewCell {
         }
         //
         actStartDateLbl = UILabel()
-        actStartDateLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        actStartDateLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        actStartDateLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        actStartDateLbl.textColor = kTextGray28
         superview.addSubview(actStartDateLbl)
         actStartDateLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(sepLine)

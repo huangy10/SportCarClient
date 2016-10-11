@@ -74,7 +74,7 @@ class ActivityHomeController: UIViewController {
             })
         titleMineBtn.tag = 0
         titleMineLbl = titleMineBtn.addSubview(UILabel.self)
-            .config(15, fontWeight: UIFontWeightBold, textColor: kTextBlack, textAlignment: .center, text: LS("已发布"))
+            .config(15, fontWeight: UIFontWeightSemibold, textColor: kTextGray87, textAlignment: .center, text: LS("已发布"))
             .layout({ (make) in
                 make.center.equalTo(titleMineBtn)
                 make.size.equalTo(LS(" 已发布 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
@@ -89,7 +89,7 @@ class ActivityHomeController: UIViewController {
             })
         titleAppliedBtn.tag = 1
         titleAppliedLbl = titleAppliedBtn.addSubview(UILabel.self)
-            .config(15, fontWeight: UIFontWeightBold, textColor: kTextGray, textAlignment: .center, text: LS("已报名"))
+            .config(15, fontWeight: UIFontWeightSemibold, textColor: kTextGray54, textAlignment: .center, text: LS("已报名"))
             .layout({ (make) in
                 make.center.equalTo(titleAppliedBtn)
                 make.size.equalTo(LS(" 已报名 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
@@ -99,7 +99,7 @@ class ActivityHomeController: UIViewController {
 //        titleMineBtn.tag = 1
 //        titleMineBtn.setTitle(LS("发布"), forState: .Normal)
 //        titleMineBtn.setTitleColor(kBarBgColor, forState: .Normal)
-//        titleMineBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+//        titleMineBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
 //        titleMineBtn.addTarget(self, action: #selector(ActivityHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
 //        container.addSubview(titleMineBtn)
 //        titleMineBtn.snp.makeConstraints { (make) -> Void in
@@ -112,7 +112,7 @@ class ActivityHomeController: UIViewController {
 //        titleNearByBtn.tag = 0
 //        titleNearByBtn.setTitle(LS("发现"), forState: .Normal)
 //        titleNearByBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-//        titleNearByBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+//        titleNearByBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
 //        titleNearByBtn.addTarget(self, action: #selector(ActivityHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
 //        container.addSubview(titleNearByBtn)
 //        titleNearByBtn.snp.makeConstraints { (make) -> Void in
@@ -124,7 +124,7 @@ class ActivityHomeController: UIViewController {
 //        titleAppliedBtn = UIButton()
 //        titleAppliedBtn.setTitle(LS("已报"), forState: .Normal)
 //        titleAppliedBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-//        titleAppliedBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+//        titleAppliedBtn.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
 //        titleAppliedBtn.tag = 2
 //        titleAppliedBtn.addTarget(self, action: #selector(ActivityHomeController.navTitleBtnPressed(_:)), forControlEvents: .TouchUpInside)
 //        container.addSubview(titleAppliedBtn)
@@ -157,8 +157,8 @@ class ActivityHomeController: UIViewController {
         let lbls = [titleMineLbl, titleAppliedLbl]
         let targetLbl = lbls[sender.tag]!
         let sourceLbl = lbls[curTag]!
-        targetLbl.textColor = kTextBlack
-        sourceLbl.textColor = kTextGray
+        targetLbl.textColor = kTextGray87
+        sourceLbl.textColor = kTextGray54
         
         titleBtnIcon.snp.remakeConstraints { (make) -> Void in
             make.bottom.equalTo(titleBtnIcon.superview!)

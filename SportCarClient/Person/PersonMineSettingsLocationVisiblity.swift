@@ -43,7 +43,7 @@ class PersonMineSettingsLocationVisiblityController: UITableViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
         let rightItem = UIBarButtonItem(title: LS("确定"), style: .done, target: self, action: #selector(PersonMineSettingsLocationVisiblityController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
@@ -119,8 +119,8 @@ class PersonMineSettingsLocationVisiblityCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         titleLbl = UILabel()
-        titleLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        titleLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        titleLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        titleLbl.textColor = kTextGray28
         titleLbl.text = LS("请开启定位可见以发现跑车地图上的车主并在系统设置中开启定位功能")
         titleLbl.numberOfLines = 0
         titleLbl.textAlignment = .center

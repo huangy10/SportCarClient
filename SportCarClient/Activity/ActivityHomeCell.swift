@@ -104,7 +104,7 @@ class ActivityCell: UICollectionViewCell {
 //                make.left.equalTo(container).offset(12)
 //                make.right.equalTo(container).offset(-12)
 //            })
-//        let sepLine = container.addSubview(UIView.self).config(UIColor(white: 0.72, alpha: 1))
+//        let sepLine = container.addSubview(UIView.self).config(kTextGray28)
 //            .layout { (make) in
 //                make.left.equalTo(actNameLbl)
 //                make.top.equalTo(actNameLbl.snp_bottom).offset(6)
@@ -112,7 +112,7 @@ class ActivityCell: UICollectionViewCell {
 //                make.height.equalTo(1)
 //        }
 //        actStartDateLbl = container.addSubview(UILabel.self)
-//            .config(12, textColor: UIColor(white: 0.72, alpha: 1))
+//            .config(12, textColor: kTextGray28)
 //            .layout({ (make) in
 //                make.left.equalTo(sepLine)
 //                make.top.equalTo(sepLine.snp_bottom).offset(20)

@@ -52,7 +52,7 @@ class ActivityReleaseInfoBoard: UIView {
         
         posterLbl = UILabel()
         posterLbl.textAlignment = .center
-        posterLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        posterLbl.textColor = kTextGray28
         posterLbl.font = UIFont.systemFont(ofSize: 12)
         posterLbl.text = LS("上传一个活动海报")
         posterBtn.addSubview(posterLbl)
@@ -81,8 +81,8 @@ class ActivityReleaseInfoBoard: UIView {
         wrapper.contentSize = CGSize(width: UIScreen.main.bounds.width * 0.8, height: 17)
         //
         actNameInput = UITextField()
-        actNameInput.font = UIFont.systemFont(ofSize: 19, weight: UIFontWeightUltraLight)
-        actNameInput.textColor = UIColor(white: 0.72, alpha: 1)
+        actNameInput.font = UIFont.systemFont(ofSize: 19, weight: UIFontWeightRegular)
+        actNameInput.textColor = kTextGray28
         actNameInput.placeholder = LS("为活动取一个名字")
         actNameInput.textAlignment = .center
         wrapper.addSubview(actNameInput)
@@ -99,8 +99,8 @@ class ActivityReleaseInfoBoard: UIView {
         }
         //
         actDesInput = UITextView()
-        actDesInput.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        actDesInput.textColor = UIColor(white: 0.72, alpha: 1)
+        actDesInput.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        actDesInput.textColor = kTextGray28
         actDesInput.text = LS("活动描述...")
         superview.addSubview(actDesInput)
         actDesInput.snp.makeConstraints { (make) -> Void in
@@ -112,8 +112,8 @@ class ActivityReleaseInfoBoard: UIView {
         //
         actDesInputWordCount = UILabel()
         actDesInputWordCount.text = "0/40"
-        actDesInputWordCount.textColor = UIColor(white: 0.72, alpha: 1)
-        actDesInputWordCount.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        actDesInputWordCount.textColor = kTextGray28
+        actDesInputWordCount.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         superview.addSubview(actDesInputWordCount)
         actDesInputWordCount.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)
@@ -137,9 +137,9 @@ class ActivityReleaseInfoBoard: UIView {
         }
         //
         informOfListCountLbl = UILabel()
-        informOfListCountLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        informOfListCountLbl.textColor = kTextGray28
         informOfListCountLbl.text = "0/9"
-        informOfListCountLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        informOfListCountLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         superview.addSubview(informOfListCountLbl)
         informOfListCountLbl.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)

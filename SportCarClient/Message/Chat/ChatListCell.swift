@@ -19,11 +19,11 @@ class ChatListCell: UITableViewCell {
             recentTalkLbl.text = data.recentChatDes
             recentTalkTimeLbl.text = dateDisplay(data.updatedAt!)
             setUnreadNumber(Int(data.unreadNum))
-            if data.alwaysOnTop {
-                contentView.backgroundColor = UIColor(white: 0, alpha: 0.04)
-            } else {
-                contentView.backgroundColor = UIColor.white
-            }
+//            if data.alwaysOnTop {
+//                contentView.backgroundColor = UIColor(white: 0, alpha: 0.04)
+//            } else {
+//                contentView.backgroundColor = UIColor.white
+//            }
             switch data.data! {
             case .user(let user):
                 avatarBtn.kf.setImage(with: user.avatarURL!, for: .normal)
@@ -65,7 +65,7 @@ class ChatListCell: UITableViewCell {
         }
         //
         unreadLbl = UILabel()
-        unreadLbl.font = UIFont.systemFont(ofSize: 9, weight: UIFontWeightUltraLight)
+        unreadLbl.font = UIFont.systemFont(ofSize: 9, weight: UIFontWeightRegular)
         unreadLbl.textColor = UIColor.white
         unreadLbl.backgroundColor = kHighlightedRedTextColor
         unreadLbl.layer.cornerRadius = 9
@@ -80,7 +80,7 @@ class ChatListCell: UITableViewCell {
         }
         //
         nickNameLbl = UILabel()
-        nickNameLbl.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightBlack)
+        nickNameLbl.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
         nickNameLbl.textColor = UIColor.black
         superview.addSubview(nickNameLbl)
         nickNameLbl.snp.makeConstraints { (make) -> Void in
@@ -89,7 +89,7 @@ class ChatListCell: UITableViewCell {
         }
         //
         recentTalkLbl = UILabel()
-        recentTalkLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        recentTalkLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         recentTalkLbl.textColor = UIColor(white: 0, alpha: 0.58)
         superview.addSubview(recentTalkLbl)
         recentTalkLbl.snp.makeConstraints { (make) -> Void in
@@ -99,8 +99,8 @@ class ChatListCell: UITableViewCell {
         }
         //
         recentTalkTimeLbl = UILabel()
-        recentTalkTimeLbl.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightUltraLight)
-        recentTalkTimeLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        recentTalkTimeLbl.font = UIFont.systemFont(ofSize: 10, weight: UIFontWeightRegular)
+        recentTalkTimeLbl.textColor = kTextGray28
         superview.addSubview(recentTalkTimeLbl)
         recentTalkTimeLbl.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview).offset(-15)

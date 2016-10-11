@@ -71,7 +71,7 @@ class LoginRegisterController: InputableViewController {
         titleLbl = UILabel()
         titleLbl?.clipsToBounds = true
 //        titleLbl?.text = "跑车范"
-        titleLbl?.font = UIFont.systemFont(ofSize: 30, weight: UIFontWeightBold)
+        titleLbl?.font = UIFont.systemFont(ofSize: 30, weight: UIFontWeightSemibold)
         titleLbl?.textColor = UIColor.white
         titleLbl?.textAlignment = NSTextAlignment.center
         superview.addSubview(titleLbl!)
@@ -153,6 +153,7 @@ class LoginRegisterController: InputableViewController {
         loginPhoneInput = TextFieldWithLeadingIconView()
         loginPhoneInput?.delegate = self
         loginPhoneInput?.placeholder = NSLocalizedString("请输入您的手机号", comment: "")
+        loginPhoneInput?.keyboardType = .numberPad
         loginPhoneInput?.font = UIFont.systemFont(ofSize: 14)
         loginPhoneInput?.leftViewMode = UITextFieldViewMode.always
         let loginPhoneInputIcon = UIImageView(image: UIImage(named: "account_phone_input"))
@@ -182,9 +183,10 @@ class LoginRegisterController: InputableViewController {
         }
         //
         let forgetBtn = UIButton()
-        forgetBtn.setTitle(NSLocalizedString("忘记密码?", comment: ""), for: .normal)
-        forgetBtn.titleLabel?.adjustsFontSizeToFitWidth = true
-        forgetBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: .normal)
+//        forgetBtn.setTitle(NSLocalizedString("忘记密码?", comment: ""), for: .normal)
+//        forgetBtn.titleLabel?.adjustsFontSizeToFitWidth = true
+//        forgetBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
+//        forgetBtn.setTitleColor(kTextGray28, for: .normal)
         container.addSubview(forgetBtn)
         forgetBtn.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(17)
@@ -193,6 +195,11 @@ class LoginRegisterController: InputableViewController {
             make.right.equalTo(inputContainer)
         }
         forgetBtn.addTarget(self, action: #selector(LoginRegisterController.forgetBtnPressed), for: .touchUpInside)
+        forgetBtn.addSubview(UILabel.self)
+            .config(14, fontWeight: UIFontWeightRegular, textColor: kTextGray28, textAlignment: .center, text: LS("忘记密码?"))
+            .layout { (make) in
+                make.center.equalTo(forgetBtn)
+        }
         //
         let login = UIButton()
         login.setBackgroundImage(UIImage(named: "account_login_btn"), for: .normal)
@@ -248,6 +255,7 @@ class LoginRegisterController: InputableViewController {
         registerPhoneInput = TextFieldWithLeadingIconView()
         registerPhoneInput?.delegate = self
         registerPhoneInput?.placeholder = NSLocalizedString("请输入您的手机号", comment: "")
+        registerPhoneInput?.keyboardType = .numberPad
         registerPhoneInput?.font = UIFont.systemFont(ofSize: 14)
         registerPhoneInput?.leftViewMode = UITextFieldViewMode.always
         let registerPhoneInputIcon = UIImageView(image: UIImage(named: "account_phone_input"))

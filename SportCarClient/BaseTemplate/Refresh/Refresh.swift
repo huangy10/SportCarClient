@@ -80,12 +80,12 @@ class SSPullToRefresh: UIView {
     }
     
     func createSubviews() {
-        pullingLbl = self.addSubview(UILabel.self).config(textColor: kTextBlack, textAlignment: .center)
+        pullingLbl = self.addSubview(UILabel.self).config(textColor: kTextGray87, textAlignment: .center)
             .layout({ (make) in
                 make.center.equalTo(self)
             })
         
-        confirmingLabl = self.addSubview(UILabel.self).config(textColor: kTextBlack, textAlignment: .center)
+        confirmingLabl = self.addSubview(UILabel.self).config(textColor: kTextGray87, textAlignment: .center)
             .layout({ (make) in
                 make.center.equalTo(self)
             })

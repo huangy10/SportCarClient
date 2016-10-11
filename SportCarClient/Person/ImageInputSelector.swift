@@ -105,7 +105,7 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
         takePhotoBtn = UIButton()
         takePhotoBtn.setTitle(LS("拍照"), for: .normal)
         takePhotoBtn.setTitleColor(UIColor.white, for: .normal)
-        takePhotoBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
+        takePhotoBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
         container.addSubview(takePhotoBtn)
         takePhotoBtn.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(44)
@@ -117,7 +117,7 @@ class ImageInputSelectorController: UIViewController, UIImagePickerControllerDel
         albumBtn = UIButton()
         albumBtn.setTitle(LS("相册"), for: .normal)
         albumBtn.setTitleColor(UIColor.white, for: .normal)
-        albumBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
+        albumBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
         container.addSubview(albumBtn)
         albumBtn.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(44)

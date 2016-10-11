@@ -216,7 +216,7 @@ class PersonMineSettingsBtnsCell: UITableViewCell {
         changePassword = UIButton()
         changePassword.setTitle(LS("修改密码"), for: .normal)
         changePassword.setTitleColor(UIColor.black, for: .normal)
-        changePassword.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        changePassword.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         superview.addSubview(changePassword)
         changePassword.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(quitBtn)

@@ -96,7 +96,7 @@ class ActivityReleaseMapCell: UITableViewCell {
         //
 //        locInput = UITextField()
 //        locInput.textColor = UIColor.blackColor()
-//        locInput.font = UIFont.systemFontOfSize(14, weight: UIFontWeightUltraLight)
+//        locInput.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
 //        wrapper.addSubview(locInput)
 //        locInput.autoresizingMask = [.FlexibleHeight , .FlexibleWidth]
         
