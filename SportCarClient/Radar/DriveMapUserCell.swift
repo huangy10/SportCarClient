@@ -67,8 +67,8 @@ class DriverMapUserCell: UITableViewCell {
         }
         //
         avatarClubLbl = UILabel()
-        avatarClubLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        avatarClubLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        avatarClubLbl.textColor = kTextGray28
+        avatarClubLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         superview.addSubview(avatarClubLbl)
         avatarClubLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(avatarClubLogo.snp.right).offset(4)
@@ -77,7 +77,7 @@ class DriverMapUserCell: UITableViewCell {
         //
         distanceLbl = UILabel()
         distanceLbl.textColor = UIColor(white: 0, alpha: 0.58)
-        distanceLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        distanceLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         superview.addSubview(distanceLbl)
         distanceLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(nameLbl)

@@ -56,9 +56,9 @@ class GroupChatSettingHostController: GroupChatSettingController, GroupMemberSel
         
         let rightBtn = UIButton()
         let btnText = LS("进入聊天")
-        rightBtn.frame = CGRect(x: 0, y: 0, width: btnText.sizeWithFont(UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 21)).width, height: 21)
+        rightBtn.frame = CGRect(x: 0, y: 0, width: btnText.sizeWithFont(UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 21)).width, height: 21)
         rightBtn.setTitle(btnText, for: .normal)
-        rightBtn.titleLabel!.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        rightBtn.titleLabel!.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         rightBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
         rightBtn.addTarget(self, action: #selector(navRightBtnPressed), for: .touchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBtn)

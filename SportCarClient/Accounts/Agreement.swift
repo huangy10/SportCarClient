@@ -24,7 +24,7 @@ class AgreementController: UIViewController {
         let agreementLbl = UILabel(frame: CGRect(x: 0, y: 0, width: screenFrame.width - 23 * 2, height: CGFloat.greatestFiniteMagnitude))
         agreementLbl.numberOfLines = 0
         agreementLbl.lineBreakMode = NSLineBreakMode.byWordWrapping
-        agreementLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        agreementLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         agreementLbl.attributedText = readAgreementFromFile()
         agreementLbl.sizeToFit()
         board.addSubview(agreementLbl)
@@ -55,16 +55,17 @@ class AgreementController: UIViewController {
 //        let leftBtnItem = UIBarButtonItem(customView: backBtn)
         
         let leftBtn = UIBarButtonItem(title: LS("取消"), style: .done, target: self, action: #selector(backBtnPressed))
-        leftBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        leftBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         return leftBtn
     }
     
     func backBtnPressed() {
 //        self.navigationController?.popViewControllerAnimated(true)
-        if let nav = navigationController {
-            nav.popViewController(animated: true)
-        } else {
-            dismiss(animated: true, completion: nil)
-        }
+        dismiss(animated: true, completion: nil)
+
+//        if let nav = navigationController {
+//            nav.popViewController(animated: true)
+//        } else {
+//        }
     }
 }

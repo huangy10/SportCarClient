@@ -26,7 +26,7 @@ class StatusDeleteController: PresentTemplateViewController, LoadingProtocol {
         deleteBtn = UIButton()
         deleteBtn.setTitle(LS("删除"), for: .normal)
         deleteBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
-        deleteBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
+        deleteBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
         container.addSubview(deleteBtn)
         deleteBtn.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(container)

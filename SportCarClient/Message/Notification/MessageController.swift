@@ -135,7 +135,7 @@ class MessageController: UIViewController {
             make.right.equalTo(container.snp.centerX)
         }
         titleNotifLbl = titleNotifBtn.addSubview(UILabel.self)
-            .config(15, fontWeight: UIFontWeightBold, textColor: kTextBlack, textAlignment: .center, text: LS("通知"))
+            .config(15, fontWeight: UIFontWeightSemibold, textColor: kTextGray87, textAlignment: .center, text: LS("通知"))
             .layout({ (make) in
                 make.center.equalTo(titleNotifBtn)
                 make.size.equalTo(LS(" 通知 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
@@ -161,7 +161,7 @@ class MessageController: UIViewController {
         titleChatBtn.tag = 1
         titleChatBtn.addTarget(self, action: #selector(MessageController.titleBtnPressed(_:)), for: .touchUpInside)
         titleChatLbl = titleChatBtn.addSubview(UILabel.self)
-            .config(15, fontWeight: UIFontWeightBold, textColor: kTextGray, textAlignment: .center, text: LS("聊天"))
+            .config(15, fontWeight: UIFontWeightSemibold, textColor: kTextGray54, textAlignment: .center, text: LS("聊天"))
             .layout({ (make) in
                 make.center.equalTo(titleChatBtn)
                 make.size.equalTo(LS(" 聊天 ").sizeWithFont(kBarTextFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
@@ -213,8 +213,8 @@ class MessageController: UIViewController {
                 make.right.equalTo(titleChatLbl)
                 make.height.equalTo(2.5)
             })
-            titleChatLbl.textColor = kTextBlack
-            titleNotifLbl.textColor = kTextGray
+            titleChatLbl.textColor = kTextGray87
+            titleNotifLbl.textColor = kTextGray54
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.titleBtnIcon.superview!.layoutIfNeeded()
                 }, completion: nil)
@@ -228,8 +228,8 @@ class MessageController: UIViewController {
                 make.right.equalTo(titleNotifLbl)
                 make.height.equalTo(2.5)
             })
-            titleChatLbl.textColor = kTextGray
-            titleNotifLbl.textColor = kTextBlack
+            titleChatLbl.textColor = kTextGray54
+            titleNotifLbl.textColor = kTextGray87
             UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: { () -> Void in
                 self.titleBtnIcon.superview!.layoutIfNeeded()
                 }, completion: nil)

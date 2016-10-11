@@ -245,7 +245,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         let pickerDoneBtn = UIButton()
         pickerDoneBtn.setTitle(NSLocalizedString("完成", comment: ""), for: .normal)
         pickerDoneBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
-        pickerDoneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        pickerDoneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         pickerHeader.addSubview(pickerDoneBtn)
         pickerDoneBtn.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(pickerHeader).offset(-20)
@@ -388,7 +388,7 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let titleLbl = UILabel()
-        titleLbl.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightLight)
+        titleLbl.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightRegular)
         if row == 0 {
             titleLbl.text = "男"
         }else{

@@ -155,7 +155,7 @@ class InlineUserSelectController: UICollectionViewController {
     
     func configureShowAllMembersBtn() {
         showAllMembersBtn = self.view.addSubview(UIButton.self)
-            .config(self, selector: #selector(showAllMembersBtnPressed), title: LS("全部成员"), titleColor: kHighlightRed, titleSize: 14, titleWeight: UIFontWeightUltraLight)
+            .config(self, selector: #selector(showAllMembersBtnPressed), title: LS("全部成员"), titleColor: kHighlightRed, titleSize: 14, titleWeight: UIFontWeightRegular)
             .layout({ (make) in
                 make.right.equalTo(self.view).offset(-15)
                 make.bottom.equalTo(self.view)
@@ -277,7 +277,7 @@ class InlineUserSelectCell: UICollectionViewCell {
         avatarCarLogo.clipsToBounds = true
         //
         nameLbl = UILabel()
-        nameLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        nameLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         nameLbl.textColor = UIColor.black
         nameLbl.textAlignment = .center
         superview.addSubview(nameLbl)

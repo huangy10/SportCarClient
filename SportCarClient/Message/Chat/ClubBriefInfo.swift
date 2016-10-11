@@ -37,7 +37,7 @@ class ClubBriefInfoController: UITableViewController {
                 _ = try! self.targetClub.loadDataFromJSON(json!)
                 clubJson = json!
                 let barBtnItem = UIBarButtonItem(title: LS("申请加入"), style: .plain, target: self, action: #selector(ClubBriefInfoController.navRightBtnPressed))
-                barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+                barBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
                 self.navigationItem.rightBarButtonItem = barBtnItem
             }else {
                 _ = try! self.targetClub.loadDataFromJSON(json!["club"])

@@ -128,7 +128,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
                 make.bottom.equalTo(hostAvatar)
             })
         releaseDateLbl = superview.addSubview(UILabel.self)
-            .config(12, textColor: UIColor(white: 0.72, alpha: 1))
+            .config(12, textColor: kTextGray28)
             .layout({ (make) in
                 make.left.equalTo(hostNameLbl.snp.right).offset(8)
                 make.bottom.equalTo(hostNameLbl)
@@ -143,7 +143,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         desLbl.lineBreakMode = .byCharWrapping
         
         commentNumLbl = superview.addSubview(UILabel.self)
-            .config(12, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .right)
+            .config(12, textColor: kTextGray28, textAlignment: .right)
             .layout({ (make) in
                 make.right.equalTo(superview).offset(-20)
                 make.top.equalTo(desLbl.snp.bottom).offset(10)
@@ -179,7 +179,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
                 make.height.equalTo(0.5)
                 make.top.equalTo(commentNumLbl.snp.bottom).offset(30)
         }
-        superview.addSubview(UILabel.self).config(textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("详情"))
+        superview.addSubview(UILabel.self).config(textColor: kTextGray28, textAlignment: .center, text: LS("详情"))
             .layout { (make) in
                 make.center.equalTo(sepLine)
                 make.width.equalTo(70)
@@ -194,7 +194,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
                 make.size.equalTo(10)
         }.toRound(5)
         let static1 = superview.addSubview(UILabel.self)
-            .config(textColor: UIColor(white: 0.72, alpha: 1), text: LS("活动地点"))
+            .config(textColor: kTextGray28, text: LS("活动地点"))
             .layout { (make) in
                 make.left.equalTo(bubble1.snp.right).offset(20)
                 make.top.equalTo(bubble1)
@@ -296,7 +296,7 @@ class ActivityDetailHeaderView: UIView, UICollectionViewDataSource, UICollection
         }
         superview.addSubview(UILabel.self)
             .config(UIColor.white)
-            .config(textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("评论"))
+            .config(textColor: kTextGray28, textAlignment: .center, text: LS("评论"))
             .layout { (make) in
                 make.center.equalTo(sepLine2)
                 make.width.equalTo(70)

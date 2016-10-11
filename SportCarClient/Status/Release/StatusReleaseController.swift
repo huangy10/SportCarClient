@@ -112,8 +112,8 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKGeo
         statusContentInput?.text = LS("有什么想说的呢...")
         statusContentInput?.delegate = self
         inputFields.append(statusContentInput)
-        statusContentInput?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
-        statusContentInput?.textColor = UIColor(white: 0.72, alpha: 1)
+        statusContentInput?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
+        statusContentInput?.textColor = kTextGray28
         board?.addSubview(statusContentInput!)
         statusContentInput?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(superview).offset(15)
@@ -123,8 +123,8 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKGeo
         })
         // 状态内容的字数统计
         statusContentWordCountLbl = UILabel()
-        statusContentWordCountLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        statusContentWordCountLbl?.textColor = UIColor(white: 0.72, alpha: 1)
+        statusContentWordCountLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        statusContentWordCountLbl?.textColor = kTextGray28
         statusContentWordCountLbl?.textAlignment = .right
         statusContentWordCountLbl?.text = "0/140"
         board?.addSubview(statusContentWordCountLbl!)
@@ -155,8 +155,8 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKGeo
         })
         //
         informOfListCountLbl = UILabel()
-        informOfListCountLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        informOfListCountLbl?.textColor = UIColor(white: 0.72, alpha: 1)
+        informOfListCountLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        informOfListCountLbl?.textColor = kTextGray28
         informOfListCountLbl?.textAlignment = .right
         informOfListCountLbl?.text = "0/9"
         board?.addSubview(informOfListCountLbl!)
@@ -230,16 +230,16 @@ class StatusReleaseController: InputableViewController, FFSelectDelegate, BMKGeo
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationItem.title = LS("发布动态")
         let leftBtnItem = UIBarButtonItem(title: LS("取消"), style: .plain, target: self, action: #selector(StatusReleaseController.navLeftBtnPressed))
-        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        leftBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.leftBarButtonItem = leftBtnItem
         
 //        let rightBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 28, height: 16))
 //        rightBtn.setTitle(LS("发布"), for: .normal)
 //        rightBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
-//        rightBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+//        rightBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
 //        rightBtn.addTarget(self, action: #selector(StatusReleaseController.navRightBtnPressed), for: .touchUpInside)
         let rightBtnItem = UIBarButtonItem(title: LS("发布"), style: .done, target: self, action: #selector(navRightBtnPressed))
-        rightBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        rightBtnItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         
         self.navigationItem.rightBarButtonItem = rightBtnItem
         
@@ -477,7 +477,7 @@ extension StatusReleaseController {
             statusContentInput?.text = ""
             statusContentInput?.textColor = UIColor.black
             firstEditting = false
-            statusContentInput?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
+            statusContentInput?.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
         }
     }
     

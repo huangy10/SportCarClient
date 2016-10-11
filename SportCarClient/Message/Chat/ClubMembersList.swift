@@ -181,7 +181,7 @@ class ClubMemberCell: UserSelectCellUnselectable {
             })
         kickOutBtn.setTitle(LS("请出"), for: .normal)
         kickOutBtn.setTitleColor(kHighlightRed, for: .normal)
-        kickOutBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        kickOutBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         kickOutBtn.layer.cornerRadius = 2
         kickOutBtn.layer.borderColor = kHighlightRed.cgColor
         kickOutBtn.layer.borderWidth = 0.5

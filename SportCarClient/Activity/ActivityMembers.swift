@@ -168,7 +168,7 @@ class ActivityMemberCell: UITableViewCell {
     
     func configureAvatarCarLbl() {
         avatarCarLbl = contentView.addSubview(UILabel.self)
-            .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0, alpha: 0.58))
+            .config(12, fontWeight: UIFontWeightRegular, textColor: UIColor(white: 0, alpha: 0.58))
             .layout({ (make) in
                 make.left.equalTo(nameLbl)
                 make.bottom.equalTo(avatar)
@@ -194,7 +194,7 @@ class ActivityMemberCell: UITableViewCell {
             })
         kickoutBtn.setTitle(LS("请出"), for: .normal)
         kickoutBtn.setTitleColor(kHighlightRed, for: .normal)
-        kickoutBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        kickoutBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         kickoutBtn.layer.cornerRadius = 2
         kickoutBtn.layer.borderColor = kHighlightRed.cgColor
         kickoutBtn.layer.borderWidth = 0.5

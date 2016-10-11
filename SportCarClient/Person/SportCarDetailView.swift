@@ -40,7 +40,7 @@ class SportCarInfoDetailController: UITableViewController, UITextFieldDelegate, 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
 //        //
 //        let rightItem = UIBarButtonItem(title: LS("删除"), style: .done, target: self, action: #selector(SportCarInfoDetailController.navRightBtnPressed))
-//        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+//        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
 //        self.navigationItem.rightBarButtonItem = rightItem
     }
     
@@ -263,8 +263,8 @@ class SportCarInfoDetailHeader: UITableViewHeaderFooterView {
         }
         //
         statementLbl = UILabel()
-        statementLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        statementLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        statementLbl.textColor = kTextGray28
+        statementLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         statementLbl.text = LS("认证可以获得什么？")
         superview.addSubview(statementLbl)
         statementLbl.snp.makeConstraints { (make) -> Void in

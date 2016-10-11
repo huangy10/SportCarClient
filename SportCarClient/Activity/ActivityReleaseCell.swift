@@ -59,8 +59,8 @@ class ActivityReleaseCell: UITableViewCell {
         self.backgroundColor = UIColor.white
         //
         staticLbl = UILabel()
-        staticLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        staticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        staticLbl.textColor = kTextGray28
+        staticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         superview.addSubview(staticLbl)
         staticLbl.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(superview)
@@ -88,7 +88,7 @@ class ActivityReleaseCell: UITableViewCell {
         //
         infoInput = UITextField()
         infoInput.textColor = UIColor.black
-        infoInput.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        infoInput.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         wrapper.addSubview(infoInput)
         infoInput.textAlignment = .right
         infoInput.snp.makeConstraints { (make) -> Void in
@@ -97,8 +97,8 @@ class ActivityReleaseCell: UITableViewCell {
         }
         
         staticInfoLabel = UILabel()
-        staticInfoLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        staticInfoLabel.textColor = UIColor(white: 0.72, alpha: 1)
+        staticInfoLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        staticInfoLabel.textColor = kTextGray28
         superview.addSubview(staticInfoLabel)
         staticInfoLabel.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(wrapper)

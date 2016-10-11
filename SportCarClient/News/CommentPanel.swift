@@ -136,7 +136,7 @@ class CommentBarView: UIView {
         //
         contentInput = UITextView()
         contentInput?.returnKeyType = .done
-        contentInput?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        contentInput?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         contentInput?.textColor = UIColor.black
         roundCornerContainer.addSubview(contentInput!)
         contentInput?.snp.makeConstraints({ (make) -> Void in

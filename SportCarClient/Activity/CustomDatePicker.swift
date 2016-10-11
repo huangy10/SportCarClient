@@ -65,7 +65,7 @@ class CustomDatePicker: UIView {
         doneBtn = UIButton()
         doneBtn.setTitle(LS("完成"), for: .normal)
         doneBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
-        doneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        doneBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         doneBtn.addTarget(self, action: #selector(CustomDatePicker.doneBtnPressed), for: .touchUpInside)
         superview.addSubview(doneBtn)
         doneBtn.snp.makeConstraints { (make) -> Void in

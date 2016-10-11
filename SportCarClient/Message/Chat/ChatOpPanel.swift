@@ -104,7 +104,7 @@ class ChatOpPanelController: UIViewController {
         //
         contentInput = UITextView()
         contentInput?.textColor = UIColor.black
-        contentInput?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        contentInput?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         contentInputContainer.addSubview(contentInput!)
         contentInput?.snp.makeConstraints( { (make) -> Void in
             make.right.equalTo(contentInputContainer).offset(-contentHeight / 2)
@@ -117,7 +117,7 @@ class ChatOpPanelController: UIViewController {
         voiceInputBtn?.backgroundColor = UIColor.white
         voiceInputBtn?.layer.cornerRadius = contentHeight / 2
         voiceInputBtn?.setTitle(LS("按住 说话"), for: .normal)
-        voiceInputBtn?.setTitleColor(UIColor(white: 0.72, alpha: 1), for: .normal)
+        voiceInputBtn?.setTitleColor(kTextGray28, for: .normal)
         voiceInputBtn?.setTitleColor(UIColor.black, for: .highlighted)
         contentInputContainer.addSubview(voiceInputBtn!)
         voiceInputBtn?.snp.makeConstraints({ (make) -> Void in
@@ -155,7 +155,7 @@ extension ChatOpPanelController {
     
     func startRecording() {
         recording = true
-        voiceInputBtn?.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        voiceInputBtn?.backgroundColor = kTextGray28
         if recorder == nil {
             recorder = ChatAudioRecorder(delegate: (delegate as! ChatRoomController))
         }

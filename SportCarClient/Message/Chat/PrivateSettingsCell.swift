@@ -31,7 +31,7 @@ class PrivateChatSettingsHeader: UITableViewHeaderFooterView {
             make.centerY.equalTo(self)
         }
 //        let sepLine1 = UIView()
-//        sepLine1.backgroundColor = UIColor(white: 0.72, alpha: 1)
+//        sepLine1.backgroundColor = kTextGray28
 //        self.addSubview(sepLine1)
 //        sepLine1.snp.makeConstraints { (make) -> Void in
 //            make.right.equalTo(self)
@@ -41,7 +41,7 @@ class PrivateChatSettingsHeader: UITableViewHeaderFooterView {
 //        }
 //        //
 //        let sepLine2 = UIView()
-//        sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
+//        sepLine2.backgroundColor = kTextGray28
 //        self.addSubview(sepLine2)
 //        sepLine2.snp.makeConstraints { (make) -> Void in
 //            make.left.equalTo(self)
@@ -94,7 +94,7 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
             if editable {
                 infoLbl.textColor = UIColor.black
             }else {
-                infoLbl.textColor = UIColor(white: 0.72, alpha: 1)
+                infoLbl.textColor = kTextGray28
             }
         }
     }
@@ -146,8 +146,8 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         let superview = self
         //
         staticLbl = UILabel()
-        staticLbl.textColor = kTextGray
-        staticLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        staticLbl.textColor = kTextGray54
+        staticLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         superview.addSubview(staticLbl)
         staticLbl.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(superview)
@@ -164,7 +164,7 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         //
         infoLbl = UILabel()
         infoLbl.textColor = UIColor.black
-        infoLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        infoLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         superview.addSubview(infoLbl)
         infoLbl.snp.makeConstraints { (make) -> Void in
             make.centerY.equalTo(staticLbl)
@@ -172,9 +172,9 @@ class PrivateChatSettingsCommonCell: UITableViewCell {
         }
         //
         boolSelect = UISwitch()
-        boolSelect.tintColor = UIColor(white: 0.72, alpha: 1)
+        boolSelect.tintColor = kTextGray28
         boolSelect.onTintColor = kHighlightedRedTextColor
-        boolSelect.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        boolSelect.backgroundColor = kTextGray28
         boolSelect.layer.cornerRadius = 15.5
         superview.addSubview(boolSelect)
         boolSelect.snp.makeConstraints { (make) -> Void in

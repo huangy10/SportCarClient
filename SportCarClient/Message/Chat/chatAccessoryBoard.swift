@@ -44,8 +44,8 @@ class ChatAccessoryBoard: UIView {
         })
         let takePhotoLbl = UILabel()
         takePhotoLbl.text = LS("拍照")
-        takePhotoLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        takePhotoLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        takePhotoLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        takePhotoLbl.textColor = kTextGray28
         takePhotoLbl.textAlignment = .center
         superview.addSubview(takePhotoLbl)
         takePhotoLbl.snp.makeConstraints { (make) -> Void in
@@ -63,8 +63,8 @@ class ChatAccessoryBoard: UIView {
             make.size.equalTo(69)
         })
         let photoAlbumLbl = UILabel()
-        photoAlbumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        photoAlbumLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        photoAlbumLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        photoAlbumLbl.textColor = kTextGray28
         photoAlbumLbl.textAlignment = .center
         photoAlbumLbl.text = LS("照片")
         superview.addSubview(photoAlbumLbl)

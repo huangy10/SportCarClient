@@ -185,7 +185,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         }
         //
 //        let sepLine = UIView()
-//        sepLine.backgroundColor = UIColor(white: 0.72, alpha: 1)
+//        sepLine.backgroundColor = kTextGray28
 //        carsView.addSubview(sepLine)
 //        sepLine.snp.makeConstraints { (make) -> Void in
 //            make.left.equalTo(carsView)
@@ -195,7 +195,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
 //        }
 //        //
 //        let sepLine2 = UIView()
-//        sepLine2.backgroundColor = UIColor(white: 0.72, alpha: 1)
+//        sepLine2.backgroundColor = kTextGray28
 //        carsView.addSubview(sepLine2)
 //        sepLine2.snp.makeConstraints { (make) -> Void in
 //            make.left.equalTo(carsView)

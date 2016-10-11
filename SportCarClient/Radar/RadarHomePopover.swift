@@ -36,7 +36,7 @@ class RadarHomePopoverController: UIViewController {
             make.centerY.equalTo(newStatusBtn)
         }
         let statusLbl = UILabel()
-        statusLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        statusLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         statusLbl.textColor = UIColor.black
         statusLbl.text = LS("发布动态")
         newStatusBtn.addSubview(statusLbl)
@@ -73,7 +73,7 @@ class RadarHomePopoverController: UIViewController {
         //
         let chatLbl = UILabel()
         chatLbl.textColor = UIColor.black
-        chatLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        chatLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         chatLbl.text = LS("新建聊天")
         newChatBtn.addSubview(chatLbl)
         chatLbl.snp.makeConstraints { (make) -> Void in
@@ -109,7 +109,7 @@ class RadarHomePopoverController: UIViewController {
         }
         //
         let actLbl = UILabel()
-        actLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        actLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         actLbl.textColor = UIColor(white: 0.945, alpha: 1)
         actLbl.text = LS("发起活动")
         newActivityBtn.addSubview(actLbl)

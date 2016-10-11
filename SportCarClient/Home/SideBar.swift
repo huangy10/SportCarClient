@@ -96,8 +96,8 @@ class SideBarController: UIViewController {
         })
         if let car = host.avatarCarModel {
             carNameLbl = UILabel()
-            carNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
-            carNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
+            carNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+            carNameLbl?.textColor = kTextGray28
             carNameLbl?.text = car.name
             superview.addSubview(carNameLbl!)
             let size = carNameLbl?.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
@@ -127,7 +127,7 @@ class SideBarController: UIViewController {
             let btn = UIButton()
             btn.setTitle(titles[i], for: .normal)
             btn.setTitleColor(UIColor.white, for: .normal)
-            btn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+            btn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
             btn.contentHorizontalAlignment = .left
             btn.addTarget(self, action: #selector(SideBarController.sideBtnPressed(_:)), for: .touchUpInside)
             btn.tag = i + 1
@@ -154,7 +154,7 @@ class SideBarController: UIViewController {
         unreadMessagesLbl = UILabel()
         unreadMessagesLbl.textColor = UIColor.white
         unreadMessagesLbl.backgroundColor = kHighlightedRedTextColor
-        unreadMessagesLbl.font = UIFont.systemFont(ofSize: 9, weight: UIFontWeightUltraLight)
+        unreadMessagesLbl.font = UIFont.systemFont(ofSize: 9, weight: UIFontWeightRegular)
         unreadMessagesLbl.layer.cornerRadius = 9
         unreadMessagesLbl.clipsToBounds = true
         unreadMessagesLbl.textAlignment = .center

@@ -100,11 +100,18 @@ class PersonMineSettingsAuthController: AuthThreeImagesController, ProgressProto
     let descriptionText = "1. 头像应为企业商标/标识或品牌Logo\n2.昵称应为企业/品牌的全称或无歧义简称；若昵称为代理品牌，需体现代理区域n.昵称不能仅包含一个通用性描述词语，且不可使用过度修饰性词语\n4.企业提供完成有效年检的《企业法人营业执照》/《个体工商户营业执照》等资料\n5.微博昵称与营业执照登记名称不一致需提供相关补充材料，如《商标注册证》、《代理授权书》等"
     
     override func createDescriptionLabel() -> UIView {
-        return UILabel().config(12, textColor: UIColor(white: 0.72, alpha: 1), text: descriptionText, multiLine: true)
+        let label = UILabel()
+        label.numberOfLines = 0
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 4
+        let attrText = NSAttributedString(string: descriptionText, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSParagraphStyleAttributeName: paragraphStyle, NSForegroundColorAttributeName: kTextGray54])
+        label.attributedText = attrText
+        return label
+//        return UILabel().config(14, textColor: kTextGray28, text: descriptionText, multiLine: true)
     }
     
     override func getHeightForDescriptionLable() -> CGFloat {
         let width = UIScreen.main.bounds.width - 30
-        return descriptionText.boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)], context: nil).size.height
+        return descriptionText.boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)], context: nil).size.height
     }
 }

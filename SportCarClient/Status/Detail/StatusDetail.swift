@@ -295,8 +295,8 @@ class StatusDetailController: InputableViewController, DetailCommentCellDelegate
         }
         //
         let commentStaticLbl = UILabel()
-        commentStaticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        commentStaticLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        commentStaticLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        commentStaticLbl.textColor = kTextGray28
         commentStaticLbl.backgroundColor = UIColor.white
         commentStaticLbl.textAlignment = .center
         commentStaticLbl.text = LS("评论")
@@ -410,7 +410,7 @@ extension StatusDetailController: UICollectionViewDataSource {
         })
         //
         nameLbl = UILabel()
-        nameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightBlack)
+        nameLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         nameLbl?.textColor = UIColor.black
         headerContainer?.addSubview(nameLbl!)
         nameLbl?.snp.makeConstraints({ (make) -> Void in
@@ -430,8 +430,8 @@ extension StatusDetailController: UICollectionViewDataSource {
         })
         //
         releaseDateLbl = UILabel()
-        releaseDateLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        releaseDateLbl?.textColor = UIColor(white: 0.72, alpha: 1)
+        releaseDateLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        releaseDateLbl?.textColor = kTextGray28
         headerContainer?.addSubview(releaseDateLbl!)
         releaseDateLbl?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(nameLbl!)
@@ -440,9 +440,9 @@ extension StatusDetailController: UICollectionViewDataSource {
         })
         //
         avatarCarNameLbl = UILabel()
-        avatarCarNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        avatarCarNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         avatarCarNameLbl?.textAlignment = .right
-        avatarCarNameLbl?.textColor = UIColor(white: 0.72, alpha: 1)
+        avatarCarNameLbl?.textColor = kTextGray28
         headerContainer?.addSubview(avatarCarNameLbl!)
         avatarCarNameLbl?.snp.makeConstraints({ (make) -> Void in
             make.right.equalTo(headerContainer!).offset(-15)
@@ -510,8 +510,8 @@ extension StatusDetailController: UICollectionViewDataSource {
         }
         //
         locationLbL = UILabel()
-        locationLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
-        locationLbL?.textColor = UIColor(white: 0.72, alpha: 1)
+        locationLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        locationLbL?.textColor = kTextGray28
         locationLbL?.numberOfLines = 0
         locationLbL?.lineBreakMode = .byWordWrapping
         superview.addSubview(locationLbL!)
@@ -522,8 +522,8 @@ extension StatusDetailController: UICollectionViewDataSource {
         })
         //
         commentNumLbL = UILabel()
-        commentNumLbL?.textColor = UIColor(white: 0.72, alpha: 1)
-        commentNumLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        commentNumLbL?.textColor = kTextGray28
+        commentNumLbL?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         commentNumLbL?.textAlignment = .right
         superview.addSubview(commentNumLbL!)
         commentNumLbL?.snp.makeConstraints({ (make) -> Void in
@@ -541,8 +541,8 @@ extension StatusDetailController: UICollectionViewDataSource {
         })
         //
         likeNumLbl = UILabel()
-        likeNumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-        likeNumLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        likeNumLbl?.textColor = kTextGray28
+        likeNumLbl?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         likeNumLbl?.textAlignment = .right
         superview.addSubview(likeNumLbl!)
         likeNumLbl?.snp.makeConstraints({ (make) -> Void in
@@ -648,7 +648,7 @@ extension StatusDetailController: UICollectionViewDataSource {
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 3
         style.lineBreakMode = .byCharWrapping
-        return NSAttributedString(string: content, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.58), NSParagraphStyleAttributeName: style])
+        return NSAttributedString(string: content, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular), NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.58), NSParagraphStyleAttributeName: style])
     }
     
     class func heightForStatusContent(_ content: String) -> CGFloat {

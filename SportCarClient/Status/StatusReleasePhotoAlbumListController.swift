@@ -157,7 +157,7 @@ class StatusReleasePhotoAlbumListCell: UITableViewCell {
         })
         //
         albumNameLbl = UILabel()
-        albumNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightBold)
+        albumNameLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightSemibold)
         albumNameLbl?.textColor = UIColor.black
         superview.addSubview(albumNameLbl!)
         albumNameLbl?.snp.makeConstraints({ (make) -> Void in
@@ -166,8 +166,8 @@ class StatusReleasePhotoAlbumListCell: UITableViewCell {
         })
         //
         photoNumInAlbumLbl = UILabel()
-        photoNumInAlbumLbl?.textColor = UIColor(white: 0.72, alpha: 1)
-        photoNumInAlbumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        photoNumInAlbumLbl?.textColor = kTextGray28
+        photoNumInAlbumLbl?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         superview.addSubview(photoNumInAlbumLbl!)
         photoNumInAlbumLbl?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(albumNameLbl!.snp.right)

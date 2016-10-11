@@ -106,7 +106,7 @@ class NotificationCell: UITableViewCell {
     
     func configureDateLbl() {
         dateLbl = contentView.addSubview(UILabel.self)
-            .config(10, fontWeight: UIFontWeightUltraLight, textColor: kNotificationHintColor)
+            .config(10, fontWeight: UIFontWeightRegular, textColor: kNotificationHintColor)
             .layout({ (make) in
                 make.left.equalTo(titleLbl)
                 make.top.equalTo(titleLbl.snp.bottom).offset(5)
@@ -134,7 +134,7 @@ class NotificationCell: UITableViewCell {
     
     func configureDetailLbl() {
         detailLbl = contentView.addSubview(UILabel.self)
-            .config(14, fontWeight: UIFontWeightUltraLight)
+            .config(14, fontWeight: UIFontWeightRegular)
             .layout({ (make) in
                 make.left.equalTo(avatarBtn)
                 make.right.equalTo(cover)
@@ -154,7 +154,7 @@ class NotificationCell: UITableViewCell {
     
     func configureDenyBtn() {
         denyBtn = contentView.addSubview(UIButton.self)
-            .config(self, selector: #selector(denyBtnPressed), title: LS("谢绝"), titleColor: kTextGray, titleSize: 14, titleWeight: UIFontWeightRegular)
+            .config(self, selector: #selector(denyBtnPressed), title: LS("谢绝"), titleColor: kTextGray54, titleSize: 14, titleWeight: UIFontWeightRegular)
             .layout({ (make) in
                 make.centerX.equalTo(agreeBtn).offset(-50)
                 make.centerY.equalTo(agreeBtn)
@@ -199,7 +199,7 @@ class NotificationCell: UITableViewCell {
         if detailDescription == "" {
             withCoverHeight = minimalHeight
         } else {
-            let detailLblHeight = (detailDescription as NSString).boundingRect(with: CGSize(width: titleMaxWidthForCurrentScreen(displayMode), height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)], context: nil).height
+            let detailLblHeight = (detailDescription as NSString).boundingRect(with: CGSize(width: titleMaxWidthForCurrentScreen(displayMode), height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)], context: nil).height
             withCoverHeight = minimalHeight + detailLblHeight + 15
         }
         
@@ -251,9 +251,9 @@ class NotificationCell: UITableViewCell {
     
     class func getFontForArgsAt(_ index: Int) -> UIFont {
         if index % 2 == 0 {
-            return UIFont.systemFont(ofSize: 14, weight: UIFontWeightBlack)
+            return UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         } else {
-            return UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+            return UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         }
     }
     

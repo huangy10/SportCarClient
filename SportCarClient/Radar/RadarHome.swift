@@ -76,9 +76,9 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
                 make.center.equalTo(container)
             })
         titleClubBtn.tag = 1
-        let defaultFont = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        let defaultFont = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         titleClubLbl = titleClubBtn.addSubview(UILabel.self)
-            .config(15, fontWeight: UIFontWeightBold, textColor: kTextGray, textAlignment: .center, text: LS("俱乐部"), multiLine: false)
+            .config(15, fontWeight: UIFontWeightSemibold, textColor: kTextGray54, textAlignment: .center, text: LS("俱乐部"), multiLine: false)
             .layout({ (make) in
                 make.center.equalTo(titleClubBtn)
                 make.size.equalTo(LS(" 俱乐部 ").sizeWithFont(defaultFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
@@ -93,7 +93,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             })
         titleDriverBtn.tag = 0
         titleDriverLbl = titleDriverBtn.addSubview(UILabel.self)
-            .config(15, fontWeight: UIFontWeightBold, textColor: kTextBlack, textAlignment: .center, text: LS("车主"))
+            .config(15, fontWeight: UIFontWeightSemibold, textColor: kTextGray87, textAlignment: .center, text: LS("车主"))
             .layout({ (make) in
                 make.center.equalTo(titleDriverBtn)
                 make.size.equalTo(LS(" 车主 ").sizeWithFont(defaultFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
@@ -108,7 +108,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
             })
         titleActBtn.tag = 2
         titleActLbl = titleActBtn.addSubview(UILabel.self)
-            .config(15, fontWeight: UIFontWeightBold, textColor: kTextGray, textAlignment: .center, text: LS("活动"))
+            .config(15, fontWeight: UIFontWeightSemibold, textColor: kTextGray54, textAlignment: .center, text: LS("活动"))
             .layout({ (make) in
                 make.center.equalTo(titleActBtn)
                 make.size.equalTo(LS(" 活动 ").sizeWithFont(defaultFont, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)))
@@ -173,8 +173,8 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         let btns = [titleDriverLbl, titleClubLbl, titleActLbl]
         let targetLbl = btns[sender.tag]!
         let sourceLbl = btns[curTag]!
-        targetLbl.textColor = kTextBlack
-        sourceLbl.textColor = kTextGray
+        targetLbl.textColor = kTextGray87
+        sourceLbl.textColor = kTextGray54
         titleBtnIcon.snp.remakeConstraints { (make) in
             make.bottom.equalTo(titleBtnIcon.superview!)
             make.left.equalTo(targetLbl).offset(-3)
@@ -272,7 +272,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         releaseStatus.addTarget(self, action: #selector(RadarHomeController.releaseBtnPressed(_:)), for: .touchUpInside)
         releaseStatus.setTitle(LS("发布动态"), for: .normal)
         releaseStatus.setTitleColor(UIColor.black, for: .normal)
-        releaseStatus.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        releaseStatus.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         superview.addSubview(releaseStatus)
         releaseStatus.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
@@ -301,7 +301,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         addChat.addTarget(self, action: #selector(RadarHomeController.releaseBtnPressed(_:)), for: .touchUpInside)
         addChat.setTitleColor(UIColor.black, for: .normal)
         addChat.setTitle(LS("新建聊天"), for: .normal)
-        addChat.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        addChat.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         superview.addSubview(addChat)
         addChat.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)
@@ -330,7 +330,7 @@ class RadarHomeController: UIViewController, FFSelectDelegate, GroupChatSetupDel
         startActivity.addTarget(self, action: #selector(RadarHomeController.releaseBtnPressed(_:)), for: .touchUpInside)
         startActivity.setTitle(LS("发起活动"), for: .normal)
         startActivity.setTitleColor(UIColor.black, for: .normal)
-        startActivity.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        startActivity.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         superview.addSubview(startActivity)
         startActivity.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(superview)

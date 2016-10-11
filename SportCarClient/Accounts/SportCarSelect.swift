@@ -72,8 +72,8 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         //
         let selectBtn = UIButton()
         selectBtn.setTitle(NSLocalizedString("请选择品牌型号", comment: ""), for: .normal)
-        selectBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: .normal)
-        selectBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        selectBtn.setTitleColor(kTextGray28, for: .normal)
+        selectBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         selectBtn.titleLabel?.textAlignment = .center
         superview.addSubview(selectBtn)
         selectBtn.snp.makeConstraints { (make) -> Void in
@@ -95,8 +95,8 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         //
         let signatureLbl = UILabel()
         signatureLbl.text = NSLocalizedString("跑车签名", comment: "")
-        signatureLbl.textColor = UIColor(white: 0.72, alpha: 1)
-        signatureLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
+        signatureLbl.textColor = kTextGray28
+        signatureLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         signatureLbl.textAlignment = .left
         superview.addSubview(signatureLbl)
         signatureLbl.snp.makeConstraints { (make) -> Void in
@@ -109,7 +109,7 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         signatureInput = UITextField()
         signatureInput?.delegate = self
         signatureInput?.placeholder = NSLocalizedString("为爱车写一段签名吧(选填)", comment: "")
-        signatureInput?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightLight)
+        signatureInput?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         self.inputFields.append(signatureInput)
         superview.addSubview(signatureInput!)
         signatureInput?.snp.makeConstraints({ (make) -> Void in
@@ -139,9 +139,9 @@ class SportCarSelectController: InputableViewController, SportCarBrandOnlineSele
         
         let plzSelectLbl = UILabel()
         plzSelectLbl.text = NSLocalizedString("请选择一辆您拥有或者关注的跑车", comment: "")
-        plzSelectLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightLight)
+        plzSelectLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         plzSelectLbl.textAlignment = .center
-        plzSelectLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        plzSelectLbl.textColor = kTextGray28
         superview.addSubview(plzSelectLbl)
         plzSelectLbl.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(superview)

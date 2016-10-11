@@ -340,7 +340,7 @@ class UserSelectCell: UITableViewCell {
         })
         //
         avatarImg = UIImageView()
-        avatarImg?.backgroundColor = UIColor(white: 0.72, alpha: 1)
+        avatarImg?.backgroundColor = kTextGray28
         superview.addSubview(avatarImg!)
         avatarImg?.layer.cornerRadius = 35 / 2
         avatarImg?.clipsToBounds = true
@@ -361,8 +361,8 @@ class UserSelectCell: UITableViewCell {
         })
         //
         recentStatusLbL = UILabel()
-        recentStatusLbL?.textColor = UIColor(white: 0.72, alpha: 1)
-        recentStatusLbL?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        recentStatusLbL?.textColor = kTextGray54
+        recentStatusLbL?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         superview.addSubview(recentStatusLbL!)
         recentStatusLbL?.snp.makeConstraints({ (make) -> Void in
             make.left.equalTo(nickNameLbl!)

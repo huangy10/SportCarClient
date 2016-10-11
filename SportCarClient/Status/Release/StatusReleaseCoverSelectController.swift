@@ -91,8 +91,8 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
         
         let cancelBtn = UIButton()
         cancelBtn.setTitle(LS("取消"), for: .normal)
-        cancelBtn.setTitleColor(UIColor(white: 0.72, alpha: 1), for: .normal)
-        cancelBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
+        cancelBtn.setTitleColor(kTextGray28, for: .normal)
+        cancelBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
         cancelBtn.addTarget(self, action: #selector(StatusReleasePhotoSelectController.bottomBtnPressed), for: .touchUpInside)
         bottomBar.addSubview(cancelBtn)
         cancelBtn.snp.makeConstraints { (make) -> Void in
@@ -109,7 +109,7 @@ class StatusReleasePhotoSelectController: UICollectionViewController, UICollecti
         rightNavBtn = UIButton()
         rightNavBtn?.setTitle(LS("确定") + "(0/\(maxSelectLimit))", for: .normal)
         rightNavBtn?.setTitleColor(kHighlightedRedTextColor, for: .normal)
-        rightNavBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        rightNavBtn?.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         rightNavBtn?.addTarget(self, action: #selector(StatusReleasePhotoSelectController.navRightBtnPressed), for: .touchUpInside)
         rightNavBtn?.frame = CGRect(x: 0, y: 0, width: 60, height: 20)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightNavBtn!)

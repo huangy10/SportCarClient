@@ -281,11 +281,11 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     
     func configureShareNumDisplay() {
         shareNumLbl = cover.addSubview(UILabel.self)
-            .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), text: "0")
+            .config(12, fontWeight: UIFontWeightRegular, textColor: kTextGray28, text: "0")
             .layout({ (make) in
                 make.bottom.equalTo(cover).offset(-10)
-                make.right.equalTo(cover).offset(-15)
-                make.width.equalTo(30)
+                make.right.equalTo(cover)
+                make.width.equalTo(25)
             })
         shareIcon = cover.addSubview(UIImageView.self)
             .config(UIImage(named: "news_share_white"), contentMode: .scaleAspectFit)
@@ -298,7 +298,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     
     func configureCommentNumDisplay() {
         commentNumLbl = cover.addSubview(UILabel.self)
-            .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), text: "0")
+            .config(12, fontWeight: UIFontWeightRegular, textColor: kTextGray28, text: "0")
             .layout({ (make) in
                 make.right.equalTo(shareIcon.snp.left)
                 make.bottom.equalTo(shareIcon)
@@ -315,7 +315,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     
     func configureLikeNumDisplay() {
         likeNumLbl = cover.addSubview(UILabel.self)
-            .config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), text: "0")
+            .config(12, fontWeight: UIFontWeightRegular, textColor: kTextGray28, text: "0")
             .layout({ (make) in
                 make.bottom.equalTo(commentNumLbl)
                 make.right.equalTo(commentIcon.snp.left)
@@ -332,7 +332,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     
     func configureTitleLbl() {
         titleLbl = header.addSubview(UILabel.self)
-            .config(17, fontWeight: UIFontWeightBlack, textColor: UIColor.black, multiLine: true)
+            .config(17, fontWeight: UIFontWeightSemibold, textColor: UIColor.black, multiLine: true)
             .layout({ (make) in
                 make.left.equalTo(cover).offset(15)
                 make.bottom.equalTo(cover).offset(-10)
@@ -341,7 +341,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         titleLbl.layer.opacity = 0
         
         titleLblWhite = cover.addSubview(UILabel.self)
-            .config(17, fontWeight: UIFontWeightBlack, textColor: UIColor.white, multiLine: true)
+            .config(17, fontWeight: UIFontWeightSemibold, textColor: UIColor.white, multiLine: true)
             .layout({ (make) in
                 make.edges.equalTo(titleLbl)
             })
@@ -372,6 +372,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
                 make.size.equalTo(15)
                 make.top.equalTo(newsDetail.snp.bottom).offset(30)
             })
+        likeInfoIcon.contentMode = .scaleAspectFit
         likeDescriptionLbl = header.addSubview(UILabel.self)
             .layout({ (make) in
                 make.left.equalTo(likeInfoIcon.snp.right).offset(10)
@@ -380,14 +381,14 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func configureCommentSepLine() {
-        let sepLine = header.addSubview(UIView.self).config(UIColor(white: 0.72, alpha: 1))
+        let sepLine = header.addSubview(UIView.self).config(kTextGray28)
             .layout { (make) in
                 make.left.equalTo(view)
                 make.right.equalTo(view)
                 make.height.equalTo(0.5)
                 make.top.equalTo(likeInfoIcon.snp.bottom).offset(24)
         }
-        header.addSubview(UILabel.self).config(UIColor.white).config(12, fontWeight: UIFontWeightUltraLight, textColor: UIColor(white: 0.72, alpha: 1), textAlignment: .center, text: LS("评论"))
+        header.addSubview(UILabel.self).config(UIColor.white).config(12, fontWeight: UIFontWeightRegular, textColor: kTextGray28, textAlignment: .center, text: LS("评论"))
             .layout { (make) in
                 make.centerY.equalTo(sepLine.snp.top)
                 make.centerX.equalTo(header)
@@ -655,7 +656,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func shareControllerFinished() {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: false, completion: nil)
     }
     
     func changeLayoutWhenKeyboardStatusChanges(_ notification: Foundation.Notification) {

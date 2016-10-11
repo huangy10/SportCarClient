@@ -70,7 +70,7 @@ class InlineUserSelectDeletable: InlineUserSelectController {
                 parentController?.navigationController?.pushViewController(detail, animated: true)
             } else {
                 let detail = PersonOtherController(user: user)
-                parentController?.navigationController?.pushViewController(detail, animated: false)
+                parentController?.navigationController?.pushViewController(detail, animated: true)
             }
         }
     }

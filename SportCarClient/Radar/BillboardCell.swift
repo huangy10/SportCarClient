@@ -173,7 +173,7 @@ class BillboardCell: UITableViewCell {
     func getOrderTextFont(_ size: CGFloat) -> UIFont {
         let fontName = UIFont.fontNames(forFamilyName: "Titillium Web")
         return UIFont(name: fontName[0], size: size)!
-//        return UIFont.systemFontOfSize(size, weight: UIFontWeightBold)
+//        return UIFont.systemFontOfSize(size, weight: UIFontWeightSemibold)
     }
     
     func getNameLblContent() -> String {
@@ -222,7 +222,7 @@ class BillboardFirstThree: BillboardCell {
                 make.top.equalTo(greatMark)
             })
         orderLbl = contentView.addSubview(UILabel.self)
-        orderLbl.font = UIFont.systemFont(ofSize: 32, weight: UIFontWeightBold)
+        orderLbl.font = UIFont.systemFont(ofSize: 32, weight: UIFontWeightSemibold)
         orderLbl.snp.makeConstraints { (make) in
             make.left.equalTo(container).offset(12)
             make.bottom.equalTo(greatMark)

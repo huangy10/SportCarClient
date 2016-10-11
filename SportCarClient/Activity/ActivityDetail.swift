@@ -153,12 +153,12 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
                 navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightImage)
             } else {
                 let rightItem = UIBarButtonItem(title: LS("关闭活动"), style: .done, target: self, action: #selector(ActivityDetailController.navRightBtnPressed))
-                rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+                rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
                 navigationItem.rightBarButtonItem = rightItem
             }
         } else {
             let rightItem = UIBarButtonItem(title: act.applied ? LS("已报名") : LS("报名"), style: .done, target: self, action: #selector(ActivityDetailController.navRightBtnPressed))
-            rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+            rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
             self.navigationItem.rightBarButtonItem = rightItem
         }
     }

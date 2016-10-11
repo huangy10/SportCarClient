@@ -76,8 +76,8 @@ class AvatarCarSelectController: AvatarItemSelectController {
         //
         addAuthCarLbl = UILabel()
         addAuthCarLbl.text = LS("暂无认证跑车，点击添加")
-        addAuthCarLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightUltraLight)
-        addAuthCarLbl.textColor = UIColor(white: 0.72, alpha: 1)
+        addAuthCarLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        addAuthCarLbl.textColor = kTextGray28
         addAuthCarLbl.textAlignment = .center
         superview.addSubview(addAuthCarLbl)
         addAuthCarLbl.snp.makeConstraints { (make) -> Void in

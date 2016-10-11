@@ -73,7 +73,7 @@ class BlockUserController: UIViewController {
                 make.width.equalTo(220)
             })
         blockLbl = container.addSubview(UILabel.self)
-            .config(14, fontWeight: UIFontWeightUltraLight, textColor: UIColor.white, textAlignment: .center, text: LS("屏蔽"))
+            .config(14, fontWeight: UIFontWeightRegular, textColor: UIColor.white, textAlignment: .center, text: LS("屏蔽"))
             .layout({ (make) in
                 make.centerX.equalTo(closeBtn)
                 make.top.equalTo(sepLine.snp.bottom).offset(30)

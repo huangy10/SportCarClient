@@ -32,7 +32,7 @@ class LocationSelectCell: UITableViewCell {
                 make.bottom.equalTo(superview.snp.centerY)
             })
         detailLbl = superview.addSubview(UILabel.self)
-            .config(12, textColor: UIColor(white: 0.72, alpha: 1))
+            .config(12, textColor: kTextGray28)
             .layout({ (make) in
                 make.left.equalTo(titleLbl)
                 make.right.equalTo(titleLbl)

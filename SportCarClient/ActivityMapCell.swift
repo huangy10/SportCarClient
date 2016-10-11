@@ -64,7 +64,7 @@ class MapCell: UITableViewCell {
         //
         locLbl = UILabel()
         locLbl.textColor = UIColor.black
-        locLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        locLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         locDesContainer.addSubview(locLbl)
         locLbl.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(locDesIcon.snp.right).offset(17)

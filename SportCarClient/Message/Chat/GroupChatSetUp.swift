@@ -63,7 +63,7 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
         nameInput.delegate = self
         inputFields.append(nameInput)
         nameInput.textColor = UIColor.black
-        nameInput.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightUltraLight)
+        nameInput.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightRegular)
         nameInput.textAlignment = .center
         nameInput.placeholder = LS("请输入群聊名称")
         superview.addSubview(nameInput)
@@ -95,7 +95,7 @@ class GroupChatSetupController: InputableViewController, ProgressProtocol, UIIma
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         //
         let rightItem = UIBarButtonItem(title: LS("确定"), style: .done, target: self, action: #selector(GroupChatSetupController.navRightBtnPressed))
-        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
+        rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         self.navigationItem.rightBarButtonItem = rightItem
     }
     

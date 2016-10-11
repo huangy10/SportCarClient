@@ -16,7 +16,7 @@ class ClearCacheController: PresentTemplateViewController {
     
     override func createContent() {
         cacheSizeInfoLabl = UILabel()
-        cacheSizeInfoLabl.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightUltraLight)
+        cacheSizeInfoLabl.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
         cacheSizeInfoLabl.textColor = UIColor.white
         cacheSizeInfoLabl.textAlignment = .center
         // 由于这个页面只能由mine setting调出，而mine settng出现时，缓存描述符已经可用

@@ -16,7 +16,7 @@ class ClubDiscoverCell: DriverMapUserCell {
     override func createSubviews() {
         super.createSubviews()
 //        valueLbl = UILabel()
-//        valueLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightUltraLight)
+//        valueLbl.font = UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)
 //        valueLbl.textColor = UIColor(white: 0, alpha: 0.58)
 //        self.contentView.addSubview(valueLbl)
 //        valueLbl.snp_makeConstraints { (make) -> Void in

@@ -103,8 +103,8 @@ class AuthThreeImagesController: AuthBasicController, UIImagePickerControllerDel
     
     func getStaticLabel() -> UILabel{
         let lbl = UILabel()
-        lbl.textColor = kTextGray
-        lbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightUltraLight)
+        lbl.textColor = kTextGray54
+        lbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
         return lbl
     }
     
