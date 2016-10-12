@@ -45,7 +45,7 @@ class ChatRequester2: BasicRequester {
     }
     
     override func internalErrorHandler(_ error: NSError) -> NSError? {
-        if let url = (error.userInfo[NSURLErrorFailingURLErrorKey] as AnyObject).absoluteString , (url?.hasSuffix("/chat/update"))! {
+        if let url = (error.userInfo[NSURLErrorFailingURLErrorKey] as? URL), url.absoluteString.hasSuffix("/chat/update") {
             if error.code == -999 {
                 return nil
             } else {
@@ -54,38 +54,6 @@ class ChatRequester2: BasicRequester {
         } else {
             return error
         }
-    }
-    
-    @available(*, deprecated: 1)
-    func download_audio_file_async(_ chatRecord: ChatRecord, onComplete:(_ record: ChatRecord, _ localURL: URL)->(), onError: (_ record: ChatRecord)->()) {
-        // 首先查看是否已经有local副本存在
-//        if let local = chatRecord.audioLocal {
-//            if let localPath = NSURL(string: local)?.path {
-//                let filename = localPath.split("/").last()!
-//                let cacheFilePath = (getCachedAudioDirectory() as AnyObject).stringByAppendingPathComponent(filename)
-//                if NSFileManager.defaultManager().fileExistsAtPath(cacheFilePath) {
-//                    onComplete(record: chatRecord, localURL: NSURL(string: cacheFilePath)!)
-//                    return
-//                }
-//            }
-//        }
-//        let urlStr = chatRecord.audio
-//        var target_URL: NSURL = NSURL()
-//        manager.download(.GET, SFURL(urlStr!)!.absoluteString, destination: { (tmpURL, response) -> NSURL in
-//            let pathComponent = response.suggestedFilename ?? (NSUUID().UUIDString + ".m4a")
-//            let cacheFilePath = (self.getCachedAudioDirectory() as AnyObject).stringByAppendingPathComponent(pathComponent)
-//            target_URL = NSURL(fileURLWithPath: cacheFilePath)
-//            return target_URL
-//        }).response { (_, _, _, err) -> Void in
-//            if err == nil {
-//                onComplete(record: chatRecord, localURL: target_URL)
-//            }else{
-//                if err?.code == 516 {
-//                    onComplete(record: chatRecord, localURL: target_URL)
-//                }
-//                onError(record: chatRecord)
-//            }
-//        }
     }
     
     func getCachedAudioDirectory() -> String {

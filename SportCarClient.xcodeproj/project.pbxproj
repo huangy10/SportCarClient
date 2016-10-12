@@ -398,6 +398,7 @@
 		BF67816B1C15AA77001C89AE /* AccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountController.swift; path = Accounts/AccountController.swift; sourceTree = "<group>"; };
 		BF67816F1C15AB10001C89AE /* LoginRegister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginRegister.swift; path = Accounts/LoginRegister.swift; sourceTree = "<group>"; };
 		BF77F3181C85357D00B09D9A /* ReportAndBlacklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportAndBlacklist.swift; path = Status/Report/ReportAndBlacklist.swift; sourceTree = "<group>"; };
+		BF7CA9161DAD0A4800D8F8A4 /* SportCarClient.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SportCarClient.entitlements; sourceTree = "<group>"; };
 		BF8495C21CA50C0C003B1B2D /* StatusNearby.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusNearby.swift; path = Status/HomeSubviews/StatusNearby.swift; sourceTree = "<group>"; };
 		BF8D0DC21C424E710070B921 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewControllerExtensions.swift; path = BaseTemplate/ViewControllerExtensions.swift; sourceTree = "<group>"; };
 		BF8D42F91C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityReleaseInfoBoard.swift; path = Activity/ActivityReleaseInfoBoard.swift; sourceTree = "<group>"; };
@@ -1771,6 +1772,7 @@
 		BFFA51141C05D9910019E5EF /* SportCarClient */ = {
 			isa = PBXGroup;
 			children = (
+				BF7CA9161DAD0A4800D8F8A4 /* SportCarClient.entitlements */,
 				BF1A636C1D6351C7005C86C8 /* ExtraResources */,
 				BFDBD5FF1D3D19B600793256 /* Sync */,
 				BFB857D31CD89A9400610349 /* Network */,
@@ -2431,6 +2433,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = SportCarClient/SportCarClient.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
@@ -2574,6 +2577,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = SportCarClient/SportCarClient.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
@@ -2605,6 +2609,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = SportCarClient/SportCarClient.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";

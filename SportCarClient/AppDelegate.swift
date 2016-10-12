@@ -109,7 +109,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        
+        print(error)
     }
     
     func onGetNetworkState(_ iError: Int32) {

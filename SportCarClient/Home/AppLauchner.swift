@@ -122,7 +122,7 @@ class AppManager: UIViewController {
             if granted {
                 application.registerForRemoteNotifications()
             } else {
-                self.deviceTokenString = "UnauthorizedDevice"
+                self.deviceTokenString = "Unauthorized_Device"
             }
         }
         
