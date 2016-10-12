@@ -201,7 +201,13 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
             self.data.append(billboardItem)
         }
         if data.count > 0 || alwaysReload {
-            tableView.reloadData()
+            if alwaysReload {
+                UIView.transition(with: tableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                    self.tableView.reloadData()
+                    }, completion: nil)
+            } else {
+                tableView.reloadData()
+            }
         }
     }
     
@@ -268,7 +274,7 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
         if !clubFilter.dirty {
             return
         } else {
-            filterType = ["total", "average", "members", "female"][clubFilter.selectedRow]
+            filterType = ["total", "average", "members", "females"][clubFilter.selectedRow]
         }
 
         data.removeAll()

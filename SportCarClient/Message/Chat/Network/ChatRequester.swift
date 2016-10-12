@@ -118,6 +118,7 @@ class ChatRequester2: BasicRequester {
             url,
             parameters: param,
             withManager: self.listenManager,
+            encoding: URLEncoding.default,
             responseQueue: queue,
             responseDataField: "data",
             onSuccess: onSuccess, onError: onError
