@@ -15,9 +15,13 @@ class RosterDict: MyOrderedDict<String, RosterItem> {
     func resortRosters() {
         let rosters = _dict.map({ $0.1 })
         _keys = rosters.sorted(by: { (r1, r2) -> Bool in
-            if r1.alwaysOnTop && !r2.alwaysOnTop {
-                return true
-            } else if r1.updatedAt!.compare(r2.updatedAt!) == .orderedDescending {
+//            if r1.alwaysOnTop && !r2.alwaysOnTop {
+//                return true
+//            } else if r1.updatedAt!.compare(r2.updatedAt!) == .orderedDescending {
+//                return true
+//            }
+//            return false
+            if r1.updatedAt!.compare(r2.updatedAt!) == .orderedDescending {
                 return true
             }
             return false

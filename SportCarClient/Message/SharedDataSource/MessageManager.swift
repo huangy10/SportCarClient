@@ -107,7 +107,6 @@ class MessageManager {
         // big enough so that it never timeout
         mutableRequest.timeoutInterval = 3600
         // send request to the server
-        print(_curRoom?.rosterItem)
         request = ChatRequester2.sharedInstance.listen(
             queue, unread: self.unreadNum, curFocusedChat: _curRoom?.rosterItem.ssid ?? 0, onSuccess: { (json) in
                 // 128 是和服务器约定的信息缓存队列的长度

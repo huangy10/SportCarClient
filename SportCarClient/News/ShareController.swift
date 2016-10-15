@@ -251,7 +251,8 @@ class ShareController: UIViewController {
             }
             if let delegate = delegate {
                 let message = QQApiNewsObject(url: URL(string: delegate.linkForShare()), title: delegate.titleForShare(), description: delegate.descriptionForShare(), previewImageData: UIImagePNGRepresentation(delegate.thumbnailForShare())!, targetContentType: QQApiURLTargetTypeNews)
-                let req = SendMessageToQQReq(content: message)
+                // MDZZ
+                let req = SendMessageToQQReq.init(content: message)
                 QQApiInterface.send(req)
             }
         default:
