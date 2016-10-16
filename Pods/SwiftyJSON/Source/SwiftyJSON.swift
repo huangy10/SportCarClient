@@ -1,6 +1,6 @@
 //  SwiftyJSON.swift
 //
-//  Copyright (c) 2014 Ruoyu Fu, Pinglin Tang
+//  Copyright (c) 2014 - 2016 Ruoyu Fu, Pinglin Tang
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -198,14 +198,17 @@ public struct JSON {
     public static var null: JSON { get { return JSON(NSNull()) } }
 }
 
-public enum JSONIndex:Comparable {
+public enum JSONIndex:Comparable
+{
     case array(Int)
     case dictionary(DictionaryIndex<String, JSON>)
     case null
 }
 
-public func ==(lhs: JSONIndex, rhs: JSONIndex) -> Bool {
-    switch (lhs, rhs) {
+public func ==(lhs: JSONIndex, rhs: JSONIndex) -> Bool
+{
+    switch (lhs, rhs)
+    {
     case (.array(let left), .array(let right)):
         return left == right
     case (.dictionary(let left), .dictionary(let right)):
@@ -216,8 +219,10 @@ public func ==(lhs: JSONIndex, rhs: JSONIndex) -> Bool {
     }
 }
 
-public func <(lhs: JSONIndex, rhs: JSONIndex) -> Bool {
-    switch (lhs, rhs) {
+public func <(lhs: JSONIndex, rhs: JSONIndex) -> Bool
+{
+    switch (lhs, rhs)
+    {
     case (.array(let left), .array(let right)):
         return left < right
     case (.dictionary(let left), .dictionary(let right)):
@@ -228,12 +233,15 @@ public func <(lhs: JSONIndex, rhs: JSONIndex) -> Bool {
 }
 
 
-extension JSON: Collection{
+extension JSON: Collection
+{
     
     public typealias Index = JSONIndex
     
-    public var startIndex: Index{
-        switch type {
+    public var startIndex: Index
+    {
+        switch type
+        {
         case .array:
             return .array(rawArray.startIndex)
         case .dictionary:
@@ -243,8 +251,10 @@ extension JSON: Collection{
         }
     }
     
-    public var endIndex: Index{
-        switch type {
+    public var endIndex: Index
+    {
+        switch type
+        {
         case .array:
             return .array(rawArray.endIndex)
         case .dictionary:
@@ -254,8 +264,10 @@ extension JSON: Collection{
         }
     }
     
-    public func index(after i: Index) -> Index {
-        switch i {
+    public func index(after i: Index) -> Index
+    {
+        switch i
+        {
         case .array(let idx):
             return .array(rawArray.index(after: idx))
         case .dictionary(let idx):
@@ -266,8 +278,10 @@ extension JSON: Collection{
         
     }
     
-    public subscript (position: Index) -> (String, JSON) {
-        switch position {
+    public subscript (position: Index) -> (String, JSON)
+    {
+        switch position
+        {
         case .array(let idx):
             return (String(idx), JSON(self.rawArray[idx]))
         case .dictionary(let idx):
@@ -285,7 +299,8 @@ extension JSON: Collection{
 /**
  *  To mark both String and Int can be used in subscript.
  */
-public enum JSONKey {
+public enum JSONKey
+{
     case index(Int)
     case key(String)
 }
@@ -509,7 +524,8 @@ extension JSON: Swift.ExpressibleByArrayLiteral {
 }
 
 extension JSON: Swift.ExpressibleByNilLiteral {
-    
+
+    @available(*, deprecated, message: "use JSON.null instead. Will be removed in future versions")
     public init(nilLiteral: ()) {
         self.init(NSNull() as Any)
     }
@@ -891,14 +907,19 @@ extension JSON {
         }
     }
     
-    public var int: Int? {
-        get {
+    public var int: Int?
+    {
+        get
+        {
             return self.number?.intValue
         }
-        set {
-            if let newValue = newValue {
+        set
+        {
+            if let newValue = newValue
+            {
                 self.object = NSNumber(value: newValue)
-            } else {
+            } else
+            {
                 self.object = NSNull()
             }
         }
@@ -1210,8 +1231,7 @@ extension NSNumber {
     var isBool:Bool {
         get {
             let objCType = String(cString: self.objCType)
-            if (self.compare(trueNumber) == ComparisonResult.orderedSame && objCType == trueObjCType)
-                || (self.compare(falseNumber) == ComparisonResult.orderedSame && objCType == falseObjCType){
+            if (self.compare(trueNumber) == .orderedSame && objCType == trueObjCType) || (self.compare(falseNumber) == .orderedSame && objCType == falseObjCType){
                 return true
             } else {
                 return false
@@ -1227,7 +1247,7 @@ func ==(lhs: NSNumber, rhs: NSNumber) -> Bool {
     case (true, false):
         return false
     default:
-        return lhs.compare(rhs) == ComparisonResult.orderedSame
+        return lhs.compare(rhs) == .orderedSame
     }
 }
 
@@ -1243,7 +1263,7 @@ func <(lhs: NSNumber, rhs: NSNumber) -> Bool {
     case (true, false):
         return false
     default:
-        return lhs.compare(rhs) == ComparisonResult.orderedAscending
+        return lhs.compare(rhs) == .orderedAscending
     }
 }
 
@@ -1267,7 +1287,7 @@ func <=(lhs: NSNumber, rhs: NSNumber) -> Bool {
     case (true, false):
         return false
     default:
-        return lhs.compare(rhs) != ComparisonResult.orderedDescending
+        return lhs.compare(rhs) != .orderedDescending
     }
 }
 
@@ -1279,6 +1299,6 @@ func >=(lhs: NSNumber, rhs: NSNumber) -> Bool {
     case (true, false):
         return false
     default:
-        return lhs.compare(rhs) != ComparisonResult.orderedAscending
+        return lhs.compare(rhs) != .orderedAscending
     }
 }

@@ -41,6 +41,7 @@ public struct NullableAttribute<T>: NullableAttributeProtocol {
     public init(_ name: String, _ parentAttribute: NamedAttributeProtocol) {
         self.___name = parentAttribute.___name + "." + name
     }
+    
 }
 
 // MARK: - Attribute extensions - CollectionType

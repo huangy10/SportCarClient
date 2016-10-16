@@ -5,11 +5,11 @@ PODS:
   - Cent (6.0.1):
     - Dollar (~> 6.0.0)
   - Dollar (6.0.0)
-  - Kingfisher (3.1.1)
-  - SnapKit (3.0.1)
+  - Kingfisher (3.1.3)
+  - SnapKit (3.0.2)
   - Spring (1.0.3)
-  - SwiftDate (4.0.2)
-  - SwiftyJSON (3.1.0)
+  - SwiftDate (4.0.5)
+  - SwiftyJSON (3.1.1)
   - SwiftyTimer (2.0.0)
   - WeiboSDK (3.1.4)
 
@@ -44,10 +44,10 @@ CHECKOUT OPTIONS:
     :commit: e011752ffd0b1ccc6cdf1cf6726f234ef5738fac
     :git: https://github.com/AnthonyMDev/AlecrimCoreData.git
   Spring:
-    :commit: e5c127b7aa6ce31e5f4d01100a8991423a1eb498
+    :commit: 3a9227c6e9157e7b47f5ac1ee5abab2a56b50002
     :git: https://github.com/MengTo/Spring.git
   SwiftyJSON:
-    :commit: ff43c8e31b4a74e9f98ead17d9b83fa9caf6c486
+    :commit: 707516458b618c48ad9365d23a0dad3c3b860fa0
     :git: https://github.com/SwiftyJSON/SwiftyJSON.git
   WeiboSDK:
     :commit: 3daf7147ddd0fde3b04a61d8d94327d41d0c239c
@@ -59,11 +59,11 @@ SPEC CHECKSUMS:
   BaiduMapKit: de2a726d5296d6b2dc0e974b683af73153608dcd
   Cent: a9a45d7823ec2a60284e21c93afdc3be70db007a
   Dollar: 6e69123e0901307d67a416dac70aeec56243a6e0
-  Kingfisher: 12b755ae697cc9f0fd3e550db8417fa1233e09ab
-  SnapKit: f818b8326d45b4e1c777d0ab27b5c0a3624bfdeb
+  Kingfisher: 007f5851c18c81e7cc106c9cbac1bafea1cce5dc
+  SnapKit: 2e456761aa92d4d4067a7a5594c18769d451a8ad
   Spring: 3f02b5dc3308572ef177b3cad0fa7bbc4b0706f7
-  SwiftDate: 88d2953c87d6d04263aea363ed8b773461de29c4
-  SwiftyJSON: 29b9f2a64f118c07e691667c2ba1efe536acfe0b
+  SwiftDate: a945bf4150ef977824df91116ca30a04604216d3
+  SwiftyJSON: f0be2e604f83e8405a624e9f891898bf6ed4e019
   SwiftyTimer: 2efd74b060d69ad4f1496baf5bbedbe132125fcf
   WeiboSDK: bceab625ec59b7039ba721cc4ba9f5868804f63e
 
