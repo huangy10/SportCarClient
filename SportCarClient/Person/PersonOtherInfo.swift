@@ -51,7 +51,7 @@ class PersonOtherInfoController: PersonMineInfoController {
             case 2:
                 return rawCell.setData(LS("活跃地区"), propertyValue: user.district, editable: false)
             default:
-                return rawCell.setData(LS("个性签名"), propertyValue: user.signature, editable: false)
+                return rawCell.setData(LS("个性签名"), propertyValue: trancate(userSignature: user.signature!), editable: false)
             }
         }
     }

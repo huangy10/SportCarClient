@@ -124,16 +124,27 @@ class PersonMineInfoController: UITableViewController, AvatarCarSelectDelegate, 
             case 2:
                 return rawCell.setData(LS("活跃地区"), propertyValue: user.district)
             default:
-                let sigLen = user.signature!.length
-                let sig: String
-                if sigLen > signatureMaxLen {
-                    sig = user.signature![0..<signatureMaxLen]
-                } else {
-                    sig = user.signature!
-                }
-                return rawCell.setData(LS("个性签名"), propertyValue: sig)
+//                let sigLen = user.signature!.length
+//                let sig: String
+//                if sigLen > signatureMaxLen {
+//                    sig = user.signature![0..<signatureMaxLen]
+//                } else {
+//                    sig = user.signature!
+//                }
+                return rawCell.setData(LS("个性签名"), propertyValue: trancate(userSignature: user.signature!))
             }
         }
+    }
+    
+    func trancate(userSignature: String) -> String {
+        let sigLen = userSignature.length
+        let sig: String
+        if sigLen > signatureMaxLen {
+            sig = user.signature![0..<signatureMaxLen]
+        } else {
+            sig = userSignature
+        }
+        return sig
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

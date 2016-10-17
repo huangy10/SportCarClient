@@ -31,6 +31,8 @@ class PersonHeaderMine: UIView {
     var followlistBtn: UIButton!
     var statuslistBtn: UIButton!
     
+    let scale: CGFloat = UIScreen.main.bounds.width / 375.0
+    
     /// 是否自己抓取位置数据
     var locateYouself = true
     
@@ -68,7 +70,7 @@ class PersonHeaderMine: UIView {
     func configureBackMask() {
         backMask = BackMaskView()
         backMask.backgroundColor = UIColor.clear
-        backMask.centerHegiht = 175
+        backMask.centerHegiht = 175 * scale
         backMask.ratio = 0.2
         backMask.addShadow(opacity: 0.1, offset: CGSize(width: 0, height: -3))
         addSubview(backMask)
@@ -81,7 +83,7 @@ class PersonHeaderMine: UIView {
     func configureAvatarBtn() {
         avatarBtn = addSubview(UIButton.self)
             .layout { (make) in
-                make.top.equalTo(self).offset(140)
+                make.top.equalTo(self).offset(140.0 * scale)
                 make.size.equalTo(90)
                 make.left.equalTo(self).offset(25)
         }

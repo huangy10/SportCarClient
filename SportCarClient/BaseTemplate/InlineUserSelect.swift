@@ -85,7 +85,7 @@ class InlineUserSelectController: UICollectionViewController {
         let cellNum = userNum + (showAddBtn ? 1 : 0) + (showDeleteBtn ? 1 : 0)
         let height = CGFloat((cellNum - 1) / 4 + 1) * cellHeight + 15
         if userNum >= 12 && !showAddBtn && !showDeleteBtn {
-            return height + 30
+            return height + 50
         } else {
             return height
         }
@@ -157,7 +157,7 @@ class InlineUserSelectController: UICollectionViewController {
         showAllMembersBtn = self.view.addSubview(UIButton.self)
             .config(self, selector: #selector(showAllMembersBtnPressed), title: LS("全部成员"), titleColor: kHighlightRed, titleSize: 14, titleWeight: UIFontWeightRegular)
             .layout({ (make) in
-                make.right.equalTo(self.view).offset(-15)
+                make.right.equalTo(self.view)
                 make.bottom.equalTo(self.view)
                 make.size.equalTo(CGSize(width: 100, height: 44))
             })

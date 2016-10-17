@@ -509,6 +509,11 @@ extension GroupChatSettingController {
             chatRoom.targetClub = targetClub
             chatRoom.chatCreated = false
             temp.navigationController?.pushViewController(chatRoom, animated: true)
+        } else {
+            let chatRoom = ChatRoomController()
+            chatRoom.targetClub = targetClub
+            chatRoom.chatCreated = false
+            navigationController?.pushViewController(chatRoom, animated: true)
         }
     }
 }
