@@ -79,13 +79,17 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
     }
     
     func configureTableView() {
-        tableView = UITableView(frame: view.bounds, style: .plain)
+        tableView = UITableView(frame: .zero, style: .plain)
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints({ (make) in
+            make.edges.equalTo(view)
+        })
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.backgroundColor = UIColor(white: 0, alpha: 0.06)
-        tableView.contentInset = UIEdgeInsetsMake(8, 0, 8, 0)
-        view.addSubview(tableView)
+        tableView.contentInset = UIEdgeInsetsMake(8, 0, 68, 0)
+        
         tableView.register(BillboardCell.self, forCellReuseIdentifier: "cell")
         tableView.register(BillboardFirstThree.self, forCellReuseIdentifier: "first_three")
         tableView.separatorStyle = .none
