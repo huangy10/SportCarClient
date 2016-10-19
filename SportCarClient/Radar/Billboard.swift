@@ -63,8 +63,8 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
     }
     
     func refresh() {
-        data.removeAll()
-        loadMoreClubData(0, limit: 20, scope: scope, filterType: filterType, alwaysReload: true)
+//        data.removeAll()
+        loadMoreClubData(0, limit: 20, scope: scope, filterType: filterType, alwaysReload: true, clearOldData: true)
     }
     
     func configureNavigationBar() {
@@ -180,12 +180,12 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
         present(cityPicker.toNavWrapper(), animated: true, completion: nil)
     }
     
-    func loadMoreClubData(_ skip: Int, limit: Int, scope: String, filterType: String, alwaysReload: Bool = false) {
+    func loadMoreClubData(_ skip: Int, limit: Int, scope: String, filterType: String, alwaysReload: Bool = false, clearOldData: Bool = false) {
         if let req = ongoingRequest {
             req.cancel()
         }
         ongoingRequest = ClubRequester.sharedInstance.clubBillboard(skip, limit: limit, scope: scope, filterType: filterType, onSuccess: { (json) in
-            self.parseServerData(json!.arrayValue, alwaysReload: alwaysReload)
+            self.parseServerData(json!.arrayValue, alwaysReload: alwaysReload, clearOldData: clearOldData)
             self.refreshControl.endRefreshing()
             }) { (code) in
                 self.showToast(LS("访问错误"))
@@ -193,7 +193,8 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
         }
     }
     
-    func parseServerData(_ data: [JSON], alwaysReload: Bool) {
+    func parseServerData(_ data: [JSON], alwaysReload: Bool, clearOldData: Bool = false) {
+        var newItems: [BillboardItem] = []
         for item in data {
             let clubJson = item["club"]
             let club = try! MainManager.sharedManager.getOrCreate(clubJson) as Club
@@ -202,8 +203,12 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
             let newToList = item["new_to_list"].boolValue
             let orderChange = item["order_change"].intValue
             let billboardItem = BillboardItem(club: club, newToList: newToList, order: order, orderChange: orderChange)
-            self.data.append(billboardItem)
+            newItems.append(billboardItem)
         }
+        if clearOldData {
+            self.data.removeAll()
+        }
+        self.data.append(contentsOf: newItems)
         if data.count > 0 || alwaysReload {
             if alwaysReload {
                 UIView.transition(with: tableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
@@ -226,6 +231,7 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = (indexPath as NSIndexPath).row
         let item = data[row]
+        print(row)
         if row >= 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BillboardCell
             cell.setData(item.club, order: item.order, orderChange: item.orderChange, new: item.newToList)

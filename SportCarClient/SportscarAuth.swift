@@ -12,7 +12,7 @@ import UIKit
 import Spring
 
 
-class SportscarAuthController: PersonMineSettingsAuthController {
+class SportscarAuthController: PersonMineSettingsAuthController{
     let kDistrictSet = ["京", "沪", "晋", "冀", "鄂", "豫", "鲁", "贵", "陕", "赣", "苏", "湘", "桂", "甘", "闽", "粤", "辽", "黑", "云", "宁", "新", "川", "渝", "蒙", "吉", "琼", "藏", "青", "甲", "乙"]
     /// 汽车所属区域选择
     var districtPickerContainer: UIView!
@@ -33,21 +33,35 @@ class SportscarAuthController: PersonMineSettingsAuthController {
                 self.showToast(LS("请完整提供要求的信息"))
                 return
             }
+            // 此处暂时禁用了后续两张图片，所以只需要这里的就可以了 Woody Huang, 2016.10.19
+            break
         }
         guard let carLicenseNum = carLicense.text , carLicenseNum.length > 0 else {
             self.showToast(LS("请完整提供要求的信息"))
             return
         }
         pp_showProgressView()
-        SportCarRequester.sharedInstance.authenticateSportscar(car.ssidString, driveLicense: selectedImages[0]!, photo: selectedImages[2]!, idCard: selectedImages[1]!, licenseNum: districtLabel.text! + carLicenseNum, onSuccess: { (json) -> () in
+        
+        let licenseNum = districtLabel.text! + carLicenseNum
+//        SportCarRequester.sharedInstance.authenticateSportscar(car.ssidString, driveLicense: selectedImages[0]!, photo: selectedImages[2]!, idCard: selectedImages[1]!, licenseNum: districtLabel.text! + carLicenseNum, onSuccess: { (json) -> () in
+//            self.pp_hideProgressView()
+//            self.showToast(LS("认证申请已经成功发送"))
+//            }, onProgress: { (progress) -> () in
+//                self.pp_updateProgress(progress)
+//            }) { (code) -> () in
+//                self.pp_hideProgressView()
+//                self.showToast(LS("认证申请发送失败"))
+//        }
+        SportCarRequester.sharedInstance.authenticate(sportscar: car.ssidString, driveLicense: selectedImages[0]!, licenseNum: licenseNum, onSuccess: { (json) in
             self.pp_hideProgressView()
             self.showToast(LS("认证申请已经成功发送"))
-            }, onProgress: { (progress) -> () in
+            }, onProgress: { (progress) in
                 self.pp_updateProgress(progress)
-            }) { (code) -> () in
+            }) { (code) in
                 self.pp_hideProgressView()
                 self.showToast(LS("认证申请发送失败"))
         }
+        
         _ = self.navigationController?.popViewController(animated: true)
     }
     

@@ -90,11 +90,21 @@ class SportCarRequester: BasicRequester {
         )
     }
     
+    func authenticate(sportscar carID: String, driveLicense: UIImage, licenseNum: String, onSuccess: @escaping (JSON?)->(), onProgress: @escaping (_ progress: Float)->(), onError: @escaping (_ code: String?)->()) {
+        upload(urlForName("auth"),
+               parameters: ["car_id": carID, "drive_license": driveLicense, "license": licenseNum],
+               onSuccess: onSuccess,
+               onProgress: onProgress,
+               onError: onError
+        )
+    }
+    
     func deleteCar(_ carID: String, onSuccess: @escaping SSSuccessCallback, onError: @escaping SSFailureCallback) -> Request {
         return post(urlForName("delete", param: ["carID": carID]), onSuccess: onSuccess, onError: onError)
     }
     
-    func updateCarSignature(_ carID: String, signature: String, onSuccess: @escaping SSSuccessCallback, onError: @escaping SSFailureCallback) -> Request {
+    func updateCarSignature(_ carID: String, signature: String, onSuccess: @escaping SSSuccessCallback, onError: @escaping
+        SSFailureCallback) -> Request {
         return post(urlForName("signature", param: ["carID": carID]),
                     parameters: ["signature": signature],
                     onSuccess: onSuccess, onError: onError)
