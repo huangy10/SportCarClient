@@ -68,7 +68,7 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
     }
     
     func configureNavigationBar() {
-        navigationItem.title = LS("排行榜")
+        navigationItem.title = LS("俱乐部排名")
         homeBtn = BackToHomeBtn()
         homeBtn.addTarget(self, action: #selector(navLeftBtnPressed), for: .touchUpInside)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: homeBtn)
@@ -231,7 +231,6 @@ class BillboardController: UIViewController, RadarFilterDelegate, CityElementSel
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = (indexPath as NSIndexPath).row
         let item = data[row]
-        print(row)
         if row >= 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BillboardCell
             cell.setData(item.club, order: item.order, orderChange: item.orderChange, new: item.newToList)

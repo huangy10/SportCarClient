@@ -165,6 +165,9 @@ class MessageManager {
         var chatDirty = false
         var notifDirty = false
         var newNotifications: [Notification] = []
+        
+        var newChatUnreadNum: Int = 0
+        var newNotifUnreadNum: Int = 0
         for json in data {
             if json["chatID"].exists() {
                 let result = try ChatParser().parse(json)
@@ -178,10 +181,10 @@ class MessageManager {
                         curRoom.chats.append(chat)
                         chatDirty = true
                     } else {
-                        unreadChatNum += 1
+                        newChatUnreadNum += 1
                     }
                 } else {
-                    unreadChatNum += 1
+                    newChatUnreadNum += 1
                 }
             } else if json["notification_id"].exists() {
                 // 注意从服务器返回的消息是按照createdAt降序排列的
@@ -191,13 +194,19 @@ class MessageManager {
 //                }
                 newNotifications.append(notif)
                 
-                self.unreadNotifNum += 1
+                newNotifUnreadNum += 1
                 notifDirty = true
             } else if json["ssid"].exists() {
                 // rosterItem change
             } else {
                 throw SSModelError.notSupported
             }
+        }
+        if newChatUnreadNum > 0 {
+            self.unreadChatNum += newChatUnreadNum
+        }
+        if newNotifUnreadNum > 0 {
+            self.unreadNotifNum += newNotifUnreadNum
         }
         if chatDirty {
             DispatchQueue.main.async(execute: { 
@@ -342,8 +351,18 @@ class MessageManager {
         }
     }
     
+    func syncUnreadChatNum() {
+        let context = MainManager.sharedManager.getOperationContext()
+        let hostID = MainManager.sharedManager.hostUserID!
+        let x: Int32 = context.rosterItems.filter({$0.hostSSID == hostID}).reduce(0, { $0 + $1.unreadNum})
+        self.unreadChatNum = Int(x)
+//        self.unreadChatNum = context.rosterItems.filter({$0.hostSSID == hostID}).sum( {$0.unreadNum} )
+    }
+    
     func leaveRoom() {
         _curRoom = nil
+        // Always re-sync the unread number after leaving the room
+        syncUnreadChatNum()
         // update listening status
         queue.async { 
             self.listen()

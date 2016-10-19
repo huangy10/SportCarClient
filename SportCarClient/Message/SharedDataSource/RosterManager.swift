@@ -149,7 +149,7 @@ class RosterManager {
         let context = ChatModelManger.sharedManager.getOperationContext()
         // TODO: order by createdAt or updatedAt?
         let existingRosterItems = context.rosterItems.filter({$0.hostSSID == hostID})
-            .orderBy(orderingClosure: { $0.createdAt })
+            .orderBy(orderingClosure: { $0.updatedAt })
         var unread: Int = 0
         existingRosterItems.forEach { (item) in
             item.manager = ChatModelManger.sharedManager
