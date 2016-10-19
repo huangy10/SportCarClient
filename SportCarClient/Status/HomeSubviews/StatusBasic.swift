@@ -33,7 +33,8 @@ fileprivate func <= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 
-class StatusBasicController: UITableViewController {
+class StatusBasicController: UITableViewController, StatusCellProtocol, LoadingProtocol {
+    var delayWorkItem: DispatchWorkItem?
     /*
     由于动态页面分成了三个tag，区别只是数据的不同，故我们这里首先构造一个完成页面布局的基类，然后派生出去实现数据获取
     */
@@ -92,20 +93,21 @@ class StatusBasicController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: StatusCell.reuseIdentifier, for: indexPath) as! StatusCell
         cell.parent = homeController
+        cell.delegate = self
         cell.status = status[(indexPath as NSIndexPath).row]
         cell.selectionStyle = .none
         cell.loadDataAndUpdateUI()
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        let curStatus = status[(indexPath as NSIndexPath).row]
-        if curStatus.image?.split(delimiter: ";").count <= 1{
-            return 420
-        }else{
-            return 520
-        }
-    }
+//    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+//        let curStatus = status[(indexPath as NSIndexPath).row]
+//        if curStatus.image?.split(delimiter: ";").count <= 1{
+//            return 420
+//        }else{
+//            return 520
+//        }
+//    }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return StatusCell.heightForStatus(status[(indexPath as NSIndexPath).row])
@@ -120,6 +122,23 @@ class StatusBasicController: UITableViewController {
 //    override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
 //        return false
 //    }
+    
+    func statusCellLikePressed(cell: StatusCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {
+            return
+        }
+        let data = status[indexPath.row]
+        lp_start()
+        _ = StatusRequester.sharedInstance.likeStatus(data.ssidString, onSuccess: { (json) in
+            self.lp_stop()
+            data.likeNum = json!["like_num"].int32Value
+            data.liked = json!["like_state"].boolValue
+            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            }) { (code) in
+                self.lp_stop()
+                self.showToast(LS("无法访问服务器"))
+        }
+    }
 }
 
 // MARK: - Utilities

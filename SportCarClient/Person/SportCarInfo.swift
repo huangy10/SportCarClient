@@ -86,7 +86,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
         
         carLogoIcon = superview.addSubview(UIImageView.self)
             .layout({ (make) in
-                make.size.equalTo(20)
+                make.size.equalTo(30)
                 make.top.equalTo(carNameLbl)
                 make.left.equalTo(carNameLbl.snp.right).offset(3)
             })

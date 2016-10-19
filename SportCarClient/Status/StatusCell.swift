@@ -11,10 +11,15 @@ import SnapKit
 import Kingfisher
 import Dollar
 
+protocol StatusCellProtocol: class {
+    func statusCellLikePressed(cell: StatusCell)
+}
+
 /// 状态页面的cell
 class StatusCell: UITableViewCell, UICollectionViewDataSource{
     
     weak var parent: UIViewController?
+    weak var delegate: StatusCellProtocol?
     
     static let reuseIdentifier = "statuc_cell"
     
@@ -244,6 +249,11 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
             make.top.equalTo(likeNumLbl!)
             make.size.equalTo(15)
         })
+        superview.addSubview(UIButton.self).config(self, selector: #selector(likeBtnPressed))
+            .layout({ (make) in
+                make.center.equalTo(likeIcon!)
+                make.size.equalTo(40)
+            })
     }
     
     func getHeightOfCell() -> CGFloat{
@@ -354,7 +364,7 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 3
         style.lineBreakMode = .byCharWrapping
-        let result = NSAttributedString(string: content, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular), NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.58), NSParagraphStyleAttributeName: style])
+        let result = NSAttributedString(string: content, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular), NSForegroundColorAttributeName: UIColor.black, NSParagraphStyleAttributeName: style])
         return result
     }
     
@@ -421,6 +431,10 @@ class StatusCell: UITableViewCell, UICollectionViewDataSource{
             let detail = PersonOtherController(user: status!.user!)
             parent?.navigationController?.pushViewController(detail, animated: true)
         }
+    }
+    
+    func likeBtnPressed() {
+        delegate?.statusCellLikePressed(cell: self)
     }
 }
 

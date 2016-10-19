@@ -15,6 +15,10 @@ class StatusHotController: UICollectionViewController {
     var myRefreshControl: UIRefreshControl?
     weak var homeController: StatusHomeController?
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     convenience init () {
         let layout = UICollectionViewFlowLayout()
         let screenWidth = UIScreen.main.bounds.width
@@ -34,6 +38,17 @@ class StatusHotController: UICollectionViewController {
         myRefreshControl?.addTarget(self, action: #selector(loadLatestStatusData), for: .valueChanged)
         collectionView?.addSubview(myRefreshControl!)
         loadMoreStatusData()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(onStatusDeleted(notification:)), name: NSNotification.Name(rawValue: kStatusDidDeletedNotification), object: nil)
+    }
+    
+    func onStatusDeleted(notification: NSNotification) {
+        if let statusID = (notification as NSNotification).userInfo![kStatusDidDeletedStatusIDKey] as? String{
+            status = $.remove(status, callback: { $0.ssidString == statusID })
+            collectionView?.reloadData()
+        } else {
+            assertionFailure()
+        }
     }
     
     // MARK: Data Fetching

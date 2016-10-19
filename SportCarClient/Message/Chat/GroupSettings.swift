@@ -77,7 +77,7 @@ class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModi
             for data in json!["club"]["members"].arrayValue {
                 // 添加成员
                 let user: User = try! MainManager.sharedManager.getOrCreate(data)
-                if user == self.targetClub.founderUser {
+                if user.ssid == self.targetClub.founderUser!.ssid {
                     self.targetClub.members.insert(user, at: 0)
                 } else {
                     self.targetClub.members.append(user)

@@ -93,6 +93,8 @@ class ChatRoomController: InputableViewController, ChatOpPanelDelegate, UIImageP
     var displayAccessoryBoard: Bool = false
     var firstShowFlag: Bool = false
     
+    var firstMessageSent: Bool = false
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -408,6 +410,10 @@ extension ChatRoomController {
                 self.showToast(LS("消息发送失败"))
         }
         
+        if !firstMessageSent {
+            firstMessageSent = true
+            RosterManager.defaultManager.data.resortRosters()
+        }
     }
     
     func opPanelDidSwitchInputModel(_ opPanel: ChatOpPanelController) {

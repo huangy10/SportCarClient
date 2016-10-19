@@ -648,7 +648,7 @@ extension StatusDetailController: UICollectionViewDataSource {
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 3
         style.lineBreakMode = .byCharWrapping
-        return NSAttributedString(string: content, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular), NSForegroundColorAttributeName: UIColor(white: 0, alpha: 0.58), NSParagraphStyleAttributeName: style])
+        return NSAttributedString(string: content, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular), NSForegroundColorAttributeName: UIColor.black, NSParagraphStyleAttributeName: style])
     }
     
     class func heightForStatusContent(_ content: String) -> CGFloat {
