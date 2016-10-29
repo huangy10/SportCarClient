@@ -34,7 +34,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
         return cityFilterLbl.text == "全国"
     }
     
-    var ongoingRequest: Request?
+    weak var ongoingRequest: Request?
     
 //    var cityFilter: UIButton!
 //    var cityFilterLbl: UILabel!

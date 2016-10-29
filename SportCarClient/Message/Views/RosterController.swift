@@ -20,8 +20,6 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
         return RosterManager.defaultManager.data
     }
     
-    weak var messageController: MessageController!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ChatListCell.self, forCellReuseIdentifier: ChatListCell.reuseIdentifier)
@@ -46,7 +44,7 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
     func confirmNewChat() {
         let selector = FFSelectController()
         selector.delegate = self
-        messageController.present(selector.toNavWrapper(), animated: true, completion: nil)
+        parent?.present(selector.toNavWrapper(), animated: true, completion: nil)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -72,7 +70,7 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
         }
         detail.rosterItem = access
         detail.chatCreated = true
-        messageController.navigationController?.pushViewController(detail, animated: true)
+        parent?.navigationController?.pushViewController(detail, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -86,7 +84,7 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
     
     // MARK: User select delegate
     func userSelected(_ users: [User]) {
-        messageController.dismiss(animated: false, completion: nil)
+        parent?.dismiss(animated: false, completion: nil)
         
         if users.count == 0 {
         }else if users.count == 1 {
@@ -94,19 +92,19 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
             let room = ChatRoomController()
             room.chatCreated = false
             room.targetUser = users.first
-            messageController.navigationController?.pushViewController(room, animated: true)
+            parent?.navigationController?.pushViewController(room, animated: true)
             
         }else{
             // 创建群聊
             let detail = GroupChatSetupController()
             detail.users = users
             detail.delegate = self
-            messageController.navigationController?.pushViewController(detail, animated: true)
+            parent?.navigationController?.pushViewController(detail, animated: true)
         }
     }
     
     func userSelectCancelled() {
-        messageController.dismiss(animated: true, completion: nil)
+        parent?.dismiss(animated: true, completion: nil)
     }
     
     func groupChatSetupControllerDidSuccessCreatingClub(_ newClub: Club) {
@@ -116,6 +114,6 @@ class RosterController: UITableViewController, FFSelectDelegate, GroupChatSetupD
         chatRoom.targetClub = newClub
         
         chatRoom.chatCreated = false
-        messageController.navigationController?.pushViewController(chatRoom, animated: true)
+        parent?.navigationController?.pushViewController(chatRoom, animated: true)
     }
 }

@@ -232,6 +232,8 @@
 		BFE967661CA81E060097C42C /* ActivityEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967651CA81E060097C42C /* ActivityEdit.swift */; };
 		BFE9676A1CA90CF60097C42C /* SportCarAuthHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967691CA90CF60097C42C /* SportCarAuthHeader.swift */; };
 		BFE9676C1CA92AD40097C42C /* GroupMemberSelecter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE9676B1CA92AD40097C42C /* GroupMemberSelecter.swift */; };
+		BFEF5BBA1DC46BB800868029 /* ActivityNearbyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEF5BB91DC46BB800868029 /* ActivityNearbyList.swift */; };
+		BFEF5BBC1DC47D7700868029 /* TaggedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEF5BBB1DC47D7700868029 /* TaggedContainer.swift */; };
 		BFEFB5E31C5E4C8600841BF4 /* chatAccessoryBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEFB5E21C5E4C8600841BF4 /* chatAccessoryBoard.swift */; };
 		BFF5EEF91CA428E700F64301 /* ClubRank.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF5EEF81CA428E700F64301 /* ClubRank.swift */; };
 		BFF715001CC289C30028F87F /* 合成 1_00000.png in Resources */ = {isa = PBXBuildFile; fileRef = BFF714CE1CC289C30028F87F /* 合成 1_00000.png */; };
@@ -549,6 +551,8 @@
 		BFE967651CA81E060097C42C /* ActivityEdit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityEdit.swift; path = Activity/ActivityEdit.swift; sourceTree = "<group>"; };
 		BFE967691CA90CF60097C42C /* SportCarAuthHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarAuthHeader.swift; path = Person/SportCarAuthHeader.swift; sourceTree = "<group>"; };
 		BFE9676B1CA92AD40097C42C /* GroupMemberSelecter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GroupMemberSelecter.swift; path = Message/Chat/GroupMemberSelecter.swift; sourceTree = "<group>"; };
+		BFEF5BB91DC46BB800868029 /* ActivityNearbyList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityNearbyList.swift; path = Activity/ActivityNearbyList.swift; sourceTree = "<group>"; };
+		BFEF5BBB1DC47D7700868029 /* TaggedContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TaggedContainer.swift; path = BaseTemplate/TaggedContainer.swift; sourceTree = "<group>"; };
 		BFEFB5E21C5E4C8600841BF4 /* chatAccessoryBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = chatAccessoryBoard.swift; path = Message/Chat/chatAccessoryBoard.swift; sourceTree = "<group>"; };
 		BFF5EEF81CA428E700F64301 /* ClubRank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubRank.swift; path = Radar/ClubRank.swift; sourceTree = "<group>"; };
 		BFF714CE1CC289C30028F87F /* 合成 1_00000.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "合成 1_00000.png"; sourceTree = "<group>"; };
@@ -1110,6 +1114,7 @@
 				BFAC52291C1C84A700107F71 /* InputableViewController.swift */,
 				BFCB96351C1F0551004F77E8 /* BlackBarNavigationController.swift */,
 				BFCB96451C2061E0004F77E8 /* LoadingButton.swift */,
+				BFEF5BBB1DC47D7700868029 /* TaggedContainer.swift */,
 			);
 			name = BaseTemplate;
 			sourceTree = "<group>";
@@ -1258,6 +1263,7 @@
 		BFC0326A1C6F39CE00ECA69A /* Activity */ = {
 			isa = PBXGroup;
 			children = (
+				BFEF5BB81DC46B9E00868029 /* NearBy */,
 				BFC0328F1C74519400ECA69A /* Release */,
 				BFC0327E1C72EED600ECA69A /* Detail */,
 				BFC032731C6F554B00ECA69A /* Network */,
@@ -1671,6 +1677,14 @@
 			name = News;
 			sourceTree = "<group>";
 		};
+		BFEF5BB81DC46B9E00868029 /* NearBy */ = {
+			isa = PBXGroup;
+			children = (
+				BFEF5BB91DC46BB800868029 /* ActivityNearbyList.swift */,
+			);
+			name = NearBy;
+			sourceTree = "<group>";
+		};
 		BFF5EEF71CA428A200F64301 /* rank */ = {
 			isa = PBXGroup;
 			children = (
@@ -1941,7 +1955,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = WoodyHuang;
 				TargetAttributes = {
 					BFFA51111C05D9910019E5EF = {
@@ -2306,6 +2320,7 @@
 				BFC032581C6E006800ECA69A /* PersonMineInfo.swift in Sources */,
 				BF2F7E971C644C7600E3A3A2 /* NotificationCell.swift in Sources */,
 				BFE967181CA584870097C42C /* Status.swift in Sources */,
+				BFEF5BBA1DC46BB800868029 /* ActivityNearbyList.swift in Sources */,
 				BF49FBAD1C19424D0019EBC2 /* ShinyButton.swift in Sources */,
 				BFC0327B1C700E8700ECA69A /* ActivityNearByCell.swift in Sources */,
 				BF5107151C60D28A008DC14F /* MyOrderedDict.swift in Sources */,
@@ -2346,6 +2361,7 @@
 				BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */,
 				BFC032841C734C8300ECA69A /* ActivityCommentPanel.swift in Sources */,
 				BF8FE9A31C86C22400008170 /* ImageViewer.swift in Sources */,
+				BFEF5BBC1DC47D7700868029 /* TaggedContainer.swift in Sources */,
 				BF5D19D41D8A940100A66FC0 /* NewsCommentCell2.swift in Sources */,
 				BFE1CDCC1DA54B0E00F4CADD /* PropertyButtons.swift in Sources */,
 				BF4113D11D649A76005B6757 /* NotificationCell2.swift in Sources */,

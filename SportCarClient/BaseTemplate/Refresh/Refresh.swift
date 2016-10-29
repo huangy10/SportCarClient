@@ -32,11 +32,13 @@ class SSPullToRefresh: UIView {
                 actIndicator.isHidden = false
                 actIndicator.startAnimating()
                 if let scrollView = scrollView , oldValue != .loading {
-                    scrollView.contentOffset = previousScrollViewOffset
+//                    scrollView.contentOffset = previousScrollViewOffset
                     scrollView.bounces = false
-                    UIView.animate(withDuration: 0.3, animations: { 
+                    UIView.animate(withDuration: 0.3, animations: {
                         let insets = self.frame.height + self.scrollViewDefaultInsets.top
-                        scrollView.contentInset.top = insets
+                        var newInsets = self.scrollViewDefaultInsets
+                        newInsets.top = insets
+                        scrollView.contentInset = newInsets
                         scrollView.contentOffset = CGPoint(x: scrollView.contentOffset.x, y: -insets)
                         }, completion: { _ in
                             scrollView.bounces = true
@@ -77,6 +79,7 @@ class SSPullToRefresh: UIView {
         self.action = action
         scrollView.addSubview(self)
         self.frame  = CGRect(x: 0, y: scrollView.contentInset.top - 80, width: UIScreen.main.bounds.width, height: 80)
+        previousScrollViewOffset = scrollView.contentOffset
     }
     
     func createSubviews() {
@@ -154,7 +157,7 @@ class SSPullToRefresh: UIView {
         if self.state != State.inital {
             return
         }
-        scrollView?.setContentOffset(CGPoint(x: 0, y: -self.frame.height - scrollViewDefaultInsets.top), animated: true)
+        scrollView?.setContentOffset(CGPoint(x: scrollView!.contentOffset.x, y: -self.frame.height - scrollViewDefaultInsets.top), animated: true)
         let delayTime = DispatchTime.now() + Double(Int64(0.27 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
         DispatchQueue.main.asyncAfter(deadline: delayTime) { 
             self.state = State.loading

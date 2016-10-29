@@ -12,6 +12,7 @@ import Dollar
 
 class ActivityHomeMineListController: UICollectionViewController {
     
+    @available(*, deprecated: 1)
     weak var home: ActivityHomeController!
     
     var data: [Activity] = []
@@ -62,7 +63,7 @@ class ActivityHomeMineListController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let detail = ActivityDetailController(act: data[(indexPath as NSIndexPath).row])
         detail.parentCollectionView = self.collectionView
-        home.navigationController?.pushViewController(detail, animated: true)
+        parent?.navigationController?.pushViewController(detail, animated: true)
     }
     
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

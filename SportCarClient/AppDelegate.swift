@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
     func imageCacheSettings() {
         let cache = KingfisherManager.shared.cache
         // Set max disk cache to 50 mb. Default is no limit.
-        cache.maxDiskCacheSize = 50 * 1024 * 1024
+        cache.maxDiskCacheSize = UInt(50 * 1024 * 1024)
     }
     
     func shareSetup() {
