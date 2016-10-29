@@ -58,9 +58,6 @@ class ShareController: UIViewController {
             self.bgMask.layer.opacity = 1
             self.container.layer.opacity = 1
             }, completion: nil)
-//        SpringAnimation.spring(0.3) { () -> Void in
-//            
-//        }
     }
     
     func createSubviews() {

@@ -49,10 +49,6 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
     }
     var locDescription: String?
     
-//    convenience init() {
-//        self.init (currentLocation: nil, des: nil)
-//    }
-    
     init (currentLocation: CLLocationCoordinate2D?, des: String?) {
         super.init()
         self.location = currentLocation
@@ -145,10 +141,6 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
     
     func navSettings() {
         navigationItem.title = LS("选择地点")
-//        let navLeftBtn = UIButton()
-//            .config(self, selector: #selector(navLeftBtnPressed), image: UIImage(named: "account_header_back_btn"), contentMode: .ScaleAspectFit)
-//            .setFrame(CGRectMake(0, 0, 15, 15))
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: navLeftBtn)
         let navLeftBtn = UIBarButtonItem(title: LS("取消"), style: .done, target: self, action: #selector(navLeftBtnPressed))
         navLeftBtn.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         navigationItem.leftBarButtonItem = navLeftBtn
@@ -169,22 +161,9 @@ class LocationSelectController: InputableViewController, UITableViewDataSource, 
         } else {
             showToast(LS("请选择一个地点"), onSelf: true)
         }
-//        guard let poi = self.selectedPoi else {
-//            self.showToast(LS("请选择一个地点"), onSelf: true)
-//            return
-//        }
-//        delegate.locationSelectDidSelect(Location(location: poi.pt, description: poi.name))
     }
     
     // MARK: - TextField delegate
-//    
-//    func textFieldShouldReturn(textField: UITextField) -> Bool {
-//        if let locDes = textField.text {
-//            searchLocName(locDes)
-//        }
-//        return true
-//    }
-//
     func textField(_ textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         if textField.textInputMode?.primaryLanguage == "zh-Hans" {
             let selectedRange = textField.markedTextRange
