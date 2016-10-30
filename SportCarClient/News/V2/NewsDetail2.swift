@@ -136,15 +136,6 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     var likeInfoIcon: UIImageView!
     var likeDescriptionLbl: UILabel!
     
-//    var snapShotView: UIView! {
-//        didSet {
-//            view.addSubview(snapShotView)
-//            snapShotView.snp.makeConstraints { (make) in
-//                make.edges.equalTo(view)
-//            }
-//        }
-//    }
-    
     // animation related
     var initCoverFrame: CGRect = CGRect.zero
     
@@ -440,15 +431,6 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         } else {
             shareNumLbl.text = "\(news.shareNum)"
         }
-        
-//        if news.liked {
-//            likeIcon.image = UIImage(named: "news_like_liked")
-//            likeInfoIcon.image = likeIcon.image
-//        } else {
-//            likeIcon.image = UIImage(named: "news_like_unliked")
-//            likeInfoIcon.image = likeIcon.image
-//        }
-//        commentPanel.setLikedAnimated(news.liked)
         reloadLikeStatusAndUpdateUI()
         
         setNewsDetail()
