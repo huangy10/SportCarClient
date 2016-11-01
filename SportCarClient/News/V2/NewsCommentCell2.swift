@@ -9,22 +9,22 @@
 import UIKit
 
 
-class NewsCommentCell2: DetailCommentCell2 {
-    
-    func setData(_ avatarURL: URL, name: String, content: String, commentAt: Date, responseTo: String?, showReplyBtn: Bool) {
-        avatarBtn.kf.setImage(with: avatarURL, for: .normal)
-        nameLbl.text = name
-        contentLbl.text = content
-        commentDateLbl.text = dateDisplay(commentAt)
-        if let temp = responseTo {
-            responseLbl.isHidden = false
-            responseStaticLbl.isHidden = false
-            responseLbl.text = temp
-        } else {
-            responseLbl.isHidden = true
-            responseStaticLbl.isHidden = true
-        }
-        replyBtn.isHidden = !showReplyBtn
-    }
-    
-}
+//class NewsCommentCell2: DetailCommentCell2 {
+//    
+//    func setData(_ avatarURL: URL, name: String, content: String, commentAt: Date, responseTo: String?, showReplyBtn: Bool) {
+//        avatarBtn.kf.setImage(with: avatarURL, for: .normal)
+//        nameLbl.text = name
+//        contentLbl.text = content
+//        commentDateLbl.text = dateDisplay(commentAt)
+//        if let temp = responseTo {
+//            responseLbl.isHidden = false
+//            responseStaticLbl.isHidden = false
+//            responseLbl.text = temp
+//        } else {
+//            responseLbl.isHidden = true
+//            responseStaticLbl.isHidden = true
+//        }
+//        replyBtn.isHidden = !showReplyBtn
+//    }
+//    
+//}

@@ -131,7 +131,8 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     var likeIcon: UIImageView!
     
     var newsDetail: UIWebView!
-    var commentPanel: CommentBarView!
+//    var commentPanel: CommentBarView!
+    var bottomBar: BasicBottomBar!
     
     var likeInfoIcon: UIImageView!
     var likeDescriptionLbl: UILabel!
@@ -189,8 +190,8 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         configureNewsContentBoard()
         configureRecentLikeInfo()
         configureCommentSepLine()
-        configureCommentBar()
-        
+//        configureCommentBar()
+        configureBottomBar()
         configureNavigationBar()
         
         lp_start()
@@ -203,6 +204,10 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         } else {
             webViewReqPermitted = 1
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     func configureNavigationBar() {
@@ -237,7 +242,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         tableView.separatorStyle = .none
         tableView.estimatedRowHeight = 87.0
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.register(NewsCommentCell2.self, forCellReuseIdentifier: "cell")
+        tableView.register(DetailCommentCell2.self, forCellReuseIdentifier: "cell")
         tableView.register(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty")
         
         refreshControl = UIRefreshControl()
@@ -387,21 +392,35 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func configureCommentBar() {
-        commentPanel = CommentBarView()
-        view.addSubview(commentPanel)
-        commentPanel.contentInput?.delegate = self
-        commentPanel.setOriginY(view.bounds.height)
+    func configureBottomBar() {
+        bottomBar = BasicBottomBar(delegate: self)
+        view.addSubview(bottomBar)
+        var rect = view.bounds
+        rect.size.height -= 64
+        bottomBar.setFrame(withOffsetToBottom: 0, superviewFrame: rect)
         
-        commentPanel.likeBtn?.addTarget(self, action: #selector(likeBtnPressed), for: .touchUpInside)
-        commentPanel.shareBtn?.addTarget(self, action: #selector(shareBtnPressed), for: .touchUpInside)
-        
-        tableView.contentInset = UIEdgeInsetsMake(0, 0, commentPanel.barheight, 0)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        var oldInset = tableView.contentInset
+        oldInset.bottom += bottomBar.defaultBarHeight
+        tableView.contentInset = oldInset
     }
+    
+//    func configureCommentBar() {
+//        commentPanel = CommentBarView()
+//        view.addSubview(commentPanel)
+//        commentPanel.contentInput?.delegate = self
+//        commentPanel.setOriginY(view.bounds.height)
+//        
+//        commentPanel.likeBtn?.addTarget(self, action: #selector(likeBtnPressed), for: .touchUpInside)
+//        commentPanel.shareBtn?.addTarget(self, action: #selector(shareBtnPressed), for: .touchUpInside)
+//        
+//        tableView.contentInset = UIEdgeInsetsMake(0, 0, commentPanel.barheight, 0)
+//        
+//        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+//        
+//        commentPanel.isHidden = true
+//    }
     
     func configureHeader() {
         header = UIView()
@@ -444,7 +463,8 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
             likeIcon.image = UIImage(named: "news_like_unliked")
             likeInfoIcon.image = likeIcon.image
         }
-        commentPanel.setLikedAnimated(news.liked)
+//        commentPanel.setLikedAnimated(news.liked)
+        bottomBar.reloadIcon(at: 0, withPulse: true)
         likeDescriptionLbl.attributedText = news.getLikeDescription()
     }
     
@@ -507,7 +527,7 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if comments.count > 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! NewsCommentCell2
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DetailCommentCell2
             let comment = comments[(indexPath as NSIndexPath).row]
             cell.setData(comment.user.avatarURL!, name: comment.user.nickName!, content: comment.content, commentAt: comment.createdAt, responseTo: comment.responseTo?.user.nickName, showReplyBtn: !comment.user.isHost)
             cell.delegate = self
@@ -551,7 +571,8 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
             self.titleLbl.transform = titleTransform
             self.titleLblWhite.transform = titleTransform
             
-            self.commentPanel.setOriginY(self.view.bounds.height - self.commentPanel.barheight)
+//            self.commentPanel.setOriginY(self.view.bounds.height - self.commentPanel.barheight)
+            self.bottomBar.setFrame(withOffsetToBottom: 0)
             self.view.layoutIfNeeded()
             self.updateHeaderHeight()
             }, completion: { (_) in
@@ -579,7 +600,8 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
             self.titleLblWhite.transform = CGAffineTransform.identity
             
             self.view.layoutIfNeeded()
-            self.commentPanel.setOriginY(self.view.frame.height)
+//            self.commentPanel.setOriginY(self.view.frame.height)
+            self.bottomBar.setFrame(withOffsetToBottom: -self.bottomBar.defaultBarHeight)
             self.updateHeaderHeight()
             }, completion: { (_) in
                 onFinished()
@@ -641,49 +663,49 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         dismiss(animated: false, completion: nil)
     }
     
-    func changeLayoutWhenKeyboardStatusChanges(_ notification: Foundation.Notification) {
-        switch notification.name {
-        case NSNotification.Name.UIKeyboardWillShow:
-            let userInfo = (notification as NSNotification).userInfo!
-            let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue!
-            commentPanel.setOriginY(view.frame.height - keyboardFrame.height - commentPanel.frame.height)
-            tableView.contentInset = UIEdgeInsetsMake(0, 0, view.bounds.height - commentPanel.frame.origin.y, 0)
-            break
-        case NSNotification.Name.UIKeyboardWillHide:
-            commentPanel.setOriginY(view.frame.height - commentPanel.frame.height)
-            tableView.contentInset = UIEdgeInsetsMake(0, 0, view.bounds.height - commentPanel.frame.origin.y, 0)
-            break
-        case NSNotification.Name.UIKeyboardDidChangeFrame:
-            break
-        default:
-            break
-        }
-    }
+//    func changeLayoutWhenKeyboardStatusChanges(_ notification: Foundation.Notification) {
+//        switch notification.name {
+//        case NSNotification.Name.UIKeyboardWillShow:
+//            let userInfo = (notification as NSNotification).userInfo!
+//            let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue!
+//            commentPanel.setOriginY(view.frame.height - keyboardFrame.height - commentPanel.frame.height)
+//            tableView.contentInset = UIEdgeInsetsMake(0, 0, view.bounds.height - commentPanel.frame.origin.y, 0)
+//            break
+//        case NSNotification.Name.UIKeyboardWillHide:
+//            commentPanel.setOriginY(view.frame.height - commentPanel.frame.height)
+//            tableView.contentInset = UIEdgeInsetsMake(0, 0, view.bounds.height - commentPanel.frame.origin.y, 0)
+//            break
+//        case NSNotification.Name.UIKeyboardDidChangeFrame:
+//            break
+//        default:
+//            break
+//        }
+//    }
     
     // text editor
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        tapper.isEnabled = true
-    }
-    
-    func textViewDidChange(_ textView: UITextView) {
-        let textView = commentPanel.contentInput!
-        let fixedWidth = textView.bounds.width
-        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-        commentPanel.setBarHeight(newSize.height)
-    }
-    
+//    
+//    func textViewDidBeginEditing(_ textView: UITextView) {
+//        tapper.isEnabled = true
+//    }
+//    
+//    func textViewDidChange(_ textView: UITextView) {
+//        let textView = commentPanel.contentInput!
+//        let fixedWidth = textView.bounds.width
+//        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+//        commentPanel.setBarHeight(newSize.height)
+//    }
+//    
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            let commentText = textView.text ?? ""
-            if commentText.length > 0 {
-                commentConfirmed(commentText)
-            }else{
-                commentCanceled()
-            }
-            // 调用父类InputableViewControlle的这个函数来隐藏键盘
-            dismissKeyboard()
-        }
+//        if text == "\n" {
+//            let commentText = textView.text ?? ""
+//            if commentText.length > 0 {
+//                commentConfirmed(commentText)
+//            }else{
+//                commentCanceled()
+//            }
+//            // 调用父类InputableViewControlle的这个函数来隐藏键盘
+//            dismissKeyboard()
+//        }
         
         if text == "" && responseToPrefixStr != nil {
             if (textView.textInputMode?.primaryLanguage != "zh-Hans" || textView.markedTextRange == nil) && textView.text.length <= responseToPrefixStr!.length{
@@ -696,13 +718,14 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func dismissKeyboard() {
-        commentPanel.contentInput?.resignFirstResponder()
+        bottomBar.contentInput.resignFirstResponder()
+//        commentPanel.contentInput?.resignFirstResponder()
         tapper.isEnabled = false
     }
-    
-    func commentCanceled() {
-        // do nothing
-    }
+//    
+//    func commentCanceled() {
+//        // do nothing
+//    }
     
     func commentConfirmed(_ commentString: String?) {
         var responseToComment: NewsComment? = nil
@@ -744,9 +767,10 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
             tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
         tableView.endUpdates()
-        commentPanel?.contentInput?.text = ""
-        
-        commentPanel.restBarHeight()
+//        commentPanel?.contentInput?.text = ""
+//        
+//        commentPanel.restBarHeight()
+        bottomBar.clearInputContent()
     }
     
     // 
@@ -786,9 +810,11 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
         let targetComment = comments[responseToRow!]
         let responseToName = targetComment.user!.nickName!
         responseToPrefixStr = LS("回复") + responseToName + ": "
-        commentPanel.contentInput!.text = responseToPrefixStr
+//        commentPanel.contentInput!.text = responseToPrefixStr
+        bottomBar.contentInput.text = responseToPrefixStr
         atUser.removeAll()
-        commentPanel.contentInput?.becomeFirstResponder()
+//        commentPanel.contentInput?.becomeFirstResponder()
+        bottomBar.contentInput.becomeFirstResponder()
     }
     
     func detailCommentCellAvatarPressed(_ cell: DetailCommentCell2) {
@@ -796,5 +822,47 @@ class NewsDetailController2: UIViewController, UITableViewDataSource, UITableVie
             let comment = comments[row]
             navigationController?.pushViewController(comment.user.showDetailController(), animated: true)
         }
+    }
+}
+
+extension NewsDetailController2: BottomBarDelegate {
+    func bottomBarMessageConfirmSent() {
+        let content = bottomBar.contentInput.text
+        commentConfirmed(content)
+        bottomBar.clearInputContent()
+    }
+    
+    func bottomBarBtnPressed(at index: Int) {
+        if index == 0 {
+            likeBtnPressed()
+        } else {
+            shareBtnPressed()
+        }
+    }
+    
+    func bottomBarHeightShouldChange(into newHeight: CGFloat) -> Bool {
+        return true
+    }
+    
+    func bottomBarDidBeginEditing() {
+        tapper.isEnabled = true
+    }
+    
+    func getIconForBtn(at idx: Int) -> UIImage {
+        if idx == 0 && news.liked {
+            return UIImage(named: "news_like_liked")!
+        } else if idx == 0 {
+            return UIImage(named: "news_like_unliked")!
+        } else {
+            return UIImage(named: "news_share")!
+        }
+    }
+    
+    func numberOfLeftBtns() -> Int {
+        return 0
+    }
+    
+    func numberOfRightBtns() -> Int {
+        return 2
     }
 }

@@ -9,6 +9,7 @@
 import UIKit
 
 
+@available(*, deprecated: 1)
 class ActivityCommentPanel: CommentBarView {
     
     override func createSubivews() {

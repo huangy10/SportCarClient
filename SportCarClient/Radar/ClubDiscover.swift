@@ -13,8 +13,6 @@ import Dollar
 
 class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableViewDelegate, ClubBubbleViewDelegate, RadarFilterDelegate, CityElementSelectDelegate {
     
-    weak var radarHome: RadarHomeController?
-    
     var clubs: [Club] = []
     
     var clubList: UITableView!
@@ -134,15 +132,15 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         if club.attended {
             if club.founderUser!.isHost {
                 let detail = GroupChatSettingHostController(targetClub: club)
-                radarHome?.navigationController?.pushViewController(detail, animated: true)
+                parent?.navigationController?.pushViewController(detail, animated: true)
             } else {
                 let detail = GroupChatSettingController(targetClub: club)
-                radarHome?.navigationController?.pushViewController(detail, animated: true)
+                parent?.navigationController?.pushViewController(detail, animated: true)
             }
         } else {
             let detail = ClubBriefInfoController()
             detail.targetClub = club
-            radarHome?.navigationController?.pushViewController(detail, animated: true)
+            parent?.navigationController?.pushViewController(detail, animated: true)
         }
     }
     
@@ -156,15 +154,15 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         if club.attended {
             if club.founderUser!.isHost {
                 let detail = GroupChatSettingHostController(targetClub: club)
-                radarHome?.navigationController?.pushViewController(detail, animated: true)
+                parent?.navigationController?.pushViewController(detail, animated: true)
             } else {
                 let detail = GroupChatSettingController(targetClub: club)
-                radarHome?.navigationController?.pushViewController(detail, animated: true)
+                parent?.navigationController?.pushViewController(detail, animated: true)
             }
         } else {
             let detail = ClubBriefInfoController()
             detail.targetClub = club
-            radarHome?.navigationController?.pushViewController(detail, animated: true)
+            parent?.navigationController?.pushViewController(detail, animated: true)
         }
     }
     
@@ -229,19 +227,19 @@ class ClubDiscoverController: UIViewController, UITableViewDataSource, UITableVi
         select.maxLevel = 1
         select.showAllContry = true
         select.delegate = self
-        self.radarHome?.present(select.toNavWrapper(), animated: true, completion: nil)
+        self.parent?.present(select.toNavWrapper(), animated: true, completion: nil)
     }
     
     // MARK: City Element Select
     
     func cityElementSelectDidSelect(_ dataSource: CityElementSelectDataSource) {
-        self.radarHome?.dismiss(animated: true, completion: nil)
+        self.parent?.dismiss(animated: true, completion: nil)
         cityFilterType = dataSource.selectedCity ?? "全国"
         cityFilterLbl.text = cityFilterType
         sendRequest(true)
     }
     
     func cityElementSelectDidCancel() {
-        self.radarHome?.dismiss(animated: true, completion: nil)
+        parent?.dismiss(animated: true, completion: nil)
     }
 }

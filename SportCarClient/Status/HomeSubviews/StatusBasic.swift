@@ -43,8 +43,6 @@ class StatusBasicController: UITableViewController, StatusCellProtocol, LoadingP
     
     var myRefreshControl: UIRefreshControl?
     
-    weak var homeController: StatusHomeController?
-    
     weak var requestOnFly: Request?
     
     deinit {
@@ -92,25 +90,22 @@ class StatusBasicController: UITableViewController, StatusCellProtocol, LoadingP
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: StatusCell.reuseIdentifier, for: indexPath) as! StatusCell
-        cell.parent = homeController
         cell.delegate = self
-        cell.status = status[(indexPath as NSIndexPath).row]
-        cell.selectionStyle = .none
-        cell.loadDataAndUpdateUI()
+        cell.status = status[indexPath.row]
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//        let curStatus = status[(indexPath as NSIndexPath).row]
-//        if curStatus.image?.split(delimiter: ";").count <= 1{
-//            return 420
-//        }else{
-//            return 520
-//        }
-//    }
-    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return StatusCell.heightForStatus(status[(indexPath as NSIndexPath).row])
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let s = status[indexPath.row]
+        selectedCell = tableView.cellForRow(at: indexPath) as? StatusCell
+        let detail = StatusDetailController(status: s)
+        parent?.navigationController?.delegate = self
+        parent?.navigationController?.pushViewController(detail, animated: true)
     }
     
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -118,10 +113,6 @@ class StatusBasicController: UITableViewController, StatusCellProtocol, LoadingP
             loadMoreData()
         }
     }
-    
-//    override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-//        return false
-//    }
     
     func statusCellLikePressed(cell: StatusCell) {
         guard let indexPath = tableView.indexPath(for: cell) else {
@@ -137,6 +128,16 @@ class StatusBasicController: UITableViewController, StatusCellProtocol, LoadingP
             }) { (code) in
                 self.lp_stop()
                 self.showToast(LS("无法访问服务器"))
+        }
+    }
+    
+    var selectedCell: StatusCell?
+    
+    func getSelectedCellFrame() -> CGRect {
+        if let cell = selectedCell {
+            return cell.detail.convert(cell.detail.bounds, to: navigationController!.view)
+        } else {
+            fatalError()
         }
     }
 }
@@ -203,5 +204,21 @@ extension StatusBasicController {
             }
         }
         
+    }
+}
+
+extension StatusBasicController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        switch operation {
+        case .push where fromVC.isKind(of: StatusHomeController.self):
+            let res = StatusDetailEntranceAnimation()
+            res.fromVC = self
+            return res
+        case .pop where (toVC.isKind(of: StatusHomeController.self) && fromVC.isKind(of: StatusDetailController.self)):
+            let res = StatusDetailDismissAnimation()
+            return res
+        default:
+            return nil
+        }
     }
 }

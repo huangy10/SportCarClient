@@ -12,7 +12,7 @@ import Alamofire
 
 
 class RadarDriverMapController: UIViewController, RadarFilterDelegate {
-    weak var radarHome: RadarHomeController?
+//    weak var radarHome: RadarHomeController?
     
     var map: BMKMapView!
     var userAnnotate: BMKPointAnnotation!
@@ -207,7 +207,7 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
                 } else {
                     cell?.annotation = userAnno
                 }
-                cell?.parent = self.radarHome
+                cell?.parent = parent
                 cell?.user = userAnno.user
                 return cell
             }
@@ -217,7 +217,7 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
     
     func mapView(_ mapView: BMKMapView!, didSelect view: BMKAnnotationView!) {
         if let user = view.annotation as? UserAnnotation {
-            radarHome?.navigationController?.pushViewController(user.user.showDetailController(), animated: true)
+            parent?.navigationController?.pushViewController(user.user.showDetailController(), animated: true)
         }
     }
     
@@ -376,7 +376,7 @@ extension RadarDriverMapController: UITableViewDataSource, UITableViewDelegate {
         }
         assert(!user.isHost)
         let detail = PersonOtherController(user: user)
-        radarHome?.navigationController?.pushViewController(detail, animated: true)
+        parent?.navigationController?.pushViewController(detail, animated: true)
     }
     
     func showUserBtnPressed() {

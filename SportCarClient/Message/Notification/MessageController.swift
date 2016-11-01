@@ -36,6 +36,7 @@ class MessageController: TaggedContainer {
         super.viewDidLoad()
         configureUnreadLbls()
         NotificationCenter.default.addObserver(self, selector: #selector(onUnreadNumChanged(_:)), name: NSNotification.Name(rawValue: kUnreadNumberDidChangeNotification), object: nil)
+        navigationController?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,6 +99,23 @@ class MessageController: TaggedContainer {
                 self.notifUnreadLbl.setUnreadNum(MessageManager.defaultManager.unreadNotifNum)
                 self.chatUnreadLbl.setUnreadNum(MessageManager.defaultManager.unreadChatNum)
             })
+        }
+    }
+}
+
+extension MessageController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        switch operation {
+        case .push where (fromVC == self && toVC.isKind(of: StatusDetailController.self)):
+            let res = StatusCoverPresentAnimation()
+            res.delegate = notificationList
+            return res
+        case .pop where (fromVC.isKind(of: StatusDetailController.self) && toVC == self):
+            let res = StatusCoverDismissAnimation()
+            res.delegate = notificationList
+            return res
+        default:
+            return nil
         }
     }
 }

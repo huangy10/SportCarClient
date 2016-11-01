@@ -35,16 +35,6 @@ class StatusFollowController: StatusBasicController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let s = self.status[(indexPath as NSIndexPath).row]
-        let cell =  tableView.cellForRow(at: indexPath)
-        let pos = cell!.frame.origin.y - tableView.contentOffset.y + 10
-        let detail = StatusDetailController(status: s, background: getScreenShot(), initPos: pos, initHeight: cell!.frame.height)
-        detail.list = tableView
-        detail.indexPath = indexPath
-        self.homeController?.navigationController?.pushViewController(detail, animated: false)
-    }
-    
     func getScreenShot() -> UIImage{
         UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, true, UIScreen.main.scale)
         let context = UIGraphicsGetCurrentContext()!

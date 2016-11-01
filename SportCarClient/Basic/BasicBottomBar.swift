@@ -10,9 +10,10 @@ import UIKit
 
 protocol BottomBarDelegate: class {
     // 功能相关
-    func bottomBarHeightShouldChange(into newHeight: CGFloat)
+    func bottomBarHeightShouldChange(into newHeight: CGFloat) -> Bool
     func bottomBarBtnPressed(at index: Int)
     func bottomBarMessageConfirmSent()
+    func bottomBarDidBeginEditing()
     
     // 外观相关
     func getIconForBtn(at idx: Int) -> UIImage
@@ -23,11 +24,9 @@ protocol BottomBarDelegate: class {
 class BasicBottomBar: UIView {
     
     weak var delegate: BottomBarDelegate!
-    weak var contentInputDelegate: ContentInputFormatterDelegate?
     
     var leftStack: UIStackView?
     var rightStack: UIStackView?
-    var textView: UITextView!
     var btns: [SSButton] = []
     var contentInput: UITextView!
     var contentInputFormatter: ContentInputFormatter!
@@ -45,7 +44,7 @@ class BasicBottomBar: UIView {
     init(delegate: BottomBarDelegate) {
         self.delegate = delegate
         super.init(frame: .zero)
-        
+        backgroundColor = UIColor(white: 0.92, alpha: 1)
         configureLeftBtns()
         configureRightBtns()
         configureContentInput()
@@ -124,8 +123,9 @@ class BasicBottomBar: UIView {
             make.right.equalTo(self).offset(-15)
             make.bottom.equalTo(self).offset(-5)
             make.width.equalTo(num * bSize + (num - 1) * getIntervalOfBtns())
+            make.height.equalTo(bSize)
         }
-        
+        stack.backgroundColor = UIColor.red
         let baseNum = delegate.numberOfLeftBtns()
         for idx in baseNum..<(baseNum + delegate.numberOfRightBtns()) {
             let btn = SSButton()
@@ -141,6 +141,7 @@ class BasicBottomBar: UIView {
    
     func configure(btn: SSButton, at idx: Int) {
         btn.autoresizingMask = .flexibleHeight
+        btn.backgroundColor = .white
         btn.addTarget(self, action: #selector(btnPressed), for: .touchUpInside)
         let (bSize, iSize) = getIconSize()
         btn.layer.cornerRadius = bSize / 2
@@ -153,13 +154,13 @@ class BasicBottomBar: UIView {
         stack.spacing = getIntervalOfBtns()
         stack.alignment = .center
         stack.axis = .horizontal
-        stack.distribution = .equalSpacing
+        stack.distribution = .fillEqually
         return stack
     }
    
     
-    func btnPressed(sender: Int) {
-        delegate.bottomBarBtnPressed(at: sender)
+    func btnPressed(sender: UIButton) {
+        delegate.bottomBarBtnPressed(at: sender.tag)
     }
     
     func configureContentInput() {
@@ -194,13 +195,12 @@ class BasicBottomBar: UIView {
             make.size.equalTo(iSize)
         }
         
+        contentInput = UITextView()
         configureContentInputFormatter()
+        contentInput.delegate = contentInputFormatter
         
-        textView = UITextView()
-        textView.delegate = contentInputFormatter
-        
-        container.addSubview(textView)
-        textView.snp.makeConstraints { (make) in
+        container.addSubview(contentInput)
+        contentInput.snp.makeConstraints { (make) in
             make.left.equalTo(icon.snp.right).offset(10)
             make.right.equalTo(container).offset(-18)
             make.top.equalTo(container)
@@ -210,6 +210,8 @@ class BasicBottomBar: UIView {
     
     func configureContentInputFormatter() {
         contentInputFormatter = ContentInputFormatter()
+        contentInputFormatter.delegate = self
+        contentInputFormatter.textInput = contentInput
         contentInputFormatter.textCountLimit = 140
     }
     
@@ -217,6 +219,8 @@ class BasicBottomBar: UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardStatusChanges(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(contentInputDidStartEditing(notification:)), name: NSNotification.Name.UITextViewTextDidBeginEditing, object: contentInput)
     }
     
     func changeLayoutWhenKeyboardStatusChanges(_ notification: NSNotification) {
@@ -226,7 +230,7 @@ class BasicBottomBar: UIView {
         switch notification.name {
         case NSNotification.Name.UIKeyboardWillShow:
             let userInfo = notification.userInfo!
-            let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue!
+            let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue!
             setFrame(withOffsetToBottom: keyboardFrame.height)
         case NSNotification.Name.UIKeyboardWillHide:
             setFrame(withOffsetToBottom: 0)
@@ -242,4 +246,49 @@ class BasicBottomBar: UIView {
         let y = sFrame.height - height - offset
         frame = CGRect(x: 0, y: y, width: width, height: height)
     }
+    
+    func updateBarHeight(_ newHeight: CGFloat) {
+        var oldFrame = frame
+        oldFrame.origin.y -= newHeight - oldFrame.height
+        oldFrame.size.height = newHeight
+        frame = oldFrame
+    }
+    
+    func resetBarBarHeight() {
+        updateBarHeight(defaultBarHeight)
+    }
+    
+    func clearInputContent() {
+        contentInput.text = ""
+//        resetBarBarHeight()
+    }
+    
+    func contentInputDidStartEditing(notification: NSNotification) {
+        delegate.bottomBarDidBeginEditing()
+    }
+    
+    func forwardTextViewDelegateTo(_ upStream: UITextViewDelegate) {
+        contentInputFormatter.forwardToDelegate = upStream
+    }
 }
+
+extension BasicBottomBar: ContentInputFormatterDelegate {
+    func contentInputShouldChangeHeight(into height: CGFloat) {
+        if delegate.bottomBarHeightShouldChange(into: height) {
+            updateBarHeight(max(height, defaultBarHeight))
+        }
+    }
+    
+    func contentInputConfirmed(contentInputFormatter: ContentInputFormatter) {
+        delegate.bottomBarMessageConfirmSent()
+    }
+    
+    func smallOperationIconImage(forIdx idx: Int) -> UIImage? {
+//        if idx == 0 && status. {
+//            
+//        }
+        return nil
+    }
+}
+
+

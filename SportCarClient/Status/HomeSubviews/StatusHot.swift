@@ -15,6 +15,8 @@ class StatusHotController: UICollectionViewController {
     var myRefreshControl: UIRefreshControl?
     weak var homeController: StatusHomeController?
     
+    weak var selectedCell: UICollectionViewCell?
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -40,6 +42,11 @@ class StatusHotController: UICollectionViewController {
         loadMoreStatusData()
         
         NotificationCenter.default.addObserver(self, selector: #selector(onStatusDeleted(notification:)), name: NSNotification.Name(rawValue: kStatusDidDeletedNotification), object: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        selectedCell = nil
     }
     
     func onStatusDeleted(notification: NSNotification) {
@@ -122,10 +129,37 @@ class StatusHotController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectedCell = collectionView.cellForItem(at: indexPath)
+        parent?.navigationController?.delegate = self
         let s = status[(indexPath as NSIndexPath).row]
+//        let detail = StatusDetailController(status: s)
+//        detail.loadAnimated = false
+//        parent?.navigationController?.pushViewController(detail, animated: true)
         let detail = StatusDetailController(status: s)
-        detail.loadAnimated = false
-        self.homeController?.navigationController?.pushViewController(detail, animated: true)
+        parent?.navigationController?.pushViewController(detail, animated: true)
+    }
+}
+
+extension StatusHotController: StatusCoverPresentable {
+    func initialCoverPosition() -> CGRect {
+        return selectedCell!.convert(selectedCell!.bounds, to: navigationController!.view)
+    }
+}
+
+extension StatusHotController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        switch operation {
+        case .push where fromVC.isKind(of: StatusHomeController.self):
+            let res = StatusCoverPresentAnimation()
+            res.delegate = self
+            return res
+        case .pop where (toVC.isKind(of: StatusHomeController.self) && fromVC.isKind(of: StatusDetailController.self)):
+            let res = StatusCoverDismissAnimation()
+            res.delegate = self
+            return res
+        default:
+            return nil
+        }
     }
 }
 

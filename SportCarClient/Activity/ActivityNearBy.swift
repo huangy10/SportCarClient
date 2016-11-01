@@ -12,8 +12,6 @@ import Alamofire
 
 class ActivityNearByController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, CityElementSelectDelegate {
     
-    weak var home: RadarHomeController!
-    
     var acts: [Activity] = []
     
     var map: BMKMapView!
@@ -143,7 +141,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
         select.showAllContry = true
         select.delegate = self
         select.curSelected = cityFilterLbl.text
-        home.present(select.toNavWrapper(), animated: true, completion: nil)
+        parent?.present(select.toNavWrapper(), animated: true, completion: nil)
     }
     
     //
@@ -174,7 +172,7 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
         let act = acts[(indexPath as NSIndexPath).row]
         let detail = ActivityDetailController(act: act)
         showReload = false
-        home.navigationController?.pushViewController(detail, animated: true)
+        parent?.navigationController?.pushViewController(detail, animated: true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -254,11 +252,11 @@ class ActivityNearByController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func cityElementSelectDidCancel() {
-        home.dismiss(animated: true, completion: nil)
+        parent?.dismiss(animated: true, completion: nil)
     }
     
     func cityElementSelectDidSelect(_ dataSource: CityElementSelectDataSource) {
-        home.dismiss(animated: true, completion: nil)
+        parent?.dismiss(animated: true, completion: nil)
         let keyword = dataSource.selectedCity ?? "全国"
         cityFilterLbl.text = keyword
         

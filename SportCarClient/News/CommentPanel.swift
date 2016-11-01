@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 
+@available(*, deprecated: 1)
 class CommentBarView: UIView {
     
     /*

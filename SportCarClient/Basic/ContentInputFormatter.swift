@@ -10,22 +10,30 @@ import UIKit
 
 protocol ContentInputFormatterDelegate: class {
     func contentInputConfirmed(contentInputFormatter: ContentInputFormatter)
-    
-    func dismissKeyboard()
+    func contentInputShouldChangeHeight(into height: CGFloat)
 }
 
 
 class ContentInputFormatter: NSObject, UITextViewDelegate {
     
     var textCountLimit = 140
-    var textInput: UITextView!
-    var fixedWidth: CGFloat?
+    var textInput: UITextView! {
+        didSet {
+            configureTextInput()
+        }
+    }
     var disableConfirmKey: Bool = false
     var confirmKey: String = "\n"
     var callDidChangeAfterTruncate: Bool = true
     
     weak var forwardToDelegate: UITextViewDelegate?
     weak var delegate: ContentInputFormatterDelegate?
+    
+    func configureTextInput() {
+        textInput.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
+        textInput.isScrollEnabled = false
+        textInput.bounces = false
+    }
     
     func textViewDidChange(_ textView: UITextView) {
         
@@ -44,6 +52,16 @@ class ContentInputFormatter: NSObject, UITextViewDelegate {
         if text.length > textCountLimit {
             textView.text = text[0..<textCountLimit]
         }
+        
+        // calculate new height
+        if text == "" {
+            delegate?.contentInputShouldChangeHeight(into: 0)
+        } else {
+            let fixedWidth = textInput.bounds.width
+            let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+            delegate?.contentInputShouldChangeHeight(into: newSize.height + 10)
+        }
+        
         if callDidChangeAfterTruncate {
             forwardToDelegate?.textViewDidChange?(textView)
         }
@@ -78,7 +96,7 @@ class ContentInputFormatter: NSObject, UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == confirmKey {
             delegate?.contentInputConfirmed(contentInputFormatter: self)
-            delegate?.dismissKeyboard()
+            return false
         }
         if let res = forwardToDelegate?.textView?(textView, shouldChangeTextIn: range, replacementText: text) {
             return res

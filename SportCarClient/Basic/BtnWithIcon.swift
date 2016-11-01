@@ -14,7 +14,7 @@ class SSButton: UIButton {
     var iconSize: CGFloat = -1 {
         didSet {
             icon.snp.remakeConstraints { (make) in
-                make.center.equalTo(icon)
+                make.center.equalTo(self)
                 make.size.equalTo(iconSize)
             }
         }

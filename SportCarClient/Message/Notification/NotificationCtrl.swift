@@ -21,7 +21,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
     internal var delayWorkItem: DispatchWorkItem?
     
     var data: [Notification] = []
-    
+    weak var selectedStatusCell: NotificationCell?
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(NotificationCell.self, forCellReuseIdentifier: "cell")
@@ -92,7 +92,11 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
                 
             })
         }
-        parent?.navigationController?.pushViewController(getDetailController(forRow: (indexPath as NSIndexPath).row), animated: true)
+        let detail = getDetailController(forRow: indexPath.row)
+        if detail.isKind(of: StatusDetailController.self) {
+            selectedStatusCell = tableView.cellForRow(at: indexPath) as? NotificationCell
+        }
+        parent?.navigationController?.pushViewController(detail, animated: true)
     }
     
     lazy var detailControllerMap: [String: (Notification)->UIViewController] = {
@@ -108,14 +112,12 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
         func status(_ notification: Notification) -> UIViewController {
             let status = try! notification.getRelatedObj()! as Status
             let detail = StatusDetailController(status: status)
-            detail.loadAnimated = false
             return detail
         }
         
         func statusComment(_ notification: Notification) -> UIViewController {
             let status =  (try! notification.getRelatedObj()! as StatusComment).status
             let detail = StatusDetailController(status: status)
-            detail.loadAnimated = false
             return detail
         }
 
@@ -230,5 +232,10 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
             }
         }
     }
-    
+}
+
+extension NotificationController: StatusCoverPresentable {
+    func initialCoverPosition() -> CGRect {
+        return selectedStatusCell!.convert(selectedStatusCell!.cover.frame, to: parent!.navigationController!.view)
+    }
 }

@@ -12,9 +12,9 @@ import Cent
 import MapKit
 import Dollar
 
-class ActivityDetailController: InputableViewController, UITableViewDataSource, UITableViewDelegate, FFSelectDelegate, DetailCommentCellDelegate, LoadingProtocol {
+class ActivityDetailController: UIViewController, LoadingProtocol {
 
-
+    var delayWorkItem: DispatchWorkItem?
     
     var act: Activity!
     var comments: [ActivityComment] = []
@@ -22,7 +22,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     var infoView: ActivityDetailHeaderView!
     var tableView: UITableView!
-    var commentPanel: ActivityCommentPanel!
+    var bottomBar: BasicBottomBar!
     
     var responseToRow: Int = -1
     var atUser: [String] = []
@@ -32,8 +32,10 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     
     var needReloadActInfo: Bool = false
     
+    var tapper: UITapGestureRecognizer!
+    
     init(act: Activity) {
-        super.init()
+        super.init(nibName: nil, bundle: nil)
         self.act = act
     }
     
@@ -63,17 +65,23 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         mapCell.map.viewWillDisappear()
     }
     
+    func dismissKeyboard() {
+        bottomBar.contentInput.resignFirstResponder()
+        tapper.isEnabled = false
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSettings()
+        configureTapper()
+        configureTableView()
+        configureMapCell()
+        configureInfoView()
+        configureBottomBar()
         
         loadActInfo()
-        // Send request to get the comments
         loadMoreComments()
         
-        //
-        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardAppears(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(changeLayoutWhenKeyboardDisappears(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onActivityInfoChanged(_:)), name: NSNotification.Name(rawValue: kActivityInfoChanged), object: nil)
         
     }
@@ -86,53 +94,54 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
     }
     
-    override func createSubviews() {
-        super.createSubviews()
-        let superview = self.view.config(UIColor.white)
-        
-        tableView = UITableView(frame: CGRect.zero, style: .plain)
+    func configureTableView() {
+        tableView = UITableView(frame: .zero, style: .plain)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        self.view.addSubview(tableView)
-        tableView.layout { (make) in
-            make.edges.equalTo(superview)
-        }
-        tableView.register(ActivityCommentCell.self, forCellReuseIdentifier: ActivityCommentCell.reuseIdentifier)
-        tableView.register(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty_cell")
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints{ $0.edges.equalTo(view) }
         
+        tableView.register(DetailCommentCell2.self, forCellReuseIdentifier: "cell")
+        tableView.register(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty")
+    }
+    
+    func configureInfoView() {
         infoView = ActivityDetailHeaderView(act: act)
         infoView.likeBtn.addTarget(self, action: #selector(likeBtnPressed), for: .touchUpInside)
         infoView.parentController = self
         tableView.addSubview(infoView)
         infoView.snp.makeConstraints { (make) in
             make.bottom.equalTo(tableView.snp.top)
-            make.left.equalTo(superview)
-            make.right.equalTo(superview)
+            make.left.equalTo(view)
+            make.right.equalTo(view)
             make.height.equalTo(infoView.preferedHeight)
         }
-        
-        commentPanel = ActivityCommentPanel()
-        inputFields.append(commentPanel.contentInput)
-        commentPanel.contentInput?.delegate = self
-        superview.addSubview(commentPanel)
-        commentPanel.likeBtn?.addTarget(self, action: #selector(likeBtnPressed), for: .touchUpInside)
-        commentPanel.setLikedAnimated(act.liked, flag: false)
-        commentPanel.snp.makeConstraints { (make) in
-            make.left.equalTo(superview)
-            make.right.equalTo(superview)
-            make.bottom.equalTo(superview)
-            make.height.equalTo(commentPanel.barheight)
-        }
-        
-        tableView.contentInset = UIEdgeInsetsMake(infoView.preferedHeight, 0, commentPanel.barheight, 0)
-        tableView.setContentOffset(CGPoint(x: 0, y: -infoView.preferedHeight), animated: false)
-        
+    }
+    
+    func configureTapper() {
+        tapper = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapper)
+    }
+    
+    func configureMapCell() {
         mapCell = MapCell(trailingHeight: 100)
         mapCell.locBtn.addTarget(self, action: #selector(ActivityDetailController.needNavigation), for: .touchUpInside)
         mapCell.locLbl.text = LS("导航至 ") + (act.location?.descr ?? LS("未知地点"))
         mapCell.locDesIcon.image = UIImage(named: "location_mark_black")
         mapCell.locDesIcon.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+    }
+    
+    func configureBottomBar() {
+        bottomBar = BasicBottomBar(delegate: self)
+        bottomBar.forwardTextViewDelegateTo(self)
+        view.addSubview(bottomBar)
+        var rect = view.bounds
+        rect.size.height -= 64
+        bottomBar.setFrame(withOffsetToBottom: 0, superviewFrame: rect)
+        var oldInset = tableView.contentInset
+        oldInset.bottom += bottomBar.defaultBarHeight
+        tableView.contentInset = oldInset
     }
     
     fileprivate func navSettings() {
@@ -152,7 +161,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
                     .setFrame(CGRect(x: 0, y: 0, width: 44, height: 18.5))
                 navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightImage)
             } else {
-                let rightItem = UIBarButtonItem(title: LS("关闭活动"), style: .done, target: self, action: #selector(ActivityDetailController.navRightBtnPressed))
+                let rightItem = UIBarButtonItem(title: LS("关闭活动"), style: .done, target: self, action: #selector(navRightBtnPressed))
                 rightItem.setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
                 navigationItem.rightBarButtonItem = rightItem
             }
@@ -170,40 +179,8 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
     func navRightBtnPressed() {
         if act.mine {
             closeActivity()
-//            if !act.finished {
-//                act.endAt = NSDate()
-//                setNavRightBtn()
-//                lp_start()
-//                ActivityRequester.sharedInstance.closeActivty(act.ssidString, onSuccess: { (json) in
-//                    self.lp_stop()
-//                    self.parentCollectionView?.reloadData()
-//                    // push a notification to tell other related component to update the status
-//                    NSNotificationCenter.defaultCenter().postNotificationName(kActivityManualEndedNotification, object: nil, userInfo: [kActivityKey: self.act])
-//                    self.showToast(LS("活动已关闭报名"))
-//                    }, onError: { (code) in
-//                        self.showToast(LS("Access Error: \(code)"))
-//                        self.lp_stop()
-//                })
-//            }
         } else {
             applyForActivity()
-//            if act.applied {
-//                return
-//            }
-//            if act.finished {
-//                showToast(LS("活动已结束，无法报名"))
-//            }
-//            act.hostApply()
-//            infoView.loadDataAndUpdateUI()
-//            setNavRightBtn()
-//            self.lp_start()
-//            ActivityRequester.sharedInstance.postToApplyActivty(act.ssidString, onSuccess: { (json) in
-//                self.showToast(LS("报名成功"))
-//                self.lp_stop()
-//                }, onError: { (code) in
-//                    self.showToast(LS("报名失败"))
-//                    self.lp_stop()
-//            })
         }
     }
     
@@ -267,7 +244,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
                 let likeNum = data["like_num"].int32Value
                 self.infoView.setLikeIconState(liked)
                 self.infoView.likeNumLbl.text = "\(likeNum)"
-                self.commentPanel.setLikedAnimated(liked)
+                self.bottomBar.reloadIcon(at: 0, withPulse: true)
             } else {
                 assertionFailure()
             }
@@ -277,87 +254,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            if comments.count == 0 {
-                return 1
-            }
-            return comments.count
-        } else {
-            return 1
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if (indexPath as NSIndexPath).section == 0 {
-            if comments.count == 0 {
-                // empty info cell
-                return 100
-            }
-            return ActivityCommentCell.heightForComment(comments[(indexPath as NSIndexPath).row].content!)
-        } else {
-            return 250
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if (indexPath as NSIndexPath).section == 0 {
-            if comments.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "empty_cell", for: indexPath) as! SSEmptyListHintCell
-                cell.titleLbl.text = LS("还没有评论")
-                return cell
-            }
-            let cell = tableView.dequeueReusableCell(withIdentifier: ActivityCommentCell.reuseIdentifier, for: indexPath) as! ActivityCommentCell
-            cell.comment = comments[(indexPath as NSIndexPath).row]
-            cell.replyBtn?.tag = (indexPath as NSIndexPath).row
-            cell.delegate = self
-            cell.loadDataAndUpdateUI()
-            return cell
-        } else {
-            if !mapCell.centerSet {
-                let center = CLLocationCoordinate2D(latitude: act.location!.latitude, longitude: act.location!.longitude)
-                mapCell.setMapCenter(center)
-            }
-            return mapCell
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if comments.count == 0 {
-            return
-        }
-        let comment = comments[(indexPath as NSIndexPath).row]
-        if comment.user.isHost {
-            return
-        } else {
-            responseToRow = (indexPath as NSIndexPath).row
-            let responseToName = comment.user.nickName!
-            responseToPrefixStr = LS("回复 ") + responseToName + ": "
-            commentPanel?.contentInput?.text = responseToPrefixStr
-            atUser.removeAll()
-            commentPanel?.contentInput?.becomeFirstResponder()
-        }
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        infoView.adjustCoverScaleAccordingToTableOffset(scrollView.contentOffset.y + infoView.preferedHeight)
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y + scrollView.frame.height > scrollView.contentSize.height - 1 {
-            loadMoreComments()
-        }
-    }
-    
-    // MARK: data fetching
-    
-    /**
-     Fetch the latest information about the act
-     */
     func loadActInfo(_ showLoading: Bool = true) {
         if showLoading {
             lp_start()
@@ -370,13 +267,11 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
                 DispatchQueue.main.async(execute: {
                     self.setNavRightBtn()
                     _ = self.infoView.loadDataAndUpdateUI() // the preferedHeight udpated
-                    self.commentPanel.setLikedAnimated(self.act.liked, flag: false)
+                    self.bottomBar.reloadIcon(at: 0)
                     self.tableView.contentOffset = CGPoint(x: 0, y: -self.infoView.preferedHeight)
-                    self.tableView.contentInset = UIEdgeInsetsMake(self.infoView.preferedHeight, 0, self.commentPanel.barheight, 0)
-//                    UIView.animateWithDuration(0.3, animations: {
-//                        self.tableView.contentInset = UIEdgeInsetsMake(self.infoView.preferedHeight, 0, self.commentPanel.barheight, 0)
-//                        self.tableView.contentOffset = CGPointMake(0, -self.infoView.preferedHeight)
-//                    })
+                    var oldInset = self.tableView.contentInset
+                    oldInset.top = self.infoView.preferedHeight
+                    self.tableView.contentInset = oldInset
                 })
                 
             } else {
@@ -410,9 +305,6 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
     }
     
-    /**
-     send comments to the server
-     */
     func commentConfirmed(_ content: String) {
         var responseToComment: ActivityComment? = nil
         if responseToRow >= 0 {
@@ -430,10 +322,7 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
         tableView.endUpdates()
-        commentPanel.contentInput?.text = ""
-        commentPanel.snp.updateConstraints { (make) in
-            make.height.equalTo(commentPanel.barheight)
-        }
+        bottomBar.clearInputContent()
         
         lp_start()
         ActivityRequester.sharedInstance.sendActivityComment(act.ssidString, content: content, responseTo: responseToComment?.ssidString, informOf: nil, onSuccess: { (json) in
@@ -455,59 +344,6 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
         }
     }
     
-    func textViewDidChange(_ textView: UITextView) {
-        let fixedWidth = textView.bounds.width
-        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-        commentPanel.snp.updateConstraints { (make) in
-            make.height.equalTo(max(newSize.height, commentPanel.barheight))
-        }
-        self.view.layoutIfNeeded()
-    }
-    
-    func textView(_ textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            if let commentText = textView.text , commentText.length > 0 {
-                commentConfirmed(commentText)
-            }
-            dismissKeyboard()
-        }
-        if text == "" && responseToPrefixStr.length > 0 {
-            if (textView.textInputMode?.primaryLanguage != "zh-Hans" || textView.markedTextRange == nil) && textView.text.length <= responseToPrefixStr.length {
-                textView.text = ""
-                responseToPrefixStr = ""
-                responseToRow = -1
-            }
-        }
-        return true
-    }
-    
-    // MARK: delegate functions
-    
-    func userSelectCancelled() {
-        // just dismiss the presented user selector
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    /**
-     邀请其他用户参加活动
-     
-     - parameter users: 被邀请的用户的list
-     */
-    func userSelected(_ users: [User]) {
-        self.dismiss(animated: true, completion: nil)
-        let userIDs = users.map { $0.ssidString }
-        let userIDData = try! JSON(userIDs).rawData()
-        let userJSONString = String(data: userIDData, encoding: String.Encoding.utf8)
-        self.lp_start()
-        _ = ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: userJSONString!, opType: "invite", onSuccess: { (json) in
-            self.showToast(LS("邀请已发送"))
-            self.lp_stop()
-            }) { (code) in
-                self.showToast(LS("邀请发送失败"))
-                self.lp_stop()
-        }
-    }
-    
     func avatarPressed(_ cell: DetailCommentCell) {
         // 评论列表的代理
         if let commentCell = cell as? ActivityCommentCell {
@@ -515,27 +351,11 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             navigationController?.pushViewController((comment?.user.showDetailController())!, animated: true)
         }
     }
-    
-    func replyPressed(_ cell: DetailCommentCell) {
-        commentPressed(cell.replyBtn!)
-    }
-    
-    func commentPressed(_ sender: UIButton) {
-        responseToRow = sender.tag
-        let targetComment = comments[responseToRow]
-        if let responseToName = targetComment.user.nickName {
-            responseToPrefixStr = LS("回复 ") + responseToName + ": "
-            commentPanel.contentInput?.text = responseToPrefixStr
-        }
-        atUser.removeAll()
-        commentPanel.contentInput?.becomeFirstResponder()
-    }
-    
+
     // MARK: navigation
     
     func needNavigation() {
         showConfirmToast(LS("导航"), message: LS("跳转到地图导航？"), target: self, onConfirm: #selector(openMapToNavigate))
-//        toast = showConfirmToast(LS("跳转到地图导航?"), target: self, confirmSelector: #selector(openMapToNavigate), cancelSelector: #selector(hideToast as ()->()))
     }
     
     func openMapToNavigate() {
@@ -558,45 +378,189 @@ class ActivityDetailController: InputableViewController, UITableViewDataSource, 
             MKMapItem.openMaps(with: [target], launchOptions: options)
         }
     }
+}
+
+extension ActivityDetailController: BottomBarDelegate {
+    func bottomBarDidBeginEditing() {
+        tapper.isEnabled = true
+    }
     
-    // MARK: adjust layout when keyboard appears
+    func bottomBarMessageConfirmSent() {
+        commentConfirmed(bottomBar.contentInput.text)
+    }
     
-    func changeLayoutWhenKeyboardAppears(_ notification: Foundation.Notification) {
-        if let userInfo = (notification as NSNotification).userInfo {
-            if let keyboardFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as AnyObject).cgRectValue {
-                var inset = tableView.contentInset
-                inset.bottom += keyboardFrame.height
-                tableView.contentInset = inset
-                tableView.setContentOffset(CGPoint(x: 0, y: -50), animated: true)
-                commentPanel.snp.remakeConstraints({ (make) in
-                    make.left.equalTo(self.view)
-                    make.right.equalTo(self.view)
-                    make.bottom.equalTo(self.view).offset(-keyboardFrame.height)
-                    make.height.equalTo(commentPanel.barheight)
-                })
-                self.view.layoutIfNeeded()
-            }
+    func bottomBarHeightShouldChange(into newHeight: CGFloat) -> Bool {
+        return true
+    }
+    
+    func bottomBarBtnPressed(at index: Int) {
+        likeBtnPressed()
+    }
+    
+    func getIconForBtn(at idx: Int) -> UIImage {
+        if act.liked {
+            return UIImage(named: "news_like_liked")!
+        } else {
+            return UIImage(named: "news_like_unliked")!
         }
     }
     
-    func changeLayoutWhenKeyboardDisappears(_ notification: Foundation.Notification) {
-        var inset = tableView.contentInset
-        inset.bottom = commentPanel.barheight
-        tableView.contentInset = inset
-        commentPanel.snp.remakeConstraints({ (make) in
-            make.left.equalTo(self.view)
-            make.right.equalTo(self.view)
-            make.bottom.equalTo(self.view)
-            make.height.equalTo(commentPanel.barheight)
-        })
-        self.view.layoutIfNeeded()
+    func numberOfLeftBtns() -> Int {
+        return 0
     }
     
-    // MARK: loading
-    @available(*, deprecated: 1)
-    func checkImageDetail(_ cell: DetailCommentCell) {
-        
+    func numberOfRightBtns() -> Int {
+        return 1
     }
 }
 
+extension ActivityDetailController: DetailCommentCellDelegate2 {
+    
+    func startReplyToComment(atIndexPath indexPath: IndexPath) {
+        responseToRow = indexPath.row
+        let comment = comments[responseToRow]
+        responseToPrefixStr = getCommentPrefix(forUserNickName: comment.user.nickName!)
+        bottomBar.contentInput.text = responseToPrefixStr
+        atUser.removeAll()
+        bottomBar.contentInput.becomeFirstResponder()
+    }
+    
+    func getCommentPrefix(forUserNickName name: String) -> String {
+        return LS("回复 ") + name + ": "
+    }
+    
+    func detailCommentCellReplyPressed(_ cell: DetailCommentCell2) {
+        if let indexPath = tableView.indexPath(for: cell) {
+            startReplyToComment(atIndexPath: indexPath)
+        }
+    }
+    
+    func detailCommentCellAvatarPressed(_ cell: DetailCommentCell2) {
+        if let indexPath = tableView.indexPath(for: cell) {
+            let comment = comments[indexPath.row]
+            navigationController?.pushViewController(comment.user.showDetailController(), animated: true)
+        }
+    }
+}
+
+extension ActivityDetailController: UITextViewDelegate {
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "" && responseToPrefixStr.length > 0 {
+            if (textView.textInputMode?.primaryLanguage != "zh-Hans" || textView.markedTextRange == nil) && textView.text.length <= responseToPrefixStr.length {
+                textView.text = ""
+                responseToPrefixStr = ""
+                responseToRow = -1
+            }
+        }
+        return true
+    }
+}
+
+
+extension ActivityDetailController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            if comments.count == 0 {
+                return 1
+            }
+            return comments.count
+        } else {
+            return 1
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            if comments.count == 0 {
+                return 100
+            } else {
+                return 87
+            }
+        } else {
+            return 250
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath as NSIndexPath).section == 0 {
+            if comments.count == 0 {
+                // empty info cell
+                return 100
+            }
+//            return ActivityCommentCell.heightForComment(comments[(indexPath as NSIndexPath).row].content!)
+            return UITableViewAutomaticDimension
+        } else {
+            return 250
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            if comments.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "empty", for: indexPath) as! SSEmptyListHintCell
+                cell.titleLbl.text = LS("还没有评论")
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DetailCommentCell2
+                cell.delegate = self
+                let comment = comments[indexPath.row]
+                cell.setData(comment.user.avatarURL!, name: comment.user.nickName!, content: comment.content, commentAt: comment.createdAt, responseTo: comment.responseTo?.user.nickName, showReplyBtn: !comment.user.isHost)
+                cell.setNeedsUpdateConstraints()
+                cell.updateConstraintsIfNeeded()
+                return cell
+            }
+        } else {
+            if !mapCell.centerSet {
+                let center = CLLocationCoordinate2D(latitude: act.location!.latitude, longitude: act.location!.longitude)
+                mapCell.setMapCenter(center)
+            }
+            return mapCell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if comments.count == 0 || indexPath.section > 0 {
+            return
+        }
+        startReplyToComment(atIndexPath: indexPath)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        infoView.adjustCoverScaleAccordingToTableOffset(scrollView.contentOffset.y + infoView.preferedHeight)
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y + scrollView.frame.height > scrollView.contentSize.height - 1 {
+            loadMoreComments()
+        }
+    }
+}
+
+extension ActivityDetailController: FFSelectDelegate {
+    func userSelectCancelled() {
+        // just dismiss the presented user selector
+        self.dismiss(animated: true, completion: nil)
+    }
+  
+    func userSelected(_ users: [User]) {
+        self.dismiss(animated: true, completion: nil)
+        let userIDs = users.map { $0.ssidString }
+        let userIDData = try! JSON(userIDs).rawData()
+        let userJSONString = String(data: userIDData, encoding: String.Encoding.utf8)
+        self.lp_start()
+        _ = ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: userJSONString!, opType: "invite", onSuccess: { (json) in
+            self.showToast(LS("邀请已发送"))
+            self.lp_stop()
+        }) { (code) in
+            self.showToast(LS("邀请发送失败"))
+            self.lp_stop()
+        }
+    }
+}
 

@@ -31,6 +31,9 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     var homeBtn: BackToHomeBtn!
     
     var needReloadUserInfo: Bool = false
+    weak var selectedStatusCell: UICollectionViewCell?
+    
+    weak var oldNavDelegate: UINavigationControllerDelegate?
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -238,6 +241,8 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         navigationItem.title = getNavTitle()
         navigationItem.leftBarButtonItem = getNavLeftBtn()
         navigationItem.rightBarButtonItem = getNavRightBtn()
+        oldNavDelegate = navigationController?.delegate
+        navigationController?.delegate = self
     }
     
     func getNavLeftBtn() -> UIBarButtonItem? {
@@ -280,6 +285,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         if homeDelegate != nil {
             homeDelegate?.backToHome(nil)
         }else {
+            navigationController?.delegate = oldNavDelegate
             _ = self.navigationController?.popViewController(animated: true)
         }
     }
@@ -377,8 +383,9 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             }
             status = data.statusDict[data.selectedCar!.ssidString]![(indexPath as NSIndexPath).row]
         }
+        selectedStatusCell = collectionView.cellForItem(at: indexPath)
         let detail = StatusDetailController(status: status)
-        detail.loadAnimated = false
+//        detail.loadAnimated = false
         self.navigationController?.pushViewController(detail, animated: true)
     }
     
@@ -560,6 +567,29 @@ extension PersonBasicController {
         carsViewList.selectedCar = car
         carsViewList.collectionView?.reloadData()
         self.collectionView?.reloadData()
+    }
+}
+
+extension PersonBasicController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        switch operation {
+        case .push where (fromVC == self && toVC.isKind(of: StatusDetailController.self)):
+            let res = StatusCoverPresentAnimation()
+            res.delegate = self
+            return res
+        case .pop where (fromVC.isKind(of: StatusDetailController.self) && toVC == self):
+            let res = StatusCoverDismissAnimation()
+            res.delegate = self
+            return res
+        default:
+            return nil
+        }
+    }
+}
+
+extension PersonBasicController: StatusCoverPresentable {
+    func initialCoverPosition() -> CGRect {
+        return selectedStatusCell!.convert(selectedStatusCell!.bounds, to: navigationController!.view)
     }
 }
 
