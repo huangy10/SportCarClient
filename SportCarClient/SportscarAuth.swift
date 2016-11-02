@@ -13,7 +13,7 @@ import Spring
 
 
 class SportscarAuthController: PersonMineSettingsAuthController, LoadingProtocol {
-    var delayWorkItem: DispatchWorkItem?
+    
     let kDistrictSet = ["京", "沪", "晋", "冀", "鄂", "豫", "鲁", "贵", "陕", "赣", "苏", "湘", "桂", "甘", "闽", "粤", "辽", "黑", "云", "宁", "新", "川", "渝", "蒙", "吉", "琼", "藏", "青", "甲", "乙"]
     /// 汽车所属区域选择
     var districtPickerContainer: UIView!
