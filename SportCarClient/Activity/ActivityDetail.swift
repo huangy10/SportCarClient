@@ -28,7 +28,6 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
     var atUser: [String] = []
     var responseToPrefixStr = ""
     
-    var mapCell: MapCell!
     var mapFooter: MapFooterView!
     
     var needReloadActInfo: Bool = false
@@ -51,7 +50,6 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
-//        mapCell.map.viewWillAppear()
         mapFooter.map.viewWillAppear()
         
         if needReloadActInfo {
@@ -62,7 +60,6 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-//        mapCell.map.viewWillDisappear()
         mapFooter.map.viewWillDisappear()
     }
     
@@ -76,7 +73,6 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
         navSettings()
         configureTapper()
         configureTableView()
-//        configureMapCell()
         configureMapFooter()
         configureHeader()
         configureBottomBar()
@@ -120,14 +116,6 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
     func configureTapper() {
         tapper = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapper)
-    }
-    
-    func configureMapCell() {
-        mapCell = MapCell(trailingHeight: 100)
-        mapCell.locBtn.addTarget(self, action: #selector(ActivityDetailController.needNavigation), for: .touchUpInside)
-        mapCell.locLbl.text = LS("导航至 ") + (act.location?.descr ?? LS("未知地点"))
-        mapCell.locDesIcon.image = UIImage(named: "location_mark_black")
-        mapCell.locDesIcon.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
     }
     
     func configureMapFooter() {
@@ -481,60 +469,40 @@ extension ActivityDetailController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            if comments.count == 0 {
-                return 1
-            }
-            return comments.count
-        } else {
+        if comments.count == 0 {
             return 1
         }
+        return comments.count
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            if comments.count == 0 {
-                return 100
-            } else {
-                return 87
-            }
+        if comments.count == 0 {
+            return 100
         } else {
-            return 250
+            return 87
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if (indexPath as NSIndexPath).section == 0 {
-            if comments.count == 0 {
-                return 100
-            }
-            return UITableViewAutomaticDimension
-        } else {
-            return 250
+        if comments.count == 0 {
+            return 100
         }
+        return UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            if comments.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "empty", for: indexPath) as! SSEmptyListHintCell
-                cell.titleLbl.text = LS("还没有评论")
-                return cell
-            } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DetailCommentCell2
-                cell.delegate = self
-                let comment = comments[indexPath.row]
-                cell.setData(comment.user.avatarURL!, name: comment.user.nickName!, content: comment.content, commentAt: comment.createdAt, responseTo: comment.responseTo?.user.nickName, showReplyBtn: !comment.user.isHost)
-                cell.setNeedsUpdateConstraints()
-                cell.updateConstraintsIfNeeded()
-                return cell
-            }
+        if comments.count == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "empty", for: indexPath) as! SSEmptyListHintCell
+            cell.titleLbl.text = LS("还没有评论")
+            return cell
         } else {
-            if !mapCell.centerSet {
-                let center = CLLocationCoordinate2D(latitude: act.location!.latitude, longitude: act.location!.longitude)
-                mapCell.setMapCenter(center)
-            }
-            return mapCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DetailCommentCell2
+            cell.delegate = self
+            let comment = comments[indexPath.row]
+            cell.setData(comment.user.avatarURL!, name: comment.user.nickName!, content: comment.content, commentAt: comment.createdAt, responseTo: comment.responseTo?.user.nickName, showReplyBtn: !comment.user.isHost)
+            cell.setNeedsUpdateConstraints()
+            cell.updateConstraintsIfNeeded()
+            return cell
         }
     }
     
