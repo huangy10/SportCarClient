@@ -20,7 +20,7 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
     var comments: [ActivityComment] = []
     weak var parentCollectionView: UICollectionView?
     
-    var infoView: ActivityDetailHeaderView!
+    var header: ActivityDetailHeaderView!
     var tableView: UITableView!
     var bottomBar: BasicBottomBar!
     
@@ -29,6 +29,7 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
     var responseToPrefixStr = ""
     
     var mapCell: MapCell!
+    var mapFooter: MapFooterView!
     
     var needReloadActInfo: Bool = false
     
@@ -50,9 +51,8 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
-        mapCell.map.viewWillAppear()
-//        infoView.loadDataAndUpdateUI()
-        tableView.setContentOffset(CGPoint(x: 0, y: -infoView.preferedHeight), animated: false)
+//        mapCell.map.viewWillAppear()
+        mapFooter.map.viewWillAppear()
         
         if needReloadActInfo {
             loadActInfo()
@@ -62,7 +62,8 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        mapCell.map.viewWillDisappear()
+//        mapCell.map.viewWillDisappear()
+        mapFooter.map.viewWillDisappear()
     }
     
     func dismissKeyboard() {
@@ -75,8 +76,9 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
         navSettings()
         configureTapper()
         configureTableView()
-        configureMapCell()
-        configureInfoView()
+//        configureMapCell()
+        configureMapFooter()
+        configureHeader()
         configureBottomBar()
         
         loadActInfo()
@@ -104,19 +106,15 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
         
         tableView.register(DetailCommentCell2.self, forCellReuseIdentifier: "cell")
         tableView.register(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty")
+        tableView.register(CommentStaticHeader.self, forHeaderFooterViewReuseIdentifier: "header")
     }
     
-    func configureInfoView() {
-        infoView = ActivityDetailHeaderView(act: act)
-        infoView.likeBtn.addTarget(self, action: #selector(likeBtnPressed), for: .touchUpInside)
-        infoView.parentController = self
-        tableView.addSubview(infoView)
-        infoView.snp.makeConstraints { (make) in
-            make.bottom.equalTo(tableView.snp.top)
-            make.left.equalTo(view)
-            make.right.equalTo(view)
-            make.height.equalTo(infoView.preferedHeight)
-        }
+    func configureHeader() {
+        header = ActivityDetailHeaderView(activity: act)
+        header.delegate = self
+        header.loadDataAndUpdateUI()
+        header.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: header.requiredHeight())
+        tableView.tableHeaderView = header
     }
     
     func configureTapper() {
@@ -130,6 +128,14 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
         mapCell.locLbl.text = LS("导航至 ") + (act.location?.descr ?? LS("未知地点"))
         mapCell.locDesIcon.image = UIImage(named: "location_mark_black")
         mapCell.locDesIcon.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+    }
+    
+    func configureMapFooter() {
+        mapFooter = MapFooterView(trailingHeight: 100)
+        mapFooter.delegate = self
+        mapFooter.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 250)
+        tableView.tableFooterView = mapFooter
+        mapFooter.setCenterLocation(act.location!.coordinate, withDes: LS("导航至 ") + (act.location?.descr ?? LS("未知地点")))
     }
     
     func configureBottomBar() {
@@ -199,7 +205,8 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
         _ = ActivityRequester.sharedInstance.postToApplyActivty(act.ssidString, onSuccess: { (json) in
             self.showToast(LS("报名成功"))
             _ = self.act.hostApply()
-            _ = self.infoView.loadDataAndUpdateUI()
+//            _ = self.infoView.loadDataAndUpdateUI()
+            self.header.reloadMemberList()
             self.setNavRightBtn()
             self.lp_stop()
             }) { (code) in
@@ -240,10 +247,11 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
         _ = ActivityRequester.sharedInstance.activityOperation(act.ssidString, targetUserID: "", opType: "like", onSuccess: { (json) in
             self.lp_stop()
             if let data = json {
-                let liked = data["liked"].boolValue
-                let likeNum = data["like_num"].int32Value
-                self.infoView.setLikeIconState(liked)
-                self.infoView.likeNumLbl.text = "\(likeNum)"
+                self.act.liked = data["liked"].boolValue
+                self.act.likeNum = data["like_num"].int32Value
+//                self.infoView.setLikeIconState(liked)
+//                self.infoView.likeNumLbl.text = "\(likeNum)"
+                self.header.opsView.reloadAll()
                 self.bottomBar.reloadIcon(at: 0, withPulse: true)
             } else {
                 assertionFailure()
@@ -262,16 +270,17 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
         _ = ActivityRequester.sharedInstance.getActivityDetail(act.ssidString, onSuccess: { (json) in
             if let data = json {
                 _ = try! self.act.loadDataFromJSON(data, detailLevel: 1)
-                self.infoView.act = self.act
+//                self.infoView.act = self.act
                 
                 DispatchQueue.main.async(execute: {
                     self.setNavRightBtn()
-                    _ = self.infoView.loadDataAndUpdateUI() // the preferedHeight udpated
+                    self.header.loadDataAndUpdateUI()
+//                    _ = self.infoView.loadDataAndUpdateUI() // the preferedHeight udpated
                     self.bottomBar.reloadIcon(at: 0)
-                    self.tableView.contentOffset = CGPoint(x: 0, y: -self.infoView.preferedHeight)
-                    var oldInset = self.tableView.contentInset
-                    oldInset.top = self.infoView.preferedHeight
-                    self.tableView.contentInset = oldInset
+//                    self.tableView.contentOffset = CGPoint(x: 0, y: -self.infoView.preferedHeight)
+//                    var oldInset = self.tableView.contentInset
+//                    oldInset.top = self.infoView.preferedHeight
+//                    self.tableView.contentInset = oldInset
                 })
                 
             } else {
@@ -312,7 +321,8 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
         }
         let newComment = ActivityComment(act: act).initForPost(content, responseTo: responseToComment)
         act.commentNum += 1
-        infoView.commentNumLbl.text = "\(act.commentNum)"
+//        infoView.commentNumLbl.text = "\(act.commentNum)"
+        header.opsView.reloadBtn(at: 1)
         
         tableView.beginUpdates()
         comments.insert(newComment, at: 0)
@@ -332,7 +342,8 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
                 // update the comment number
                 let commentNum = data["comment_num"].int32Value
                 self.act.commentNum = commentNum
-                self.infoView.commentNumLbl.text = "\(commentNum)"
+//                self.infoView.commentNumLbl.text = "\(commentNum)"
+                self.header.opsView.reloadBtn(at: 1)
             } else {
                 assertionFailure()
             }
@@ -417,8 +428,11 @@ extension ActivityDetailController: BottomBarDelegate {
 extension ActivityDetailController: DetailCommentCellDelegate2 {
     
     func startReplyToComment(atIndexPath indexPath: IndexPath) {
-        responseToRow = indexPath.row
         let comment = comments[responseToRow]
+        if comment.user.isHost {
+            return
+        }
+        responseToRow = indexPath.row
         responseToPrefixStr = getCommentPrefix(forUserNickName: comment.user.nickName!)
         bottomBar.contentInput.text = responseToPrefixStr
         atUser.removeAll()
@@ -460,8 +474,10 @@ extension ActivityDetailController: UITextViewDelegate {
 
 extension ActivityDetailController: UITableViewDelegate, UITableViewDataSource {
     
+    
+    
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -490,10 +506,8 @@ extension ActivityDetailController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if (indexPath as NSIndexPath).section == 0 {
             if comments.count == 0 {
-                // empty info cell
                 return 100
             }
-//            return ActivityCommentCell.heightForComment(comments[(indexPath as NSIndexPath).row].content!)
             return UITableViewAutomaticDimension
         } else {
             return 250
@@ -531,8 +545,16 @@ extension ActivityDetailController: UITableViewDelegate, UITableViewDataSource {
         startReplyToComment(atIndexPath: indexPath)
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! CommentStaticHeader
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        infoView.adjustCoverScaleAccordingToTableOffset(scrollView.contentOffset.y + infoView.preferedHeight)
+        header.adjustCoverScaleAccordingToTableOffset(scrollView.contentOffset.y)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -561,6 +583,52 @@ extension ActivityDetailController: FFSelectDelegate {
             self.showToast(LS("邀请发送失败"))
             self.lp_stop()
         }
+    }
+}
+
+extension ActivityDetailController: ActivityDetailHeaderDelegate {
+    func detailHeaderShowAllMemberBtnPressed() {
+        let memberDisplay = ActivityMembersController()
+        memberDisplay.act = act
+        memberDisplay.delegate = self
+        navigationController?.pushViewController(memberDisplay, animated: true)
+    }
+    
+    func detailHeaderLikeBtnPressed() {
+        likeBtnPressed()
+    }
+    
+    func detailHeaderEditBtnPressed() {
+        if act.finished {
+            showToast(LS("活动已结束，不能编辑"))
+        }  else {
+            let detail = ActivityEditController()
+            detail.act = act
+        }
+    }
+    
+    func detailHeaderShowInvite() {
+        var forceSeletedUsers = act.applicants
+        forceSeletedUsers.append(act.user!)
+        let select = FFSelectController(maxSelectNum: 0, preSelectedUsers: forceSeletedUsers, preSelect: false, authedUserOnly: act.authedUserOnly)
+        select.delegate = self
+        present(select.toNavWrapper(), animated: true, completion: nil)
+    }
+    
+    func detailHeaderUserSelected(_ user: User) {
+        navigationController?.pushViewController(user.showDetailController(), animated: true)
+    }
+}
+
+extension ActivityDetailController: ActivityMemberDelegate {
+    func activityMemberControllerDidRemove(_ user: User) {
+        header.reloadMemberList()
+    }
+}
+
+extension ActivityDetailController: MapFooterDelegate {
+    func mapFooterNavigatePressed() {
+        needNavigation()
     }
 }
 
