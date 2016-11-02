@@ -102,6 +102,9 @@ class BasicRequester {
     }
     
     func internalErrorHandler(_ error: NSError) -> NSError? {
+        if error.code == -999 {
+            return nil
+        }
         return error
     }
     

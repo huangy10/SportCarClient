@@ -1,5 +1,5 @@
 //
-//  RequestManageProtocol.swift
+//  RequestManageMixin.swift
 //  SportCarClient
 //
 //  Created by 黄延 on 16/9/16.
@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-protocol RequestManageProtocol: class {
+protocol RequestManageMixin: class {
     var onGoingRequest: [String: Request] { set get }
     
     func registerReqeust(_ req: Request, forKey key: String)
@@ -17,9 +17,11 @@ protocol RequestManageProtocol: class {
     func clearAllRequest()
     
     func clearRequestForKey(_ key: String)
+    
+    func reqKeyFromFunctionName(withExtraID extraID: String, funcName: String) -> String
 }
 
-extension RequestManageProtocol where Self: UIViewController {
+extension RequestManageMixin where Self: UIViewController {
 
     func registerReqeust(_ req: Request, forKey key: String) {
         clearRequestForKey(key)
@@ -40,10 +42,13 @@ extension RequestManageProtocol where Self: UIViewController {
         }
     }
     
+    func reqKeyFromFunctionName(withExtraID extraID: String, funcName: String = #function) -> String {
+        return "\(funcName)-\(extraID)"
+    }
 }
 
 extension Request {
-    func registerForRequestManage(_ manage: RequestManageProtocol, forKey key: String) {
+    func registerForRequestManage(_ manage: RequestManageMixin, forKey key: String = #function) {
         manage.registerReqeust(self, forKey: key)
     }
 }

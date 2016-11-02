@@ -109,7 +109,7 @@ class NewsDetailDismissAnimation: NSObject, UIViewControllerAnimatedTransitionin
 }
 
 
-class NewsDetailController2: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, LoadingProtocol, UIWebViewDelegate, RequestManageProtocol, ShareControllorDelegate, DetailCommentCellDelegate2 {
+class NewsDetailController2: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, LoadingProtocol, UIWebViewDelegate, RequestManageMixin, ShareControllorDelegate, DetailCommentCellDelegate2 {
     internal var delayWorkItem: DispatchWorkItem?
 
     var news: News!

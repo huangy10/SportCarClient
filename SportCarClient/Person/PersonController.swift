@@ -9,9 +9,11 @@
 import UIKit
 import SwiftyJSON
 import Dollar
+import Alamofire
 
-class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, SportCarSelectDetailProtocol, SportCarBrandOnlineSelectorDelegate, LoadingProtocol {
+class PersonBasicController: UICollectionViewController, UICollectionViewDelegateFlowLayout, SportCarViewListDelegate, SportCarInfoCellDelegate, SportCarSelectDetailProtocol, SportCarBrandOnlineSelectorDelegate, LoadingProtocol, RequestManageMixin {
     internal var delayWorkItem: DispatchWorkItem?
+    var onGoingRequest: [String : Request] = [:]
 
     weak var homeDelegate: HomeDelegate?
     // 显示的用户的信息
@@ -35,7 +37,10 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     
     weak var oldNavDelegate: UINavigationControllerDelegate?
     
+    var refreshControl: UIRefreshControl!
+    
     deinit {
+        clearAllRequest()
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -47,7 +52,7 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         super.init(collectionViewLayout: flowLayout)
         data = PersonDataSource()
         data.user = user
-            }
+    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -58,21 +63,21 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
         super.viewDidLoad()
         
         createSubviews()
+        configureRefreshControl()
         navSettings()
         configureNotficationObserveBehavior()
         locationService = BMKLocationService()
-        
         // 发出网络请求
         loadAccountInfo()
         
         // 第三个响应：开始获取的动态列表，每次获取十个
-        _ = AccountRequester2.sharedInstance.getStatusListSimplified(data.user.ssidString, carID: nil, dateThreshold: Date(), limit: 10, onSuccess: { (json) -> () in
+        AccountRequester2.sharedInstance.getStatusListSimplified(data.user.ssidString, carID: nil, dateThreshold: Date(), limit: 10, onSuccess: { (json) -> () in
             //
             self.jsonDataHandler(json!, container: &self.data.statusList)
             self.collectionView?.reloadData()
             }) { (code) -> () in
                 self.showToast(LS("网络访问错误:\(code)"))
-        }
+        }.registerForRequestManage(self)
     }
     
     func configureNotficationObserveBehavior() {
@@ -118,16 +123,18 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
     func loadAccountInfo() {
         let requester = AccountRequester2.sharedInstance
         // 这个请求是保证当前用户的数据是最新的，而hostuser中的数据可以暂时先直接拿来展示
-        _ = requester.getProfileDataFor(data.user.ssidString, onSuccess: { (json) -> () in
+        requester.getProfileDataFor(data.user.ssidString, onSuccess: { (json) -> () in
             let hostUser = self.data.user!
             try! hostUser.loadDataFromJSON(json!, detailLevel: 1)
             self.header.user = hostUser
             self.header.loadDataAndUpdateUI()
+            self.refreshControl.endRefreshing()
         }) { (code) -> () in
             self.showToast(LS("网络访问错误:\(code)"))
-        }
+            self.refreshControl.endRefreshing()
+        }.registerForRequestManage(self, forKey: reqKeyFromFunctionName(withExtraID: "info"))
         // 获取认证车辆的列表
-        _ = requester.getAuthedCarsList(data.user.ssidString, onSuccess: { (json) -> () in
+        requester.getAuthedCarsList(data.user.ssidString, onSuccess: { (json) -> () in
             self.data.handleAuthedCarsJSONResponse(json!, user: self.data.user)
             self.data.selectedCar = self.data.cars.first()
             self.carsViewList.cars = self.data.cars
@@ -137,7 +144,13 @@ class PersonBasicController: UICollectionViewController, UICollectionViewDelegat
             self.collectionView?.reloadData()
         }) { (code) -> () in
             self.showToast(LS("车辆关注列表获取失败"))
-        }
+        }.registerForRequestManage(self, forKey: reqKeyFromFunctionName(withExtraID: "cars"))
+    }
+    
+    func configureRefreshControl() {
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(loadAccountInfo), for: .valueChanged)
+        collectionView?.refreshControl = refreshControl
     }
 
     
@@ -538,7 +551,7 @@ extension PersonBasicController {
     func sportCarBrandOnlineSelectorDidSelect(_ manufacture: String, carName: String, subName: String) {
         dismiss(animated: true, completion: nil)
         lp_start()
-        _ = SportCarRequester.sharedInstance.querySportCarWith(manufacture, carName: carName, subName: subName, onSuccess: { (json) in
+        SportCarRequester.sharedInstance.querySportCarWith(manufacture, carName: carName, subName: subName, onSuccess: { (json) in
             self.lp_stop()
             guard let data = json else {
                 return
@@ -557,8 +570,7 @@ extension PersonBasicController {
             }) { (code) in
                 self.lp_stop()
                 self.showToast(LS("获取跑车数据失败"))
-  
-        }
+        }.registerForRequestManage(self)
     }
     
     func sportCarSelectDeatilDidAddCar(_ car: SportCar) {
@@ -632,7 +644,7 @@ extension PersonBasicController {
                 self.jsonDataHandler(json!, container: &(self.data.statusDict[selectedCarID]!))
                 self.collectionView?.reloadData()
                 }, onError: { (code) -> () in
-            })
+            }).registerForRequestManage(self)
         }else {
             let targetStatusList = data.statusList
             var dateThreshold = Date()
@@ -644,7 +656,7 @@ extension PersonBasicController {
                 self.jsonDataHandler(json!, container: &(self.data.statusList))
                 self.collectionView?.reloadData()
                 }, onError: { (code) -> () in
-            })
+            }).registerForRequestManage(self)
         }
     }
     
