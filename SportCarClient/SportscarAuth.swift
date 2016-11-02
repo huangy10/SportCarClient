@@ -12,7 +12,8 @@ import UIKit
 import Spring
 
 
-class SportscarAuthController: PersonMineSettingsAuthController{
+class SportscarAuthController: PersonMineSettingsAuthController, LoadingProtocol {
+    var delayWorkItem: DispatchWorkItem?
     let kDistrictSet = ["京", "沪", "晋", "冀", "鄂", "豫", "鲁", "贵", "陕", "赣", "苏", "湘", "桂", "甘", "闽", "粤", "辽", "黑", "云", "宁", "新", "川", "渝", "蒙", "吉", "琼", "藏", "青", "甲", "乙"]
     /// 汽车所属区域选择
     var districtPickerContainer: UIView!
@@ -28,45 +29,36 @@ class SportscarAuthController: PersonMineSettingsAuthController{
     }
     
     override func navRightBtnPressed() {
-        for im in self.selectedImages {
-            if im == nil {
+        for idx in 0..<2 {
+            if selectedImages[idx] == nil {
                 self.showToast(LS("请完整提供要求的信息"))
                 return
             }
-            // 此处暂时禁用了后续两张图片，所以只需要这里的就可以了 Woody Huang, 2016.10.19
-            break
         }
         guard let carLicenseNum = carLicense.text , carLicenseNum.length > 0 else {
             self.showToast(LS("请完整提供要求的信息"))
             return
         }
         pp_showProgressView()
-        
+        lp_start()
         let licenseNum = districtLabel.text! + carLicenseNum
-//        SportCarRequester.sharedInstance.authenticateSportscar(car.ssidString, driveLicense: selectedImages[0]!, photo: selectedImages[2]!, idCard: selectedImages[1]!, licenseNum: districtLabel.text! + carLicenseNum, onSuccess: { (json) -> () in
-//            self.pp_hideProgressView()
-//            self.showToast(LS("认证申请已经成功发送"))
-//            }, onProgress: { (progress) -> () in
-//                self.pp_updateProgress(progress)
-//            }) { (code) -> () in
-//                self.pp_hideProgressView()
-//                self.showToast(LS("认证申请发送失败"))
-//        }
-        SportCarRequester.sharedInstance.authenticate(sportscar: car.ssidString, driveLicense: selectedImages[0]!, licenseNum: licenseNum, onSuccess: { (json) in
+        SportCarRequester.sharedInstance.authenticate(sportscar: car.ssidString, driveLicense: selectedImages[0]!, carLicense: selectedImages[1]!, licenseNum: licenseNum, onSuccess: { (json) in
+            self.lp_stop()
             self.pp_hideProgressView()
             self.showToast(LS("认证申请已经成功发送"))
+            _ = self.navigationController?.popViewController(animated: true)
             }, onProgress: { (progress) in
                 self.pp_updateProgress(progress)
             }) { (code) in
+                self.lp_stop()
                 self.pp_hideProgressView()
                 self.showToast(LS("认证申请发送失败"))
         }
         
-        _ = self.navigationController?.popViewController(animated: true)
     }
     
     override func getStaticLabelContentForIndex(_ index: Int) -> String {
-        return [LS("上传驾驶证"), LS("上传身份证"), LS("上传带牌照的人车合影")][index]
+        return [LS("上传驾驶证"), LS("上传行驶证"), LS("上传带牌照的人车合影")][index]
     }
     
     override func createSubviews() {
@@ -85,14 +77,14 @@ class SportscarAuthController: PersonMineSettingsAuthController{
     
     override func createImagesImputPanel() -> UIView {
         let container = super.createImagesImputPanel()
-//        let exampleImage = UIImageView(image: UIImage(named: "sports_car_auth_example"))
-//        container.addSubview(exampleImage)
-//        exampleImage.snp.makeConstraints { (make) -> Void in
-//            make.left.equalTo(container)
-//            make.top.equalTo(staticLabel1.snp.bottom).offset(5)
-//            make.right.equalTo(imageBtn1.snp.left).offset(-24)
-//            make.height.equalTo(exampleImage.snp.width).multipliedBy(0.67)
-//        }
+        let exampleImage = UIImageView(image: UIImage(named: "sports_car_auth_example"))
+        container.addSubview(exampleImage)
+        exampleImage.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(container)
+            make.top.equalTo(staticLabel1.snp.bottom).offset(5)
+            make.right.equalTo(imageBtn1.snp.left).offset(-24)
+            make.height.equalTo(exampleImage.snp.width).multipliedBy(0.67)
+        }
         return container
     }
     
@@ -283,9 +275,9 @@ class SportscarAuthController: PersonMineSettingsAuthController{
     }
     
     func driverLicenseOnlyForNow() {
-        imageBtn2.isHidden = true
+//        imageBtn2.isHidden = true
         imageBtn3.isHidden = true
-        staticLabel2.isHidden = true
+//        staticLabel2.isHidden = true
         staticLabel3.isHidden = true
         
     }

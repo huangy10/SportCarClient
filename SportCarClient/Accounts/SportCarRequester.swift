@@ -90,9 +90,9 @@ class SportCarRequester: BasicRequester {
         )
     }
     
-    func authenticate(sportscar carID: String, driveLicense: UIImage, licenseNum: String, onSuccess: @escaping (JSON?)->(), onProgress: @escaping (_ progress: Float)->(), onError: @escaping (_ code: String?)->()) {
+    func authenticate(sportscar carID: String, driveLicense: UIImage, carLicense: UIImage, licenseNum: String, onSuccess: @escaping (JSON?)->(), onProgress: @escaping (_ progress: Float)->(), onError: @escaping (_ code: String?)->()) {
         upload(urlForName("auth"),
-               parameters: ["car_id": carID, "drive_license": driveLicense, "license": licenseNum],
+               parameters: ["car_id": carID, "drive_license": driveLicense, "car_license": carLicense, "license": licenseNum],
                onSuccess: onSuccess,
                onProgress: onProgress,
                onError: onError
