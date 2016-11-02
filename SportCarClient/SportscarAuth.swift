@@ -12,7 +12,8 @@ import UIKit
 import Spring
 
 
-class SportscarAuthController: PersonMineSettingsAuthController{
+class SportscarAuthController: PersonMineSettingsAuthController, LoadingProtocol {
+    var delayWorkItem: DispatchWorkItem?
     let kDistrictSet = ["京", "沪", "晋", "冀", "鄂", "豫", "鲁", "贵", "陕", "赣", "苏", "湘", "桂", "甘", "闽", "粤", "辽", "黑", "云", "宁", "新", "川", "渝", "蒙", "吉", "琼", "藏", "青", "甲", "乙"]
     /// 汽车所属区域选择
     var districtPickerContainer: UIView!
@@ -39,19 +40,21 @@ class SportscarAuthController: PersonMineSettingsAuthController{
             return
         }
         pp_showProgressView()
-        
+        lp_start()
         let licenseNum = districtLabel.text! + carLicenseNum
         SportCarRequester.sharedInstance.authenticate(sportscar: car.ssidString, driveLicense: selectedImages[0]!, carLicense: selectedImages[1]!, licenseNum: licenseNum, onSuccess: { (json) in
+            self.lp_stop()
             self.pp_hideProgressView()
             self.showToast(LS("认证申请已经成功发送"))
+            _ = self.navigationController?.popViewController(animated: true)
             }, onProgress: { (progress) in
                 self.pp_updateProgress(progress)
             }) { (code) in
+                self.lp_stop()
                 self.pp_hideProgressView()
                 self.showToast(LS("认证申请发送失败"))
         }
         
-        _ = self.navigationController?.popViewController(animated: true)
     }
     
     override func getStaticLabelContentForIndex(_ index: Int) -> String {
