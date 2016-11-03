@@ -252,8 +252,11 @@ extension RadarDriverMapController {
         
         locationUpdatingRequest = requester.getRadarDataWithFilter(userLocation!.location.coordinate, scanCenter: scanCenter, filterDistance: distance, filterType: filterType, filterParam: filterParam, onSuccess: { (json) in
             // 当前正在显示的用户
+            guard let json = json else {
+                return
+            }
             var usersIDs: [String] = []
-            for data in json!.arrayValue {
+            for data in json.arrayValue {
                 let onlyOnList = data["only_on_list"].boolValue
                 // 创建用户对象
                 let user: User = try! MainManager.sharedManager.getOrCreate(data)
