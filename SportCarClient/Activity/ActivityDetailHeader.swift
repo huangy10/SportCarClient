@@ -188,7 +188,8 @@ class ActivityDetailHeaderView: UIView {
             make.left.equalTo(self)
             make.right.equalTo(self)
             make.top.equalTo(opsView.snp.bottom).offset(55)
-            make.height.equalTo(300)
+//            make.height.equalTo(300)
+            make.bottom.equalTo(self)
         }
         
         var infoLbls: [UILabel] = []

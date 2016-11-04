@@ -103,4 +103,32 @@ class PersonDataSource {
             statusDict[car.ssidString] = $.remove(list, value: status)
         }
     }
+    
+    func statusCellNumber() -> Int {
+        if let car = selectedCar {
+            return statusDict[car.ssidString]!.count
+        } else {
+            if user.isHost {
+                return statusList.count + 1
+            } else {
+                return statusList.count
+            }
+        }
+    }
+    
+    func getStatus(atIdx idx: Int) -> Status? {
+        if let car = selectedCar {
+            return statusDict[car.ssidString]![idx]
+        } else {
+            if user.isHost {
+                if idx == 0 {
+                    return nil
+                } else {
+                    return statusList[idx - 1]
+                }
+            } else {
+                return statusList[idx]
+            }
+        }
+    }
 }

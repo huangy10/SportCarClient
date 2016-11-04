@@ -84,7 +84,7 @@ class BasicRequester {
             if let newError = self.internalErrorHandler(err as NSError) {
                 onError("\(newError.code)")
             } else {
-                onSuccess(nil)
+//                onSuccess(nil)
             }
         case .success(let value):
             let json = JSON(value)

@@ -150,6 +150,7 @@ class StatusDetailHeaderView: UIView {
                 make.left.equalTo(self).offset(15)
                 make.top.equalTo(cover.snp.bottom).offset(15)
             })
+        contentLbl.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 30
         contentLbl.numberOfLines = 0
     }
     

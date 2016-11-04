@@ -18,27 +18,36 @@ protocol PersonProfileProtocol: class {
 
 
 class PersonProfileView: UIView {
-    private var user: User
+    var user: User! {
+        didSet {
+            if !subviewsCreated {
+                configureMap()
+                configureBackMask()
+                configureAvatarBtn()
+                configureAvatarCar()
+                configureNameLbl()
+                configureAvatarClub()
+                configureDetailBtn()
+                configureNumbersStack()
+                configureNumberLbls()
+                configureSepLine()
+                configureFollowBtn()
+                
+                subviewsCreated = true
+            }
+            
+            loadDataAndUpdateUI()
+        }
+    }
     weak var delegate: PersonProfileProtocol!
+    private var subviewsCreated: Bool = false
     
     var isHost: Bool {
         return user.isHost
     }
     
-    init (user: User) {
-        self.user = user
+    override init (frame: CGRect) {
         super.init(frame: .zero)
-        
-        configureMap()
-        configureBackMask()
-        configureAvatarBtn()
-        configureAvatarCar()
-        configureNameLbl()
-        configureAvatarClub()
-        configureDetailBtn()
-        configureNumbersStack()
-        configureNumberLbls()
-        configureSepLine()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -61,6 +70,14 @@ class PersonProfileView: UIView {
     //
     
     let locateYourSelf = true
+    
+    func requiredHeight() -> CGFloat {
+        var rect = CGRect.zero
+        for view in subviews {
+            rect = rect.union(view.frame)
+        }
+        return rect.height - 300
+    }
     
     func configureMap() {
         map = addSubview(BMKMapView.self).config(UIColor.black)
@@ -86,8 +103,8 @@ class PersonProfileView: UIView {
     func configureAvatarBtn() {
         avatarBtn = addSubview(UIButton.self)
             .layout { (make) in
-//                make.top.equalTo(self).offset(140.0 * scale)
-                make.bottom.equalTo(self).offset(121)
+                make.top.equalTo(self).offset(140.0)
+//                make.bottom.equalTo(self).offset(-121)
                 make.size.equalTo(90)
                 make.left.equalTo(self).offset(25)
         }
@@ -149,7 +166,6 @@ class PersonProfileView: UIView {
                 make.centerY.equalTo(arrowRightIcon)
                 make.right.equalTo(arrowRightIcon.snp.left).offset(-7)
             })
-        
         detailBtn = addSubview(UIButton.self)
             .layout({ (make) in
                 make.left.equalTo(avatarBtn)
@@ -163,7 +179,7 @@ class PersonProfileView: UIView {
         var lbls: [UILabel] = []
         ["动态", "粉丝", "关注"].enumerated().forEach { (idx, text) in
             let btn = UIButton()
-            btn.autoresizingMask = .flexibleHeight
+            btn.heightAnchor.constraint(equalToConstant: 40).isActive = true
             btn.addTarget(self, action: #selector(numberBtnPresed(sender:)), for: .touchUpInside)
             numStack.addArrangedSubview(btn)
             
@@ -235,7 +251,7 @@ class PersonProfileView: UIView {
         }
     }
     
-    func configureFollowBtnPressed() {
+    func configureFollowBtn() {
         followBtn = addSubview(UIButton.self)
             .layout({ (mk) in
                 mk.centerY.equalTo(fansNumLbl.snp.bottom)
@@ -245,6 +261,7 @@ class PersonProfileView: UIView {
             })
         followBtn.layer.cornerRadius = 2
         followBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        setFollowState(false)
     }
     
     func loadDataAndUpdateUI () {

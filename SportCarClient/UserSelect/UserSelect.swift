@@ -233,13 +233,15 @@ extension UserSelectController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let user = self.users[(indexPath as NSIndexPath).row]
-        if user.isHost {
-            let detail = PersonBasicController(user: user)
-            navigationController?.pushViewController(detail, animated: true)
-        } else {
-            let detail = PersonOtherController(user: user)
-            navigationController?.pushViewController(detail, animated: true)
-        }
+//        
+//        if user.isHost {
+//            let detail = PersonBasicController(user: user)
+//            navigationController?.pushViewController(detail, animated: true)
+//        } else {
+//            let detail = PersonOtherController(user: user)
+//            navigationController?.pushViewController(detail, animated: true)
+//        }
+        navigationController?.pushViewController(PersonController(user: user), animated: true)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
