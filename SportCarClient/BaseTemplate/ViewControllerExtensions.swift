@@ -59,6 +59,10 @@ extension UIViewController {
         return inputImage.applyBlurWithRadius(5, tintColor: UIColor(white: 0, alpha: 0.7), saturationDeltaFactor: 1.8)!
     }
     
+    func showReqError(withCode code: String?) {
+        showToast(LS("网络访问错误：") + (code ?? "unkown"))
+    }
+    
     /**
      弹出一个一段时间之后自动消失的对话框
      

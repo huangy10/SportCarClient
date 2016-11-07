@@ -9,6 +9,8 @@
 import UIKit
 import Alamofire
 import Kingfisher
+import SwiftyJSON
+import Dollar
 
 
 class PersonController: UIViewController, RequestManageMixin {
@@ -17,8 +19,9 @@ class PersonController: UIViewController, RequestManageMixin {
     
     var header: PersonHeaderView!
     var tableView: UITableView!
+    var refresh: UIRefreshControl!
     
-    var data: PersonDataSource!
+    var data: PersonDataSourceDelegate!
     var user: User {
         return data.user
     }
@@ -31,8 +34,7 @@ class PersonController: UIViewController, RequestManageMixin {
     weak var oldNavDelegate: UINavigationControllerDelegate?
     
     init (user: User) {
-        data = PersonDataSource()
-        data.user = user
+        data = DefaultPersonDataSource(user: user)
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -52,6 +54,9 @@ class PersonController: UIViewController, RequestManageMixin {
         configureNavBar()
         configureTableView()
         configureHeader()
+        
+        refresh.beginRefreshing()
+        pullToRefresh()
     }
     
     func configureNavBar() {
@@ -107,6 +112,10 @@ class PersonController: UIViewController, RequestManageMixin {
         tableView.snp.makeConstraints { (mk) in
             mk.edges.equalTo(view)
         }
+        
+        refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(pullToRefresh), for: .touchUpInside)
+        tableView.refreshControl = refresh
     }
     
     func configureHeader() {
@@ -142,6 +151,93 @@ class PersonController: UIViewController, RequestManageMixin {
             _ = self.navigationController?.popViewController(animated: true)
         }
     }
+    
+    func reqGetStatusList() {
+        let num = data.numberOfStatus()
+        let dateThreshold: Date
+        if num == 0 {
+            dateThreshold = Date()
+        } else {
+            dateThreshold = data.getStatus(atIdx: num - 1).createdAt!
+        }
+        let selectedCar = data.selectedCar
+        AccountRequester2.sharedInstance.getStatusListSimplified(user.ssidString, carID: data.selectedCar?.ssidString, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
+            self.parseStatusData(json!.arrayValue, forCar: selectedCar)
+            self.tableView.reloadData()
+            
+            self.pullToRefreshTaskCountDown -= 1
+        }, onError: { (code) -> () in
+            self.showReqError(withCode: code)
+            self.pullToRefreshTaskCountDown -= 1
+        }).registerForRequestManage(self)
+    }
+    
+    func parseStatusData(_ json: [JSON], forCar car: SportCar?) {
+        var buf: [Status] = []
+        for data in json {
+            let status = try! MainManager.sharedManager.getOrCreate(data) as Status
+            buf.append(status)
+        }
+        data.updateStatusList(forCar: car, withData: buf)
+    }
+    
+    var pullToRefreshTaskCountDown: Int = 0 {
+        didSet {
+            if pullToRefreshTaskCountDown <= 0 {
+                refresh.endRefreshing()
+                header.loadDataAndUpdateUI()
+            }
+            print(pullToRefreshTaskCountDown)
+        }
+    }
+    
+    func pullToRefresh() {
+        pullToRefreshTaskCountDown = 3
+        reqGetAccountInfo()
+        reqGetCarList()
+        reqGetStatusList()
+    }
+    
+    func reqGetAccountInfo() {
+        AccountRequester2.sharedInstance.getProfileDataFor(user.ssidString, onSuccess: { (json) -> () in
+            let user = self.data.user
+            try! user.loadDataFromJSON(json!, detailLevel: 1)
+            //
+            self.pullToRefreshTaskCountDown -= 1
+        }, onError: { (code) -> () in
+            self.showReqError(withCode: code)
+            self.pullToRefreshTaskCountDown -= 1
+        }).registerForRequestManage(self)
+    }
+    
+    func reqGetCarList() {
+        let autoSelectFirstCar = data.cars.count == 0
+        AccountRequester2.sharedInstance.getAuthedCarsList(user.ssidString, onSuccess: { (json) -> () in
+            var newCars: [SportCar] = []
+            let oldCars: [SportCar] = self.data.cars
+            for data in json!.arrayValue {
+                let car = try! MainManager.sharedManager.getOrCreate(SportCar.reorgnaizeJSON(data), detailLevel: 1) as SportCar
+                newCars.append(car)
+            }
+            
+            let newCarIds = newCars.map({ $0.ssid })
+            for oldCar in oldCars {
+                if !newCarIds.contains(value: oldCar.ssid) {
+                    self.data.rmCar(oldCar)
+                }
+            }
+            
+            self.data.cars = newCars
+            if autoSelectFirstCar && newCars.count > 0 {
+                self.data.selectedCar = newCars.first()
+            }
+            
+            self.pullToRefreshTaskCountDown -= 1
+        }, onError: { (code) -> () in
+            self.showReqError(withCode: code)
+            self.pullToRefreshTaskCountDown -= 1
+        }).registerForRequestManage(self)
+    }
 }
 
 extension PersonController: UITableViewDataSource, UITableViewDelegate {
@@ -150,7 +246,7 @@ extension PersonController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let statusNum = data.statusCellNumber()
+        let statusNum = data.numberOfStatusCell()
         if statusNum == 0 {
             return 0
         }
@@ -161,55 +257,11 @@ extension PersonController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PersonStatusListGroupCell
         cell.indexPath = indexPath
         let rangeMin = indexPath.row * 3
-        let rangeMax = min(rangeMin + 3, data.statusCellNumber())
-        (rangeMin..<rangeMax).forEach({ cell.setImage(data.getStatus(atIdx: $0)?.coverURL!, atIdx: $0) })
+        let rangeMax = min(rangeMin + 3, data.numberOfStatusCell())
+        (rangeMin..<rangeMax).forEach({ cell.setImage(data.getStatus(atIdx: $0).coverURL!, atIdx: $0) })
         return cell
     }
 }
-//
-//extension PersonController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-//    
-//    func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        return 1
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return data.statusCellNumber()
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        if let status = data.getStatus(atIdx: indexPath.row) {
-//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PersonStatusListCell
-//            cell.cover.kf.setImage(with: status.coverURL!)
-//            return cell
-//        } else {
-//            return collectionView.dequeueReusableCell(withReuseIdentifier: "add", for: indexPath)
-//        }
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        
-//        header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! PersonHeaderView
-//        print(indexPath.row, indexPath.section)
-//        header.user = user
-//        header.dataSource = self
-//        return header
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-////        header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "header", for: IndexPath(row: 0, section: 0)) as! PersonHeaderView
-////        header.dataSource = self
-//        
-//        return CGSize(width: UIScreen.main.bounds.width, height: 0)
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-//        header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "header", for: IndexPath(row: 0, section: 0)) as! PersonHeaderView
-//        header.user = user
-//        header.dataSource = self
-//        return CGSize(width: UIScreen.main.bounds.width, height: header.requiredHeight())
-//    }
-//}
 
 extension PersonController: PersonHeaderCarListDatasource {
     func personHeaderCarList() -> [SportCar] {

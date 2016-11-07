@@ -131,4 +131,18 @@ class PersonDataSource {
             }
         }
     }
+    
+    /**
+     * 获取当前的动态列表，会根据选定的车型来返回合适的结果
+     */
+    func getStatusList() -> [Status] {
+        if let car = selectedCar {
+            if let  list = statusDict[car.ssidString] {
+                return list
+            }
+            return []
+        } else {
+            return statusList
+        }
+    }
 }

@@ -183,6 +183,7 @@
 		BFC8F14A1CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BFC8F1421CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle */; };
 		BFC8F14B1CC8A5B200ABE31F /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC8F1441CC8A5B200ABE31F /* libWeChatSDK.a */; };
 		BFC8F14C1CC8A5B200ABE31F /* read_me.txt in Resources */ = {isa = PBXBuildFile; fileRef = BFC8F1451CC8A5B200ABE31F /* read_me.txt */; };
+		BFCA21C71DD0C08F001D066C /* PersonDataSource2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCA21C61DD0C08F001D066C /* PersonDataSource2.swift */; };
 		BFCA900A1C4FC64300B05E74 /* StatusHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCA90091C4FC64300B05E74 /* StatusHome.swift */; };
 		BFCA900C1C4FC74B00B05E74 /* StatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCA900B1C4FC74B00B05E74 /* StatusCell.swift */; };
 		BFCA900F1C50A09100B05E74 /* StatusBasic.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCA900E1C50A09100B05E74 /* StatusBasic.swift */; };
@@ -509,6 +510,7 @@
 		BFC8F1461CC8A5B200ABE31F /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
 		BFC8F1471CC8A5B200ABE31F /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		BFC8F1481CC8A5B200ABE31F /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		BFCA21C61DD0C08F001D066C /* PersonDataSource2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonDataSource2.swift; path = Person/V2/PersonDataSource2.swift; sourceTree = "<group>"; };
 		BFCA90091C4FC64300B05E74 /* StatusHome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusHome.swift; path = Status/StatusHome.swift; sourceTree = "<group>"; };
 		BFCA900B1C4FC74B00B05E74 /* StatusCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusCell.swift; path = Status/StatusCell.swift; sourceTree = "<group>"; };
 		BFCA900E1C50A09100B05E74 /* StatusBasic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusBasic.swift; path = Status/HomeSubviews/StatusBasic.swift; sourceTree = "<group>"; };
@@ -967,6 +969,7 @@
 				BF8A558E1DCB6BF100F99F15 /* PersonProfile.swift */,
 				BF8A55901DCB795900F99F15 /* PersonCarProfile.swift */,
 				BF8A55921DCC739100F99F15 /* PersonHeader.swift */,
+				BFCA21C61DD0C08F001D066C /* PersonDataSource2.swift */,
 			);
 			name = V2;
 			sourceTree = "<group>";
@@ -2275,6 +2278,7 @@
 				BFBC526E1C52944200EE7D34 /* MessageController.swift in Sources */,
 				BF11F6AE1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift in Sources */,
 				BF2F7E8E1C62F39A00E3A3A2 /* NotificationCtrl.swift in Sources */,
+				BFCA21C71DD0C08F001D066C /* PersonDataSource2.swift in Sources */,
 				BFE967431CA6296F0097C42C /* SSModelError.swift in Sources */,
 				BF8EC2D61CBA2DE300003735 /* Refresh.swift in Sources */,
 				BF23368E1C56529B00F0AE41 /* ChatRequester.swift in Sources */,

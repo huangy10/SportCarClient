@@ -24,11 +24,8 @@ class PersonHeaderView: UIView {
             if !subviewsCreated {
                 configureUserProfileView()
                 configureCarList()
-                
-                loadDataAndUpdateUI()
-            } else {
-                userProfileView.user = user
             }
+            loadDataAndUpdateUI()
         }
     }
     var car: SportCar? {
