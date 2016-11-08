@@ -105,7 +105,7 @@ class PersonController: UIViewController, RequestManageMixin {
         tableView.separatorStyle = .none
         
         tableView.register(PersonStatusListGroupCell.self, forCellReuseIdentifier: "cell")
-        tableView.contentInset = UIEdgeInsetsMake(9, 0, 0, 0)
+        tableView.contentInset = UIEdgeInsetsMake(5, 0, 0, 0)
         tableView.rowHeight = UITableViewAutomaticDimension
         
         view.addSubview(tableView)
@@ -114,7 +114,7 @@ class PersonController: UIViewController, RequestManageMixin {
         }
         
         refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(pullToRefresh), for: .touchUpInside)
+        refresh.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         tableView.refreshControl = refresh
     }
     
@@ -261,6 +261,10 @@ extension PersonController: UITableViewDataSource, UITableViewDelegate {
         (rangeMin..<rangeMax).forEach({ cell.setImage(data.getStatus(atIdx: $0).coverURL!, atIdx: $0) })
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UIScreen.main.bounds.width / 3
+    }
 }
 
 extension PersonController: PersonHeaderCarListDatasource {
@@ -292,7 +296,7 @@ class PersonStatusListGroupCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureBtns()
-        
+
         selectionStyle = .none
     }
     
@@ -303,17 +307,19 @@ class PersonStatusListGroupCell: UITableViewCell {
     func configureBtns() {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.spacing = 9
+        stack.spacing = 2.5
         stack.distribution = .fillEqually
         stack.alignment = .center
         contentView.addSubview(stack)
         stack.snp.makeConstraints { (mk) in
-            mk.edges.equalTo(UIEdgeInsetsMake(0, 9, 9, 9))
+            mk.edges.equalTo(UIEdgeInsetsMake(0, 5, 5, 5))
         }
-        for idx in 0..<2 {
+        for idx in 0..<3 {
             let btn = UIButton()
             btn.addTarget(self, action: #selector(btnPressed(sender:)), for: .touchUpInside)
-//            btn.snp.makeConstraints({ $0.height.equalTo(btn.snp.width) })
+            btn.snp.makeConstraints({ (mk) in
+                mk.height.equalTo(btn.snp.width)
+            })
             btn.tag = idx
             stack.addArrangedSubview(btn)
             btns.append(btn)

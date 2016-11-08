@@ -143,7 +143,7 @@ extension PersonHeaderView: UICollectionViewDataSource, UICollectionViewDelegate
             cell.set(car: nil)
             cell.set(selected: car == nil)
         } else  {
-            let car = dataSource.personHeaderCarList()[indexPath.row]
+            let car = dataSource.personHeaderCarList()[indexPath.row - 1]
             cell.set(car: car)
             cell.set(selected: self.car?.ssid == car.ssid)
         }
