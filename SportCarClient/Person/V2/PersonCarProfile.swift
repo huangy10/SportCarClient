@@ -42,6 +42,7 @@ class PersonCarProfileView: UIView {
     init (car: SportCar) {
         self.car = car
         super.init(frame: UIScreen.main.bounds)
+        backgroundColor = .clear
         
         configureCarGallary()
         configureCarName()
@@ -73,7 +74,7 @@ class PersonCarProfileView: UIView {
     func configureCarName() {
         nameLbl = addSubview(UILabel.self).config(19, fontWeight: UIFontWeightSemibold)
             .layout({ (mk) in
-                mk.left.equalTo(self)
+                mk.left.equalTo(self).offset(20)
                 mk.top.equalTo(gallary.snp.bottom).offset(15)
             })
         nameLbl.preferredMaxLayoutWidth = UIScreen.main.bounds.width * 0.55
@@ -194,12 +195,12 @@ class PersonCarProfileView: UIView {
     
     func configureStatusListHeader() {
         statusListHeader = addSubview(UILabel.self).config(14, fontWeight: UIFontWeightSemibold, textAlignment: .center, text: "动态")
+            .config(.white)
             .layout({ (mk) in
                 mk.left.equalTo(self)
                 mk.right.equalTo(self)
                 mk.top.equalTo(paramBoardStack.snp.bottom)
-//                mk.height.equalTo(44)
-                mk.bottom.equalTo(self)
+                mk.height.equalTo(44)
             })
     }
     
@@ -255,7 +256,7 @@ class PersonCarProfileView: UIView {
             rect = rect.union(view.frame)
         }
         
-        return rect.height
+        return rect.height + 5
     }
 }
 

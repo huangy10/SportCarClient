@@ -19,15 +19,7 @@ protocol PersonHeaderCarListDatasource: class {
 
 
 class PersonHeaderView: UIView {
-    var user: User! {
-        didSet {
-            if !subviewsCreated {
-                configureUserProfileView()
-                configureCarList()
-            }
-            loadDataAndUpdateUI()
-        }
-    }
+    var user: User
     var car: SportCar? {
         didSet {
             configureCarProfile()
@@ -43,8 +35,12 @@ class PersonHeaderView: UIView {
     var needsReload: Bool = false
     private var subviewsCreated: Bool = false
     
-    override init (frame: CGRect) {
+    init (user: User) {
+        self.user = user
         super.init(frame: UIScreen.main.bounds)
+        
+        configureUserProfileView()
+        configureCarList()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -119,7 +115,7 @@ class PersonHeaderView: UIView {
         layoutIfNeeded()
         let result = userProfileView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height + 62
         if let carView = carProfileView, !carView.isHidden {
-            return result + carView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+            return result + carView.requiredHeight()
         }
         return result
     }

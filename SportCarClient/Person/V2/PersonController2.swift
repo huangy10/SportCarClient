@@ -36,6 +36,10 @@ class PersonController: UIViewController, RequestManageMixin {
             header.car = newValue
             
             tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: header.requiredHeight())
+            
+            if data.numberOfStatus() == 0 {
+                reqGetStatusList(overrideReqKey: "auto")
+            }
         }
     }
     
@@ -118,7 +122,6 @@ class PersonController: UIViewController, RequestManageMixin {
         tableView.separatorStyle = .none
         
         tableView.register(PersonStatusListGroupCell.self, forCellReuseIdentifier: "cell")
-        tableView.contentInset = UIEdgeInsetsMake(5, 0, 0, 0)
         tableView.rowHeight = UITableViewAutomaticDimension
         
         view.addSubview(tableView)
@@ -132,9 +135,8 @@ class PersonController: UIViewController, RequestManageMixin {
     }
     
     func configureHeader() {
-        header = PersonHeaderView(frame: .zero)
+        header = PersonHeaderView(user: user)
         header.dataSource = self
-        header.user = user
         
         let container = UIView()
         container.addSubview(header)
@@ -165,7 +167,7 @@ class PersonController: UIViewController, RequestManageMixin {
         }
     }
     
-    func reqGetStatusList() {
+    func reqGetStatusList(overrideReqKey: String = "") {
         let num = data.numberOfStatus()
         let dateThreshold: Date
         if num == 0 {
@@ -183,7 +185,7 @@ class PersonController: UIViewController, RequestManageMixin {
         }, onError: { (code) -> () in
             self.showReqError(withCode: code)
             self.pullToRefreshTaskCountDown -= 1
-        }).registerForRequestManage(self)
+        }).registerForRequestManage(self, forKey: reqKeyFromFunctionName(withExtraID: overrideReqKey))
     }
     
     func parseStatusData(_ json: [JSON], forCar car: SportCar?) {
@@ -209,7 +211,7 @@ class PersonController: UIViewController, RequestManageMixin {
         pullToRefreshTaskCountDown = 3
         reqGetAccountInfo()
         reqGetCarList()
-        reqGetStatusList()
+        reqGetStatusList(overrideReqKey: "pull")
     }
     
     func reqGetAccountInfo() {
@@ -252,8 +254,6 @@ class PersonController: UIViewController, RequestManageMixin {
             self.pullToRefreshTaskCountDown -= 1
         }).registerForRequestManage(self)
     }
-    
-    
 }
 
 extension PersonController: UITableViewDataSource, UITableViewDelegate {
