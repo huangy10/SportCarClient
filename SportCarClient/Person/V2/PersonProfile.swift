@@ -14,6 +14,7 @@ protocol PersonProfileProtocol: class {
     func headerFansNumPressed()
     func headerFollowsNumPressed()
     func headerFollowBtnPressed()
+    func headerDetailBtnPressed()
 }
 
 
@@ -32,6 +33,9 @@ class PersonProfileView: UIView {
                 configureNumberLbls()
                 configureSepLine()
                 configureFollowBtn()
+                if user.isHost {
+                    followBtn.isHidden = true
+                }
                 
                 subviewsCreated = true
             }
@@ -167,6 +171,7 @@ class PersonProfileView: UIView {
                 make.right.equalTo(arrowRightIcon.snp.left).offset(-7)
             })
         detailBtn = addSubview(UIButton.self)
+            .config(self, selector: #selector(detailBtnPressed))
             .layout({ (make) in
                 make.left.equalTo(avatarBtn)
                 make.bottom.equalTo(avatarBtn)
@@ -179,6 +184,7 @@ class PersonProfileView: UIView {
         var lbls: [UILabel] = []
         ["动态", "粉丝", "关注"].enumerated().forEach { (idx, text) in
             let btn = UIButton()
+            btn.tag = idx
             btn.heightAnchor.constraint(equalToConstant: 40).isActive = true
             btn.addTarget(self, action: #selector(numberBtnPresed(sender:)), for: .touchUpInside)
             numStack.addArrangedSubview(btn)
@@ -285,6 +291,8 @@ class PersonProfileView: UIView {
         fansNumLbl.text = "\(user.fansNum)"
         followsNumLbl.text = "\(user.followsNum)"
         statusNumLbl.text = "\(user.statusNum)"
+        
+        setFollowState(user.followed)
     }
     
     func setFollowState(_ isFollowed: Bool) {
@@ -306,6 +314,9 @@ class PersonProfileView: UIView {
         delegate.headerFollowBtnPressed()
     }
     
+    func detailBtnPressed() {
+        delegate.headerDetailBtnPressed()
+    }
     func numberBtnPresed(sender: UIButton) {
         switch sender.tag {
         case 0:

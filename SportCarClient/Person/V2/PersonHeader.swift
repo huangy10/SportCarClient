@@ -16,6 +16,7 @@ protocol PersonHeaderCarListDatasource: class {
     func personHeaderCarList() -> [SportCar]
     func personHeaderSportCarSelectionChanged(intoCar newCar: SportCar?)
     func personHeaderNeedAddCar()
+    func personHeaderCarNeedEdit()
 }
 
 
@@ -95,6 +96,7 @@ class PersonHeaderView: UIView {
             view.car = car
         } else {
             let view = PersonCarProfileView(car: car)
+            view.delegate = self
             addSubview(view)
             view.snp.makeConstraints({ (mk) in
                 mk.left.equalTo(self)
@@ -166,5 +168,11 @@ extension PersonHeaderView: UICollectionViewDataSource, UICollectionViewDelegate
             let car = dataSource.personHeaderCarList()[indexPath.row - 1]
             dataSource.personHeaderSportCarSelectionChanged(intoCar: car)
         }
+    }
+}
+
+extension PersonHeaderView: PersonCarProfileDelegate {
+    func carProfileEditBtnPressed() {
+        dataSource.personHeaderCarNeedEdit()
     }
 }

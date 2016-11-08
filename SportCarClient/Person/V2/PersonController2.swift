@@ -13,8 +13,8 @@ import SwiftyJSON
 import Dollar
 
 
-class PersonController: UIViewController, RequestManageMixin {
-    
+class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
+    var delayWorkItem: DispatchWorkItem?
     weak var homeDelegate: HomeDelegate?
     
     var header: PersonHeaderView!
@@ -56,6 +56,7 @@ class PersonController: UIViewController, RequestManageMixin {
     }
     var homeBtn: BackToHomeBtn!
     weak var oldNavDelegate: UINavigationControllerDelegate?
+    var selectedIdx: Int = 0
     
     init (user: User) {
         data = DefaultPersonDataSource(user: user)
@@ -88,6 +89,7 @@ class PersonController: UIViewController, RequestManageMixin {
         navigationItem.leftBarButtonItem = getNavLeftBtn()
         navigationItem.rightBarButtonItem = getNavRightBtn()
         oldNavDelegate = navigationController?.delegate
+        navigationController?.delegate = self
     }
     
     func getNavLeftBtn() -> UIBarButtonItem? {
@@ -144,6 +146,7 @@ class PersonController: UIViewController, RequestManageMixin {
     func configureHeader() {
         header = PersonHeaderView(user: user)
         header.dataSource = self
+        header.userProfileView.delegate = self
         
         let container = UIView()
         container.addSubview(header)
@@ -271,7 +274,7 @@ class PersonController: UIViewController, RequestManageMixin {
     }
 }
 
-extension PersonController: UITableViewDataSource, UITableViewDelegate {
+extension PersonController: UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -290,12 +293,30 @@ extension PersonController: UITableViewDataSource, UITableViewDelegate {
         cell.delegate = self
         let rangeMin = indexPath.row * 3
         let rangeMax = min(rangeMin + 3, data.numberOfStatusCell())
-        (rangeMin..<rangeMax).forEach({ cell.setImage(data.getStatus(atIdx: $0).coverURL!, atIdx: $0) })
+        (rangeMin..<rangeMax).forEach({ cell.setImage(getStatus(atIdx: $0)?.coverURL!, atIdx: $0) })
         return cell
+    }
+    
+    func getStatus(atIdx idx: Int) -> Status? {
+        if user.isHost && selectedCar == nil {
+            if idx == 0 {
+                return nil
+            } else {
+                return data.getStatus(atIdx: idx - 1)
+            }
+        } else {
+            return data.getStatus(atIdx: idx)
+        }
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UIScreen.main.bounds.width / 3
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y + scrollView.frame.height >= scrollView.contentSize.height {
+            reqGetStatusList()
+        }
     }
 }
 
@@ -309,13 +330,145 @@ extension PersonController: PersonHeaderCarListDatasource {
     }
     
     func personHeaderNeedAddCar() {
-        
+        let detail = ManufacturerOnlineSelectorController()
+        detail.delegate = self
+        present(detail.toNavWrapper(), animated: true, completion: nil)
+    }
+    
+    func personHeaderCarNeedEdit() {
+        let detail = SportCarInfoDetailController()
+        detail.car = selectedCar!
+        navigationController?.pushViewController(detail, animated: true)
+    }
+}
+
+extension PersonController: SportCarBrandOnlineSelectorDelegate, SportCarSelectDetailProtocol {
+    func sportCarBrandOnlineSelectorDidSelect(_ manufacture: String, carName: String, subName: String) {
+        dismiss(animated: true, completion: nil)
+        lp_start()
+        SportCarRequester.sharedInstance.querySportCarWith(manufacture, carName: carName, subName: subName, onSuccess: { (json) in
+            self.lp_stop()
+            guard let data = json else {
+                return
+            }
+            let carImgURL = SF(data["image_url"].stringValue)
+            let headers = [LS("具体型号"), LS("爱车签名"), LS("价格"), LS("发动机"), LS("扭矩"), LS("车身结构"), LS("最高时速"), LS("百公里加速")]
+            let contents = [carName, nil, data["price"].string, data["engine"].string, data["transmission"].string, data["body"].string, data["max_speed"].string, data["zeroTo60"].string]
+            let detail = SportCarSelectDetailController()
+            detail.delegate = self
+            detail.headers = headers
+            detail.carId = data["carID"].stringValue
+            detail.contents = contents
+            detail.carType = carName
+            detail.carDisplayURL = URL(string: carImgURL ?? "")
+            self.navigationController?.pushViewController(detail, animated: true)
+        }) { (code) in
+            self.lp_stop()
+            self.showToast(LS("获取跑车数据失败"))
+            }.registerForRequestManage(self)
+    }
+    
+    func sportCarBrandOnlineSelectorDidCancel() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func sportCarSelectDeatilDidAddCar(_ car: SportCar) {
+        data.addCar(car)
+        header.loadDataAndUpdateUI()
     }
 }
 
 extension PersonController: PersonStatusListGroupCellDelegate {
     func statusPressed(at idx: Int) {
-        
+        selectedIdx = idx
+        let status: Status
+        if selectedCar == nil && user.isHost {
+            if idx == 0 {
+                let release = StatusReleaseController()
+                release.presenter = self
+                present(release, animated: true, completion: nil)
+                return
+            } else {
+                status = data.getStatus(atIdx: idx - 1)
+            }
+        } else {
+            status = data.getStatus(atIdx: idx)
+        }
+        let detail = StatusDetailController(status: status)
+        navigationController?.pushViewController(detail, animated: true)
+    }
+}
+
+extension PersonController: UINavigationControllerDelegate, StatusCoverPresentable {
+    
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        switch operation {
+        case .push where (fromVC == self && toVC.isKind(of: StatusDetailController.self)):
+            let res = StatusCoverPresentAnimation()
+            res.delegate = self
+            return res
+        case .pop where (fromVC.isKind(of: StatusDetailController.self) && toVC == self):
+            let res = StatusCoverDismissAnimation()
+            res.delegate = self
+            return res
+        default:
+            return nil
+        }
+    }
+    
+    func initialCoverPosition() -> CGRect {
+        let cell = tableView.cellForRow(at: IndexPath(row: selectedIdx / 3, section: 0)) as! PersonStatusListGroupCell
+        let btn = cell.btns[selectedIdx % 3]
+        var rect = cell.contentView.convert(btn.frame, to: navigationController!.view)
+        rect.origin.x += 5
+        return rect
+    }
+}
+
+extension PersonController: PersonProfileProtocol {
+    
+    func headerDetailBtnPressed() {
+        if user.isHost {
+            let detail =  PersonMineInfoController()
+            navigationController?.pushViewController(detail, animated: true)
+        } else {
+            let detail = PersonOtherInfoController()
+            detail.user = user
+            navigationController?.pushViewController(detail, animated: true)
+        }
+    }
+    
+    func headerStatusNumPressed() {
+        personHeaderSportCarSelectionChanged(intoCar: nil)
+    }
+    
+    func headerFansNumPressed() {
+        let fans = FansSelectController()
+        fans.targetUser = user
+        navigationController?.pushViewController(fans, animated: true)
+    }
+    
+    func headerFollowsNumPressed() {
+        let follows = FollowSelectController()
+        follows.targetUser = user
+        navigationController?.pushViewController(follows, animated: true)
+    }
+    
+    func headerFollowBtnPressed() {
+        likeBtnPressed()
+    }
+   
+    func likeBtnPressed() {
+        lp_start()
+        AccountRequester2.sharedInstance.follow(user.ssidString, onSuccess: { (json) -> () in
+            self.lp_stop()
+            let followed = json!.boolValue
+            self.user.followed = true
+            self.header.userProfileView.setFollowState(followed)
+        }, onError: { (code) -> () in
+            self.lp_stop()
+            self.showReqError(withCode: code)
+        }).registerForRequestManage(self)
     }
 }
 
@@ -354,6 +507,7 @@ class PersonStatusListGroupCell: UITableViewCell {
         for idx in 0..<3 {
             let btn = UIButton()
             btn.addTarget(self, action: #selector(btnPressed(sender:)), for: .touchUpInside)
+            btn.imageView?.contentMode = .scaleAspectFill
             btn.snp.makeConstraints({ (mk) in
                 mk.height.equalTo(btn.snp.width)
             })
