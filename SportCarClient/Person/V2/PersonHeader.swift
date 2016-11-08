@@ -98,6 +98,7 @@ class PersonHeaderView: UIView {
             view.car = car
         } else {
             let view = PersonCarProfileView(car: car)
+            addSubview(view)
             view.snp.makeConstraints({ (mk) in
                 mk.left.equalTo(self)
                 mk.right.equalTo(self)

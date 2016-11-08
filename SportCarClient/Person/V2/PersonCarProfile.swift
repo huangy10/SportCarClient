@@ -41,7 +41,7 @@ class PersonCarProfileView: UIView {
     
     init (car: SportCar) {
         self.car = car
-        super.init(frame: .zero)
+        super.init(frame: UIScreen.main.bounds)
         
         configureCarGallary()
         configureCarName()
@@ -66,7 +66,7 @@ class PersonCarProfileView: UIView {
             mk.left.equalTo(self)
             mk.right.equalTo(self)
             mk.top.equalTo(self)
-            mk.height.equalTo(gallary.snp.width).multipliedBy(0.588)
+            mk.height.equalTo(self.snp.width).multipliedBy(0.588)
         }
     }
     
@@ -75,7 +75,6 @@ class PersonCarProfileView: UIView {
             .layout({ (mk) in
                 mk.left.equalTo(self)
                 mk.top.equalTo(gallary.snp.bottom).offset(15)
-//                mk.width.equalTo(self).multipliedBy(0.55)
             })
         nameLbl.preferredMaxLayoutWidth = UIScreen.main.bounds.width * 0.55
         nameLbl.numberOfLines = 0
@@ -137,8 +136,6 @@ class PersonCarProfileView: UIView {
             mk.top.equalTo(signatureLbl.snp.bottom).offset(22.5)
             mk.left.equalTo(self)
             mk.right.equalTo(self)
-            mk.height.equalTo(252)
-//            mk.bottom.equalTo(self)
         }
         
         paramBoardStack.addSubview(UIView.self).config(UIColor(white: 0.1, alpha: 1))
@@ -153,19 +150,23 @@ class PersonCarProfileView: UIView {
             stack.distribution = .fillEqually
             stack.alignment = .center
             paramBoardStack.addArrangedSubview(stack)
-            stack.autoresizingMask = .flexibleWidth
+//            stack.autoresizingMask = .flexibleWidth
+            stack.snp.makeConstraints { (mk) in
+                mk.width.equalTo(self)
+            }
             return stack
         }
         
         var lbls: [UILabel] = []
         
-        let subStacks = (0..<2).map{ _ in createSubStack() }
+        let subStacks = (0..<3).map{ _ in createSubStack() }
         
         ["型号", "发动机", "最高车速", "价格", "车身结构", "百公里加速"].enumerated().forEach { (idx, text) in
             let stack = subStacks[idx / 2]
             let container = UIView()
             container.backgroundColor = UIColor(red: 0.145, green: 0.161, blue: 0.173, alpha: 1)
-            container.autoresizingMask = .flexibleHeight
+//            container.autoresizingMask = .flexibleHeight
+            container.heightAnchor.constraint(equalToConstant: 84).isActive = true
             stack.addArrangedSubview(container)
             
             let sLbl = container.addSubview(UILabel.self).config(12, textColor: kTextGray28, text: LS(text))
@@ -192,12 +193,12 @@ class PersonCarProfileView: UIView {
     }
     
     func configureStatusListHeader() {
-        statusListHeader = addSubview(UILabel.self).config(14, fontWeight: UIFontWeightSemibold)
+        statusListHeader = addSubview(UILabel.self).config(14, fontWeight: UIFontWeightSemibold, textAlignment: .center, text: "动态")
             .layout({ (mk) in
                 mk.left.equalTo(self)
                 mk.right.equalTo(self)
                 mk.top.equalTo(paramBoardStack.snp.bottom)
-                mk.height.equalTo(44)
+//                mk.height.equalTo(44)
                 mk.bottom.equalTo(self)
             })
     }
@@ -248,6 +249,7 @@ class PersonCarProfileView: UIView {
             // 在autolayout系统没有对本view进行布局之前先将这个view的frame设置成最大
             frame = UIScreen.main.bounds
         }
+        layoutIfNeeded()
         var rect: CGRect = .zero
         for view in subviews {
             rect = rect.union(view.frame)

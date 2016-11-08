@@ -26,6 +26,19 @@ class PersonController: UIViewController, RequestManageMixin {
         return data.user
     }
     
+    var selectedCar: SportCar? {
+        get {
+            return data.selectedCar
+        }
+        
+        set {
+            data.selectedCar = newValue
+            header.car = newValue
+            
+            tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: header.requiredHeight())
+        }
+    }
+    
     var onGoingRequest: [String : Request] = [:]
     var isRoot: Bool {
         return homeDelegate != nil
@@ -160,9 +173,10 @@ class PersonController: UIViewController, RequestManageMixin {
         } else {
             dateThreshold = data.getStatus(atIdx: num - 1).createdAt!
         }
-        let selectedCar = data.selectedCar
-        AccountRequester2.sharedInstance.getStatusListSimplified(user.ssidString, carID: data.selectedCar?.ssidString, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
-            self.parseStatusData(json!.arrayValue, forCar: selectedCar)
+        // 我们这里用一个临时变量来存下当前的选中的车，以免在回调之前这个变量发生改变
+        let curSelectedCar = data.selectedCar
+        AccountRequester2.sharedInstance.getStatusListSimplified(user.ssidString, carID: curSelectedCar?.ssidString, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
+            self.parseStatusData(json!.arrayValue, forCar: curSelectedCar)
             self.tableView.reloadData()
             
             self.pullToRefreshTaskCountDown -= 1
@@ -229,7 +243,7 @@ class PersonController: UIViewController, RequestManageMixin {
             
             self.data.cars = newCars
             if autoSelectFirstCar && newCars.count > 0 {
-                self.data.selectedCar = newCars.first()
+                self.selectedCar = newCars.first()
             }
             
             self.pullToRefreshTaskCountDown -= 1
@@ -238,6 +252,8 @@ class PersonController: UIViewController, RequestManageMixin {
             self.pullToRefreshTaskCountDown -= 1
         }).registerForRequestManage(self)
     }
+    
+    
 }
 
 extension PersonController: UITableViewDataSource, UITableViewDelegate {
@@ -298,6 +314,7 @@ class PersonStatusListGroupCell: UITableViewCell {
         configureBtns()
 
         selectionStyle = .none
+        backgroundColor = kGeneralTableViewBGColor
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -312,7 +329,7 @@ class PersonStatusListGroupCell: UITableViewCell {
         stack.alignment = .center
         contentView.addSubview(stack)
         stack.snp.makeConstraints { (mk) in
-            mk.edges.equalTo(UIEdgeInsetsMake(0, 5, 5, 5))
+            mk.edges.equalTo(UIEdgeInsetsMake(0, 5, 2.5, 5))
         }
         for idx in 0..<3 {
             let btn = UIButton()
