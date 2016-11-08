@@ -14,7 +14,8 @@ protocol PersonHeaderDelegate: class {
 
 protocol PersonHeaderCarListDatasource: class {
     func personHeaderCarList() -> [SportCar]
-    func personHeaderSportCarSelectionChanged(intoCar newCar: SportCar)
+    func personHeaderSportCarSelectionChanged(intoCar newCar: SportCar?)
+    func personHeaderNeedAddCar()
 }
 
 
@@ -153,6 +154,17 @@ extension PersonHeaderView: UICollectionViewDataSource, UICollectionViewDelegate
             return CGSize(width: 120, height: 62)
         } else {
             return SportscarViewListCarCell.getRequiredSize(forGivenCar: cars[indexPath.row - 1])
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            dataSource.personHeaderSportCarSelectionChanged(intoCar: nil)
+        } else if indexPath.row == dataSource.personHeaderCarList().count + 1 {
+            dataSource.personHeaderNeedAddCar()
+        } else {
+            let car = dataSource.personHeaderCarList()[indexPath.row - 1]
+            dataSource.personHeaderSportCarSelectionChanged(intoCar: car)
         }
     }
 }

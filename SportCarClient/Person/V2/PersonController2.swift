@@ -32,13 +32,20 @@ class PersonController: UIViewController, RequestManageMixin {
         }
         
         set {
+            if selectedCar == newValue {
+                return
+            }
             data.selectedCar = newValue
             header.car = newValue
             
             tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: header.requiredHeight())
             
             if data.numberOfStatus() == 0 {
+                refresh.beginRefreshing()
                 reqGetStatusList(overrideReqKey: "auto")
+            } else {
+                header.loadDataAndUpdateUI()
+                tableView.reloadData()
             }
         }
     }
@@ -177,14 +184,15 @@ class PersonController: UIViewController, RequestManageMixin {
         }
         // 我们这里用一个临时变量来存下当前的选中的车，以免在回调之前这个变量发生改变
         let curSelectedCar = data.selectedCar
+        incrTaskCountDown()
         AccountRequester2.sharedInstance.getStatusListSimplified(user.ssidString, carID: curSelectedCar?.ssidString, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
             self.parseStatusData(json!.arrayValue, forCar: curSelectedCar)
             self.tableView.reloadData()
             
-            self.pullToRefreshTaskCountDown -= 1
+            self.decrTaskCountDown()
         }, onError: { (code) -> () in
             self.showReqError(withCode: code)
-            self.pullToRefreshTaskCountDown -= 1
+            self.decrTaskCountDown(withSuccessFlag: true)
         }).registerForRequestManage(self, forKey: reqKeyFromFunctionName(withExtraID: overrideReqKey))
     }
     
@@ -197,36 +205,43 @@ class PersonController: UIViewController, RequestManageMixin {
         data.updateStatusList(forCar: car, withData: buf)
     }
     
-    var pullToRefreshTaskCountDown: Int = 0 {
-        didSet {
-            if pullToRefreshTaskCountDown <= 0 {
-                refresh.endRefreshing()
+    var taskCountDown: Int = 0
+    
+    func incrTaskCountDown() {
+        taskCountDown += 1
+    }
+    
+    func decrTaskCountDown(withSuccessFlag success: Bool = true) {
+        taskCountDown -= 1
+        if taskCountDown <= 0 {
+            refresh.endRefreshing()
+            if success {
                 header.loadDataAndUpdateUI()
             }
-            print(pullToRefreshTaskCountDown)
         }
     }
     
     func pullToRefresh() {
-        pullToRefreshTaskCountDown = 3
         reqGetAccountInfo()
         reqGetCarList()
         reqGetStatusList(overrideReqKey: "pull")
     }
     
     func reqGetAccountInfo() {
+        incrTaskCountDown()
         AccountRequester2.sharedInstance.getProfileDataFor(user.ssidString, onSuccess: { (json) -> () in
             let user = self.data.user
             try! user.loadDataFromJSON(json!, detailLevel: 1)
             //
-            self.pullToRefreshTaskCountDown -= 1
+            self.decrTaskCountDown()
         }, onError: { (code) -> () in
             self.showReqError(withCode: code)
-            self.pullToRefreshTaskCountDown -= 1
+            self.decrTaskCountDown(withSuccessFlag: false)
         }).registerForRequestManage(self)
     }
     
     func reqGetCarList() {
+        incrTaskCountDown()
         let autoSelectFirstCar = data.cars.count == 0
         AccountRequester2.sharedInstance.getAuthedCarsList(user.ssidString, onSuccess: { (json) -> () in
             var newCars: [SportCar] = []
@@ -248,10 +263,10 @@ class PersonController: UIViewController, RequestManageMixin {
                 self.selectedCar = newCars.first()
             }
             
-            self.pullToRefreshTaskCountDown -= 1
+            self.decrTaskCountDown()
         }, onError: { (code) -> () in
             self.showReqError(withCode: code)
-            self.pullToRefreshTaskCountDown -= 1
+            self.decrTaskCountDown(withSuccessFlag: false)
         }).registerForRequestManage(self)
     }
 }
@@ -272,6 +287,7 @@ extension PersonController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PersonStatusListGroupCell
         cell.indexPath = indexPath
+        cell.delegate = self
         let rangeMin = indexPath.row * 3
         let rangeMax = min(rangeMin + 3, data.numberOfStatusCell())
         (rangeMin..<rangeMax).forEach({ cell.setImage(data.getStatus(atIdx: $0).coverURL!, atIdx: $0) })
@@ -288,7 +304,11 @@ extension PersonController: PersonHeaderCarListDatasource {
         return data.cars
     }
     
-    func personHeaderSportCarSelectionChanged(intoCar newCar: SportCar) {
+    func personHeaderSportCarSelectionChanged(intoCar newCar: SportCar?) {
+        selectedCar = newCar
+    }
+    
+    func personHeaderNeedAddCar() {
         
     }
 }
