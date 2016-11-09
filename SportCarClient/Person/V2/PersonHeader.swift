@@ -93,6 +93,7 @@ class PersonHeaderView: UIView {
         }
         
         if let view = carProfileView {
+            view.isHidden = false
             view.car = car
         } else {
             let view = PersonCarProfileView(car: car)

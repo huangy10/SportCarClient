@@ -46,7 +46,10 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
             data.selectedCar = newValue
             header.car = newValue
             
-            tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: header.requiredHeight())
+//            UIView.animate(withDuration: 0.3, animations: {
+//                self.tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.header.requiredHeight())
+//            })
+            self.tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.header.requiredHeight())
             
             if data.numberOfStatus() == 0 {
                 refresh.beginRefreshing()
@@ -321,8 +324,16 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
         let curSelectedCar = data.selectedCar
         incrTaskCountDown()
         AccountRequester2.sharedInstance.getStatusListSimplified(user.ssidString, carID: curSelectedCar?.ssidString, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
-            self.parseStatusData(json!.arrayValue, forCar: curSelectedCar)
-            self.tableView.reloadData()
+            if self.parseStatusData(json!.arrayValue, forCar: curSelectedCar) {
+//            self.tableView.reloadData()
+                if overrideReqKey != "" {
+                    UIView.transition(with: self.tableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                        self.tableView.reloadData()
+                    }, completion: nil)
+                } else {
+                    self.tableView.reloadData()
+                }
+            }
             
             self.decrTaskCountDown()
         }, onError: { (code) -> () in
@@ -331,13 +342,14 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
         }).registerForRequestManage(self, forKey: reqKeyFromFunctionName(withExtraID: overrideReqKey))
     }
     
-    func parseStatusData(_ json: [JSON], forCar car: SportCar?) {
+    func parseStatusData(_ json: [JSON], forCar car: SportCar?) -> Bool {
         var buf: [Status] = []
         for data in json {
             let status = try! MainManager.sharedManager.getOrCreate(data) as Status
             buf.append(status)
         }
         data.updateStatusList(forCar: car, withData: buf)
+        return buf.count != 0
     }
     
     var taskCountDown: Int = 0
