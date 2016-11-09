@@ -21,6 +21,9 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
     var header: PersonHeaderView!
     var tableView: UITableView!
     var refresh: UIRefreshControl!
+    var isTableEmpty: Bool {
+        return data.numberOfStatusCell() == 0
+    }
     
     var data: PersonDataSourceDelegate!
     var user: User {
@@ -261,6 +264,7 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
         tableView.separatorStyle = .none
         
         tableView.register(PersonStatusListGroupCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty")
         tableView.rowHeight = UITableViewAutomaticDimension
         
         view.addSubview(tableView)
@@ -472,12 +476,17 @@ extension PersonController: UITableViewDataSource, UITableViewDelegate, UIScroll
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let statusNum = data.numberOfStatusCell()
         if statusNum == 0 {
-            return 0
+            return 1
         }
         return (statusNum - 1) / 3 + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if isTableEmpty {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "empty", for: indexPath) as! SSEmptyListHintCell
+            cell.titleLbl.text = LS("还没有动态！")
+            return cell
+        }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! PersonStatusListGroupCell
         cell.indexPath = indexPath
         cell.delegate = self

@@ -25,12 +25,14 @@ class SSEmptyListHintCell: UITableViewCell {
     func createSubviews() {
         self.selectionStyle = .none
         let superview = self.contentView
-        titleLbl = superview.addSubview(UILabel.self).config(14, textColor: kTextGray28)
+        superview.backgroundColor = .clear
+        titleLbl = superview.addSubview(UILabel.self).config(14, textColor: kTextGray28, textAlignment: .center)
             .layout({ (make) in
 //                make.center.equalTo(superview).offset(CGPoint(x: 0, y: -15) as! ConstraintOffsetTarget)
-                make.centerX.equalTo(superview)
-                make.centerY.equalTo(superview).offset(-15)
+//                make.centerX.equalTo(superview)
+//                make.centerY.equalTo(superview).offset(-15)
+                make.edges.equalTo(superview)
+                make.height.equalTo(100)
             })
-        contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 100)
     }
 }

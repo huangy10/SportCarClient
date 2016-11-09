@@ -483,12 +483,12 @@ extension ActivityDetailController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if comments.count == 0 {
-            return 100
-        }
-        return UITableViewAutomaticDimension
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        if comments.count == 0 {
+//            return 100
+//        }
+//        return UITableViewAutomaticDimension
+//    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if comments.count == 0 {
