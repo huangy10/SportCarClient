@@ -11,13 +11,18 @@ import Spring
 import Kingfisher
 import SnapKit
 
+protocol HomeDelegate: class {
+    func backToHome(_ onComplete: (()->())?)
+    func switchController(_ from: Int, to: Int)
+}
+
 class HomeController2: UIViewController, HomeDelegate {
     var hostUser: User {
         return MainManager.sharedManager.hostUser!
     }
     
     // MARK: controllers
-    var person: PersonBasicController?
+    var person: PersonController?
     var news: NewsController2?
     var billboard: BillboardController?
     var status: StatusHomeController?
@@ -380,8 +385,10 @@ class HomeController2: UIViewController, HomeDelegate {
         }
         case 6:
             if person == nil {
-                person = PersonBasicController(user: MainManager.sharedManager.hostUser!)
-                person?.isRoot = true
+//                person = PersonBasicController(user: MainManager.sharedManager.hostUser!)
+//                person?.isRoot = true
+//                person?.homeDelegate = self
+                person = PersonController(user: MainManager.sharedManager.hostUser!)
                 person?.homeDelegate = self
                 wrappedControllers[index] = person!.toNavWrapper()
             }

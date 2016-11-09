@@ -296,8 +296,8 @@ extension PrivateChatSettingController {
 //                assertionFailure()
 //                return
 //            }
-            let detail = PersonOtherController(user: user)
-            self.navigationController?.pushViewController(detail, animated: true)
+//            let detail = PersonOtherController(user: user)
+            self.navigationController?.pushViewController(user.showDetailController(), animated: true)
             break
         case 1:
             // 点击修改备注

@@ -192,7 +192,6 @@
 		BFCB96361C1F0551004F77E8 /* BlackBarNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96351C1F0551004F77E8 /* BlackBarNavigationController.swift */; };
 		BFCB963A1C1FB0AE004F77E8 /* SportCarRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96391C1FB0AE004F77E8 /* SportCarRequester.swift */; };
 		BFCB963C1C1FFD2D004F77E8 /* SportCarSelectDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */; };
-		BFCB96401C205DF1004F77E8 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB963F1C205DF1004F77E8 /* Home.swift */; };
 		BFCB96441C206169004F77E8 /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96431C206169004F77E8 /* SideBar.swift */; };
 		BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96451C2061E0004F77E8 /* LoadingButton.swift */; };
 		BFDB5CB41D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB5CB31D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift */; };
@@ -519,7 +518,6 @@
 		BFCB96351C1F0551004F77E8 /* BlackBarNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlackBarNavigationController.swift; sourceTree = "<group>"; };
 		BFCB96391C1FB0AE004F77E8 /* SportCarRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarRequester.swift; path = Accounts/SportCarRequester.swift; sourceTree = "<group>"; };
 		BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarSelectDetail.swift; path = Accounts/SportCarSelectDetail.swift; sourceTree = "<group>"; };
-		BFCB963F1C205DF1004F77E8 /* Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Home.swift; path = Home/Home.swift; sourceTree = "<group>"; };
 		BFCB96431C206169004F77E8 /* SideBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideBar.swift; path = Home/SideBar.swift; sourceTree = "<group>"; };
 		BFCB96451C2061E0004F77E8 /* LoadingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingButton.swift; path = BaseTemplate/LoadingButton.swift; sourceTree = "<group>"; };
 		BFDB5CB31D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SportCarBrandOnlineSelectorController.swift; sourceTree = "<group>"; };
@@ -1448,7 +1446,6 @@
 		BFCB963E1C205DE2004F77E8 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				BFCB963F1C205DF1004F77E8 /* Home.swift */,
 				BFCB96431C206169004F77E8 /* SideBar.swift */,
 				BF9404961C2818C3001ABB1E /* AppLauchner.swift */,
 				BF662A141CCBA39500B3D84D /* Entrance.swift */,
@@ -2353,7 +2350,6 @@
 				BF58990C1C4CFF26005496EA /* informUser.swift in Sources */,
 				BFFFAFEB1C84AA4300EBA314 /* FansSelect.swift in Sources */,
 				BF8FE9A41C86C22400008170 /* UIImageView+ImageViewer.swift in Sources */,
-				BFCB96401C205DF1004F77E8 /* Home.swift in Sources */,
 				BFC032791C700DFA00ECA69A /* ActivityNearBy.swift in Sources */,
 				BFCA90141C50D6CB00B05E74 /* StatusDetail.swift in Sources */,
 				BFC032511C6DCD6200ECA69A /* AuthBasic.swift in Sources */,

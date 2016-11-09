@@ -681,8 +681,9 @@ extension PersonController: BMKLocationServiceDelegate, BMKMapViewDelegate {
         let coor = userLocation.location.coordinate
         userAnno.coordinate = userLocation.location.coordinate
         self.userLocation = Location(latitude: coor.latitude, longitude: coor.longitude, description: "", city: "")
-        let userLocInScreen = mapView.convert(userLocation.location.coordinate, toPointTo: mapView)
-        let userLocWithOffset = CGPoint(x: userLocInScreen.x + header.frame.width / 4, y: userLocInScreen.y - header.frame.height / 3)
+        let userLocInScreen = mapView.convert(coor, toPointTo: mapView)
+        let rect = header.userProfileView.frame
+        let userLocWithOffset = CGPoint(x: userLocInScreen.x, y: userLocInScreen.y - rect.height / 4)
         let newCoordinate = mapView.convert(userLocWithOffset, toCoordinateFrom: mapView)
         let region = BMKCoordinateRegionMakeWithDistance(newCoordinate, 3000, 5000)
         mapView.setRegion(region, animated: true)

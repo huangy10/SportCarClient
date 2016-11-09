@@ -141,13 +141,14 @@ class InlineUserSelectController: UICollectionViewController {
             delegate?.inlineUserSelectNeedAddMembers()
         } else if (indexPath as NSIndexPath).row < users.count{
             let user = users[(indexPath as NSIndexPath).row]
-            if user.isHost {
-                let detail = PersonBasicController(user: user)
-                parentController?.navigationController?.pushViewController(detail, animated: true)
-            } else {
-                let detail = PersonOtherController(user: user)
-                parentController?.navigationController?.pushViewController(detail, animated: true)
-            }
+//            if user.isHost {
+//                let detail = PersonBasicController(user: user)
+//                parentController?.navigationController?.pushViewController(detail, animated: true)
+//            } else {
+//                let detail = PersonOtherController(user: user)
+//                parentController?.navigationController?.pushViewController(detail, animated: true)
+//            }
+            parentController?.navigationController?.pushViewController(user.showDetailController(), animated: true)
         }
     }
     

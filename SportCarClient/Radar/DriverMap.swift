@@ -378,8 +378,9 @@ extension RadarDriverMapController: UITableViewDataSource, UITableViewDelegate {
             return
         }
         assert(!user.isHost)
-        let detail = PersonOtherController(user: user)
-        parent?.navigationController?.pushViewController(detail, animated: true)
+//        let detail = PersonOtherController(user: user)
+
+        parent?.navigationController?.pushViewController(user.showDetailController(), animated: true)
     }
     
     func showUserBtnPressed() {

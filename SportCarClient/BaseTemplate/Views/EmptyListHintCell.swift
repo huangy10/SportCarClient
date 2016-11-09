@@ -26,6 +26,7 @@ class SSEmptyListHintCell: UITableViewCell {
         self.selectionStyle = .none
         let superview = self.contentView
         superview.backgroundColor = .clear
+        backgroundColor = .clear
         titleLbl = superview.addSubview(UILabel.self).config(14, textColor: kTextGray28, textAlignment: .center)
             .layout({ (make) in
 //                make.center.equalTo(superview).offset(CGPoint(x: 0, y: -15) as! ConstraintOffsetTarget)
