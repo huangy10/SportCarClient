@@ -22,6 +22,9 @@ protocol PersonDataSourceDelegate: class {
     func numberOfStatus() -> Int
     func numberOfStatusCell() -> Int
     func updateStatusList(forCar car: SportCar?, withData data: [Status])
+    
+    func rmStatus(_ status: Status) -> Bool
+    func newStatus(_ status: Status) -> Bool
 }
 
 
@@ -83,5 +86,13 @@ class DefaultPersonDataSource: PersonDataSourceDelegate {
     func rmCar(_ car: SportCar) {
         cars = $.remove(cars, callback: { $0.ssid == car.ssid })
         statusDict[getMapKey(forCar: car)] = nil
+    }
+    
+    func rmStatus(_ status: Status) -> Bool {
+        return true
+    }
+    
+    func newStatus(_ status: Status) -> Bool {
+        return true
     }
 }

@@ -259,6 +259,7 @@ class PersonProfileView: UIView {
     
     func configureFollowBtn() {
         followBtn = addSubview(UIButton.self)
+            .config(self, selector: #selector(followBtnPressed))
             .layout({ (mk) in
                 mk.centerY.equalTo(fansNumLbl.snp.bottom)
                 mk.right.equalTo(self).offset(-15)

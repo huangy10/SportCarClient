@@ -223,6 +223,7 @@ class PersonOtherController: PersonBasicController, RequestProtocol {
                 let newCoordinate = self.header.map.convert(userLocWithOffset, toCoordinateFrom: self.header.map)
                 let region = BMKCoordinateRegionMakeWithDistance(newCoordinate, 3000, 5000)
 //                let region = BMKCoordinateRegionMakeWithDistance(self.userLoc!.location, 3000, 5000)
+                
                 self.header.map.setRegion(region, animated: true)
                 self.header.map.addAnnotation(self.userAnno)
                 }) { (code) -> () in

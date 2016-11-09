@@ -11,6 +11,7 @@ import Alamofire
 import Kingfisher
 import SwiftyJSON
 import Dollar
+import MapKit
 
 
 class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
@@ -25,6 +26,13 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
     var user: User {
         return data.user
     }
+    
+    var mapView: BMKMapView! {
+        return header.userProfileView.map
+    }
+    var locationService: BMKLocationService!
+    var userLocation: Location?
+    var userAnno: BMKPointAnnotation!
     
     var selectedCar: SportCar? {
         get {
@@ -42,10 +50,14 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
             
             if data.numberOfStatus() == 0 {
                 refresh.beginRefreshing()
+                tableView.setContentOffset(.zero, animated: true)
                 reqGetStatusList(overrideReqKey: "auto")
             } else {
                 header.loadDataAndUpdateUI()
-                tableView.reloadData()
+                UIView.transition(with: tableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                    self.tableView.reloadData()
+                }, completion: nil)
+//                tableView.reloadData()
             }
         }
     }
@@ -57,6 +69,7 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
     var homeBtn: BackToHomeBtn!
     weak var oldNavDelegate: UINavigationControllerDelegate?
     var selectedIdx: Int = 0
+    var needReload: Bool = false
     
     init (user: User) {
         data = DefaultPersonDataSource(user: user)
@@ -79,15 +92,98 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
         configureNavBar()
         configureTableView()
         configureHeader()
+        configureNotifications()
+        if user.isHost {
+            configureMap()
+        } else {
+            trackTargetUserLocation()
+        }
         
         refresh.beginRefreshing()
         pullToRefresh()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if user.isHost {
+            locationService.delegate = self
+            locationService.startUserLocationService()
+        }
+        
+        mapView.delegate = self
+        mapView.viewWillAppear()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if user.isHost {
+            locationService.delegate = nil
+            locationService.stopUserLocationService()
+        }
+        
+        mapView.delegate = nil
+        mapView.viewWillDisappear()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if needReload {
+            tableView.reloadData()
+        }
+        
+        if header.needsReload {
+            header.loadDataAndUpdateUI()
+        }
+    }
+    
+    func configureNotifications() {
+        if user.isHost {
+            NotificationCenter.default.addObserver(self, selector: #selector(onStatusNew(_:)), name: NSNotification.Name(rawValue: kStatusNewNotification), object: nil)
+        }
+        NotificationCenter.default.addObserver(self, selector: #selector(onStatusDelete(_:)), name: NSNotification.Name(rawValue: kStatusDidDeletedNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onAccountInfoChanged(_:)), name: NSNotification.Name(rawValue: kAccountInfoChanged), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onCarDeleted(_:)), name: NSNotification.Name(rawValue: kCarDeletedNotification), object: nil)
+    }
+    
+    func onStatusNew(_ n: NSNotification) {
+        guard let status = n.userInfo?[kStatusKey] as? Status else {
+            return
+        }
+        
+        needReload = data.newStatus(status)
+    }
+    
+    func onStatusDelete(_ n: NSNotification) {
+        if let status = n.userInfo?[kStatusKey] as? Status {
+            needReload = data.rmStatus(status)
+        }
+    }
+    
+    func onAccountInfoChanged(_ n: NSNotification) {
+        header.needsReload = true
+    }
+    
+    func onCarDeleted(_ n: NSNotification) {
+        if let car = n.userInfo?[kSportcarKey] as? SportCar {
+            data.rmCar(car)
+            header.needsReload = true
+            needReload = true
+        }
+    }
+    
+    func configureMap() {
+        locationService = BMKLocationService()
+    }
+    
     func configureNavBar() {
         navigationItem.title = getNavTitle()
         navigationItem.leftBarButtonItem = getNavLeftBtn()
-        navigationItem.rightBarButtonItem = getNavRightBtn()
+        if user.isHost {
+            navigationItem.rightBarButtonItem = getNavRightBtn()
+        } else {
+            navigationItem.rightBarButtonItems = getNavRightBtns()
+        }
         oldNavDelegate = navigationController?.delegate
         navigationController?.delegate = self
     }
@@ -104,6 +200,37 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
             backBtn.frame = CGRect(x: 0, y: 0, width: 15, height: 15)
             return UIBarButtonItem(customView: backBtn)
         }
+    }
+    
+    func getNavRightBtns() -> [UIBarButtonItem] {
+        var result: [UIBarButtonItem] = []
+        let btnSize: CGFloat = 30
+        let iconSize: CGFloat = 18
+        let btnFrame = CGRect(x: 0, y: 0, width: btnSize, height: btnSize)
+        let edgeVal = (btnSize - iconSize) / 2
+        let edge = UIEdgeInsets(top: edgeVal, left: edgeVal, bottom: edgeVal, right: edgeVal)
+        let setting = UIButton().config(
+            self, selector: #selector(navRightBtnPressed),
+            image: UIImage(named: "person_setting"))
+        setting.frame = btnFrame
+        setting.imageEdgeInsets = edge
+        setting.imageView?.contentMode = .scaleAspectFit
+        result.append(UIBarButtonItem(customView: setting))
+        
+        let navigate = UIButton().config(self, selector: #selector(locateBtnPressed))
+        navigate.setImage(UIImage(named: "locate"), for: .normal)
+        navigate.imageView?.contentMode = .scaleAspectFit
+        navigate.frame = btnFrame
+        navigate.imageEdgeInsets = edge
+        result.append(UIBarButtonItem(customView: navigate))
+        
+        let chat = UIButton().config(self, selector: #selector(chatBtnPressed))
+        chat.setImage(UIImage(named: "chat"), for: .normal)
+        chat.imageView?.contentMode = .scaleAspectFit
+        chat.frame = btnFrame
+        chat.imageEdgeInsets = edge
+        result.append(UIBarButtonItem(customView: chat))
+        return result
     }
     
     func getNavRightBtn() -> UIBarButtonItem? {
@@ -164,8 +291,13 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
     }
     
     func navRightBtnPressed() {
-        let settings = PersonMineSettings()
-        navigationController?.pushViewController(settings, animated: true)
+        if user.isHost {
+            let settings = PersonMineSettings()
+            navigationController?.pushViewController(settings, animated: true)
+        } else {
+            let block = BlockUserController(user: user)
+            block.presentFromRootViewController()
+        }
     }
     
     func navLeftBtnPressed() {
@@ -271,6 +403,52 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
             self.showReqError(withCode: code)
             self.decrTaskCountDown(withSuccessFlag: false)
         }).registerForRequestManage(self)
+    }
+   
+    func chatBtnPressed() {
+        if navigationController!.viewControllers.count > 3, let room = self.navigationController?.viewControllers.fetch(index: -3) as? ChatRoomController, room.targetUser!.ssid == user.ssid {
+            _ = navigationController?.popViewController(animated: true)
+            return
+        }
+        
+        let room = ChatRoomController()
+        room.targetUser = user
+        room.chatCreated = false
+        
+        navigationController?.pushViewController(room, animated: true)
+    }
+    
+    func locateBtnPressed() {
+        guard userLocation != nil else {
+            showToast(LS("无法确认目标用户的位置"))
+            return
+        }
+        
+        needNavigation()
+    }
+    
+    func needNavigation() {
+        showConfirmToast(LS("导航"), message: LS("跳转到地图导航至该用户地址？"), target: self, onConfirm: #selector(openMapToNavigate))
+    }
+    
+    func openMapToNavigate() {
+        let param = BMKNaviPara()
+        let end = BMKPlanNode()
+        let center = userLocation!.location
+        end.pt = center
+        let targetName = userLocation!.description
+        end.name = targetName
+        param.endPoint = end
+        param.appScheme = "baidumapsdk://mapsdk.baidu.com"
+        let res = BMKNavigation.openBaiduMapNavigation(param)
+        if res.rawValue != 0 {
+            // 如果没有安装百度地图，则打开自带地图
+            let target = MKMapItem(placemark: MKPlacemark(coordinate: center, addressDictionary: nil))
+            target.name = targetName
+            let options: [String: AnyObject] = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving as AnyObject,
+                                                MKLaunchOptionsMapTypeKey: NSNumber(value: MKMapType.standard.rawValue as UInt)]
+            MKMapItem.openMaps(with: [target], launchOptions: options)
+        }
     }
 }
 
@@ -455,10 +633,10 @@ extension PersonController: PersonProfileProtocol {
     }
     
     func headerFollowBtnPressed() {
-        likeBtnPressed()
+        followBtnPressed()
     }
    
-    func likeBtnPressed() {
+    func followBtnPressed() {
         lp_start()
         AccountRequester2.sharedInstance.follow(user.ssidString, onSuccess: { (json) -> () in
             self.lp_stop()
@@ -467,6 +645,53 @@ extension PersonController: PersonProfileProtocol {
             self.header.userProfileView.setFollowState(followed)
         }, onError: { (code) -> () in
             self.lp_stop()
+            self.showReqError(withCode: code)
+        }).registerForRequestManage(self)
+    }
+}
+
+extension PersonController: BMKLocationServiceDelegate, BMKMapViewDelegate {
+    func didUpdate(_ userLocation: BMKUserLocation!) {
+        if self.userLocation == nil {
+            userAnno = BMKPointAnnotation()
+            mapView.addAnnotation(userAnno)
+        }
+        
+        let coor = userLocation.location.coordinate
+        userAnno.coordinate = userLocation.location.coordinate
+        self.userLocation = Location(latitude: coor.latitude, longitude: coor.longitude, description: "", city: "")
+        let userLocInScreen = mapView.convert(userLocation.location.coordinate, toPointTo: mapView)
+        let userLocWithOffset = CGPoint(x: userLocInScreen.x + header.frame.width / 4, y: userLocInScreen.y - header.frame.height / 3)
+        let newCoordinate = mapView.convert(userLocWithOffset, toCoordinateFrom: mapView)
+        let region = BMKCoordinateRegionMakeWithDistance(newCoordinate, 3000, 5000)
+        mapView.setRegion(region, animated: true)
+    }
+    
+    func mapView(_ mapView: BMKMapView!, viewFor annotation: BMKAnnotation!) -> BMKAnnotationView! {
+        let view = UserSelectAnnotationView(annotation: annotation, reuseIdentifier: "user_location")
+        view?.annotation = annotation
+        return view
+    }
+    
+    
+    func trackTargetUserLocation() {
+        userAnno = BMKPointAnnotation()
+        RadarRequester.sharedInstance.trackUser(user.ssidString, onSuccess: { (json) -> () in
+            self.userLocation = Location(latitude: json!["lat"].doubleValue, longitude: json!["lon"].doubleValue, description: json!["description"].stringValue, city: json!["city"].stringValue)
+            let loc = self.userLocation!.location
+            self.userAnno.coordinate = loc
+            let userLocInScreen = self.mapView.convert(loc, toPointTo: self.mapView)
+            let rect = self.header.userProfileView.frame
+            let userLocWithOffset = CGPoint(x: userLocInScreen.x, y: userLocInScreen.y - rect.height / 60)
+            let newCoordinate = self.mapView.convert(userLocWithOffset, toCoordinateFrom: self.mapView)
+            let region = BMKCoordinateRegionMakeWithDistance(newCoordinate, 3000, 5000)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { 
+                self.mapView.setRegion(region, animated: true)
+                self.mapView.addAnnotation(self.userAnno)
+            })
+            
+        }, onError: { (code) -> () in
             self.showReqError(withCode: code)
         }).registerForRequestManage(self)
     }
