@@ -10,6 +10,7 @@ import UIKit
 
 class UserAnnotation: BMKPointAnnotation {
     var user: User!
+    var onMap: Bool = true
     
     override init() {
         super.init()

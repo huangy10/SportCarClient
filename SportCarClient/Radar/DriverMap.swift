@@ -266,17 +266,23 @@ extension RadarDriverMapController {
                 if let anno = self.userAnnos[userID] {
                     let loc = data["loc"]
                     anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
-                    if onlyOnList {
+                    if onlyOnList && anno.onMap {
+                        anno.onMap = false
                         self.map.removeAnnotation(anno)
+                    } else if !onlyOnList && !anno.onMap {
+                        anno.onMap = true
+                        self.map.addAnnotation(anno)
                     }
                 } else {
                     let anno = UserAnnotation()
+                    anno.onMap = true
                     anno.user = user
                     anno.title = " "
                     let loc = data["loc"]
                     anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
                     self.userAnnos[userID] = anno
                     if !onlyOnList {
+                        anno.onMap = false
                         self.map.addAnnotation(anno)
                     }
                 }
