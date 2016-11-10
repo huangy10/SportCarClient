@@ -122,8 +122,11 @@ extension UIViewController {
         }
     }
     
-    func showConfirmToast(_ title: String, message: String, target: AnyObject!, onConfirm: Selector) {
-        ConfirmToastPresentationController(title: title, des: message, target: target, confirmSelector: onConfirm).presentFromRootController(self)
+    @discardableResult
+    func showConfirmToast(_ title: String, message: String, target: AnyObject!, onConfirm: Selector) -> ConfirmToastPresentationController {
+        let ctl = ConfirmToastPresentationController(title: title, des: message, target: target, confirmSelector: onConfirm)
+        ctl.presentFromRootController(self)
+        return ctl
     }
     
     @available(*, deprecated: 1)

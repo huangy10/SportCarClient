@@ -36,6 +36,7 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
     // Added by Woody Huang 2016.07.10
     var lastUpdate: Date = Date()
     var showOnMap: Bool = false
+    weak var confirmToast: ConfirmToastPresentationController?
     weak var toast: UIView?
     
     deinit {
@@ -78,8 +79,8 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
                 }
             }
             timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(RadarDriverMapController.getLocationData), userInfo: nil, repeats: true)
-        } else {
-            showConfirmToast(LS("跑车雷达"), message: LS("这里会将您的实时位置共享给周围用户，确认继续？"), target: self, onConfirm: #selector(confirmShowOnMap))
+        } else if confirmToast == nil {
+            confirmToast = showConfirmToast(LS("跑车雷达"), message: LS("这里会将您的实时位置共享给周围用户，确认继续？"), target: self, onConfirm: #selector(confirmShowOnMap))
         }
     }
     
