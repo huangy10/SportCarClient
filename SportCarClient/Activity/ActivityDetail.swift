@@ -106,11 +106,19 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
     }
     
     func configureHeader() {
+        let container = UIView()
         header = ActivityDetailHeaderView(activity: act)
         header.delegate = self
         header.loadDataAndUpdateUI()
-        header.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: header.requiredHeight())
-        tableView.tableHeaderView = header
+        container.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: header.requiredHeight())
+        tableView.tableHeaderView = container
+        container.addSubview(header)
+        header.snp.makeConstraints { (mk) in
+            mk.centerX.equalTo(view)
+            mk.width.equalTo(view)
+            mk.top.equalTo(container)
+            mk.bottom.equalTo(container)
+        }
     }
     
     func configureTapper() {
@@ -119,11 +127,19 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
     }
     
     func configureMapFooter() {
+        let container = UIView()
         mapFooter = MapFooterView(trailingHeight: 100)
         mapFooter.delegate = self
-        mapFooter.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 250)
-        tableView.tableFooterView = mapFooter
+        container.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 250)
+        tableView.tableFooterView = container
         mapFooter.setCenterLocation(act.location!.coordinate, withDes: LS("导航至 ") + (act.location?.descr ?? LS("未知地点")))
+        container.addSubview(mapFooter)
+        mapFooter.snp.makeConstraints { (mk) in
+            mk.centerX.equalTo(view)
+            mk.width.equalTo(view)
+            mk.top.equalTo(container)
+            mk.bottom.equalTo(container)
+        }
     }
     
     func configureBottomBar() {
