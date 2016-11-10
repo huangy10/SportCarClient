@@ -90,7 +90,7 @@ class SportCarInfoCell: UICollectionViewCell, SportCarGallaryDataSource {
                 make.top.equalTo(carNameLbl)
                 make.left.equalTo(carNameLbl.snp.right).offset(3)
             })
-        carLogoIcon.layer.cornerRadius = 10
+        carLogoIcon.layer.cornerRadius = 15
         carLogoIcon.contentMode = .scaleAspectFit
         carLogoIcon.clipsToBounds = true
         //

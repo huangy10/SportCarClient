@@ -88,13 +88,15 @@ class NotificationBaseCell: UITableViewCell {
     
     func avatarPressed() {
         if let user = notification.user, let nav = navigationController {
-            if user.isHost {
-                let detail = PersonBasicController(user: user)
-                nav.pushViewController(detail, animated: true)
-            } else {
-                let detail = PersonOtherController(user: user)
-                nav.pushViewController(detail, animated: true)
-            }
+//            if user.isHost {
+//                let detail = PersonBasicController(user: user)
+//                nav.pushViewController(detail, animated: true)
+//            } else {
+//                let detail = PersonOtherController(user: user)
+//                nav.pushViewController(detail, animated: true)
+//            }
+            
+            nav.pushViewController(user.showDetailController(), animated: true)
         } else {
             assertionFailure()
         }

@@ -160,10 +160,14 @@ class StatusDetailController: UIViewController {
         detail.status = status
         header = UIView()
         header.addSubview(detail)
-        detail.snp.makeConstraints { (make) in
-            make.edges.equalTo(header)
-        }
         tableView.tableHeaderView = header
+        detail.snp.makeConstraints { (make) in
+//            make.edges.equalTo(header)
+            make.centerX.equalTo(header)
+            make.width.equalTo(view)
+            make.bottom.equalTo(header)
+            make.top.equalTo(header)
+        }
         
         header.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: StatusDetailHeaderView.requiredHeight(forStatus: status))
         

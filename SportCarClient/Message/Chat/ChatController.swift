@@ -615,13 +615,14 @@ extension ChatRoomController {
 extension ChatRoomController {
     func avatarPressed(_ chatRecord: ChatRecord) {
         if let user = chatRecord.senderUser {
-            if user.isHost {
-                let detail = PersonBasicController(user: user)
-                self.navigationController?.pushViewController(detail, animated: true)
-            } else {
-                let detail = PersonOtherController(user: user)
-                self.navigationController?.pushViewController(detail, animated: true)
-            }
+//            if user.isHost {
+//                let detail = PersonBasicController(user: user)
+//                self.navigationController?.pushViewController(detail, animated: true)
+//            } else {
+//                let detail = PersonOtherController(user: user)
+//                self.navigationController?.pushViewController(detail, animated: true)
+//            }
+            navigationController?.pushViewController(user.showDetailController(), animated: true)
         } else {
             assertionFailure()
         }

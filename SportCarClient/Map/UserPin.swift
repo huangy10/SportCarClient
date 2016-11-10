@@ -46,8 +46,8 @@ class UserAnnotationView: BMKAnnotationView {
     
 //    @available(*, deprecated=1)
     func avatarPressed() {
-        let detail = PersonOtherController(user: user)
-        parent.navigationController?.pushViewController(detail, animated: true)
+//        let detail = PersonOtherController(user: user)
+        parent.navigationController?.pushViewController(user.showDetailController(), animated: true)
     }
 
     required init?(coder aDecoder: NSCoder) {

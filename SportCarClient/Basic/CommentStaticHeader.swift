@@ -27,8 +27,8 @@ class CommentStaticHeader: UITableViewHeaderFooterView {
     func configureSepLine() {
         sepLine = contentView.addSubview(UIView.self).config(kTextGray28)
             .layout({ (make) in
-                make.right.equalToSuperview().offset(-15)
-                make.left.equalToSuperview().offset(15)
+                make.right.equalToSuperview().offset(-15).priority(250)
+                make.left.equalToSuperview().offset(15).priority(250)
                 make.centerY.equalToSuperview()
                 make.height.equalTo(0.5)
             })

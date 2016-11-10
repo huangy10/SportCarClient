@@ -85,11 +85,14 @@
 		BF662A0F1CCB626800B3D84D /* RosterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF662A0E1CCB626800B3D84D /* RosterManager.swift */; };
 		BF662A131CCB664C00B3D84D /* RosterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF662A121CCB664C00B3D84D /* RosterController.swift */; };
 		BF662A151CCBA39500B3D84D /* Entrance.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF662A141CCBA39500B3D84D /* Entrance.swift */; };
-		BF662A171CCBA3C600B3D84D /* SideBar2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF662A161CCBA3C600B3D84D /* SideBar2.swift */; };
 		BF67816C1C15AA77001C89AE /* AccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816B1C15AA77001C89AE /* AccountController.swift */; };
 		BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF67816F1C15AB10001C89AE /* LoginRegister.swift */; };
 		BF77F3191C85357D00B09D9A /* ReportAndBlacklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF77F3181C85357D00B09D9A /* ReportAndBlacklist.swift */; };
 		BF8495C31CA50C0C003B1B2D /* StatusNearby.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8495C21CA50C0C003B1B2D /* StatusNearby.swift */; };
+		BF8A558D1DCB6BA100F99F15 /* PersonController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A558C1DCB6BA100F99F15 /* PersonController2.swift */; };
+		BF8A558F1DCB6BF100F99F15 /* PersonProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A558E1DCB6BF100F99F15 /* PersonProfile.swift */; };
+		BF8A55911DCB795900F99F15 /* PersonCarProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A55901DCB795900F99F15 /* PersonCarProfile.swift */; };
+		BF8A55931DCC739100F99F15 /* PersonHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8A55921DCC739100F99F15 /* PersonHeader.swift */; };
 		BF8D0DC31C424E710070B921 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D0DC21C424E710070B921 /* ViewControllerExtensions.swift */; };
 		BF8D42FA1C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D42F91C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift */; };
 		BF8D42FD1C7481F5009AD4BA /* ActivityReleaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8D42FC1C7481F5009AD4BA /* ActivityReleaseCell.swift */; };
@@ -155,9 +158,6 @@
 		BFC0327B1C700E8700ECA69A /* ActivityNearByCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0327A1C700E8700ECA69A /* ActivityNearByCell.swift */; };
 		BFC0327D1C72DA4300ECA69A /* UserMapLocationMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0327C1C72DA4300ECA69A /* UserMapLocationMark.swift */; };
 		BFC032801C72EEEB00ECA69A /* ActivityDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0327F1C72EEEB00ECA69A /* ActivityDetail.swift */; };
-		BFC032841C734C8300ECA69A /* ActivityCommentPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC032831C734C8300ECA69A /* ActivityCommentPanel.swift */; };
-		BFC032861C73507600ECA69A /* ActivityMapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC032851C73507600ECA69A /* ActivityMapCell.swift */; };
-		BFC032881C73542200ECA69A /* ActivityCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC032871C73542200ECA69A /* ActivityCommentCell.swift */; };
 		BFC032911C7451AD00ECA69A /* ActivityRelease.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC032901C7451AD00ECA69A /* ActivityRelease.swift */; };
 		BFC36B991C698D5900DC6FE2 /* PersonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36B981C698D5900DC6FE2 /* PersonController.swift */; };
 		BFC36B9C1C698DD200DC6FE2 /* PersonMyHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36B9B1C698DD200DC6FE2 /* PersonMyHeader.swift */; };
@@ -179,6 +179,7 @@
 		BFC8F14A1CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BFC8F1421CC8A5B200ABE31F /* TencentOpenApi_IOS_Bundle.bundle */; };
 		BFC8F14B1CC8A5B200ABE31F /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC8F1441CC8A5B200ABE31F /* libWeChatSDK.a */; };
 		BFC8F14C1CC8A5B200ABE31F /* read_me.txt in Resources */ = {isa = PBXBuildFile; fileRef = BFC8F1451CC8A5B200ABE31F /* read_me.txt */; };
+		BFCA21C71DD0C08F001D066C /* PersonDataSource2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCA21C61DD0C08F001D066C /* PersonDataSource2.swift */; };
 		BFCA900A1C4FC64300B05E74 /* StatusHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCA90091C4FC64300B05E74 /* StatusHome.swift */; };
 		BFCA900C1C4FC74B00B05E74 /* StatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCA900B1C4FC74B00B05E74 /* StatusCell.swift */; };
 		BFCA900F1C50A09100B05E74 /* StatusBasic.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCA900E1C50A09100B05E74 /* StatusBasic.swift */; };
@@ -187,9 +188,8 @@
 		BFCB96361C1F0551004F77E8 /* BlackBarNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96351C1F0551004F77E8 /* BlackBarNavigationController.swift */; };
 		BFCB963A1C1FB0AE004F77E8 /* SportCarRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96391C1FB0AE004F77E8 /* SportCarRequester.swift */; };
 		BFCB963C1C1FFD2D004F77E8 /* SportCarSelectDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */; };
-		BFCB96401C205DF1004F77E8 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB963F1C205DF1004F77E8 /* Home.swift */; };
-		BFCB96441C206169004F77E8 /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96431C206169004F77E8 /* SideBar.swift */; };
 		BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96451C2061E0004F77E8 /* LoadingButton.swift */; };
+		BFDA4E7A1DD41BB200F9E504 /* MapAsFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDA4E791DD41BB200F9E504 /* MapAsFooter.swift */; };
 		BFDB5CB41D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB5CB31D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift */; };
 		BFDBD6011D3D1A4200793256 /* PermissionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */; };
 		BFDD88601D6AF2700043A333 /* CityElementSelectWithSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDD885F1D6AF2700043A333 /* CityElementSelectWithSuggestion.swift */; };
@@ -401,12 +401,15 @@
 		BF662A0E1CCB626800B3D84D /* RosterManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RosterManager.swift; path = Message/SharedDataSource/RosterManager.swift; sourceTree = "<group>"; };
 		BF662A121CCB664C00B3D84D /* RosterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RosterController.swift; path = Message/Views/RosterController.swift; sourceTree = "<group>"; };
 		BF662A141CCBA39500B3D84D /* Entrance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Entrance.swift; path = Home/Entrance.swift; sourceTree = "<group>"; };
-		BF662A161CCBA3C600B3D84D /* SideBar2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideBar2.swift; path = Home/SideBar2.swift; sourceTree = "<group>"; };
 		BF67816B1C15AA77001C89AE /* AccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountController.swift; path = Accounts/AccountController.swift; sourceTree = "<group>"; };
 		BF67816F1C15AB10001C89AE /* LoginRegister.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginRegister.swift; path = Accounts/LoginRegister.swift; sourceTree = "<group>"; };
 		BF77F3181C85357D00B09D9A /* ReportAndBlacklist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportAndBlacklist.swift; path = Status/Report/ReportAndBlacklist.swift; sourceTree = "<group>"; };
 		BF7CA9161DAD0A4800D8F8A4 /* SportCarClient.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SportCarClient.entitlements; sourceTree = "<group>"; };
 		BF8495C21CA50C0C003B1B2D /* StatusNearby.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusNearby.swift; path = Status/HomeSubviews/StatusNearby.swift; sourceTree = "<group>"; };
+		BF8A558C1DCB6BA100F99F15 /* PersonController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonController2.swift; path = Person/V2/PersonController2.swift; sourceTree = "<group>"; };
+		BF8A558E1DCB6BF100F99F15 /* PersonProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonProfile.swift; path = Person/V2/PersonProfile.swift; sourceTree = "<group>"; };
+		BF8A55901DCB795900F99F15 /* PersonCarProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonCarProfile.swift; path = Person/V2/PersonCarProfile.swift; sourceTree = "<group>"; };
+		BF8A55921DCC739100F99F15 /* PersonHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonHeader.swift; path = Person/V2/PersonHeader.swift; sourceTree = "<group>"; };
 		BF8D0DC21C424E710070B921 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewControllerExtensions.swift; path = BaseTemplate/ViewControllerExtensions.swift; sourceTree = "<group>"; };
 		BF8D42F91C745FBC009AD4BA /* ActivityReleaseInfoBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityReleaseInfoBoard.swift; path = Activity/ActivityReleaseInfoBoard.swift; sourceTree = "<group>"; };
 		BF8D42FC1C7481F5009AD4BA /* ActivityReleaseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityReleaseCell.swift; path = Activity/ActivityReleaseCell.swift; sourceTree = "<group>"; };
@@ -473,9 +476,6 @@
 		BFC0327A1C700E8700ECA69A /* ActivityNearByCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityNearByCell.swift; path = Activity/ActivityNearByCell.swift; sourceTree = "<group>"; };
 		BFC0327C1C72DA4300ECA69A /* UserMapLocationMark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserMapLocationMark.swift; path = Activity/UserMapLocationMark.swift; sourceTree = "<group>"; };
 		BFC0327F1C72EEEB00ECA69A /* ActivityDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityDetail.swift; path = Activity/ActivityDetail.swift; sourceTree = "<group>"; };
-		BFC032831C734C8300ECA69A /* ActivityCommentPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityCommentPanel.swift; path = Activity/ActivityCommentPanel.swift; sourceTree = "<group>"; };
-		BFC032851C73507600ECA69A /* ActivityMapCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityMapCell.swift; sourceTree = "<group>"; };
-		BFC032871C73542200ECA69A /* ActivityCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityCommentCell.swift; path = Activity/ActivityCommentCell.swift; sourceTree = "<group>"; };
 		BFC032901C7451AD00ECA69A /* ActivityRelease.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityRelease.swift; path = Activity/ActivityRelease.swift; sourceTree = "<group>"; };
 		BFC36B981C698D5900DC6FE2 /* PersonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonController.swift; path = Person/PersonController.swift; sourceTree = "<group>"; };
 		BFC36B9B1C698DD200DC6FE2 /* PersonMyHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMyHeader.swift; path = Person/PersonMyHeader.swift; sourceTree = "<group>"; };
@@ -501,6 +501,7 @@
 		BFC8F1461CC8A5B200ABE31F /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
 		BFC8F1471CC8A5B200ABE31F /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		BFC8F1481CC8A5B200ABE31F /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		BFCA21C61DD0C08F001D066C /* PersonDataSource2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonDataSource2.swift; path = Person/V2/PersonDataSource2.swift; sourceTree = "<group>"; };
 		BFCA90091C4FC64300B05E74 /* StatusHome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusHome.swift; path = Status/StatusHome.swift; sourceTree = "<group>"; };
 		BFCA900B1C4FC74B00B05E74 /* StatusCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusCell.swift; path = Status/StatusCell.swift; sourceTree = "<group>"; };
 		BFCA900E1C50A09100B05E74 /* StatusBasic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusBasic.swift; path = Status/HomeSubviews/StatusBasic.swift; sourceTree = "<group>"; };
@@ -509,9 +510,8 @@
 		BFCB96351C1F0551004F77E8 /* BlackBarNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlackBarNavigationController.swift; sourceTree = "<group>"; };
 		BFCB96391C1FB0AE004F77E8 /* SportCarRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarRequester.swift; path = Accounts/SportCarRequester.swift; sourceTree = "<group>"; };
 		BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarSelectDetail.swift; path = Accounts/SportCarSelectDetail.swift; sourceTree = "<group>"; };
-		BFCB963F1C205DF1004F77E8 /* Home.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Home.swift; path = Home/Home.swift; sourceTree = "<group>"; };
-		BFCB96431C206169004F77E8 /* SideBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideBar.swift; path = Home/SideBar.swift; sourceTree = "<group>"; };
 		BFCB96451C2061E0004F77E8 /* LoadingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingButton.swift; path = BaseTemplate/LoadingButton.swift; sourceTree = "<group>"; };
+		BFDA4E791DD41BB200F9E504 /* MapAsFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapAsFooter.swift; path = Basic/MapAsFooter.swift; sourceTree = "<group>"; };
 		BFDB5CB31D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SportCarBrandOnlineSelectorController.swift; sourceTree = "<group>"; };
 		BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PermissionCheck.swift; path = Sync/PermissionCheck.swift; sourceTree = "<group>"; };
 		BFDD885F1D6AF2700043A333 /* CityElementSelectWithSuggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CityElementSelectWithSuggestion.swift; path = Person/CityElementSelectWithSuggestion.swift; sourceTree = "<group>"; };
@@ -683,6 +683,7 @@
 			isa = PBXGroup;
 			children = (
 				BFBE19221C952FB3005114A0 /* custom_config_黑夜 */,
+				BFC0327C1C72DA4300ECA69A /* UserMapLocationMark.swift */,
 				BFBE19201C9521FF005114A0 /* LocSelectPin.swift */,
 				BFBE19241C953286005114A0 /* UserPin.swift */,
 				BFFA15441C9D271E00E985DF /* Location.swift */,
@@ -790,14 +791,6 @@
 			name = Notification;
 			sourceTree = "<group>";
 		};
-		BF313B7A1CA39DA200545DB7 /* factory */ = {
-			isa = PBXGroup;
-			children = (
-				BF313B7B1CA3D62A00545DB7 /* UIFactory.swift */,
-			);
-			name = factory;
-			sourceTree = "<group>";
-		};
 		BF32EEAA1C088CF60098FEC1 /* Account */ = {
 			isa = PBXGroup;
 			children = (
@@ -843,6 +836,7 @@
 		BF5491DE1C23070A0090D151 /* Person */ = {
 			isa = PBXGroup;
 			children = (
+				BF8A558B1DCB2D6D00F99F15 /* V2 */,
 				BF5E7EE91C8607B9004B8305 /* Other */,
 				BFFFAFE91C84AA3000EBA314 /* UserSelect */,
 				BFC36BAD1C6C5DFA00DC6FE2 /* Mine */,
@@ -951,6 +945,18 @@
 			name = Report;
 			sourceTree = "<group>";
 		};
+		BF8A558B1DCB2D6D00F99F15 /* V2 */ = {
+			isa = PBXGroup;
+			children = (
+				BF8A558C1DCB6BA100F99F15 /* PersonController2.swift */,
+				BF8A558E1DCB6BF100F99F15 /* PersonProfile.swift */,
+				BF8A55901DCB795900F99F15 /* PersonCarProfile.swift */,
+				BF8A55921DCC739100F99F15 /* PersonHeader.swift */,
+				BFCA21C61DD0C08F001D066C /* PersonDataSource2.swift */,
+			);
+			name = V2;
+			sourceTree = "<group>";
+		};
 		BF8D42F11C745DA3009AD4BA /* Radar */ = {
 			isa = PBXGroup;
 			children = (
@@ -992,14 +998,6 @@
 				BF5D19D71D8C1E6700A66FC0 /* RequestManageProtocol.swift */,
 			);
 			name = Puglins;
-			sourceTree = "<group>";
-		};
-		BF8EC2D41CBA2DD100003735 /* refresh */ = {
-			isa = PBXGroup;
-			children = (
-				BF8EC2D51CBA2DE300003735 /* Refresh.swift */,
-			);
-			name = refresh;
 			sourceTree = "<group>";
 		};
 		BF8FE9A01C86C1FE00008170 /* ImageViewer */ = {
@@ -1084,8 +1082,6 @@
 			isa = PBXGroup;
 			children = (
 				BF11F6AC1CBFD7EC0092A7E9 /* Globals */,
-				BF8EC2D41CBA2DD100003735 /* refresh */,
-				BF313B7A1CA39DA200545DB7 /* factory */,
 				BF1D93541C52775900FD9997 /* Views */,
 				BFA2C7671C40F96400202EF0 /* Tools */,
 				BFB39CC91C1E9E6800FB6B5D /* SportCarBrandSelect */,
@@ -1146,6 +1142,7 @@
 		BFB857D31CD89A9400610349 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				BFC032741C6F556C00ECA69A /* ActivityRequester.swift */,
 				BF54DD791C303D5100F635C0 /* NewsRequester.swift */,
 				BFB857D41CD89AAF00610349 /* BasicRequester.swift */,
 				BFDBD5FF1D3D19B600793256 /* Sync */,
@@ -1247,7 +1244,6 @@
 				BFEF5BB81DC46B9E00868029 /* NearBy */,
 				BFC0328F1C74519400ECA69A /* Release */,
 				BFC0327E1C72EED600ECA69A /* Detail */,
-				BFC032731C6F554B00ECA69A /* Network */,
 				BFC032701C6F507D00ECA69A /* Home */,
 				BFC0326D1C6F39FB00ECA69A /* Cell */,
 				BFC0326B1C6F39EA00ECA69A /* ActivityHome.swift */,
@@ -1258,8 +1254,6 @@
 		BFC0326D1C6F39FB00ECA69A /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				BFC032851C73507600ECA69A /* ActivityMapCell.swift */,
-				BFC032871C73542200ECA69A /* ActivityCommentCell.swift */,
 				BFC0326E1C6F3A1100ECA69A /* ActivityHomeCell.swift */,
 				BFC0327A1C700E8700ECA69A /* ActivityNearByCell.swift */,
 			);
@@ -1271,18 +1265,9 @@
 			children = (
 				BFC032711C6F508B00ECA69A /* ActivtyList.swift */,
 				BFC032781C700DFA00ECA69A /* ActivityNearBy.swift */,
-				BFC0327C1C72DA4300ECA69A /* UserMapLocationMark.swift */,
 				BF8D42FE1C748CB8009AD4BA /* ActivityApplied.swift */,
 			);
 			name = Home;
-			sourceTree = "<group>";
-		};
-		BFC032731C6F554B00ECA69A /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				BFC032741C6F556C00ECA69A /* ActivityRequester.swift */,
-			);
-			name = Network;
 			sourceTree = "<group>";
 		};
 		BFC0327E1C72EED600ECA69A /* Detail */ = {
@@ -1290,7 +1275,6 @@
 			children = (
 				BFE598571CB40F5500001F99 /* cell&header */,
 				BFC0327F1C72EEEB00ECA69A /* ActivityDetail.swift */,
-				BFC032831C734C8300ECA69A /* ActivityCommentPanel.swift */,
 				BF01FDA41D65E78A00865630 /* ActivityMembers.swift */,
 			);
 			name = Detail;
@@ -1425,11 +1409,8 @@
 		BFCB963E1C205DE2004F77E8 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				BFCB963F1C205DF1004F77E8 /* Home.swift */,
-				BFCB96431C206169004F77E8 /* SideBar.swift */,
 				BF9404961C2818C3001ABB1E /* AppLauchner.swift */,
 				BF662A141CCBA39500B3D84D /* Entrance.swift */,
-				BF662A161CCBA3C600B3D84D /* SideBar2.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -1663,11 +1644,14 @@
 		BFEF5BC01DC4CEE200868029 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				BF313B7B1CA3D62A00545DB7 /* UIFactory.swift */,
+				BF8EC2D51CBA2DE300003735 /* Refresh.swift */,
 				BFEF5BC31DC4CF3800868029 /* BasicBottomBar.swift */,
 				BFEF5BC51DC4D54500868029 /* BtnWithIcon.swift */,
 				BFEF5BC71DC50D0B00868029 /* ContentInputFormatter.swift */,
 				BF2F5F071DC5FA9500C2CD55 /* SmallOperationBoard.swift */,
 				BF2F5F091DC6637400C2CD55 /* CommentStaticHeader.swift */,
+				BFDA4E791DD41BB200F9E504 /* MapAsFooter.swift */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2132,7 +2116,6 @@
 				BFE967311CA588580097C42C /* BaseInMemModel.swift in Sources */,
 				BF1A63691D61EAA4005C86C8 /* Billboard.swift in Sources */,
 				BFE967601CA6EE080097C42C /* ChatModelManager.swift in Sources */,
-				BF662A171CCBA3C600B3D84D /* SideBar2.swift in Sources */,
 				BFC0326F1C6F3A1100ECA69A /* ActivityHomeCell.swift in Sources */,
 				BFC032531C6DD14000ECA69A /* AuthThreeImageInput.swift in Sources */,
 				BFA64F001C946AB900BA460F /* StatusHot.swift in Sources */,
@@ -2158,9 +2141,9 @@
 				BFE967351CA58D230097C42C /* StatusComment.swift in Sources */,
 				BFE967021CA584740097C42C /* BaseModel.swift in Sources */,
 				BF630EDD1CABDBF900EFD37E /* PropertyBaseCell.swift in Sources */,
-				BFC032881C73542200ECA69A /* ActivityCommentCell.swift in Sources */,
 				BFFA15451C9D271E00E985DF /* Location.swift in Sources */,
 				BFC0327D1C72DA4300ECA69A /* UserMapLocationMark.swift in Sources */,
+				BF8A55911DCB795900F99F15 /* PersonCarProfile.swift in Sources */,
 				BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */,
 				BF2F5F081DC5FA9500C2CD55 /* SmallOperationBoard.swift in Sources */,
 				BFEFB5E31C5E4C8600841BF4 /* chatAccessoryBoard.swift in Sources */,
@@ -2187,6 +2170,7 @@
 				BF11C7041CF32A8A00CCD184 /* LoadingProtocol.swift in Sources */,
 				BF23368B1C563F4200F0AE41 /* ChatAudioPlayer.swift in Sources */,
 				BF5E7EEB1C860804004B8305 /* PersonOtherInfo.swift in Sources */,
+				BF8A558D1DCB6BA100F99F15 /* PersonController2.swift in Sources */,
 				BFC032641C6EF55400ECA69A /* AvatarCarSelect.swift in Sources */,
 				BFE967661CA81E060097C42C /* ActivityEdit.swift in Sources */,
 				BF1A636B1D61EAD7005C86C8 /* BillboardCell.swift in Sources */,
@@ -2234,6 +2218,7 @@
 				BFC36BA71C6B0F7400DC6FE2 /* PersonStatusHeader.swift in Sources */,
 				BF24291E1C7C524D005D4C6E /* DriverMap.swift in Sources */,
 				BF5E7EE61C85EA3D004B8305 /* Suggestions.swift in Sources */,
+				BF8A558F1DCB6BF100F99F15 /* PersonProfile.swift in Sources */,
 				BFC36BB41C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift in Sources */,
 				BFE967121CA584870097C42C /* Activity.swift in Sources */,
 				BFE9673D1CA5908E0097C42C /* SportCar.generated.swift in Sources */,
@@ -2247,11 +2232,11 @@
 				BF58990E1C4D14A3005496EA /* SportCarSelectList.swift in Sources */,
 				BFFFAFED1C84B1FB00EBA314 /* FollowSelect.swift in Sources */,
 				BF9B54B51C802E3B0006D673 /* GroupChatSetUp.swift in Sources */,
-				BFCB96441C206169004F77E8 /* SideBar.swift in Sources */,
 				BF8D0DC31C424E710070B921 /* ViewControllerExtensions.swift in Sources */,
 				BFBC526E1C52944200EE7D34 /* MessageController.swift in Sources */,
 				BF11F6AE1CBFD8490092A7E9 /* GlobalNotifiicationSettings.swift in Sources */,
 				BF2F7E8E1C62F39A00E3A3A2 /* NotificationCtrl.swift in Sources */,
+				BFCA21C71DD0C08F001D066C /* PersonDataSource2.swift in Sources */,
 				BFE967431CA6296F0097C42C /* SSModelError.swift in Sources */,
 				BF8EC2D61CBA2DE300003735 /* Refresh.swift in Sources */,
 				BF23368E1C56529B00F0AE41 /* ChatRequester.swift in Sources */,
@@ -2268,11 +2253,11 @@
 				BFE9675C1CA6E8D60097C42C /* News.swift in Sources */,
 				BF5107131C60CBA6008DC14F /* ChatListCell.swift in Sources */,
 				BF77F3191C85357D00B09D9A /* ReportAndBlacklist.swift in Sources */,
-				BFC032861C73507600ECA69A /* ActivityMapCell.swift in Sources */,
 				BF2BB97C1C9D995100049337 /* PresntableProtocol.swift in Sources */,
 				BF2A19BC1CDF9DB600073E1A /* RosterItem.swift in Sources */,
 				BF9664061C89F0B60096D131 /* AvatarClubSelect.swift in Sources */,
 				BFE9675E1CA6E9DF0097C42C /* NewsComment.swift in Sources */,
+				BFDA4E7A1DD41BB200F9E504 /* MapAsFooter.swift in Sources */,
 				BFAA0CAC1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift in Sources */,
 				BF5E7EE81C85EC45004B8305 /* SportscarAuth.swift in Sources */,
 				BFC36BAA1C6B27B000DC6FE2 /* PersonRequest.swift in Sources */,
@@ -2314,6 +2299,7 @@
 				BF9B54AF1C7FFDB20006D673 /* RadarHomePopover.swift in Sources */,
 				BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */,
 				BFBE19251C953286005114A0 /* UserPin.swift in Sources */,
+				BF8A55931DCC739100F99F15 /* PersonHeader.swift in Sources */,
 				BFA2C76B1C412B1500202EF0 /* CommentPanel.swift in Sources */,
 				BFFBA8131C65E5B900991642 /* PrivateSettingsCell.swift in Sources */,
 				BF27E6CD1C38457F0074771D /* MakeCommentPanel.swift in Sources */,
@@ -2325,7 +2311,6 @@
 				BF58990C1C4CFF26005496EA /* informUser.swift in Sources */,
 				BFFFAFEB1C84AA4300EBA314 /* FansSelect.swift in Sources */,
 				BF8FE9A41C86C22400008170 /* UIImageView+ImageViewer.swift in Sources */,
-				BFCB96401C205DF1004F77E8 /* Home.swift in Sources */,
 				BFC032791C700DFA00ECA69A /* ActivityNearBy.swift in Sources */,
 				BFCA90141C50D6CB00B05E74 /* StatusDetail.swift in Sources */,
 				BFC032511C6DCD6200ECA69A /* AuthBasic.swift in Sources */,
@@ -2347,7 +2332,6 @@
 				BFCB963C1C1FFD2D004F77E8 /* SportCarSelectDetail.swift in Sources */,
 				BF419E921DC8CEE000A43A90 /* temp.swift in Sources */,
 				BF2959921C1DC9870071385D /* SportCarSelect.swift in Sources */,
-				BFC032841C734C8300ECA69A /* ActivityCommentPanel.swift in Sources */,
 				BF8FE9A31C86C22400008170 /* ImageViewer.swift in Sources */,
 				BFEF5BBC1DC47D7700868029 /* TaggedContainer.swift in Sources */,
 				BF5D19D41D8A940100A66FC0 /* NewsCommentCell2.swift in Sources */,

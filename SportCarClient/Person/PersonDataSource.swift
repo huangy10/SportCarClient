@@ -103,4 +103,46 @@ class PersonDataSource {
             statusDict[car.ssidString] = $.remove(list, value: status)
         }
     }
+    
+    func statusCellNumber() -> Int {
+        if let car = selectedCar {
+            return statusDict[car.ssidString]!.count
+        } else {
+            if user.isHost {
+                return statusList.count + 1
+            } else {
+                return statusList.count
+            }
+        }
+    }
+    
+    func getStatus(atIdx idx: Int) -> Status? {
+        if let car = selectedCar {
+            return statusDict[car.ssidString]![idx]
+        } else {
+            if user.isHost {
+                if idx == 0 {
+                    return nil
+                } else {
+                    return statusList[idx - 1]
+                }
+            } else {
+                return statusList[idx]
+            }
+        }
+    }
+    
+    /**
+     * 获取当前的动态列表，会根据选定的车型来返回合适的结果
+     */
+    func getStatusList() -> [Status] {
+        if let car = selectedCar {
+            if let  list = statusDict[car.ssidString] {
+                return list
+            }
+            return []
+        } else {
+            return statusList
+        }
+    }
 }

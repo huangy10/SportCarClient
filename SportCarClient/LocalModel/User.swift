@@ -194,11 +194,12 @@ class User: BaseModel {
 extension User {
     
     func showDetailController() -> UIViewController {
-        if isHost {
-            return PersonBasicController(user: self)
-        } else {
-            return PersonOtherController(user: self)
-        }
+//        if isHost {
+//            return PersonBasicController(user: self)
+//        } else {
+//            return PersonOtherController(user: self)
+//        }
+        return PersonController(user: self)
     }
     
 }

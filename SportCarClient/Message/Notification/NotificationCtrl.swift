@@ -102,11 +102,12 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
     lazy var detailControllerMap: [String: (Notification)->UIViewController] = {
         func user(_ notification: Notification) -> UIViewController {
             let user = notification.user!
-            if user.isHost {
-                return PersonBasicController(user: user)
-            } else {
-                return PersonOtherController(user: user)
-            }
+//            if user.isHost {
+//                return PersonBasicController(user: user)
+//            } else {
+//                return PersonOtherController(user: user)
+//            }
+            return user.showDetailController()
         }
         
         func status(_ notification: Notification) -> UIViewController {
@@ -180,13 +181,15 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
         if let indexPath = tableView.indexPath(for: cell) {
             let notification = data[(indexPath as NSIndexPath).row]
             if let user = notification.user, let nav = parent?.navigationController {
-                if user.isHost {
-                    let detail = PersonBasicController(user: user)
-                    nav.pushViewController(detail, animated: true)
-                } else {
-                    let detail = PersonOtherController(user: user)
-                    nav.pushViewController(detail, animated: true)
-                }
+//                if user.isHost {
+////                    let detail = PersonBasicController(user: user)
+//                    nav.pushViewController(detail, animated: true)
+//                } else {
+//                    let detail = PersonOtherController(user: user)
+//                    nav.pushViewController(detail, animated: true)
+//                }
+                let detail = PersonController(user: user)
+                nav.pushViewController(detail, animated: true)
             } else {
                 assertionFailure()
             }
