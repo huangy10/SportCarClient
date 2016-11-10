@@ -82,51 +82,7 @@ class ActivityCell: UICollectionViewCell {
         self.contentView.clipsToBounds = false
         self.contentView.addShadow(3, color: UIColor.black, opacity: 0.4, offset: CGSize(width: 0, height: 2.5))
     }
-//    
-//    func createSubviews() {
-//        self.contentView.backgroundColor = UIColor.clearColor()
-//        container = self.contentView.addSubview(UIView.self).config(UIColor.whiteColor())
-//            .addShadow()
-//            .layout({ (make) in
-//                make.edges.equalTo(self.contentView)
-//            })
-//        cover = container.addSubview(UIImageView.self).config(nil)
-//        cover.layout({ (make) in
-//                make.right.equalTo(container)
-//                make.left.equalTo(container)
-//                make.top.equalTo(container)
-//                make.height.equalTo(cover.snp_width).multipliedBy(0.588)
-//            })
-//        actNameLbl = container.addSubview(UILabel.self)
-//            .config(17, fontWeight: UIFontWeightSemibold, textColor: UIColor.blackColor(), multiLine: false)
-//            .layout({ (make) in
-//                make.top.equalTo(cover.snp_bottom).offset(15)
-//                make.left.equalTo(container).offset(12)
-//                make.right.equalTo(container).offset(-12)
-//            })
-//        let sepLine = container.addSubview(UIView.self).config(kTextGray28)
-//            .layout { (make) in
-//                make.left.equalTo(actNameLbl)
-//                make.top.equalTo(actNameLbl.snp_bottom).offset(6)
-//                make.width.equalTo(26)
-//                make.height.equalTo(1)
-//        }
-//        actStartDateLbl = container.addSubview(UILabel.self)
-//            .config(12, textColor: kTextGray28)
-//            .layout({ (make) in
-//                make.left.equalTo(sepLine)
-//                make.top.equalTo(sepLine.snp_bottom).offset(20)
-//            })
-//        doneMark = container.addSubview(UIImageView.self).config(UIImage(named: "activity_done"))
-//            .layout({ (make) in
-//                make.bottom.equalTo(cover).offset(-7)
-//                make.right.equalTo(cover).offset(-13)
-//                make.size.equalTo(CGSizeMake(44, 18.5))
-//            })
-//        self.clipsToBounds = false
-//        self.addShadow()
-//    }
-//    
+
     fileprivate func loadDataAndUpdateUI() {
         cover.kf.setImage(with: act.posterURL!)
         avatar.kf.setImage(with: act.user!.avatarURL!)

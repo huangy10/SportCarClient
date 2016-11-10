@@ -23,7 +23,7 @@ class ActivityReleaseMapCell: UITableViewCell {
     var onInvokeLocationSelect: (()->())? = nil
     
     init (trailingHeight: CGFloat) {
-        super.init(style: .default, reuseIdentifier: MapCell.reuseIdentifier)
+        super.init(style: .default, reuseIdentifier: "activity_release_map_cell")
         self.trailingHeight = trailingHeight
         self.selectionStyle = .none
         createSubviews()

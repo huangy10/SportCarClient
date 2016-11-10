@@ -358,14 +358,6 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
                 self.lp_stop()
         }
     }
-    
-    func avatarPressed(_ cell: DetailCommentCell) {
-        // 评论列表的代理
-        if let commentCell = cell as? ActivityCommentCell {
-            let comment = commentCell.comment
-            navigationController?.pushViewController((comment?.user.showDetailController())!, animated: true)
-        }
-    }
 
     // MARK: navigation
     
@@ -498,13 +490,6 @@ extension ActivityDetailController: UITableViewDelegate, UITableViewDataSource {
             return 87
         }
     }
-    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        if comments.count == 0 {
-//            return 100
-//        }
-//        return UITableViewAutomaticDimension
-//    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if comments.count == 0 {
