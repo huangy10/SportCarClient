@@ -97,6 +97,7 @@ class PersonHeaderView: UIView {
             view.car = car
         } else {
             let view = PersonCarProfileView(car: car)
+            view.user = user
             view.delegate = self
             addSubview(view)
             view.snp.makeConstraints({ (mk) in

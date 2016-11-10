@@ -15,6 +15,7 @@ protocol PersonCarProfileDelegate: class {
 
 
 class PersonCarProfileView: UIView {
+    var user: User!
     var car: SportCar {
         didSet {
             loadDataAndUpdateUI()
@@ -225,7 +226,7 @@ class PersonCarProfileView: UIView {
         speedLbl.text = car.maxSpeed
         acceLbl.text = car.zeroTo60
         
-        editBtn.isHidden = car.mine
+        editBtn.isHidden = !(car.mine && user.isHost)
     }
     
     func setAudioWaveHidden(_ flag: Bool) {
