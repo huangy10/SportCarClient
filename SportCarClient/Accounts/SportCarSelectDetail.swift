@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
-
+import Alamofire
 
 protocol SportCarSelectDetailProtocol: class {
     func sportCarSelectDeatilDidAddCar(_ car: SportCar)
@@ -93,7 +93,9 @@ class SportCarSelectParamEditableCell: SportCarSelectParamCell {
     }
 }
 
-class SportCarSelectDetailController: UITableViewController, SportCarBrandOnlineSelectorDelegate {
+class SportCarSelectDetailController: UITableViewController, SportCarBrandOnlineSelectorDelegate, LoadingProtocol, RequestManageMixin {
+    var delayWorkItem: DispatchWorkItem?
+    var onGoingRequest: [String : Request] = [:]
     
     var headers: [String]?
     var contents: [String?]?
@@ -105,6 +107,10 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
     
     weak var contentInput: UITextField?
     weak var delegate: SportCarSelectDetailProtocol?
+    
+    deinit {
+        clearAllRequest()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,11 +137,6 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
     }
     
     func navBarRigthBtn() -> UIBarButtonItem! {
-//        let nextStepBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 42, height: 16))
-//        nextStepBtn.setTitle(NSLocalizedString("下一步", comment: ""), for: .normal)
-//        nextStepBtn.setTitleColor(kHighlightedRedTextColor, for: .normal)
-//        nextStepBtn.titleLabel?.font = kBarTextFont
-//        nextStepBtn.addTarget(self, action: #selector(SportCarSelectDetailController.nextBtnPressed), for: .touchUpInside)
         let nextStepBtnItem = UIBarButtonItem(title: LS("下一步"), style: .done, target: self, action: #selector(nextBtnPressed))
         nextStepBtnItem.setTitleTextAttributes([NSFontAttributeName:kBarTextFont, NSForegroundColorAttributeName: kHighlightedRedTextColor], for: .normal)
         return nextStepBtnItem
@@ -151,7 +152,9 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
     func nextBtnPressed() {
         contentInput?.resignFirstResponder()
         let signature: String = contentInput?.text ?? ""
-        _ = SportCarRequester.sharedInstance.postToFollow(signature, carId: carId!, onSuccess: { (json) -> () in
+        lp_start()
+        SportCarRequester.sharedInstance.postToFollow(signature, carId: carId!, onSuccess: { (json) -> () in
+            self.lp_stop()
             // add this car to current users
             let car: SportCar = try! MainManager.sharedManager.getOrCreate(SportCar.reorgnaizeJSON(json!))
             if AppManager.sharedAppManager.state != AppManagerState.loginRegister {
@@ -162,12 +165,13 @@ class SportCarSelectDetailController: UITableViewController, SportCarBrandOnline
             }
             self.delegate?.sportCarSelectDeatilDidAddCar(car)
             }) { (code) -> () in
+                self.lp_stop()
                 if code == "No permission" {
                     self.showToast(LS("请先认证您的第一辆爱车"))
                 } else {
                     self.showToast(LS("服务器发生了内部错误"))
                 }
-        }
+        }.registerForRequestManage(self)
     }
     
     func createSubviews() {
