@@ -49,9 +49,6 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
             data.selectedCar = newValue
             header.car = newValue
             
-//            UIView.animate(withDuration: 0.3, animations: {
-//                self.tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.header.requiredHeight())
-//            })
             self.tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.header.requiredHeight())
             
             if data.numberOfStatus() == 0 {
@@ -63,7 +60,6 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
                 UIView.transition(with: tableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
                     self.tableView.reloadData()
                 }, completion: nil)
-//                tableView.reloadData()
             }
         }
     }
@@ -329,8 +325,7 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
         incrTaskCountDown()
         AccountRequester2.sharedInstance.getStatusListSimplified(user.ssidString, carID: curSelectedCar?.ssidString, dateThreshold: dateThreshold, limit: 10, onSuccess: { (json) -> () in
             if self.parseStatusData(json!.arrayValue, forCar: curSelectedCar) {
-//            self.tableView.reloadData()
-                if overrideReqKey != "" {
+                if overrideReqKey == "auto" {
                     UIView.transition(with: self.tableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
                         self.tableView.reloadData()
                     }, completion: nil)
