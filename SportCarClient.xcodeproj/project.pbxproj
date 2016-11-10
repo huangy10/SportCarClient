@@ -194,6 +194,7 @@
 		BFCB963C1C1FFD2D004F77E8 /* SportCarSelectDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */; };
 		BFCB96441C206169004F77E8 /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96431C206169004F77E8 /* SideBar.swift */; };
 		BFCB96461C2061E0004F77E8 /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCB96451C2061E0004F77E8 /* LoadingButton.swift */; };
+		BFDA4E7A1DD41BB200F9E504 /* MapAsFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDA4E791DD41BB200F9E504 /* MapAsFooter.swift */; };
 		BFDB5CB41D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB5CB31D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift */; };
 		BFDBD6011D3D1A4200793256 /* PermissionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */; };
 		BFDD88601D6AF2700043A333 /* CityElementSelectWithSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDD885F1D6AF2700043A333 /* CityElementSelectWithSuggestion.swift */; };
@@ -520,6 +521,7 @@
 		BFCB963B1C1FFD2D004F77E8 /* SportCarSelectDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarSelectDetail.swift; path = Accounts/SportCarSelectDetail.swift; sourceTree = "<group>"; };
 		BFCB96431C206169004F77E8 /* SideBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideBar.swift; path = Home/SideBar.swift; sourceTree = "<group>"; };
 		BFCB96451C2061E0004F77E8 /* LoadingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingButton.swift; path = BaseTemplate/LoadingButton.swift; sourceTree = "<group>"; };
+		BFDA4E791DD41BB200F9E504 /* MapAsFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapAsFooter.swift; path = Basic/MapAsFooter.swift; sourceTree = "<group>"; };
 		BFDB5CB31D6973E20079A047 /* SportCarBrandOnlineSelectorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SportCarBrandOnlineSelectorController.swift; sourceTree = "<group>"; };
 		BFDBD6001D3D1A4200793256 /* PermissionCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PermissionCheck.swift; path = Sync/PermissionCheck.swift; sourceTree = "<group>"; };
 		BFDD885F1D6AF2700043A333 /* CityElementSelectWithSuggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CityElementSelectWithSuggestion.swift; path = Person/CityElementSelectWithSuggestion.swift; sourceTree = "<group>"; };
@@ -1688,6 +1690,7 @@
 				BFEF5BC71DC50D0B00868029 /* ContentInputFormatter.swift */,
 				BF2F5F071DC5FA9500C2CD55 /* SmallOperationBoard.swift */,
 				BF2F5F091DC6637400C2CD55 /* CommentStaticHeader.swift */,
+				BFDA4E791DD41BB200F9E504 /* MapAsFooter.swift */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2297,6 +2300,7 @@
 				BF2A19BC1CDF9DB600073E1A /* RosterItem.swift in Sources */,
 				BF9664061C89F0B60096D131 /* AvatarClubSelect.swift in Sources */,
 				BFE9675E1CA6E9DF0097C42C /* NewsComment.swift in Sources */,
+				BFDA4E7A1DD41BB200F9E504 /* MapAsFooter.swift in Sources */,
 				BFAA0CAC1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift in Sources */,
 				BF5E7EE81C85EC45004B8305 /* SportscarAuth.swift in Sources */,
 				BFC36BAA1C6B27B000DC6FE2 /* PersonRequest.swift in Sources */,
