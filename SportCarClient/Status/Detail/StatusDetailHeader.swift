@@ -41,13 +41,21 @@ class StatusDetailHeaderView: UIView {
     var locLbl: UILabel!
     var opsView: SmallOperationBoard!
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init() {
+        super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 0))
         backgroundColor = .white
         configureHeader()
         configureCover()
         configureFooter()
     }
+    
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        backgroundColor = .white
+//        configureHeader()
+//        configureCover()
+//        configureFooter()
+//    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
