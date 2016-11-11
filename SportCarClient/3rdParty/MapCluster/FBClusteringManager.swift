@@ -22,6 +22,7 @@ open class FBClusteringManager : NSObject {
     var tree:FBQuadTree? = nil
     
     var lock:NSRecursiveLock = NSRecursiveLock()
+    var userAnno: BMKAnnotation?
     
     open var maxZoomLevel = 1.0
     
@@ -29,17 +30,17 @@ open class FBClusteringManager : NSObject {
         super.init()
     }
     
-    public init(annotations: [MKAnnotation]){
+    public init(annotations: [BMKAnnotation]){
         super.init()
         addAnnotations(annotations)
     }
     
-    open func setAnnotations(_ annotations:[MKAnnotation]){
+    open func setAnnotations(_ annotations:[BMKAnnotation]){
         tree = nil
         addAnnotations(annotations)
     }
     
-    open func addAnnotations(_ annotations:[MKAnnotation]){
+    open func addAnnotations(_ annotations:[BMKAnnotation]){
         if tree == nil {
             tree = FBQuadTree()
         }
@@ -51,7 +52,7 @@ open class FBClusteringManager : NSObject {
         lock.unlock()
     }
     
-    open func clusteredAnnotationsWithinMapRect(_ rect:MKMapRect, withZoomScale zoomScale:Double) -> [MKAnnotation]{
+    open func clusteredAnnotationsWithinMapRect(_ rect:BMKMapRect, withZoomScale zoomScale:Double) -> [BMKAnnotation]{
         guard !zoomScale.isInfinite else { return [] }
         
         let cellSize:CGFloat = FBClusteringManager.FBCellSizeForZoomScale(MKZoomScale(zoomScale))
@@ -62,12 +63,12 @@ open class FBClusteringManager : NSObject {
         
         let scaleFactor:Double = zoomScale / Double(cellSize)
         
-        let minX:Int = Int(floor(MKMapRectGetMinX(rect) * scaleFactor))
-        let maxX:Int = Int(floor(MKMapRectGetMaxX(rect) * scaleFactor))
-        let minY:Int = Int(floor(MKMapRectGetMinY(rect) * scaleFactor))
-        let maxY:Int = Int(floor(MKMapRectGetMaxY(rect) * scaleFactor))
+        let minX:Int = Int(floor(BMKMapRectGetMinX(rect) * scaleFactor))
+        let maxX:Int = Int(floor(BMKMapRectGetMaxX(rect) * scaleFactor))
+        let minY:Int = Int(floor(BMKMapRectGetMinY(rect) * scaleFactor))
+        let maxY:Int = Int(floor(BMKMapRectGetMaxY(rect) * scaleFactor))
         
-        var clusteredAnnotations = [MKAnnotation]()
+        var clusteredAnnotations = [BMKAnnotation]()
         
         lock.lock()
         
@@ -75,17 +76,17 @@ open class FBClusteringManager : NSObject {
             
             for j in minY...maxY {
                 
-                let mapPoint = MKMapPoint(x: Double(i)/scaleFactor, y: Double(j)/scaleFactor)
+                let mapPoint = BMKMapPoint(x: Double(i)/scaleFactor, y: Double(j)/scaleFactor)
                 
-                let mapSize = MKMapSize(width: 1.0/scaleFactor, height: 1.0/scaleFactor)
+                let mapSize = BMKMapSize(width: 1.0/scaleFactor, height: 1.0/scaleFactor)
                 
-                let mapRect = MKMapRect(origin: mapPoint, size: mapSize)
+                let mapRect = BMKMapRect(origin: mapPoint, size: mapSize)
                 let mapBox:FBBoundingBox  = FBQuadTreeNode.FBBoundingBoxForMapRect(mapRect)
                 
                 var totalLatitude:Double = 0
                 var totalLongitude:Double = 0
                 
-                var annotations = [MKAnnotation]()
+                var annotations = [BMKAnnotation]()
                 
                 tree?.enumerateAnnotationsInBox(mapBox){ obj in
                     totalLatitude += obj.coordinate.latitude
@@ -121,9 +122,9 @@ open class FBClusteringManager : NSObject {
         return clusteredAnnotations
     }
     
-    open func allAnnotations() -> [MKAnnotation] {
+    open func allAnnotations() -> [BMKAnnotation] {
         
-        var annotations = [MKAnnotation]()
+        var annotations = [BMKAnnotation]()
         
         lock.lock()
         tree?.enumerateAnnotationsUsingBlock(){ obj in
@@ -134,12 +135,16 @@ open class FBClusteringManager : NSObject {
         return annotations
     }
     
-    open func displayAnnotations(_ annotations: [MKAnnotation], onMapView mapView:MKMapView){
+    open func displayAnnotations(_ annotations: [BMKAnnotation], onMapView mapView:BMKMapView){
         
         DispatchQueue.main.async  {
             
             let before = NSMutableSet(array: mapView.annotations)
-            before.remove(mapView.userLocation)
+            if let userLocation = self.userAnno {
+                before.remove(userLocation)
+            }
+
+//            before.remove(mapView.userLocation)
             let after = NSSet(array: annotations)
             let toKeep = NSMutableSet(set: before)
             toKeep.intersect(after as Set<NSObject>)
@@ -148,11 +153,11 @@ open class FBClusteringManager : NSObject {
             let toRemove = NSMutableSet(set: before)
             toRemove.minus(after as Set<NSObject>)
             
-            if let toAddAnnotations = toAdd.allObjects as? [MKAnnotation]{
+            if let toAddAnnotations = toAdd.allObjects as? [BMKAnnotation]{
                 mapView.addAnnotations(toAddAnnotations)
             }
             
-            if let removeAnnotations = toRemove.allObjects as? [MKAnnotation]{
+            if let removeAnnotations = toRemove.allObjects as? [BMKAnnotation]{
                 mapView.removeAnnotations(removeAnnotations)
             }
         }

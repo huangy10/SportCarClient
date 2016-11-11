@@ -20,7 +20,7 @@ open class FBQuadTreeNode : NSObject {
     
     var count = 0
     
-    var annotations:[MKAnnotation] = []
+    var annotations:[BMKAnnotation] = []
     
     // MARK: - Initializers
     
@@ -72,9 +72,9 @@ open class FBQuadTreeNode : NSObject {
         return (containsX && containsY)
     }
     
-    class func FBBoundingBoxForMapRect(_ mapRect: MKMapRect) -> FBBoundingBox {
-        let topLeft: CLLocationCoordinate2D = MKCoordinateForMapPoint(mapRect.origin)
-        let botRight: CLLocationCoordinate2D = MKCoordinateForMapPoint(MKMapPointMake(MKMapRectGetMaxX(mapRect), MKMapRectGetMaxY(mapRect)))
+    class func FBBoundingBoxForMapRect(_ mapRect: BMKMapRect) -> FBBoundingBox {
+        let topLeft: CLLocationCoordinate2D = BMKCoordinateForMapPoint(mapRect.origin)
+        let botRight: CLLocationCoordinate2D = BMKCoordinateForMapPoint(BMKMapPointMake(BMKMapRectGetMaxX(mapRect), BMKMapRectGetMaxY(mapRect)))
         
         let minLat: CLLocationDegrees = botRight.latitude
         let maxLat: CLLocationDegrees = topLeft.latitude
@@ -89,11 +89,10 @@ open class FBQuadTreeNode : NSObject {
         return (box1.x0 <= box2.xf && box1.xf >= box2.x0 && box1.y0 <= box2.yf && box1.yf >= box2.y0);
     }
     
-    class func FBMapRectForBoundingBox(_ boundingBox:FBBoundingBox) -> MKMapRect {
-        let topLeft:MKMapPoint  = MKMapPointForCoordinate(CLLocationCoordinate2DMake(CLLocationDegrees(boundingBox.x0), CLLocationDegrees(boundingBox.y0)));
-        let botRight:MKMapPoint  = MKMapPointForCoordinate(CLLocationCoordinate2DMake(CLLocationDegrees(boundingBox.xf), CLLocationDegrees(boundingBox.yf)));
-        
-        return MKMapRectMake(topLeft.x, botRight.y, fabs(botRight.x - topLeft.x), fabs(botRight.y - topLeft.y));
+    class func FBMapRectForBoundingBox(_ boundingBox:FBBoundingBox) -> BMKMapRect {
+        let topLeft:BMKMapPoint  = BMKMapPointForCoordinate(CLLocationCoordinate2DMake(CLLocationDegrees(boundingBox.x0), CLLocationDegrees(boundingBox.y0)));
+        let botRight:BMKMapPoint  = BMKMapPointForCoordinate(CLLocationCoordinate2DMake(CLLocationDegrees(boundingBox.xf), CLLocationDegrees(boundingBox.yf)));
+        return BMKMapRectMake(topLeft.x, botRight.y, fabs(botRight.x - topLeft.x), fabs(botRight.y - topLeft.y));
     }
     
 }

@@ -9,6 +9,7 @@
 import UIKit
 import Spring
 import Alamofire
+import Dollar
 
 
 class RadarDriverMapController: UIViewController, RadarFilterDelegate {
@@ -183,6 +184,7 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
         locationService.stopUserLocationService()
         if self.userLocation == nil {
             let annotate = UserAnnotation()
+            clusteringManager.userAnno = annotate
             annotate.user = MainManager.sharedManager.hostUser!
             annotate.coordinate = userLocation.location.coordinate
             map.addAnnotation(annotate)
@@ -190,6 +192,7 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
             let region = BMKCoordinateRegionMakeWithDistance(annotate.coordinate, 3000, 5000)
             map.setRegion(region, animated: true)
             userAnnotate = annotate
+//            clusteringManager.addAnnotations([annotate])
         }
         self.userLocation = userLocation
         userAnnotate.coordinate = userLocation.location.coordinate
@@ -197,6 +200,21 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
     }
     
     func mapView(_ mapView: BMKMapView!, viewFor annotation: BMKAnnotation!) -> BMKAnnotationView! {
+        if annotation is FBAnnotationCluster {
+//            print("cluster")
+            let reuseId = "cluster"
+            var clusterView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? ClusterAnnotationView
+            if clusterView == nil {
+//                clusterView = FBAnnotationClusterView(annotation: annotation, reuseIdentifier: reuseId, configuration: FBAnnotationClusterViewOptions.default())
+//                clusterView = FBAnnotationClusterView(annotation: annotation, reuseIdentifier: reuseId, options: nil)
+                clusterView = ClusterAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+                clusterView?.delegate = self
+            } else {
+                clusterView?.annotation = annotation
+                clusterView?.resetCountLblVal()
+            }
+            return clusterView
+        }
         if let userAnno = annotation as? UserAnnotation {
             let user = userAnno.user
             if (user?.isHost)! {
@@ -221,15 +239,14 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
     
     func mapView(_ mapView: BMKMapView!, regionDidChangeAnimated animated: Bool) {
         DispatchQueue.global(qos: .userInitiated).async {
-//            let mapBoundsWidth = Double(mapView.bounds.width)
-//            let mapRectWidth = mapView.visibleMapRect.size.width
-//            let scale = mapBoundsWidth / mapRectWidth
-//            
-//            let annotationArray = self.clusteringManager.clusteredAnnotationsWithinMapRect(mapView.visibleMapRect, withZoomScale: scale)
-//            
-//            DispatchQueue.main.async(execute: { 
-//                self.clusteringManager.displayAnnotations(annotationArray, onMapView: self.mapView)
-//            })
+            let mapBoundsWidth = Double(mapView.bounds.width)
+            let mapRectWidth = mapView.visibleMapRect.size.width
+            let scale = mapBoundsWidth / mapRectWidth
+            let annotationArray = self.clusteringManager.clusteredAnnotationsWithinMapRect(mapView.visibleMapRect, withZoomScale: scale)
+            
+            DispatchQueue.main.async(execute: { 
+                self.clusteringManager.displayAnnotations(annotationArray, onMapView: mapView)
+            })
         }
     }
     
@@ -274,11 +291,16 @@ extension RadarDriverMapController {
                 return
             }
             var usersIDs: [String] = []
+            var annotations = [BMKAnnotation]()
+            var dirty: Bool = false
             for data in json.arrayValue {
                 let onlyOnList = data["only_on_list"].boolValue
                 // 创建用户对象
                 let user: User = try! MainManager.sharedManager.getOrCreate(data)
                 let userID = user.ssidString
+                if usersIDs.contains(value: userID) {
+                    continue
+                }
                 usersIDs.append(user.ssidString)
                 if let anno = self.userAnnos[userID] {
                     let loc = data["loc"]
@@ -286,21 +308,29 @@ extension RadarDriverMapController {
                     if onlyOnList && anno.onMap {
                         anno.onMap = false
                         self.map.removeAnnotation(anno)
+                        dirty = true
                     } else if !onlyOnList && !anno.onMap {
                         anno.onMap = true
                         self.map.addAnnotation(anno)
+                        annotations.append(anno)
+                        dirty = true
+                    } else {
+                        annotations.append(anno)
                     }
                 } else {
                     let anno = UserAnnotation()
-                    anno.onMap = true
                     anno.user = user
                     anno.title = " "
                     let loc = data["loc"]
                     anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
                     self.userAnnos[userID] = anno
                     if !onlyOnList {
-                        anno.onMap = false
+                        anno.onMap = true
                         self.map.addAnnotation(anno)
+                        annotations.append(anno)
+                        dirty = true
+                    } else {
+                        anno.onMap = false
                     }
                 }
             }
@@ -310,6 +340,9 @@ extension RadarDriverMapController {
                     self.map.removeAnnotation(anno)
                     self.userAnnos[oldUser] = nil
                 }
+            }
+            if dirty {
+                self.clusteringManager.setAnnotations(annotations)
             }
             self.locationUpdatingRequest = nil
             self.lastUpdate = Date()
@@ -484,5 +517,38 @@ extension RadarDriverMapController {
     
     func radarFilterDidChange() {
         toggleMapFilter()
+    }
+}
+
+extension RadarDriverMapController: ClusterAnnotationViewDelegate {
+    func clusterAnnotationPressed(_ clusterView: ClusterAnnotationView) {
+        let cluster = clusterView.annotation as! FBAnnotationCluster
+        if cluster.annotations.count < 2 {
+            return
+        }
+        var latMax: Double = 0
+        var latMin: Double = Double.greatestFiniteMagnitude
+        var lonMax: Double = 0
+        var lonMin: Double = Double.greatestFiniteMagnitude
+        for anno in cluster.annotations {
+            let c = anno.coordinate
+            if c.latitude < latMin {
+                latMin = c.latitude
+            }
+            if c.latitude > latMax {
+                latMax = c.latitude
+            }
+            if c.longitude < lonMin {
+                lonMin = c.longitude
+            }
+            if c.longitude > lonMax {
+                lonMax = c.longitude
+            }
+        }
+        let center = CLLocationCoordinate2D(latitude: (latMax + latMin) / 2, longitude: (lonMax + lonMin) / 2)
+        let span = BMKCoordinateSpan(latitudeDelta: (latMax - latMin) * 1.5, longitudeDelta: (lonMax - lonMin) * 1.5)
+        let region = BMKCoordinateRegionMake(center, span)
+        map.setRegion(region, animated: true)
+        
     }
 }

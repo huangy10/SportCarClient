@@ -9,7 +9,56 @@
 import Foundation
 import MapKit
 
-open class FBAnnotationClusterView : MKAnnotationView {
+
+protocol ClusterAnnotationViewDelegate: class {
+    func clusterAnnotationPressed(_ clusterView: ClusterAnnotationView)
+}
+
+
+class ClusterAnnotationView: BMKAnnotationView {
+    
+    weak var delegate: ClusterAnnotationViewDelegate!
+    
+    var countLbl: UILabel!
+    var btn: UIButton!
+    
+    override init!(annotation: BMKAnnotation!, reuseIdentifier: String!) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        let cluster = annotation as! FBAnnotationCluster
+        let count = cluster.annotations.count
+        
+        bounds = CGRect(x: 0, y: 0, width: 65, height: 65)
+        let bg = addSubview(UIView.self).config(kHighlightRed)
+            .layout { (mk) in
+                mk.edges.equalTo(self)
+        }.addShadow()
+        bg.layer.cornerRadius = 32.5
+        btn = addSubview(UIButton.self).config(self, selector: #selector(btnPressed))
+            .layout({ (mk) in
+                mk.edges.equalTo(self)
+            })
+        countLbl = addSubview(UILabel.self).config(21, fontWeight: UIFontWeightSemibold, textColor: .white, textAlignment: .center, text: count > 99 ? "99+" : "\(count)")
+            .layout({ (mk) in
+                mk.center.equalTo(self)
+            })
+    }
+    
+    func btnPressed() {
+        delegate.clusterAnnotationPressed(self)
+    }
+    
+    func resetCountLblVal() {
+        let cluster = annotation as! FBAnnotationCluster
+        let val = cluster.annotations.count
+        countLbl.text = val > 99 ? "99+" : "\(val)"
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError()
+    }
+}
+
+open class FBAnnotationClusterView : BMKAnnotationView {
     
     var count = 0
     
@@ -24,7 +73,7 @@ open class FBAnnotationClusterView : MKAnnotationView {
     
     //var option : FBAnnotationClusterViewOptions? = nil
     
-    public init(annotation: MKAnnotation?, reuseIdentifier: String?, options: FBAnnotationClusterViewOptions?){
+    public init(annotation: BMKAnnotation?, reuseIdentifier: String?, options: FBAnnotationClusterViewOptions?){
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         
         let cluster:FBAnnotationCluster = annotation as! FBAnnotationCluster
@@ -68,6 +117,7 @@ open class FBAnnotationClusterView : MKAnnotationView {
         }
         
         backgroundColor = UIColor.clear
+        bounds = CGRect(x: 0, y: 0, width: 65, height: 65)
         setupLabel()
         setTheCount(count)
     }
@@ -88,7 +138,7 @@ open class FBAnnotationClusterView : MKAnnotationView {
             countLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             countLabel.textAlignment = .center
             countLabel.backgroundColor = UIColor.clear
-            countLabel.textColor = UIColor.white
+            countLabel.textColor = UIColor.black
             countLabel.adjustsFontSizeToFitWidth = true
             countLabel.minimumScaleFactor = 2
             countLabel.numberOfLines = 1
@@ -110,12 +160,12 @@ open class FBAnnotationClusterView : MKAnnotationView {
         
         // Images are faster than using drawRect:
         
-        let imageAsset = UIImage(named: imageName, in: (!loadExternalImage) ? Bundle(for: FBAnnotationClusterView.self) : nil, compatibleWith: nil)
+//        let imageAsset = UIImage(named: imageName, in: (!loadExternalImage) ? Bundle(for: FBAnnotationClusterView.self) : nil, compatibleWith: nil)
         
         //UIImage(named: imageName)!
         
         countLabel?.frame = self.bounds
-        image = imageAsset
+//        image = imageAsset
         centerOffset = CGPoint.zero
         
         // adds a white border around the green circle

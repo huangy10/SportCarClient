@@ -18,15 +18,15 @@ open class FBQuadTree : NSObject {
     override init (){
         super.init()
         
-        rootNode = FBQuadTreeNode(boundingBox:FBQuadTreeNode.FBBoundingBoxForMapRect(MKMapRectWorld))
+        rootNode = FBQuadTreeNode(boundingBox:FBQuadTreeNode.FBBoundingBoxForMapRect(BMKMapRectWorld))
         
     }
     
-    func insertAnnotation(_ annotation:MKAnnotation) -> Bool {
+    func insertAnnotation(_ annotation:BMKAnnotation) -> Bool {
         return insertAnnotation(annotation, toNode:rootNode!)
     }
     
-    func insertAnnotation(_ annotation:MKAnnotation, toNode node:FBQuadTreeNode) -> Bool {
+    func insertAnnotation(_ annotation:BMKAnnotation, toNode node:FBQuadTreeNode) -> Bool {
         
         if !FBQuadTreeNode.FBBoundingBoxContainsCoordinate(node.boundingBox!, coordinate: annotation.coordinate) {
             return false
@@ -63,15 +63,15 @@ open class FBQuadTree : NSObject {
         
     }
     
-    func enumerateAnnotationsInBox(_ box:FBBoundingBox, callback: (MKAnnotation) -> Void){
+    func enumerateAnnotationsInBox(_ box:FBBoundingBox, callback: (BMKAnnotation) -> Void){
         enumerateAnnotationsInBox(box, withNode:rootNode!, callback: callback)
     }
     
-    func enumerateAnnotationsUsingBlock(_ callback: (MKAnnotation) -> Void){
-        enumerateAnnotationsInBox(FBQuadTreeNode.FBBoundingBoxForMapRect(MKMapRectWorld), withNode:rootNode!, callback:callback)
+    func enumerateAnnotationsUsingBlock(_ callback: (BMKAnnotation) -> Void){
+        enumerateAnnotationsInBox(FBQuadTreeNode.FBBoundingBoxForMapRect(BMKMapRectWorld), withNode:rootNode!, callback:callback)
     }
     
-    func enumerateAnnotationsInBox(_ box:FBBoundingBox, withNode node:FBQuadTreeNode, callback: (MKAnnotation) -> Void){
+    func enumerateAnnotationsInBox(_ box:FBBoundingBox, withNode node:FBQuadTreeNode, callback: (BMKAnnotation) -> Void){
         if (!FBQuadTreeNode.FBBoundingBoxIntersectsBoundingBox(node.boundingBox!, box2: box)) {
             return;
         }
