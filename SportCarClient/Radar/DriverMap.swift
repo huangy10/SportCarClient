@@ -39,6 +39,9 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
     weak var confirmToast: ConfirmToastPresentationController?
     weak var toast: UIView?
     
+    // about cluster
+    let clusteringManager = FBClusteringManager()
+    
     deinit {
         timer?.invalidate()
         NotificationCenter.default.removeObserver(self)
@@ -214,6 +217,20 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
             }
         }
         return nil
+    }
+    
+    func mapView(_ mapView: BMKMapView!, regionDidChangeAnimated animated: Bool) {
+        DispatchQueue.global(qos: .userInitiated).async {
+//            let mapBoundsWidth = Double(mapView.bounds.width)
+//            let mapRectWidth = mapView.visibleMapRect.size.width
+//            let scale = mapBoundsWidth / mapRectWidth
+//            
+//            let annotationArray = self.clusteringManager.clusteredAnnotationsWithinMapRect(mapView.visibleMapRect, withZoomScale: scale)
+//            
+//            DispatchQueue.main.async(execute: { 
+//                self.clusteringManager.displayAnnotations(annotationArray, onMapView: self.mapView)
+//            })
+        }
     }
     
     func mapView(_ mapView: BMKMapView!, didSelect view: BMKAnnotationView!) {

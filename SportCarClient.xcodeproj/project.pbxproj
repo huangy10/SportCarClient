@@ -53,6 +53,13 @@
 		BF54DD7A1C303D5100F635C0 /* NewsRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF54DD791C303D5100F635C0 /* NewsRequester.swift */; };
 		BF58990C1C4CFF26005496EA /* informUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF58990B1C4CFF26005496EA /* informUser.swift */; };
 		BF58990E1C4D14A3005496EA /* SportCarSelectList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF58990D1C4D14A3005496EA /* SportCarSelectList.swift */; };
+		BF599E721DD5C0F8000BE453 /* FBAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF599E6B1DD5C0F8000BE453 /* FBAnnotation.swift */; };
+		BF599E731DD5C0F8000BE453 /* FBAnnotationClusterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF599E6C1DD5C0F8000BE453 /* FBAnnotationClusterView.swift */; };
+		BF599E741DD5C0F8000BE453 /* FBBoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF599E6D1DD5C0F8000BE453 /* FBBoundingBox.swift */; };
+		BF599E751DD5C0F8000BE453 /* FBAnnotationCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF599E6E1DD5C0F8000BE453 /* FBAnnotationCluster.swift */; };
+		BF599E761DD5C0F8000BE453 /* FBClusteringManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF599E6F1DD5C0F8000BE453 /* FBClusteringManager.swift */; };
+		BF599E771DD5C0F8000BE453 /* FBQuadTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF599E701DD5C0F8000BE453 /* FBQuadTree.swift */; };
+		BF599E781DD5C0F8000BE453 /* FBQuadTreeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF599E711DD5C0F8000BE453 /* FBQuadTreeNode.swift */; };
 		BF5B8CB61DC7A4D900541A5D /* StatusAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5B8CB51DC7A4D900541A5D /* StatusAnimations.swift */; };
 		BF5D19CE1D8A349C00A66FC0 /* NewsController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5D19CD1D8A349C00A66FC0 /* NewsController2.swift */; };
 		BF5D19D01D8A380E00A66FC0 /* NewsCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5D19CF1D8A380E00A66FC0 /* NewsCell2.swift */; };
@@ -294,8 +301,6 @@
 		BFFA15451C9D271E00E985DF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15441C9D271E00E985DF /* Location.swift */; };
 		BFFA15471C9D2B1700E985DF /* RequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA15461C9D2B1700E985DF /* RequestProtocol.swift */; };
 		BFFA51161C05D9910019E5EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA51151C05D9910019E5EF /* AppDelegate.swift */; };
-		BFFA512E1C05D9920019E5EF /* SportCarClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA512D1C05D9920019E5EF /* SportCarClientTests.swift */; };
-		BFFA51391C05D9920019E5EF /* SportCarClientUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA51381C05D9920019E5EF /* SportCarClientUITests.swift */; };
 		BFFA61B31C7DDC88003BCB2B /* RadarRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA61B21C7DDC88003BCB2B /* RadarRequester.swift */; };
 		BFFBA80D1C6595CF00991642 /* privateSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFBA80C1C6595CF00991642 /* privateSettings.swift */; };
 		BFFBA8101C65D7B100991642 /* InlineUserSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFBA80F1C65D7B100991642 /* InlineUserSelect.swift */; };
@@ -303,23 +308,6 @@
 		BFFFAFEB1C84AA4300EBA314 /* FansSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFFAFEA1C84AA4300EBA314 /* FansSelect.swift */; };
 		BFFFAFED1C84B1FB00EBA314 /* FollowSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFFAFEC1C84B1FB00EBA314 /* FollowSelect.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		BFFA512A1C05D9920019E5EF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BFFA510A1C05D9910019E5EF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BFFA51111C05D9910019E5EF;
-			remoteInfo = SportCarClient;
-		};
-		BFFA51351C05D9920019E5EF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BFFA510A1C05D9910019E5EF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BFFA51111C05D9910019E5EF;
-			remoteInfo = SportCarClient;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		3C67C8D9B0B71677E04519EA /* Pods-SportCarClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportCarClient.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SportCarClient/Pods-SportCarClient.debug.xcconfig"; sourceTree = "<group>"; };
@@ -369,6 +357,13 @@
 		BF54DD791C303D5100F635C0 /* NewsRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsRequester.swift; path = News/NewsRequester.swift; sourceTree = "<group>"; };
 		BF58990B1C4CFF26005496EA /* informUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = informUser.swift; path = Status/Release/informUser.swift; sourceTree = "<group>"; };
 		BF58990D1C4D14A3005496EA /* SportCarSelectList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarSelectList.swift; path = Status/Release/SportCarSelectList.swift; sourceTree = "<group>"; };
+		BF599E6B1DD5C0F8000BE453 /* FBAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBAnnotation.swift; path = 3rdParty/MapCluster/FBAnnotation.swift; sourceTree = "<group>"; };
+		BF599E6C1DD5C0F8000BE453 /* FBAnnotationClusterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBAnnotationClusterView.swift; path = 3rdParty/MapCluster/FBAnnotationClusterView.swift; sourceTree = "<group>"; };
+		BF599E6D1DD5C0F8000BE453 /* FBBoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBBoundingBox.swift; path = 3rdParty/MapCluster/FBBoundingBox.swift; sourceTree = "<group>"; };
+		BF599E6E1DD5C0F8000BE453 /* FBAnnotationCluster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBAnnotationCluster.swift; path = 3rdParty/MapCluster/FBAnnotationCluster.swift; sourceTree = "<group>"; };
+		BF599E6F1DD5C0F8000BE453 /* FBClusteringManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBClusteringManager.swift; path = 3rdParty/MapCluster/FBClusteringManager.swift; sourceTree = "<group>"; };
+		BF599E701DD5C0F8000BE453 /* FBQuadTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBQuadTree.swift; path = 3rdParty/MapCluster/FBQuadTree.swift; sourceTree = "<group>"; };
+		BF599E711DD5C0F8000BE453 /* FBQuadTreeNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBQuadTreeNode.swift; path = 3rdParty/MapCluster/FBQuadTreeNode.swift; sourceTree = "<group>"; };
 		BF5B8CB51DC7A4D900541A5D /* StatusAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusAnimations.swift; path = Status/Animations/StatusAnimations.swift; sourceTree = "<group>"; };
 		BF5D19CD1D8A349C00A66FC0 /* NewsController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsController2.swift; path = News/V2/NewsController2.swift; sourceTree = "<group>"; };
 		BF5D19CF1D8A380E00A66FC0 /* NewsCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsCell2.swift; path = News/V2/NewsCell2.swift; sourceTree = "<group>"; };
@@ -618,10 +613,8 @@
 		BFFA51121C05D9910019E5EF /* SportCarClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SportCarClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFFA51151C05D9910019E5EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFFA51241C05D9920019E5EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BFFA51291C05D9920019E5EF /* SportCarClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SportCarClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFFA512D1C05D9920019E5EF /* SportCarClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportCarClientTests.swift; sourceTree = "<group>"; };
 		BFFA512F1C05D9920019E5EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BFFA51341C05D9920019E5EF /* SportCarClientUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SportCarClientUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFFA51381C05D9920019E5EF /* SportCarClientUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportCarClientUITests.swift; sourceTree = "<group>"; };
 		BFFA513A1C05D9920019E5EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BFFA61B21C7DDC88003BCB2B /* RadarRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RadarRequester.swift; path = Radar/RadarRequester.swift; sourceTree = "<group>"; };
@@ -642,20 +635,6 @@
 				BFC8F1491CC8A5B200ABE31F /* TencentOpenAPI.framework in Frameworks */,
 				BFC8F14B1CC8A5B200ABE31F /* libWeChatSDK.a in Frameworks */,
 				059B97869E6AEDFF9D074A8B /* Pods_SportCarClient.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BFFA51261C05D9920019E5EF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BFFA51311C05D9920019E5EF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -871,6 +850,20 @@
 				BFAA0CAD1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift */,
 			);
 			name = PhotoSelect;
+			sourceTree = "<group>";
+		};
+		BF599E6A1DD5C0EC000BE453 /* MapCluster */ = {
+			isa = PBXGroup;
+			children = (
+				BF599E6B1DD5C0F8000BE453 /* FBAnnotation.swift */,
+				BF599E6C1DD5C0F8000BE453 /* FBAnnotationClusterView.swift */,
+				BF599E6D1DD5C0F8000BE453 /* FBBoundingBox.swift */,
+				BF599E6E1DD5C0F8000BE453 /* FBAnnotationCluster.swift */,
+				BF599E6F1DD5C0F8000BE453 /* FBClusteringManager.swift */,
+				BF599E701DD5C0F8000BE453 /* FBQuadTree.swift */,
+				BF599E711DD5C0F8000BE453 /* FBQuadTreeNode.swift */,
+			);
+			name = MapCluster;
 			sourceTree = "<group>";
 		};
 		BF5E7EE91C8607B9004B8305 /* Other */ = {
@@ -1208,6 +1201,7 @@
 		BFC0325D1C6EE90900ECA69A /* 3rdPartyCode */ = {
 			isa = PBXGroup;
 			children = (
+				BF599E6A1DD5C0EC000BE453 /* MapCluster */,
 				BFC8F13F1CC8A58600ABE31F /* Share */,
 				BF972F0E1C9D6D8800AF997B /* ImageResizer */,
 				BFE0CD131C8D79630031C45B /* Extension */,
@@ -1748,8 +1742,6 @@
 			isa = PBXGroup;
 			children = (
 				BFFA51121C05D9910019E5EF /* SportCarClient.app */,
-				BFFA51291C05D9920019E5EF /* SportCarClientTests.xctest */,
-				BFFA51341C05D9920019E5EF /* SportCarClientUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1881,42 +1873,6 @@
 			productReference = BFFA51121C05D9910019E5EF /* SportCarClient.app */;
 			productType = "com.apple.product-type.application";
 		};
-		BFFA51281C05D9920019E5EF /* SportCarClientTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BFFA51401C05D9920019E5EF /* Build configuration list for PBXNativeTarget "SportCarClientTests" */;
-			buildPhases = (
-				BFFA51251C05D9920019E5EF /* Sources */,
-				BFFA51261C05D9920019E5EF /* Frameworks */,
-				BFFA51271C05D9920019E5EF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				BFFA512B1C05D9920019E5EF /* PBXTargetDependency */,
-			);
-			name = SportCarClientTests;
-			productName = SportCarClientTests;
-			productReference = BFFA51291C05D9920019E5EF /* SportCarClientTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		BFFA51331C05D9920019E5EF /* SportCarClientUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BFFA51431C05D9920019E5EF /* Build configuration list for PBXNativeTarget "SportCarClientUITests" */;
-			buildPhases = (
-				BFFA51301C05D9920019E5EF /* Sources */,
-				BFFA51311C05D9920019E5EF /* Frameworks */,
-				BFFA51321C05D9920019E5EF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				BFFA51361C05D9920019E5EF /* PBXTargetDependency */,
-			);
-			name = SportCarClientUITests;
-			productName = SportCarClientUITests;
-			productReference = BFFA51341C05D9920019E5EF /* SportCarClientUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1941,16 +1897,6 @@
 							};
 						};
 					};
-					BFFA51281C05D9920019E5EF = {
-						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 0800;
-						TestTargetID = BFFA51111C05D9910019E5EF;
-					};
-					BFFA51331C05D9920019E5EF = {
-						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 0800;
-						TestTargetID = BFFA51111C05D9910019E5EF;
-					};
 				};
 			};
 			buildConfigurationList = BFFA510D1C05D9910019E5EF /* Build configuration list for PBXProject "SportCarClient" */;
@@ -1967,8 +1913,6 @@
 			projectRoot = "";
 			targets = (
 				BFFA51111C05D9910019E5EF /* SportCarClient */,
-				BFFA51281C05D9920019E5EF /* SportCarClientTests */,
-				BFFA51331C05D9920019E5EF /* SportCarClientUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -2041,20 +1985,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BFFA51271C05D9920019E5EF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BFFA51321C05D9920019E5EF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -2122,6 +2052,7 @@
 				BF5E7EE01C85C770004B8305 /* PresentTemplate.swift in Sources */,
 				BFC3D42C1D5DB6B200494592 /* SportCarGallary.swift in Sources */,
 				BFCA90111C50A0C000B05E74 /* StatusFollow.swift in Sources */,
+				BF599E741DD5C0F8000BE453 /* FBBoundingBox.swift in Sources */,
 				BF1D93581C52783000FD9997 /* StatusDetailCommentCell.swift in Sources */,
 				BF5D19D21D8A6C5300A66FC0 /* NewsDetail2.swift in Sources */,
 				BFC36BA01C69A6A900DC6FE2 /* PersonDataSource.swift in Sources */,
@@ -2129,6 +2060,7 @@
 				BFBC52791C53902500EE7D34 /* ChatOpPanel.swift in Sources */,
 				BF2336941C57353C00F0AE41 /* ChatWave.swift in Sources */,
 				BF9847341C76311D006DDE3C /* ActivityReleaseMapCell.swift in Sources */,
+				BF599E781DD5C0F8000BE453 /* FBQuadTreeNode.swift in Sources */,
 				BF662A151CCBA39500B3D84D /* Entrance.swift in Sources */,
 				BFDFF27E1C8BF73E00055C1C /* ClubBubbles.swift in Sources */,
 				BFE967101CA584870097C42C /* ChatRecord.swift in Sources */,
@@ -2182,6 +2114,7 @@
 				BF9B54AD1C7F70980006D673 /* RadarHome.swift in Sources */,
 				BF6308AC1C19B7D20087A4F0 /* AccountRequester.swift in Sources */,
 				BF5B8CB61DC7A4D900541A5D /* StatusAnimations.swift in Sources */,
+				BF599E731DD5C0F8000BE453 /* FBAnnotationClusterView.swift in Sources */,
 				BFCA900A1C4FC64300B05E74 /* StatusHome.swift in Sources */,
 				BF662A081CCB25CC00B3D84D /* ChatParser.swift in Sources */,
 				BFADDF6D1C82D39D00893435 /* RadarFilterController.swift in Sources */,
@@ -2208,6 +2141,7 @@
 				BF5D19D01D8A380E00A66FC0 /* NewsCell2.swift in Sources */,
 				BFC032551C6DD73700ECA69A /* PersonMineSettingAuth.swift in Sources */,
 				BFF82B451D323E090039A478 /* Blacklist.swift in Sources */,
+				BF599E761DD5C0F8000BE453 /* FBClusteringManager.swift in Sources */,
 				BFAC522A1C1C84A700107F71 /* InputableViewController.swift in Sources */,
 				BF1D93561C52776F00FD9997 /* DetailCommentCell2.swift in Sources */,
 				BFC0325F1C6EE92600ECA69A /* UIImageEffects.swift in Sources */,
@@ -2225,10 +2159,12 @@
 				BFBC52711C52946300EE7D34 /* ChatController.swift in Sources */,
 				BFE967591CA6D9DC0097C42C /* Notification.generated.swift in Sources */,
 				BFC032621C6EEFBA00ECA69A /* AvatarItemSelect.swift in Sources */,
+				BF599E751DD5C0F8000BE453 /* FBAnnotationCluster.swift in Sources */,
 				BF9664041C89CBD10096D131 /* ClubBriefInfo.swift in Sources */,
 				BF2429221C7C8E15005D4C6E /* UIImage+Gif.swift in Sources */,
 				BFC36B9C1C698DD200DC6FE2 /* PersonMyHeader.swift in Sources */,
 				BFE5985D1CB4A31100001F99 /* InlineUserSelectMiniCell.swift in Sources */,
+				BF599E721DD5C0F8000BE453 /* FBAnnotation.swift in Sources */,
 				BF58990E1C4D14A3005496EA /* SportCarSelectList.swift in Sources */,
 				BFFFAFED1C84B1FB00EBA314 /* FollowSelect.swift in Sources */,
 				BF9B54B51C802E3B0006D673 /* GroupChatSetUp.swift in Sources */,
@@ -2259,6 +2195,7 @@
 				BFE9675E1CA6E9DF0097C42C /* NewsComment.swift in Sources */,
 				BFDA4E7A1DD41BB200F9E504 /* MapAsFooter.swift in Sources */,
 				BFAA0CAC1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift in Sources */,
+				BF599E771DD5C0F8000BE453 /* FBQuadTree.swift in Sources */,
 				BF5E7EE81C85EC45004B8305 /* SportscarAuth.swift in Sources */,
 				BFC36BAA1C6B27B000DC6FE2 /* PersonRequest.swift in Sources */,
 				BF662A131CCB664C00B3D84D /* RosterController.swift in Sources */,
@@ -2343,36 +2280,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BFFA51251C05D9920019E5EF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BFFA512E1C05D9920019E5EF /* SportCarClientTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BFFA51301C05D9920019E5EF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BFFA51391C05D9920019E5EF /* SportCarClientUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		BFFA512B1C05D9920019E5EF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BFFA51111C05D9910019E5EF /* SportCarClient */;
-			targetProxy = BFFA512A1C05D9920019E5EF /* PBXContainerItemProxy */;
-		};
-		BFFA51361C05D9920019E5EF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BFFA51111C05D9910019E5EF /* SportCarClient */;
-			targetProxy = BFFA51351C05D9920019E5EF /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		BF7FF4E81CBCC7F400BF45D3 /* adhoc */ = {
@@ -2443,32 +2351,6 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "SportCarClient/Bridge/BMKSwiftDemo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
-			};
-			name = adhoc;
-		};
-		BF7FF4EA1CBCC7F400BF45D3 /* adhoc */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = SportCarClientTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClientTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SportCarClient.app/SportCarClient";
-			};
-			name = adhoc;
-		};
-		BF7FF4EB1CBCC7F400BF45D3 /* adhoc */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = SportCarClientUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClientUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = SportCarClient;
-				USES_XCTRUNNER = YES;
 			};
 			name = adhoc;
 		};
@@ -2622,58 +2504,6 @@
 			};
 			name = Release;
 		};
-		BFFA51411C05D9920019E5EF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = SportCarClientTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClientTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SportCarClient.app/SportCarClient";
-			};
-			name = Debug;
-		};
-		BFFA51421C05D9920019E5EF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = SportCarClientTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClientTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SportCarClient.app/SportCarClient";
-			};
-			name = Release;
-		};
-		BFFA51441C05D9920019E5EF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = SportCarClientUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClientUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = SportCarClient;
-				USES_XCTRUNNER = YES;
-			};
-			name = Debug;
-		};
-		BFFA51451C05D9920019E5EF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = SportCarClientUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.woodyhuang.SportCarClientUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = SportCarClient;
-				USES_XCTRUNNER = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2693,26 +2523,6 @@
 				BFFA513E1C05D9920019E5EF /* Debug */,
 				BFFA513F1C05D9920019E5EF /* Release */,
 				BF7FF4E91CBCC7F400BF45D3 /* adhoc */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BFFA51401C05D9920019E5EF /* Build configuration list for PBXNativeTarget "SportCarClientTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BFFA51411C05D9920019E5EF /* Debug */,
-				BFFA51421C05D9920019E5EF /* Release */,
-				BF7FF4EA1CBCC7F400BF45D3 /* adhoc */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BFFA51431C05D9920019E5EF /* Build configuration list for PBXNativeTarget "SportCarClientUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BFFA51441C05D9920019E5EF /* Debug */,
-				BFFA51451C05D9920019E5EF /* Release */,
-				BF7FF4EB1CBCC7F400BF45D3 /* adhoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

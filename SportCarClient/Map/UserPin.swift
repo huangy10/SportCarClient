@@ -9,13 +9,31 @@
 import UIKit
 import MapKit
 
+class AnnoWrapper: NSObject, MKAnnotation {
+    var title: String?
+    var subtitle: String?
+    
+    var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    weak var userPin: UserAnnotation!
+}
+
+
 class UserAnnotation: BMKPointAnnotation {
     var user: User!
     var onMap: Bool = true
+    var mk: AnnoWrapper!
+    
+    override var coordinate: CLLocationCoordinate2D {
+        didSet {
+            mk.coordinate = coordinate
+        }
+    }
     
     override init() {
         super.init()
         self.title = " "
+        mk = AnnoWrapper()
+        mk.userPin = self
     }
 }
 
@@ -106,7 +124,4 @@ class HostUserOnRadarAnnotationView: BMKAnnotationView {
         self.setNeedsDisplay()
     }
 }
-
-extension BMKPointAnnotation: MKAnnotation {
-    
-}
+//
