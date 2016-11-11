@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 class UserAnnotation: BMKPointAnnotation {
     var user: User!
@@ -104,4 +105,8 @@ class HostUserOnRadarAnnotationView: BMKAnnotationView {
         _curAngle += 0.03
         self.setNeedsDisplay()
     }
+}
+
+extension BMKPointAnnotation: MKAnnotation {
+    
 }
