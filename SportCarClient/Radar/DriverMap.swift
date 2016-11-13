@@ -100,6 +100,7 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
     func createSubviews() {
         self.view.backgroundColor = UIColor.black
         map = BMKMapView()
+        map.showMapScaleBar = true
         self.view.addSubview(map)
         map.snp.makeConstraints { (make) -> Void in
             make.edges.equalTo(self.view)
@@ -307,11 +308,11 @@ extension RadarDriverMapController {
                     anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
                     if onlyOnList && anno.onMap {
                         anno.onMap = false
-                        self.map.removeAnnotation(anno)
+//                        self.map.removeAnnotation(anno)
                         dirty = true
                     } else if !onlyOnList && !anno.onMap {
                         anno.onMap = true
-                        self.map.addAnnotation(anno)
+//                        self.map.addAnnotation(anno)
                         annotations.append(anno)
                         dirty = true
                     } else {
@@ -326,7 +327,7 @@ extension RadarDriverMapController {
                     self.userAnnos[userID] = anno
                     if !onlyOnList {
                         anno.onMap = true
-                        self.map.addAnnotation(anno)
+//                        self.map.addAnnotation(anno)
                         annotations.append(anno)
                         dirty = true
                     } else {

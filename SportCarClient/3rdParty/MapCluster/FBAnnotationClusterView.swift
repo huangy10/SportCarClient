@@ -27,17 +27,17 @@ class ClusterAnnotationView: BMKAnnotationView {
         let cluster = annotation as! FBAnnotationCluster
         let count = cluster.annotations.count
         
-        bounds = CGRect(x: 0, y: 0, width: 65, height: 65)
+        bounds = CGRect(x: 0, y: 0, width: PinSize, height: PinSize)
         let bg = addSubview(UIView.self).config(kHighlightRed)
             .layout { (mk) in
                 mk.edges.equalTo(self)
         }.addShadow()
-        bg.layer.cornerRadius = 32.5
+        bg.layer.cornerRadius = PinSize / 2
         btn = addSubview(UIButton.self).config(self, selector: #selector(btnPressed))
             .layout({ (mk) in
                 mk.edges.equalTo(self)
             })
-        countLbl = addSubview(UILabel.self).config(21, fontWeight: UIFontWeightSemibold, textColor: .white, textAlignment: .center, text: count > 99 ? "99+" : "\(count)")
+        countLbl = addSubview(UILabel.self).config(17, fontWeight: UIFontWeightSemibold, textColor: .white, textAlignment: .center, text: count > 99 ? "99+" : "\(count)")
             .layout({ (mk) in
                 mk.center.equalTo(self)
             })
@@ -117,7 +117,7 @@ open class FBAnnotationClusterView : BMKAnnotationView {
         }
         
         backgroundColor = UIColor.clear
-        bounds = CGRect(x: 0, y: 0, width: 65, height: 65)
+        bounds = CGRect(x: 0, y: 0, width: PinSize, height: PinSize)
         setupLabel()
         setTheCount(count)
     }

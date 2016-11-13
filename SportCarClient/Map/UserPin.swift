@@ -9,6 +9,8 @@
 import UIKit
 import MapKit
 
+let PinSize: CGFloat = 55
+
 class AnnoWrapper: NSObject, MKAnnotation {
     var title: String?
     var subtitle: String?
@@ -52,14 +54,14 @@ class UserAnnotationView: BMKAnnotationView {
     
     override init!(annotation: BMKAnnotation!, reuseIdentifier: String!) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        self.bounds = CGRect(x: 0, y: 0, width: 65, height: 65)
+        self.bounds = CGRect(x: 0, y: 0, width: PinSize, height: PinSize)
         avatar = self.addSubview(UIButton.self)
             .config(self, selector: #selector(avatarPressed))
-            .setFrame(CGRect(x: 0, y: 0, width: 65, height: 65))
+            .setFrame(CGRect(x: 0, y: 0, width: PinSize, height: PinSize))
             .toRound()
         avatarCar = self.addSubview(UIImageView.self)
             .config(nil)
-            .setFrame(CGRect(x: 40, y: 40, width: 25, height: 25))
+            .setFrame(CGRect(x: PinSize - 25, y: PinSize - 25, width: 25, height: 25))
             .toRound()
         self.addShadow()
     }
