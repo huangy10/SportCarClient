@@ -29,6 +29,12 @@ class UserAnnotationView: BMKAnnotationView {
             if let avatarCarURL = user.avatarCarModel?.logoURL {
                 avatarCar.kf.setImage(with: avatarCarURL)
             }
+            if user.identified {
+                avatar.layer.borderColor = kHighlightRed.cgColor
+                avatar.layer.borderWidth = 2
+            } else {
+                avatar.layer.borderColor = nil
+            }
         }
     }
     var avatar: UIButton!
