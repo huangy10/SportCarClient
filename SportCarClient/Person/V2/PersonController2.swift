@@ -487,6 +487,7 @@ extension PersonController: UITableViewDataSource, UITableViewDelegate, UIScroll
         cell.delegate = self
         let rangeMin = indexPath.row * 3
         let rangeMax = min(rangeMin + 3, data.numberOfStatusCell())
+        cell.clearImages()
         (rangeMin..<rangeMax).forEach({ cell.setImage(getStatus(atIdx: $0)?.coverURL!, atIdx: $0) })
         return cell
     }
@@ -574,6 +575,9 @@ extension PersonController: SportCarBrandOnlineSelectorDelegate, SportCarSelectD
 
 extension PersonController: PersonStatusListGroupCellDelegate {
     func statusPressed(at idx: Int) {
+        if idx >= data.numberOfStatusCell() {
+            return
+        }
         selectedIdx = idx
         let status: Status
         if selectedCar == nil && user.isHost {
@@ -774,6 +778,12 @@ class PersonStatusListGroupCell: UITableViewCell {
             } else {
                 btns[idx].setImage(UIImage(named: "release_status_in_person"), for: .normal)
             }
+        }
+    }
+    
+    func clearImages() {
+        for btn in btns {
+            btn.setImage(nil, for: .normal)
         }
     }
     
