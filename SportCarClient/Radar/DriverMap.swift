@@ -84,7 +84,7 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
             }
             timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(RadarDriverMapController.getLocationData), userInfo: nil, repeats: true)
         } else if confirmToast == nil {
-            confirmToast = showConfirmToast(LS("跑车雷达"), message: LS("这里会将您的实时位置共享给周围用户，确认继续？"), target: self, onConfirm: #selector(confirmShowOnMap))
+            confirmToast = showConfirmToast(LS("跑车雷达"), message: LS("这里会将您的实时位置共享给周围用户，确认继续？\n如需隐身，请进入：个人-设置-定位可见 中设置隐身"), target: self, onConfirm: #selector(confirmShowOnMap))
         }
     }
     

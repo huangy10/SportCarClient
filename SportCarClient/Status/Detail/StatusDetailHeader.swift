@@ -25,7 +25,6 @@ class StatusDetailHeaderView: UIView {
     
     var headerContainer: UIView!
     var cover: UIImageView!
-//    var footerContainer: UIView!
     
     // 头部
     var avatarBtn: UIButton!
@@ -48,14 +47,6 @@ class StatusDetailHeaderView: UIView {
         configureCover()
         configureFooter()
     }
-    
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        backgroundColor = .white
-//        configureHeader()
-//        configureCover()
-//        configureFooter()
-//    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

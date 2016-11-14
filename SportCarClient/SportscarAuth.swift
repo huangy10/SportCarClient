@@ -54,7 +54,6 @@ class SportscarAuthController: PersonMineSettingsAuthController, LoadingProtocol
                 self.pp_hideProgressView()
                 self.showToast(LS("认证申请发送失败"))
         }
-        
     }
     
     override func getStaticLabelContentForIndex(_ index: Int) -> String {

@@ -580,7 +580,7 @@ extension PersonController: PersonStatusListGroupCellDelegate {
             if idx == 0 {
                 let release = StatusReleaseController()
                 release.presenter = self
-                present(release, animated: true, completion: nil)
+                present(release.toNavWrapper(), animated: true, completion: nil)
                 return
             } else {
                 status = data.getStatus(atIdx: idx - 1)
