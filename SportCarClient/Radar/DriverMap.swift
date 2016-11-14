@@ -202,12 +202,9 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
     
     func mapView(_ mapView: BMKMapView!, viewFor annotation: BMKAnnotation!) -> BMKAnnotationView! {
         if annotation is FBAnnotationCluster {
-//            print("cluster")
             let reuseId = "cluster"
             var clusterView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? ClusterAnnotationView
             if clusterView == nil {
-//                clusterView = FBAnnotationClusterView(annotation: annotation, reuseIdentifier: reuseId, configuration: FBAnnotationClusterViewOptions.default())
-//                clusterView = FBAnnotationClusterView(annotation: annotation, reuseIdentifier: reuseId, options: nil)
                 clusterView = ClusterAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
                 clusterView?.delegate = self
             } else {
@@ -239,14 +236,18 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
     }
     
     func mapView(_ mapView: BMKMapView!, regionDidChangeAnimated animated: Bool) {
+        reloadMapClusterPins()
+    }
+    
+    func reloadMapClusterPins() {
         DispatchQueue.global(qos: .userInitiated).async {
-            let mapBoundsWidth = Double(mapView.bounds.width)
-            let mapRectWidth = mapView.visibleMapRect.size.width
+            let mapBoundsWidth = Double(self.map.bounds.width)
+            let mapRectWidth = self.map.visibleMapRect.size.width
             let scale = mapBoundsWidth / mapRectWidth
-            let annotationArray = self.clusteringManager.clusteredAnnotationsWithinMapRect(mapView.visibleMapRect, withZoomScale: scale)
+            let annotationArray = self.clusteringManager.clusteredAnnotationsWithinMapRect(self.map.visibleMapRect, withZoomScale: scale)
             
-            DispatchQueue.main.async(execute: { 
-                self.clusteringManager.displayAnnotations(annotationArray, onMapView: mapView)
+            DispatchQueue.main.async(execute: {
+                self.clusteringManager.displayAnnotations(annotationArray, onMapView: self.map)
             })
         }
     }
@@ -260,10 +261,6 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
     func mapTapped() {
         showUserBtnPressed()
     }
-}
-
-// MARK: - 网络&数据
-extension RadarDriverMapController {
     
     /**
      更新用户的位置
@@ -308,11 +305,11 @@ extension RadarDriverMapController {
                     anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
                     if onlyOnList && anno.onMap {
                         anno.onMap = false
-//                        self.map.removeAnnotation(anno)
+                        //                        self.map.removeAnnotation(anno)
                         dirty = true
                     } else if !onlyOnList && !anno.onMap {
                         anno.onMap = true
-//                        self.map.addAnnotation(anno)
+                        //                        self.map.addAnnotation(anno)
                         annotations.append(anno)
                         dirty = true
                     } else {
@@ -327,7 +324,7 @@ extension RadarDriverMapController {
                     self.userAnnos[userID] = anno
                     if !onlyOnList {
                         anno.onMap = true
-//                        self.map.addAnnotation(anno)
+                        //                        self.map.addAnnotation(anno)
                         annotations.append(anno)
                         dirty = true
                     } else {
@@ -344,6 +341,7 @@ extension RadarDriverMapController {
             }
             if dirty {
                 self.clusteringManager.setAnnotations(annotations)
+                self.reloadMapClusterPins()
             }
             self.locationUpdatingRequest = nil
             self.lastUpdate = Date()
@@ -352,47 +350,12 @@ extension RadarDriverMapController {
                     self.userList.reloadData()
                 })
             }
-            }, onError: { (code) in
-                self.locationUpdatingRequest = nil
+        }, onError: { (code) in
+            self.locationUpdatingRequest = nil
         })
-
-//        
-//        locationUpdatingRequest = requester.getRadarData(userLocation!.location.coordinate, scanCenter: scanCenter, filterDistance: distance, onSuccess: { (json) -> () in
-//            // 当前正在显示的用户
-//            for data in json!.arrayValue {
-//                // 创建用户对象
-//                let user: User = try! MainManager.sharedManager.getOrCreate(data)
-//                let userID = user.ssidString
-//                if let anno = self.userAnnos[userID] {
-//                    let loc = data["loc"]
-//                    anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
-//                } else {
-//                    let anno = UserAnnotation()
-//                    anno.user = user
-//                    anno.title = " "
-//                    let loc = data["loc"]
-//                    anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
-//                    self.userAnnos[userID] = anno
-//                    self.map.addAnnotation(anno)
-//                }
-//            }
-//            self.locationUpdatingRequest = nil
-//            self.lastUpdate = NSDate()
-//            if self.showUserListBtn.tag == 1 {
-//                dispatch_async(dispatch_get_main_queue(), { 
-//                    self.userList.reloadData()
-//                })
-//            }
-//            }) { (code) -> () in
-//                self.locationUpdatingRequest = nil
-//        }
     }
     
     func onUserBlocked(_ notification: Foundation.Notification) {
-//        guard let user = notification.userInfo?[kUserKey] as? User else {
-//            assertionFailure()
-//            return
-//        }
         let user = (notification as NSNotification).userInfo![kUserKey] as! User
         let blockStatus = (notification as NSNotification).userInfo![kAccountBlackStatusKey] as! String
         if blockStatus == kAccountBlackStatusBlocked {
