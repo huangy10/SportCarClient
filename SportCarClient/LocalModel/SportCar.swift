@@ -40,9 +40,6 @@ class SportCar: BaseModel{
         let imagesRaw = JSON(data: images!.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
         imageArray = $.map(imagesRaw.arrayValue, transform: { SFURL($0.stringValue)!})
         
-//        if let video = video {
-//            videoURL = SFURL(video)
-//        }
         if let audio = audio {
             audioURL = SFURL(audio)
         }
@@ -68,7 +65,6 @@ class SportCar: BaseModel{
         let videoRaw = media["video"].arrayValue
         if videoRaw.count > 0 {
             video = videoRaw[0].stringValue
-//            videoURL = SFURL(video!)
         }
         logo = json["logo"].stringValue
         name = json["name"].stringValue

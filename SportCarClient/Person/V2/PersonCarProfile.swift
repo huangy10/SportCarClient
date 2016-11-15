@@ -40,8 +40,9 @@ class PersonCarProfileView: UIView {
     
     var statusListHeader: UILabel!
     
-    init (car: SportCar) {
+    init (car: SportCar, user: User) {
         self.car = car
+        self.user = user
         super.init(frame: UIScreen.main.bounds)
         backgroundColor = .clear
         
@@ -226,7 +227,7 @@ class PersonCarProfileView: UIView {
         speedLbl.text = car.maxSpeed
         acceLbl.text = car.zeroTo60
         
-        editBtn.isHidden = !(car.mine && user.isHost)
+        editBtn.isHidden = !(user.isHost)
     }
     
     func setAudioWaveHidden(_ flag: Bool) {
@@ -234,7 +235,7 @@ class PersonCarProfileView: UIView {
             return
         }
         audioWave.isHidden = flag
-        audioWave.snp.remakeConstraints { (mk) in
+        paramBoardStack.snp.remakeConstraints { (mk) in
             if flag {
                 mk.top.equalTo(signatureLbl.snp.bottom).offset(22.5)
             } else {
@@ -242,7 +243,7 @@ class PersonCarProfileView: UIView {
             }
             mk.left.equalTo(self)
             mk.right.equalTo(self)
-            mk.height.equalTo(252)
+//            mk.height.equalTo(252)
         }
     }
     

@@ -16,6 +16,7 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
 //    weak var radarHome: RadarHomeController?
     
     var map: BMKMapView!
+    var mapOp: MapOpertaionView!
     var userAnnotate: BMKPointAnnotation!
     var locationService: BMKLocationService!
     var userLocation: BMKUserLocation?
@@ -39,11 +40,13 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
     var showOnMap: Bool = false
     weak var confirmToast: ConfirmToastPresentationController?
     weak var toast: UIView?
+    var zoomLevelToastDisplayed: Bool = false
     
     // about cluster
     let clusteringManager = FBClusteringManager()
     
     deinit {
+        print("deinit radar map")
         timer?.invalidate()
         NotificationCenter.default.removeObserver(self)
     }
@@ -166,6 +169,19 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
                 make.left.equalTo(mapFilterView)
                 make.size.equalTo(CGSize(width: 115, height: 40))
         }
+        
+        configureMapOps()
+    }
+    
+    func configureMapOps() {
+        mapOp = MapOpertaionView()
+        mapOp.map = map
+        mapOp.delegate = self
+        view.addSubview(mapOp)
+        mapOp.snp.makeConstraints { (mk) in
+            mk.bottom.equalTo(showUserListBtn)
+            mk.left.equalTo(view).offset(15)
+        }
     }
 }
 
@@ -236,6 +252,12 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
     }
     
     func mapView(_ mapView: BMKMapView!, regionDidChangeAnimated animated: Bool) {
+        if map.zoomLevel < 11 && !zoomLevelToastDisplayed {
+            zoomLevelToastDisplayed = true
+            showToast(LS("跑车范仅显示你附近30km的用户"))
+        } else if map.zoomLevel > 11 {
+            zoomLevelToastDisplayed = false
+        }
         reloadMapClusterPins()
     }
     
@@ -514,5 +536,11 @@ extension RadarDriverMapController: ClusterAnnotationViewDelegate {
         let region = BMKCoordinateRegionMake(center, span)
         map.setRegion(region, animated: true)
         
+    }
+}
+
+extension RadarDriverMapController: MapOperationDelegate {
+    func mapOperationGetUserLocation() -> CLLocationCoordinate2D? {
+        return userLocation?.location.coordinate
     }
 }

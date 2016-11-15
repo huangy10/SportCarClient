@@ -96,7 +96,7 @@ class PersonHeaderView: UIView {
             view.isHidden = false
             view.car = car
         } else {
-            let view = PersonCarProfileView(car: car)
+            let view = PersonCarProfileView(car: car, user: user)
             view.user = user
             view.delegate = self
             addSubview(view)

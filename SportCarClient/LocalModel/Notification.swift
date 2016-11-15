@@ -107,6 +107,13 @@ class Notification: BaseModel {
                 _obj = act
             }
         }
+        let carJSON = data["related_own"]
+        if carJSON.exists() {
+            let car = try manager.getOrCreate(carJSON) as SportCar
+            messageBody = ""
+            image = nil
+            _obj = car
+        }
         if _objInMem != nil {
             relatedObj = try _objInMem?.toJSONString(0)
         } else if _obj != nil{
@@ -184,6 +191,12 @@ class Notification: BaseModel {
             return [username, "在评论中提到了你"]
         case "ActivityComment:response":
             return [username, "在活动中回复了你"]
+        case "SportCarIdentificationRequestRecord:agree":
+            let own = try! getRelatedObj()! as SportCar
+            return [own.name!, " 的认证申请已经通过"]
+        case "SportCarIdentificationRequestRecord:deny":
+            let own = try! getRelatedObj()! as SportCar
+            return [own.name!, " 的认证申请被拒绝"]
         default:
             print(simplifiedMessageType)
             return ["没有定义的消息类型"]

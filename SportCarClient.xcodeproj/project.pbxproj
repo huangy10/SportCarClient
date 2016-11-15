@@ -60,6 +60,7 @@
 		BF599E761DD5C0F8000BE453 /* FBClusteringManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF599E6F1DD5C0F8000BE453 /* FBClusteringManager.swift */; };
 		BF599E771DD5C0F8000BE453 /* FBQuadTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF599E701DD5C0F8000BE453 /* FBQuadTree.swift */; };
 		BF599E781DD5C0F8000BE453 /* FBQuadTreeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF599E711DD5C0F8000BE453 /* FBQuadTreeNode.swift */; };
+		BF59F74B1DDAF2C800E20D4A /* MapOperationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF59F74A1DDAF2C800E20D4A /* MapOperationView.swift */; };
 		BF5B8CB61DC7A4D900541A5D /* StatusAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5B8CB51DC7A4D900541A5D /* StatusAnimations.swift */; };
 		BF5D19CE1D8A349C00A66FC0 /* NewsController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5D19CD1D8A349C00A66FC0 /* NewsController2.swift */; };
 		BF5D19D01D8A380E00A66FC0 /* NewsCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5D19CF1D8A380E00A66FC0 /* NewsCell2.swift */; };
@@ -364,6 +365,7 @@
 		BF599E6F1DD5C0F8000BE453 /* FBClusteringManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBClusteringManager.swift; path = 3rdParty/MapCluster/FBClusteringManager.swift; sourceTree = "<group>"; };
 		BF599E701DD5C0F8000BE453 /* FBQuadTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBQuadTree.swift; path = 3rdParty/MapCluster/FBQuadTree.swift; sourceTree = "<group>"; };
 		BF599E711DD5C0F8000BE453 /* FBQuadTreeNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FBQuadTreeNode.swift; path = 3rdParty/MapCluster/FBQuadTreeNode.swift; sourceTree = "<group>"; };
+		BF59F74A1DDAF2C800E20D4A /* MapOperationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapOperationView.swift; path = Basic/MapOperationView.swift; sourceTree = "<group>"; };
 		BF5B8CB51DC7A4D900541A5D /* StatusAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusAnimations.swift; path = Status/Animations/StatusAnimations.swift; sourceTree = "<group>"; };
 		BF5D19CD1D8A349C00A66FC0 /* NewsController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsController2.swift; path = News/V2/NewsController2.swift; sourceTree = "<group>"; };
 		BF5D19CF1D8A380E00A66FC0 /* NewsCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsCell2.swift; path = News/V2/NewsCell2.swift; sourceTree = "<group>"; };
@@ -667,6 +669,7 @@
 				BFBE19241C953286005114A0 /* UserPin.swift */,
 				BFFA15441C9D271E00E985DF /* Location.swift */,
 				BFC4F14F1CE6F176004D7BD0 /* LocationSelect */,
+				BF59F74A1DDAF2C800E20D4A /* MapOperationView.swift */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -2121,6 +2124,7 @@
 				BFCB96361C1F0551004F77E8 /* BlackBarNavigationController.swift in Sources */,
 				BFAA0CA91C46009F00AB5C3C /* StatusRequester.swift in Sources */,
 				BF8EC2D81CBA951D00003735 /* BackToHomeBtn.swift in Sources */,
+				BF59F74B1DDAF2C800E20D4A /* MapOperationView.swift in Sources */,
 				BFC0324E1C6D7A8400ECA69A /* PersonSettingMineDataSource.swift in Sources */,
 				BF972F101C9D6D9A00AF997B /* imageResizer.swift in Sources */,
 				BFFA61B31C7DDC88003BCB2B /* RadarRequester.swift in Sources */,
