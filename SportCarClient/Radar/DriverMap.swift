@@ -264,10 +264,11 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
     
     func reloadMapClusterPins() {
         DispatchQueue.global(qos: .userInitiated).async {
+
             let mapBoundsWidth = Double(self.map.bounds.width)
             let mapRectWidth = self.map.visibleMapRect.size.width
             let scale = mapBoundsWidth / mapRectWidth
-            let annotationArray = self.clusteringManager.clusteredAnnotationsWithinMapRect(self.map.visibleMapRect, withZoomScale: scale)
+            let annotationArray = self.clusteringManager.clusteredAnnotationsWithinMapRect(self.map.visibleMapRect, withZoomScale: scale, zoomLevel: self.map.zoomLevel)
             self.mapAnnoEmpty = annotationArray.count == 0
             DispatchQueue.main.async(execute: {
                 self.clusteringManager.displayAnnotations(annotationArray, onMapView: self.map)

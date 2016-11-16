@@ -53,10 +53,10 @@ open class FBClusteringManager : NSObject {
     }
     
     // rect传入的是map的visibleRect
-    open func clusteredAnnotationsWithinMapRect(_ rect:BMKMapRect, withZoomScale zoomScale:Double) -> [BMKAnnotation]{
+    open func clusteredAnnotationsWithinMapRect(_ rect:BMKMapRect, withZoomScale zoomScale:Double, zoomLevel: Float) -> [BMKAnnotation]{
         guard !zoomScale.isInfinite else { return [] }
         
-        let cellSize:CGFloat = FBClusteringManager.FBCellSizeForZoomScale(MKZoomScale(zoomScale))
+        let cellSize:CGFloat = FBClusteringManager.FBCellSizeForZoomLevel(zoomLevel)
         
         //        if delegate?.respondsToSelector("cellSizeFactorForCoordinator:") {
         //            cellSize *= delegate.cellSizeFactorForCoordinator(self)
@@ -179,9 +179,33 @@ open class FBClusteringManager : NSObject {
         return zoomLevel;
     }
     
+    open class func FBCellSizeForZoomLevel(_ zoomLevel: Float) -> CGFloat {
+        
+        switch (Int(zoomLevel)) {
+        case 13:
+            return 64
+        case 14:
+            return 64
+        case 15:
+            return 64
+        case 16:
+            return 32
+        case 17:
+            return 32
+        case 18:
+            return 32
+        case 18 ..< Int.max:
+            return 16
+            
+        default:
+            // less than 13 zoom level
+            return 88
+        }
+    }
+    
     open class func FBCellSizeForZoomScale(_ zoomScale:MKZoomScale) -> CGFloat {
         
-        let zoomLevel:Int = FBClusteringManager.FBZoomScaleToZoomLevel(zoomScale)
+        let zoomLevel:Int = FBClusteringManager.FBZoomScaleToZoomLevel(zoomScale) - 1
         
         switch (zoomLevel) {
         case 13:
