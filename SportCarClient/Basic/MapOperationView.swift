@@ -103,7 +103,7 @@ class MapOpertaionView: UIView {
             .config(40, fontWeight: UIFontWeightUltraLight, textColor: .black, textAlignment: .center, text: "-")
             .layout { (mk) in
                 mk.centerX.equalToSuperview()
-                mk.centerY.equalTo(container.snp.bottom).offset(-22)
+                mk.centerY.equalTo(container.snp.bottom).offset(-24)
         }
     }
     

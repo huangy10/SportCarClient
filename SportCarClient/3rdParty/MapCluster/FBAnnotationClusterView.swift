@@ -28,7 +28,7 @@ class ClusterAnnotationView: BMKAnnotationView {
         let count = cluster.annotations.count
         
         bounds = CGRect(x: 0, y: 0, width: PinSize, height: PinSize)
-        let bg = addSubview(UIView.self).config(kHighlightRed)
+        let bg = addSubview(UIView.self).config(UIColor(white: 0.32, alpha: 1))
             .layout { (mk) in
                 mk.edges.equalTo(self)
         }.addShadow()

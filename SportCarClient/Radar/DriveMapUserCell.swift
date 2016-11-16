@@ -37,65 +37,6 @@ class DriverMapUserCell: UITableViewCell {
     }
     
     func createSubviews() {
-//        let superview = self.contentView
-//        superview.backgroundColor = UIColor.white
-//        //
-//        avatar = UIImageView()
-//        superview.addSubview(avatar)
-//        avatar.layer.cornerRadius = 17.5
-//        avatar.clipsToBounds = true
-//        avatar.snp.makeConstraints { (make) -> Void in
-//            make.centerY.equalTo(superview)
-//            make.left.equalTo(25)
-//            make.size.equalTo(35)
-//        }
-//        //
-//        nameLbl = UILabel()
-//        nameLbl.textColor = UIColor.black
-//        nameLbl.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightSemibold)
-//        superview.addSubview(nameLbl)
-//        nameLbl.snp.makeConstraints { (make) -> Void in
-//            make.left.equalTo(avatar.snp.right).offset(13)
-//            make.top.equalTo(avatar)
-//        }
-//        //
-//        avatarClubLogo = UIButton()
-//        avatarClubLogo.layer.cornerRadius = 10
-//        avatarClubLogo.clipsToBounds = true
-//        superview.addSubview(avatarClubLogo)
-//        avatarClubLogo.snp.makeConstraints { (make) -> Void in
-//            make.left.equalTo(nameLbl.snp.right).offset(9)
-//            make.centerY.equalTo(nameLbl)
-//            make.size.equalTo(20)
-//        }
-//        //
-//        distanceLbl = UILabel()
-//        distanceLbl.textColor = UIColor(white: 0, alpha: 0.58)
-//        distanceLbl.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
-//        superview.addSubview(distanceLbl)
-//        distanceLbl.snp.makeConstraints { (make) -> Void in
-//            make.left.equalTo(nameLbl)
-//            make.top.equalTo(nameLbl.snp.bottom).offset(3)
-//        }
-//        //
-//        let arrow = UIImageView(image: UIImage(named: "account_btn_next_icon"))
-//        superview.addSubview(arrow)
-//        arrow.snp.makeConstraints { (make) -> Void in
-//            make.centerY.equalTo(avatar)
-//            make.right.equalTo(superview).offset(-25)
-//            make.size.equalTo(CGSize(width: 9, height: 15))
-//        }
-//        //
-//        let sepLine = UIView()
-//        sepLine.backgroundColor = UIColor(white: 0.945, alpha: 1)
-//        superview.addSubview(sepLine)
-//        sepLine.snp.makeConstraints { (make) -> Void in
-//            make.left.equalTo(superview)
-//            make.right.equalTo(superview)
-//            make.bottom.equalTo(superview)
-//            make.height.equalTo(0.5)
-//        }
-//        
         configureAvatar()
         configureNameLbl()
         configureAvatarClub()
@@ -179,9 +120,11 @@ class DriverMapUserCell: UITableViewCell {
         avatarCarLogoIcon = addSubview(UIImageView.self)
             .layout({ (mk) in
                 mk.centerY.equalTo(avatarCarNameLbl)
-                mk.right.equalTo(avatarCarNameLbl.snp.left)
-                mk.size.equalTo(21)
+                mk.right.equalTo(avatarCarNameLbl.snp.left).offset(2)
+                mk.size.equalTo(20)
             })
+        avatarCarLogoIcon.layer.cornerRadius = 10
+        avatarCarLogoIcon.clipsToBounds = true
     }
     
     func configureGenderIcon() {
@@ -189,7 +132,7 @@ class DriverMapUserCell: UITableViewCell {
             .layout({ (mk) in
                 mk.centerY.equalTo(nameLbl)
                 mk.left.equalTo(nameLbl.snp.right)
-                mk.size.equalTo(15)
+                mk.size.equalTo(12)
             })
         genderIcon.contentMode = .scaleAspectFit
     }
@@ -210,19 +153,18 @@ class DriverMapUserCell: UITableViewCell {
         }
         distanceLbl.text = LS("距离你  ") + "\(Int(distance))" + (showKM ? "km" : "m")
         if let avatarClub = user.avatarClubModel {
-//            avatarClubLogo.kf.setImage(with: avatarClub.logoURL!, for: .normal)
             avatarClubIcon.kf.setImage(with: avatarClub.logoURL!)
             genderIcon.snp.remakeConstraints({ (mk) in
                 mk.centerY.equalTo(nameLbl)
-                mk.left.equalTo(avatarClubIcon.snp.right).offset(2)
-                mk.size.equalTo(15)
+                mk.left.equalTo(avatarClubIcon.snp.right).offset(3)
+                mk.size.equalTo(12)
             })
         } else {
-            avatarClubIcon.isHidden = true
+            avatarClubIcon.image = nil
             genderIcon.snp.remakeConstraints({ (mk) in
                 mk.centerY.equalTo(nameLbl)
-                mk.left.equalTo(nameLbl.snp.right)
-                mk.size.equalTo(15)
+                mk.left.equalTo(nameLbl.snp.right).offset(3)
+                mk.size.equalTo(12)
             })
         }
         
@@ -236,7 +178,7 @@ class DriverMapUserCell: UITableViewCell {
             avatarCarLogoIcon.isHidden = true
         }
         
-        if user.gender == "m" {
+        if user.gender == "男" {
             genderIcon.image = #imageLiteral(resourceName: "gender_mark_male")
         } else {
             genderIcon.image = #imageLiteral(resourceName: "gender_mark_female")

@@ -28,12 +28,14 @@ class UserAnnotationView: BMKAnnotationView {
             avatar.kf.setImage(with: user.avatarURL!, for: .normal)
             if let avatarCarURL = user.avatarCarModel?.logoURL {
                 avatarCar.kf.setImage(with: avatarCarURL)
+            } else {
+                avatarCar.image = nil
             }
             if user.identified {
                 avatar.layer.borderColor = kHighlightRed.cgColor
                 avatar.layer.borderWidth = 2
             } else {
-                avatar.layer.borderColor = nil
+                avatar.layer.borderColor = UIColor.clear.cgColor
             }
         }
     }

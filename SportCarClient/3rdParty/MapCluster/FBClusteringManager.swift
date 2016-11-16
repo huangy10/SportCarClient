@@ -52,6 +52,7 @@ open class FBClusteringManager : NSObject {
         lock.unlock()
     }
     
+    // rect传入的是map的visibleRect
     open func clusteredAnnotationsWithinMapRect(_ rect:BMKMapRect, withZoomScale zoomScale:Double) -> [BMKAnnotation]{
         guard !zoomScale.isInfinite else { return [] }
         
@@ -71,6 +72,10 @@ open class FBClusteringManager : NSObject {
         var clusteredAnnotations = [BMKAnnotation]()
         
         lock.lock()
+//        print(FBQuadTreeNode.FBBoundingBoxForMapRect(rect))
+//        for a in self.allAnnotations() {
+//            print(a.coordinate)
+//        }
         
         for i in minX...maxX {
             

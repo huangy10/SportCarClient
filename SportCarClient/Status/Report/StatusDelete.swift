@@ -52,7 +52,7 @@ class StatusDeleteController: PresentTemplateViewController, LoadingProtocol {
             NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: kStatusDidDeletedNotification), object: nil, userInfo: [kStatusDidDeletedStatusIDKey: self.status.ssidString, kStatusKey: self.status])
             waitSignal.signal()
             
-            self.delegate?.statusDidDeleted()
+//            self.delegate?.statusDidDeleted()
             self.hideAnimated({ [weak self] in
                 DispatchQueue.main.async(execute: {
                     self?.delegate?.statusDidDeleted()

@@ -85,7 +85,7 @@ class ActivityDetailHeaderView: UIView {
         backMask.snp.makeConstraints { (make) in
             make.edges.equalTo(coverContainer)
         }
-        backMask.addShadow(opacity: 1, offset: CGSize(width: 0, height: -3))
+        backMask.addShadow(opacity: 0.2, offset: CGSize(width: 0, height: -3))
         
         // 加一块白色的遮罩将cover底部超出的部分挡住
         addSubview(UIView.self).config(.white)

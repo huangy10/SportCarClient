@@ -79,6 +79,7 @@ open class FBQuadTree : NSObject {
         let tempArray = node.annotations
         
         for annotation in tempArray {
+            
             if (FBQuadTreeNode.FBBoundingBoxContainsCoordinate(box, coordinate: annotation.coordinate)) {
                 callback(annotation);
             }

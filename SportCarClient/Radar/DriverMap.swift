@@ -41,6 +41,7 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
     weak var confirmToast: ConfirmToastPresentationController?
     weak var toast: UIView?
     var zoomLevelToastDisplayed: Bool = false
+    var mapAnnoEmpty: Bool = false
     
     // about cluster
     let clusteringManager = FBClusteringManager()
@@ -267,7 +268,7 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
             let mapRectWidth = self.map.visibleMapRect.size.width
             let scale = mapBoundsWidth / mapRectWidth
             let annotationArray = self.clusteringManager.clusteredAnnotationsWithinMapRect(self.map.visibleMapRect, withZoomScale: scale)
-            
+            self.mapAnnoEmpty = annotationArray.count == 0
             DispatchQueue.main.async(execute: {
                 self.clusteringManager.displayAnnotations(annotationArray, onMapView: self.map)
             })
@@ -316,7 +317,7 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
             for data in json.arrayValue {
                 let onlyOnList = data["only_on_list"].boolValue
                 // 创建用户对象
-                let user: User = try! MainManager.sharedManager.getOrCreate(data)
+                let user: User = try! MainManager.sharedManager.getOrCreate(data, detailLevel: 1)
                 let userID = user.ssidString
                 if usersIDs.contains(value: userID) {
                     continue
@@ -361,7 +362,7 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
                     self.userAnnos[oldUser] = nil
                 }
             }
-            if dirty {
+            if dirty || self.mapAnnoEmpty {
                 self.clusteringManager.setAnnotations(annotations)
                 self.reloadMapClusterPins()
             }

@@ -573,6 +573,7 @@ extension ActivityDetailController: ActivityDetailHeaderDelegate {
         }  else {
             let detail = ActivityEditController()
             detail.act = act
+            navigationController?.pushViewController(detail, animated: true)
         }
     }
     
