@@ -120,7 +120,7 @@ class DriverMapUserCell: UITableViewCell {
         avatarCarLogoIcon = addSubview(UIImageView.self)
             .layout({ (mk) in
                 mk.centerY.equalTo(avatarCarNameLbl)
-                mk.right.equalTo(avatarCarNameLbl.snp.left).offset(2)
+                mk.right.equalTo(avatarCarNameLbl.snp.left).offset(-2)
                 mk.size.equalTo(20)
             })
         avatarCarLogoIcon.layer.cornerRadius = 10
