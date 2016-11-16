@@ -284,7 +284,7 @@ extension StatusDetailController: StatusDetailHeaderDelegate {
 
 extension StatusDetailController: StatusDeleteDelegate {
     func statusDidDeleted() {
-        backBtnPressed()
+        _ = navigationController?.popViewController(animated: true)
     }
 }
 

@@ -52,7 +52,9 @@ class StatusHotController: UICollectionViewController {
     func onStatusDeleted(notification: NSNotification) {
         if let statusID = (notification as NSNotification).userInfo![kStatusDidDeletedStatusIDKey] as? String{
             status = $.remove(status, callback: { $0.ssidString == statusID })
-            collectionView?.reloadData()
+            DispatchQueue.main.async {
+                self.collectionView?.reloadData()
+            }
         } else {
             assertionFailure()
         }

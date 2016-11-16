@@ -194,13 +194,17 @@ extension StatusBasicController {
         if let user = (notification as NSNotification).userInfo?[kUserKey] as? User {
             if name == kUserBlacklistedNotification {
                 status = status.filter({$0.user!.ssid != user.ssid})
-                tableView.reloadData()
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         } else if let users = (notification as NSNotification).userInfo?[kUserListKey] as? [User] {
             if name == kUserBlacklistedNotification {
                 let blIDs = users.map { $0.ssid }
                 status = status.filter { !blIDs.contains($0.ssid) }
-                tableView.reloadData()
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
         
