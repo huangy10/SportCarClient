@@ -120,9 +120,6 @@ class MessageManager {
                 }
                 do {
                     try self.parse(json!.arrayValue)
-//                    for data in json!.arrayValue {
-//                        try self.parse(data)
-//                    }
                 } catch let err {
                     print(err)
                     self.state = .error
@@ -138,8 +135,6 @@ class MessageManager {
                 if let code = code {
                     self.errorHanlde(code)
                 }
-//                self.state = .ERROR
-//                try! ChatModelManger.sharedManager.save()
                 // re-send the request
                 self.request = nil
                 let delay = DispatchTime.now() + Double(Int64(NSEC_PER_SEC * 3)) / Double(NSEC_PER_SEC)
@@ -172,10 +167,6 @@ class MessageManager {
             if json["chatID"].exists() {
                 let result = try ChatParser().parse(json)
                 let chat = result.0
-//                if let rosterItem = result.1 {
-//                    rosterItem.recentChatDes = chat.summary
-//                    RosterManager.defaultManager.addNewRosterItem(rosterItem)
-//                }
                 if let curRoom = _curRoom {
                     if curRoom.rosterItem.takeChatRecord(chat) {
                         curRoom.chats.append(chat)
@@ -189,9 +180,6 @@ class MessageManager {
             } else if json["notification_id"].exists() {
                 // 注意从服务器返回的消息是按照createdAt降序排列的
                 let notif = try NotificationParser().parse(json)
-//                if let list = _curNotifList {
-//                    list.data.insert(notif, atIndex: 0)
-//                }
                 newNotifications.append(notif)
                 
                 newNotifUnreadNum += 1

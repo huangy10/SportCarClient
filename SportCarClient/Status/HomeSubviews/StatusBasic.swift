@@ -40,6 +40,9 @@ class StatusBasicController: UITableViewController, StatusCellProtocol, LoadingP
     */
     /// 状态数据
     var status: [Status] = []
+    var isListEmpty: Bool {
+        return status.isEmpty
+    }
     
     var myRefreshControl: UIRefreshControl?
     
@@ -70,6 +73,7 @@ class StatusBasicController: UITableViewController, StatusCellProtocol, LoadingP
         NotificationCenter.default.addObserver(self, selector: #selector(onUserBlacklisted(_:)), name: NSNotification.Name(rawValue: kUserUnBlacklistedNotification), object: nil)
         
         tableView.register(StatusCell.self, forCellReuseIdentifier: StatusCell.reuseIdentifier)
+        tableView.register(SSEmptyListHintCell.self, forCellReuseIdentifier: "empty")
         myRefreshControl = UIRefreshControl()
         tableView.addSubview(myRefreshControl!)
         tableView.contentInset = UIEdgeInsetsMake(5, 0, 5, 0)
@@ -85,22 +89,35 @@ class StatusBasicController: UITableViewController, StatusCellProtocol, LoadingP
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return status.count
+        return isListEmpty ? 1 : status.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: StatusCell.reuseIdentifier, for: indexPath) as! StatusCell
-        cell.delegate = self
-        cell.status = status[indexPath.row]
-        return cell
+        if isListEmpty {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "empty", for: indexPath) as! SSEmptyListHintCell
+            cell.titleLbl.text = LS("暂无动态")
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: StatusCell.reuseIdentifier, for: indexPath) as! StatusCell
+            cell.delegate = self
+            cell.status = status[indexPath.row]
+            return cell
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return StatusCell.heightForStatus(status[(indexPath as NSIndexPath).row])
+        if isListEmpty {
+            return 100
+        } else {
+            return StatusCell.heightForStatus(status[(indexPath as NSIndexPath).row])
+        }
     }
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if isListEmpty {
+            return
+        }
         let s = status[indexPath.row]
         selectedCell = tableView.cellForRow(at: indexPath) as? StatusCell
         let detail = StatusDetailController(status: s)

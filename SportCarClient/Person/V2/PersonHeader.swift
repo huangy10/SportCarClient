@@ -178,3 +178,113 @@ extension PersonHeaderView: PersonCarProfileDelegate {
         dataSource.personHeaderCarNeedEdit()
     }
 }
+
+class SportCarViewListAddBtnCell: UICollectionViewCell {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        createSubviews()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func createSubviews() {
+        
+        let desLbl = contentView.addSubview(UILabel.self)
+            .config(14, fontWeight: UIFontWeightSemibold, textColor: kTextGray38, textAlignment: .left, text: LS("添加爱车"))
+            .layout { (make) in
+                make.centerX.equalTo(contentView).offset(18)
+                make.centerY.equalTo(contentView)
+        }
+        
+        let icon = UIImageView(image: UIImage(named: "person_add_more"))
+        self.addSubview(icon)
+        icon.snp.makeConstraints { (make) -> Void in
+            make.centerY.equalTo(desLbl)
+            make.right.equalTo(desLbl.snp.left).offset(-4)
+            make.size.equalTo(12)
+        }
+        
+    }
+}
+
+
+class SportscarViewListCarCell: UICollectionViewCell {
+    weak var car: SportCar?
+    var authIcon: UIImageView!
+    var carNameLbl: UILabel!
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        createSubviews()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func createSubviews() {
+        configureNameLbl()
+        configureAuthIcon()
+    }
+    
+    func configureNameLbl() {
+        carNameLbl = contentView.addSubview(UILabel.self)
+            .layout({ (make) in
+                make.center.equalTo(contentView)
+            })
+        carNameLbl.font = type(of: self).fontForNameLbl()
+        carNameLbl.textAlignment = .center
+        carNameLbl.textColor = kTextGray87
+    }
+    
+    func configureAuthIcon() {
+        authIcon = contentView.addSubview(UIImageView.self)
+            .config(UIImage(named: "auth_status_authed"), contentMode: .scaleAspectFit)
+            .layout({ (make) in
+                make.right.equalTo(carNameLbl)
+                make.bottom.equalTo(carNameLbl.snp.top)
+                make.width.equalTo(30)
+                make.height.equalTo(13)
+            })
+        authIcon.isHidden = true
+    }
+    
+    func set(car: SportCar?) {
+        self.car = car
+        if let car = car {
+            carNameLbl.text = car.name
+            setAuthStatus(car.identified)
+        } else {
+            carNameLbl.text = LS("动态")
+            setAuthStatus(false)
+        }
+    }
+    
+    func set(selected isSelected: Bool) {
+        if isSelected {
+            carNameLbl.textColor = UIColor.black
+        } else {
+            carNameLbl.textColor = kTextGray38
+        }
+    }
+    
+    func setAuthStatus(_ isAuthed: Bool) {
+        authIcon.isHidden = !isAuthed
+    }
+    
+    class func fontForNameLbl() -> UIFont {
+        return UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
+    }
+    
+    class func getRequiredSize(forGivenCar car: SportCar?) -> CGSize {
+        let height = 62 as CGFloat
+        let font = fontForNameLbl()
+        let text = car?.name ?? LS("动态")
+        let requiredWidth = text.sizeWithFont(font, boundingSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: height)).width
+        return CGSize(width: requiredWidth + 40, height: height)
+    }
+}
+

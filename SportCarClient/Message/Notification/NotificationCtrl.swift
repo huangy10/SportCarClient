@@ -9,14 +9,6 @@
 import UIKit
 import SnapKit
 
-protocol NotificationDataSource: class {
-    func numberOfNotifications() -> Int
-    
-    func notificationAt(_ index: Int) -> Notification
-    
-    func markNotificationAsReadAt(_ index: Int)
-}
-
 class NotificationController: UITableViewController, NotificationCellDelegate, LoadingProtocol {
     internal var delayWorkItem: DispatchWorkItem?
     
@@ -136,13 +128,6 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
         func club(_ notification: Notification) -> UIViewController {
             let club: Club = try! notification.getRelatedObj()!
             if club.attended {
-//                if club.founderUser!.isHost {
-//                    let detail = GroupChatSettingHostController(targetClub: club)
-//                    return detail
-//                } else {
-//                    let detail = GroupChatSettingController(targetClub: club)
-//                    return detail
-//                }
                 let chatRoom  = ChatRoomController()
                 chatRoom.targetClub = club
                 chatRoom.chatCreated = false
@@ -181,15 +166,7 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
         if let indexPath = tableView.indexPath(for: cell) {
             let notification = data[(indexPath as NSIndexPath).row]
             if let user = notification.user, let nav = parent?.navigationController {
-//                if user.isHost {
-////                    let detail = PersonBasicController(user: user)
-//                    nav.pushViewController(detail, animated: true)
-//                } else {
-//                    let detail = PersonOtherController(user: user)
-//                    nav.pushViewController(detail, animated: true)
-//                }
-                let detail = PersonController(user: user)
-                nav.pushViewController(detail, animated: true)
+                nav.pushViewController(user.showDetailController(), animated: true)
             } else {
                 assertionFailure()
             }

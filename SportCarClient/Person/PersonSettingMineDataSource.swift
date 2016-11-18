@@ -12,10 +12,10 @@ let PMUpdateFinishedNotification = "pm_update_finished_notification"
 let PMUpdateErrorNotification = "pm_update_error_notification"
 
 let kPersonMineSettingsLocationVisibleMapping: [String: String] = [
-    "all": "所有人",
-    "female_only": "仅女性",
-    "male_only": "仅男性",
-    "none": "不可见",
+    "all": "所有人可见",
+    "female_only": "仅女性可见",
+    "male_only": "仅男性可见",
+    "none": "隐身",
     "only_idol": "仅我关注的人",
     "only_friend": "互相关注",
 ]

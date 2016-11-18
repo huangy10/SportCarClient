@@ -130,6 +130,8 @@
 		BFAA0CA91C46009F00AB5C3C /* StatusRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0CA81C46009F00AB5C3C /* StatusRequester.swift */; };
 		BFAA0CAC1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0CAB1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift */; };
 		BFAA0CAE1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0CAD1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift */; };
+		BFAA0F4B1DDECE46007CB8BD /* BackMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0F4A1DDECE46007CB8BD /* BackMaskView.swift */; };
+		BFAA0F4D1DDED3A4007CB8BD /* CarWaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0F4C1DDED3A4007CB8BD /* CarWaveView.swift */; };
 		BFAC52271C1C5F9500107F71 /* AuthCodeBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC52261C1C5F9500107F71 /* AuthCodeBtnView.swift */; };
 		BFAC522A1C1C84A700107F71 /* InputableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC52291C1C84A700107F71 /* InputableViewController.swift */; };
 		BFADDF6A1C82A35100893435 /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFADDF691C82A35100893435 /* ShareController.swift */; };
@@ -167,15 +169,7 @@
 		BFC0327D1C72DA4300ECA69A /* UserMapLocationMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0327C1C72DA4300ECA69A /* UserMapLocationMark.swift */; };
 		BFC032801C72EEEB00ECA69A /* ActivityDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0327F1C72EEEB00ECA69A /* ActivityDetail.swift */; };
 		BFC032911C7451AD00ECA69A /* ActivityRelease.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC032901C7451AD00ECA69A /* ActivityRelease.swift */; };
-		BFC36B991C698D5900DC6FE2 /* PersonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36B981C698D5900DC6FE2 /* PersonController.swift */; };
-		BFC36B9C1C698DD200DC6FE2 /* PersonMyHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36B9B1C698DD200DC6FE2 /* PersonMyHeader.swift */; };
-		BFC36B9E1C699B7500DC6FE2 /* PersonOtherHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36B9D1C699B7500DC6FE2 /* PersonOtherHeader.swift */; };
-		BFC36BA01C69A6A900DC6FE2 /* PersonDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36B9F1C69A6A900DC6FE2 /* PersonDataSource.swift */; };
-		BFC36BA31C69A90400DC6FE2 /* SportscarViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BA21C69A90400DC6FE2 /* SportscarViewList.swift */; };
-		BFC36BA51C6AE5F500DC6FE2 /* SportCarInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BA41C6AE5F500DC6FE2 /* SportCarInfo.swift */; };
-		BFC36BA71C6B0F7400DC6FE2 /* PersonStatusHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BA61C6B0F7400DC6FE2 /* PersonStatusHeader.swift */; };
 		BFC36BAA1C6B27B000DC6FE2 /* PersonRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BA91C6B27B000DC6FE2 /* PersonRequest.swift */; };
-		BFC36BAC1C6C496A00DC6FE2 /* OtherPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BAB1C6C496A00DC6FE2 /* OtherPerson.swift */; };
 		BFC36BAF1C6C5E1D00DC6FE2 /* PersonMineSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BAE1C6C5E1D00DC6FE2 /* PersonMineSettings.swift */; };
 		BFC36BB21C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */; };
 		BFC36BB41C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */; };
@@ -436,6 +430,8 @@
 		BFAA0CA81C46009F00AB5C3C /* StatusRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusRequester.swift; path = Status/Network/StatusRequester.swift; sourceTree = "<group>"; };
 		BFAA0CAB1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusReleaseCoverSelectController.swift; path = Status/Release/StatusReleaseCoverSelectController.swift; sourceTree = "<group>"; };
 		BFAA0CAD1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusReleasePhotoAlbumListController.swift; path = Status/StatusReleasePhotoAlbumListController.swift; sourceTree = "<group>"; };
+		BFAA0F4A1DDECE46007CB8BD /* BackMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackMaskView.swift; sourceTree = "<group>"; };
+		BFAA0F4C1DDED3A4007CB8BD /* CarWaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CarWaveView.swift; path = Person/V2/CarWaveView.swift; sourceTree = "<group>"; };
 		BFAC52261C1C5F9500107F71 /* AuthCodeBtnView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthCodeBtnView.swift; path = Accounts/AuthCodeBtnView.swift; sourceTree = "<group>"; };
 		BFAC52291C1C84A700107F71 /* InputableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InputableViewController.swift; path = BaseTemplate/InputableViewController.swift; sourceTree = "<group>"; };
 		BFADDF691C82A35100893435 /* ShareController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShareController.swift; path = News/ShareController.swift; sourceTree = "<group>"; };
@@ -474,15 +470,7 @@
 		BFC0327C1C72DA4300ECA69A /* UserMapLocationMark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserMapLocationMark.swift; path = Activity/UserMapLocationMark.swift; sourceTree = "<group>"; };
 		BFC0327F1C72EEEB00ECA69A /* ActivityDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityDetail.swift; path = Activity/ActivityDetail.swift; sourceTree = "<group>"; };
 		BFC032901C7451AD00ECA69A /* ActivityRelease.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityRelease.swift; path = Activity/ActivityRelease.swift; sourceTree = "<group>"; };
-		BFC36B981C698D5900DC6FE2 /* PersonController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonController.swift; path = Person/PersonController.swift; sourceTree = "<group>"; };
-		BFC36B9B1C698DD200DC6FE2 /* PersonMyHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMyHeader.swift; path = Person/PersonMyHeader.swift; sourceTree = "<group>"; };
-		BFC36B9D1C699B7500DC6FE2 /* PersonOtherHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonOtherHeader.swift; path = Person/PersonOtherHeader.swift; sourceTree = "<group>"; };
-		BFC36B9F1C69A6A900DC6FE2 /* PersonDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonDataSource.swift; path = Person/PersonDataSource.swift; sourceTree = "<group>"; };
-		BFC36BA21C69A90400DC6FE2 /* SportscarViewList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportscarViewList.swift; path = Person/SportscarViewList.swift; sourceTree = "<group>"; };
-		BFC36BA41C6AE5F500DC6FE2 /* SportCarInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarInfo.swift; path = Person/SportCarInfo.swift; sourceTree = "<group>"; };
-		BFC36BA61C6B0F7400DC6FE2 /* PersonStatusHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonStatusHeader.swift; path = Person/PersonStatusHeader.swift; sourceTree = "<group>"; };
 		BFC36BA91C6B27B000DC6FE2 /* PersonRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonRequest.swift; path = Person/PersonRequest.swift; sourceTree = "<group>"; };
-		BFC36BAB1C6C496A00DC6FE2 /* OtherPerson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OtherPerson.swift; path = Person/OtherPerson.swift; sourceTree = "<group>"; };
 		BFC36BAE1C6C5E1D00DC6FE2 /* PersonMineSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettings.swift; path = Person/PersonMineSettings.swift; sourceTree = "<group>"; };
 		BFC36BB11C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsNewMessageNotification.swift; path = Person/PersonMineSettingsNewMessageNotification.swift; sourceTree = "<group>"; };
 		BFC36BB31C6C730800DC6FE2 /* PersonMineSettingsLocationVisiblity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonMineSettingsLocationVisiblity.swift; path = Person/PersonMineSettingsLocationVisiblity.swift; sourceTree = "<group>"; };
@@ -818,16 +806,11 @@
 		BF5491DE1C23070A0090D151 /* Person */ = {
 			isa = PBXGroup;
 			children = (
-				BF8A558B1DCB2D6D00F99F15 /* V2 */,
-				BF5E7EE91C8607B9004B8305 /* Other */,
+				BFC36BB01C6C6FA900DC6FE2 /* Settings */,
+				BFAA0F4E1DDED89E007CB8BD /* ProfileList */,
+				BF8A558B1DCB2D6D00F99F15 /* ProfileBoard */,
 				BFFFAFE91C84AA3000EBA314 /* UserSelect */,
-				BFC36BAD1C6C5DFA00DC6FE2 /* Mine */,
-				BFC36BA81C6B279D00DC6FE2 /* Network */,
 				BFC36BA11C69A8F200DC6FE2 /* Component */,
-				BFC36B9A1C698DC000DC6FE2 /* headers */,
-				BFC36B981C698D5900DC6FE2 /* PersonController.swift */,
-				BFC36B9F1C69A6A900DC6FE2 /* PersonDataSource.swift */,
-				BFC36BAB1C6C496A00DC6FE2 /* OtherPerson.swift */,
 			);
 			name = Person;
 			sourceTree = "<group>";
@@ -941,7 +924,7 @@
 			name = Report;
 			sourceTree = "<group>";
 		};
-		BF8A558B1DCB2D6D00F99F15 /* V2 */ = {
+		BF8A558B1DCB2D6D00F99F15 /* ProfileBoard */ = {
 			isa = PBXGroup;
 			children = (
 				BF8A558C1DCB6BA100F99F15 /* PersonController2.swift */,
@@ -950,7 +933,7 @@
 				BF8A55921DCC739100F99F15 /* PersonHeader.swift */,
 				BFCA21C61DD0C08F001D066C /* PersonDataSource2.swift */,
 			);
-			name = V2;
+			name = ProfileBoard;
 			sourceTree = "<group>";
 		};
 		BF8D42F11C745DA3009AD4BA /* Radar */ = {
@@ -1074,6 +1057,15 @@
 			name = Release;
 			sourceTree = "<group>";
 		};
+		BFAA0F4E1DDED89E007CB8BD /* ProfileList */ = {
+			isa = PBXGroup;
+			children = (
+				BF5E7EE91C8607B9004B8305 /* Other */,
+				BFC36BAD1C6C5DFA00DC6FE2 /* Mine */,
+			);
+			name = ProfileList;
+			sourceTree = "<group>";
+		};
 		BFAC52281C1C849000107F71 /* BaseTemplate */ = {
 			isa = PBXGroup;
 			children = (
@@ -1138,6 +1130,7 @@
 		BFB857D31CD89A9400610349 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				BFC36BA91C6B27B000DC6FE2 /* PersonRequest.swift */,
 				BFC032741C6F556C00ECA69A /* ActivityRequester.swift */,
 				BF54DD791C303D5100F635C0 /* NewsRequester.swift */,
 				BFB857D41CD89AAF00610349 /* BasicRequester.swift */,
@@ -1186,19 +1179,6 @@
 				BFC032541C6DD73700ECA69A /* PersonMineSettingAuth.swift */,
 			);
 			name = auth;
-			sourceTree = "<group>";
-		};
-		BFC032561C6DFF7400ECA69A /* info */ = {
-			isa = PBXGroup;
-			children = (
-				BFDFF2751C8BC33700055C1C /* CitySelect */,
-				BFC032651C6F19BD00ECA69A /* SportCarSelect */,
-				BFC032601C6EEFA800ECA69A /* avatarItemSelect */,
-				BFC032571C6E006800ECA69A /* PersonMineInfo.swift */,
-				BFC032591C6E22EF00ECA69A /* PersonMineSinglePropertyModifier.swift */,
-				BFC0325B1C6ECF5100ECA69A /* ImageInputSelector.swift */,
-			);
-			name = info;
 			sourceTree = "<group>";
 		};
 		BFC0325D1C6EE90900ECA69A /* 3rdPartyCode */ = {
@@ -1289,39 +1269,24 @@
 			name = Release;
 			sourceTree = "<group>";
 		};
-		BFC36B9A1C698DC000DC6FE2 /* headers */ = {
-			isa = PBXGroup;
-			children = (
-				BFC36B9B1C698DD200DC6FE2 /* PersonMyHeader.swift */,
-				BFC36B9D1C699B7500DC6FE2 /* PersonOtherHeader.swift */,
-			);
-			name = headers;
-			sourceTree = "<group>";
-		};
 		BFC36BA11C69A8F200DC6FE2 /* Component */ = {
 			isa = PBXGroup;
 			children = (
-				BFC36BA21C69A90400DC6FE2 /* SportscarViewList.swift */,
-				BFC36BA41C6AE5F500DC6FE2 /* SportCarInfo.swift */,
-				BFC36BA61C6B0F7400DC6FE2 /* PersonStatusHeader.swift */,
 				BFC3D42B1D5DB6B200494592 /* SportCarGallary.swift */,
+				BFAA0F4C1DDED3A4007CB8BD /* CarWaveView.swift */,
 			);
 			name = Component;
-			sourceTree = "<group>";
-		};
-		BFC36BA81C6B279D00DC6FE2 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				BFC36BA91C6B27B000DC6FE2 /* PersonRequest.swift */,
-			);
-			name = Network;
 			sourceTree = "<group>";
 		};
 		BFC36BAD1C6C5DFA00DC6FE2 /* Mine */ = {
 			isa = PBXGroup;
 			children = (
-				BFC032561C6DFF7400ECA69A /* info */,
-				BFC36BB01C6C6FA900DC6FE2 /* Settings */,
+				BFDFF2751C8BC33700055C1C /* CitySelect */,
+				BFC032651C6F19BD00ECA69A /* SportCarSelect */,
+				BFC032601C6EEFA800ECA69A /* avatarItemSelect */,
+				BFC032571C6E006800ECA69A /* PersonMineInfo.swift */,
+				BFC032591C6E22EF00ECA69A /* PersonMineSinglePropertyModifier.swift */,
+				BFC0325B1C6ECF5100ECA69A /* ImageInputSelector.swift */,
 			);
 			name = Mine;
 			sourceTree = "<group>";
@@ -1649,6 +1614,7 @@
 				BF2F5F071DC5FA9500C2CD55 /* SmallOperationBoard.swift */,
 				BF2F5F091DC6637400C2CD55 /* CommentStaticHeader.swift */,
 				BFDA4E791DD41BB200F9E504 /* MapAsFooter.swift */,
+				BFAA0F4A1DDECE46007CB8BD /* BackMaskView.swift */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2058,7 +2024,6 @@
 				BF599E741DD5C0F8000BE453 /* FBBoundingBox.swift in Sources */,
 				BF1D93581C52783000FD9997 /* StatusDetailCommentCell.swift in Sources */,
 				BF5D19D21D8A6C5300A66FC0 /* NewsDetail2.swift in Sources */,
-				BFC36BA01C69A6A900DC6FE2 /* PersonDataSource.swift in Sources */,
 				BF5D19CE1D8A349C00A66FC0 /* NewsController2.swift in Sources */,
 				BFBC52791C53902500EE7D34 /* ChatOpPanel.swift in Sources */,
 				BF2336941C57353C00F0AE41 /* ChatWave.swift in Sources */,
@@ -2089,7 +2054,6 @@
 				BFC032801C72EEEB00ECA69A /* ActivityDetail.swift in Sources */,
 				BF9664001C89449F0096D131 /* ClubAuth.swift in Sources */,
 				BF630EE11CABF6DD00EFD37E /* SinglePropertyModifer.swift in Sources */,
-				BFC36BA51C6AE5F500DC6FE2 /* SportCarInfo.swift in Sources */,
 				BFEF5BC81DC50D0B00868029 /* ContentInputFormatter.swift in Sources */,
 				BF54DD7A1C303D5100F635C0 /* NewsRequester.swift in Sources */,
 				BFF5EEF91CA428E700F64301 /* ClubRank.swift in Sources */,
@@ -2153,7 +2117,6 @@
 				BF6308A51C19AF600087A4F0 /* ProfileInformation.swift in Sources */,
 				BF1AB8351CCB205700959096 /* MessageManager.swift in Sources */,
 				BF9B54AB1C7F5F740006D673 /* DriveMapUserCell.swift in Sources */,
-				BFC36BA71C6B0F7400DC6FE2 /* PersonStatusHeader.swift in Sources */,
 				BF24291E1C7C524D005D4C6E /* DriverMap.swift in Sources */,
 				BF5E7EE61C85EA3D004B8305 /* Suggestions.swift in Sources */,
 				BF8A558F1DCB6BF100F99F15 /* PersonProfile.swift in Sources */,
@@ -2166,7 +2129,6 @@
 				BF599E751DD5C0F8000BE453 /* FBAnnotationCluster.swift in Sources */,
 				BF9664041C89CBD10096D131 /* ClubBriefInfo.swift in Sources */,
 				BF2429221C7C8E15005D4C6E /* UIImage+Gif.swift in Sources */,
-				BFC36B9C1C698DD200DC6FE2 /* PersonMyHeader.swift in Sources */,
 				BFE5985D1CB4A31100001F99 /* InlineUserSelectMiniCell.swift in Sources */,
 				BF599E721DD5C0F8000BE453 /* FBAnnotation.swift in Sources */,
 				BF58990E1C4D14A3005496EA /* SportCarSelectList.swift in Sources */,
@@ -2182,7 +2144,6 @@
 				BF23368E1C56529B00F0AE41 /* ChatRequester.swift in Sources */,
 				BF8D42FD1C7481F5009AD4BA /* ActivityReleaseCell.swift in Sources */,
 				BFC032751C6F556C00ECA69A /* ActivityRequester.swift in Sources */,
-				BFC36B9E1C699B7500DC6FE2 /* PersonOtherHeader.swift in Sources */,
 				BFAA0CAE1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift in Sources */,
 				BF2A19B71CDF808100073E1A /* ClubRequster.swift in Sources */,
 				BF2429271C7D62D6005D4C6E /* UserOnMap.swift in Sources */,
@@ -2200,6 +2161,7 @@
 				BFDA4E7A1DD41BB200F9E504 /* MapAsFooter.swift in Sources */,
 				BFAA0CAC1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift in Sources */,
 				BF599E771DD5C0F8000BE453 /* FBQuadTree.swift in Sources */,
+				BFAA0F4D1DDED3A4007CB8BD /* CarWaveView.swift in Sources */,
 				BF5E7EE81C85EC45004B8305 /* SportscarAuth.swift in Sources */,
 				BFC36BAA1C6B27B000DC6FE2 /* PersonRequest.swift in Sources */,
 				BF662A131CCB664C00B3D84D /* RosterController.swift in Sources */,
@@ -2215,15 +2177,14 @@
 				BFE967251CA584A20097C42C /* Status.generated.swift in Sources */,
 				BFE598591CB4107300001F99 /* ActivityDetailHeader.swift in Sources */,
 				BFC36BB21C6C6FD100DC6FE2 /* PersonMineSettingsNewMessageNotification.swift in Sources */,
+				BFAA0F4B1DDECE46007CB8BD /* BackMaskView.swift in Sources */,
 				BFCB963A1C1FB0AE004F77E8 /* SportCarRequester.swift in Sources */,
 				BFC032721C6F508B00ECA69A /* ActivtyList.swift in Sources */,
 				BFE967411CA591C30097C42C /* LocationModel.swift in Sources */,
 				BFEF5BC41DC4CF3800868029 /* BasicBottomBar.swift in Sources */,
 				BFC0325C1C6ECF5100ECA69A /* ImageInputSelector.swift in Sources */,
-				BFC36BAC1C6C496A00DC6FE2 /* OtherPerson.swift in Sources */,
 				BFC0324B1C6CCC7D00ECA69A /* PersonMineSettingsInvitation.swift in Sources */,
 				BFC0325A1C6E22EF00ECA69A /* PersonMineSinglePropertyModifier.swift in Sources */,
-				BFC36BA31C69A90400DC6FE2 /* SportscarViewList.swift in Sources */,
 				BFFA15471C9D2B1700E985DF /* RequestProtocol.swift in Sources */,
 				BF95EC2D1C8F251A00B77817 /* InlineUserDeletable.swift in Sources */,
 				BF8EC2D31CB9277C00003735 /* WaitableProtocol.swift in Sources */,
@@ -2236,7 +2197,6 @@
 				BF49FBAD1C19424D0019EBC2 /* ShinyButton.swift in Sources */,
 				BFC0327B1C700E8700ECA69A /* ActivityNearByCell.swift in Sources */,
 				BF5107151C60D28A008DC14F /* MyOrderedDict.swift in Sources */,
-				BFC36B991C698D5900DC6FE2 /* PersonController.swift in Sources */,
 				BF9B54AF1C7FFDB20006D673 /* RadarHomePopover.swift in Sources */,
 				BF6781701C15AB10001C89AE /* LoginRegister.swift in Sources */,
 				BFBE19251C953286005114A0 /* UserPin.swift in Sources */,

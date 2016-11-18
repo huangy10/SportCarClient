@@ -9,7 +9,7 @@
 import UIKit
 
 
-let kPersonMineSettingsLocationVisiblityStaticLabelString = [LS("仅列表可见"), LS("所有人"), LS("仅女性"), LS("仅男性"), LS("不可见"), LS("仅我关注的人"), LS("互相关注")]
+let kPersonMineSettingsLocationVisiblityStaticLabelString = [LS("仅列表可见"), LS("所有人可见"), LS("仅女性可见"), LS("仅男性可见"), LS("隐身"), LS("仅我关注的人"), LS("互相关注")]
 
 class PersonMineSettingsLocationVisiblityController: UITableViewController {
     
