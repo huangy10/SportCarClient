@@ -9,6 +9,7 @@
 import UIKit
 import AudioToolbox
 import UserNotifications
+import Kingfisher
 
 let kAppManagerNotificationLogout = "app_manager_notification_logout"
 
@@ -91,6 +92,8 @@ class AppManager: UIViewController {
         ChatModelManger.sharedManager.logout()
         // 停止聊天更新
         MessageManager.defaultManager.disconnect()
+        ImageCache.default.clearMemoryCache()
+
 //        ChatRecordDataSource.sharedDataSource.pause()
 //        ChatRecordDataSource.sharedDataSource.flushAll()
         //
@@ -178,5 +181,9 @@ class AppManager: UIViewController {
         DispatchQueue.main.async { 
             self.logout(true)
         }
+    }
+    
+    override func didReceiveMemoryWarning() {
+        ImageCache.default.clearMemoryCache()
     }
 }
