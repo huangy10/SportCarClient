@@ -65,13 +65,6 @@ class InlineUserSelectDeletable: InlineUserSelectController {
             delegate?.inlineUserSelectNeedAddMembers()
         } else {
             let user = users[(indexPath as NSIndexPath).row]
-//            if user.isHost {
-//                let detail = PersonBasicController(user: user)
-//                parentController?.navigationController?.pushViewController(detail, animated: true)
-//            } else {
-//                let detail = PersonOtherController(user: user)
-//                parentController?.navigationController?.pushViewController(detail, animated: true)
-//            }
             parentController?.navigationController?.pushViewController(user.showDetailController(), animated: true)
         }
     }

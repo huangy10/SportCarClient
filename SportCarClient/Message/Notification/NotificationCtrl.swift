@@ -42,6 +42,12 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
         super.viewWillDisappear(animated)
     }
     
+    func resortData() {
+        data.sort { (n1, n2) -> Bool in
+            return n1.createdAt! > n2.createdAt!
+        }
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -94,11 +100,6 @@ class NotificationController: UITableViewController, NotificationCellDelegate, L
     lazy var detailControllerMap: [String: (Notification)->UIViewController] = {
         func user(_ notification: Notification) -> UIViewController {
             let user = notification.user!
-//            if user.isHost {
-//                return PersonBasicController(user: user)
-//            } else {
-//                return PersonOtherController(user: user)
-//            }
             return user.showDetailController()
         }
         

@@ -34,7 +34,7 @@ class InlineUserSelectController: UICollectionViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
+        layout.minimumLineSpacing = 10
         let screenWidth = UIScreen.main.bounds.width
         layout.itemSize = CGSize(width: screenWidth / 4, height: screenWidth / 4)
         self.init(collectionViewLayout: layout)
@@ -81,9 +81,9 @@ class InlineUserSelectController: UICollectionViewController {
     }
     
     class func preferedHeightFor(_ userNum: Int, showAddBtn: Bool, showDeleteBtn: Bool) -> CGFloat {
-        let cellHeight = UIScreen.main.bounds.width / 4
+        let cellHeight = UIScreen.main.bounds.width / 4 + 10
         let cellNum = userNum + (showAddBtn ? 1 : 0) + (showDeleteBtn ? 1 : 0)
-        let height = CGFloat((cellNum - 1) / 4 + 1) * cellHeight + 15
+        let height = CGFloat((cellNum - 1) / 4 + 1) * cellHeight + 15 - 10
         if userNum >= 12 && !showAddBtn && !showDeleteBtn {
             return height + 50
         } else {

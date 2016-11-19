@@ -8,11 +8,13 @@
 
 import UIKit
 import SnapKit
+import Alamofire
 
 let kGroupChatSettingSectionTitles = ["", "信息", "通知", "聊天"]
 
-class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModifierDelegate, InlineUserSelectDelegate, FFSelectDelegate, LoadingProtocol, UITableViewDataSource, UITableViewDelegate {
+class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModifierDelegate, InlineUserSelectDelegate, FFSelectDelegate, LoadingProtocol, UITableViewDataSource, UITableViewDelegate, RequestManageMixin {
     internal var delayWorkItem: DispatchWorkItem?
+    var onGoingRequest: [String : Request] = [:]
     
     var tableView: UITableView!
     var targetClub: Club!
@@ -28,21 +30,14 @@ class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModi
     
     var inlineUsersCell: UITableViewCell!
     
+    deinit {
+        clearAllRequest()
+    }
+    
     init(targetClub: Club) {
         super.init(nibName: nil, bundle: nil)
         self.targetClub = targetClub
     }
-    
-//    init(rosterItem: RosterItem) {
-//        super.init(style: .Plain)
-//        self.rosterItem = rosterItem
-//        switch rosterItem.data! {
-//        case .CLUB(let club):
-//            targetClub = club
-//        default:
-//            break
-//        }
-//    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -70,7 +65,7 @@ class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModi
         
         let requester = ClubRequester.sharedInstance
         lp_start()
-        _ = requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
+        requester.getClubInfo(targetClub.ssidString, onSuccess: { (json) -> () in
             self.lp_stop()
             _ = try! self.targetClub.loadDataFromJSON(json!, detailLevel: 0)
             self.targetClub.members.removeAll()
@@ -87,17 +82,14 @@ class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModi
                     self.targetClub.remarkName = user.clubNickName
                 }
             }
-//            let actJson = json!["recent_act"]
-//            if actJson.exists() {
-//                self.targetClub.recentActivity = try! MainManager.sharedManager.getOrCreate(actJson) as Activity
-//            }
+
             self.tableView.reloadData()
             self.inlineUserSelect?.users = self.targetClub.members
             self.inlineUserSelect?.collectionView?.reloadData()
             
             }) { (code) -> () in
                 self.lp_stop()
-        }
+        }.registerForRequestManage(self)
         createInlineUserSelect()
     }
     
@@ -198,14 +190,6 @@ class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModi
             if (indexPath as NSIndexPath).row < 4 {
                 return 50
             }else {
-//                let userCellHeight = UIScreen.mainScreen().bounds.width / 4
-//                let userNum = targetClub.members.count + (inlineUserSelect!.showAddBtn ? 1 : 0)
-//                if userNum == 0 {
-//                    return userCellHeight
-//                }
-//                let height: CGFloat = userCellHeight * CGFloat((userNum - 1) / 4 + 1)
-//                return height
-                
                 return InlineUserSelectController.preferedHeightFor(targetClub.members.count, showAddBtn: inlineUserSelect!.showAddBtn, showDeleteBtn: false)
             }
         case 2:
@@ -225,11 +209,6 @@ class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModi
         switch (indexPath as NSIndexPath).section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsAvatarCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsAvatarCell
-//            cell.avatarImage.kf_setImageWithURL(targetClub.logoURL!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
-//                if error == nil {
-//                    cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.black)
-//                }
-//            })
             cell.avatarImage.kf.setImage(with: targetClub.logoURL!, placeholder: nil, options: nil, progressBlock: nil, completionHandler: { (image, error, _, _) in
                 if error == nil {
                     cell.avatarImage.setupForImageViewer(nil, backgroundColor: UIColor.black)
@@ -272,22 +251,6 @@ class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModi
             }else {
                 inlineUserSelect?.collectionView?.reloadData()
                 return inlineUsersCell
-//                let cell = tableView.dequeueReusableCellWithIdentifier("inline_user_select", forIndexPath: indexPath)
-//                cell.selectionStyle = .None
-//                if inlineUserSelect == nil {
-//                    inlineUserSelect = InlineUserSelectController()
-//                    inlineUserSelect?.delegate = self
-//                    cell.contentView.addSubview(inlineUserSelect!.view)
-//                    inlineUserSelect?.view.snp.makeConstraints(closure: { (make) -> Void in
-//                        make.edges.equalTo(cell.contentView)
-//                    })
-//                    inlineUserSelect?.relatedClub = targetClub
-//                    inlineUserSelect?.parentController = self
-//                }
-//                inlineUserSelect?.users = Array(targetClub.members)
-//                inlineUserSelect?.showAddBtn = !targetClub.onlyHostCanInvite
-//                inlineUserSelect?.collectionView?.reloadData()
-//                return cell
             }
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: PrivateChatSettingsCommonCell.reuseIdentifier, for: indexPath) as! PrivateChatSettingsCommonCell
@@ -324,15 +287,6 @@ class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModi
                 let cell = tableView.dequeueReusableCell(withIdentifier: "quit", for: indexPath)
                 cell.selectionStyle = .none
                 if deleteQuitBtn == nil {
-//                    deleteQuitBtn = UIButton()
-//                    deleteQuitBtn?.setImage(UIImage(named: "delete_and_quit_btn"), forState: .Normal)
-//                    deleteQuitBtn?.addTarget(self, action: #selector(GroupChatSettingController.deleteAndQuitBtnPressed), forControlEvents: .TouchUpInside)
-//                    cell.contentView.addSubview(deleteQuitBtn!)
-//                    deleteQuitBtn?.snp.makeConstraints(closure: { (make) -> Void in
-//                        make.centerX.equalTo(cell.contentView)
-//                        make.top.equalTo(cell.contentView).offset(15)
-//                        make.size.equalTo(CGSizeMake(150, 50))
-//                    })
                     deleteQuitBtn = cell.contentView.addSubview(UIButton.self)
                         .config(self, selector: #selector(deleteAndQuitBtnPressed), title: LS("删除并退出"), titleColor: kHighlightedRedTextColor, titleSize: 15)
                         .layout({ (make) in
@@ -371,11 +325,6 @@ class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModi
             // 举报
             let report = ReportBlacklistViewController(userID: targetClub.ssid, reportType: "club", parent: self)
             self.present(report, animated: false, completion: nil)
-        } else if (indexPath as NSIndexPath).section == 1 && (indexPath as NSIndexPath).row == 2 {
-//            if let act = targetClub.recentActivity {
-//                let detail = ActivityDetailController(act: act)
-//                self.navigationController?.pushViewController(detail, animated: true)
-//            }
         }
     }
     
@@ -424,7 +373,7 @@ class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModi
         let targets = userIDs.filter({!originIDs.contains($0)})
         let requester = ClubRequester.sharedInstance
         self.lp_start()
-        _ = requester.updateClubMembers(targetClub.ssidString, members: targets, opType: "add", onSuccess: { (json) -> () in
+        requester.updateClubMembers(targetClub.ssidString, members: targets, opType: "add", onSuccess: { (json) -> () in
             // TODO: 放到请求外面
             self.targetClub.members.append(contentsOf: users)
             self.targetClub.memberNum = Int32(self.targetClub.members.count)
@@ -439,11 +388,10 @@ class GroupChatSettingController: UIViewController, PersonMineSinglePropertyModi
                 if code == "no permission" {
                     self.showToast(LS("您没有权限进行此项操作"))
                 }
-        }
+        }.registerForRequestManage(self)
     }
     
     func clearChatContent() {
-//        hideToast()
         MessageManager.defaultManager.clearChatHistory(targetClub)
         showToast(LS("清除成功!"))
     }
