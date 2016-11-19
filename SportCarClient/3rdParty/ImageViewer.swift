@@ -35,6 +35,8 @@ class ImageViewer: UIViewController, LoadingProtocol {
     var scrollView = UIScrollView()
     var maskView = UIView()
     
+    var saveBtn: UIButton!
+    
     // MARK: - Lifecycle methods
     init(senderView: UIImageView,highQualityImageUrl: URL?, backgroundColor: UIColor, fadeToHide: Bool = false) {
         self.senderView = senderView
@@ -58,8 +60,26 @@ class ImageViewer: UIViewController, LoadingProtocol {
         configureMaskView()
         configureScrollView()
         configureCloseButton()
+        configureSaveBtn()
         configureImageView()
         configureConstraints()
+    }
+    
+    func configureSaveBtn() {
+        closeButton.isHidden = true
+        saveBtn = view.addSubview(UIButton.self).config(self, selector: #selector(saveToPhotos))
+            .layout({ (mk) in
+                mk.center.equalTo(closeButton)
+                mk.width.equalTo(50)
+                mk.height.equalTo(30)
+            })
+        
+        saveBtn.setTitle(LS("保存"), for: .normal)
+        saveBtn.layer.borderColor = kHighlightRed.cgColor
+        saveBtn.layer.borderWidth = 1
+        saveBtn.layer.cornerRadius = 3
+        
+        saveBtn.alpha = 0.0
     }
     
     // MARK: - View configuration
@@ -187,7 +207,8 @@ class ImageViewer: UIViewController, LoadingProtocol {
             }, completion: nil)
         
         UIView.animate(withDuration: 0.4, delay: 0.03, options: UIViewAnimationOptions.beginFromCurrentState, animations: {() -> Void in
-            self.closeButton.alpha = 1.0
+//            self.closeButton.alpha = 1.0
+            self.saveBtn.alpha = 1.0
             self.maskView.alpha = 1.0
             }, completion: nil)
         
@@ -316,6 +337,7 @@ class ImageViewer: UIViewController, LoadingProtocol {
                 }
                 
                 self.maskView.alpha = 0.0
+                self.saveBtn.alpha = 0.0
                 }, completion: {(finished) in
                     self.willMove(toParentViewController: nil)
                     self.view.removeFromSuperview()
@@ -335,6 +357,21 @@ class ImageViewer: UIViewController, LoadingProtocol {
     
     override var prefersStatusBarHidden : Bool {
         return true
+    }
+    
+    func saveToPhotos() {
+        lp_start()
+        UIImageWriteToSavedPhotosAlbum(imageView.image!, self, #selector(imageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+    
+    @objc func imageSaved(_ image: UIImage, didFinishSavingWithError: NSErrorPointer, contextInfo: UnsafeRawPointer) {
+        lp_stop()
+        if let err = didFinishSavingWithError?.pointee {
+            showToast(LS("保存失败: ") + err.description)
+        } else {
+            showToast(LS("保存成功"))
+        }
+        
     }
 }
 

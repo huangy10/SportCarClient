@@ -128,8 +128,6 @@
 		BFA2C76B1C412B1500202EF0 /* CommentPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2C76A1C412B1500202EF0 /* CommentPanel.swift */; };
 		BFA64F001C946AB900BA460F /* StatusHot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA64EFF1C946AB900BA460F /* StatusHot.swift */; };
 		BFAA0CA91C46009F00AB5C3C /* StatusRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0CA81C46009F00AB5C3C /* StatusRequester.swift */; };
-		BFAA0CAC1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0CAB1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift */; };
-		BFAA0CAE1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0CAD1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift */; };
 		BFAA0F4B1DDECE46007CB8BD /* BackMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0F4A1DDECE46007CB8BD /* BackMaskView.swift */; };
 		BFAA0F4D1DDED3A4007CB8BD /* CarWaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAA0F4C1DDED3A4007CB8BD /* CarWaveView.swift */; };
 		BFAC52271C1C5F9500107F71 /* AuthCodeBtnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC52261C1C5F9500107F71 /* AuthCodeBtnView.swift */; };
@@ -429,8 +427,6 @@
 		BFA2C76A1C412B1500202EF0 /* CommentPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentPanel.swift; path = News/CommentPanel.swift; sourceTree = "<group>"; };
 		BFA64EFF1C946AB900BA460F /* StatusHot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusHot.swift; path = Status/HomeSubviews/StatusHot.swift; sourceTree = "<group>"; };
 		BFAA0CA81C46009F00AB5C3C /* StatusRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusRequester.swift; path = Status/Network/StatusRequester.swift; sourceTree = "<group>"; };
-		BFAA0CAB1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusReleaseCoverSelectController.swift; path = Status/Release/StatusReleaseCoverSelectController.swift; sourceTree = "<group>"; };
-		BFAA0CAD1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusReleasePhotoAlbumListController.swift; path = Status/StatusReleasePhotoAlbumListController.swift; sourceTree = "<group>"; };
 		BFAA0F4A1DDECE46007CB8BD /* BackMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackMaskView.swift; sourceTree = "<group>"; };
 		BFAA0F4C1DDED3A4007CB8BD /* CarWaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CarWaveView.swift; path = Person/V2/CarWaveView.swift; sourceTree = "<group>"; };
 		BFAC52261C1C5F9500107F71 /* AuthCodeBtnView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthCodeBtnView.swift; path = Accounts/AuthCodeBtnView.swift; sourceTree = "<group>"; };
@@ -832,15 +828,6 @@
 			name = News;
 			sourceTree = "<group>";
 		};
-		BF58990A1C4CFEC6005496EA /* PhotoSelect */ = {
-			isa = PBXGroup;
-			children = (
-				BFAA0CAB1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift */,
-				BFAA0CAD1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift */,
-			);
-			name = PhotoSelect;
-			sourceTree = "<group>";
-		};
 		BF599E6A1DD5C0EC000BE453 /* MapCluster */ = {
 			isa = PBXGroup;
 			children = (
@@ -921,7 +908,6 @@
 			isa = PBXGroup;
 			children = (
 				BF77F3181C85357D00B09D9A /* ReportAndBlacklist.swift */,
-				BF5E7EDF1C85C770004B8305 /* PresentTemplate.swift */,
 				BF5E7EE11C85D559004B8305 /* StatusDelete.swift */,
 			);
 			name = Report;
@@ -1052,7 +1038,6 @@
 		BFAA0CAA1C461E2F00AB5C3C /* Release */ = {
 			isa = PBXGroup;
 			children = (
-				BF58990A1C4CFEC6005496EA /* PhotoSelect */,
 				BF3387E51C47C2AF00B95CAB /* StatusReleaseController.swift */,
 				BF58990B1C4CFF26005496EA /* informUser.swift */,
 				BF58990D1C4D14A3005496EA /* SportCarSelectList.swift */,
@@ -1133,6 +1118,7 @@
 		BFB857D31CD89A9400610349 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				BFAA0CA81C46009F00AB5C3C /* StatusRequester.swift */,
 				BFC36BA91C6B27B000DC6FE2 /* PersonRequest.swift */,
 				BFC032741C6F556C00ECA69A /* ActivityRequester.swift */,
 				BF54DD791C303D5100F635C0 /* NewsRequester.swift */,
@@ -1388,19 +1374,10 @@
 				BFCA900D1C50A07400B05E74 /* HomeSubViews */,
 				BF1EC23D1C4941350016F425 /* UserSelect */,
 				BFAA0CAA1C461E2F00AB5C3C /* Release */,
-				BFCD5CCF1C44C159004FC5F1 /* Network */,
 				BFCA90091C4FC64300B05E74 /* StatusHome.swift */,
 				BFCA900B1C4FC74B00B05E74 /* StatusCell.swift */,
 			);
 			name = Status;
-			sourceTree = "<group>";
-		};
-		BFCD5CCF1C44C159004FC5F1 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				BFAA0CA81C46009F00AB5C3C /* StatusRequester.swift */,
-			);
-			name = Network;
 			sourceTree = "<group>";
 		};
 		BFDBD5FF1D3D19B600793256 /* Sync */ = {
@@ -1609,6 +1586,7 @@
 		BFEF5BC01DC4CEE200868029 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				BF5E7EDF1C85C770004B8305 /* PresentTemplate.swift */,
 				BF313B7B1CA3D62A00545DB7 /* UIFactory.swift */,
 				BF8EC2D51CBA2DE300003735 /* Refresh.swift */,
 				BFEF5BC31DC4CF3800868029 /* BasicBottomBar.swift */,
@@ -2148,7 +2126,6 @@
 				BF23368E1C56529B00F0AE41 /* ChatRequester.swift in Sources */,
 				BF8D42FD1C7481F5009AD4BA /* ActivityReleaseCell.swift in Sources */,
 				BFC032751C6F556C00ECA69A /* ActivityRequester.swift in Sources */,
-				BFAA0CAE1C4667A500AB5C3C /* StatusReleasePhotoAlbumListController.swift in Sources */,
 				BF2A19B71CDF808100073E1A /* ClubRequster.swift in Sources */,
 				BF2429271C7D62D6005D4C6E /* UserOnMap.swift in Sources */,
 				BFB857D51CD89AAF00610349 /* BasicRequester.swift in Sources */,
@@ -2163,7 +2140,6 @@
 				BF9664061C89F0B60096D131 /* AvatarClubSelect.swift in Sources */,
 				BFE9675E1CA6E9DF0097C42C /* NewsComment.swift in Sources */,
 				BFDA4E7A1DD41BB200F9E504 /* MapAsFooter.swift in Sources */,
-				BFAA0CAC1C46221B00AB5C3C /* StatusReleaseCoverSelectController.swift in Sources */,
 				BF599E771DD5C0F8000BE453 /* FBQuadTree.swift in Sources */,
 				BFAA0F4D1DDED3A4007CB8BD /* CarWaveView.swift in Sources */,
 				BF5E7EE81C85EC45004B8305 /* SportscarAuth.swift in Sources */,

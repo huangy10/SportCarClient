@@ -156,6 +156,7 @@ class StatusDetailController: UIViewController {
     
     func configureHeader() {
         detail = StatusDetailHeaderView()
+        detail.isCoverZoomable = true
         detail.delegate = self
         detail.status = status
         header = UIView()

@@ -40,6 +40,8 @@ class StatusDetailHeaderView: UIView {
     var locLbl: UILabel!
     var opsView: SmallOperationBoard!
     
+    var isCoverZoomable: Bool = false
+    
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 0))
         backgroundColor = .white
@@ -209,7 +211,11 @@ class StatusDetailHeaderView: UIView {
             avatarCarLogoIcon.isHidden = true
             avatarCarNameLbl.isHidden = true
         }
+        
         cover.kf.setImage(with: status.coverURL!)
+        if isCoverZoomable {
+            cover.setupForImageViewer(status.coverURL!, backgroundColor: .black, fadeToHide: false)
+        }
         contentLbl.attributedText = type(of: self).makeFormatedStatusContent(status.content!)
         if let des = status.location?.descr {
             locLbl.text = des

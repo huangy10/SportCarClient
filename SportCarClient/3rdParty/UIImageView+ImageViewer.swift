@@ -36,61 +36,11 @@ public extension UIImageView {
         }
         let gestureRecognizer = ImageViewerTapGestureRecognizer(target: self, action: #selector(UIImageView.didTap(_:)), highQualityImageUrl: highQualityImageUrl, backgroundColor: backgroundColor, fadeToHide: fadeToHide)
         addGestureRecognizer(gestureRecognizer)
-        
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress(_:)))
-        addGestureRecognizer(longPress)
     }
     
     internal func didTap(_ recognizer: ImageViewerTapGestureRecognizer) {        
         let imageViewer = ImageViewer(senderView: self, highQualityImageUrl: recognizer.highQualityImageUrl, backgroundColor: recognizer.backgroundColor, fadeToHide: recognizer.fadeToHide)
         imageViewer.presentFromRootViewController()
-    }
-    
-    internal func didLongPress(_ recognizer: UILongPressGestureRecognizer) {
-        switch recognizer.state {
-        case .began:
-            if image == nil {
-                return
-            }
-            showSaveImageBtn()
-        default:
-            break
-        }
-    }
-    
-    func showSaveImageBtn() {
-        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-        let popover = getPopoverControllerForImageSave()
-        rootViewController?.present(popover, animated: true, completion: nil)
-    }
-    
-    func getPopoverControllerForImageSave() -> UIViewController {
-        let controller = UIViewController()
-        controller.preferredContentSize = CGSize(width: 100, height: 44)
-        controller.view.addSubview(UIButton.self).config(self, selector: #selector(saveImageToPhotoAlbums(_:)), title: LS("保存"), titleColor: UIColor.white, titleSize: 14, titleWeight: UIFontWeightRegular)
-            .layout { (make) in
-                make.edges.equalTo(controller.view)
-        }
-        controller.modalPresentationStyle = .popover
-        let popover = controller.popoverPresentationController
-        popover?.sourceRect = bounds
-        popover?.sourceView = self
-        popover?.permittedArrowDirections = [.down, .up]
-        popover?.backgroundColor = UIColor.black
-        popover?.delegate = self
-        return controller
-    }
-    
-    func saveImageToPhotoAlbums(_ sender: UIButton) {
-        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-        rootViewController?.dismiss(animated: true, completion: nil)
-        
-        UIImageWriteToSavedPhotosAlbum(image!, self, #selector(imageSaved(_: didFinishSavingWithError:contextInfo:)), nil)
-    }
-    
-    @objc func imageSaved(_ image: UIImage, didFinishSavingWithError: NSErrorPointer, contextInfo: UnsafeRawPointer) {
-        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-        rootViewController?.showToast(LS("保存成功"))
     }
 }
 
