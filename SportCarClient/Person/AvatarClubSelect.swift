@@ -9,6 +9,8 @@
 //
 
 import UIKit
+import SwiftyJSON
+import Alamofire
 
 
 protocol AvatarClubSelectDelegate: class {
@@ -17,7 +19,9 @@ protocol AvatarClubSelectDelegate: class {
 }
 
 
-class AvatarClubSelectController: AvatarItemSelectController {
+class AvatarClubSelectController: AvatarItemSelectController, RequestManageMixin {
+    internal var onGoingRequest: [String : Request] = [:]
+
     
     weak var delegate: AvatarClubSelectDelegate?
     
@@ -29,24 +33,38 @@ class AvatarClubSelectController: AvatarItemSelectController {
     var noIntialSelect: Bool = false
     
     var noClubLbl: UILabel!
+    var authed_only = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         createSubviews()
         let requester = ClubRequester.sharedInstance
-        _ = requester.getClubListAuthed({ (json) -> () in
-            var i = 0
-            for data in json!.arrayValue {
-                let club: Club = try! MainManager.sharedManager.getOrCreate(Club.reorganizeJSON(data))
-                self.clubs.append(club)
-                if club.ssid == self.preSelectID ?? self.user.avatarClubModel?.ssid && !self.noIntialSelect{
-                    self.selectedRow = i
-                }
-                i += 1
-            }
-            self.tableView.reloadData()
+        if authed_only {
+            requester.getClubListAuthed({ (json) -> () in
+                self.requestResponseHandler(json!.arrayValue)
             }) { (code) -> () in
+                self.showReqError(withCode: code)
+            }.registerForRequestManage(self)
+        } else {
+            requester.getClubList({ (json) in
+                self.requestResponseHandler(json!.arrayValue)
+            }, onError: { (code) in
+                self.showReqError(withCode: code)
+            }).registerForRequestManage(self)
         }
+    }
+    
+    func requestResponseHandler(_ json: [JSON]) {
+        var i = 0
+        for data in json {
+            let club: Club = try! MainManager.sharedManager.getOrCreate(Club.reorganizeJSON(data))
+            self.clubs.append(club)
+            if club.ssid == self.preSelectID ?? self.user.avatarClubModel?.ssid && !self.noIntialSelect{
+                self.selectedRow = i
+            }
+            i += 1
+        }
+        self.tableView.reloadData()
     }
     
     func createSubviews() {

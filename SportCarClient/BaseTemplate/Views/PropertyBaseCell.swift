@@ -44,8 +44,9 @@ class SSPropertyBaseCell: UITableViewCell {
             .layout({ (make) in
                 make.centerY.equalTo(staticLbl)
                 make.right.equalTo(superview).offset(-15)
-                make.size.equalTo(CGSize(width: 9, height: 15))
+                make.size.equalTo(CGSize(width: 15, height: 15))
             })
+        arrowIcon.contentMode = .scaleAspectFit
         sepLine = superview.addSubview(UIView.self)
             .config(UIColor(white: 0.933, alpha: 1))
             .layout { (make) in
@@ -56,7 +57,14 @@ class SSPropertyBaseCell: UITableViewCell {
         }
     }
     
-    
+    func setMarked(_ flag: Bool, arrowForHide: Bool = false) {
+        if arrowForHide {
+            arrowIcon.image = flag ? #imageLiteral(resourceName: "hook") : #imageLiteral(resourceName: "account_btn_next_icon")
+        } else {
+            arrowIcon.image = #imageLiteral(resourceName: "hook")
+            arrowIcon.isHidden = !flag
+        }
+    }
 }
 
 

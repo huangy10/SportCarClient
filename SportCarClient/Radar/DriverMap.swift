@@ -12,7 +12,7 @@ import Alamofire
 import Dollar
 
 
-class RadarDriverMapController: UIViewController, RadarFilterDelegate {
+class RadarDriverMapController: UIViewController {
 //    weak var radarHome: RadarHomeController?
     
     var map: BMKMapView!
@@ -26,9 +26,16 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
     var userList: UITableView!
     var showUserListBtn: UIButton!
     
+    @available(*, deprecated: 1)
     var mapFilter: RadarFilterController!
+    @available(*, deprecated: 1)
     var mapNav: BlackBarNavigationController!
+    @available(*, deprecated: 1)
     var mapFilterView: UIView!
+    
+    var filterType: String = "distance"
+    var filterClub: Club?
+    var mapFilterLbl: UILabel!
     
     var tapper: UITapGestureRecognizer!
     ///
@@ -150,27 +157,28 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
                 make.size.equalTo(showUserListBtn).dividedBy(2)
         }
 
-        mapFilter = RadarFilterController()
-        mapFilter.delegate = self
-        mapNav = mapFilter.toNavWrapper()
-
-        self.view.addSubview(mapNav.view)
-        mapFilter.view.toRound(20, clipsToBound: false)
-        mapFilterView = mapNav.view.addShadow()
-            .layout({ (make) in
-            make.bottom.equalTo(showUserListBtn)
-            make.right.equalTo(showUserListBtn.snp.left).offset(-13)
-            make.width.equalTo(115)
-            make.height.equalTo(40)
-        })
-
-        self.view.addSubview(UIButton.self).config(self, selector: #selector(toggleMapFilter))
-            .layout { (make) in
-                make.top.equalTo(mapFilterView)
-                make.left.equalTo(mapFilterView)
-                make.size.equalTo(CGSize(width: 115, height: 40))
-        }
+//        mapFilter = RadarFilterController()
+//        mapFilter.delegate = self
+//        mapNav = mapFilter.toNavWrapper()
+//
+//        self.view.addSubview(mapNav.view)
+//        mapFilter.view.toRound(20, clipsToBound: false)
+//        mapFilterView = mapNav.view.addShadow()
+//            .layout({ (make) in
+//            make.bottom.equalTo(showUserListBtn)
+//            make.right.equalTo(showUserListBtn.snp.left).offset(-13)
+//            make.width.equalTo(115)
+//            make.height.equalTo(40)
+//        })
+//
+//        self.view.addSubview(UIButton.self).config(self, selector: #selector(toggleMapFilter))
+//            .layout { (make) in
+//                make.top.equalTo(mapFilterView)
+//                make.left.equalTo(mapFilterView)
+//                make.size.equalTo(CGSize(width: 115, height: 40))
+//        }
         
+        configureMapFilter()
         configureMapOps()
     }
     
@@ -183,6 +191,38 @@ class RadarDriverMapController: UIViewController, RadarFilterDelegate {
             mk.bottom.equalTo(showUserListBtn)
             mk.left.equalTo(view).offset(15)
         }
+    }
+    
+    func configureMapFilter() {
+        let btn = view.addSubview(UIButton.self).config(self, selector: #selector(toggleMapFilter))
+            .config(.white)
+            .layout { (mk) in
+                mk.bottom.equalTo(showUserListBtn)
+                mk.right.equalTo(showUserListBtn.snp.left).offset(-13)
+                mk.width.equalTo(115)
+                mk.height.equalTo(40)
+        }
+        btn.layer.cornerRadius = 20
+        
+        let marker = btn.addSubview(UIImageView.self).config(#imageLiteral(resourceName: "up_arrow"), contentMode: .scaleAspectFit)
+            .layout { (mk) in
+                mk.right.equalTo(btn).offset(-20)
+                mk.centerY.equalTo(btn)
+                mk.size.equalTo(13)
+        }
+        
+        mapFilterLbl = btn.addSubview(UILabel.self).config(14, textColor: kTextGray87, text: LS("附近热门"))
+            .layout({ (mk) in
+                mk.left.equalTo(btn).offset(20)
+                mk.centerY.equalTo(btn)
+                mk.right.equalTo(marker.snp.left).offset(5)
+            })
+    }
+    
+    func toggleMapFilter() {
+        let filter = DriverMapFilterPickController(curFilterType: filterType, curFilterClub: filterClub)
+        filter.delegate = self
+        parent?.present(filter.toNavWrapper(), animated: true, completion: nil)
     }
 }
 
@@ -206,11 +246,9 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
             annotate.user = MainManager.sharedManager.hostUser!
             annotate.coordinate = userLocation.location.coordinate
             map.addAnnotation(annotate)
-//            map.setCenterCoordinate(annotate.coordinate, animated: true)
             let region = BMKCoordinateRegionMakeWithDistance(annotate.coordinate, 3000, 5000)
             map.setRegion(region, animated: true)
             userAnnotate = annotate
-//            clusteringManager.addAnnotations([annotate])
         }
         self.userLocation = userLocation
         userAnnotate.coordinate = userLocation.location.coordinate
@@ -303,11 +341,16 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
         let loc2 = CLLocation(latitude: mapBounds.center.latitude + mapBounds.span.latitudeDelta, longitude: mapBounds.center.longitude + mapBounds.span.longitudeDelta)
         let distance = loc1.distance(from: loc2)
         
-        let filterType = mapFilter.getFitlerTypeString()
-        let filterParam = mapFilter.getFilterParam()
+//        let filterType = mapFilter.getFitlerTypeString()
+        let filterParam: [String: AnyObject]?
+        if let club = filterClub {
+            filterParam = ["club_id": club.ssidString as AnyObject]
+        } else {
+            filterParam = nil
+        }
         
         
-        locationUpdatingRequest = requester.getRadarDataWithFilter(userLocation!.location.coordinate, scanCenter: scanCenter, filterDistance: distance, filterType: filterType, filterParam: filterParam, onSuccess: { (json) in
+        locationUpdatingRequest = requester.getRadarDataWithFilter(userLocation!.location.coordinate, scanCenter: scanCenter, filterDistance: distance, filterType: filterType, filterParam: filterParam , onSuccess: { (json) in
             // 当前正在显示的用户
             guard let json = json else {
                 return
@@ -329,11 +372,9 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
                     anno.coordinate = CLLocationCoordinate2D(latitude: loc["lat"].doubleValue, longitude: loc["lon"].doubleValue)
                     if onlyOnList && anno.onMap {
                         anno.onMap = false
-                        //                        self.map.removeAnnotation(anno)
                         dirty = true
                     } else if !onlyOnList && !anno.onMap {
                         anno.onMap = true
-                        //                        self.map.addAnnotation(anno)
                         annotations.append(anno)
                         dirty = true
                     } else {
@@ -348,7 +389,6 @@ extension RadarDriverMapController: BMKMapViewDelegate, BMKLocationServiceDelega
                     self.userAnnos[userID] = anno
                     if !onlyOnList {
                         anno.onMap = true
-                        //                        self.map.addAnnotation(anno)
                         annotations.append(anno)
                         dirty = true
                     } else {
@@ -423,8 +463,6 @@ extension RadarDriverMapController: UITableViewDataSource, UITableViewDelegate {
             return
         }
         assert(!user.isHost)
-//        let detail = PersonOtherController(user: user)
-
         parent?.navigationController?.pushViewController(user.showDetailController(), animated: true)
     }
     
@@ -440,9 +478,6 @@ extension RadarDriverMapController: UITableViewDataSource, UITableViewDelegate {
             SpringAnimation.spring(duration: 0.6, animations: { () -> Void in
                 self.view.layoutIfNeeded()
             })
-            if mapFilter.expanded {
-                toggleMapFilter()
-            }
             userList.reloadData()
             showUserListBtn.tag = 1
             tapper.isEnabled = true
@@ -460,51 +495,6 @@ extension RadarDriverMapController: UITableViewDataSource, UITableViewDelegate {
             tapper.isEnabled = false
         }
         
-    }
-}
-
-extension RadarDriverMapController {
-    func toggleMapFilter() {
-        
-        if mapNav.viewControllers.count > 1 {
-            mapNav.popToRootViewController(animated: true)
-            return
-        }
-        
-        if mapFilter.expanded {
-            // hide the list
-            mapFilterView.snp.remakeConstraints({ (make) -> Void in
-                make.bottom.equalTo(showUserListBtn)
-                make.right.equalTo(showUserListBtn.snp.left).offset(-13)
-                make.width.equalTo(115)
-                make.height.equalTo(40)
-            })
-            UIView.animate(withDuration: 0.3, animations: { () -> Void in
-                self.view.layoutIfNeeded()
-                self.mapFilter.view.toRound(20)
-                self.mapFilter.marker.transform = CGAffineTransform.identity
-            }) 
-        }else {
-            // dispaly the list
-            mapFilterView.snp.remakeConstraints({ (make) -> Void in
-                make.bottom.equalTo(showUserListBtn)
-                make.right.equalTo(showUserListBtn.snp.left).offset(-13)
-                make.width.equalTo(115)
-                make.height.equalTo(40 * 6)
-            })
-            
-            UIView.animate(withDuration: 0.3, animations: { () -> Void in
-                self.view.layoutIfNeeded()
-                self.mapFilter.view.toRound(5)
-                self.mapFilter.marker.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI))
-            }) 
-        }
-        mapFilter.expanded = !mapFilter.expanded
-        
-    }
-    
-    func radarFilterDidChange() {
-        toggleMapFilter()
     }
 }
 
@@ -544,5 +534,25 @@ extension RadarDriverMapController: ClusterAnnotationViewDelegate {
 extension RadarDriverMapController: MapOperationDelegate {
     func mapOperationGetUserLocation() -> CLLocationCoordinate2D? {
         return userLocation?.location.coordinate
+    }
+}
+
+extension RadarDriverMapController: DriverMapFilterDelegate {
+    func driverMapFilterUpdate(_ filter: String, display: String, withClub club: Club?) {
+        self.filterType = filter
+        self.filterClub = club
+        self.mapFilterLbl.text = display
+        
+        if toast == nil {
+            removeAllAnnotations()
+            toast = showStaticToast(LS("正在切换"))
+        }
+    }
+    
+    func removeAllAnnotations() {
+        userAnnos.removeAll()
+        clusteringManager.setAnnotations([])
+        reloadMapClusterPins()
+        userList.reloadData()
     }
 }

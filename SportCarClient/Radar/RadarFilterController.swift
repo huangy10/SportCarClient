@@ -38,17 +38,19 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
         tableView.backgroundColor = UIColor.white
     }
     
+    let titles = [LS("附近热门"), LS("我关注的"), LS("我的粉丝"), LS("互相关注"), LS("仅男性"), LS("仅女性"), LS("仅认证车主"), LS("群组")]
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 8
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! RadarFilterCell
-        cell.titleLbl.text = [LS("附近热门"), LS("我关注的"), LS("我的粉丝"), LS("互相关注"), LS("群组")][(indexPath as NSIndexPath).row]
+        cell.titleLbl.text = titles[indexPath.row]
         cell.marker.isHidden = selectedRow != (indexPath as NSIndexPath).row
         return cell
     }
@@ -56,8 +58,8 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as! RadarFilterHeader
         marker = header.marker
-        if selectedRow < 4 {
-            header.titleLbl.text = [LS("附近热门"), LS("我关注的"), LS("我的粉丝"), LS("互相关注")][selectedRow]
+        if selectedRow < 7 {
+            header.titleLbl.text = titles[selectedRow]
         }else {
             header.titleLbl.text = selectedClub
         }
@@ -69,17 +71,17 @@ class RadarFilterController: UITableViewController, RadarClubFilterDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (indexPath as NSIndexPath).row == 4 {
+        if indexPath.row == 7 {
             let detail = RadarClubFilterController()
             detail.selectdClubID = self.selectedClubID
             detail.selectdClub = self.selectedClub
             detail.delegate = self
-            selectedRow = 4
+            selectedRow = indexPath.row
             self.navigationController?.pushViewController(detail, animated: true)
             return
         }
         
-        if (indexPath as NSIndexPath).row != selectedRow {
+        if indexPath.row != selectedRow {
             selectedRow = (indexPath as NSIndexPath).row
             tableView.reloadData()
             delegate?.radarFilterDidChange()

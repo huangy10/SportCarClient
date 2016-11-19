@@ -234,6 +234,7 @@
 		BFE967661CA81E060097C42C /* ActivityEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967651CA81E060097C42C /* ActivityEdit.swift */; };
 		BFE9676A1CA90CF60097C42C /* SportCarAuthHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE967691CA90CF60097C42C /* SportCarAuthHeader.swift */; };
 		BFE9676C1CA92AD40097C42C /* GroupMemberSelecter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE9676B1CA92AD40097C42C /* GroupMemberSelecter.swift */; };
+		BFEDB1A91DDFE53E0003B4DA /* DriverMapFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEDB1A81DDFE53E0003B4DA /* DriverMapFilter.swift */; };
 		BFEF5BBA1DC46BB800868029 /* ActivityNearbyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEF5BB91DC46BB800868029 /* ActivityNearbyList.swift */; };
 		BFEF5BBC1DC47D7700868029 /* TaggedContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEF5BBB1DC47D7700868029 /* TaggedContainer.swift */; };
 		BFEF5BC41DC4CF3800868029 /* BasicBottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEF5BC31DC4CF3800868029 /* BasicBottomBar.swift */; };
@@ -539,6 +540,7 @@
 		BFE967651CA81E060097C42C /* ActivityEdit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityEdit.swift; path = Activity/ActivityEdit.swift; sourceTree = "<group>"; };
 		BFE967691CA90CF60097C42C /* SportCarAuthHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SportCarAuthHeader.swift; path = Person/SportCarAuthHeader.swift; sourceTree = "<group>"; };
 		BFE9676B1CA92AD40097C42C /* GroupMemberSelecter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GroupMemberSelecter.swift; path = Message/Chat/GroupMemberSelecter.swift; sourceTree = "<group>"; };
+		BFEDB1A81DDFE53E0003B4DA /* DriverMapFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DriverMapFilter.swift; path = Radar/DriverMapFilter.swift; sourceTree = "<group>"; };
 		BFEF5BB91DC46BB800868029 /* ActivityNearbyList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityNearbyList.swift; path = Activity/ActivityNearbyList.swift; sourceTree = "<group>"; };
 		BFEF5BBB1DC47D7700868029 /* TaggedContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TaggedContainer.swift; path = BaseTemplate/TaggedContainer.swift; sourceTree = "<group>"; };
 		BFEF5BC31DC4CF3800868029 /* BasicBottomBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicBottomBar.swift; path = Basic/BasicBottomBar.swift; sourceTree = "<group>"; };
@@ -730,6 +732,7 @@
 				BF9B54A91C7F5BED0006D673 /* Cell */,
 				BF24291D1C7C524D005D4C6E /* DriverMap.swift */,
 				BF2429261C7D62D6005D4C6E /* UserOnMap.swift */,
+				BFEDB1A81DDFE53E0003B4DA /* DriverMapFilter.swift */,
 			);
 			name = Driver;
 			sourceTree = "<group>";
@@ -2128,6 +2131,7 @@
 				BFC032621C6EEFBA00ECA69A /* AvatarItemSelect.swift in Sources */,
 				BF599E751DD5C0F8000BE453 /* FBAnnotationCluster.swift in Sources */,
 				BF9664041C89CBD10096D131 /* ClubBriefInfo.swift in Sources */,
+				BFEDB1A91DDFE53E0003B4DA /* DriverMapFilter.swift in Sources */,
 				BF2429221C7C8E15005D4C6E /* UIImage+Gif.swift in Sources */,
 				BFE5985D1CB4A31100001F99 /* InlineUserSelectMiniCell.swift in Sources */,
 				BF599E721DD5C0F8000BE453 /* FBAnnotation.swift in Sources */,
