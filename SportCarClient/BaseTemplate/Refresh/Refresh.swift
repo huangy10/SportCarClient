@@ -78,7 +78,8 @@ class SSPullToRefresh: UIView {
         self.scrollView = scrollView
         self.action = action
         scrollView.addSubview(self)
-        self.frame  = CGRect(x: 0, y: scrollView.contentInset.top - 80, width: UIScreen.main.bounds.width, height: 80)
+        let width =  UIScreen.main.bounds.width - scrollView.contentInset.left - scrollView.contentInset.right
+        self.frame  = CGRect(x: 0, y: scrollView.contentInset.top - 80, width: width, height: 80)
         previousScrollViewOffset = scrollView.contentOffset
     }
     
