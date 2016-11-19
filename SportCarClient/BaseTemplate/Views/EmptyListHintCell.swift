@@ -37,3 +37,27 @@ class SSEmptyListHintCell: UITableViewCell {
             })
     }
 }
+
+
+class SSEmptyCollectionHitCell: UICollectionViewCell {
+    var titleLbl: UILabel!
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        createSubviews()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError()
+    }
+    
+    func createSubviews() {
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+        
+        titleLbl = contentView.addSubview(UILabel.self).config(14, textColor: kTextGray28, textAlignment: .center)
+            .layout({ (mk) in
+                mk.edges.equalTo(contentView)
+            })
+    }
+}

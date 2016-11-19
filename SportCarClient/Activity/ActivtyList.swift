@@ -10,10 +10,7 @@ import UIKit
 import Dollar
 
 
-class ActivityHomeMineListController: UICollectionViewController {
-    
-    @available(*, deprecated: 1)
-    weak var home: ActivityHomeController!
+class ActivityHomeMineListController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     var data: [Activity] = []
     var loading: Bool = false
@@ -21,8 +18,6 @@ class ActivityHomeMineListController: UICollectionViewController {
     
     convenience init() {
         let layout = UICollectionViewFlowLayout()
-        let screenWidth = UIScreen.main.bounds.width
-        layout.itemSize = CGSize(width: screenWidth / 2 - 17.5, height: 200)
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
@@ -40,6 +35,7 @@ class ActivityHomeMineListController: UICollectionViewController {
         collectionView?.alwaysBounceVertical = true
         collectionView?.contentInset = UIEdgeInsetsMake(10, 12.5, 10, 12.5)
         collectionView?.register(ActivityCell.self, forCellWithReuseIdentifier: ActivityCell.reuseIdentifier)
+        collectionView?.register(SSEmptyCollectionHitCell.self, forCellWithReuseIdentifier: "empty")
         collectionView?.backgroundColor = kGeneralTableViewBGColor
         refreshControl = collectionView?.addSubview(UIRefreshControl.self)
             .config(self, selector: #selector(getLatestActData))
@@ -51,10 +47,15 @@ class ActivityHomeMineListController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data.count
+        return max(data.count, 1)
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if data.isEmpty {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "empty", for: indexPath) as! SSEmptyCollectionHitCell
+            cell.titleLbl.text = emptyHint()
+            return cell
+        }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ActivityCell.reuseIdentifier, for: indexPath) as! ActivityCell
         cell.act = data[(indexPath as NSIndexPath).row]
         return cell
@@ -66,10 +67,23 @@ class ActivityHomeMineListController: UICollectionViewController {
         parent?.navigationController?.pushViewController(detail, animated: true)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let screenWidth = UIScreen.main.bounds.width
+        if data.isEmpty {
+            return CGSize(width: screenWidth - collectionView.contentInset.left - collectionView.contentInset.right, height: 100)
+        } else {
+            return CGSize(width: screenWidth / 2 - 17.5, height: 200)
+        }
+    }
+    
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.height {
             getMoreActData()
         }
+    }
+    
+    func emptyHint() -> String {
+        return "你尚未发布互动"
     }
 
     func getLatestActData() {

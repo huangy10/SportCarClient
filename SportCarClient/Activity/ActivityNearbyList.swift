@@ -120,8 +120,6 @@ class ActivityNearByListController: UIViewController {
     
     func getCollectionLayout() -> UICollectionViewLayout {
         let defaultLayout = UICollectionViewFlowLayout()
-        let screenWidth = UIScreen.main.bounds.width
-        defaultLayout.itemSize = CGSize(width: screenWidth / 2 - 17.5, height: 200)
         defaultLayout.scrollDirection = .vertical
         defaultLayout.minimumLineSpacing = 10
         defaultLayout.minimumInteritemSpacing = 10
@@ -141,6 +139,7 @@ class ActivityNearByListController: UIViewController {
         }
         
         collectionView.register(ActivityCell.self, forCellWithReuseIdentifier: ActivityCell.reuseIdentifier)
+        collectionView.register(SSEmptyCollectionHitCell.self, forCellWithReuseIdentifier: "empty")
     }
     
     func configureCityFilter() {
@@ -181,17 +180,22 @@ class ActivityNearByListController: UIViewController {
     }
 }
 
-extension ActivityNearByListController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension ActivityNearByListController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data.count
+        return max(data.count, 1)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if data.isEmpty {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "empty", for: indexPath) as! SSEmptyCollectionHitCell
+            cell.titleLbl.text = LS("附近暂无活动")
+            return cell
+        }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ActivityCell.reuseIdentifier, for: indexPath) as! ActivityCell
         cell.act = data[indexPath.row]
         return cell
@@ -201,6 +205,15 @@ extension ActivityNearByListController: UICollectionViewDataSource, UICollection
         let act = data[indexPath.row]
         let detail = ActivityDetailController(act: act)
         parent?.navigationController?.pushViewController(detail, animated: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let screenWidth = UIScreen.main.bounds.width
+        if data.isEmpty {
+            return CGSize(width: screenWidth - collectionView.contentInset.left - collectionView.contentInset.right, height: 100)
+        } else {
+            return CGSize(width: screenWidth / 2 - 17.5, height: 200)
+        }
     }
 }
 

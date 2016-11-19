@@ -35,6 +35,10 @@ class AvatarClubSelectController: AvatarItemSelectController, RequestManageMixin
     var noClubLbl: UILabel!
     var authed_only = true
     
+    deinit {
+        clearAllRequest()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         createSubviews()

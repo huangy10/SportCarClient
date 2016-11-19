@@ -47,4 +47,8 @@ class ActivityAppliedController: ActivityHomeMineListController {
                 self.refreshControl?.endRefreshing()
         }
     }
+    
+    override func emptyHint() -> String {
+        return LS("你尚未报名活动")
+    }
 }
