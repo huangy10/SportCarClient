@@ -10,6 +10,7 @@ import UIKit
 import AudioToolbox
 import UserNotifications
 import Kingfisher
+import Alamofire
 
 let kAppManagerNotificationLogout = "app_manager_notification_logout"
 
@@ -18,11 +19,18 @@ enum AppManagerState {
 }
 
 /// 这个类的作用是以全局的角度来调度主要功能模块
-class AppManager: UIViewController {
+class AppManager: UIViewController, RequestManageMixin {
     
+    var onGoingRequest: [String : Request] = [:]
     /// 全局的instance对象
     static let sharedAppManager = AppManager()
-    var deviceTokenString: String? = "Unauthorized_Device"
+    var deviceTokenString: String? = nil {
+        didSet {
+            if let token = deviceTokenString, MainManager.sharedManager.hostUser != nil {
+                updateDeviceToken(token)
+            }
+        }
+    }
     
     var state: AppManagerState = .init
     
@@ -83,6 +91,7 @@ class AppManager: UIViewController {
         if !forced {
             _ = AccountRequester2.sharedInstance.logout({ (json) -> (Void) in
                 print("logout")
+                self.clearAllRequest()
                 }) { (code) -> (Void) in
                     print("logout fails")
             }
@@ -125,12 +134,17 @@ class AppManager: UIViewController {
             if granted {
                 application.registerForRemoteNotifications()
             } else {
-                self.deviceTokenString = "Unauthorized_Device"
+                self.deviceTokenString = nil
             }
         }
-        
-//        let notificationSettings = UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil)
-//        application.registerUserNotificationSettings(notificationSettings)
+    }
+    
+    func updateDeviceToken(_ token: String) {
+        AccountRequester2.sharedInstance.updateToken(newToken: token, onSuccess: { (_) in
+            
+        }, onError: { (_) in
+            
+        }).registerForRequestManage(self)
     }
     
     func loadHistoricalNotifications(_ launchOptions: [AnyHashable: Any]?) {

@@ -33,7 +33,8 @@ class AccountRequester2: BasicRequester {
         "operation": "<userID>/operation",
         "status": "<userID>/status",
         "permission": "permission",
-        "reset": "reset"
+        "reset": "reset",
+        "token": "token"
     ]
     
     override var urlMap: [String : String] {
@@ -58,6 +59,11 @@ class AccountRequester2: BasicRequester {
             urlForName("sendcode"),
             parameters: ["phone_num": phoneNum],
             onSuccess: onSuccessWrapped, onError: onFailure)
+    }
+    
+    func updateToken(newToken: String, onSuccess: @escaping SSSuccessCallback, onError: @escaping SSFailureCallback) -> Request {
+        let param = ["device_token": newToken]
+        return post(urlForName("token"), parameters: param, onSuccess: onSuccess, onError: onError)
     }
     
     func postToLogin(
