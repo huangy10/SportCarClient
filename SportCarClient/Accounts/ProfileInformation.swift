@@ -77,6 +77,10 @@ class ProfileInfoController: InputableViewController, UIPickerViewDataSource, UI
         }
         guard let avatar = selectedAvatarImage else{
             showToast(LS("请选择头像"))
+            // 让头像按钮闪烁一下
+            UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: .autoreverse, animations: { 
+                self.avatarBtn?.alpha = 0.5
+            }, completion: nil)
             return
         }
         let requester = AccountRequester2.sharedInstance
