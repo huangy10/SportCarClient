@@ -53,22 +53,6 @@ class RosterManager {
     var onTopNum: Int = 0
     
     /**
-     - parameter bringToFront: whether to bring the added roster item to the  very front of the roster list
-     - returns: if the new item has already exists in the roster list before the insertion
-     */
-    @available(*, deprecated: 1)
-    func addNewRosterItem(_ newItem: RosterItem, bringToFront: Bool = false) -> Bool{
-        if let roster = data[newItem.mapKey] {
-            roster.recentChatDes = newItem.recentChatDes
-            self.data.bringKeyToFront(newItem.mapKey)
-            return false
-        }
-        data[newItem.mapKey] = newItem
-        self.data.bringKeyToFront(newItem.mapKey)
-        return true
-    }
-    
-    /**
      Accept json data as input and get the output
      */
     func getOrCreateNewRoster(_ json: JSON, autoBringToFront: Bool = false) -> RosterItem {
@@ -96,37 +80,7 @@ class RosterManager {
             return newItem
         }
     }
-    
-    @available(*, deprecated: 1)
-    func rosterItemForUser(_ user: User) -> RosterItem? {
-        for (_, item) in data._dict {
-            switch item.data! {
-            case .user(let chater):
-                if chater.ssid == user.ssid {
-                    return item
-                }
-            default:
-                continue
-            }
-        }
-        return nil
-    }
-    
-    @available(*, deprecated: 1)
-    func rosterItemForClub(_ club: Club) -> RosterItem? {
-        for (_, item) in data._dict {
-            switch item.data! {
-            case .club(let club):
-                if club.ssid == club.ssid {
-                    return item
-                }
-            default:
-                continue
-            }
-        }
-        return nil
-    }
-    
+
     /**
      Request roster list from server, work on the Message queue
      */
@@ -149,7 +103,7 @@ class RosterManager {
         let context = ChatModelManger.sharedManager.getOperationContext()
         // TODO: order by createdAt or updatedAt?
         let existingRosterItems = context.rosterItems.filter({$0.hostSSID == hostID})
-            .orderBy(orderingClosure: { $0.updatedAt })
+            .orderBy(ascending: false, orderingClosure: { $0.updatedAt })
         var unread: Int = 0
         existingRosterItems.forEach { (item) in
             item.manager = ChatModelManger.sharedManager
