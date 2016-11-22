@@ -14,6 +14,7 @@ protocol ActivityDetailHeaderDelegate: class {
     func detailHeaderShowAllMemberBtnPressed()
     func detailHeaderUserSelected(_ user: User)
     func detailHeaderShowInvite()
+    func detailHeaderShowLikeList()
 }
 
 class ActivityDetailHeaderView: UIView {
@@ -52,6 +53,7 @@ class ActivityDetailHeaderView: UIView {
         configureActReleaseDate()
         configureDesLbl()
         configureOpsView()
+        configureLikeInfoLbl()
         configureExtraInfoSepLine()
         configureExtraInfo()
     }
@@ -158,6 +160,13 @@ class ActivityDetailHeaderView: UIView {
                 mk.left.equalTo(desLbl)
                 mk.right.equalTo(opsView.snp.left)
             })
+        addSubview(UIButton.self).config(self, selector: #selector(showLikeListPressed))
+            .layout { (mk) in
+                mk.right.equalTo(likeInfoLbl)
+                mk.left.equalTo(likeInfoLbl)
+                mk.centerY.equalTo(likeInfoLbl)
+                mk.height.equalTo(40)
+        }
     }
     
     func configureOpsView() {
@@ -165,7 +174,7 @@ class ActivityDetailHeaderView: UIView {
         addSubview(opsView)
         opsView.snp.makeConstraints { (make) in
             make.right.equalTo(self)
-            make.top.equalTo(desLbl.snp.bottom).offset(10)
+            make.top.equalTo(desLbl.snp.bottom).offset(20)
             make.width.equalTo(opsView.requiredWidth())
             make.height.equalTo(18)
         }
@@ -199,7 +208,7 @@ class ActivityDetailHeaderView: UIView {
             make.right.equalTo(self)
             make.top.equalTo(opsView.snp.bottom).offset(55)
 //            make.height.equalTo(300)
-            make.bottom.equalTo(self)
+//            make.bottom.equalTo(self)
         }
         
         var infoLbls: [UILabel] = []
@@ -291,6 +300,10 @@ class ActivityDetailHeaderView: UIView {
         delegate.detailHeaderShowAllMemberBtnPressed()
     }
     
+    func showLikeListPressed() {
+        delegate.detailHeaderShowLikeList()
+    }
+    
     func loadDataAndUpdateUI() {
         cover.kf.setImage(with: act.posterURL!, placeholder: nil, options: nil, progressBlock: nil) { (image, _, _, _) in
             self.cover.setupForImageViewer(nil, backgroundColor: UIColor.black, fadeToHide: true)
@@ -311,6 +324,16 @@ class ActivityDetailHeaderView: UIView {
         }
         actTimeLbl.text = act.timeDes
         reloadMemberList()
+        
+        updateLikeInfoLbl()
+    }
+    
+    func updateLikeInfoLbl() {
+        if let recentLike = act.recentLikeUserName {
+            likeInfoLbl.attributedText = makeLikeInfoText(recentLikeUserName: recentLike, likeNum: Int(act.likeNum))
+        } else {
+            likeInfoLbl.attributedText = nil
+        }
     }
     
     func makeLikeInfoText(recentLikeUserName: String, likeNum: Int) -> NSAttributedString {

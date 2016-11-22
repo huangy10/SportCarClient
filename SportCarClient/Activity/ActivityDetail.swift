@@ -257,6 +257,13 @@ class ActivityDetailController: UIViewController, LoadingProtocol {
 //                self.infoView.likeNumLbl.text = "\(likeNum)"
                 self.header.opsView.reloadAll()
                 self.bottomBar.reloadIcon(at: 0, withPulse: true)
+                
+                if self.act.liked {
+                    self.act.recentLikeUserName = MainManager.sharedManager.hostUser?.nickName
+                    self.header.updateLikeInfoLbl()
+                } else {
+                    self.loadActInfo()
+                }
             } else {
                 assertionFailure()
             }
@@ -587,6 +594,12 @@ extension ActivityDetailController: ActivityDetailHeaderDelegate {
     
     func detailHeaderUserSelected(_ user: User) {
         navigationController?.pushViewController(user.showDetailController(), animated: true)
+    }
+    
+    func detailHeaderShowLikeList() {
+        let vc = ActivityLikeUsersList()
+        vc.act = act
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

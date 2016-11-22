@@ -27,7 +27,8 @@ class ActivityRequester: BasicRequester {
         "applied": "applied",
         "nearby": "discover",
         "mine": "mine",
-        "edit": "<actID>/edit"
+        "edit": "<actID>/edit",
+        "like_users": "<actID>/like_users"
     ]
     
     override var urlMap: [String : String] {
@@ -179,6 +180,15 @@ class ActivityRequester: BasicRequester {
         return post(
             urlForName("operation", param: ["actID": actID]),
             parameters: ["op_type": opType, "target_user": targetUserID],
+            responseDataField: "data",
+            onSuccess: onSuccess, onError: onError
+        )
+    }
+    
+    func getLikeUsers(actID: String, skip: Int, limit: Int, onSuccess: @escaping SSSuccessCallback, onError: @escaping SSFailureCallback) -> Request {
+        return get(
+            urlForName("like_users", param: ["actID": actID]),
+            parameters: ["skip": skip, "limit": limit],
             responseDataField: "data",
             onSuccess: onSuccess, onError: onError
         )

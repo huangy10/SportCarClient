@@ -72,7 +72,7 @@ class DriverMapUserCell: UITableViewCell {
             .layout({ (mk) in
                 mk.centerY.equalTo(nameLbl)
                 mk.size.equalTo(20)
-                mk.left.equalTo(nameLbl.snp.right)
+                mk.left.equalTo(nameLbl.snp.right).offset(10)
             })
         avatarClubIcon.layer.cornerRadius = 10
         avatarClubIcon.clipsToBounds = true
@@ -131,7 +131,7 @@ class DriverMapUserCell: UITableViewCell {
         genderIcon = addSubview(UIImageView.self)
             .layout({ (mk) in
                 mk.centerY.equalTo(nameLbl)
-                mk.left.equalTo(nameLbl.snp.right)
+                mk.left.equalTo(nameLbl.snp.right).offset(10)
                 mk.size.equalTo(12)
             })
         genderIcon.contentMode = .scaleAspectFit
@@ -145,25 +145,19 @@ class DriverMapUserCell: UITableViewCell {
             nameLbl.textColor = .black
         }
         nameLbl.text = user.nickName
-        var distance = hostLoc.distance(from: userLoc)
-        var showKM = false
-        if distance > 1000 {
-            distance = distance / 1000
-            showKM = true
-        }
-        distanceLbl.text = LS("距离你  ") + "\(Int(distance))" + (showKM ? "km" : "m")
+        updateDistanceLbl()
         if let avatarClub = user.avatarClubModel {
             avatarClubIcon.kf.setImage(with: avatarClub.logoURL!)
             genderIcon.snp.remakeConstraints({ (mk) in
                 mk.centerY.equalTo(nameLbl)
-                mk.left.equalTo(avatarClubIcon.snp.right).offset(3)
+                mk.left.equalTo(avatarClubIcon.snp.right).offset(5)
                 mk.size.equalTo(12)
             })
         } else {
             avatarClubIcon.image = nil
             genderIcon.snp.remakeConstraints({ (mk) in
                 mk.centerY.equalTo(nameLbl)
-                mk.left.equalTo(nameLbl.snp.right).offset(3)
+                mk.left.equalTo(nameLbl.snp.right).offset(10)
                 mk.size.equalTo(12)
             })
         }
@@ -180,9 +174,20 @@ class DriverMapUserCell: UITableViewCell {
         
         if user.gender == "男" {
             genderIcon.image = #imageLiteral(resourceName: "gender_mark_male")
-        } else {
+        } else if user.gender == "女" {
             genderIcon.image = #imageLiteral(resourceName: "gender_mark_female")
+        } else {
+            genderIcon.image = nil
         }
     }
     
+    func updateDistanceLbl() {
+        var distance = hostLoc.distance(from: userLoc)
+        var showKM = false
+        if distance > 1000 {
+            distance = distance / 1000
+            showKM = true
+        }
+        distanceLbl.text = LS("距离你  ") + "\(Int(distance))" + (showKM ? "km" : "m")
+    }
 }

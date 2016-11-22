@@ -72,6 +72,8 @@ class AccountRequester2: BasicRequester {
         var param = ["username": phoneNum, "password": password]
         if let token = AppManager.sharedAppManager.deviceTokenString {
             param["device_token"] = token
+        } else {
+            param["device_token"] = "Unauthorized Device"
         }
         return post(urlForName("login"), parameters: param, responseDataField: "data", onSuccess: onSuccess, onError: onError)
     }

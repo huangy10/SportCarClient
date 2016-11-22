@@ -246,6 +246,8 @@ class StatusDetailController: UIViewController, RequestManageMixin, LoadingProto
             if self.status.liked {
                 self.status.recentLikeUserName = MainManager.sharedManager.hostUser?.nickName
                 self.detail.updateLikeInfoLbl()
+            } else {
+                self.updateStatusInfo()
             }
         }, onError: { (code) in
             self.lp_stop()

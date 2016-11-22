@@ -108,7 +108,7 @@ class User: BaseModel {
             }
         }
     }
-    
+     
     @discardableResult
     override func loadDataFromJSON(_ data: JSON, detailLevel: Int, forceMainThread: Bool = false) throws -> Self {
         try super.loadDataFromJSON(data, detailLevel: detailLevel, forceMainThread: forceMainThread)
@@ -116,6 +116,7 @@ class User: BaseModel {
         avatar = data["avatar"].stringValue
         recentStatusDes = data["recent_status"].stringValue
         identified = data["identified"].boolValue
+        gender = data["gender"].stringValue
         let noteNameJson = data["note_name"]
         if !noteNameJson.isEmpty {
             noteName = noteNameJson.stringValue
@@ -127,7 +128,6 @@ class User: BaseModel {
         }
         if detailLevel >= 1 {
             district = data["district"].stringValue
-            gender = data["gender"].stringValue
             phoneNum = data["phoneNum"].stringValue
             starSign = data["star_sign"].stringValue
             age = data["age"].int32Value

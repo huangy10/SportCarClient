@@ -1,20 +1,18 @@
 //
-//  StatusLikeUsers.swift
+//  ActivityLikeUsers.swift
 //  SportCarClient
 //
 //  Created by 黄延 on 2016/11/22.
 //  Copyright © 2016年 WoodyHuang. All rights reserved.
 //
 
-import UIKit
-import SwiftyJSON
+import Foundation
 
 
-class StatusLikeUsersList: UserSelectController, LoadingProtocol {
+class ActivityLikeUsersList: UserSelectController, LoadingProtocol {
     
-    var status: Status!
+    var act: Activity!
     var likers: [User] = []
-    var dateThreshold: Date?
     
     override var users: [User] {
         return likers
@@ -22,17 +20,17 @@ class StatusLikeUsersList: UserSelectController, LoadingProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         getMoreLikers()
     }
     
     override func createSubviews() {
         super.createSubviews()
+        
         searchBar?.isHidden = true
         selectedUserList?.isHidden = true
         
         userTableView?.snp.remakeConstraints { (mk) in
-            mk.edges.equalTo(self.view)
+            mk.edges.equalTo(view)
         }
         
         userTableView?.register(UserLikeCell.self, forCellReuseIdentifier: "cell")
@@ -78,15 +76,13 @@ class StatusLikeUsersList: UserSelectController, LoadingProtocol {
             return super.tableView(tableView, heightForRowAt: indexPath)
         }
     }
-    
+
     func getMoreLikers() {
-        let threshold: Date = dateThreshold ?? Date()
-        StatusRequester.sharedInstance.getStatusLikeList(status.ssidString, dateThreshold: threshold, limit: 10, opType: "more", onSuccess: { (json) -> () in
+        ActivityRequester.sharedInstance.getLikeUsers(actID: act.ssidString, skip: users.count, limit: 10, onSuccess: { (json) -> () in
             var newUsers: [User] = []
             for data in json!.arrayValue {
                 let user = try! MainManager.sharedManager.getOrCreate(data) as User
                 newUsers.append(user)
-                self.dateThreshold = DateSTR(data["like_at"].stringValue)
             }
             
             if newUsers.count > 0 {
@@ -101,7 +97,6 @@ class StatusLikeUsersList: UserSelectController, LoadingProtocol {
                 }
             }
         }, onError: { (code) -> () in
-            self.showReqError(withCode: code)
         }).registerForRequestManage(self)
     }
     

@@ -117,6 +117,7 @@
 		BF9664001C89449F0096D131 /* ClubAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9663FF1C89449F0096D131 /* ClubAuth.swift */; };
 		BF9664041C89CBD10096D131 /* ClubBriefInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9664031C89CBD10096D131 /* ClubBriefInfo.swift */; };
 		BF9664061C89F0B60096D131 /* AvatarClubSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9664051C89F0B60096D131 /* AvatarClubSelect.swift */; };
+		BF9687581DE416F8004353CF /* UserLikeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9687571DE416F8004353CF /* UserLikeCell.swift */; };
 		BF972F101C9D6D9A00AF997B /* imageResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF972F0F1C9D6D9A00AF997B /* imageResizer.swift */; };
 		BF9847341C76311D006DDE3C /* ActivityReleaseMapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9847331C76311D006DDE3C /* ActivityReleaseMapCell.swift */; };
 		BF9B54AB1C7F5F740006D673 /* DriveMapUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9B54AA1C7F5F740006D673 /* DriveMapUserCell.swift */; };
@@ -300,6 +301,7 @@
 		BFFBA8101C65D7B100991642 /* InlineUserSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFBA80F1C65D7B100991642 /* InlineUserSelect.swift */; };
 		BFFBA8131C65E5B900991642 /* PrivateSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFBA8121C65E5B900991642 /* PrivateSettingsCell.swift */; };
 		BFFCD0DF1DE3DF7300488F3C /* StatusLikeUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFCD0DE1DE3DF7300488F3C /* StatusLikeUsers.swift */; };
+		BFFCD0E11DE40C8700488F3C /* ActivityLikeUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFCD0E01DE40C8700488F3C /* ActivityLikeUsers.swift */; };
 		BFFFAFEB1C84AA4300EBA314 /* FansSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFFAFEA1C84AA4300EBA314 /* FansSelect.swift */; };
 		BFFFAFED1C84B1FB00EBA314 /* FollowSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFFAFEC1C84B1FB00EBA314 /* FollowSelect.swift */; };
 /* End PBXBuildFile section */
@@ -417,6 +419,7 @@
 		BF9663FF1C89449F0096D131 /* ClubAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubAuth.swift; path = Message/Chat/ClubAuth.swift; sourceTree = "<group>"; };
 		BF9664031C89CBD10096D131 /* ClubBriefInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClubBriefInfo.swift; path = Message/Chat/ClubBriefInfo.swift; sourceTree = "<group>"; };
 		BF9664051C89F0B60096D131 /* AvatarClubSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AvatarClubSelect.swift; path = Person/AvatarClubSelect.swift; sourceTree = "<group>"; };
+		BF9687571DE416F8004353CF /* UserLikeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserLikeCell.swift; path = Basic/UserLikeCell.swift; sourceTree = "<group>"; };
 		BF972F0F1C9D6D9A00AF997B /* imageResizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = imageResizer.swift; path = 3rdParty/imageResizer.swift; sourceTree = "<group>"; };
 		BF9847331C76311D006DDE3C /* ActivityReleaseMapCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityReleaseMapCell.swift; path = Activity/ActivityReleaseMapCell.swift; sourceTree = "<group>"; };
 		BF9B54AA1C7F5F740006D673 /* DriveMapUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DriveMapUserCell.swift; path = Radar/DriveMapUserCell.swift; sourceTree = "<group>"; };
@@ -612,6 +615,7 @@
 		BFFBA8121C65E5B900991642 /* PrivateSettingsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrivateSettingsCell.swift; path = Message/Chat/PrivateSettingsCell.swift; sourceTree = "<group>"; };
 		BFFCD0DD1DE325E900488F3C /* SportCarClient V161121.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SportCarClient V161121.xcdatamodel"; sourceTree = "<group>"; };
 		BFFCD0DE1DE3DF7300488F3C /* StatusLikeUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusLikeUsers.swift; path = Status/Detail/StatusLikeUsers.swift; sourceTree = "<group>"; };
+		BFFCD0E01DE40C8700488F3C /* ActivityLikeUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityLikeUsers.swift; path = Activity/ActivityLikeUsers.swift; sourceTree = "<group>"; };
 		BFFFAFEA1C84AA4300EBA314 /* FansSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FansSelect.swift; path = Person/FansSelect.swift; sourceTree = "<group>"; };
 		BFFFAFEC1C84B1FB00EBA314 /* FollowSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FollowSelect.swift; path = Person/FollowSelect.swift; sourceTree = "<group>"; };
 		DCDC6FE0FF3785D17A4CE42E /* Pods-SportCarClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportCarClient.release.xcconfig"; path = "Pods/Target Support Files/Pods-SportCarClient/Pods-SportCarClient.release.xcconfig"; sourceTree = "<group>"; };
@@ -1245,6 +1249,7 @@
 				BFE598571CB40F5500001F99 /* cell&header */,
 				BFC0327F1C72EEEB00ECA69A /* ActivityDetail.swift */,
 				BF01FDA41D65E78A00865630 /* ActivityMembers.swift */,
+				BFFCD0E01DE40C8700488F3C /* ActivityLikeUsers.swift */,
 			);
 			name = Detail;
 			sourceTree = "<group>";
@@ -1600,6 +1605,7 @@
 				BF2F5F091DC6637400C2CD55 /* CommentStaticHeader.swift */,
 				BFDA4E791DD41BB200F9E504 /* MapAsFooter.swift */,
 				BFAA0F4A1DDECE46007CB8BD /* BackMaskView.swift */,
+				BF9687571DE416F8004353CF /* UserLikeCell.swift */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -2057,6 +2063,7 @@
 				BF8A558D1DCB6BA100F99F15 /* PersonController2.swift in Sources */,
 				BFC032641C6EF55400ECA69A /* AvatarCarSelect.swift in Sources */,
 				BFE967661CA81E060097C42C /* ActivityEdit.swift in Sources */,
+				BFFCD0E11DE40C8700488F3C /* ActivityLikeUsers.swift in Sources */,
 				BF1A636B1D61EAD7005C86C8 /* BillboardCell.swift in Sources */,
 				BF5E7EE41C85E568004B8305 /* ClearCache.swift in Sources */,
 				BFBE19211C9521FF005114A0 /* LocSelectPin.swift in Sources */,
@@ -2126,6 +2133,7 @@
 				BF2F7E8E1C62F39A00E3A3A2 /* NotificationCtrl.swift in Sources */,
 				BFCA21C71DD0C08F001D066C /* PersonDataSource2.swift in Sources */,
 				BFE967431CA6296F0097C42C /* SSModelError.swift in Sources */,
+				BF9687581DE416F8004353CF /* UserLikeCell.swift in Sources */,
 				BF8EC2D61CBA2DE300003735 /* Refresh.swift in Sources */,
 				BF23368E1C56529B00F0AE41 /* ChatRequester.swift in Sources */,
 				BF8D42FD1C7481F5009AD4BA /* ActivityReleaseCell.swift in Sources */,
