@@ -13,6 +13,7 @@ import Dollar
 
 protocol StatusCellProtocol: class {
     func statusCellLikePressed(cell: StatusCell)
+    func statuCellLikeListPressed(cell: StatusCell)
 }
 
 class StatusCell: UITableViewCell {
@@ -57,6 +58,10 @@ class StatusCell: UITableViewCell {
 
 
 extension StatusCell: StatusDetailHeaderDelegate {
+    func statusHeaderLikeListPressed() {
+        delegate?.statuCellLikeListPressed(cell: self)
+    }
+
     func statusHeaderLikePressed() {
         delegate?.statusCellLikePressed(cell: self)
     }

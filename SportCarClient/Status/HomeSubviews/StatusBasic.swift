@@ -148,6 +148,16 @@ class StatusBasicController: UITableViewController, StatusCellProtocol, LoadingP
         }
     }
     
+    func statuCellLikeListPressed(cell: StatusCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {
+            return
+        }
+        let data = status[indexPath.row]
+        let vc = StatusLikeUsersList()
+        vc.status = data
+        parent?.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     var selectedCell: StatusCell?
     
     func getSelectedCellFrame() -> CGRect {
@@ -231,7 +241,7 @@ extension StatusBasicController {
 extension StatusBasicController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         switch operation {
-        case .push where fromVC.isKind(of: StatusHomeController.self):
+        case .push where (fromVC.isKind(of: StatusHomeController.self) && toVC.isKind(of: StatusDetailController.self)):
             let res = StatusDetailEntranceAnimation()
             res.fromVC = self
             return res

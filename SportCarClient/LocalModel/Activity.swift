@@ -86,6 +86,9 @@ class Activity: BaseModel {
         if data["applied"].exists() {
             applied = data["applied"].boolValue
         }
+        if let recentLike = data["recent_like_user"].string, recentLike != "" {
+            recentLikeUserName = recentLike
+        }
         if let liked = data["liked"].bool {
             self.liked = liked
         }

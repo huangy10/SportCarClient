@@ -21,7 +21,8 @@ class StatusRequester: BasicRequester {
         "detail": "<statusID>",
         "comments": "<statusID>/comments",
         "post_comment": "<statusID>/post_comments",
-        "operation": "<statusID>/operation"
+        "operation": "<statusID>/operation",
+        "like_users": "<statusID>/like_users"
     ]
     
     override var urlMap: [String : String] {
@@ -128,6 +129,15 @@ class StatusRequester: BasicRequester {
             urlForName("operation", param: ["statusID": statusID]),
             parameters: ["op_type": "like"],
             responseDataField: "like_info",
+            onSuccess: onSuccess, onError: onError
+        )
+    }
+    
+    func getStatusLikeList(_ statusID: String, dateThreshold: Date, limit: Int, opType: String, onSuccess: @escaping SSSuccessCallback, onError: @escaping SSFailureCallback) -> Request {
+        return get(
+            urlForName("like_users", param: ["statusID": statusID]),
+            parameters: ["date_threshold": STRDate(dateThreshold), "limit": limit, "op_type": opType],
+            responseDataField: "data",
             onSuccess: onSuccess, onError: onError
         )
     }

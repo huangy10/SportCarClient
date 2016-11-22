@@ -31,6 +31,8 @@ extension Status {
     @NSManaged var mine: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var sent: Bool // cannot mark as optional because Objective-C compatibility issues
     @NSManaged var thumbnail: String?
+    
+    @NSManaged var recentLikeUserName: String?
 
     @NSManaged var user: User?
 
@@ -55,6 +57,7 @@ extension Status {
     static let mine = AlecrimCoreData.NullableAttribute<Bool>("mine")
     static let sent = AlecrimCoreData.NullableAttribute<Bool>("sent")
     static let thumbnail = AlecrimCoreData.NullableAttribute<String>("thumbnail")
+    static let recentLikeUserName = AlecrimCoreData.NullableAttribute<String>("recentLikeUserName")
 
     static let user = AlecrimCoreData.NullableAttribute<User>("user")
 
@@ -79,6 +82,7 @@ extension AlecrimCoreData.AttributeProtocol where Self.ValueType: Status {
     var mine: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("mine", self) }
     var sent: AlecrimCoreData.NullableAttribute<Bool> { return AlecrimCoreData.NullableAttribute<Bool>("sent", self) }
     var thumbnail: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("thumbnail", self) }
+    var recentLikeUserName: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("recentLikeUserName", self)}
 
     var user: AlecrimCoreData.NullableAttribute<User> { return AlecrimCoreData.NullableAttribute<User>("user", self) }
 

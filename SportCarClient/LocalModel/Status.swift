@@ -73,6 +73,9 @@ class Status: BaseModel {
         if let liked = data["liked"].bool {
             self.liked = liked
         }
+        if let recentLike = data["recent_like_user"].string, recentLike != "" {
+            self.recentLikeUserName = recentLike
+        }
         
         let carJSON = data["car"]
         if carJSON.exists() {

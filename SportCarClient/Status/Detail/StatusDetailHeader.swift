@@ -11,6 +11,7 @@ import UIKit
 protocol StatusDetailHeaderDelegate: class {
     func statusHeaderAvatarPressed()
     func statusHeaderLikePressed()
+    func statusHeaderLikeListPressed()
 }
 
 class StatusDetailHeaderView: UIView {
@@ -36,8 +37,9 @@ class StatusDetailHeaderView: UIView {
     
     // 底部
     var contentLbl: UILabel!
-    var locIcon: UIImageView!
-    var locLbl: UILabel!
+//    var locIcon: UIImageView!
+//    var locLbl: UILabel!
+    var likeInfoLbl: UILabel!
     var opsView: SmallOperationBoard!
     
     var isCoverZoomable: Bool = false
@@ -65,8 +67,8 @@ class StatusDetailHeaderView: UIView {
         configureAvatarBtn()
         configureNameLbl()
         configureAvatarClubIcon()
-        configureReleaseDateLbl()
         configureAvatarCars()
+        configureReleaseDateLbl()
     }
     
     func configureAvatarBtn() {
@@ -105,6 +107,7 @@ class StatusDetailHeaderView: UIView {
             .layout({ (make) in
                 make.left.equalTo(nameLbl)
                 make.bottom.equalTo(avatarBtn)
+                make.width.equalTo(self).multipliedBy(0.5)
                 make.top.equalTo(nameLbl.snp.bottom)
             })
     }
@@ -140,8 +143,9 @@ class StatusDetailHeaderView: UIView {
     
     func configureFooter() {
         configureContentLbl()
-        configureLocationDisplay()
+//        configureLocationDisplay()
         configureOpsView()
+        configureLikeInfoLbl()
     }
     
     func configureContentLbl() {
@@ -155,37 +159,57 @@ class StatusDetailHeaderView: UIView {
         contentLbl.numberOfLines = 0
     }
     
-    func configureLocationDisplay() {
-        locIcon = addSubview(UIImageView.self).config(UIImage(named: "status_location_icon"), contentMode: .scaleAspectFit)
-            .layout({ (make) in
-                make.left.equalTo(contentLbl)
-                make.top.equalTo(contentLbl.snp.bottom).offset(15)
-                make.size.equalTo(18)
-            })
-        locLbl = addSubview(UILabel.self).config(14, fontWeight: UIFontWeightRegular, textColor: kTextGray28)
-            .layout({ (make) in
-                make.left.equalTo(locIcon.snp.right).offset(10)
-                make.top.equalTo(locIcon)
-                make.width.equalTo(self).dividedBy(2)
-            })
-        locLbl.numberOfLines = 2
-        locLbl.lineBreakMode = .byWordWrapping
-    }
-    
+//    func configureLocationDisplay() {
+//        locIcon = addSubview(UIImageView.self).config(UIImage(named: "status_location_icon"), contentMode: .scaleAspectFit)
+//            .layout({ (make) in
+//                make.left.equalTo(contentLbl)
+//                make.top.equalTo(contentLbl.snp.bottom).offset(15)
+//                make.size.equalTo(18)
+//            })
+//        locLbl = addSubview(UILabel.self).config(14, fontWeight: UIFontWeightRegular, textColor: kTextGray28)
+//            .layout({ (make) in
+//                make.left.equalTo(locIcon.snp.right).offset(10)
+//                make.top.equalTo(locIcon)
+//                make.width.equalTo(self).dividedBy(2)
+//            })
+//        locLbl.numberOfLines = 2
+//        locLbl.lineBreakMode = .byWordWrapping
+//    }
+//    
     func configureOpsView() {
         opsView = SmallOperationBoard(delegate: self)
         opsView.delegate = self
         addSubview(opsView)
         opsView.snp.makeConstraints { (make) in
             make.right.equalTo(self)
-            make.top.equalTo(locIcon)
+            make.top.equalTo(contentLbl.snp.bottom).offset(15)
             make.height.equalTo(17)
             make.width.equalTo(opsView.requiredWidth())
         }
     }
     
+    func configureLikeInfoLbl() {
+        likeInfoLbl = addSubview(UILabel.self)
+            .layout({ (mk) in
+                mk.left.equalTo(contentLbl)
+                mk.centerY.equalTo(opsView)
+                mk.right.equalTo(opsView.snp.left)
+            })
+        addSubview(UIButton.self).config(self, selector: #selector(likeListPressed))
+            .layout { (mk) in
+                mk.left.equalTo(likeInfoLbl)
+                mk.right.equalTo(likeInfoLbl)
+                mk.centerY.equalTo(likeInfoLbl)
+                mk.height.equalTo(40)
+        }
+    }
+    
     func avatarBtnPressed() {
         delegate.statusHeaderAvatarPressed()
+    }
+    
+    func likeListPressed() {
+        delegate.statusHeaderLikeListPressed()
     }
     
     func loadDataAndUpdateUI() {
@@ -195,7 +219,7 @@ class StatusDetailHeaderView: UIView {
         let user = status.user!
         avatarBtn.kf.setImage(with: user.avatarURL!, for: .normal)
         nameLbl.text = user.nickName
-        releaseDateLbl.text = dateDisplay(status.createdAt!)
+        releaseDateLbl.text = "\(dateDisplay(status.createdAt!)) \(status.location?.descr ?? LS("未知地点"))"
         if let club = user.avatarClubModel {
             avatarClubIcon.isHidden = false
             avatarClubIcon.kf.setImage(with: club.logoURL!)
@@ -217,12 +241,43 @@ class StatusDetailHeaderView: UIView {
             cover.setupForImageViewer(status.coverURL!, backgroundColor: .black, fadeToHide: false)
         }
         contentLbl.attributedText = type(of: self).makeFormatedStatusContent(status.content!)
-        if let des = status.location?.descr {
-            locLbl.text = des
-        } else {
-            locLbl.text = LS("未知地点")
-        }
+//        if let des = status.location?.descr {
+//            locLbl.text = des
+//        } else {
+//            locLbl.text = LS("未知地点")
+//        }
         opsView.reloadAll()
+        
+        // 
+        updateLikeInfoLbl()
+    }
+    
+    func updateLikeInfoLbl() {
+        guard let status = status else {
+            return
+        }
+        if let recentLike = status.recentLikeUserName {
+            likeInfoLbl.attributedText = makeRecentLikeInfoString(likeNum: Int(status.likeNum), recentLikeName: recentLike)
+        } else {
+            likeInfoLbl.attributedText = nil
+        }
+    }
+    
+    func makeRecentLikeInfoString(likeNum: Int, recentLikeName: String) -> NSAttributedString {
+        if likeNum == 0 {
+            return NSAttributedString(string: "还没有人赞", attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular), NSForegroundColorAttributeName: kTextGray54])
+        }
+        let result: NSMutableAttributedString
+        if likeNum == 1 {
+            result = NSMutableAttributedString(string: "\(recentLikeName)赞过了")
+        } else {
+            result = NSMutableAttributedString(string: "\(recentLikeName)和其他\(likeNum - 1)人赞了")
+        }
+        result.addAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)], range: NSRange(location: 0, length: result.length))
+        result.addAttributes([NSForegroundColorAttributeName: kHighlightRed], range: NSRange(location: 0, length: recentLikeName.length))
+        result.addAttributes([NSForegroundColorAttributeName: kTextGray54
+            ], range: NSRange(location: recentLikeName.length, length: result.length - recentLikeName.length))
+        return result
     }
     
     class func heightForStatusContent(_ content: String) -> CGFloat {

@@ -10,9 +10,11 @@ import UIKit
 import SnapKit
 import Kingfisher
 import Dollar
+import Alamofire
 
 /// 用户选择界面
-class UserSelectController: InputableViewController, UISearchBarDelegate {
+class UserSelectController: InputableViewController, UISearchBarDelegate, RequestManageMixin {
+    var onGoingRequest: [String : Request] = [:]
     /// 用户列表
     var users: [User] {
         get {
@@ -33,6 +35,10 @@ class UserSelectController: InputableViewController, UISearchBarDelegate {
     var userTableView: UITableView?
     /// 搜索栏
     var searchBar: UISearchBar?
+    
+    deinit {
+        clearAllRequest()
+    }
     
     override init () {
         super.init()

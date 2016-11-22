@@ -33,6 +33,8 @@ extension Activity {
     @NSManaged var poster: String?
     @NSManaged var sent: Date?
     @NSManaged var startAt: Date?
+    
+    @NSManaged var recentLikeUserName: String?
 
     @NSManaged var user: User?
 
@@ -59,6 +61,7 @@ extension Activity {
     static let poster = AlecrimCoreData.NullableAttribute<String>("poster")
     static let sent = AlecrimCoreData.NullableAttribute<Date>("sent")
     static let startAt = AlecrimCoreData.NullableAttribute<Date>("startAt")
+    static let recentLikeUserName = AlecrimCoreData.NullableAttribute<String>("recentLikeUserName")
 
     static let user = AlecrimCoreData.NullableAttribute<User>("user")
 
@@ -85,6 +88,7 @@ extension AlecrimCoreData.AttributeProtocol where Self.ValueType: Activity {
     var poster: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("poster", self) }
     var sent: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<Date>("sent", self) }
     var startAt: AlecrimCoreData.NullableAttribute<Date> { return AlecrimCoreData.NullableAttribute<Date>("startAt", self) }
+    var recentLikeUserName: AlecrimCoreData.NullableAttribute<String> { return AlecrimCoreData.NullableAttribute<String>("recentLikeUserName", self)}
 
     var user: AlecrimCoreData.NullableAttribute<User> { return AlecrimCoreData.NullableAttribute<User>("user", self) }
 

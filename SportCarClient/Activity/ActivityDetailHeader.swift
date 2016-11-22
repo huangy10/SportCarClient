@@ -31,6 +31,7 @@ class ActivityDetailHeaderView: UIView {
     var avatarImg: UIImageView!
     var hostNameLbl: UILabel!
     var desLbl: UILabel!
+    var likeInfoLbl: UILabel!
     var opsView: SmallOperationBoard!
     
     var extraInfoStack: UIStackView!
@@ -148,6 +149,15 @@ class ActivityDetailHeaderView: UIView {
             })
         desLbl.numberOfLines = 0
         desLbl.lineBreakMode = .byCharWrapping
+    }
+    
+    func configureLikeInfoLbl() {
+        likeInfoLbl = addSubview(UILabel.self)
+            .layout({ (mk) in
+                mk.centerY.equalTo(opsView)
+                mk.left.equalTo(desLbl)
+                mk.right.equalTo(opsView.snp.left)
+            })
     }
     
     func configureOpsView() {
@@ -301,6 +311,22 @@ class ActivityDetailHeaderView: UIView {
         }
         actTimeLbl.text = act.timeDes
         reloadMemberList()
+    }
+    
+    func makeLikeInfoText(recentLikeUserName: String, likeNum: Int) -> NSAttributedString {
+        if likeNum == 0 {
+            return NSAttributedString(string: "还没有人点赞", attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)])
+        }
+        let result: NSMutableAttributedString
+        if likeNum == 1 {
+            result = NSMutableAttributedString(string: "\(recentLikeUserName)赞了")
+        } else {
+            result = NSMutableAttributedString(string: "\(recentLikeUserName)和其他\(likeNum - 1)人赞了")
+        }
+        result.addAttribute(NSFontAttributeName, value: UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular), range: NSRange(location: 0, length: result.length))
+        result.addAttribute(NSForegroundColorAttributeName, value: kTextGray54, range: NSRange(location: recentLikeUserName.length, length: result.length - recentLikeUserName.length))
+        result.addAttribute(NSForegroundColorAttributeName, value: kHighlightRed, range: NSRange(location: 0, length:recentLikeUserName.length))
+        return result
     }
     
     func reloadMemberList() {

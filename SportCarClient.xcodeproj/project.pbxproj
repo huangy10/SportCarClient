@@ -299,6 +299,7 @@
 		BFFBA80D1C6595CF00991642 /* privateSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFBA80C1C6595CF00991642 /* privateSettings.swift */; };
 		BFFBA8101C65D7B100991642 /* InlineUserSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFBA80F1C65D7B100991642 /* InlineUserSelect.swift */; };
 		BFFBA8131C65E5B900991642 /* PrivateSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFBA8121C65E5B900991642 /* PrivateSettingsCell.swift */; };
+		BFFCD0DF1DE3DF7300488F3C /* StatusLikeUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFCD0DE1DE3DF7300488F3C /* StatusLikeUsers.swift */; };
 		BFFFAFEB1C84AA4300EBA314 /* FansSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFFAFEA1C84AA4300EBA314 /* FansSelect.swift */; };
 		BFFFAFED1C84B1FB00EBA314 /* FollowSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFFAFEC1C84B1FB00EBA314 /* FollowSelect.swift */; };
 /* End PBXBuildFile section */
@@ -609,6 +610,8 @@
 		BFFBA80C1C6595CF00991642 /* privateSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = privateSettings.swift; path = Message/Chat/privateSettings.swift; sourceTree = "<group>"; };
 		BFFBA80F1C65D7B100991642 /* InlineUserSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InlineUserSelect.swift; path = BaseTemplate/InlineUserSelect.swift; sourceTree = "<group>"; };
 		BFFBA8121C65E5B900991642 /* PrivateSettingsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrivateSettingsCell.swift; path = Message/Chat/PrivateSettingsCell.swift; sourceTree = "<group>"; };
+		BFFCD0DD1DE325E900488F3C /* SportCarClient V161121.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "SportCarClient V161121.xcdatamodel"; sourceTree = "<group>"; };
+		BFFCD0DE1DE3DF7300488F3C /* StatusLikeUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusLikeUsers.swift; path = Status/Detail/StatusLikeUsers.swift; sourceTree = "<group>"; };
 		BFFFAFEA1C84AA4300EBA314 /* FansSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FansSelect.swift; path = Person/FansSelect.swift; sourceTree = "<group>"; };
 		BFFFAFEC1C84B1FB00EBA314 /* FollowSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FollowSelect.swift; path = Person/FollowSelect.swift; sourceTree = "<group>"; };
 		DCDC6FE0FF3785D17A4CE42E /* Pods-SportCarClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SportCarClient.release.xcconfig"; path = "Pods/Target Support Files/Pods-SportCarClient/Pods-SportCarClient.release.xcconfig"; sourceTree = "<group>"; };
@@ -1353,6 +1356,7 @@
 				BF1D93571C52783000FD9997 /* StatusDetailCommentCell.swift */,
 				BF2F5F031DC5F8AB00C2CD55 /* StatusDetailHeader.swift */,
 				BF5B8CB51DC7A4D900541A5D /* StatusAnimations.swift */,
+				BFFCD0DE1DE3DF7300488F3C /* StatusLikeUsers.swift */,
 			);
 			name = Detail;
 			sourceTree = "<group>";
@@ -2185,6 +2189,7 @@
 				BFFBA8131C65E5B900991642 /* PrivateSettingsCell.swift in Sources */,
 				BF27E6CD1C38457F0074771D /* MakeCommentPanel.swift in Sources */,
 				BF5FF0ED1C15B4860050F5FE /* GlobalVariables.swift in Sources */,
+				BFFCD0DF1DE3DF7300488F3C /* StatusLikeUsers.swift in Sources */,
 				BFE967211CA584A20097C42C /* Activity.generated.swift in Sources */,
 				BF630EDF1CABE46C00EFD37E /* AvatarCell.swift in Sources */,
 				BFDFF2811C8C0E8600055C1C /* ClubDiscoverListCell.swift in Sources */,
@@ -2477,10 +2482,11 @@
 		BFE967471CA6D8920097C42C /* SportCarApp.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				BFFCD0DD1DE325E900488F3C /* SportCarClient V161121.xcdatamodel */,
 				BFC7F26D1D5C57FA00C5BE46 /* SportCarClient V160811.xcdatamodel */,
 				BFE967481CA6D8920097C42C /* SportCarClient.xcdatamodel */,
 			);
-			currentVersion = BFC7F26D1D5C57FA00C5BE46 /* SportCarClient V160811.xcdatamodel */;
+			currentVersion = BFFCD0DD1DE325E900488F3C /* SportCarClient V161121.xcdatamodel */;
 			path = SportCarApp.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
