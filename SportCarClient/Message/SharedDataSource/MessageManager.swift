@@ -275,11 +275,15 @@ class MessageManager {
                             , at: .top, animated: false)
                     })
                 }
-                self.unreadChatNum = max(0, self.unreadChatNum - Int(room.rosterItem.unreadNum))
+//                self.unreadChatNum = max(0, self.unreadChatNum - Int(room.rosterItem.unreadNum))
                 // clear the unread number
                 if room.rosterItem.unreadNum > 0 {
                     room.rosterItem.unreadNum = 0
                 }
+                
+                self.unreadChatNum = Int(ChatModelManger.sharedManager.getOperationContext().rosterItems
+                    .filter({ $0.hostSSID == MainManager.sharedManager.hostUserID!})
+                    .reduce(0, { $0 + $1.unreadNum}))
                 self._curRoom = room
                 // update listening status
                 self.listen()
@@ -340,10 +344,10 @@ class MessageManager {
     }
     
     func syncUnreadChatNum() {
-        let context = MainManager.sharedManager.getOperationContext()
-        let hostID = MainManager.sharedManager.hostUserID!
-        let x: Int32 = context.rosterItems.filter({$0.hostSSID == hostID}).reduce(0, { $0 + $1.unreadNum})
-        self.unreadChatNum = Int(x)
+//        let context = MainManager.sharedManager.getOperationContext()
+//        let hostID = MainManager.sharedManager.hostUserID!
+//        let x: Int32 = context.rosterItems.filter({$0.hostSSID == hostID}).reduce(0, { $0 + $1.unreadNum})
+//        self.unreadChatNum = Int(x)
 //        self.unreadChatNum = context.rosterItems.filter({$0.hostSSID == hostID}).sum( {$0.unreadNum} )
     }
     
