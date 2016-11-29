@@ -195,7 +195,7 @@ class RadarDriverMapController: UIViewController {
     
     func configureMapFilter() {
         let btn = view.addSubview(UIButton.self).config(self, selector: #selector(toggleMapFilter))
-            .config(.white)
+            .config(.white).addShadow()
             .layout { (mk) in
                 mk.bottom.equalTo(showUserListBtn)
                 mk.right.equalTo(showUserListBtn.snp.left).offset(-13)

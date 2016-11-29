@@ -82,8 +82,9 @@ class SportscarAuthController: PersonMineSettingsAuthController, LoadingProtocol
             make.left.equalTo(container)
             make.top.equalTo(staticLabel1.snp.bottom).offset(5)
             make.right.equalTo(imageBtn1.snp.left).offset(-24)
-            make.height.equalTo(exampleImage.snp.width).multipliedBy(0.67)
+            make.bottom.equalTo(imageBtn1)
         }
+        exampleImage.contentMode = .scaleAspectFit
         return container
     }
     
