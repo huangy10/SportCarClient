@@ -188,10 +188,10 @@ class PersonCarProfileView: UIView {
         }
         
         subNameLbl = lbls[0]
-        priceLbl = lbls[1]
-        engineLbl = lbls[2]
-        bodyLbl = lbls[3]
-        speedLbl = lbls[4]
+        engineLbl = lbls[1]
+        speedLbl = lbls[2]
+        priceLbl = lbls[3]
+        bodyLbl = lbls[4]
         acceLbl = lbls[5]
     }
     
@@ -231,9 +231,9 @@ class PersonCarProfileView: UIView {
     }
     
     func setAudioWaveHidden(_ flag: Bool) {
-        if audioWave.isHidden == flag {
-            return
-        }
+//        if audioWave.isHidden == flag {
+//            return
+//        }
         audioWave.isHidden = flag
         paramBoardStack.snp.remakeConstraints { (mk) in
             if flag {

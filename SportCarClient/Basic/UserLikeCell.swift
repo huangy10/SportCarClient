@@ -11,6 +11,12 @@ import UIKit
 
 class UserLikeCell: DriverMapUserCell {
     override func updateDistanceLbl() {
-        distanceLbl.text = user.recentStatusDes
+        if let des = user.recentStatusDes, des != "" {
+            distanceLbl.text = des
+        } else {
+            distanceLbl.text = LS("还没有动态")
+        }
     }
 }
+
+typealias UserFullInfoCell = UserLikeCell

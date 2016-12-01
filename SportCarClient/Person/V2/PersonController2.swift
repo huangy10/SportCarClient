@@ -48,7 +48,7 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
             }
             data.selectedCar = newValue
             header.car = newValue
-            
+            header.loadDataAndUpdateUI()
             self.tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.header.requiredHeight())
             
             if data.numberOfStatus() == 0 {
@@ -56,7 +56,6 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
                 tableView.setContentOffset(.zero, animated: true)
                 reqGetStatusList(overrideReqKey: "auto")
             } else {
-                header.loadDataAndUpdateUI()
                 UIView.transition(with: tableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
                     self.tableView.reloadData()
                 }, completion: nil)
@@ -171,6 +170,8 @@ class PersonController: UIViewController, RequestManageMixin, LoadingProtocol {
             data.rmCar(car)
             header.needsReload = true
             needReload = true
+            
+            selectedCar = data.cars.first()
         }
     }
     

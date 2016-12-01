@@ -35,7 +35,7 @@ class FansSelectController: UserSelectController {
         })
         //
         selectedUserList?.isHidden = true
-        userTableView?.register(UserSelectCellUnselectable.self, forCellReuseIdentifier: "cell")
+        userTableView?.register(UserFullInfoCell.self, forCellReuseIdentifier: "cell")
     }
     
     override func navTitle() -> String {
@@ -48,11 +48,13 @@ class FansSelectController: UserSelectController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserSelectCellUnselectable
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UserFullInfoCell
         let user = users[(indexPath as NSIndexPath).row]
-        cell.avatarImg?.kf.setImage(with: user.avatarURL!)
-        cell.nickNameLbl?.text = user.nickName
-        cell.recentStatusLbL?.text = user.recentStatusDes
+//        cell.avatarImg?.kf.setImage(with: user.avatarURL!)
+//        cell.nickNameLbl?.text = user.nickName
+//        cell.recentStatusLbL?.text = user.recentStatusDes
+        cell.user = user
+        cell.loadDataAndUpdateUI()
         return cell
     }
     
